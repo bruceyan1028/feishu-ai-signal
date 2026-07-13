@@ -6,7 +6,7 @@ alwaysApply: false
 
 # Intelligence Presentation
 
-- Keep the featured briefing point full-width; arrange points 2–5 in a responsive two-column grid with balanced card heights and no orphaned whitespace.
+- Keep the featured briefing point full-width; arrange points 2–5 in a responsive two-column grid. Let each card follow its own text height instead of stretching paired cards to a fixed or equal height; use compact but readable padding.
 - Briefing-point titles must state the concrete conclusion; never display placeholders such as “要点 1”. Keep linked-signal counters such as `1/5` on the title row, and use at least 15px body text for comfortable reading.
 - Signal cards must use an accurate Chinese headline as the primary bold title. Preserve the original-language headline as secondary provenance text.
 - Prefer an image extracted from the exact article through RSS, Open Graph, or article content. If unavailable, web-search the exact article, named entity, product, or event and use a clearly relevant real-world image. Do not use generic “AI brain/circuit” illustrations or purely AI-generated imagery for unrelated subjects.
@@ -14,4 +14,5 @@ alwaysApply: false
 - Persist `中文标题` and `图片链接` in Bitable so the card, webpage, and detail view share the same source of truth.
 - Every event-aggregation source label must be a working link to that source's corresponding original article. Do not render invented source rows without URLs.
 - Initially show a concise subset of “全部信号” and place a clear “查看更多” control below the cards to progressively reveal the remaining filtered results.
+- The generated brief should normally retain up to 30 ranked signals so “查看更多” has meaningful depth; the initial viewport may still show only a small subset.
 - Keep real news fields traceable to Bitable; comments, notes, meetings, and other explicitly mocked interactions may remain local demo data.

@@ -92,7 +92,7 @@
   .brief-card { transition: transform .12s ease, box-shadow .12s ease; }
   .brief-card:hover { transform: translate(-2px,-2px); box-shadow: 6px 6px 0 var(--ds-accent) !important; }
   .brief-card .ref:hover { background: var(--ds-accent) !important; color: #fff !important; }
-  .brief-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); grid-auto-rows: minmax(170px, auto); gap: 16px; }
+  .brief-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); grid-auto-rows: auto; align-items: start; gap: 16px; }
   @media (max-width: 760px) { .brief-grid { grid-template-columns: 1fr; } }
   .src-row:hover { background: rgba(22,19,15,.03); }
   .src-link:hover { color: var(--accent-bright, #a78bff) !important; border-bottom-color: var(--accent-bright, #a78bff) !important; }

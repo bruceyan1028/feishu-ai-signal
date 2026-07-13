@@ -42,7 +42,7 @@ LLM_MODEL = _env("LLM_MODEL", "deepseek-chat")
 # report.py 真实模式单次分析的最新条目数上限
 REPORT_MAX_ENTRIES = int(os.environ.get("REPORT_MAX_ENTRIES", "20"))
 DAILY_CANDIDATE_LIMIT = int(os.environ.get("DAILY_CANDIDATE_LIMIT", "30"))
-DAILY_SIGNAL_LIMIT = int(os.environ.get("DAILY_SIGNAL_LIMIT", "15"))
+DAILY_SIGNAL_LIMIT = int(os.environ.get("DAILY_SIGNAL_LIMIT", "30"))
 
 FEISHU_HOST = "https://open.feishu.cn"
 

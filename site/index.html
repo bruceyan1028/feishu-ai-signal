@@ -92,7 +92,7 @@
   .brief-card { transition: transform .12s ease, box-shadow .12s ease; }
   .brief-card:hover { transform: translate(-2px,-2px); box-shadow: 6px 6px 0 var(--ds-accent) !important; }
   .brief-card .ref:hover { background: var(--ds-accent) !important; color: #fff !important; }
-  .brief-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); grid-auto-rows: minmax(170px, auto); gap: 16px; }
+  .brief-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); grid-auto-rows: auto; align-items: start; gap: 16px; }
   @media (max-width: 760px) { .brief-grid { grid-template-columns: 1fr; } }
   .src-row:hover { background: rgba(22,19,15,.03); }
   .src-link:hover { color: var(--accent-bright, #a78bff) !important; border-bottom-color: var(--accent-bright, #a78bff) !important; }
@@ -158,6 +158,7 @@ const state = {
   filter: '全部',
   srcTab: '全部',
   sortKey: 'impact',
+  signalLimit: 6,
   showScoreBars: true,
   detailRank: null,
   detailTab: '正文',
@@ -534,6 +535,13 @@ async function loadBrief(){
       tags: Array.isArray(s.tags) ? s.tags : [],
       image: s.imageUrl || '',
     }));
+    const seenImages = new Set();
+    signals.forEach(s=>{
+      const imageKey = s.image.split(/[?#]/)[0].toLowerCase();
+      if(!imageKey) return;
+      if(seenImages.has(imageKey)) s.image = '';
+      else seenImages.add(imageKey);
+    });
     personal = signals.slice(0,3).map((s,index)=>({
       ref:s.rank,
       match:Math.max(82, 96-index*5),
@@ -631,8 +639,9 @@ const App = {
     };
     requestAnimationFrame(()=>requestAnimationFrame(go));
   },
-  setFilter(f){ state.filter=f; render(); },
+  setFilter(f){ state.filter=f; state.signalLimit=6; render(); },
   setSort(v){ state.sortKey=v; render(); },
+  showMoreSignals(){ state.signalLimit += 6; render(); },
   setSrcTab(t){ state.srcTab=t; render(); },
   toggleBars(){ state.showScoreBars=!state.showScoreBars; render(); },
   async reloadSources(){ await loadSources(); },
@@ -872,9 +881,19 @@ function topicImageUrl(s){
   if(s.image) return s.image;
   if(!s.recordId && IMAGE_BY_RANK[s.rank]) return IMAGE_BY_RANK[s.rank];
   const hay = `${s.zhTitle} ${s.title} ${s.tags.join(' ')} ${s.cat}`;
-  const map = [[/机器人|robot|LeRobot/i,'1485827404703-89b55fcc595e'],[/GPU|NVIDIA|AMD|算力|token|HBM/i,'1591405351990-4726e331f141'],[/端侧|手机|NPU|Apple/i,'1510557880182-3d4d3cba35a5'],[/隐私|PII|安全|诈骗|深伪|诉讼|监管/i,'1550751827-4bd374c3f58b'],[/RAG|数据库|向量|记忆/i,'1544197150-b99a580bb7a8'],[/开源|模型|LLM|Bedrock|SageMaker/i,'1518770660439-4636190af475']];
-  for(const [re,id] of map){ if(re.test(hay)) return IMG(id); }
-  return IMG('1518770660439-4636190af475');
+  // 仅以真实场景摄影兜底；同一主题准备多张，并按标题稳定分散。
+  const map = [
+    [/机器人|robot|LeRobot/i,['1485827404703-89b55fcc595e','1535378917042-10a22c95931a']],
+    [/汽车|车辆|automotive|vehicle|SDV/i,['1503376780353-7e6692767b70','1492144534655-ae79c964c9d7']],
+    [/GPU|NVIDIA|AMD|算力|token|HBM|芯片/i,['1591405351990-4726e331f141','1518770660439-4636190af475']],
+    [/端侧|手机|NPU|Apple/i,['1510557880182-3d4d3cba35a5','1511707171634-5f897ff02aa9']],
+    [/隐私|PII|安全|诈骗|深伪|诉讼|监管/i,['1550751827-4bd374c3f58b','1563013544-824ae1b704d3']],
+    [/RAG|数据库|向量|记忆/i,['1544197150-b99a580bb7a8','1558494949-ef010cbdcc31']],
+    [/开源|模型|LLM|Bedrock|SageMaker/i,['1518770660439-4636190af475','1516321318423-f06f85e504b3']],
+  ];
+  const hash = [...hay].reduce((n,ch)=>((n*31)+ch.charCodeAt(0))>>>0, 0);
+  for(const [re,ids] of map){ if(re.test(hay)) return IMG(ids[hash % ids.length]); }
+  return IMG(['1558494949-ef010cbdcc31','1461749280684-dccba630e2f6'][hash % 2]);
 }
 // 配图封面:图片加载失败时回退到品牌渐变底(离线可用)
 function coverHtml(A, s, h){
@@ -926,8 +945,10 @@ function briefHtml(A){
     const chip = `color-mix(in srgb, ${c} 16%, #fff)`;
     const cbd = `color-mix(in srgb, ${c} 40%, transparent)`;
     const m = b.text.match(/^(.*?)[:：]([\s\S]*)$/);
-    const title = m ? m[1] : `要点 ${i+1}`;
-    const rest = m ? m[2] : b.text;
+    const clause = b.text.match(/^(.{6,28}?)[，。；;]([\s\S]+)$/);
+    const explicitTitle = b.title && !/^要点\s*\d*$/i.test(b.title.trim()) ? b.title.trim() : '';
+    const title = explicitTitle || (m ? m[1] : clause ? clause[1] : `${b.text.slice(0,24)}${b.text.length>24?'…':''}`);
+    const rest = m ? m[2] : clause ? clause[2] : b.text;
     const num = String(i+1).padStart(2,'0');
     const refsHtml = b.refs.map(r=>`<button class="ref" onclick="event.stopPropagation(); App.jumpTo(${r})" title="跳转到 #${r} 信号卡片" style="display: inline-flex; align-items: center; justify-content: center; min-width: 20px; height: 19px; padding: 0 6px; border: 1px solid ${cbd}; background: ${chip}; color: ${c}; font-size: 11px; font-weight: 700; font-family: ${mono}; cursor: pointer;">${r}</button>`).join(`<span style="color:${cbd}; font-weight:700;">/</span>`);
     if(featured){
@@ -936,11 +957,13 @@ function briefHtml(A){
         <div style="flex: none; display: flex; align-items: center; justify-content: center; width: 130px; border-right: 1.5px solid var(--ds-ink-line); background: ${c};">
           <span style="font-family: ${mono}; font-size: 52px; font-weight: 700; color: #fff; letter-spacing: -.03em;">${num}</span>
         </div>
-        <div style="flex: 1; min-width: 0; display: flex; flex-direction: column; justify-content: center; gap: 10px; padding: 22px 26px;">
-          <div style="align-self: flex-start; font-size: 20px; font-weight: 700; letter-spacing: -.01em; color: var(--ds-text); background: ${chip}; border-left: 4px solid ${c}; padding: 7px 14px;">${esc(title)}</div>
-          <div style="font-size: 14px; line-height: 1.7; color: ${UI.text2};">${esc(rest)}</div>
+        <div style="flex: 1; min-width: 0; display: flex; flex-direction: column; justify-content: center; gap: 12px; padding: 22px 26px;">
+          <div style="display:flex; align-items:center; gap:12px;">
+            <div style="font-size: 20px; font-weight: 700; letter-spacing: -.01em; color: var(--ds-text); background: ${chip}; border-left: 4px solid ${c}; padding: 7px 14px;">${esc(title)}</div>
+            <div style="margin-left:auto; display:flex; align-items:center; gap:6px; flex:none;">${refsHtml}</div>
+          </div>
+          <div style="font-size: 16px; line-height: 1.75; color: ${UI.text2};">${esc(rest)}</div>
         </div>
-        <div style="flex: none; display: flex; align-items: center; gap: 6px; padding: 0 24px; border-left: 1px dashed var(--ds-border);">${refsHtml}</div>
       </div>`;
     }
     return `
@@ -948,9 +971,9 @@ function briefHtml(A){
         <div style="display: flex; align-items: flex-start; gap: 12px;">
           <span style="font-family: ${mono}; font-size: 34px; font-weight: 700; line-height: .9; color: ${c}; letter-spacing: -.03em; flex: none;">${num}</span>
           <div style="font-size: 15px; font-weight: 700; line-height: 1.35; letter-spacing: -.01em; color: var(--ds-text); background: ${chip}; border-left: 3px solid ${c}; padding: 6px 10px;">${esc(title)}</div>
+          <div style="margin-left:auto; display:flex; align-items:center; gap:6px; flex:none;">${refsHtml}</div>
         </div>
-        <div style="font-size: 13px; line-height: 1.65; color: ${UI.text2}; border-top: 1px solid ${cbd}; padding-top: 10px;">${esc(rest)}</div>
-        <div style="display: flex; gap: 6px; align-items: center; margin-top: auto;">${refsHtml}</div>
+        <div style="font-size: 15px; line-height: 1.7; color: ${UI.text2}; border-top: 1px solid ${cbd}; padding-top: 10px;">${esc(rest)}</div>
       </div>`;
   };
   const featuredHtml = bullets.length ? briefCard(bullets[0], 0, true) : '';
@@ -977,7 +1000,9 @@ function briefHtml(A){
   };
   const sortLabels = { impact:'按影响分排序', novel:'按新颖度排序', action:'按可行动排序', date:'按时间排序' };
 
-  const visible = signals.filter(s => matchesFilter(s, state.filter)).slice().sort(sortFns[state.sortKey]);
+  const filteredSignals = signals.filter(s => matchesFilter(s, state.filter)).slice().sort(sortFns[state.sortKey]);
+  const visible = filteredSignals.slice(0, state.signalLimit);
+  const hasMoreSignals = visible.length < filteredSignals.length;
 
   const filterChipsHtml = filters.map(f => {
     const active = state.filter===f;
@@ -1094,6 +1119,9 @@ function briefHtml(A){
             </div>
           </div>
           <div style="display: flex; flex-direction: column; gap: 20px;">${cardsHtml}</div>
+          ${hasMoreSignals?`<div style="display:flex; justify-content:center; margin-top:28px;">
+            <button onclick="App.showMoreSignals()" style="min-width:150px; height:42px; padding:0 24px; border:1.5px solid var(--ds-ink-line); background:var(--ds-card); color:var(--ds-text); box-shadow:3px 3px 0 rgba(22,19,15,.10); font-size:13px; font-weight:700; cursor:pointer;">查看更多 · ${filteredSignals.length-visible.length} 条</button>
+          </div>`:''}
           <div style="margin-top: 40px; padding: 16px 18px; border: 1.5px solid var(--ds-ink-line); background: #fff; box-shadow: 4px 4px 0 rgba(22,19,15,.06);">
             <div style="display: flex; align-items: baseline; gap: 10px; margin-bottom: 4px;">
               <span style="font-size: 14px; font-weight: 700; color: var(--ds-text);">报告遗漏的重要信号</span>
