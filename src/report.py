@@ -118,8 +118,11 @@ ANALYSIS_PROMPT = """你是资深 AI 行业分析师。请阅读下面这条 AI 
 def _llm_json(prompt: str) -> dict[str, Any]:
     import requests
 
-    urls = [f"{config.LLM_BASE_URL}/chat/completions"]
-    if not config.LLM_BASE_URL.endswith("/v1"):
+    if config.LLM_BASE_URL.endswith("/chat/completions"):
+        urls = [config.LLM_BASE_URL]
+    else:
+        urls = [f"{config.LLM_BASE_URL}/chat/completions"]
+    if not config.LLM_BASE_URL.endswith(("/v1", "/chat/completions")):
         urls.append(f"{config.LLM_BASE_URL}/v1/chat/completions")
     resp = None
     for url in urls:

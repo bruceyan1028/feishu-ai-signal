@@ -1,0 +1,232 @@
+{
+  "date": "2026-07-13",
+  "title": "AI Signal 每日情报 · 2026-07-13",
+  "intro": "今日真实 RSS 信号集中在开放机器人、企业模型托管、机器遗忘与多轮强化学习基础设施。与此同时，隐私处理、Agent 安全和推理硬件优化继续成为生产落地的关键约束。",
+  "bullets": [
+    {
+      "text": "开放生态继续向机器人与研究工具链扩展，NVIDIA 与 Hugging Face 围绕 LeRobot 加强模型和框架供给。",
+      "refs": [
+        1,
+        5
+      ]
+    },
+    {
+      "text": "企业多模型平台加速扩容，MiniMax 进入 Bedrock，Hugging Face 到 SageMaker 的使用路径进一步缩短。",
+      "refs": [
+        2,
+        10
+      ]
+    },
+    {
+      "text": "模型治理从原则走向工程：选择性机器遗忘与图像 PII 自动遮盖分别覆盖知识删除和多模态隐私。",
+      "refs": [
+        3,
+        6
+      ]
+    },
+    {
+      "text": "Agent 与模型后训练基础设施继续深化，多轮强化学习和安全关键系统中的身份防护值得优先关注。",
+      "refs": [
+        4,
+        9
+      ]
+    },
+    {
+      "text": "AMD 的 MXFP4 图像生成优化与 SK Hynix 资本动向共同反映推理硬件和 HBM 供应链竞争。",
+      "refs": [
+        7,
+        8
+      ]
+    }
+  ],
+  "signals": [
+    {
+      "recordId": "recvoFuujUDmu5",
+      "title": "NVIDIA and Hugging Face Bring New Models and Frameworks to LeRobot for the Open Robotics Community",
+      "source": "NVIDIA Blog",
+      "url": "https://blogs.nvidia.com/blog/hugging-face-lerobot-models-frameworks-open-robotics",
+      "category": "算力芯片云",
+      "publishedDate": "2026-07-07",
+      "summary": "NVIDIA 与 Hugging Face 为 LeRobot 引入新的模型与框架，面向开放机器人社区扩展机器人开发工具链。",
+      "why": "开源机器人模型与工具链的结合会降低具身智能实验门槛，值得机器人团队评估兼容性。",
+      "impact": 88,
+      "novelty": 82,
+      "actionability": 78,
+      "urgency": "高",
+      "tags": [
+        "AI",
+        "开源",
+        "硬件"
+      ]
+    },
+    {
+      "recordId": "recvoF0NJRmBni",
+      "title": "Run MiniMax models on Amazon Bedrock",
+      "source": "AWS AI / Bedrock Blog",
+      "url": "https://aws.amazon.com/blogs/machine-learning/run-minimax-models-on-amazon-bedrock",
+      "category": "算力芯片云",
+      "publishedDate": "2026-07-07",
+      "summary": "AWS 发布在 Amazon Bedrock 上运行 MiniMax 模型的实践，扩充托管模型选择。",
+      "why": "更多模型进入统一托管平台，会影响企业的模型路由、采购和多模型架构选择。",
+      "impact": 86,
+      "novelty": 74,
+      "actionability": 86,
+      "urgency": "高",
+      "tags": [
+        "LLM",
+        "产品"
+      ]
+    },
+    {
+      "recordId": "recvoF0NJRHOM2",
+      "title": "Teaching models to forget: Selective unlearning with Amazon Nova",
+      "source": "AWS AI / Bedrock Blog",
+      "url": "https://aws.amazon.com/blogs/machine-learning/teaching-models-to-forget-selective-unlearning-with-amazon-nova",
+      "category": "算力芯片云",
+      "publishedDate": "2026-07-07",
+      "summary": "AWS 介绍基于 Amazon Nova 的选择性机器遗忘方法，使模型能够定向移除特定知识或训练影响。",
+      "why": "机器遗忘关系到隐私删除、版权合规和模型治理，是生产模型生命周期的重要能力。",
+      "impact": 84,
+      "novelty": 88,
+      "actionability": 70,
+      "urgency": "高",
+      "tags": [
+        "AI",
+        "监管",
+        "推理"
+      ]
+    },
+    {
+      "recordId": "recvoF0NJRbvaW",
+      "title": "Deploying Multi-Turn RL Infrastructure for Amazon Nova on Amazon SageMaker HyperPod",
+      "source": "AWS AI / Bedrock Blog",
+      "url": "https://aws.amazon.com/blogs/machine-learning/deploying-multi-turn-rl-infrastructure-for-amazon-nova-on-amazon-sagemaker-hyperpod",
+      "category": "算力芯片云",
+      "publishedDate": "2026-07-07",
+      "summary": "AWS 介绍在 SageMaker HyperPod 上为 Amazon Nova 部署多轮强化学习基础设施的方法。",
+      "why": "多轮强化学习基础设施是提升 Agent 长任务表现和定制模型能力的关键工程环节。",
+      "impact": 80,
+      "novelty": 81,
+      "actionability": 72,
+      "urgency": "中",
+      "tags": [
+        "Agent",
+        "推理",
+        "硬件"
+      ]
+    },
+    {
+      "recordId": "recvoF0NJRZu1X",
+      "title": "How Open Models Are Driving AI Research",
+      "source": "NVIDIA Blog",
+      "url": "https://blogs.nvidia.com/blog/open-models-icml-2026",
+      "category": "算力芯片云",
+      "publishedDate": "2026-07-07",
+      "summary": "NVIDIA 讨论开放模型如何推动 AI 研究，并聚焦 ICML 2026 相关开放生态进展。",
+      "why": "开放模型生态的成熟度决定研究复现、私有部署和供应商多元化的可行性。",
+      "impact": 79,
+      "novelty": 67,
+      "actionability": 66,
+      "urgency": "中",
+      "tags": [
+        "AI",
+        "开源"
+      ]
+    },
+    {
+      "recordId": "recvoF0NJRdA0m",
+      "title": "Automatically redact PII in images with Amazon Nova",
+      "source": "AWS AI / Bedrock Blog",
+      "url": "https://aws.amazon.com/blogs/machine-learning/automatically-redact-pii-in-images-with-amazon-nova",
+      "category": "算力芯片云",
+      "publishedDate": "2026-07-07",
+      "summary": "AWS 展示使用 Amazon Nova 自动识别并遮盖图片中个人身份信息的方案。",
+      "why": "图像 PII 自动处理可直接降低数据流转和多模态应用中的隐私合规风险。",
+      "impact": 78,
+      "novelty": 68,
+      "actionability": 84,
+      "urgency": "高",
+      "tags": [
+        "多模态",
+        "监管",
+        "产品"
+      ]
+    },
+    {
+      "recordId": "recvoF0NJR754P",
+      "title": "Accelerating Diffusers and xDiT Image Generation with MXFP4 using AMD Quark on AMD Instinct™ MI350 GPUs",
+      "source": "AMD Instinct / ROCm",
+      "url": "https://rocm.blogs.amd.com/artificial-intelligence/quark-xdit/readme.html",
+      "category": "算力芯片云",
+      "publishedDate": "2026-07-06",
+      "summary": "AMD 展示在 Instinct MI350 GPU 上结合 AMD Quark 与 MXFP4 加速 Diffusers 和 xDiT 图像生成。",
+      "why": "低精度推理优化会改变图像生成吞吐与单位成本，也增强 AMD 在 AI 推理市场的竞争力。",
+      "impact": 77,
+      "novelty": 76,
+      "actionability": 74,
+      "urgency": "中",
+      "tags": [
+        "多模态",
+        "推理",
+        "硬件"
+      ]
+    },
+    {
+      "recordId": "recvoF0NJR5IqY",
+      "title": "US investors will soon get access to SK Hynix, another memory maker riding the AI boom",
+      "source": "TechCrunch AI",
+      "url": "https://techcrunch.com/2026/07/06/us-investors-will-soon-get-access-to-sk-hynix-another-memory-maker-riding-the-ai-boom",
+      "category": "创业融资并购",
+      "publishedDate": "2026-07-07",
+      "summary": "TechCrunch 报道 SK Hynix 计划让美国投资者获得投资渠道，反映 AI 热潮对高带宽内存厂商的持续推动。",
+      "why": "HBM 供给和资本扩张直接影响 AI 加速器成本与交付周期。",
+      "impact": 76,
+      "novelty": 62,
+      "actionability": 55,
+      "urgency": "中",
+      "tags": [
+        "硬件",
+        "融资"
+      ]
+    },
+    {
+      "recordId": "recvoF0NJReXRX",
+      "title": "Shift into high gear with agents: Securing the software-defined vehicle",
+      "source": "Google Cloud AI Blog",
+      "url": "https://cloud.google.com/blog/products/identity-security/shift-into-high-gear-with-agents-securing-the-software-defined-vehicle",
+      "category": "算力芯片云",
+      "publishedDate": "2026-07-07",
+      "summary": "Google Cloud 讨论在软件定义汽车中部署 Agent 时的安全措施与身份防护。",
+      "why": "Agent 进入汽车等安全关键系统后，权限边界、身份认证和审计必须前置设计。",
+      "impact": 74,
+      "novelty": 73,
+      "actionability": 75,
+      "urgency": "中",
+      "tags": [
+        "Agent",
+        "监管",
+        "产品"
+      ]
+    },
+    {
+      "recordId": "recvoF0NJRUxam",
+      "title": "From Hugging Face to Amazon SageMaker Studio in one click",
+      "source": "AWS AI / Bedrock Blog",
+      "url": "https://aws.amazon.com/blogs/machine-learning/from-hugging-face-to-amazon-sagemaker-studio-in-one-click-2",
+      "category": "算力芯片云",
+      "publishedDate": "2026-07-07",
+      "summary": "AWS 打通从 Hugging Face 到 Amazon SageMaker Studio 的一键使用路径，简化模型导入与开发流程。",
+      "why": "更低的模型迁移摩擦有助于团队更快比较开源模型并进入托管部署。",
+      "impact": 72,
+      "novelty": 64,
+      "actionability": 82,
+      "urgency": "中",
+      "tags": [
+        "开源",
+        "产品"
+      ]
+    }
+  ],
+  "briefRecordId": "recvpeMeuxd8Nm",
+  "briefTableId": "tblOZoliKFSTSVNG"
+}
