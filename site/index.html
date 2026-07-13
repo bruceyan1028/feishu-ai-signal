@@ -482,6 +482,19 @@ function hexToRgb(h){ const m=h.replace('#',''); const n=parseInt(m.length===3?m
 function scoreColor(v){ if(v>=75) return '#16a34a'; if(v>=55) return '#ca8a04'; return '#dc2626'; }
 function scoreBadge(v){ if(v>=75) return {bg:'#f0fdf4',color:'#15803d',border:'#bbf7d0'}; if(v>=55) return {bg:'#fefce8',color:'#a16207',border:'#fde68a'}; return {bg:'#fef2f2',color:'#b91c1c',border:'#fecaca'}; }
 function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function zhProse(s){
+  return String(s)
+    .replace(/,(?=[\u3400-\u9fff“「（])/g, '，')
+    .replace(/:(?=[\u3400-\u9fff“「（])/g, '：')
+    .replace(/;(?=[\u3400-\u9fff“「（])/g, '；')
+    .replace(/([\u3400-\u9fff])\s+(?=[\u3400-\u9fff])/g, '$1')
+    .replace(/\s*([，。；：！？、])\s*/g, '$1');
+}
+function zhProseHtml(html){
+  return String(html).split(/(<[^>]+>)/g).map(part=>part.startsWith('<') ? part : zhProse(part)).join('')
+    .replace(/([\u3400-\u9fff])\s+(<)/g, '$1$2')
+    .replace(/(>)\s+([\u3400-\u9fff])/g, '$1$2');
+}
 
 // UI token → 全部指向 :root CSS 变量(改配色只改 :root)
 const UI = {
@@ -1369,8 +1382,9 @@ function articleBody(A, s){
   const hl = x => `<mark class="note-hl">${x}</mark>`;
   const ul = x => `<span class="note-ul">${x}</span>`;
   const cmt = (x, who, note) => `<span class="note-cmt">${x}<span class="cmt-pop"><b>${esc(who)}</b> · ${esc(note)}</span></span>`;
-  const P = html => `<p style="margin: 0 0 16px; font-size: 15px; line-height: 2; color: ${UI.text2};">${html}</p>`;
-  const lead = `<p style="margin: 0 0 18px; font-size: 16px; line-height: 1.9; font-weight: 600; color: var(--ds-text);">${hl(esc(s.summary))}</p>`;
+  const proseStyle = 'font-family:"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif; letter-spacing:0; word-spacing:0; text-align:left; text-justify:none; word-break:normal; overflow-wrap:break-word;';
+  const P = html => `<p style="margin: 0 0 16px; font-size: 15px; line-height: 2; color: ${UI.text2}; ${proseStyle}">${zhProseHtml(html)}</p>`;
+  const lead = `<p style="margin: 0 0 18px; font-size: 16px; line-height: 1.9; font-weight: 600; color: var(--ds-text); ${proseStyle}">${hl(esc(zhProse(s.summary)))}</p>`;
   const images = s.kind==='论文'
     ? (s.mediaAssets?.images || []).filter(item=>item?.url).slice(0,3)
     : [];
