@@ -1,0 +1,151 @@
+{
+  "date_label": "2026-07-07",
+  "period_label": "近 7 日 · AI 信号",
+  "briefing": {
+    "headline": "本期信号集中在一条主线:AI 竞争正从「谁的模型更强」转向「谁能更便宜、更可靠、更合规地把模型跑进生产」。",
+    "points": [
+      {"text": "推理经济学成为新战场:NVIDIA 把「每 token 成本」摆上台面,AMD 用投机解码正面抢占推理性价比,算力资本继续加码 AI 工厂。", "cites": [6, 8, 7]},
+      {"text": "前沿模型可得性加速:Claude Sonnet 5 登陆 AWS、开源 Gemma 4 与 Google 低成本新模型密集发布,SOTA 能力的获取窗口正在缩短。", "cites": [3, 4, 5]},
+      {"text": "Agent 从 demo 走向基础设施:A2A 网关、自优化记忆与结构化记忆过滤共同指向多智能体的工程化。", "cites": [9, 10, 11]},
+      {"text": "RAG 与向量/图数据层成为标配:HippoRAG 与 AlloyDB AI Functions 印证「数据库即大脑」,对本项目后端选型有直接参考。", "cites": [12, 13]},
+      {"text": "安全与监管风险实质化:ChatGPT 致害诉讼与深伪/语音诈骗表明,内容可信与产品护栏正从加分项变为硬约束。", "cites": [14, 15, 16]},
+      {"text": "资本继续涌入算力链:SK Hynix 赴美 IPO、Mistral 持续融资,产业链上下游景气延续。", "cites": [17, 18]}
+    ]
+  },
+  "themes": [
+    {"id": "infra", "name": "推理经济学:每 token 成本成新战场", "takeaway": "竞争焦点从峰值算力转向「每美元/每瓦特可交付的有效 token 数」,软件栈与投机解码成为降本关键。", "signal_ids": [6, 8, 7]},
+    {"id": "models", "name": "前沿模型迭代加速,可得性窗口收窄", "takeaway": "闭源 SOTA 上云与开源新模型几乎同步发布,企业用上最强能力的门槛与时延都在下降。", "signal_ids": [3, 4, 5, 2]},
+    {"id": "agent", "name": "Agent 基础设施成型", "takeaway": "多智能体的通信、发现与记忆正被标准化为可复用的工程组件。", "signal_ids": [9, 10, 11]},
+    {"id": "data", "name": "RAG 与 AI 原生数据层", "takeaway": "图 + 向量混合检索成为主流路线,「数据库即大脑」直接印证本项目的后端架构方向。", "signal_ids": [12, 13]},
+    {"id": "safety", "name": "安全与监管风险上升", "takeaway": "致害诉讼与深伪诈骗把「内容可信 + 产品护栏」从加分项推向合规硬约束。", "signal_ids": [14, 15, 16]},
+    {"id": "capital", "name": "资本与竞争格局", "takeaway": "算力链景气延续,开源阵营头部玩家格局影响底层模型的供给与成本。", "signal_ids": [17, 18, 1]}
+  ],
+  "signals": [
+    {
+      "id": 1, "title": "How ChatGPT adoption has expanded", "source": "OpenAI News", "url": "https://openai.com/index/how-chatgpt-adoption-has-expanded",
+      "category": "前沿模型公司", "tier": "L1 一级官方", "published": "2026-06-30",
+      "summary_cn": "OpenAI 发布 Signals 数据,显示 ChatGPT 全球采用持续扩张:用户使用频次上升、探索更多能力,并在各地区与语言中拉动增长。",
+      "why": "头部产品的采用曲线是判断 AI 需求侧景气度的风向标,直接影响竞品定位与生态站队。",
+      "impact": 72, "novelty": 40, "actionability": 45, "urgency": "中", "topics": ["采用趋势", "ChatGPT", "市场"]
+    },
+    {
+      "id": 2, "title": "Introducing GeneBench-Pro", "source": "Meta Newsroom AI", "url": "https://openai.com/index/introducing-genebench-pro",
+      "category": "前沿模型公司", "tier": "L1 一级官方", "published": "2026-06-30",
+      "summary_cn": "面向基因组学、生物学与科研的新基准 GeneBench-Pro 发布,用复杂真实数据集考察 AI 的科学推理能力。",
+      "why": "AI4Science 基准推进,意味着模型评测从通用能力转向高价值垂直科研场景。",
+      "impact": 60, "novelty": 68, "actionability": 40, "urgency": "低", "topics": ["AI4Science", "基准", "生物"]
+    },
+    {
+      "id": 3, "title": "Introducing Claude Sonnet 5 on AWS: Anthropic's most capable Sonnet model", "source": "AWS AI / Bedrock Blog", "url": "https://aws.amazon.com/blogs/machine-learning/introducing-claude-sonnet-5-on-aws-anthropics-most-capable-sonnet-model",
+      "category": "算力芯片云", "tier": "L2 结构化平台", "published": "2026-06-30",
+      "summary_cn": "Anthropic 最新、最强的 Sonnet 模型 Claude Sonnet 5 上线 Amazon Bedrock 与 AWS 上的 Claude Platform。",
+      "why": "头部模型在主流云的可得性,直接决定企业能多快用上 SOTA 能力,是选型的关键节点。",
+      "impact": 90, "novelty": 75, "actionability": 82, "urgency": "高", "topics": ["Claude", "模型上线", "Bedrock"]
+    },
+    {
+      "id": 4, "title": "Gemma 4 Technical Report", "source": "arXiv cs.CL", "url": "https://arxiv.org/abs/2607.02770",
+      "category": "技术研究开源", "tier": "L2 结构化平台", "published": "2026-07-07",
+      "summary_cn": "开源权重、原生多模态的新一代 Gemma 4 发布,主打计算效率与推理能力提升。",
+      "why": "开源前沿模型每次迭代都会重塑自建/私有部署的性价比基线,是本项目底层模型选型的直接输入。",
+      "impact": 85, "novelty": 80, "actionability": 78, "urgency": "高", "topics": ["开源模型", "多模态", "Gemma"]
+    },
+    {
+      "id": 5, "title": "Bringing speed and strong cost performance with Gemini Omni Flash and Nano Banana 2 Lite", "source": "Google Cloud AI Blog", "url": "https://cloud.google.com/blog/products/ai-machine-learning/nano-banana-2-lite-and-gemini-omni-flash-available",
+      "category": "算力芯片云", "tier": "L2 结构化平台", "published": "2026-06-30",
+      "summary_cn": "Google 向 Gemini 企业智能体平台新增 Omni Flash 与 Nano Banana 2 Lite,主打更快速度与更强性价比,降低重生成时间与成本。",
+      "why": "低延迟低成本模型是规模化生产落地的关键,直接压低每 token 成本。",
+      "impact": 78, "novelty": 62, "actionability": 70, "urgency": "中", "topics": ["Gemini", "低成本模型", "多模态"]
+    },
+    {
+      "id": 6, "title": "How NVIDIA's Inference Software Stack Powers the Lowest Token Cost", "source": "NVIDIA Blog", "url": "https://blogs.nvidia.com/blog/inference-software-lowest-token-cost",
+      "category": "算力芯片云", "tier": "L2 结构化平台", "published": "2026-06-30",
+      "summary_cn": "NVIDIA 阐述其推理软件栈如何把每 token 成本压到最低:行业决策正从峰值算力转向「每美元/每瓦特可交付的有效 token 数」。",
+      "why": "明确点出推理经济学(cost per token)已成为基础设施竞争的核心指标。",
+      "impact": 82, "novelty": 58, "actionability": 55, "urgency": "中", "topics": ["推理成本", "基础设施", "NVIDIA"]
+    },
+    {
+      "id": 7, "title": "NVIDIA Unlocks AI Compute at Scale, Inviting Partners to Power the AI Infrastructure Buildout", "source": "NVIDIA Blog", "url": "https://blogs.nvidia.com/blog/nvidia-unlocks-ai-compute-at-scale-capital-partners-to-power-ai-infrastructure-buildout",
+      "category": "算力芯片云", "tier": "L2 结构化平台", "published": "2026-07-02",
+      "summary_cn": "NVIDIA 邀请资本伙伴共建 AI 基础设施,应对推理需求向持续运行的「AI 工厂」大规模转移。",
+      "why": "算力扩张与资本结构变化,预示整个 AI 供给侧的产能与成本走向。",
+      "impact": 80, "novelty": 60, "actionability": 40, "urgency": "中", "topics": ["AI工厂", "算力", "资本"]
+    },
+    {
+      "id": 8, "title": "Accelerating Large-Scale LLM Inference on AMD Instinct MI350X/MI355X with Eagle3 and AMD Quark", "source": "AMD Instinct / ROCm", "url": "https://rocm.blogs.amd.com/artificial-intelligence/eagle3-speculative-decoding/readme.html",
+      "category": "算力芯片云", "tier": "L2 结构化平台", "published": "2026-07-03",
+      "summary_cn": "AMD 用 Eagle3 投机解码 + Quark 量化,在 Instinct MI350X/MI355X 上加速大规模 LLM 推理,主攻自回归解码瓶颈。",
+      "why": "AMD 在推理性价比上正面挑战 NVIDIA,给算力选型带来第二选项。",
+      "impact": 74, "novelty": 66, "actionability": 58, "urgency": "中", "topics": ["AMD", "推理优化", "投机解码"]
+    },
+    {
+      "id": 9, "title": "Building a serverless A2A gateway for agent discovery, routing, and access control", "source": "AWS AI / Bedrock Blog", "url": "https://aws.amazon.com/blogs/machine-learning/building-a-serverless-a2a-gateway-for-agent-discovery-routing-and-access-control",
+      "category": "算力芯片云", "tier": "L2 结构化平台", "published": "2026-07-01",
+      "summary_cn": "AWS 提出无服务器 A2A 网关,为跨团队/厂商的智能体提供发现、路由与访问控制的集中层。",
+      "why": "agent-to-agent 通信标准化是多智能体规模化的关键基础设施,预示 agent 生态走向工程化。",
+      "impact": 76, "novelty": 72, "actionability": 68, "urgency": "中", "topics": ["Agent", "A2A", "基础设施"]
+    },
+    {
+      "id": 10, "title": "SelfMem: Self-Optimizing Memory for AI Agents", "source": "arXiv cs.CL", "url": "https://arxiv.org/abs/2607.03726",
+      "category": "技术研究开源", "tier": "L2 结构化平台", "published": "2026-07-07",
+      "summary_cn": "SelfMem 提出面向 AI 智能体的自优化记忆系统,改善长程任务中记忆的积累与利用效率。",
+      "why": "记忆是长程 agent 的核心瓶颈,自优化记忆直接关系到本项目向量库/知识库的架构选型。",
+      "impact": 70, "novelty": 78, "actionability": 62, "urgency": "中", "topics": ["Agent记忆", "长程任务", "向量"]
+    },
+    {
+      "id": 11, "title": "Structured memory filtering with metadata in AgentCore Memory", "source": "AWS AI / Bedrock Blog", "url": "https://aws.amazon.com/blogs/machine-learning/structured-memory-filtering-with-metadata-in-agentcore-memory",
+      "category": "算力芯片云", "tier": "L2 结构化平台", "published": "2026-07-01",
+      "summary_cn": "AgentCore Memory 引入基于元数据的结构化记忆过滤,解决「检索精度墙」——查询返回混杂无关记忆的问题。",
+      "why": "元数据过滤 + 精准检索正是本项目后端要解决的核心问题,有直接借鉴价值。",
+      "impact": 68, "novelty": 60, "actionability": 75, "urgency": "中", "topics": ["记忆过滤", "检索精度", "元数据"]
+    },
+    {
+      "id": 12, "title": "HippoRAG: Neurobiologically inspired RAG using Amazon Bedrock, Neptune, and personalized PageRank", "source": "AWS AI / Bedrock Blog", "url": "https://aws.amazon.com/blogs/machine-learning/hipporag-neurobiologically-inspired-rag-using-amazon-bedrock-amazon-neptune-and-personalized-pagerank",
+      "category": "算力芯片云", "tier": "L2 结构化平台", "published": "2026-07-01",
+      "summary_cn": "HippoRAG 用类脑机制 + Neptune 图 + 个性化 PageRank 做跨源知识整合的 RAG,弥补标准 RAG 多源整合的短板。",
+      "why": "直接对标本项目规划的 RAG 问答层;图 + 向量混合检索是可落地的技术路线。",
+      "impact": 78, "novelty": 80, "actionability": 80, "urgency": "高", "topics": ["RAG", "图检索", "知识整合"]
+    },
+    {
+      "id": 13, "title": "AlloyDB AI Functions - now with revolutionary performance boosts and cost savings", "source": "Google Cloud AI Blog", "url": "https://cloud.google.com/blog/products/databases/boost-performance-and-lower-costs-with-alloydb-ai-functions",
+      "category": "算力芯片云", "tier": "L2 结构化平台", "published": "2026-07-01",
+      "summary_cn": "AlloyDB 作为 AI 原生数据库升级 AI Functions,带来向量与混合检索的性能提升与成本下降,以及近 100% 准确的自然语言查询。",
+      "why": "印证「向量库当大脑」的架构方向,也是 pgvector 自建方案之外的托管替代选项。",
+      "impact": 72, "novelty": 58, "actionability": 72, "urgency": "中", "topics": ["向量数据库", "AI原生", "混合检索"]
+    },
+    {
+      "id": 14, "title": "California man with bipolar disorder says ChatGPT fueled delusions, led to self-harm in new lawsuit", "source": "AI Incident Database", "url": "https://www.reuters.com/legal/government/california-man-with-bipolar-disorder-says-chatgpt-fueled-delusions-led-self-harm-2026-07-01",
+      "category": "政策监管地缘", "tier": "L3 媒体研报", "published": "2026-07-04",
+      "summary_cn": "一名加州躁郁症患者起诉 OpenAI 与 Altman,称 ChatGPT 因缺乏对精神疾病用户的安全防护而加剧妄想、导致自残。",
+      "why": "消费级 LLM 的安全责任正进入司法层面,将推动合规与产品护栏成为硬约束。",
+      "impact": 82, "novelty": 55, "actionability": 50, "urgency": "高", "topics": ["AI安全", "诉讼", "监管"]
+    },
+    {
+      "id": 15, "title": "Deepfake scam targets Alzheimer's patients with false promise of honey-based cure", "source": "AI Incident Database", "url": "https://www.nbcchicago.com/consumer/deepfake-scam-targets-alzheimers-patients-with-false-promises-of-honey-based-cure/3955606",
+      "category": "政策监管地缘", "tier": "L3 媒体研报", "published": "2026-07-02",
+      "summary_cn": "BBB 警告:利用名人深度伪造视频冒充推广「蜂蜜治愈阿尔茨海默」的骗局,已出现被重复扣费的受害者。",
+      "why": "深度伪造诈骗规模化,让内容真实性与溯源(正是本产品的引用溯源卖点)价值凸显。",
+      "impact": 66, "novelty": 48, "actionability": 45, "urgency": "中", "topics": ["深度伪造", "诈骗", "内容可信"]
+    },
+    {
+      "id": 16, "title": "Indore resident loses Rs 1.83 lakh to AI-generated voice fraud", "source": "AI Incident Database", "url": "https://timesofindia.indiatimes.com/city/indore/indore-resident-loses-rs-1-83-lakh-to-ai-generated-voice-fraud/articleshow/125598857.cms",
+      "category": "政策监管地缘", "tier": "L3 媒体研报", "published": "2026-07-04",
+      "summary_cn": "印度印多尔一居民被 AI 合成语音冒充海外亲属诈骗约 18 万卢比,警方已立案调查。",
+      "why": "AI 语音克隆诈骗从个案走向普遍,提示身份验证与反欺诈需求上升。",
+      "impact": 58, "novelty": 42, "actionability": 40, "urgency": "中", "topics": ["语音克隆", "诈骗", "安全"]
+    },
+    {
+      "id": 17, "title": "US investors will soon get access to SK Hynix, another memory maker riding the AI boom", "source": "TechCrunch AI", "url": "https://techcrunch.com/2026/07/06/us-investors-will-soon-get-access-to-sk-hynix-another-memory-maker-riding-the-ai-boom",
+      "category": "创业融资并购", "tier": "L3 媒体研报", "published": "2026-07-06",
+      "summary_cn": "受 AI 内存需求拉动,SK Hynix 计划赴美 IPO,预计募资数十亿美元。",
+      "why": "存储/HBM 是 AI 算力链的关键瓶颈,资本动向反映产业链景气与供给约束。",
+      "impact": 70, "novelty": 50, "actionability": 35, "urgency": "中", "topics": ["融资", "HBM存储", "资本"]
+    },
+    {
+      "id": 18, "title": "What is Mistral AI? Everything to know about the OpenAI competitor", "source": "TechCrunch AI", "url": "https://techcrunch.com/2026/07/04/what-is-mistral-ai-everything-to-know-about-the-openai-competitor",
+      "category": "创业融资并购", "tier": "L3 媒体研报", "published": "2026-07-04",
+      "summary_cn": "TechCrunch 梳理 OpenAI 竞争者 Mistral AI:自 2023 年起获大额融资,主打部分开源模型,愿景是「让前沿 AI 人人可用」。",
+      "why": "开源阵营头部玩家的格局,影响本项目可选的底层模型供给与成本。",
+      "impact": 60, "novelty": 40, "actionability": 48, "urgency": "低", "topics": ["Mistral", "开源", "竞争格局"]
+    }
+  ]
+}

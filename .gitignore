@@ -1,0 +1,11 @@
+.env
+.cursor/mcp.json
+.claude/
+.venv/
+venv/
+__pycache__/
+*.pyc
+.DS_Store
+*.log
+output/
+site/

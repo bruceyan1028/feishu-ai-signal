@@ -1,0 +1,2002 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI Signal 智能仪表板 v2</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  /* ============================================================
+     浅色红黑主题 — 所有视觉色集中在此 :root。
+     改配色 = 只改这里(刷新即看)。accent 换色由 --ds-accent 派生。
+     ============================================================ */
+  :root {
+    /* 中性表面:全部纯白 */
+    --ds-canvas: #ffffff;          /* 页底:纯白 */
+    --ds-section: #ffffff;         /* 内容区列底:纯白 */
+    --ds-panel-solid: #ffffff;     /* 浅色对比块 */
+    --ds-panel: #ffffff;           /* 面板 */
+    --ds-card: #ffffff;            /* 卡片底 */
+
+    /* 描边:实心墨线(编辑风,加重以强化分区可读性) */
+    --ds-border: rgba(22,19,15,.24);
+    --ds-border-2: rgba(22,19,15,.42);
+    --ds-hair: rgba(22,19,15,.14);
+    --ds-chip: rgba(22,19,15,.05);
+    --ds-ink-line: #16130f;        /* 主结构墨线(卡片外框/分区) */
+
+    /* 叠加(替代原白色玻璃叠加) */
+    --ds-fill-1: rgba(22,19,15,.04);
+    --ds-fill-2: rgba(22,19,15,.02);
+    --ds-fill-3: rgba(22,19,15,.06);
+
+    /* 文字 */
+    --ds-text: #16130f;            /* 主(近黑) */
+    --ds-text-2: #4a453d;
+    --ds-text-3: #6f685e;
+    --ds-on-dark: #faf7f0;         /* 深色块上的浅字 */
+
+    /* 强调:红 */
+    --ds-accent: #c22f2a;
+    --ds-accent-soft: color-mix(in srgb, var(--ds-accent) 10%, transparent);
+    --ds-accent-border: color-mix(in srgb, var(--ds-accent) 45%, transparent);
+    --ds-accent-glow: transparent;                                   /* 浅色去辉光 */
+    --ds-accent-faint: color-mix(in srgb, var(--ds-accent) 6%, transparent);
+    --ds-accent-bright: var(--ds-accent);                            /* 浅底不提亮 */
+    --ds-accent-deep: color-mix(in srgb, var(--ds-accent), black 30%);
+
+    /* 状态 */
+    --ds-good: #1f7a45; --ds-good-bg: rgba(31,122,69,.10); --ds-good-border: rgba(31,122,69,.45);
+    --ds-warn: #a06600; --ds-warn-bg: rgba(160,102,0,.10); --ds-warn-border: rgba(160,102,0,.45);
+    --ds-crit: #c22f2a; --ds-crit-bg: rgba(194,47,42,.08); --ds-crit-border: rgba(194,47,42,.45);
+
+    /* 图表类别色(降饱和适配浅底) */
+    --ds-cat-1: #2b6cb0; --ds-cat-2: #1f7a45; --ds-cat-3: #a06600; --ds-cat-4: #5a4fb5;
+    --ds-cat-5: #c22f2a; --ds-cat-6: #b23a6a; --ds-cat-7: #bf4a1e; --ds-cat-8: #2f6b2f;
+
+    /* 圆角:直角化 */
+    --ds-radius-sm: 0px; --ds-radius: 0px; --ds-radius-lg: 2px; --ds-radius-xl: 2px;
+
+    /* 兼容旧变量名(简报条等) */
+    --accent: var(--ds-accent);
+    --accent-soft: var(--ds-accent-soft);
+    --accent-border: var(--ds-accent-border);
+    --accent-deep: var(--ds-accent-deep);
+    --accent-bright: var(--ds-accent-bright);
+    --accent-faint: var(--ds-accent-faint);
+    --accent-glow: var(--ds-accent-glow);
+  }
+  body { margin: 0; background: var(--ds-canvas); color: var(--ds-text); font-family: "Geist", "PingFang SC", "Microsoft YaHei", sans-serif; }
+  a { color: var(--ds-text); text-decoration: none; }
+  a:hover { color: var(--accent-bright, #c22f2a); }
+  ::selection { background: color-mix(in srgb, var(--ds-accent) 22%, transparent); }
+  ::-webkit-scrollbar { width: 11px; height: 11px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: rgba(22,19,15,.18); border-radius: 8px; border: 3px solid transparent; background-clip: padding-box; }
+  ::-webkit-scrollbar-thumb:hover { background: rgba(22,19,15,.2); }
+  @keyframes hairline { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+  @keyframes floaty { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes popIn { from { opacity: 0; transform: translateY(14px) scale(.985); } to { opacity: 1; transform: translateY(0) scale(1); } }
+  @keyframes slideRight { from { opacity: 0; transform: translateX(-8px); } to { opacity: 1; transform: translateX(0); } }
+  button, input, select, textarea { font-family: inherit; }
+  /* --- 信号卡片:可点,悬停做硬阴影位移(编辑/野兽派风) --- */
+  .signal-card { cursor: pointer; transition: transform .12s ease, box-shadow .12s ease; }
+  .signal-card:hover { transform: translate(-2px, -2px); box-shadow: 6px 6px 0 var(--ds-accent) !important; }
+  .signal-card:hover .card-hint { opacity: 1; transform: translateX(0); }
+  .card-hint { opacity: 0; transform: translateX(-4px); transition: opacity .2s ease, transform .2s ease; }
+  .personal-card { transition: transform .12s ease, box-shadow .12s ease; }
+  .personal-card:hover { transform: translate(-2px,-2px); box-shadow: 6px 6px 0 var(--ds-accent) !important; }
+  /* --- 简报卡片 --- */
+  .brief-card { transition: transform .12s ease, box-shadow .12s ease; }
+  .brief-card:hover { transform: translate(-2px,-2px); box-shadow: 6px 6px 0 var(--ds-accent) !important; }
+  .brief-card .ref:hover { background: var(--ds-accent) !important; color: #fff !important; }
+  .src-row:hover { background: rgba(22,19,15,.03); }
+  .src-link:hover { color: var(--accent-bright, #a78bff) !important; border-bottom-color: var(--accent-bright, #a78bff) !important; }
+  .del-btn:hover { color: #ff8a8a !important; border-color: rgba(255,120,120,.4) !important; }
+  .add-btn:hover { filter: brightness(1.12); }
+  .swatch { cursor: pointer; width: 16px; height: 16px; border-radius: 5px; border: 1px solid rgba(22,19,15,.25); padding: 0; }
+  .swatch.active { box-shadow: 0 0 0 2px #08080a, 0 0 0 4px rgba(255,255,255,.6); }
+  /* --- 顶部主导航(浅色条上,方角卡片按钮) --- */
+  .top-item { display: inline-flex; align-items: center; gap: 7px; height: 34px; padding: 0 14px; cursor: pointer; color: var(--ds-text-2); transition: color .15s ease, background .15s ease, border-color .15s ease; border: 1.5px solid var(--ds-ink-line); background: #fff; font-size: 13px; font-weight: 600; font-family: inherit; }
+  .top-item:hover { background: var(--ds-accent-faint); color: var(--ds-text); }
+  .top-item.active { font-weight: 700; }
+  .top-item svg { width: 17px; height: 17px; }
+  /* --- 底部 AI 对话条(浅色) --- */
+  .bot-input { flex: 1; height: 40px; padding: 0 14px; border: 1.5px solid var(--ds-ink-line); background: #fff; color: var(--ds-text); font-size: 13px; outline: none; }
+  .bot-input::placeholder { color: var(--ds-text-3); }
+  .bot-input:focus { box-shadow: inset 0 0 0 1px var(--ds-accent); }
+  /* --- 简报每条:单行长条 + 深色小标题色块 + 加粗紫色竖条 --- */
+  .brief-bullet { position: relative; display: flex; align-items: center; gap: 12px; padding: 8px 16px 8px 10px; min-height: 44px; border: 1px solid rgba(22,19,15,.09); border-radius: 10px; background: linear-gradient(90deg, var(--accent-soft, rgba(108,71,255,.14)) 0, rgba(22,19,15,.045) 180px, rgba(22,19,15,.02) 100%); box-shadow: 0 1px 2px rgba(0,0,0,.3); transition: background .2s ease, box-shadow .2s ease, border-color .2s ease, transform .12s ease; }
+  .brief-bullet:hover { border-color: var(--accent-border, rgba(108,71,255,.4)); box-shadow: 0 8px 22px -12px rgba(0,0,0,.7); transform: translateX(2px); }
+  .bl-bar { flex: none; width: 6px; align-self: stretch; min-height: 28px; border-radius: 4px; background: linear-gradient(180deg, var(--accent-bright, #a78bff), var(--accent, #6C47FF)); box-shadow: 0 0 0 1px rgba(0,0,0,.3), 0 3px 12px -1px var(--accent-glow, rgba(108,71,255,.55)); }
+  .bl-title { flex: none; font-size: 13px; font-weight: 700; color: #ffffff; background: linear-gradient(180deg, #34343e, #1c1c22); padding: 6px 13px; border-radius: 7px; white-space: nowrap; border: 1px solid rgba(22,19,15,.1); box-shadow: 0 1px 3px rgba(0,0,0,.4), inset 0 1px 0 rgba(22,19,15,.08); }
+  .bl-text { flex: 1; min-width: 0; font-size: 13.5px; line-height: 1.5; color: var(--ds-text-2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .bl-refs { flex: none; display: inline-flex; gap: 5px; }
+  .brief-bullet .ref { opacity: .45; transition: opacity .2s ease, transform .15s ease, box-shadow .15s ease; cursor: pointer; }
+  .brief-bullet:hover .ref { opacity: 1; }
+  .brief-bullet .ref:hover { transform: translateY(-1px); box-shadow: 0 3px 10px -3px var(--accent-glow, rgba(108,71,255,.5)); }
+  /* --- 详情覆盖层 --- */
+  .detail-overlay { position: fixed; inset: 0; z-index: 200; display: flex; align-items: flex-start; justify-content: center; padding: 40px 20px; background: rgba(4,4,6,.72); backdrop-filter: blur(8px); overflow-y: auto; animation: fadeIn .18s ease; }
+  .detail-panel { position: relative; width: 100%; max-width: 1040px; margin: auto; border-radius: 20px; background: var(--ds-panel); border: 1px solid rgba(22,19,15,.12); box-shadow: 0 40px 90px -30px rgba(0,0,0,.85); overflow: hidden; animation: popIn .24s cubic-bezier(.2,.7,.3,1); }
+  /* --- 详情页标签 --- */
+  .dtab { height: 38px; padding: 0 16px; border: 1.5px solid var(--ds-ink-line); background: #fff; color: var(--ds-text-2); font-size: 13px; font-weight: 600; cursor: pointer; font-family: inherit; }
+  .dtab.on { background: var(--ds-accent); color: #fff; font-weight: 700; }
+  /* --- 正文笔记:高亮 / 下划线 / 悬浮折叠评论 --- */
+  .note-hl { background: #fff2a8; padding: 0 2px; box-decoration-break: clone; -webkit-box-decoration-break: clone; }
+  .note-ul { border-bottom: 2px solid var(--ds-accent); padding-bottom: 1px; }
+  .note-cmt { position: relative; background: var(--ds-accent-faint); border-bottom: 2px dotted var(--ds-accent); cursor: help; }
+  .note-cmt .cmt-pop { display: none; position: absolute; left: 0; top: 100%; margin-top: 6px; z-index: 30; width: 260px; padding: 10px 12px; background: #16130f; color: #faf7f0; font-size: 12px; line-height: 1.6; box-shadow: 0 12px 30px -10px rgba(0,0,0,.6); }
+  .note-cmt .cmt-pop b { color: var(--ds-accent-bright); }
+  .note-cmt:hover .cmt-pop { display: block; }
+  .detail-close { position: absolute; top: 16px; right: 16px; z-index: 3; width: 34px; height: 34px; border-radius: 9px; border: 1px solid rgba(22,19,15,.14); background: rgba(22,19,15,.06); color: var(--ds-text-2); font-size: 17px; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; }
+  .detail-close:hover { background: rgba(22,19,15,.12); }
+  .rel-card:hover { border-color: var(--accent-border, rgba(108,71,255,.4)) !important; background: rgba(22,19,15,.05) !important; }
+  .fig-tile:hover { transform: translateY(-2px); filter: brightness(1.08); }
+  /* --- 辩论气泡 --- */
+  .debate-post { animation: slideRight .3s ease both; }
+  .send-btn:hover { filter: brightness(1.12); }
+  .chip-btn:hover { border-color: var(--accent-border, rgba(194,47,42,.4)) !important; color: var(--ds-text) !important; }
+  .cmt-row:hover { background: rgba(22,19,15,.03); }
+  .like-btn:hover { border-color: var(--accent-border) !important; color: var(--accent-bright) !important; }
+  /* --- 索引跳转:卡片高亮闪动 --- */
+  @keyframes flashred { 0%, 30%, 60%, 100% { box-shadow: 0 0 0 0 rgba(255,90,90,0); } 15%, 45%, 75% { box-shadow: 0 0 0 3px rgba(255,90,90,.5); } }
+  .flash-red { animation: flashred 1.5s ease-in-out; }
+</style>
+</head>
+<body>
+<div id="app"></div>
+<div id="detailLayer"></div>
+
+<script>
+// ============ State (mirrors the DCLogic component) ============
+const state = {
+  page: 'brief',
+  filter: '全部',
+  srcTab: '全部',
+  sortKey: 'impact',
+  showScoreBars: true,
+  detailRank: null,
+  detailTab: '正文',
+  notesOpen: false,
+  dialogueOpen: false,
+  taskTab: 'report',
+  timelineEntity: 'NVIDIA',
+  chat: [
+    { role: 'ai', text: '我是你的信息源助手。告诉我你的关注方向或想跟踪的机构 / 主题,我会帮你调整来源权重、推荐新数据源。' },
+    { role: 'user', text: '我最近更关注推理成本和 Agent 基础设施,少推一些融资新闻。' },
+    { role: 'ai', text: '已把「推理成本」「Agent 基础设施」设为高权重,并下调「创业融资并购」的匹配优先级。建议新增来源:AMD Instinct Blog(投机解码 / 量化)与 LangChain Blog(Agent 编排),需要我加入吗?' },
+  ],
+  debates: [],
+  favorites: [],
+  pending: [],
+  bottomChat: [
+    { role:'user', text:'今天最值得先看的是哪条?' },
+    { role:'ai', text:'优先看「Claude Sonnet 5 登陆 AWS」(影响 90):同价位能力升级,现有 Bedrock 集成零改造即可切换,建议本周在评测集做回归。其次是「NVIDIA 每 token 成本拆解」,可直接用于本季度推理预算测算。' },
+    { role:'user', text:'我更关注推理成本,少推融资新闻' },
+    { role:'ai', text:'已把「算力/推理成本」相关来源(NVIDIA、AMD Instinct、Google Cloud)权重上调,并下调「创业融资并购」优先级——这类只在影响分 ≥70 时推送。要不要把 AMD Instinct Blog 加入检索列表?' },
+    { role:'user', text:'帮我跟踪阶跃星辰和智谱的端侧模型' },
+    { role:'ai', text:'已在「数据源 · 端侧模型」维度加入阶跃星辰、智谱 GLM 与面壁智能 MiniCPM,并建立主体追踪。有新端侧模型发布 / 定价变化时会在动向追踪里提示。' },
+  ],
+  detailQA: {},
+  comments: {
+    3: [
+      { id: 1, user: '李晨', dept: '平台架构组', text: '已在评测集跑了回归,代码任务提升明显,长上下文差距更大。建议下周直接灰度。', likes: 12, liked: false, time: '2 小时前' },
+      { id: 2, user: '王珂', dept: '算法组', text: '注意 token 预算:Sonnet 5 输出普遍更长,同价位下总成本可能上浮 5–8%。', likes: 8, liked: false, time: '1 小时前' },
+      { id: 3, user: 'Sarah Lin', dept: 'FinOps', text: '采购侧同步:Bedrock 承诺用量折扣本月底到期,切换前找我对一下账。', likes: 5, liked: false, time: '40 分钟前' },
+    ],
+    12: [
+      { id: 1, user: '赵一鸣', dept: '检索组', text: '我们的多跳场景占比不到 15%,20% 提升摊下来收益有限,先别急着换。', likes: 9, liked: false, time: '昨天 18:20' },
+      { id: 2, user: '李晨', dept: '平台架构组', text: 'Neptune 的运维成本要算进去,建议先用参考实现在测试集群验证。', likes: 4, liked: false, time: '昨天 19:05' },
+    ],
+    4: [
+      { id: 1, user: '陈默', dept: '端侧组', text: '4B 档位在 8 Gen4 上实测 18 token/s,离线场景可用性比上一代强太多了。', likes: 15, liked: false, time: '3 小时前' },
+    ],
+  },
+  meetings: [
+    { id: 1, title: 'AI Infra 周会', link: 'meet.feishu.cn/j/ai-infra-weekly', time: '2026-07-08 14:00', status: '已完成', mode: '官方纪要', tool: '飞书妙记', mins: 45, participants: 8,
+      summary: ['确定 Q3 推理降本目标 30%,高频轻任务下沉到低成本模型梯队', 'Claude Sonnet 5 灰度评测排期:下周一开始,先切 5% 流量', '向量库选型收敛到 AlloyDB 与自建 pgvector 两条路线'],
+      actions: [['李晨', '搭建 Sonnet 5 灰度环境', '07-14'], ['王珂', '产出 token 预算敏感性分析', '07-11']] },
+    { id: 2, title: '向量库选型评审', link: 'zoom.us/j/88123456', time: '2026-07-09 10:30', status: '已完成', mode: '自动参会', tool: 'Fathom AI', mins: 60, participants: 6,
+      summary: ['本会议无官方纪要,会议助手已自动参会并生成以下纪要', 'AlloyDB 新版向量检索性能 4×,自建方案仅在数据主权场景保留', 'HippoRAG 图结构方案列为下季度预研,不进入本轮选型'],
+      actions: [['赵一鸣', '两周内产出 AlloyDB PoC 报告', '07-23']] },
+    { id: 3, title: 'Q3 算力预算对齐会', link: 'meet.feishu.cn/j/q3-budget', time: '2026-07-10 16:00', status: '待参会', mode: '自动参会', tool: 'Fathom AI', mins: 0, participants: 0, summary: [], actions: [] },
+  ],
+  nextMeetId: 4,
+  favOpen: false,
+  historyOpen: false,
+  feedback: {},
+  missing: [],
+  customTimelines: {},
+  formName: '', formType: '国外大厂', formFormat: '网站', formUrl: '', formPriority: '中', formEdge: false,
+  sourceSync: { status: 'loading', connected: false, busy: false, message: '正在连接飞书多维表格…' },
+  sourceMeta: { types: [], formats: [], priorities: [], writable: [] },
+  sources: [
+    { id: 1, on: true,  name: 'AWS AI / Bedrock Blog', url: 'aws.amazon.com/blogs/machine-learning', type: '国外大厂', format: '网站', edge: false, priority: '高', last: '08:40', perDay: 4 },
+    { id: 2, on: true,  name: 'NVIDIA Blog',            url: 'blogs.nvidia.com',                      type: '国外大厂', format: '网站', edge: false, priority: '高', last: '08:12', perDay: 3 },
+    { id: 3, on: true,  name: 'arXiv cs.CL / cs.AI',    url: 'export.arxiv.org/api',                  type: '学术论文', format: '论文', edge: false, priority: '高', last: '06:00', perDay: 6 },
+    { id: 4, on: true,  name: 'Google Cloud Blog',      url: 'cloud.google.com/blog/products/ai',     type: '国外大厂', format: '网站', edge: true,  priority: '中', last: '08:35', perDay: 2 },
+    { id: 5, on: true,  name: 'OpenAI News',            url: 'openai.com/news',                       type: '国外大厂', format: '网站', edge: false, priority: '高', last: '09:05', perDay: 1 },
+    { id: 6, on: true,  name: 'TechCrunch AI',          url: 'techcrunch.com/category/ai',            type: '权威媒体', format: '网站', edge: false, priority: '中', last: '09:10', perDay: 5 },
+    { id: 7, on: true,  name: 'AI Incident Database',   url: 'incidentdatabase.ai',                   type: '实验室',   format: '网站', edge: false, priority: '中', last: '05:30', perDay: 2 },
+    { id: 8, on: true,  name: '机器之心',               url: '公众号 · almosthuman2014',              type: '权威媒体', format: '公众号', edge: false, priority: '中', last: '08:50', perDay: 3 },
+    { id: 9, on: false, name: '量子位',                 url: '公众号 · QbitAI',                       type: '权威媒体', format: '公众号', edge: false, priority: '低', last: '昨日 21:00', perDay: 0 },
+    { id: 10, on: true, name: 'X · @AnthropicAI 等 12 账户', url: 'x.com 列表 · ai-watchlist',        type: 'KOL',      format: '社交媒体', edge: false, priority: '低', last: '09:28', perDay: 8 },
+    { id: 11, on: false, name: '内部调研文档库',        url: '飞书云文档 · AI 选型调研空间',           type: '实验室',   format: '内部文档', edge: false, priority: '低', last: '昨日 06:00', perDay: 0 },
+    { id: 12, on: true,  name: 'YouTube · AI Explained 等 6 频道', url: 'youtube.com 播放列表 · ai-briefing', type: 'KOL',   format: '视频', edge: false, priority: '低', last: '04:00', perDay: 2 },
+    { id: 13, on: false, name: 'B站 · 跟李沐学 AI',      url: 'space.bilibili.com/1567748478',         type: 'KOL',      format: '视频', edge: false, priority: '低', last: '昨日 04:00', perDay: 0 },
+    { id: 14, on: true,  name: 'Qualcomm AI Hub',        url: 'aihub.qualcomm.com',                    type: '国外大厂', format: '网站', edge: true,  priority: '中', last: '07:20', perDay: 1 },
+    { id: 15, on: true,  name: 'Apple ML Research',      url: 'machinelearning.apple.com',             type: '实验室',   format: '网站', edge: true,  priority: '中', last: '06:10', perDay: 1 },
+    { id: 16, on: true,  name: '阶跃星辰 StepFun',        url: 'stepfun.com · 端侧模型发布',            type: '国内大厂', format: '网站', edge: true,  priority: '高', last: '08:20', perDay: 2 },
+    { id: 17, on: true,  name: '智谱 GLM',               url: 'zhipuai.cn · GLM-Edge / 开放平台',      type: '国内大厂', format: '网站', edge: true,  priority: '高', last: '08:05', perDay: 2 },
+    { id: 18, on: true,  name: '面壁智能 MiniCPM',       url: 'modelbest.cn · MiniCPM 端侧',           type: '国内大厂', format: '网站', edge: true,  priority: '中', last: '07:45', perDay: 1 },
+    { id: 19, on: false, name: '微软 Phi 团队',          url: 'huggingface.co/microsoft (Phi)',        type: '国外大厂', format: '论文', edge: true,  priority: '中', last: '昨日 22:00', perDay: 0 },
+    { id: 20, on: true,  name: '内部飞书文档 · 团队 Wiki', url: 'feishu.cn · AI 团队空间 / 会议纪要',   type: '实验室',   format: '内部文档', edge: false, priority: '中', last: '08:00', perDay: 3 },
+    { id: 21, on: true,  name: '内部知识库 · 选型结论沉淀', url: 'wiki · 模型选型 / 评测结论库',         type: '实验室',   format: '内部文档', edge: false, priority: '中', last: '07:30', perDay: 2 },
+  ],
+  nextId: 22,
+};
+
+// ============ Static data ============
+let bullets = [
+  { text: '推理经济学成为新战场:NVIDIA 把「每 token 成本」摆上台面,AMD 用投机解码正面抢占推理性价比,算力资本继续加码 AI 工厂。', refs: [6, 8, 7] },
+  { text: '前沿模型可得性加速:Claude Sonnet 5 登陆 AWS、开源 Gemma 4 与 Google 低成本新模型密集发布,SOTA 能力的获取窗口正在缩短。', refs: [3, 4, 5] },
+  { text: 'Agent 从 demo 走向基础设施:A2A 网关、自优化记忆与结构化记忆过滤共同指向多智能体的工程化。', refs: [9, 10, 11] },
+  { text: 'RAG 与向量/图数据层成为标配:HippoRAG 与 AlloyDB AI Functions 印证「数据库即大脑」,对本项目后端选型有直接参考。', refs: [12, 13] },
+  { text: '安全与监管风险实质化:ChatGPT 致害诉讼与深伪/语音诈骗表明,内容可信与产品护栏正从加分项变为硬约束。', refs: [14, 15, 16] },
+  { text: '资本继续涌入算力链:SK Hynix 赴美 IPO、Mistral 持续融资,产业链上下游景气延续。', refs: [17, 18] },
+  { text: '端侧模型能力密度跃升:高通把 10B 级模型跑进手机 NPU,Apple 3B 对标 7B 质量,「云+端」分层架构正在成型。', refs: [19, 20, 21] },
+];
+
+let personal = [
+  { ref: 12, match: 94, title: 'HippoRAG: Neurobiologically inspired RAG using Amazon Bedrock', reason: '命中关注方向「RAG 后端选型」— 图结构 + 个性化 PageRank 的检索方案,可直接对比你当前的向量方案。' },
+  { ref: 9, match: 88, title: 'Building a serverless A2A gateway for agent discovery, routing, and access control', reason: '命中关注方向「Agent 基础设施」— serverless A2A 网关与你在评估的多智能体路由架构高度重合。' },
+  { ref: 6, match: 82, title: "How NVIDIA's Inference Software Stack Powers the Lowest Token Cost", reason: '命中关注方向「推理成本」— 每 token 成本拆解框架,可用于本季度推理预算测算。' },
+];
+
+const sourceUrls = {
+  'AWS AI / Bedrock Blog': 'https://aws.amazon.com/blogs/machine-learning/',
+  'NVIDIA Blog': 'https://blogs.nvidia.com/',
+  'arXiv cs.CL': 'https://arxiv.org/list/cs.CL/recent',
+  'arXiv cs.AI': 'https://arxiv.org/list/cs.AI/recent',
+  'AI Incident Database': 'https://incidentdatabase.ai/',
+  'Google Cloud Blog': 'https://cloud.google.com/blog/products/ai-machine-learning',
+  'AMD Instinct Blog': 'https://rocm.blogs.amd.com/',
+  'OpenAI News': 'https://openai.com/news/',
+  'TechCrunch AI': 'https://techcrunch.com/category/artificial-intelligence/',
+  'Qualcomm AI Hub': 'https://aihub.qualcomm.com/',
+  'Apple ML Research': 'https://machinelearning.apple.com/',
+  'YouTube · AI Explained': 'https://www.youtube.com/@aiexplained-official',
+};
+
+let signals = [
+  { rank: 3, impact: 90, urgency: '高', zhTitle: 'Claude Sonnet 5 登陆 AWS:Anthropic 最强 Sonnet 模型上线 Bedrock', title: "Introducing Claude Sonnet 5 on AWS: Anthropic's most capable Sonnet model", source: 'AWS AI / Bedrock Blog', cat: '算力芯片云', date: '2026-06-30', summary: 'Anthropic 最新、最强的 Sonnet 模型 Claude Sonnet 5 正式上线 Amazon Bedrock 与 AWS 上的 Claude Platform。官方基准显示其在代码生成、长上下文推理与工具调用上全面超越前代,同时保持与 Sonnet 4.5 相同的定价档位,现有 Bedrock 集成可零改造直接切换模型 ID 完成升级。', why: '头部模型在主流云的可得性,直接决定企业能多快用上 SOTA 能力。同价位的能力升级意味着现有工作负载的性价比立即改善——建议尽快在内部评测集上做回归验证,评估是否将其设为默认模型,并同步复核 token 预算假设。', novel: 75, action: 82, tags: ['Claude', '模型上线', 'Bedrock'] },
+  { rank: 4, impact: 85, urgency: '高', zhTitle: 'Gemma 4 技术报告发布:开源多模态新旗舰', title: 'Gemma 4 Technical Report', source: 'arXiv cs.CL', cat: '技术研究开源', date: '2026-07-07', summary: '开源权重、原生多模态的新一代 Gemma 4 发布完整技术报告,覆盖 4B 至 70B 多个规模档位,主打计算效率与推理能力提升,并首次在开源梯队中提供 128K 上下文与图文混合输入的完整支持,权重与推理代码同步开放商用许可。', why: '开源前沿模型每次迭代都会重塑自建/私有部署的性价比基线。若 70B 档位实测接近闭源第一梯队,私有化部署路线的论证将显著增强;4B 端侧档位也为离线场景提供了新选项,是本项目底层模型选型的直接输入。', novel: 80, action: 78, tags: ['开源模型', '多模态', 'Gemma', '端侧'] },
+  { rank: 6, impact: 82, urgency: '中', zhTitle: 'NVIDIA 推理软件栈拆解:如何做到最低每 token 成本', title: "How NVIDIA's Inference Software Stack Powers the Lowest Token Cost", source: 'NVIDIA Blog', cat: '算力芯片云', date: '2026-06-30', summary: 'NVIDIA 发布推理软件栈完整技术拆解,把「每 token 成本」作为核心竞争指标,系统阐述从 TensorRT-LLM 编译优化、KV 缓存管理、动态批处理到多级调度层的降本路径,并给出不同负载形态(高并发短请求/长上下文/Agent 循环)下的成本测算模型。', why: '把推理成本变成可对标的公开指标,意味着供应商竞争将围绕单位经济学展开,利好采购方议价。其负载分型成本模型可直接借用于本季度推理预算测算,也为与云厂商谈判提供了权威参照系。', novel: 68, action: 74, tags: ['推理成本', 'NVIDIA', '算力'] },
+  { rank: 14, impact: 82, urgency: '高', zhTitle: '加州躁郁症患者起诉 OpenAI:称 ChatGPT 加剧妄想致自残', title: 'California man with bipolar disorder says ChatGPT fueled delusions, led to self-harm in new lawsuit', source: 'AI Incident Database', cat: '政策监管地缘', date: '2025-07-04', summary: '一名加州躁郁症患者起诉 OpenAI 及 Sam Altman,称 ChatGPT 在数月的长时间对话中持续迎合并强化其妄想内容,最终导致自残,案件已被法院受理。原告主张产品缺乏对精神脆弱用户的识别与干预机制,要求赔偿并强制整改对话安全策略。', why: '涉及 LLM 的安全责任诉讼进入实质审理阶段。判例一旦形成,内容护栏、使用时长干预与脆弱用户识别可能从「最佳实践」变为合规硬要求——所有对话类 AI 产品都应提前评估自身暴露面,并预研干预机制的产品化方案。', novel: 70, action: 60, tags: ['诉讼', '安全', '合规'] },
+  { rank: 5, impact: 80, urgency: '中', zhTitle: 'NVIDIA 开放规模化 AI 算力,邀伙伴共建「AI 工厂」', title: 'NVIDIA Unlocks AI Compute at Scale, Inviting Partners to Power the AI Infrastructure Buildout', source: 'NVIDIA Blog', cat: '算力芯片云', date: '2026-07-07', summary: 'NVIDIA 宣布规模化 AI 算力开放计划,向云厂商、主权算力项目与大型企业客户开放参考架构、供应链协同与融资支持,邀请合作伙伴共建「AI 工厂」基础设施,目标是把训练与推理算力集群的建设周期从数年压缩到数个季度。', why: '算力供给侧的开放联盟化会影响中期算力价格曲线与云厂商议价格局。供给放量后推理单价有望继续下行——长期算力合同的签订节奏与锁价策略值得重新评估,避免在价格下行通道中过早锁定高价。', novel: 60, action: 66, tags: ['AI 工厂', '算力', '基建'] },
+  { rank: 7, impact: 78, urgency: '中', zhTitle: 'Gemini Nano Flash 与 Nano 2 Lite:速度与低成本的新组合', title: 'Bringing speed and strong cost performance with Gemini Nano Flash and Nano 2 Lite', source: 'Google Cloud Blog', cat: '算力芯片云', date: '2026-06-30', summary: 'Google 推出 Gemini 低成本梯队两款新型号:Nano Flash 主打端侧毫秒级响应,Nano 2 Lite 则以约为旗舰模型 5% 的价格提供可用的基础推理能力。两者均已开放 API,支持批量调用折扣与上下文缓存,瞄准分类、抽取、路由等高频轻任务。', why: '低成本模型梯队的完善意味着高频轻任务可以大幅降本。值得把现有调用按任务复杂度分层,将轻任务下沉到低价档位,配合上下文缓存,整体推理开销有望压缩 30% 以上,是短期内确定性最高的降本动作。', novel: 62, action: 76, tags: ['Gemini', '低成本', '端侧'] },
+  { rank: 12, impact: 78, urgency: '中', zhTitle: 'HippoRAG:仿海马体的图结构 RAG 方案', title: 'HippoRAG: Neurobiologically inspired RAG using Amazon Bedrock, Neptune, and personalized PageRank', source: 'AWS AI / Bedrock Blog', cat: '技术研究开源', date: '2026-07-01', summary: 'HippoRAG 借鉴海马体记忆机制,以知识图谱 + Amazon Neptune 与个性化 PageRank 实现检索,论文与 AWS 参考实现同步发布。在多跳问答基准上比传统向量 RAG 提升约 20%,同时检索延迟保持在可生产化区间,全链路基于 Bedrock 托管组件搭建。', why: '图结构记忆代表 RAG 的下一代形态,对知识密集型应用的检索架构选型有直接参考价值。参考实现基于全托管组件,验证成本低——建议纳入下一轮后端选型的对比方案,与现有向量方案在自有数据集上跑同题评测。', novel: 78, action: 70, tags: ['RAG', '知识图谱', 'Bedrock'] },
+  { rank: 9, impact: 76, urgency: '中', zhTitle: 'Serverless A2A 网关:智能体发现、路由与访问控制', title: 'Building a serverless A2A gateway for agent discovery, routing, and access control', source: 'AWS AI / Bedrock Blog', cat: '技术研究开源', date: '2026-07-01', summary: 'AWS 展示基于 serverless 的 A2A(Agent-to-Agent)网关完整方案,覆盖智能体注册发现、意图路由、细粒度访问控制与调用审计,全部组件按调用量计费,补齐了多智能体系统从原型走向生产所缺的运维与治理基座。', why: 'Agent 互操作正从协议层走向基础设施层,网关的成熟度决定多智能体架构能否真正进入生产。该方案与我们在评估的路由架构高度重合,可作为「自建 vs 托管」两条路线的成本与能力对照基准。', novel: 72, action: 68, tags: ['Agent', 'A2A', '网关'] },
+  { rank: 8, impact: 74, urgency: '中', zhTitle: 'AMD MI350X/MI355X 推理加速:Eagle3 投机解码 + Quark 量化', title: 'Accelerating Large-Scale LLM Inference on AMD Instinct MI350X/MI355X with Eagle3 and AMD Quark', source: 'AMD Instinct Blog', cat: '算力芯片云', date: '2026-07-02', summary: 'AMD 发布在 Instinct MI350X/MI355X 上结合 Eagle3 投机解码与 Quark 量化工具链的推理加速实践,官方数据显示吞吐最高提升 2.8 倍,将大规模 LLM 推理的每 token 成本压至与 NVIDIA 旗舰方案可比的区间,并提供开箱即用的容器镜像。', why: 'AMD 正面抢占推理性价比,供应商多元化的窗口正在打开。即使短期不切换硬件,拿着 AMD 的公开数据与报价和现有供应商谈判,也能直接改善算力采购条件;中期则值得安排一次小规模实测。', novel: 64, action: 62, tags: ['AMD', '投机解码', '量化'] },
+  { rank: 15, impact: 72, urgency: '中', zhTitle: 'OpenAI 发布 Signals 报告:ChatGPT 采用扩散全景', title: 'How ChatGPT adoption has expanded', source: 'OpenAI News', cat: '前沿模型公司', date: '2026-06-28', summary: 'OpenAI 发布 Signals 报告,基于脱敏使用数据复盘 ChatGPT 的采用曲线:从个人问答扩散到企业工作流,编码、写作与数据分析成为增长最快的三类场景,企业席位占比首次超过三分之一,且工作流内嵌调用的增速显著高于对话式使用。', why: '头部产品的采用曲线是需求侧最好的领先指标。场景结构的变化可直接校准自家产品的优先级排序——增长最快的三类场景与我们路线图的重叠度值得逐项核对,工作流内嵌化的趋势也提示集成入口比独立入口更值得投入。', novel: 52, action: 46, tags: ['OpenAI', 'ChatGPT', '采用'] },
+  { rank: 13, impact: 72, urgency: '中', zhTitle: 'AlloyDB AI Functions 升级:向量检索性能大涨、成本下降', title: 'AlloyDB AI Functions — now with revolutionary performance boosts and cost savings', source: 'Google Cloud Blog', cat: '算力芯片云', date: '2026-07-01', summary: 'AlloyDB 内建 AI Functions 迎来大版本升级:支持在 SQL 中直接调用嵌入生成与重排序,官方称向量检索性能提升至上一代的 4 倍、存储成本下降约 40%,并新增与 Vertex AI 的原生管道集成,检索、过滤与业务数据可留在同一引擎内完成。', why: '「数据库即大脑」路线持续兑现:检索与业务数据同引擎意味着架构复杂度和数据同步成本显著降低。评估 pgvector 类方案时应基于新版本重新跑分——三个月前的性能结论很可能已经失效,选型对比需要刷新。', novel: 58, action: 64, tags: ['AlloyDB', '向量数据库', '降本'] },
+  { rank: 10, impact: 70, urgency: '中', zhTitle: 'SelfMem:让 Agent 自主优化长期记忆', title: 'SelfMem: Self-Optimizing Memory for AI Agents', source: 'arXiv cs.AI', cat: '技术研究开源', date: '2026-07-02', summary: 'SelfMem 提出让 Agent 自主重写、压缩与优先排序长期记忆的机制:模型定期审视自己的记忆库,合并冗余条目、淘汰过期信息并为高价值记忆加权,在多任务长程基准上稳定超过固定记忆策略 8–15 个百分点,且额外算力开销可控。', why: '记忆管理是长程 Agent 的核心瓶颈,自优化机制为「越用越好」提供了可行路径。虽仍是预印本,但其记忆评分与淘汰策略的设计可直接借鉴到我们 Agent 记忆层的原型中,值得安排一次小范围复现。', novel: 76, action: 52, tags: ['Agent 记忆', '自优化', '预印本'] },
+  { rank: 17, impact: 68, urgency: '中', zhTitle: 'SK Hynix 拟赴美上市:HBM 厂商乘 AI 算力热潮', title: 'US investors will soon get access to SK Hynix, another memory maker riding the AI boom', source: 'TechCrunch AI', cat: '创业融资并购', date: '2026-07-06', summary: 'SK Hynix 计划通过 ADR 赴美上市,为 HBM 产能扩张融资。作为 NVIDIA HBM 的主力供应商,其 HBM4 世代的量产进度直接牵动下一代 AI 加速器的供货节奏,市场普遍预期其估值将显著受益于持续的 AI 算力建设热潮。', why: '存储是 AI 算力链最紧的环节之一,资本动向预示 HBM 供需与价格走势。若 HBM 供给持续偏紧,算力成本的下行空间将受限——这会直接影响中期推理成本预期,值得纳入算力预算的敏感性分析。', novel: 50, action: 38, tags: ['SK Hynix', 'IPO', 'HBM'] },
+  { rank: 11, impact: 68, urgency: '低', zhTitle: 'AgentCore Memory 新增元数据结构化记忆过滤', title: 'Structured memory filtering with metadata in AgentCore Memory', source: 'AWS AI / Bedrock Blog', cat: '技术研究开源', date: '2026-07-03', summary: 'AgentCore Memory 引入基于元数据的结构化记忆过滤:开发者可为记忆条目附加会话、用户、主题等维度标签,检索时按标签组合精准取回上下文。官方示例显示无关上下文注入量下降约 60%,token 消耗与响应延迟同步改善。', why: '结构化过滤是把记忆从「全量塞上下文」转向工程化管理的关键一步,直接降低 token 消耗与幻觉率。其标签维度设计与我们 Agent 基础设施的记忆层方向一致,托管方案成熟度已可评估直接采用,省去自建成本。', novel: 60, action: 58, tags: ['AgentCore', '记忆过滤', '元数据'] },
+  { rank: 16, impact: 66, urgency: '高', zhTitle: '深伪名人视频骗局瞄准阿尔茨海默患者', title: "Deepfake scam targets Alzheimer's patients with false promise of honey-based cure", source: 'AI Incident Database', cat: '政策监管地缘', date: '2026-07-03', summary: 'BBC 调查揭露一起以深伪名人视频为核心的骗局:不法分子批量生成知名医生与电视主持人的假视频,向阿尔茨海默患者及家属兜售所谓「蜂蜜疗法」,多个社交平台的内容审核未能在传播早期拦截,受害群体持续扩大。', why: '深伪滥用正向弱势群体下沉,平台责任与内容溯源要求将进一步收紧。若产品涉及 UGC 或生成式内容分发,需要提前布局合成内容检测与来源标注(如 C2PA)能力,等监管落地再动手将非常被动。', novel: 56, action: 44, tags: ['深伪', '诈骗', '内容安全'] },
+  { rank: 18, impact: 62, urgency: '中', zhTitle: '印度印多尔 AI 语音克隆诈骗:居民损失 18.3 万卢比', title: 'Indore residents lose Rs 1.83 lakh to AI-generated voice fraud', source: 'AI Incident Database', cat: '政策监管地缘', date: '2026-07-05', summary: '印度印多尔多名居民遭 AI 合成语音诈骗:骗子克隆亲属声音制造紧急借款场景,累计损失 18.3 万卢比,当地警方已立案。这是该地区两个月内第三起同类案件,作案手法呈模板化扩散趋势,且识别难度随克隆质量提升持续上升。', why: '语音克隆诈骗正在常态化,身份验证与反欺诈产品的需求随之上升。对自家产品而言,凡涉及语音交互或声纹验证的环节都应引入活体检测或多因子确认——这既是风控合规的前置项,也是潜在的产品机会。', novel: 48, action: 42, tags: ['语音克隆', '诈骗', '风控'] },
+  { rank: 19, impact: 76, urgency: '中', kind: '文章', zhTitle: '高通发布端侧推理白皮书:10B 级模型跑进手机 NPU', title: 'Qualcomm AI Hub: Running 10B-class LLMs on-device with NPU-first inference', source: 'Qualcomm AI Hub', cat: '算力芯片云', date: '2026-07-05', summary: '高通发布端侧推理技术白皮书:通过 W4A16 量化、结构化稀疏与 NPU 优先调度,在 Snapdragon 旗舰平台上以约 18 token/s 运行 10B 级模型,并给出完整的功耗与发热工程数据,配套 AI Hub 一键部署工具链同步开放。', why: '端侧 10B 档位跑通,意味着离线与隐私敏感场景的产品设计空间被实质性打开。若产品有离线诉求,现在是评估端侧路线的窗口期——白皮书中的量化与调度参数可直接复用于选型测试。', novel: 72, action: 70, tags: ['端侧', 'NPU', '量化'] },
+  { rank: 20, impact: 74, urgency: '中', kind: '论文', zhTitle: 'Apple 更新端侧基础模型:3B 参数对标 7B 能力', title: 'Apple Intelligence Foundation Models: On-device 3B with 7B-class quality', source: 'Apple ML Research', cat: '技术研究开源', date: '2026-07-03', summary: 'Apple 发布端侧基础模型技术报告:3B 参数模型通过混合精度量化(平均 3.7 bit)与任务适配器体系,在摘要、改写与工具调用上达到 7B 级开源模型质量,并保持端侧毫秒级首响与低内存占用,适配器可按 App 动态加载。', why: '端侧小模型的能力密度持续提升,「云端大模型 + 端侧小模型」的分层架构正在成为移动端标配。其适配器方案对多任务端侧部署有直接借鉴意义,值得纳入端侧路线评估。', novel: 74, action: 58, tags: ['端侧', 'Apple', '基础模型'] },
+  { rank: 21, impact: 64, urgency: '低', kind: '视频', zhTitle: '视频解读:Gemma 4 全档位实测,4B 端侧表现超预期', title: 'Gemma 4 tested: 4B on-device performance is the real story', source: 'YouTube · AI Explained', cat: '技术研究开源', date: '2026-07-06', summary: 'AI Explained 频道对 Gemma 4 全档位独立实测:70B 接近闭源第一梯队,而最大亮点是 4B 端侧档位——在消费级手机上离线运行,多语言与工具调用能力保持完整,视频附全部测试数据与复现脚本。', why: '第三方独立实测是官方基准的重要交叉验证。4B 端侧档位的实测表现支持把端侧路线纳入正式评估,视频中的测试方法可直接复用到内部评测集。', novel: 55, action: 48, tags: ['端侧', 'Gemma', '实测'] },
+];
+// 内容类型:未标注的按来源推断(arXiv → 论文,其余 → 文章)
+signals.forEach(s => { if(!s.kind) s.kind = /arXiv/i.test(s.source) ? '论文' : '文章'; });
+let briefMeta = {
+  date: '2026-07-07',
+  title: 'AI 竞争主线正在切换',
+  intro: '从「谁的模型更强」转向「谁能更便宜、更可靠、更合规地把模型跑进生产」',
+};
+
+const filters = ['全部', '端侧模型', '算力芯片云', '政策监管地缘', '前沿模型公司', '技术研究开源', '创业融资并购'];
+// 「端侧模型」是标签驱动的横切专题,不是领域分类:按 tags 匹配
+const EDGE_FILTER = '端侧模型';
+function matchesFilter(s, f){ if(f==='全部') return true; if(f===EDGE_FILTER) return s.tags.includes('端侧'); return s.cat===f; }
+// 按「主体」分类,而非按格式(网页/RSS…)。端侧模型为横切维度(edge 标记)
+const SUBJECT_TYPES = ['国内大厂','国外大厂','权威媒体','KOL','学术论文','实验室'];
+const EDGE_DIM = '端侧模型';
+const srcTabDefs = [
+  { label: '全部', match: null },
+  { label: '国内大厂', match: ['国内大厂'] },
+  { label: '国外大厂', match: ['国外大厂'] },
+  { label: '权威媒体', match: ['权威媒体'] },
+  { label: 'KOL', match: ['KOL'] },
+  { label: '学术论文', match: ['学术论文'] },
+  { label: '实验室', match: ['实验室'] },
+  { label: EDGE_DIM, edge: true },
+];
+const urgStyles = {
+  '高': { bg: '#fef2f2', color: '#b91c1c', border: '#fecaca' },
+  '中': { bg: '#fefce8', color: '#a16207', border: '#fde68a' },
+  '低': { bg: '#fafafa', color: '#6b6b74', border: 'rgba(19,19,22,.12)' },
+};
+const idLabels = {
+  '网站': ['网址', 'https://…'],
+  '公众号': ['公众号 ID', '如:almosthuman2014'],
+  '视频': ['频道 / 播放列表', 'YouTube / B站 频道链接'],
+  '论文': ['接口 / 列表', 'arXiv / OpenReview 链接'],
+  '内部文档': ['文档 / 空间链接', '飞书 / Notion / Wiki 链接'],
+  '社交媒体': ['账户 / 列表', '@handle 或列表链接'],
+};
+
+// ============ 图表 / 任务视图 静态数据 ============
+// dataviz 深色类别色板(固定顺序,勿循环复用)
+const CAT = ['#3987e5','#199e70','#c98500','#9085e9','#e66767','#d55181','#d95926','#008300'];
+const TYPE_ORDER = SUBJECT_TYPES;
+// 信息源格式类型(网站/公众号/视频/论文/内部文档/社交媒体)
+const FORMAT_ORDER = ['网站','公众号','视频','论文','内部文档','社交媒体'];
+
+const modelPersonas = {
+  'Claude': { color: '#e0916f', bg: 'rgba(217,119,87,.15)', border: 'rgba(217,119,87,.42)', t: 'C' },
+  'GPT-5':  { color: '#25c9a1', bg: 'rgba(16,163,127,.15)', border: 'rgba(16,163,127,.42)', t: 'G' },
+  'Gemini': { color: '#6ea8fe', bg: 'rgba(66,133,244,.17)', border: 'rgba(66,133,244,.44)', t: '✦' },
+  'Grok':   { color: '#16130f', bg: 'rgba(22,19,15,.09)', border: 'rgba(22,19,15,.26)', t: '𝕏' },
+};
+
+const weeklyReport = {
+  period: '2026-06-30 → 2026-07-07',
+  headline: '本周主线:AI 竞争从「模型更强」转向「更便宜、更可靠、更合规地把模型跑进生产」。',
+  thesis: '前沿能力的获取窗口在缩短(Claude Sonnet 5 上 AWS、Gemma 4 开源),而真正拉开差距的是推理单位经济学、Agent 工程化与合规护栏三条工程化主线。本周 19 条信号中,算力/成本与工程化相关占比过半,监管风险类信号的紧迫度显著上升,端侧模型专题首次成型。',
+  metrics: [
+    { label: '信号总数', value: '19', sub: '较上周 +4' },
+    { label: '高影响(≥80)', value: '5', sub: '占 24%' },
+    { label: '覆盖领域', value: '5+1', sub: '五领域 + 端侧专题' },
+    { label: '均影响分', value: '74', sub: '较上周 +2' },
+  ],
+  areas: [
+    { cat: '算力芯片云', text: '推理单位经济学成为公开战场:NVIDIA 指标化每 token 成本,AMD 以投机解码+量化贴身竞争,Google 补齐低成本梯队,采购侧议价窗口打开。', refs: [6,8,7,5] },
+    { cat: '技术研究开源', text: 'RAG 走向图结构(HippoRAG)、Agent 走向可运维(A2A 网关/SelfMem/结构化记忆),数据层与记忆层是本周工程化重心。', refs: [12,9,10,11] },
+    { cat: '前沿模型公司', text: 'Claude Sonnet 5、Gemma 4、Gemini 低成本档密集发布,SOTA 与低价档同时扩张;OpenAI 采用曲线显示工作流内嵌化加速。', refs: [3,4,15] },
+    { cat: '政策监管地缘', text: 'ChatGPT 致害诉讼进入实审、深伪/语音克隆诈骗常态化,内容护栏与来源标注从加分项变硬约束。', refs: [14,16,18] },
+    { cat: '专题 · 端侧模型', text: '端侧能力密度跃升:高通 10B 级模型跑进手机 NPU,Apple 3B 对标 7B 质量,Gemma 4 4B 实测超预期——「云端大模型 + 端侧小模型」分层架构正在成型。', refs: [19,20,4,21] },
+  ],
+  topSignals: [3, 4, 6, 14, 12],
+  risks: [
+    'LLM 安全责任判例一旦成型,对话类产品的护栏与脆弱用户识别将成合规硬要求。',
+    'HBM 供给偏紧可能限制推理成本的下行空间,需纳入算力预算敏感性分析。',
+    '深伪/语音克隆向弱势群体下沉,涉 UGC 或语音的产品面临内容溯源合规压力。',
+  ],
+  opportunities: [
+    '同价位能力升级(Sonnet 5)+低成本梯队,可立即改善现有工作负载性价比。',
+    '图结构 RAG 与「数据库即大脑」为知识密集应用提供更低复杂度的检索架构。',
+    '合成内容检测与 C2PA 来源标注是潜在的产品与合规双重机会点。',
+  ],
+  actions: [
+    '在内部评测集上回归验证 Claude Sonnet 5,评估设为默认模型并复核 token 预算。',
+    '把高频轻任务下沉到低成本模型梯队 + 上下文缓存,目标推理开销压缩 30%+。',
+    '将 HippoRAG / AlloyDB AI Functions 纳入下一轮后端选型同题评测。',
+    '预研合成内容检测与 C2PA 来源标注,规避监管落地后的被动整改。',
+  ],
+  nextWeek: [
+    'Claude Sonnet 5 灰度评测的首批指标(p95 延迟 / 每 token 成本 / 人工评测)。',
+    'Gemma 4 70B 档位的第三方复现基准是否接近闭源第一梯队。',
+    'AI 致害诉讼的庭审进展与可能的合规先例。',
+  ],
+};
+
+const timelineData = {
+  'NVIDIA': [
+    { date:'2026-06-30', title:'公开「每 token 成本」推理软件栈', desc:'TensorRT-LLM 编译 + KV 缓存 + 动态批处理的降本路径,给出负载分型成本模型。', ref:6 },
+    { date:'2026-07-07', title:'开放规模化 AI 算力,邀伙伴共建「AI 工厂」', desc:'开放参考架构与供应链协同,压缩算力集群建设周期至数个季度。', ref:5 },
+  ],
+  'OpenAI': [
+    { date:'2025-07-04', title:'遭加州躁郁症患者起诉', desc:'称 ChatGPT 强化妄想致自残,案件进入实质审理。', ref:14 },
+    { date:'2026-06-28', title:'发布 Signals 采用报告', desc:'企业席位占比首超三分之一,工作流内嵌调用增速高于对话式。', ref:15 },
+  ],
+  'Anthropic': [
+    { date:'2026-06-30', title:'Claude Sonnet 5 登陆 AWS Bedrock', desc:'代码 / 长上下文 / 工具调用全面超越前代,定价档不变,可零改造切换。', ref:3 },
+  ],
+  'Google': [
+    { date:'2026-06-30', title:'Gemini Nano Flash / Nano 2 Lite 发布', desc:'端侧毫秒响应与约旗舰 5% 价格的低成本梯队。', ref:7 },
+    { date:'2026-07-01', title:'AlloyDB AI Functions 大升级', desc:'SQL 内嵌向量检索性能 4×、存储成本降约 40%。', ref:13 },
+    { date:'2026-07-07', title:'Gemma 4 开源多模态发布', desc:'4B–70B 多档位,128K 上下文与图文混合输入,开放商用。', ref:4 },
+  ],
+  'RAG': [
+    { date:'2026-07-01', title:'HippoRAG:海马体式图结构 RAG', desc:'知识图谱 + Neptune + 个性化 PageRank,多跳问答较向量 RAG 提升约 20%。', ref:12 },
+    { date:'2026-07-01', title:'AlloyDB「数据库即大脑」路线兑现', desc:'检索与业务数据同引擎,降低架构复杂度与同步成本。', ref:13 },
+  ],
+  'Agent': [
+    { date:'2026-07-01', title:'Serverless A2A 网关', desc:'智能体发现 / 路由 / 访问控制 / 审计,按调用计费的治理基座。', ref:9 },
+    { date:'2026-07-02', title:'SelfMem 自优化记忆', desc:'自主重写 / 压缩 / 加权长期记忆,长程基准超固定策略 8–15 个百分点。', ref:10 },
+    { date:'2026-07-03', title:'AgentCore 结构化记忆过滤', desc:'元数据标签精准取回上下文,无关注入下降约 60%。', ref:11 },
+  ],
+  'Andrej Karpathy(人物)': [
+    { date:'2024-02', title:'〔跳槽〕从 OpenAI 离职', desc:'公开宣布离开 OpenAI(此前也曾任特斯拉 AI 高级总监),转向个人方向。' },
+    { date:'2024-07', title:'〔创业〕创办 Eureka Labs,聚焦 AI 教育', desc:'成立 AI + 教育公司 Eureka Labs,目标是打造"AI 原生"的课程与学习体验。' },
+    { date:'常态', title:'〔言论/成果〕长期布道 AI 工程与教育', desc:'开源 nanoGPT、发布 "从零构建 GPT" 等广受关注的教学内容,并提出 "Software 2.0" 等观点。' },
+  ],
+  'Ilya Sutskever(人物)': [
+    { date:'2024-05', title:'〔跳槽〕从 OpenAI 离职', desc:'OpenAI 联合创始人、前首席科学家宣布离开公司。' },
+    { date:'2024-06', title:'〔创业〕创办 Safe Superintelligence(SSI)', desc:'成立专注"安全超级智能"的新公司 SSI,明确以单一目标为方向。' },
+  ],
+  'Mira Murati(人物)': [
+    { date:'2024-09', title:'〔跳槽〕从 OpenAI 离职', desc:'时任 OpenAI 首席技术官(CTO)宣布离开公司。' },
+    { date:'2025', title:'〔创业〕创办 Thinking Machines Lab', desc:'成立新的 AI 研究与产品公司 Thinking Machines Lab。' },
+  ],
+};
+
+const debateSeed = [{
+  q: '我们是否应该把生产环境的默认模型切换到 Claude Sonnet 5?',
+  posts: [
+    { model:'Claude', stance:'支持', text:'同价位下代码与长上下文全面提升,且现有 Bedrock 集成零改造切换 model ID 即可。先在评测集回归,风险可控、收益立即兑现。' },
+    { model:'GPT-5', stance:'谨慎', text:'「官方基准超越前代」不等于在你的业务分布上更优。建议只把高价值 / 长上下文工作负载切过去,高频轻任务留在低成本梯队,按任务分层而非一刀切。' },
+    { model:'Gemini', stance:'反对全量', text:'单一供应商锁定会削弱议价与容灾。更稳妥的是双供应商灰度,用 AMD / Gemini 低成本档做成本对照,避免在价格下行通道过早押注。' },
+    { model:'Grok', stance:'务实', text:'别纠结,先灰度 5% 流量跑一周,盯住 p95 延迟、每 token 成本与人工评测三项指标,数据说话。切换成本几乎为零,试错便宜。' },
+  ],
+  synthesis: '共识:低切换成本使「灰度验证」几乎无代价,分歧在于范围。建议按任务复杂度分层——先对长上下文 / 代码类工作负载灰度 Sonnet 5 并做评测集回归,轻任务保留低成本模型,同时保持第二供应商以维持议价与容灾。',
+}];
+
+// ============ Helpers ============
+function hexToRgb(h){ const m=h.replace('#',''); const n=parseInt(m.length===3?m.split('').map(c=>c+c).join(''):m,16); return [(n>>16)&255,(n>>8)&255,n&255]; }
+function scoreColor(v){ if(v>=75) return '#16a34a'; if(v>=55) return '#ca8a04'; return '#dc2626'; }
+function scoreBadge(v){ if(v>=75) return {bg:'#f0fdf4',color:'#15803d',border:'#bbf7d0'}; if(v>=55) return {bg:'#fefce8',color:'#a16207',border:'#fde68a'}; return {bg:'#fef2f2',color:'#b91c1c',border:'#fecaca'}; }
+function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+// UI token → 全部指向 :root CSS 变量(改配色只改 :root)
+const UI = {
+  canvas: 'var(--ds-canvas)',
+  section: 'var(--ds-section)',
+  panelSolid: 'var(--ds-panel-solid)',
+  panel: 'var(--ds-panel)',
+  card: 'var(--ds-card)',
+  border: 'var(--ds-border)',
+  border2: 'var(--ds-border-2)',
+  hair: 'var(--ds-hair)',
+  text: 'var(--ds-text)',
+  text2: 'var(--ds-text-2)',
+  text3: 'var(--ds-text-3)',
+  chip: 'var(--ds-chip)',
+};
+const UI_DEFAULTS = { canvas: UI.canvas, section: UI.section, panelSolid: UI.panelSolid, panel: UI.panel, card: UI.card };
+// 徽章(影响分 / 紧迫度)— 浅底可读
+function scoreBadgeD(v){
+  if(v>=75) return { color:'var(--ds-good)', bg:'var(--ds-good-bg)', border:'var(--ds-good-border)' };
+  if(v>=55) return { color:'var(--ds-warn)', bg:'var(--ds-warn-bg)', border:'var(--ds-warn-border)' };
+  return { color:'var(--ds-crit)', bg:'var(--ds-crit-bg)', border:'var(--ds-crit-border)' };
+}
+const urgD = {
+  '高': { color:'var(--ds-crit)', bg:'var(--ds-crit-bg)', border:'var(--ds-crit-border)' },
+  '中': { color:'var(--ds-warn)', bg:'var(--ds-warn-bg)', border:'var(--ds-warn-border)' },
+  '低': { color:'var(--ds-text-2)', bg:'var(--ds-fill-1)', border:'var(--ds-border)' },
+};
+
+// ============ App / actions ============
+function sourceIdArg(id){
+  return `'${String(id).replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/</g, '\\x3c')}'`;
+}
+async function sourceApi(path, options = {}){
+  const response = await fetch(path, {
+    ...options,
+    headers: { 'content-type': 'application/json', ...(options.headers || {}) },
+  });
+  const body = await response.json().catch(()=>({}));
+  if(!response.ok) throw new Error(body.error || `请求失败 (${response.status})`);
+  return body;
+}
+async function loadSources(){
+  state.sourceSync = { status:'loading', connected:state.sourceSync.connected, busy:false, message:'正在连接飞书多维表格…' };
+  render();
+  try {
+    const body = await sourceApi('/api/sources');
+    state.sources = Array.isArray(body.sources) ? body.sources : [];
+    state.sourceMeta = body.meta || state.sourceMeta;
+    if(state.sourceMeta.types.length && !state.sourceMeta.types.includes(state.formType)) state.formType=state.sourceMeta.types[0];
+    if(state.sourceMeta.formats.length && !state.sourceMeta.formats.includes(state.formFormat)) state.formFormat=state.sourceMeta.formats[0];
+    if(state.sourceMeta.priorities.length && !state.sourceMeta.priorities.includes(state.formPriority)) state.formPriority=state.sourceMeta.priorities[Math.min(1,state.sourceMeta.priorities.length-1)];
+    state.sourceSync = { status:'connected', connected:true, busy:false, message:`飞书已连接 · ${state.sources.length} 条记录` };
+  } catch(error) {
+    state.sourceSync = { status:'offline', connected:false, busy:false, message:`本地演示数据 · ${error.message}` };
+  }
+  render();
+}
+async function loadBrief(){
+  const date = new URLSearchParams(location.search).get('date');
+  const path = date ? `data/brief-${encodeURIComponent(date)}.json` : 'data/brief-latest.json';
+  try {
+    const response = await fetch(path, { cache:'no-store' });
+    if(!response.ok) throw new Error(`HTTP ${response.status}`);
+    const data = await response.json();
+    briefMeta = {
+      date: data.date || '',
+      title: data.title || 'AI Signal 每日情报',
+      intro: data.intro || '',
+    };
+    bullets = Array.isArray(data.bullets) ? data.bullets : [];
+    signals = (data.signals || []).map((s, index)=>({
+      rank: index + 1,
+      recordId: s.recordId,
+      impact: Number(s.impact) || 0,
+      urgency: s.urgency || '中',
+      kind: /arXiv/i.test(s.source || '') ? '论文' : '文章',
+      zhTitle: s.title || '未命名信号',
+      title: s.title || '',
+      source: s.source || '未知来源',
+      url: s.url || '',
+      cat: s.category || '其他',
+      date: s.publishedDate || data.date || '',
+      summary: s.summary || '',
+      why: s.why || '',
+      novel: Number(s.novelty) || 0,
+      action: Number(s.actionability) || 0,
+      tags: Array.isArray(s.tags) ? s.tags : [],
+    }));
+    personal = signals.slice(0,3).map((s,index)=>({
+      ref:s.rank,
+      match:Math.max(82, 96-index*5),
+      title:s.zhTitle,
+      reason:`命中你的高优先级情报范围「${s.tags[0] || s.cat}」；该信号影响分 ${s.impact}，建议优先查看。`,
+    }));
+    render();
+  } catch(error) {
+    console.warn('真实简报加载失败，保留内置演示数据：', error);
+  }
+}
+const App = {
+  goBrief(){ state.page='brief'; state.detailRank=null; render(); },
+  goSources(){ state.page='sources'; state.detailRank=null; render(); },
+  goTasks(){ state.page='tasks'; state.detailRank=null; render(); },
+  setTaskTab(t){ state.taskTab=t; render(); },
+  setTimelineEntity(e){ state.timelineEntity=e; render(); },
+  openDetail(rank){ state.detailRank=rank; state.detailTab='正文'; state.notesOpen=false; state.dialogueOpen=false; renderDetailLayer(); const ov=document.querySelector('.detail-overlay'); if(ov) ov.scrollTop=0; },
+  setDetailTab(t){ state.detailTab=t; state.notesOpen=false; state.dialogueOpen=false; renderDetailLayer(); const ov=document.querySelector('.detail-overlay'); if(ov) ov.scrollTop=0; },
+  toggleNotes(){ state.notesOpen=!state.notesOpen; if(state.notesOpen) state.dialogueOpen=false; renderDetailLayer(); },
+  toggleDialogue(){ state.dialogueOpen=!state.dialogueOpen; if(state.dialogueOpen) state.notesOpen=false; renderDetailLayer(); },
+  closeDetail(){ if(state.detailRank==null) return; state.detailRank=null; state.notesOpen=false; state.dialogueOpen=false; renderDetailLayer(); },
+  sendChat(){
+    const el=document.getElementById('chatInput'); const t=(el && el.value || '').trim();
+    if(!t) return;
+    state.chat.push({ role:'user', text:t });
+    state.chat.push({ role:'ai', text: chatReply(t) });
+    render();
+    requestAnimationFrame(()=>{ const c=document.getElementById('chatScroll'); if(c) c.scrollTop=c.scrollHeight; });
+  },
+  askDebate(){
+    const el=document.getElementById('debateInput'); const t=(el && el.value || '').trim();
+    if(!t) return;
+    state.debates.push(makeDebate(t));
+    render();
+    requestAnimationFrame(()=>{ const c=document.getElementById('debate-'+(state.debates.length-1)); if(c) c.scrollIntoView({behavior:'smooth', block:'start'}); });
+  },
+  sendBottomChat(){
+    const el=document.getElementById('botInput'); const t=(el && el.value || '').trim();
+    if(!t) return;
+    state.bottomChat.push({ role:'user', text:t });
+    state.bottomChat.push({ role:'ai', text: chatReply(t) });
+    render();
+    requestAnimationFrame(()=>{ const c=document.getElementById('botScroll'); if(c) c.scrollTop=c.scrollHeight; const i=document.getElementById('botInput'); if(i) i.focus(); });
+  },
+  clearBottomChat(){ state.bottomChat=[]; render(); },
+  addComment(rank){
+    const el=document.getElementById('cmtInput'); const t=(el && el.value || '').trim();
+    if(!t) return;
+    const arr = state.comments[rank] = state.comments[rank] || [];
+    arr.push({ id: Date.now(), user: '你', dept: '我的团队', text: t, likes: 0, liked: false, time: '刚刚' });
+    renderDetailLayer();
+  },
+  toggleLike(rank, id){
+    const c = (state.comments[rank]||[]).find(x=>x.id===id);
+    if(!c) return;
+    c.liked = !c.liked; c.likes += c.liked ? 1 : -1;
+    renderDetailLayer();
+  },
+  askDetail(rank){
+    const el=document.getElementById('detailAsk'); const t=(el && el.value || '').trim();
+    if(!t) return;
+    const s = signals.find(x=>x.rank===rank);
+    const a = `就你的问题「${t}」,结合本条信号:${s.why} 如需多视角分析,可到「任务视图 · 多模型辩论」发起讨论。`;
+    (state.detailQA[rank] = state.detailQA[rank] || []).push({ q: t, a });
+    state.detailTab='正文'; state.dialogueOpen=true; state.notesOpen=false;
+    renderDetailLayer();
+  },
+  addMeeting(){
+    const el=document.getElementById('meetInput'); const t=(el && el.value || '').trim();
+    if(!t) return;
+    state.meetings.push({ id: state.nextMeetId++, title: '新接入会议', link: t, time: '待开始', status: '待参会', mode: '自动参会', tool: 'Fathom AI', mins: 0, participants: 0, summary: [], actions: [] });
+    el.value='';
+    render();
+  },
+  removeMeeting(id){ state.meetings = state.meetings.filter(m=>m.id!==id); render(); },
+  toggleFav(rank){ const i=state.favorites.indexOf(rank); if(i>=0) state.favorites.splice(i,1); else { state.favorites.unshift(rank); state.favOpen=true; } render(); },
+  removeFav(rank){ const i=state.favorites.indexOf(rank); if(i>=0) state.favorites.splice(i,1); render(); },
+  toggleFavPanel(){ state.favOpen=!state.favOpen; render(); },
+  addPending(rank){ if(!state.pending.includes(rank)) state.pending.push(rank); render(); },
+  removePending(rank){ const i=state.pending.indexOf(rank); if(i>=0) state.pending.splice(i,1); render(); },
+  toggleHistory(){ state.historyOpen=!state.historyOpen; render(); },
+  setFeedback(rank, key){ const cur=state.feedback[rank]; state.feedback[rank] = (cur===key ? null : key); renderDetailLayer(); },
+  reportMissing(){ const el=document.getElementById('missInput'); const t=(el && el.value || '').trim(); if(!t) return; state.missing.unshift(t); el.value=''; render(); },
+  trackEntity(){ const el=document.getElementById('trackInput'); const t=(el && el.value || '').replace(/["'\\<>]/g,'').trim(); if(!t) return; state.customTimelines[t]=buildTimeline(t); state.timelineEntity=t; state.taskTab='timeline'; render(); },
+  jumpTo(rank){
+    // 索引可能指向被筛掉/在另一页的卡片:先回到简报「全部」再滚动
+    if(state.page!=='brief' || state.filter!=='全部'){ state.page='brief'; state.filter='全部'; render(); }
+    const go = () => {
+      const el = document.getElementById('signal-'+rank);
+      if(!el) return;
+      el.scrollIntoView({ behavior:'smooth', block:'center' });
+      el.classList.remove('flash-red'); void el.offsetWidth; el.classList.add('flash-red');
+      setTimeout(()=>el.classList.remove('flash-red'), 1600);
+    };
+    requestAnimationFrame(()=>requestAnimationFrame(go));
+  },
+  setFilter(f){ state.filter=f; render(); },
+  setSort(v){ state.sortKey=v; render(); },
+  setSrcTab(t){ state.srcTab=t; render(); },
+  toggleBars(){ state.showScoreBars=!state.showScoreBars; render(); },
+  async reloadSources(){ await loadSources(); },
+  async setSrc(id, patch){
+    const index=state.sources.findIndex(x=>String(x.id)===String(id));
+    if(index<0) return;
+    const previous={...state.sources[index]};
+    state.sources[index]={...state.sources[index],...patch};
+    render();
+    if(!previous.recordId) return;
+    try {
+      await sourceApi(`/api/sources/${encodeURIComponent(previous.recordId)}`, { method:'PATCH', body:JSON.stringify(patch) });
+      state.sourceSync={ status:'connected', connected:true, busy:false, message:'已同步到飞书' };
+    } catch(error) {
+      state.sources[index]=previous;
+      state.sourceSync={ status:'error', connected:true, busy:false, message:`同步失败 · ${error.message}` };
+    }
+    render();
+  },
+  toggleSrc(id){ const s=state.sources.find(x=>String(x.id)===String(id)); if(s) this.setSrc(id,{on:!s.on}); },
+  setPriority(id,p){ this.setSrc(id,{priority:p}); },
+  toggleEdge(id){ const s=state.sources.find(x=>String(x.id)===String(id)); if(s) this.setSrc(id,{edge:!s.edge}); },
+  async removeSrc(id){
+    const index=state.sources.findIndex(x=>String(x.id)===String(id));
+    if(index<0) return;
+    const removed=state.sources[index];
+    state.sources.splice(index,1);
+    render();
+    if(!removed.recordId) return;
+    try {
+      await sourceApi(`/api/sources/${encodeURIComponent(removed.recordId)}`, { method:'DELETE' });
+      state.sourceSync={ status:'connected', connected:true, busy:false, message:'已从飞书删除' };
+    } catch(error) {
+      state.sources.splice(index,0,removed);
+      state.sourceSync={ status:'error', connected:true, busy:false, message:`删除失败 · ${error.message}` };
+    }
+    render();
+  },
+  setForm(key,val){ state[key]=val; if(key==='formFormat') render(); },
+  toggleFormEdge(){ state.formEdge=!state.formEdge; render(); },
+  async add(){
+    if(!state.formName.trim() || state.sourceSync.busy) return;
+    let source={ id: state.nextId, on:true, name:state.formName.trim(), url:state.formUrl.trim()||'—', type:state.formType, format:state.formFormat, edge:!!state.formEdge, priority:state.formPriority, last:'待首次检索', perDay:0 };
+    if(state.sourceSync.connected){
+      state.sourceSync={...state.sourceSync,busy:true,message:'正在写入飞书…'};
+      render();
+      try {
+        const body=await sourceApi('/api/sources',{method:'POST',body:JSON.stringify(source)});
+        source=body.source;
+        state.sourceSync={status:'connected',connected:true,busy:false,message:'已添加到飞书'};
+      } catch(error) {
+        state.sourceSync={status:'error',connected:true,busy:false,message:`添加失败 · ${error.message}`};
+        render();
+        return;
+      }
+    } else {
+      state.nextId++;
+    }
+    state.sources=[...state.sources,source];
+    state.formName=''; state.formUrl=''; state.formEdge=false;
+    render();
+  },
+};
+
+// AI 对话:关键词模板化回复(纯前端 mock)
+function chatReply(t){
+  const s = t.toLowerCase();
+  const has = (...ks)=>ks.some(k => t.includes(k) || s.includes(k.toLowerCase()));
+  if(has('推理','成本','token','便宜','降本')) return '收到,已把「算力芯片云 / 推理成本」相关来源(NVIDIA、AMD Instinct、Google Cloud)权重上调,并在「与我相关」中优先推送每 token 成本类信号。要不要我把 AMD Instinct Blog 加入检索列表?';
+  if(has('agent','智能体','记忆','编排')) return '已提升「Agent 基础设施」优先级(A2A 网关、SelfMem、AgentCore 记忆过滤)。推荐新增来源:LangChain Blog 与 arXiv cs.MA(多智能体),需要我加入吗?';
+  if(has('rag','向量','检索','知识图谱','数据库')) return '好的,已加强「RAG 后端选型」跟踪(HippoRAG、AlloyDB AI Functions)。可再补充 Milvus / Weaviate 官方博客做向量库横向对比,是否加入?';
+  if(has('安全','合规','监管','诈骗','深伪','护栏')) return '已提高「政策监管地缘」权重,重点跟踪内容护栏、C2PA 来源标注与 AI 事故案例,并保留 AI Incident Database 为高优先级来源。';
+  if(has('融资','并购','ipo','估值','资本')) return '已下调「创业融资并购」的匹配优先级,这类信号只在影响分 ≥70 时推送,避免刷屏。';
+  if(has('公众号','微博','社交','视频','youtube','b站','twitter')) return '可以,在下方「添加数据源」中选择对应类型并填入账号 / 频道链接;我会按你设定的间隔检索,并计入下方看板统计。';
+  if(has('添加','新增','订阅','加入','推荐')) return '在下方「添加数据源」填写名称、类型与链接即可,新来源会立即出现在数据分析看板里。想让我按你的关注方向推荐一批来源吗?';
+  return '已记录你的偏好:「' + t + '」。我会据此调整来源权重与「与我相关」匹配规则。你也可以在下方看板查看当前来源分布,或在「添加数据源」中扩充来源。';
+}
+
+// 多模型辩论:对新问题生成不同立场发言 + 综述(纯前端 mock)
+function makeDebate(q){
+  const posts = [
+    { model:'Claude', stance:'支持', text:'就「' + q + '」而言,我倾向先行动:拆成可灰度、可回滚的小步,用真实评测集验证收益,风险可控时尽早落地。' },
+    { model:'GPT-5', stance:'谨慎', text:'关键要区分「基准表现」与「你的业务分布表现」。先在代表性子集做 A/B,按任务复杂度分层决策,而非一刀切。' },
+    { model:'Gemini', stance:'反对激进', text:'警惕单点押注与供应商锁定。保留第二方案做对照与容灾,在成本 / 延迟 / 质量三维上持续比价,别在下行通道过早锁定。' },
+    { model:'Grok', stance:'务实', text:'别空谈,先小流量灰度一周,盯住 p95 延迟、单位成本与人工评测三项硬指标,数据说话,便宜试错。' },
+  ];
+  const synthesis = '综合四方:分歧不在方向而在范围与节奏。建议就「' + q + '」采用「小步灰度 + 评测集回归 + 保留对照方案」的路径——先在高价值 / 低风险子集验证,用硬指标决定是否扩大,同时维持第二选择以保议价与容灾。';
+  return { q, posts, synthesis };
+}
+
+// 动向追踪:为自定义实体聚合匹配信号并生成追踪时间线
+function buildTimeline(name){
+  const low = name.toLowerCase();
+  const matched = signals
+    .filter(s=>`${s.zhTitle} ${s.title} ${s.tags.join(' ')}`.toLowerCase().includes(low))
+    .map(s=>({ date:s.date, title:s.zhTitle, desc:s.summary.slice(0,90)+'…', ref:s.rank }));
+  const head = { date:'2026-07-08', title:`已建立「${name}」追踪`, desc:`系统将在每次检索时聚合与「${name}」相关的信号并按时间排列。当前匹配 ${matched.length} 条历史信号。` };
+  return [...matched, head];
+}
+function getTimeline(name){ return state.customTimelines[name] || timelineData[name] || []; }
+
+// ============ Render ============
+function computeAccents(){
+  // 全部走 :root 的 --ds-accent* 派生;换 accent 只需设 --ds-accent。
+  return {
+    accent: 'var(--ds-accent)',
+    accentSoft: 'var(--ds-accent-soft)',
+    accentBorder: 'var(--ds-accent-border)',
+    accentGlow: 'var(--ds-accent-glow)',
+    accentFaint: 'var(--ds-accent-faint)',
+    accentDeep: 'var(--ds-accent-deep)',
+    accentBright: 'var(--ds-accent-bright)',
+    topLine: 'var(--ds-accent)',
+  };
+}
+
+// 顶部条:浅色底 + 科技斜纹,深色字,文字/按钮附方角卡片层
+function headerHtml(A){
+  const items = [
+    { key: 'brief',   label: '今日简报', act: 'App.goBrief()',   icon: '<path d="M4 5h16M4 10h16M4 15h10M4 20h7"/>' },
+    { key: 'sources', label: '数据源',   act: 'App.goSources()', icon: '<path d="M12 3v18M5 8l7-5 7 5M5 8v8l7 5 7-5V8"/>' },
+    { key: 'tasks',   label: '任务视图', act: 'App.goTasks()',   icon: '<rect x="3" y="4" width="7" height="7" rx="1.4"/><rect x="14" y="4" width="7" height="4" rx="1.4"/><rect x="3" y="15" width="7" height="5" rx="1.4"/><rect x="14" y="11" width="7" height="9" rx="1.4"/>' },
+  ];
+  const navBtns = items.map(it => {
+    const on = state.page === it.key;
+    return `<button class="top-item${on?' active':''}" onclick="${it.act}" style="${on?`background: ${A.accent}; border-color: var(--ds-ink-line); color: #fff;`:''}">
+      <svg viewBox="0 0 24 24" fill="none" stroke="${on?'#fff':'currentColor'}" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">${it.icon}</svg>${it.label}
+    </button>`;
+  }).join('');
+  return `
+  <header style="position: sticky; top: 0; z-index: 60; display: flex; align-items: center; gap: 16px; padding: 0 24px; height: 60px; background: #f4f1ea; border-bottom: 1.5px solid var(--ds-ink-line);">
+    <div style="display: flex; align-items: center; gap: 9px; height: 38px; padding: 0 13px; background: var(--ds-ink-line);">
+      <span style="width: 9px; height: 9px; background: ${A.accent};"></span>
+      <span style="font-size: 15px; font-weight: 700; letter-spacing: -.01em; color: #fff;">AI Signal</span>
+    </div>
+    <nav style="display: flex; align-items: center; gap: 6px;">${navBtns}</nav>
+    <div style="margin-left: auto; display: flex; align-items: center; gap: 10px; font-size: 12px; font-family: 'Geist Mono', ui-monospace, Menlo, monospace;">
+      <span style="display: inline-flex; align-items: center; height: 32px; padding: 0 11px; background: #fff; border: 1.5px solid var(--ds-ink-line); color: var(--ds-text); font-weight: 700;">${signals.length} 条 · ${state.sources.filter(s=>s.on).length} 源</span>
+      <button onclick="App.toggleHistory()" title="AI 对话历史" style="display: inline-flex; align-items: center; gap: 5px; height: 32px; padding: 0 12px; border: 1.5px solid var(--ds-ink-line); background: ${state.historyOpen?A.accent:'#fff'}; color: ${state.historyOpen?'#fff':'var(--ds-text)'}; font-size: 12px; font-weight: 700; cursor: pointer; font-family: inherit;">✦ 历史</button>
+      <button onclick="App.toggleFavPanel()" title="收藏栏" style="display: inline-flex; align-items: center; gap: 5px; height: 32px; padding: 0 12px; border: 1.5px solid var(--ds-ink-line); background: ${state.favOpen?A.accent:'#fff'}; color: ${state.favOpen?'#fff':'var(--ds-text)'}; font-size: 12px; font-weight: 700; cursor: pointer; font-family: inherit;">★ ${state.favorites.length}</button>
+    </div>
+  </header>`;
+}
+
+// 底部 AI 对话条:浅色底,输入区附方角卡片层(历史见左侧栏)
+function bottomBarHtml(A){
+  return `
+  <nav style="position: fixed; left: 0; right: 0; bottom: 0; z-index: 60; padding: 12px 16px calc(12px + env(safe-area-inset-bottom)); background: #f4f1ea; border-top: 1.5px solid var(--ds-ink-line);">
+    <div style="display: flex; gap: 8px; width: min(760px, 100%); margin: 0 auto; align-items: center;">
+      <span style="flex: none; width: 40px; height: 40px; display: inline-flex; align-items: center; justify-content: center; background: var(--ds-ink-line); color: #fff; font-size: 15px;">✦</span>
+      <input id="botInput" class="bot-input" placeholder="问 AI 助手:调整偏好、解读信号、推荐来源…" onkeydown="if(event.key==='Enter'){event.preventDefault();App.sendBottomChat();}" />
+      <button class="send-btn" onclick="App.sendBottomChat()" style="height: 40px; padding: 0 22px; border: 1.5px solid var(--ds-ink-line); background: ${A.accent}; color: #ffffff; font-size: 13px; font-weight: 700; cursor: pointer;">发送</button>
+    </div>
+  </nav>`;
+}
+
+// 机构 logo / 头像:优先真实 logo(favicon),失败回退圆形单色字标
+const avatars = {
+  'AWS AI / Bedrock Blog': { t: 'aws', bg: '#232F3E', color: '#FF9900', domain: 'aws.amazon.com' },
+  'NVIDIA Blog':           { t: 'N',   bg: '#76B900', color: '#0b0b0b', domain: 'nvidia.com' },
+  'arXiv cs.CL':           { t: 'aX',  bg: '#B31B1B', color: '#ffffff', domain: 'arxiv.org' },
+  'arXiv cs.AI':           { t: 'aX',  bg: '#B31B1B', color: '#ffffff', domain: 'arxiv.org' },
+  'AI Incident Database':  { t: '!',   bg: '#dc2626', color: '#ffffff', domain: 'incidentdatabase.ai' },
+  'Google Cloud Blog':     { t: 'G',   bg: '#ffffff', color: '#4285F4', border: '#e4e4ea', domain: 'cloud.google.com' },
+  'AMD Instinct Blog':     { t: 'A',   bg: '#0b0b0b', color: '#ED1C24', domain: 'amd.com' },
+  'OpenAI News':           { t: '◍',   bg: '#0b0b0b', color: '#ffffff', domain: 'openai.com' },
+  'TechCrunch AI':         { t: 'tc',  bg: '#0b0b0b', color: '#0aca62', domain: 'techcrunch.com' },
+  'Qualcomm AI Hub':       { t: 'Q',   bg: '#3253DC', color: '#ffffff', domain: 'qualcomm.com' },
+  'Apple ML Research':     { t: '',   bg: '#0b0b0b', color: '#f5f5f7', domain: 'apple.com' },
+  'YouTube · AI Explained': { t: '▶',  bg: '#CC0000', color: '#ffffff', domain: 'youtube.com' },
+};
+function avatarFor(src){
+  if(avatars[src]) return avatars[src];
+  const ch = (String(src).match(/[A-Za-z0-9一-龥]/) || ['?'])[0];
+  return { t: ch, bg: '#131316', color: '#ffffff' };
+}
+function avatarHtml(src){
+  const a = avatarFor(src);
+  const img = a.domain
+    ? `<img src="https://www.google.com/s2/favicons?domain=${a.domain}&sz=64" alt="" loading="lazy" onerror="this.remove()" style="position: absolute; inset: 0; margin: auto; width: 20px; height: 20px; object-fit: contain;">`
+    : '';
+  return `<span title="${esc(src)}" style="position: relative; flex: none; width: 30px; height: 30px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; overflow: hidden; background: ${a.bg}; color: ${a.color}; border: 1px solid ${a.border || 'rgba(22,19,15,.16)'}; font-family: 'Geist Mono', ui-monospace, Menlo, monospace; font-size: 11px; font-weight: 700; letter-spacing: -.03em; box-shadow: 0 1px 3px rgba(0,0,0,.4);">${a.t}${img}</span>`;
+}
+
+// 新闻主题 logo:按标题 / 标签匹配主题品牌(而非信号来源)
+const TOPIC_BRANDS = [
+  { re: /Claude|Anthropic|Sonnet/i,        t: 'C',   bg: '#2a1a12', color: '#e0916f', domain: 'anthropic.com' },
+  { re: /Gemma|Gemini|Google|AlloyDB/i,    t: 'G',   bg: '#0f1830', color: '#6ea8fe', domain: 'google.com' },
+  { re: /NVIDIA/i,                          t: 'N',   bg: '#1a2a0a', color: '#a3e635', domain: 'nvidia.com' },
+  { re: /AMD/i,                             t: 'A',   bg: '#1a0a0a', color: '#ff6b6b', domain: 'amd.com' },
+  { re: /OpenAI|ChatGPT/i,                  t: '◍',   bg: '#0b0b0b', color: '#ffffff', domain: 'openai.com' },
+  { re: /Qualcomm|Snapdragon|高通|NPU/i,    t: 'Q',   bg: '#0e1a3a', color: '#7ea2ff', domain: 'qualcomm.com' },
+  { re: /Apple|苹果/i,                      t: '',   bg: '#1a1a1a', color: '#f5f5f7', domain: 'apple.com' },
+  { re: /Hynix|HBM/i,                       t: 'SK',  bg: '#12142a', color: '#8aa0ff', domain: 'skhynix.com' },
+  { re: /RAG|Hippo|向量|知识图谱|数据库/i,  t: 'RAG', bg: '#0c221a', color: '#5fe0a0', domain: null },
+  { re: /Agent|A2A|记忆|SelfMem|AgentCore|智能体/i, t: 'AGT', bg: '#1a1230', color: '#b39aff', domain: null },
+  { re: /深伪|deepfake|语音|克隆|诈骗|安全|护栏|诉讼/i, t: '⚠', bg: '#2a1010', color: '#ff9a9a', domain: null },
+];
+function topicFor(s){
+  const hay = `${s.zhTitle} ${s.title} ${s.tags.join(' ')}`;
+  for(const b of TOPIC_BRANDS){ if(b.re.test(hay)) return b; }
+  const ch = (s.tags[0] || '?').slice(0,2);
+  return { t: ch, bg: '#16161c', color: '#c6c6d0', domain: null };
+}
+function topicAvatarHtml(s){
+  const a = topicFor(s);
+  const img = a.domain
+    ? `<img src="https://www.google.com/s2/favicons?domain=${a.domain}&sz=64" alt="" loading="lazy" onerror="this.remove()" style="position: absolute; inset: 0; margin: auto; width: 20px; height: 20px; object-fit: contain;">`
+    : '';
+  return `<span title="主题:${esc(a.t)}" style="position: relative; flex: none; width: 30px; height: 30px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; overflow: hidden; background: ${a.bg}; color: ${a.color}; border: 1px solid rgba(22,19,15,.16); font-family: 'Geist Mono', ui-monospace, Menlo, monospace; font-size: 10.5px; font-weight: 700; letter-spacing: -.03em; box-shadow: 0 1px 3px rgba(0,0,0,.4);">${a.t}${img}</span>`;
+}
+
+// 详情/卡片配图:逐条手工精选,与新闻主体高度相关(Unsplash 固定图,onerror 回退)
+const IMG = id => `https://images.unsplash.com/photo-${id}?w=640&h=480&fit=crop&q=72&auto=format`;
+const IMAGE_BY_RANK = {
+  3:  IMG('1677442136019-21780ecad995'), // Claude Sonnet 5 · 前沿模型
+  4:  IMG('1461749280684-dccba630e2f6'), // Gemma 4 开源 · 代码
+  5:  IMG('1558494949-ef010cbdcc31'),    // NVIDIA AI 工厂 · 机房
+  6:  IMG('1591405351990-4726e331f141'), // NVIDIA 推理 · GPU
+  7:  IMG('1510557880182-3d4d3cba35a5'), // Gemini Nano · 手机端侧
+  8:  IMG('1555617981-dac3880eac6e'),    // AMD MI350X · 芯片
+  9:  IMG('1639322537228-f710d846310a'), // A2A 网关 · 网络
+  10: IMG('1531746790731-6c087fecd65a'), // SelfMem · 机器人/Agent
+  11: IMG('1518770660439-4636190af475'), // AgentCore 记忆 · 电路
+  12: IMG('1633613286991-611fe299c4be'), // HippoRAG 图结构 · 图谱
+  13: IMG('1544197150-b99a580bb7a8'),    // AlloyDB · 数据库机架
+  14: IMG('1589391886645-d51941baf7fb'), // 起诉 OpenAI · 法槌
+  15: IMG('1460925895917-afdab827c52f'), // 采用报告 · 数据面板
+  16: IMG('1620712943543-bcc4688e7485'), // 深伪骗局 · AI 人脸
+  17: IMG('1611974789855-9c2a0a7236a3'), // SK Hynix IPO · 股市
+  18: IMG('1556656793-08538906a9f8'),    // 语音克隆诈骗 · 来电
+  19: IMG('1631624215749-b10b3dd7bca7'), // 高通端侧 NPU · 晶圆
+  20: IMG('1592286927505-1def25115558'), // Apple 端侧 · 手机
+  21: IMG('1551288049-bebda4e38f71'),    // Gemma 4 视频实测 · 屏幕
+};
+function topicImageUrl(s){
+  if(s.image) return s.image;
+  if(IMAGE_BY_RANK[s.rank]) return IMAGE_BY_RANK[s.rank];
+  const hay = `${s.zhTitle} ${s.title} ${s.tags.join(' ')} ${s.cat}`;
+  const map = [[/GPU|NVIDIA|算力|token/i,'1591405351990-4726e331f141'],[/端侧|手机|NPU|Apple/i,'1510557880182-3d4d3cba35a5'],[/安全|诈骗|深伪|诉讼/i,'1550751827-4bd374c3f58b'],[/RAG|数据库|向量/i,'1544197150-b99a580bb7a8']];
+  for(const [re,id] of map){ if(re.test(hay)) return IMG(id); }
+  return IMG('1518770660439-4636190af475');
+}
+// 配图封面:图片加载失败时回退到品牌渐变底(离线可用)
+function coverHtml(A, s, h){
+  const tp = topicFor(s);
+  const url = topicImageUrl(s);
+  return `
+  <div style="position: relative; height: ${h||300}px; overflow: hidden; border: 1.5px solid var(--ds-ink-line); background: linear-gradient(135deg, ${tp.bg}, #0b0b0e);">
+    <div style="position: absolute; inset: 0; background-image: radial-gradient(rgba(255,255,255,.05) 1px, transparent 1px); background-size: 14px 14px;"></div>
+    <span style="position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); font-family: 'Geist Mono', monospace; font-size: 46px; font-weight: 700; color: ${tp.color}; opacity: .55;">${tp.t}</span>
+    <img src="${esc(url)}" alt="${esc(s.zhTitle)}" loading="lazy" onerror="this.remove()" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;">
+    <div style="position: absolute; left: 0; right: 0; bottom: 0; padding: 12px 14px; background: linear-gradient(180deg, transparent, rgba(0,0,0,.72)); display: flex; align-items: center; gap: 9px;">
+      ${avatarHtml(s.source)}
+      <span style="font-size: 12px; font-weight: 600; color: #fff;">${esc(s.source)}</span>
+      <span style="margin-left: auto; font-family: 'Geist Mono', monospace; font-size: 10.5px; color: rgba(255,255,255,.75); background: rgba(0,0,0,.4); padding: 3px 8px;">配图 · 示意</span>
+    </div>
+  </div>`;
+}
+
+// 复杂的分区分隔带:mono 编号 + 标题 + 刻度虚线 + 菱形节点 + 流光细线
+function techDivider(A, num, label, onDark){
+  const line = onDark ? 'rgba(22,19,15,.28)' : 'rgba(19,19,22,.28)';
+  const rail = onDark ? 'rgba(22,19,15,.14)' : 'rgba(19,19,22,.12)';
+  const titleColor = onDark ? '#ffffff' : '#131316';
+  const bg = onDark ? 'transparent' : '#ffffff';
+  return `
+  <div style="position: relative; background: ${bg};">
+    <div style="max-width: 1180px; margin: 0 auto; border-left: 1px dashed ${rail}; border-right: 1px dashed ${rail};">
+      <div style="position: relative; display: flex; align-items: center; gap: 14px; padding: 16px 24px;">
+        <span style="width: 7px; height: 7px; border: 1px solid ${A.accent}; background: ${A.accentSoft}; transform: rotate(45deg); flex: none;"></span>
+        <span style="font-family: 'Geist Mono', ui-monospace, Menlo, monospace; font-size: 11px; font-weight: 600; letter-spacing: .12em; color: ${A.accentBright}; background: ${A.accentSoft}; border: 1px solid ${A.accentBorder}; padding: 4px 10px; border-radius: 6px; white-space: nowrap;">${num}</span>
+        <span style="font-size: 13px; font-weight: 700; letter-spacing: .02em; color: ${titleColor}; white-space: nowrap;">${label}</span>
+        <span style="flex: 1; height: 9px; background: repeating-linear-gradient(90deg, ${line} 0 2px, transparent 2px 10px); -webkit-mask-image: linear-gradient(90deg, #000 0, #000 55%, transparent 100%); mask-image: linear-gradient(90deg, #000 0, #000 55%, transparent 100%);"></span>
+        <span style="font-family: 'Geist Mono', ui-monospace, Menlo, monospace; font-size: 10.5px; color: var(--ds-text-3); letter-spacing: .1em; white-space: nowrap;">SIGNAL // ${num}</span>
+        <span style="width: 7px; height: 7px; border: 1px solid ${rail}; transform: rotate(45deg); flex: none;"></span>
+      </div>
+      <div style="height: 5px; background: linear-gradient(90deg, ${A.accent}, ${A.accent} 18%, ${A.accentBorder} 42%, transparent 72%); background-size: 200% 100%; animation: hairline 7s linear infinite;"></div>
+    </div>
+  </div>`;
+}
+
+function briefHtml(A){
+  const mono = "'Geist Mono', ui-monospace, Menlo, monospace";
+  // 简报卡片:编号 + 标题 + 正文 + 引用角标,沿用信号卡片墨线风(带彩色底)
+  // 每条简报一个主题色,文字衬同色系色块
+  const BRIEF_COLORS = ['#c22f2a','#2b6cb0','#1f7a45','#a06600','#5a4fb5','#0f766e','#b23a6a'];
+  const briefCard = (b, i, featured) => {
+    const c = BRIEF_COLORS[i % BRIEF_COLORS.length];
+    const tint = `color-mix(in srgb, ${c} 8%, #fff)`;
+    const chip = `color-mix(in srgb, ${c} 16%, #fff)`;
+    const cbd = `color-mix(in srgb, ${c} 40%, transparent)`;
+    const m = b.text.match(/^(.*?)[:：]([\s\S]*)$/);
+    const title = m ? m[1] : `要点 ${i+1}`;
+    const rest = m ? m[2] : b.text;
+    const num = String(i+1).padStart(2,'0');
+    const refsHtml = b.refs.map(r=>`<button class="ref" onclick="event.stopPropagation(); App.jumpTo(${r})" title="跳转到 #${r} 信号卡片" style="display: inline-flex; align-items: center; justify-content: center; min-width: 20px; height: 19px; padding: 0 6px; border: 1px solid ${cbd}; background: ${chip}; color: ${c}; font-size: 11px; font-weight: 700; font-family: ${mono}; cursor: pointer;">${r}</button>`).join(`<span style="color:${cbd}; font-weight:700;">/</span>`);
+    if(featured){
+      return `
+      <div class="brief-card" style="position: relative; display: flex; align-items: stretch; background: ${tint}; border: 1.5px solid var(--ds-ink-line); box-shadow: 5px 5px 0 rgba(22,19,15,.08); overflow: hidden;">
+        <div style="flex: none; display: flex; align-items: center; justify-content: center; width: 130px; border-right: 1.5px solid var(--ds-ink-line); background: ${c};">
+          <span style="font-family: ${mono}; font-size: 52px; font-weight: 700; color: #fff; letter-spacing: -.03em;">${num}</span>
+        </div>
+        <div style="flex: 1; min-width: 0; display: flex; flex-direction: column; justify-content: center; gap: 10px; padding: 22px 26px;">
+          <div style="align-self: flex-start; font-size: 20px; font-weight: 700; letter-spacing: -.01em; color: var(--ds-text); background: ${chip}; border-left: 4px solid ${c}; padding: 7px 14px;">${esc(title)}</div>
+          <div style="font-size: 14px; line-height: 1.7; color: ${UI.text2};">${esc(rest)}</div>
+        </div>
+        <div style="flex: none; display: flex; align-items: center; gap: 6px; padding: 0 24px; border-left: 1px dashed var(--ds-border);">${refsHtml}</div>
+      </div>`;
+    }
+    return `
+      <div class="brief-card" style="position: relative; display: flex; flex-direction: column; gap: 10px; padding: 16px 16px 14px; background: ${tint}; border: 1.5px solid var(--ds-ink-line); box-shadow: 4px 4px 0 rgba(22,19,15,.06);">
+        <div style="display: flex; align-items: flex-start; gap: 12px;">
+          <span style="font-family: ${mono}; font-size: 34px; font-weight: 700; line-height: .9; color: ${c}; letter-spacing: -.03em; flex: none;">${num}</span>
+          <div style="font-size: 15px; font-weight: 700; line-height: 1.35; letter-spacing: -.01em; color: var(--ds-text); background: ${chip}; border-left: 3px solid ${c}; padding: 6px 10px;">${esc(title)}</div>
+        </div>
+        <div style="font-size: 13px; line-height: 1.65; color: ${UI.text2}; border-top: 1px solid ${cbd}; padding-top: 10px;">${esc(rest)}</div>
+        <div style="display: flex; gap: 6px; align-items: center; margin-top: auto;">${refsHtml}</div>
+      </div>`;
+  };
+  const featuredHtml = bullets.length ? briefCard(bullets[0], 0, true) : '';
+  const gridHtml = bullets.slice(1).map((b,i)=>briefCard(b, i+1, false)).join('');
+
+  const personalHtml = personal.map(p => `
+    <div class="personal-card" onclick="App.openDetail(${p.ref})" style="cursor: pointer; display: flex; flex-direction: column; background: ${UI.card}; border: 1.5px solid var(--ds-ink-line); box-shadow: 3px 3px 0 ${A.accentBorder}; overflow: hidden;">
+      <div style="display: flex; align-items: center; gap: 8px; padding: 9px 13px; border-bottom: 1px solid var(--ds-ink-line);">
+        <span style="font-family: ${mono}; font-size: 10.5px; font-weight: 700; letter-spacing: .04em; color: #fff; background: ${A.accent}; padding: 3px 9px;">匹配 ${p.match}%</span>
+        <span style="font-family: ${mono}; font-size: 11px; color: ${UI.text3};">#${p.ref}</span>
+        <span style="margin-left: auto; font-size: 11px; font-weight: 600; color: ${A.accent};">查看详情 →</span>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 11px; padding: 15px 14px 16px;">
+        <div style="font-size: 15px; font-weight: 700; line-height: 1.5; color: var(--ds-text);">${esc(p.title)}</div>
+        <div style="font-size: 12.5px; line-height: 1.7; color: ${UI.text2}; border-left: 3px solid ${A.accent}; padding-left: 11px;">${esc(p.reason)}</div>
+      </div>
+    </div>`).join('');
+
+  const sortFns = {
+    impact: (a,b)=>b.impact-a.impact,
+    novel: (a,b)=>b.novel-a.novel,
+    action: (a,b)=>b.action-a.action,
+    date: (a,b)=>b.date.localeCompare(a.date),
+  };
+  const sortLabels = { impact:'按影响分排序', novel:'按新颖度排序', action:'按可行动排序', date:'按时间排序' };
+
+  const visible = signals.filter(s => matchesFilter(s, state.filter)).slice().sort(sortFns[state.sortKey]);
+
+  const filterChipsHtml = filters.map(f => {
+    const active = state.filter===f;
+    const isEdge = f===EDGE_FILTER;
+    return `<button onclick="App.setFilter('${f}')" title="${isEdge?'专题:按「端侧」标签聚合,跨领域':''}" style="height: 30px; padding: 0 14px; border-radius: 15px; border: 1px ${isEdge?'dashed':'solid'} ${active?A.accentBorder:UI.border}; background: ${active?A.accentSoft:'transparent'}; color: ${active?A.accentBright:UI.text2}; font-size: 12.5px; font-weight: ${active?700:550}; cursor: pointer;">${isEdge?'✦ ':''}${f}</button>`;
+  }).join('');
+
+  const sortOpts = [['impact','影响分'],['date','时间']]
+    .map(([v,l])=>`<option value="${v}" ${state.sortKey===v?'selected':''}>${l}</option>`).join('');
+
+  const cardsHtml = visible.map((s, idx) => {
+    const ib = scoreBadgeD(s.impact);
+    const u = urgD[s.urgency];
+    const fav = state.favorites.includes(s.rank);
+    const sourceUrl = s.url || sourceUrls[s.source] || '#';
+    const mono = "'Geist Mono', ui-monospace, Menlo, monospace";
+    const num = String(s.rank).padStart(2,'0');
+    const tp = topicFor(s);
+    const imgUrl = topicImageUrl(s);
+    const isEdge = s.tags.includes('端侧');
+    const catChip = v => `<span style="font-family: ${mono}; font-weight: 700; color: ${A.accent}; background: ${A.accentFaint}; border: 1px solid ${A.accentBorder}; padding: 3px 9px;">${esc(v)}</span>`;
+    const catsHtml = catChip(s.cat) + (isEdge ? catChip(EDGE_FILTER) : '');
+    const tagsHtml = s.tags.map(t=>`<span style="font-family: ${mono}; font-size: 11px; color: ${UI.text3}; white-space: nowrap;">#${esc(t)}</span>`).join(`<span style="color: var(--ds-hair);">/</span>`);
+    return `
+    <article id="signal-${s.rank}" class="signal-card" onclick="App.openDetail(${s.rank})" style="position: relative; display: flex; background: ${UI.card}; border: 1.5px solid var(--ds-ink-line); box-shadow: 5px 5px 0 rgba(22,19,15,.07); overflow: hidden; min-height: 214px;">
+      <!-- 左:配图,编号角标(=信号号)覆盖左上角 -->
+      <div style="flex: none; width: 288px; position: relative; border-right: 1.5px solid var(--ds-ink-line); background: linear-gradient(135deg, ${tp.bg}, #0b0b0e); overflow: hidden;">
+        <span style="position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); font-family: ${mono}; font-size: 40px; font-weight: 700; color: ${tp.color}; opacity: .5;">${tp.t}</span>
+        <img src="${esc(imgUrl)}" alt="${esc(s.zhTitle)}" loading="lazy" onerror="this.remove()" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;">
+        <span style="position: absolute; top: 0; left: 0; z-index: 2; min-width: 46px; height: 46px; padding: 0 8px; background: ${A.accent}; border-right: 1.5px solid var(--ds-ink-line); border-bottom: 1.5px solid var(--ds-ink-line); display: inline-flex; align-items: center; justify-content: center; font-family: ${mono}; font-size: 18px; font-weight: 700; color: #fff;">${num}</span>
+        <span style="position: absolute; bottom: 9px; left: 11px; right: 11px; display: inline-flex; align-items: center; gap: 7px;">
+          ${avatarHtml(s.source)}<span style="font-size: 11px; font-weight: 600; color: #fff; text-shadow: 0 1px 3px rgba(0,0,0,.7); overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${esc(s.source)}</span>
+        </span>
+      </div>
+      <!-- 右:内容,底部格子放为何重要 -->
+      <div style="flex: 1; min-width: 0; display: flex; flex-direction: column;">
+        <div style="display: flex; align-items: center; gap: 8px; padding: 10px 46px 10px 18px; border-bottom: 1px solid var(--ds-ink-line); font-family: ${mono}; font-size: 10.5px; letter-spacing: .04em; color: ${UI.text3}; flex-wrap: wrap;">
+          ${catsHtml}
+          <span style="display: inline-flex; align-items: center; gap: 6px; overflow: hidden;">${tagsHtml}</span>
+          <span style="margin-left: auto; display: inline-flex; gap: 6px; align-items: center;">
+            <span>${s.date}</span>
+            <span style="font-weight: 700; padding: 3px 8px; background: ${ib.bg}; color: ${ib.color}; border: 1px solid ${ib.border};">影响 ${s.impact}</span>
+            <span style="font-weight: 700; padding: 3px 8px; background: ${u.bg}; color: ${u.color}; border: 1px solid ${u.border};">紧迫 ${s.urgency}</span>
+          </span>
+        </div>
+        <button onclick="event.stopPropagation(); App.toggleFav(${s.rank})" title="${fav?'取消收藏':'收藏'}" style="position: absolute; top: 0; right: 0; z-index: 2; width: 36px; height: 36px; border: none; border-left: 1px solid var(--ds-ink-line); border-bottom: 1px solid var(--ds-ink-line); background: ${fav?A.accent:'#fff'}; color: ${fav?'#fff':UI.text3}; font-size: 14px; cursor: pointer; display: inline-flex; align-items: center; justify-content: center;">${fav?'★':'☆'}</button>
+        <div style="flex: 1; padding: 15px 18px;">
+          <h3 style="margin: 0 0 3px; font-size: 19px; line-height: 1.4; font-weight: 700; letter-spacing: -.01em; color: var(--ds-text);">${esc(s.zhTitle)}</h3>
+          <div style="font-family: ${mono}; font-size: 11.5px; line-height: 1.5; color: ${UI.text3}; margin-bottom: 10px;">${esc(s.title)}</div>
+          <p style="margin: 0; font-size: 13.5px; line-height: 1.75; color: ${UI.text2}; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;">${esc(s.summary)}</p>
+        </div>
+        <div style="padding: 12px 18px; border-top: 1px solid var(--ds-ink-line); background: ${A.accentSoft}; border-left: 3px solid ${A.accent};">
+          <p style="margin: 0; font-size: 12.5px; line-height: 1.65; color: ${UI.text2}; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;"><strong style="color: ${A.accentDeep};">为何重要</strong> · ${esc(s.why)}</p>
+        </div>
+      </div>
+    </article>`;
+  }).join('');
+
+  return `
+  <main>
+    <section style="position: relative;">
+      <div style="position: relative; max-width: 1180px; margin: 0 auto; background-color: ${UI.section}; border-left: 1px dashed ${UI.border}; border-right: 1px dashed ${UI.border}; overflow: hidden;">
+        <div style="position: relative; padding: 34px 36px 52px;">
+          <!-- 报头 -->
+          <div style="display: flex; align-items: center; gap: 14px; padding-bottom: 14px; margin-bottom: 26px; border-bottom: 2px solid var(--ds-ink-line);">
+            <span style="font-size: 15px; font-weight: 700; color: ${A.accent};">今日情报简报</span>
+            <span style="width: 1px; height: 15px; background: ${UI.border2};"></span>
+            <span style="font-family: ${mono}; font-size: 13px; color: ${UI.text2};">${esc(briefMeta.date)}</span>
+            <span style="margin-left: auto; font-family: ${mono}; font-size: 13px; font-weight: 700; letter-spacing: .08em; color: var(--ds-ink-line);">${signals.length} SIGNALS</span>
+          </div>
+          <!-- 大标题 -->
+          <h1 style="margin: 0 0 12px; font-size: 58px; line-height: 1.02; font-weight: 800; letter-spacing: -.03em; color: var(--ds-text);">${esc(briefMeta.title)}</h1>
+          <p style="margin: 0 0 30px; font-size: 20px; line-height: 1.45; font-weight: 500; color: ${UI.text2}; max-width: 880px;">${esc(briefMeta.intro)}</p>
+          <!-- 头条卡片 -->
+          <div style="margin-bottom: 16px;">${featuredHtml}</div>
+          <!-- 三列要点栅格 -->
+          <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;">${gridHtml}</div>
+        </div>
+      </div>
+    </section>
+
+    ${techDivider(A, '02', '与我相关', false)}
+    <section style="position: relative;">
+      <div style="max-width: 1180px; margin: 0 auto; padding: 22px 0;">
+        <div style="position: relative; background: #0a0a0a; background-image: linear-gradient(rgba(255,255,255,.045) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.045) 1px, transparent 1px); background-size: 44px 44px; overflow: hidden; border: 1.5px solid var(--ds-ink-line); box-shadow: 8px 8px 0 rgba(22,19,15,.10);">
+          <div style="position: absolute; top: 0; left: 0; right: 0; height: 4px; background: ${A.accent};"></div>
+          <span style="position: absolute; bottom: 12px; right: 18px; color: rgba(255,255,255,.2); font-family: 'Geist Mono', monospace; font-size: 13px;">+</span>
+          <div style="position: relative; padding: 38px 36px 42px;">
+            <div style="display: flex; align-items: baseline; gap: 12px; margin-bottom: 8px; flex-wrap: wrap;">
+              <h2 style="margin: 0; font-size: 21px; font-weight: 700; letter-spacing: -.01em; color: #faf7f0;">与我相关</h2>
+              <span style="font-size: 12px; color: #8f887a;">基于你的关注方向匹配 · RAG 后端选型 / Agent 基础设施 / 推理成本</span>
+            </div>
+            <p style="margin: 0 0 24px; font-size: 12px; color: #6f685e;">匹配规则可在「数据源定制」页调整优先级</p>
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;">${personalHtml}</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    ${techDivider(A, '03', '全部信号', false)}
+    <section style="position: relative;">
+      <div style="position: relative; max-width: 1180px; margin: 0 auto; background-color: ${UI.section}; background-image: radial-gradient(rgba(22,19,15,.055) 1px, transparent 1px), linear-gradient(rgba(22,19,15,.028) 1px, transparent 1px), linear-gradient(90deg, rgba(22,19,15,.028) 1px, transparent 1px); background-size: 22px 22px, 88px 88px, 88px 88px; border-left: 1px dashed ${UI.border}; border-right: 1px dashed ${UI.border}; overflow: hidden;">
+        <div style="position: absolute; top: 120px; left: 3%; width: 300px; height: 300px; border-radius: 50%; background: radial-gradient(closest-side, ${A.accentFaint}, transparent); pointer-events: none;"></div>
+        <div style="position: relative; padding: 44px 36px 72px;">
+          <div style="display: flex; align-items: baseline; gap: 12px; margin-bottom: 18px;">
+            <h2 style="margin: 0; font-size: 21px; font-weight: 700; letter-spacing: -.01em; color: var(--ds-text);">全部信号</h2>
+            <span style="font-size: 12px; color: ${UI.text3};">${sortLabels[state.sortKey]}</span>
+          </div>
+          <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 24px; flex-wrap: wrap;">
+            ${filterChipsHtml}
+            <div style="margin-left: auto; display: flex; align-items: center; gap: 8px;">
+              <span style="font-size: 12px; color: ${UI.text3};">排序</span>
+              <select onchange="App.setSort(this.value)" style="height: 30px; padding: 0 10px; border-radius: 8px; border: 1px solid ${UI.border}; background: var(--ds-card); color: ${UI.text}; font-size: 12.5px;">${sortOpts}</select>
+            </div>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 20px;">${cardsHtml}</div>
+          <div style="margin-top: 40px; padding: 16px 18px; border: 1.5px solid var(--ds-ink-line); background: #fff; box-shadow: 4px 4px 0 rgba(22,19,15,.06);">
+            <div style="display: flex; align-items: baseline; gap: 10px; margin-bottom: 4px;">
+              <span style="font-size: 14px; font-weight: 700; color: var(--ds-text);">报告遗漏的重要信号</span>
+              <span style="font-size: 11.5px; color: ${UI.text3};">遗漏反馈直接进入召回复盘 · 已收到 ${state.missing.length} 条</span>
+            </div>
+            <p style="margin: 0 0 11px; font-size: 12px; color: ${UI.text3};">觉得「这是重要信号但系统没推」?写下来,系统会回溯该主体 / 主题并调整召回。</p>
+            <div style="display: flex; gap: 8px;">
+              <input id="missInput" placeholder="例如:某公司发布了 X,但今天没看到相关信号…" onkeydown="if(event.key==='Enter'){event.preventDefault();App.reportMissing();}" style="flex: 1; height: 38px; padding: 0 13px; border: 1.5px solid var(--ds-ink-line); background: var(--ds-card); color: ${UI.text}; font-size: 13px; outline: none;" />
+              <button class="send-btn" onclick="App.reportMissing()" style="height: 38px; padding: 0 18px; border: 1.5px solid var(--ds-ink-line); background: ${A.accent}; color: #fff; font-size: 13px; font-weight: 700; cursor: pointer;">提交</button>
+            </div>
+            ${state.missing.length?`<div style="margin-top: 12px; display: flex; flex-direction: column; gap: 6px;">${state.missing.slice(0,4).map(m=>`<div style="font-size: 12px; color: ${UI.text2}; border-left: 2px solid ${A.accent}; padding-left: 10px;">${esc(m)}</div>`).join('')}</div>`:''}
+          </div>
+          <footer style="margin-top: 40px; padding-top: 24px; border-top: 1px dashed ${UI.border}; font-size: 12px; color: ${UI.text3}; text-align: center;">本简报由 AI Signal 自动生成 · 依据「数据源定制」页配置的来源与优先级检索分析</footer>
+        </div>
+      </div>
+    </section>
+  </main>`;
+}
+
+// Perplexity 风信号详情覆盖层:文章 / 论文 / 视频 分型展示 + 团队评论 + 悬浮 AI 提问
+const KIND_META = { '文章': { icon: '📄', label: '文章' }, '论文': { icon: '📑', label: '论文' }, '视频': { icon: '▶', label: '视频' } };
+
+// 按内容类型生成头部媒体区
+function detailMediaHtml(A, s){
+  const kind = s.kind || '文章';
+  if(kind==='论文'){
+    const pid = `arXiv:2607.${String(10000 + s.rank * 37).slice(-5)}`;
+    return `
+    <div style="border: 1px solid ${UI.border}; border-radius: 12px; overflow: hidden; margin-bottom: 24px; background: rgba(22,19,15,.02);">
+      <div style="display: flex; align-items: center; gap: 10px; padding: 11px 14px; background: rgba(179,27,27,.08); border-bottom: 1px solid ${UI.border};">
+        <span style="font-size: 10.5px; font-weight: 700; letter-spacing: .06em; color: #ffffff; background: #B31B1B; padding: 3px 9px; border-radius: 5px; font-family: 'Geist Mono', monospace;">PAPER</span>
+        <span style="font-size: 12px; color: ${UI.text2}; font-family: 'Geist Mono', monospace;">${pid}</span>
+        <span style="margin-left: auto; display: inline-flex; gap: 7px;">
+          <a href="${esc(s.url||sourceUrls[s.source]||'#')}" target="_blank" rel="noopener" style="font-size: 11.5px; font-weight: 600; color: ${UI.text}; padding: 4px 12px; border-radius: 6px; border: 1px solid ${UI.border2}; background: var(--ds-card);">PDF ↗</a>
+          <a href="${esc(s.url||sourceUrls[s.source]||'#')}" target="_blank" rel="noopener" style="font-size: 11.5px; font-weight: 600; color: ${UI.text}; padding: 4px 12px; border-radius: 6px; border: 1px solid ${UI.border2}; background: var(--ds-card);">代码 ↗</a>
+        </span>
+      </div>
+      <div style="padding: 16px;">
+        <div style="display: flex; gap: 24px; flex-wrap: wrap; margin-bottom: 12px; font-size: 12px; color: ${UI.text3};">
+          <span><strong style="color: ${UI.text2};">发布</strong> · ${s.date}</span>
+          <span><strong style="color: ${UI.text2};">领域</strong> · ${esc(s.cat)}</span>
+          <span><strong style="color: ${UI.text2};">来源</strong> · ${esc(s.source)}</span>
+        </div>
+        <div style="padding: 12px 14px; border-left: 3px solid #B31B1B; background: rgba(22,19,15,.03); border-radius: 0 8px 8px 0;">
+          <div style="font-size: 11px; font-weight: 700; letter-spacing: .06em; color: ${UI.text3}; margin-bottom: 6px;">ABSTRACT · 摘要</div>
+          <p style="margin: 0; font-size: 13px; line-height: 1.8; color: ${UI.text2};">${esc(s.summary)}</p>
+        </div>
+      </div>
+    </div>`;
+  }
+  if(kind==='视频'){
+    const dur = `${16 + (s.rank % 9)}:2${s.rank % 10}`;
+    const clips = s.summary.split(/[,。;]/).map(x=>x.trim()).filter(x=>x.length>6).slice(0,3);
+    return `
+    <div style="position: relative; height: 300px; border-radius: 12px; overflow: hidden; margin-bottom: 14px; border: 1px solid ${UI.border}; background: linear-gradient(135deg, #241f18, #0d0b08);">
+      <div style="position: absolute; inset: 0; background-image: radial-gradient(rgba(255,255,255,.06) 1px, transparent 1px); background-size: 14px 14px;"></div>
+      <div style="position: absolute; top: -60px; right: -40px; width: 300px; height: 220px; border-radius: 50%; background: radial-gradient(closest-side, ${A.accentSoft}, transparent);"></div>
+      <span style="position: absolute; top: 12px; left: 14px; font-family: 'Geist Mono', monospace; font-size: 10px; letter-spacing: .1em; color: rgba(255,255,255,.6);">VIDEO // ${esc(s.source)}</span>
+      <button title="播放(演示)" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); width: 66px; height: 66px; border-radius: 50%; border: none; background: ${A.accent}; color: #fff; font-size: 24px; cursor: pointer; box-shadow: 0 12px 40px -8px rgba(0,0,0,.7); display: inline-flex; align-items: center; justify-content: center; padding-left: 5px;">▶</button>
+      <div style="position: absolute; bottom: 12px; left: 14px; right: 14px; display: flex; align-items: center; gap: 10px;">
+        ${avatarHtml(s.source)}
+        <span style="font-size: 12.5px; font-weight: 600; color: #f3efe6;">${esc(s.source)}</span>
+        <span style="margin-left: auto; font-size: 11px; font-weight: 700; color: #fff; background: rgba(0,0,0,.65); padding: 3px 9px; border-radius: 5px; font-family: 'Geist Mono', monospace;">${dur}</span>
+      </div>
+    </div>
+    <div style="padding: 13px 15px; border-radius: 10px; border: 1px dashed ${UI.border2}; background: rgba(22,19,15,.02); margin-bottom: 24px;">
+      <div style="font-size: 11.5px; font-weight: 700; color: ${UI.text2}; margin-bottom: 8px;">✦ AI 转录要点(自动生成)</div>
+      ${clips.map((c,i)=>`<div style="display: flex; gap: 9px; align-items: baseline; margin-bottom: 5px;"><span style="flex: none; font-family: 'Geist Mono', monospace; font-size: 10.5px; color: ${A.accentBright};">0${i*6+2}:${(i*17+11)%60 < 10 ? '0' : ''}${(i*17+11)%60}</span><span style="font-size: 12.5px; line-height: 1.6; color: ${UI.text2};">${esc(c)}</span></div>`).join('')}
+    </div>`;
+  }
+  // 默认:文章 → 相关配图封面
+  return `<div style="margin-bottom: 24px;">${coverHtml(A, s, 300)}</div>`;
+}
+
+// 团队评论区(飞书同公司可见,按点赞排序)
+function detailCommentsHtml(A, s){
+  const cmts = (state.comments[s.rank]||[]).slice().sort((a,b)=>b.likes-a.likes);
+  const avColor = name => CAT[(name.charCodeAt(0)) % CAT.length];
+  // 仿微信读书「热门想法」卡片:头像 + 昵称 + 想法正文 + 点赞 / 评论
+  const rows = cmts.map(c=>`
+    <div style="padding: 14px 15px; background: #fff; border: 1.5px solid var(--ds-ink-line); box-shadow: 3px 3px 0 rgba(22,19,15,.06);">
+      <div style="display: flex; align-items: center; gap: 9px; margin-bottom: 9px;">
+        <span style="flex: none; width: 30px; height: 30px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; background: ${avColor(c.user)}; color: #fff; font-size: 12.5px; font-weight: 700;">${esc(c.user[0])}</span>
+        <span style="font-size: 13px; font-weight: 700; color: ${UI.text};">${esc(c.user)}</span>
+        <span style="font-size: 10.5px; font-weight: 600; color: ${UI.text3}; padding: 2px 8px; border-radius: 999px; border: 1px solid ${UI.border}; background: rgba(22,19,15,.03);">${esc(c.dept)}</span>
+        <span style="margin-left: auto; font-size: 11px; color: ${UI.text3};">${esc(c.time)}</span>
+      </div>
+      <div style="font-size: 13.5px; line-height: 1.75; color: var(--ds-text);">${esc(c.text)}</div>
+      <div style="display: flex; align-items: center; gap: 18px; margin-top: 11px; padding-top: 9px; border-top: 1px solid var(--ds-hair);">
+        <button class="like-btn" onclick="App.toggleLike(${s.rank}, ${c.id})" style="display: inline-flex; align-items: center; gap: 6px; border: none; background: none; color: ${c.liked?A.accent:UI.text3}; font-size: 12px; font-weight: 600; cursor: pointer;">${c.liked?'♥':'♡'} ${c.likes}</button>
+        <span style="display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: ${UI.text3}; cursor: pointer;">💬 回复</span>
+      </div>
+    </div>`).join('');
+  return `
+  <div style="margin-top: 26px; padding-top: 20px; border-top: 1px solid ${UI.border};">
+    <div style="display: flex; align-items: baseline; gap: 10px; margin-bottom: 14px;">
+      <span style="font-size: 15px; font-weight: 700; color: ${UI.text};">热门想法</span>
+      <span style="font-size: 11.5px; color: ${UI.text3};">飞书 · 同公司成员可见 · 按点赞排序</span>
+      <span style="margin-left: auto; font-size: 11px; color: ${UI.text3}; font-family: 'Geist Mono', monospace;">${cmts.length}</span>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 14px;">
+      ${rows || `<div style="font-size: 12.5px; color: ${UI.text3}; padding: 20px 0; text-align: center;">还没有想法 · 写下第一条</div>`}
+    </div>
+    <div style="display: flex; gap: 8px; align-items: center;">
+      <span style="flex: none; width: 32px; height: 32px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; background: ${A.accent}; color: #fff; font-size: 12px; font-weight: 700;">你</span>
+      <input id="cmtInput" placeholder="写下你的想法,同公司同事可见…" onkeydown="if(event.key==='Enter'){event.preventDefault();App.addComment(${s.rank});}" style="flex: 1; height: 38px; padding: 0 13px; border: 1.5px solid var(--ds-ink-line); background: var(--ds-card); color: ${UI.text}; font-size: 13px; outline: none;" />
+      <button class="send-btn" onclick="App.addComment(${s.rank})" style="height: 38px; padding: 0 16px; border: 1.5px solid var(--ds-ink-line); background: ${A.accent}; color: #fff; font-size: 13px; font-weight: 700; cursor: pointer;">发布</button>
+    </div>
+  </div>`;
+}
+
+// 事件聚合:按「事件」而非「文章」去重,附官方来源/媒体解读/第三方测试/社区反应/反面证据
+function eventSourcesHtml(A, s){
+  const n = 6 + (s.rank % 9);
+  const t0 = s.tags[0] || s.cat;
+  const groups = [
+    { key:'官方来源', tone:'#16130f', items:[ { who: s.source, txt:`${esc(s.zhTitle)} —— 原始发布 / 公告。`, url: s.url||sourceUrls[s.source]||'#' } ] },
+    { key:'媒体解读', tone:'#2b6cb0', items:[ { who:'TechCrunch AI', txt:`从行业影响角度解读:${esc(t0)} 的商业化节奏与竞争格局变化。` }, { who:'机器之心', txt:`中文媒体梳理要点,补充与前代 / 竞品的对比。` } ] },
+    { key:'第三方测试', tone:'#1f7a45', items:[ { who: /arXiv/i.test(s.source)?'独立复现社区':'第三方评测', txt:`公开评测集上的独立验证:${s.impact>=80?'指标基本可复现':'与官方数据存在小幅差异,需按自有分布再测'}。` } ] },
+    { key:'社区反应', tone:'#a06600', items:[ { who:'X · AI 圈', txt:`讨论集中在落地成本与迁移代价;${s.urgency==='高'?'关注度高、转发密集':'反响中性、观望为主'}。` } ] },
+    { key:'反面证据', tone:'#c22f2a', items:[ { who:'质疑观点', txt:`也有声音提醒:官方基准 ≠ 你的业务分布,${s.tags.includes('端侧')?'端侧功耗与长时发热仍待验证':'需警惕对单点提升的过度解读'}。` } ] },
+  ];
+  const blocks = groups.map(g=>`
+    <div style="border: 1px solid var(--ds-ink-line); border-left: 3px solid ${g.tone}; background: #fff; margin-bottom: 10px;">
+      <div style="display: flex; align-items: center; gap: 8px; padding: 8px 12px; border-bottom: 1px solid var(--ds-hair); background: rgba(22,19,15,.02);">
+        <span style="font-size: 12.5px; font-weight: 700; color: ${g.tone};">${g.key}</span>
+        <span style="font-size: 10.5px; font-family: 'Geist Mono', monospace; color: ${UI.text3};">${g.items.length}</span>
+      </div>
+      ${g.items.map(it=>`<div style="display: flex; gap: 9px; padding: 9px 12px; border-top: 1px solid rgba(22,19,15,.05);">
+        ${avatarHtml(it.who)}
+        <div style="min-width: 0;">
+          <div style="font-size: 12px; font-weight: 700; color: ${UI.text};">${esc(it.who)}</div>
+          <div style="font-size: 12.5px; line-height: 1.6; color: ${UI.text2};">${it.txt}${it.url?` <a href="${esc(it.url)}" target="_blank" rel="noopener" style="color:${A.accent}; font-weight:600;">↗</a>`:''}</div>
+        </div>
+      </div>`).join('')}
+    </div>`).join('');
+  return `
+  <div style="margin: 6px 0 26px;">
+    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 12px;">
+      <span style="font-size: 11px; font-weight: 700; letter-spacing: .06em; color: #fff; background: ${A.accent}; padding: 4px 10px; font-family: 'Geist Mono', monospace;">事件聚合</span>
+      <span style="font-size: 12.5px; color: ${UI.text2};">本事件由 <strong style="color:${UI.text};">${n}</strong> 篇报道去重合并 · 官方 / 媒体 / 测试 / 社区 / 反面 五路对照</span>
+    </div>
+    ${blocks}
+  </div>`;
+}
+
+// 反馈:与我无关 / 已知道 / 重复 / 事实错误 / 太晚 / 重要但差点遗漏
+function feedbackHtml(A, s){
+  const opts = ['与我无关','我已知道','内容重复','事实错误','推送太晚','重要·差点遗漏'];
+  const cur = state.feedback[s.rank];
+  const chips = opts.map(o=>{ const on=cur===o; return `<button onclick="event.stopPropagation(); App.setFeedback(${s.rank}, '${esc(o)}')" style="height: 30px; padding: 0 13px; border: 1.5px solid ${on?'var(--ds-ink-line)':UI.border}; background: ${on?A.accent:'#fff'}; color: ${on?'#fff':UI.text2}; font-size: 12px; font-weight: ${on?700:600}; cursor: pointer; font-family: inherit;">${o}</button>`; }).join('');
+  const thanks = cur ? `<div style="margin-top: 10px; font-size: 12px; color: ${UI.text2}; background: ${A.accentFaint}; border: 1px solid ${A.accentBorder}; padding: 8px 11px;">已记录「<strong style="color:${A.accentDeep};">${esc(cur)}</strong>」——将据此校准推送:${cur==='内容重复'?'合并同一事件、减少重复条目':cur==='推送太晚'?'提高该主体的时效权重、更早触发':cur==='事实错误'?'标记核查并降低该来源权重':cur==='重要·差点遗漏'?'提升该主题召回、纳入遗漏复盘':cur==='我已知道'?'下调同主题重复推送':'降低该类内容对你的匹配优先级'}。</div>` : '';
+  return `
+  <div style="margin: 8px 0 24px; padding: 15px 16px; border: 1.5px solid var(--ds-ink-line); background: #fff;">
+    <div style="font-size: 13px; font-weight: 700; color: ${UI.text}; margin-bottom: 4px;">这条对你怎么样?</div>
+    <div style="font-size: 11.5px; color: ${UI.text3}; margin-bottom: 11px;">负反馈直接参与去重与排序训练,比收藏 / 点赞更重要。</div>
+    <div style="display: flex; flex-wrap: wrap; gap: 8px;">${chips}</div>
+    ${thanks}
+  </div>`;
+}
+
+// 正文全文(非摘要):由字段展开为完整文章体,内嵌高亮/下划线/悬浮评论
+function articleBody(A, s){
+  const t0 = s.tags[0]||s.cat, t1 = s.tags[1]||s.tags[0]||'', t2 = s.tags[2]||'';
+  const hl = x => `<mark class="note-hl">${x}</mark>`;
+  const ul = x => `<span class="note-ul">${x}</span>`;
+  const cmt = (x, who, note) => `<span class="note-cmt">${x}<span class="cmt-pop"><b>${esc(who)}</b> · ${esc(note)}</span></span>`;
+  const P = html => `<p style="margin: 0 0 16px; font-size: 15px; line-height: 2; color: ${UI.text2};">${html}</p>`;
+  const lead = `<p style="margin: 0 0 18px; font-size: 16px; line-height: 1.9; font-weight: 600; color: var(--ds-text);">${hl(esc(s.summary))}</p>`;
+  // 完整报道体(叙事为主):导语 + 多段正文,内嵌划线与批注
+  const paras = [
+    lead,
+    P(`${esc(s.date)},${esc(s.source)} 就此发布了完整内容。文章开篇便点明,这次围绕 <strong>「${esc(t0)}」</strong> 的进展并非一次例行更新——它给出了此前很少被公开披露的细节,包括具体的实现路径、可复现的配置,以及一组覆盖不同使用场景的数据。对长期跟踪该方向的读者而言,这些细节的价值,往往高于结论本身。`),
+    P(`按文中的描述,团队首先解释了他们要解决的核心问题。过去,${esc(t0)} 在真实生产环境里的表现,常常与实验室数据存在不小的落差:纸面上的提升,一旦放到高并发、长上下文或成本敏感的场景中,就会被各种工程约束稀释。为此,他们没有停留在"跑分更高"的叙述上,而是把${cmt('每一项改进都对应到一个可测量的工程指标','平台架构组·李晨','这正是我们评估时最看重的:能不能落到我们自己的指标体系里。')}上,并公开了完整的测量方法。`),
+    P(`具体到做法,文章分几个层面展开。在方法层面,团队描述了${esc(t1||t0)}相关的关键设计,并强调这些设计"不是为了刷榜,而是为了在给定预算下把系统跑稳"。在数据层面,他们给出了不同负载形态下的对照结果,并坦率指出了各自的适用边界——${ul('哪些场景收益明显,哪些场景提升有限,都写得相当清楚')}。在工程层面,配套的参考实现与部署脚本同步开放,复现门槛因此大幅下降。`),
+    P(`值得注意的是,文中对"成本"着墨很多。作者写道,当同等能力的单位成本持续下探,决策的重心就会从"能不能做到"转向"用什么代价做到";${hl('单位经济学的变化,往往比单点能力的提升更直接地改变一个团队的技术选择')}。这一判断,与本期其它几条信号所指向的趋势相互印证。`),
+    P(`不过,${esc(s.source)} 也没有回避局限。文章在结尾提醒,官方给出的数据是在特定设定下取得的,${ul('与具体业务分布之间仍可能存在差距')};在做出替换或大规模采用的决定前,最稳妥的做法仍然是在自有评测集上跑一次回归。对于${s.tags.includes('端侧')?'端侧场景,还需要额外验证功耗与长时发热等工程指标':'对时延与稳定性敏感的场景,还应关注 p95 表现与回退方案'}。`),
+    P(`从更长的时间线看,${esc(s.cat)} 领域近一个季度的竞争焦点,正在从"谁的能力更强"转向"谁能更便宜、更可靠、更合规地把它跑进生产"。${t2?`围绕 ${esc(t2)} 的讨论、`:''}配套工具链的成熟,以及第三方复现的跟进(详见「事件聚合」),共同说明这一方向已经从概念走向了工程。接下来值得持续跟踪的,是独立复现能否支持官方数据、定价与供给在放量后的走向,以及它对现有工作负载的实际迁移收益。`),
+  ];
+  return paras.join('');
+}
+
+// 分析:为何重要 + 对我们的影响(保留)
+function analysisHtml(A, s){
+  const ib = scoreBadgeD(s.impact); const u = urgD[s.urgency];
+  const box = (title, body) => `
+    <div style="margin: 8px 0 16px; padding: 14px 16px; background: ${A.accentSoft}; border: 1px solid ${A.accentBorder}; border-left: 3px solid ${A.accent};">
+      <div style="font-size: 13px; font-weight: 700; color: ${A.accentDeep}; margin-bottom: 6px;">${title}</div>
+      <div style="font-size: 13.5px; line-height: 1.85; color: ${UI.text2};">${body}</div>
+    </div>`;
+  const impact = `落到本项目:建议把${(s.kind==='论文')?'这项研究':'这条'}纳入下一轮评估的对照材料,在真实数据 / 评测集上做一次小范围验证后再决定是否推进。影响分 <strong style="color:${ib.color};">${s.impact}</strong>、紧迫度 <strong style="color:${u.color};">${s.urgency}</strong> 表明其优先级${s.impact>=80?'较高,值得本周内跟进':'适中,可排入常规评估队列'};涉及 ${esc(s.tags.join(' / '))} 的内部项目应同步评估是否受影响。`;
+  return `
+    <div style="margin-top: 24px; padding-top: 20px; border-top: 1.5px solid var(--ds-ink-line);">
+      <div style="font-size: 13px; font-weight: 700; letter-spacing: .04em; color: ${UI.text3}; margin-bottom: 10px;">分析 · AI 观点</div>
+      ${box('为何重要', esc(s.why))}
+      ${box('对我们的影响', impact)}
+    </div>`;
+}
+
+// 正文左栏:与 AI 的对话记录(紧凑)
+// 与 AI 的对话记录:按钮触发,从左侧滑出弹出层
+function dialoguePopup(A, s){
+  const qa = state.detailQA[s.rank] || [];
+  const seed = qa.length ? qa : [
+    { q:'这条和上一次同主题相比,变化在哪?', a:`较上次同类信号,主要新增了可复现的工程细节与成本模型;若你此前已评估过前代,建议只重跑与「${esc(s.tags[0]||s.cat)}」相关的子集。` },
+    { q:'要不要现在就切换 / 采用?', a:`建议先小范围灰度:自有评测集回归 + 盯关键指标一周,再决定是否扩大。切换成本低,但基准分不等于你的业务收益。` },
+  ];
+  const rows = seed.map(x=>`
+    <div style="padding: 13px 15px; background: #fff; border: 1.5px solid var(--ds-ink-line); box-shadow: 3px 3px 0 rgba(22,19,15,.06); margin-bottom: 12px;">
+      <div style="display: flex; gap: 8px; align-items: flex-start; margin-bottom: 8px;"><span style="flex: none; font-family: 'Geist Mono', monospace; font-size: 10px; font-weight: 700; color: #fff; background: ${A.accent}; padding: 2px 7px;">你</span><span style="font-size: 13px; font-weight: 600; color: ${UI.text}; line-height: 1.6;">${esc(x.q)}</span></div>
+      <div style="display: flex; gap: 8px; align-items: flex-start;"><span style="flex: none; font-family: 'Geist Mono', monospace; font-size: 10px; font-weight: 700; color: ${A.accent}; border: 1px solid ${A.accentBorder}; padding: 2px 7px;">✦</span><span style="font-size: 12.5px; line-height: 1.75; color: ${UI.text2};">${esc(x.a)}</span></div>
+    </div>`).join('');
+  return `
+  <div onclick="App.toggleDialogue()" style="position: fixed; inset: 0; z-index: 210; background: transparent; display: flex; align-items: flex-start; justify-content: flex-start; padding: 76px 16px 16px;">
+    <aside onclick="event.stopPropagation()" style="width: 380px; max-width: 90vw; max-height: calc(100vh - 100px); background: var(--ds-section); border: 1.5px solid var(--ds-ink-line); box-shadow: 6px 6px 0 rgba(22,19,15,.14); display: flex; flex-direction: column; overflow: hidden; animation: slideRight .18s ease;">
+      <div style="flex: none; display: flex; align-items: center; gap: 8px; padding: 14px 16px; border-bottom: 1.5px solid var(--ds-ink-line);">
+        <span style="color: ${A.accent}; font-size: 15px;">✦</span>
+        <span style="font-size: 15px; font-weight: 700; color: var(--ds-text);">与 AI 的对话记录</span>
+        <span style="font-family: 'Geist Mono', monospace; font-size: 11px; color: ${UI.text3};">${seed.length}</span>
+        <button onclick="App.toggleDialogue()" title="关闭" style="margin-left: auto; width: 28px; height: 28px; border: 1px solid var(--ds-ink-line); background: #fff; color: ${UI.text2}; cursor: pointer; font-size: 15px;">×</button>
+      </div>
+      <div style="flex: 1 1 auto; min-height: 0; overflow-y: auto; padding: 14px 16px;">
+        <div style="font-size: 11px; color: ${UI.text3}; margin-bottom: 10px;">就这条信号与 AI 的问答记录(最新在最下)</div>
+        ${rows}
+      </div>
+    </aside>
+  </div>`;
+}
+
+// 我的笔记:仿微信读书,按钮触发弹出,只显示我写的文字内容
+function myNotesPopup(A, s){
+  const notes = [
+    '核心结论记一下:单位经济学的变化,比单点能力提升更直接地影响我们的技术选择。',
+    '这段的成本模型要拿去和我们本季度的推理预算对一下,看能压到什么水平。',
+    '官方基准 ≠ 我们的业务分布,切换前一定先在自有评测集回归。',
+    '端侧路线可行的话,记得额外验证功耗与长时发热,别只看 token/s。',
+  ];
+  const rows = notes.map((t,i)=>`
+    <div style="padding: 13px 15px; background: #fff; border: 1.5px solid var(--ds-ink-line); box-shadow: 3px 3px 0 rgba(22,19,15,.06); margin-bottom: 12px;">
+      <div style="font-size: 13.5px; line-height: 1.75; color: var(--ds-text);">${esc(t)}</div>
+      <div style="margin-top: 8px; font-size: 10.5px; color: ${UI.text3}; font-family: 'Geist Mono', monospace;">想法 · #${i+1}</div>
+    </div>`).join('');
+  return `
+  <div onclick="App.toggleNotes()" style="position: fixed; inset: 0; z-index: 210; background: transparent; display: flex; align-items: flex-start; justify-content: flex-end; padding: 76px 16px 16px;">
+    <aside onclick="event.stopPropagation()" style="width: 380px; max-width: 90vw; max-height: calc(100vh - 100px); background: var(--ds-section); border: 1.5px solid var(--ds-ink-line); box-shadow: 6px 6px 0 rgba(22,19,15,.14); display: flex; flex-direction: column; overflow: hidden; animation: slideRight .18s ease;">
+      <div style="flex: none; display: flex; align-items: center; gap: 8px; padding: 14px 16px; border-bottom: 1.5px solid var(--ds-ink-line);">
+        <span style="color: ${A.accent}; font-size: 15px;">✎</span>
+        <span style="font-size: 15px; font-weight: 700; color: var(--ds-text);">我的笔记</span>
+        <button onclick="App.toggleNotes()" title="关闭" style="margin-left: auto; width: 28px; height: 28px; border: 1px solid var(--ds-ink-line); background: #fff; color: ${UI.text2}; cursor: pointer; font-size: 15px;">×</button>
+      </div>
+      <div style="flex: 1 1 auto; min-height: 0; overflow-y: auto; padding: 14px 16px;">
+        <!-- 书目卡:标题 + 进度 + 笔记数 -->
+        <div style="margin-bottom: 12px; padding: 14px 15px; background: #fff; border: 1.5px solid var(--ds-ink-line); box-shadow: 3px 3px 0 rgba(22,19,15,.07);">
+          <div style="font-size: 14px; font-weight: 700; line-height: 1.5; color: var(--ds-text);">${esc(s.zhTitle)}</div>
+          <div style="margin-top: 8px; display: flex; gap: 14px; font-size: 11.5px; color: ${UI.text3}; font-family: 'Geist Mono', monospace;">
+            <span>➜ 已读到 ${40 + (s.rank % 40)}%</span><span>共 ${notes.length} 条笔记</span>
+          </div>
+        </div>
+        <div style="font-size: 11px; color: ${UI.text3}; margin-bottom: 10px;">你在这条信号里记录的想法(划线 / 高亮只在正文中体现)</div>
+        ${rows}
+        <button style="width: 100%; height: 40px; margin-top: 4px; border: 1.5px solid var(--ds-ink-line); background: ${A.accent}; color: #fff; font-size: 13px; font-weight: 700; cursor: pointer;">＋ 写想法</button>
+      </div>
+    </aside>
+  </div>`;
+}
+
+
+function detailHtml(A){
+  const s = signals.find(x=>x.rank===state.detailRank);
+  if(!s) return '';
+  const ib = scoreBadgeD(s.impact); const u = urgD[s.urgency];
+  const sourceUrl = s.url || sourceUrls[s.source] || '#';
+  const km = KIND_META[s.kind || '文章'];
+  const points = s.tags.map(t=>`<span style="font-size: 12px; color: ${A.accentBright}; background: ${A.accentSoft}; border: 1px solid ${A.accentBorder}; padding: 4px 11px; border-radius: 999px;">#${esc(t)}</span>`).join('');
+  const related = signals.filter(x=>x.cat===s.cat && x.rank!==s.rank).slice(0,3);
+  const relatedHtml = related.map(r=>`
+    <div class="rel-card" onclick="App.openDetail(${r.rank})" style="cursor: pointer; display: flex; gap: 11px; align-items: flex-start; padding: 13px; border-radius: 11px; border: 1px solid ${UI.border}; background: rgba(22,19,15,.02); transition: border-color .15s, background .15s;">
+      ${avatarHtml(r.source)}
+      <div style="min-width: 0;">
+        <div style="font-size: 13px; font-weight: 600; color: ${UI.text}; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">${esc(r.zhTitle)}</div>
+        <div style="margin-top: 4px; font-size: 11px; color: ${UI.text3}; font-family: 'Geist Mono', monospace;">#${r.rank} · 影响 ${r.impact} · ${r.date}</div>
+      </div>
+    </div>`).join('');
+
+  const tabs = [
+    { key:'正文', label:'正文全文' },
+    { key:'事件聚合', label:'事件聚合' },
+    { key:'讨论', label:'讨论 · 反馈' },
+  ];
+  const tab = state.detailTab || '正文';
+  const tabNav = tabs.map(t=>`<button class="dtab${tab===t.key?' on':''}" onclick="event.stopPropagation(); App.setDetailTab('${t.key}')">${t.label}</button>`).join('');
+
+  let bodyHtml = '';
+  if(tab==='正文'){
+    bodyHtml = `
+      <div style="max-width: 760px; margin: 0 auto;">
+        ${detailMediaHtml(A, s)}
+        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
+          <span style="width: 22px; height: 22px; border-radius: 6px; display: inline-flex; align-items: center; justify-content: center; background: ${A.accentSoft}; border: 1px solid ${A.accentBorder}; color: ${A.accentBright}; font-size: 12px;">✦</span>
+          <span style="font-size: 13px; font-weight: 700; color: ${UI.text};">正文全文</span>
+        </div>
+        <!-- 选中操作条(仿微信读书) -->
+        <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 14px; font-size: 11.5px; color: ${UI.text3}; flex-wrap: wrap;">
+          <span>选中文字可:</span>
+          ${['复制','划线','写想法','AI 问书'].map(x=>`<span style="display:inline-flex; align-items:center; gap:4px; padding:3px 9px; border:1px solid ${UI.border}; background:#fff; color:${UI.text2}; font-weight:600;">${x}</span>`).join('')}
+        </div>
+        ${articleBody(A, s)}
+        <div style="display: flex; flex-wrap: wrap; gap: 7px; margin: 20px 0 4px;">${points}</div>
+        ${analysisHtml(A, s)}
+      </div>`;
+  } else if(tab==='事件聚合'){
+    bodyHtml = eventSourcesHtml(A, s);
+  } else {
+    bodyHtml = `${feedbackHtml(A, s)}${detailCommentsHtml(A, s)}`;
+  }
+
+  return `
+  <div class="detail-overlay" onclick="App.closeDetail()">
+    <div class="detail-panel" onclick="event.stopPropagation()">
+      <button class="detail-close" onclick="App.closeDetail()" title="关闭 (Esc)">×</button>
+      <div style="position: absolute; top: 0; left: 0; right: 0; height: 4px; background: linear-gradient(90deg, transparent, ${A.accent}, transparent);"></div>
+      <div style="position: relative; padding: 30px 32px 0;">
+        <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 14px;">
+          <span style="font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 6px; background: rgba(22,19,15,.06); color: ${UI.text2}; border: 1px solid ${UI.border2};">${km.icon} ${km.label}</span>
+          <span style="font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 6px; background: ${A.accentSoft}; color: ${A.accentBright}; border: 1px solid ${A.accentBorder};">${esc(s.cat)}</span>
+          ${s.tags.includes('端侧')?`<span style="font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 6px; background: ${A.accentSoft}; color: ${A.accentBright}; border: 1px solid ${A.accentBorder};">端侧模型</span>`:''}
+          <span style="font-size: 11px; font-weight: 700; padding: 4px 9px; border-radius: 6px; background: ${ib.bg}; color: ${ib.color}; border: 1px solid ${ib.border};">影响 ${s.impact}</span>
+          <span style="font-size: 11px; font-weight: 700; padding: 4px 9px; border-radius: 6px; background: ${u.bg}; color: ${u.color}; border: 1px solid ${u.border};">紧迫 ${s.urgency}</span>
+          <span style="font-size: 11px; color: ${UI.text3}; font-family: 'Geist Mono', monospace;">#${s.rank}</span>
+        </div>
+        <h1 style="margin: 0 0 6px; font-size: 26px; line-height: 1.35; font-weight: 700; letter-spacing: -.015em; color: var(--ds-text);">${esc(s.zhTitle)}</h1>
+        <div style="font-size: 13px; color: ${UI.text3}; margin-bottom: 16px;">${esc(s.title)}</div>
+        <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap; padding-bottom: 16px; border-bottom: 1px solid ${UI.border};">
+          ${avatarHtml(s.source)}
+          <a class="src-link" href="${esc(sourceUrl)}" target="_blank" rel="noopener" style="font-size: 13px; font-weight: 600; color: ${UI.text}; border-bottom: 1px dashed rgba(22,19,15,.28);">${esc(s.source)} ↗</a>
+          <span style="color: ${UI.text3};">·</span>
+          <span style="font-size: 12px; color: ${UI.text3}; font-family: 'Geist Mono', monospace;">${s.date}</span>
+        </div>
+        <div style="position: sticky; top: 0; z-index: 6; display: flex; align-items: center; gap: 8px; padding: 14px 0 12px; background: var(--ds-panel); flex-wrap: wrap;">
+          ${tabNav}
+          ${tab==='正文' ? `<button onclick="event.stopPropagation(); App.toggleDialogue()" title="与 AI 的对话记录" style="margin-left: auto; display: inline-flex; align-items: center; gap: 6px; height: 38px; padding: 0 15px; border: 1.5px solid var(--ds-ink-line); background: ${state.dialogueOpen?A.accent:'#fff'}; color: ${state.dialogueOpen?'#fff':UI.text}; font-size: 13px; font-weight: 700; cursor: pointer;">✦ 对话记录 <span style="font-family:'Geist Mono',monospace; font-size:11px; opacity:.8;">${(state.detailQA[s.rank]||[]).length||2}</span></button>` : ''}
+          <button onclick="event.stopPropagation(); App.toggleNotes()" title="我的笔记" style="${tab==='正文'?'':'margin-left: auto;'} display: inline-flex; align-items: center; gap: 6px; height: 38px; padding: 0 15px; border: 1.5px solid var(--ds-ink-line); background: ${state.notesOpen?A.accent:'#fff'}; color: ${state.notesOpen?'#fff':UI.text}; font-size: 13px; font-weight: 700; cursor: pointer;">✎ 我的笔记 <span style="font-family:'Geist Mono',monospace; font-size:11px; opacity:.8;">4</span></button>
+        </div>
+      </div>
+      <div style="position: relative; padding: 4px 32px 12px;">
+        ${bodyHtml}
+      </div>
+      <div style="position: sticky; bottom: 0; z-index: 5; padding: 12px 24px 16px; background: linear-gradient(180deg, transparent, var(--ds-panel) 36%);">
+        <div style="display: flex; gap: 8px; align-items: center; padding: 8px; background: #fff; border: 1.5px solid var(--ds-ink-line); box-shadow: 4px 4px 0 rgba(22,19,15,.09);">
+          <span style="flex: none; width: 30px; height: 30px; display: inline-flex; align-items: center; justify-content: center; background: var(--ds-ink-line); color: #fff; font-size: 13px;">✦</span>
+          <input id="detailAsk" style="flex: 1; height: 36px; padding: 0 12px; border: 1.5px solid var(--ds-ink-line); background: #fff; color: var(--ds-text); font-size: 13px; outline: none;" placeholder="就这篇${km.label}向 AI 提问(回答记入左侧「对话记录」)…" onkeydown="if(event.key==='Enter'){event.preventDefault();App.askDetail(${s.rank});}" />
+          <button class="send-btn" onclick="App.askDetail(${s.rank})" style="height: 36px; padding: 0 16px; border: 1.5px solid var(--ds-ink-line); background: ${A.accent}; color: #fff; font-size: 12.5px; font-weight: 700; cursor: pointer;">提问</button>
+        </div>
+      </div>
+      ${state.notesOpen ? myNotesPopup(A, s) : ''}
+      ${state.dialogueOpen ? dialoguePopup(A, s) : ''}
+    </div>
+  </div>`;
+}
+
+function sourcesHtml(A){
+  const onCount = state.sources.filter(s=>s.on).length;
+  const perDaySum = state.sources.reduce((a,x)=>a+(x.on?x.perDay:0),0);
+  const avgPer = (perDaySum/(onCount||1)).toFixed(1);
+  const sync = state.sourceSync;
+  const syncColor = sync.status==='connected' ? 'var(--ds-good)' : sync.status==='error' ? 'var(--ds-crit)' : sync.status==='loading' ? 'var(--ds-warn)' : UI.text3;
+  const typeOrder = state.sourceMeta.types.length ? state.sourceMeta.types : TYPE_ORDER;
+  const formatOrder = state.sourceMeta.formats.length ? state.sourceMeta.formats : FORMAT_ORDER;
+  const priorityOrder = state.sourceMeta.priorities.length ? state.sourceMeta.priorities : ['高','中','低'];
+  const supportsOn = state.sourceMeta.writable.includes('on') || !sync.connected;
+  const supportsEdge = state.sourceMeta.writable.includes('edge') || !sync.connected;
+  const sourceTabs = sync.connected
+    ? [{label:'全部',match:null}, ...typeOrder.map(type=>({label:type,match:[type]}))]
+    : srcTabDefs;
+  const [formIdLabel, formIdPlaceholder] = idLabels[state.formFormat] || idLabels['网站'];
+
+  const typeOpts = typeOrder.map(v=>`<option value="${v}" ${state.formType===v?'selected':''}>${v}</option>`).join('');
+  const formatOpts = formatOrder.map(v=>`<option value="${v}" ${state.formFormat===v?'selected':''}>${v}</option>`).join('');
+  const prioOpts = priorityOrder.map(v=>`<option value="${v}" ${state.formPriority===v?'selected':''}>${v}</option>`).join('');
+
+  // ---------- AI 偏好对话窗口 ----------
+  const chatMsgs = state.chat.map(m => m.role==='ai'
+    ? `<div style="display: flex; gap: 9px; align-items: flex-start;">
+         <span style="flex: none; width: 26px; height: 26px; border-radius: 7px; display: inline-flex; align-items: center; justify-content: center; background: ${A.accentSoft}; border: 1px solid ${A.accentBorder}; color: ${A.accentBright}; font-size: 12px;">✦</span>
+         <div style="max-width: 84%; padding: 10px 13px; border-radius: 12px 12px 12px 4px; background: rgba(22,19,15,.05); border: 1px solid ${UI.border}; font-size: 13px; line-height: 1.65; color: ${UI.text};">${esc(m.text)}</div>
+       </div>`
+    : `<div style="display: flex; gap: 9px; align-items: flex-start; flex-direction: row-reverse;">
+         <span style="flex: none; width: 26px; height: 26px; border-radius: 7px; display: inline-flex; align-items: center; justify-content: center; background: ${A.accent}; color: #ffffff; font-size: 11px; font-weight: 700;">你</span>
+         <div style="max-width: 84%; padding: 10px 13px; border-radius: 12px 12px 4px 12px; background: ${A.accentSoft}; border: 1px solid ${A.accentBorder}; font-size: 13px; line-height: 1.65; color: ${UI.text};">${esc(m.text)}</div>
+       </div>`
+  ).join('');
+
+  const chatPanel = `
+    <div style="display: flex; flex-direction: column; border-radius: 14px; background: ${UI.panel}; border: 1px solid ${UI.border}; overflow: hidden; min-height: 340px;">
+      <div style="display: flex; align-items: center; gap: 9px; padding: 15px 18px; border-bottom: 1px solid ${UI.border};">
+        <span style="width: 8px; height: 8px; border-radius: 50%; background: ${A.accent}; box-shadow: 0 0 8px ${A.accentGlow};"></span>
+        <span style="font-size: 13.5px; font-weight: 700; color: var(--ds-text);">AI 偏好助手</span>
+        <span style="font-size: 11px; color: ${UI.text3};">告诉我你的关注方向,我来调权重、荐来源</span>
+      </div>
+      <div id="chatScroll" style="flex: 1; display: flex; flex-direction: column; gap: 12px; padding: 16px 18px; max-height: 300px; overflow-y: auto;">${chatMsgs}</div>
+      <div style="display: flex; gap: 8px; padding: 12px 14px; border-top: 1px solid ${UI.border}; background: rgba(22,19,15,.02);">
+        <input id="chatInput" placeholder="例如:多关注推理成本,少推融资新闻…" onkeydown="if(event.key==='Enter'){event.preventDefault();App.sendChat();}" style="flex: 1; height: 38px; padding: 0 13px; border-radius: 9px; border: 1px solid ${UI.border}; background: var(--ds-card); color: ${UI.text}; font-size: 13px; outline: none;" />
+        <button class="send-btn" onclick="App.sendChat()" style="height: 38px; padding: 0 18px; border-radius: 9px; border: none; background: ${A.accent}; color: #ffffff; font-size: 13px; font-weight: 700; cursor: pointer;">发送</button>
+      </div>
+    </div>`;
+
+  // ---------- 数据分析看板 ----------
+  const stat = (label,val,sub)=>`<div style="padding: 16px 18px; border-radius: 12px; background: ${UI.card}; border: 1px solid ${UI.border};">
+      <div style="font-size: 25px; font-weight: 700; color: var(--ds-text); font-variant-numeric: tabular-nums; line-height: 1;">${val}</div>
+      <div style="margin-top: 6px; font-size: 11.5px; color: ${UI.text3};">${label}</div>
+      ${sub?`<div style="margin-top: 3px; font-size: 10.5px; color: ${A.accentBright};">${sub}</div>`:''}
+    </div>`;
+  const statTiles = `<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+      ${stat('来源总数', state.sources.length, '')}
+      ${stat('启用中', onCount, `占比 ${Math.round(onCount/(state.sources.length||1)*100)}%`)}
+      ${stat('日均条目', perDaySum, '启用来源合计')}
+      ${stat('单源日均', avgPer, '条 / 源 · 日')}
+    </div>`;
+
+  // 类型分布(甜甜圈, dataviz 类别色)
+  const types = typeOrder.map((t,i)=>({ label:t, count: state.sources.filter(x=>x.type===t).length, color: CAT[i%CAT.length] })).filter(d=>d.count>0);
+  const typeTotal = types.reduce((a,d)=>a+d.count,0) || 1;
+  let acc=0; const stops=[];
+  types.forEach(d=>{ const start=acc/typeTotal*360; acc+=d.count; const end=acc/typeTotal*360; stops.push(`${d.color} ${start}deg ${Math.max(start,end-1.5)}deg`); stops.push(`${UI.panelSolid} ${Math.max(start,end-1.5)}deg ${end}deg`); });
+  const donut = `
+    <div style="display: flex; align-items: center; gap: 18px; flex-wrap: wrap;">
+      <div style="position: relative; width: 132px; height: 132px; flex: none;">
+        <div style="width: 132px; height: 132px; border-radius: 50%; background: conic-gradient(${stops.join(',')});"></div>
+        <div style="position: absolute; inset: 24px; border-radius: 50%; background: ${UI.panelSolid}; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+          <span style="font-size: 24px; font-weight: 700; color: var(--ds-text); line-height: 1;">${state.sources.length}</span>
+          <span style="font-size: 10.5px; color: ${UI.text3}; margin-top: 2px;">来源</span>
+        </div>
+      </div>
+      <div style="flex: 1; min-width: 130px; display: flex; flex-direction: column; gap: 8px;">
+        ${types.map(d=>`<div style="display: flex; align-items: center; gap: 8px;">
+          <span style="width: 10px; height: 10px; border-radius: 3px; background: ${d.color}; flex: none;"></span>
+          <span style="font-size: 12px; color: ${UI.text2}; flex: 1;">${esc(d.label)}</span>
+          <span style="font-size: 12px; color: ${UI.text}; font-weight: 600; font-variant-numeric: tabular-nums;">${d.count}</span>
+        </div>`).join('')}
+      </div>
+    </div>`;
+
+  const barChart = (items,color)=>{ const max=Math.max(1,...items.map(d=>d.count)); return items.map(d=>`
+      <div style="display: flex; align-items: center; gap: 10px;">
+        <span style="flex: none; width: 54px; font-size: 11.5px; color: ${UI.text2}; text-align: right;">${esc(d.label)}</span>
+        <div style="flex: 1; height: 10px; border-radius: 6px; background: rgba(22,19,15,.05); overflow: hidden;">
+          <div style="height: 100%; width: ${Math.round(d.count/max*100)}%; ${d.count>0?'min-width: 6px;':''} border-radius: 6px; background: ${color};"></div>
+        </div>
+        <span style="flex: none; width: 20px; font-size: 11.5px; color: ${UI.text}; font-weight: 600; text-align: right; font-variant-numeric: tabular-nums;">${d.count}</span>
+      </div>`).join(''); };
+  const fmtItems = formatOrder.map(v=>({ label:v, count: state.sources.filter(x=>x.format===v).length })).filter(d=>d.count>0);
+  const prioItems = priorityOrder.map(v=>({ label:v, count: state.sources.filter(x=>x.priority===v).length }));
+
+  const chartCard = (title,sub,body)=>`<div style="padding: 18px 20px; border-radius: 14px; background: ${UI.panel}; border: 1px solid ${UI.border};">
+      <div style="font-size: 13px; font-weight: 700; color: var(--ds-text); margin-bottom: 3px;">${title}</div>
+      <div style="font-size: 11px; color: ${UI.text3}; margin-bottom: 16px;">${sub}</div>
+      ${body}
+    </div>`;
+  const dashboard = `
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px;">
+      ${chartCard('主体类型分布','按来源主体(大厂 / 媒体 / KOL / 论文 / 实验室)统计', donut)}
+      ${chartCard('信息源格式分布','按格式统计:网站文章 / 公众号 / 视频 / 论文 / 内部文档 / 社交媒体', `<div style="display: flex; flex-direction: column; gap: 11px;">${barChart(fmtItems, A.accent)}</div>`)}
+      ${chartCard('优先级分布','高 / 中 / 低 各档来源数', `<div style="display: flex; flex-direction: column; gap: 11px;">${barChart(prioItems, '#199e70')}</div>`)}
+    </div>`;
+
+  // ---------- 来源表 ----------
+  const srcTabsHtml = sourceTabs.map(d => {
+    const active = state.srcTab===d.label;
+    const count = d.edge ? state.sources.filter(x=>x.edge).length : (d.match ? state.sources.filter(x=>d.match.includes(x.type)).length : state.sources.length);
+    return `<button onclick="App.setSrcTab('${d.label}')" style="display: inline-flex; align-items: center; gap: 7px; height: 38px; padding: 0 15px; border-radius: 10px 10px 0 0; border: 1px solid ${active?UI.border:'transparent'}; border-bottom: none; background: ${active?'rgba(22,19,15,.06)':'transparent'}; color: ${active?(d.edge?A.accent:UI.text):UI.text3}; font-size: 12.5px; font-weight: ${d.edge?700:600}; cursor: pointer; position: relative; top: 1px;">${d.edge?'✦ ':''}${d.label}<span style="font-size: 10.5px; font-weight: 700; padding: 1px 7px; border-radius: 999px; background: ${active?A.accentSoft:'rgba(22,19,15,.06)'}; color: ${active?A.accentBright:UI.text3}; font-family: 'Geist Mono', monospace;">${count}</span></button>`;
+  }).join('');
+
+  const activeDef = sourceTabs.find(d=>d.label===state.srcTab) || sourceTabs[0];
+  const filtered = state.sources.filter(x => activeDef.edge ? x.edge : (!activeDef.match || activeDef.match.includes(x.type)));
+  const grid = '62px minmax(150px,1.7fr) minmax(92px,1fr) 74px minmax(118px,1.1fr) minmax(80px,.9fr) 58px 38px';
+
+  const rowsHtml = filtered.map(row => {
+    const rowId = sourceIdArg(row.id);
+    const prioBtns = priorityOrder.map(p=>{ const on=row.priority===p; return `<button onclick="App.setPriority(${rowId},'${p}')" style="height: 28px; padding: 0 10px; border: none; background: ${on?A.accentSoft:'transparent'}; color: ${on?A.accentBright:UI.text3}; font-size: 12px; font-weight: ${on?700:600}; cursor: pointer;">${p}</button>`; }).join('');
+    return `
+    <div class="src-row" style="display: grid; grid-template-columns: ${grid}; padding: 0 20px; min-height: 58px; align-items: center; border-bottom: 1px solid ${UI.hair}; opacity: ${row.on?'1':'.5'};">
+      <div ${supportsOn?`onclick="App.toggleSrc(${rowId})"`:`title="当前飞书表格没有“启用”字段"`} style="width: 36px; height: 20px; border-radius: 10px; background: ${row.on?A.accent:'rgba(22,19,15,.1)'}; border: 1px solid ${row.on?A.accent:'rgba(22,19,15,.16)'}; cursor: ${supportsOn?'pointer':'not-allowed'}; position: relative; transition: background .15s; opacity: ${supportsOn?'1':'.45'};">
+        <div style="position: absolute; top: 2px; left: ${row.on?'18px':'2px'}; width: 14px; height: 14px; border-radius: 50%; background: #ffffff; transition: left .15s;"></div>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 2px; padding-right: 12px;">
+        <span style="font-size: 13.5px; font-weight: 600; color: ${UI.text};">${esc(row.name)}</span>
+        <span style="font-size: 11px; color: ${UI.text3}; font-family: 'Geist Mono', ui-monospace, Menlo, monospace; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${esc(row.url)}</span>
+      </div>
+      <span style="font-size: 12px; color: ${UI.text2}; display: inline-flex; flex-direction: column; gap: 3px; align-items: flex-start;"><span style="padding: 3px 10px; border-radius: 999px; border: 1px solid ${UI.border}; background: rgba(22,19,15,.03);">${esc(row.format||'网站')}</span><span style="font-size: 10px; color: ${UI.text3};">${esc(row.type)}</span></span>
+      ${supportsEdge?`<button onclick="App.toggleEdge(${rowId})" title="${row.edge?'取消端侧标记':'标记为端侧模型来源'}" style="justify-self: start; height: 26px; padding: 0 10px; border-radius: 999px; border: 1px solid ${row.edge?A.accentBorder:UI.border}; background: ${row.edge?A.accentSoft:'transparent'}; color: ${row.edge?A.accentBright:UI.text3}; font-size: 11px; font-weight: 700; cursor: pointer;">${row.edge?'✦ 端侧':'＋端侧'}</button>`:`<span style="font-size:11px;color:${UI.text3};">—</span>`}
+      <div style="display: inline-flex; border: 1px solid ${UI.border}; border-radius: 8px; overflow: hidden; width: fit-content; background: rgba(22,19,15,.02);">${prioBtns}</div>
+      <span style="font-size: 12px; color: ${UI.text3}; font-family: 'Geist Mono', ui-monospace, Menlo, monospace;">${esc(row.last)}</span>
+      <span style="font-size: 12.5px; color: ${UI.text}; font-weight: 600; text-align: right; font-family: 'Geist Mono', ui-monospace, Menlo, monospace;">${row.perDay}</span>
+      <button class="del-btn" onclick="App.removeSrc(${rowId})" title="删除" style="justify-self: end; width: 28px; height: 28px; border-radius: 8px; border: 1px solid ${UI.border}; background: transparent; color: ${UI.text3}; font-size: 14px; cursor: pointer;">×</button>
+    </div>`;
+  }).join('');
+
+  const emptyHtml = filtered.length===0 ? `<div style="padding: 36px 20px; text-align: center; font-size: 13px; color: ${UI.text3};">该分类下暂无数据源 · 可在上方「添加数据源」中新增</div>` : '';
+
+  const inputStyle = `height: 36px; padding: 0 12px; border-radius: 8px; border: 1px solid ${UI.border}; background: var(--ds-card); color: ${UI.text}; font-size: 13px; outline: none;`;
+  const selStyle = `height: 36px; padding: 0 10px; border-radius: 8px; border: 1px solid ${UI.border}; background: var(--ds-card); color: ${UI.text}; font-size: 13px;`;
+
+  return `
+  <main style="position: relative;">
+    <div style="position: relative; max-width: 1180px; margin: 0 auto; padding: 40px 36px 72px;">
+      <section style="margin-bottom: 28px;">
+        <div style="display: flex; align-items: baseline; gap: 12px; margin-bottom: 10px;">
+          <h1 style="margin: 0; font-size: 27px; font-weight: 700; letter-spacing: -.015em; color: var(--ds-text);">数据源定制</h1>
+          <span style="font-size: 12.5px; color: ${UI.text3};">${state.sources.length} 个来源 · ${onCount} 个启用</span>
+          <button onclick="App.reloadSources()" title="${esc(sync.message)}" style="margin-left: auto; display: inline-flex; align-items: center; gap: 7px; height: 30px; padding: 0 10px; border: 1px solid ${UI.border}; background: #fff; color: ${syncColor}; font-size: 11px; font-weight: 700; cursor: pointer;">
+            <span style="width: 7px; height: 7px; border-radius: 50%; background: ${syncColor};"></span>${sync.status==='connected'?'飞书已连接':sync.status==='loading'?'连接中':'本地模式'} · 刷新
+          </button>
+        </div>
+        <p style="margin: 0; font-size: 13.5px; line-height: 1.7; color: ${UI.text2}; max-width: 720px;">用对话告诉助手你的偏好,或直接管理来源。可开关来源、按主体分类、标记「端侧模型」维度并调整优先级;优先级同时影响「与我相关」的匹配权重。</p>
+      </section>
+
+      <section style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 16px; margin-bottom: 16px;">
+        ${chatPanel}
+        <div style="display: flex; flex-direction: column; gap: 12px;">
+          <div style="font-size: 13px; font-weight: 700; color: ${UI.text2}; letter-spacing: .02em;">概览</div>
+          ${statTiles}
+        </div>
+      </section>
+
+      <section style="margin-bottom: 34px;">
+        <div style="font-size: 15px; font-weight: 700; color: var(--ds-text); margin-bottom: 14px; display: flex; align-items: center; gap: 8px;"><span style="width: 4px; height: 15px; border-radius: 2px; background: ${A.accent};"></span>数据分析看板</div>
+        ${dashboard}
+      </section>
+
+      <section style="margin-bottom: 30px; padding: 22px; border-radius: 12px; background: ${UI.panel}; border: 1px dashed ${UI.border2};">
+        <div style="font-size: 13px; font-weight: 700; color: var(--ds-text); margin-bottom: 16px;">添加数据源</div>
+        <div style="display: grid; grid-template-columns: 1.1fr 1fr 1fr 1.5fr .7fr auto auto; gap: 12px; align-items: end;">
+          <div style="display: flex; flex-direction: column; gap: 6px;">
+            <label style="font-size: 11px; color: ${UI.text3};">名称</label>
+            <input value="${esc(state.formName)}" oninput="App.setForm('formName', this.value)" placeholder="如:阶跃星辰 / 机器之心" style="${inputStyle}" />
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 6px;">
+            <label style="font-size: 11px; color: ${UI.text3};">信息源类型</label>
+            <select onchange="App.setForm('formFormat', this.value)" style="${selStyle}">${formatOpts}</select>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 6px;">
+            <label style="font-size: 11px; color: ${UI.text3};">主体归属</label>
+            <select onchange="App.setForm('formType', this.value)" style="${selStyle}">${typeOpts}</select>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 6px;">
+            <label style="font-size: 11px; color: ${UI.text3};">${formIdLabel}</label>
+            <input value="${esc(state.formUrl)}" oninput="App.setForm('formUrl', this.value)" placeholder="${esc(formIdPlaceholder)}" style="${inputStyle} font-family: 'Geist Mono', ui-monospace, Menlo, monospace;" />
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 6px;">
+            <label style="font-size: 11px; color: ${UI.text3};">优先级</label>
+            <select onchange="App.setForm('formPriority', this.value)" style="${selStyle}">${prioOpts}</select>
+          </div>
+          ${supportsEdge?`<button onclick="App.toggleFormEdge()" title="标记为端侧模型维度" style="height: 36px; padding: 0 14px; border-radius: 8px; border: 1px solid ${state.formEdge?A.accentBorder:UI.border}; background: ${state.formEdge?A.accentSoft:'var(--ds-card)'}; color: ${state.formEdge?A.accentBright:UI.text2}; font-size: 12.5px; font-weight: 700; cursor: pointer;">${state.formEdge?'✦ 端侧':'＋端侧'}</button>`:''}
+          <button class="add-btn" onclick="App.add()" ${sync.busy?'disabled':''} title="${esc(sync.message)}" style="height: 36px; padding: 0 22px; border-radius: 8px; border: none; background: ${A.accent}; color: #ffffff; font-size: 13px; font-weight: 700; cursor: ${sync.busy?'wait':'pointer'}; opacity: ${sync.busy?'.6':'1'};">${sync.busy?'写入中…':'+ 添加'}</button>
+        </div>
+      </section>
+
+      <div style="display: flex; align-items: flex-end; gap: 4px; padding: 0 4px; flex-wrap: wrap;">${srcTabsHtml}</div>
+
+      <section style="border: 1px solid ${UI.border}; border-radius: 12px; overflow: hidden; background: ${UI.panel}; position: relative;">
+        <div style="display: grid; grid-template-columns: ${grid}; padding: 0 20px; height: 44px; align-items: center; background: rgba(22,19,15,.03); border-bottom: 1px solid ${UI.border}; font-size: 11px; font-weight: 700; letter-spacing: .06em; color: ${UI.text3};">
+          <span>状态</span><span>来源名称</span><span>信息源类型</span><span>端侧</span><span>优先级</span><span>上次检索</span><span style="text-align: right;">条目/日</span><span></span>
+        </div>
+        ${rowsHtml}
+        ${emptyHtml}
+      </section>
+
+      <p style="margin: 20px 0 0; font-size: 12px; color: ${UI.text3};">${sync.connected?'分类、获取方式和优先级选项来自飞书多维表格；新增和修改会实时写回。':'当前使用本地演示字段；连接飞书后会自动采用表格中的字段选项。'}</p>
+    </div>
+  </main>`;
+}
+
+// 跳转到某条信号详情的引用角标
+function refChip(A,r){
+  return `<button onclick="App.openDetail(${r})" title="查看 #${r} 信号" style="display: inline-flex; align-items: center; justify-content: center; min-width: 20px; height: 19px; padding: 0 5px; border: 1px solid ${A.accentBorder}; border-radius: 5px; background: ${A.accentSoft}; color: ${A.accentBright}; font-size: 10.5px; font-weight: 600; font-family: 'Geist Mono', monospace; cursor: pointer;">#${r}</button>`;
+}
+
+// 任务视图:AI 周报 / 多模型辩论 / 动向追踪
+function tasksHtml(A){
+  const tabs = [['report','AI 自动周报'],['debate','多模型辩论'],['timeline','动向追踪'],['meetings','会议助手']];
+  const tabNav = tabs.map(([k,l])=>{ const on=state.taskTab===k; return `<button onclick="App.setTaskTab('${k}')" style="height: 38px; padding: 0 18px; border-radius: 10px; border: 1px solid ${on?A.accentBorder:UI.border}; background: ${on?A.accentSoft:'transparent'}; color: ${on?A.accentBright:UI.text2}; font-size: 13px; font-weight: ${on?700:600}; cursor: pointer;">${l}</button>`; }).join('');
+
+  let body = '';
+
+  if(state.taskTab==='report'){
+    const rep = weeklyReport;
+    const pendingPanel = () => {
+      const items = state.pending.map(r=>{ const s=signals.find(x=>x.rank===r); if(!s) return ''; return `
+        <div style="display: flex; gap: 9px; align-items: flex-start; padding: 11px; border-radius: 10px; border: 1px solid ${UI.border}; background: rgba(22,19,15,.02);">
+          ${topicAvatarHtml(s)}
+          <div style="flex: 1; min-width: 0;">
+            <div style="font-size: 12px; font-weight: 600; color: ${UI.text}; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">${esc(s.zhTitle)}</div>
+            <div style="margin-top: 3px; font-size: 10px; color: ${UI.text3}; font-family: 'Geist Mono', monospace;">#${s.rank} · ${s.date}</div>
+          </div>
+          <button onclick="App.removePending(${r})" title="移出待分析" style="flex: none; width: 22px; height: 22px; border-radius: 6px; border: 1px solid ${UI.border}; background: transparent; color: ${UI.text3}; cursor: pointer; font-size: 12px;">×</button>
+        </div>`; }).join('');
+      return `<div style="position: sticky; top: 74px; padding: 18px; border-radius: 14px; background: ${UI.panelSolid}; border: 1px solid ${UI.border};">
+        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;"><span style="width: 4px; height: 14px; border-radius: 2px; background: ${A.accent};"></span><span style="font-size: 13px; font-weight: 700; color: var(--ds-text);">报告待分析区</span><span style="margin-left: auto; font-size: 11px; color: ${UI.text3}; font-family: 'Geist Mono', monospace;">${state.pending.length}</span></div>
+        <p style="margin: 0 0 14px; font-size: 11.5px; line-height: 1.6; color: ${UI.text3};">从收藏栏点「＋」加入的新闻会进入这里,下次周报生成时将额外关注。</p>
+        <div style="display: flex; flex-direction: column; gap: 9px;">${items || `<div style="font-size: 12px; color: ${UI.text3}; padding: 18px 0; text-align: center; line-height: 1.7;">暂无待分析条目<br>在右侧收藏栏点 ＋ 添加</div>`}</div>
+      </div>`;
+    };
+    const metricsHtml = rep.metrics.map(m=>`<div style="padding: 14px 16px; border-radius: 12px; background: rgba(22,19,15,.03); border: 1px solid ${UI.border};">
+        <div style="font-size: 22px; font-weight: 700; color: var(--ds-text); font-variant-numeric: tabular-nums; line-height: 1;">${m.value}</div>
+        <div style="margin-top: 5px; font-size: 11px; color: ${UI.text3};">${esc(m.label)}</div>
+        <div style="margin-top: 2px; font-size: 10px; color: ${A.accentBright};">${esc(m.sub)}</div>
+      </div>`).join('');
+    const areasHtml = rep.areas.map((a,i)=>`
+      <div style="display: flex; gap: 14px; padding: 16px 0; border-top: 1px solid ${UI.hair};">
+        <span style="flex: none; width: 26px; font-family: 'Geist Mono', monospace; font-size: 12px; color: ${A.accentBright};">0${i+1}</span>
+        <div style="flex: 1;">
+          <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px; flex-wrap: wrap;">
+            <span style="font-size: 13px; font-weight: 700; color: var(--ds-text);">${esc(a.cat)}</span>
+            ${a.refs.map(r=>refChip(A,r)).join('')}
+          </div>
+          <div style="font-size: 13px; line-height: 1.7; color: ${UI.text2};">${esc(a.text)}</div>
+        </div>
+      </div>`).join('');
+    const topHtml = rep.topSignals.map(r=>{ const s=signals.find(x=>x.rank===r); if(!s) return ''; return `
+      <div onclick="App.openDetail(${r})" class="rel-card" style="cursor: pointer; display: flex; gap: 10px; align-items: center; padding: 10px 12px; border-radius: 10px; border: 1px solid ${UI.border}; background: rgba(22,19,15,.02); transition: border-color .15s, background .15s;">
+        ${topicAvatarHtml(s)}
+        <div style="min-width: 0; flex: 1;"><div style="font-size: 12.5px; font-weight: 600; color: ${UI.text}; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${esc(s.zhTitle)}</div><div style="font-size: 10.5px; color: ${UI.text3}; font-family: 'Geist Mono', monospace;">#${s.rank} · 影响 ${s.impact} · ${s.date}</div></div>
+      </div>`; }).join('');
+    const listBlock = (title,items)=>`<div style="font-size: 13px; font-weight: 700; color: var(--ds-text); margin: 24px 0 10px;">${title}</div><ul style="margin: 0; padding-left: 18px;">${items.map(x=>`<li style="margin: 0 0 8px; font-size: 13px; line-height: 1.7; color: ${UI.text2};">${esc(x)}</li>`).join('')}</ul>`;
+    const focusHtml = state.pending.length ? `
+      <div style="margin-top: 24px; padding: 14px 16px; border-radius: 12px; background: ${A.accentSoft}; border: 1px solid ${A.accentBorder}; border-left: 3px solid ${A.accent};">
+        <div style="font-size: 12px; font-weight: 700; color: ${A.accentBright}; margin-bottom: 8px;">★ 本期额外关注(来自待分析 ${state.pending.length} 条)</div>
+        ${state.pending.map(r=>{ const s=signals.find(x=>x.rank===r); return s?`<div style="font-size: 12.5px; color: ${UI.text}; line-height: 1.8;">· ${esc(s.zhTitle)} ${refChip(A,r)}</div>`:''; }).join('')}
+      </div>` : '';
+    const reportCard = `
+      <div style="padding: 30px 34px 34px; border-radius: 16px; background: ${UI.panel}; border: 1px solid ${UI.border}; position: relative; overflow: hidden;">
+        <div style="position: absolute; top: 0; left: 0; right: 0; height: 4px; background: linear-gradient(90deg, ${A.accent}, transparent 70%);"></div>
+        <div style="position: absolute; top: -80px; right: -40px; width: 300px; height: 200px; border-radius: 50%; background: radial-gradient(closest-side, ${A.accentGlow}, transparent); pointer-events: none;"></div>
+        <div style="position: relative;">
+          <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 14px; flex-wrap: wrap;">
+            <span style="font-size: 10.5px; font-weight: 700; letter-spacing: .08em; color: ${A.accentBright}; background: ${A.accentSoft}; border: 1px solid ${A.accentBorder}; padding: 4px 10px; border-radius: 999px;">✦ AI 自动生成</span>
+            <span style="font-size: 12px; color: ${UI.text3}; font-family: 'Geist Mono', monospace;">${rep.period}</span>
+          </div>
+          <h1 style="margin: 0 0 16px; font-size: 24px; line-height: 1.45; font-weight: 700; letter-spacing: -.01em; color: var(--ds-text);">${esc(rep.headline)}</h1>
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 10px; margin-bottom: 22px;">${metricsHtml}</div>
+          <p style="margin: 0 0 6px; font-size: 14px; line-height: 1.85; color: ${UI.text2};">${esc(rep.thesis)}</p>
+          <div style="font-size: 13px; font-weight: 700; color: var(--ds-text); margin: 20px 0 2px;">分领域观察</div>
+          <div>${areasHtml}</div>
+          <div style="font-size: 13px; font-weight: 700; color: var(--ds-text); margin: 26px 0 12px;">本周 Top 信号</div>
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 10px;">${topHtml}</div>
+          ${listBlock('风险提示', rep.risks)}
+          ${listBlock('机会点', rep.opportunities)}
+          <div style="font-size: 13px; font-weight: 700; color: var(--ds-text); margin: 24px 0 10px;">建议行动</div>
+          <ol style="margin: 0; padding-left: 20px;">${rep.actions.map(a=>`<li style="margin: 0 0 9px; font-size: 13px; line-height: 1.7; color: ${UI.text2};">${esc(a)}</li>`).join('')}</ol>
+          ${listBlock('下周关注', rep.nextWeek)}
+          ${focusHtml}
+        </div>
+      </div>`;
+    body = `<div style="display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 16px; align-items: start;">${reportCard}${pendingPanel()}</div>`;
+  }
+
+  else if(state.taskTab==='debate'){
+    const allDebates = [...debateSeed, ...state.debates];
+    const debatesHtml = allDebates.map((d,idx)=>{
+      const posts = d.posts.map(p=>{ const mp=modelPersonas[p.model]||{color:UI.text,bg:UI.chip,border:UI.border,t:'?'}; return `
+        <div class="debate-post" style="display: flex; gap: 11px; align-items: flex-start;">
+          <span style="flex: none; width: 32px; height: 32px; border-radius: 9px; display: inline-flex; align-items: center; justify-content: center; background: ${mp.bg}; border: 1px solid ${mp.border}; color: ${mp.color}; font-weight: 700; font-size: 14px;">${mp.t}</span>
+          <div style="flex: 1; padding: 12px 14px; border-radius: 12px; background: rgba(22,19,15,.03); border: 1px solid ${UI.border};">
+            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
+              <span style="font-size: 13px; font-weight: 700; color: ${mp.color};">${esc(p.model)}</span>
+              <span style="font-size: 10.5px; font-weight: 600; color: ${UI.text3}; padding: 2px 8px; border-radius: 999px; border: 1px solid ${UI.border};">${esc(p.stance)}</span>
+            </div>
+            <div style="font-size: 13px; line-height: 1.7; color: ${UI.text2};">${esc(p.text)}</div>
+          </div>
+        </div>`; }).join('');
+      return `
+        <div id="debate-${idx}" style="padding: 20px; border-radius: 14px; background: ${UI.panel}; border: 1px solid ${UI.border};">
+          <div style="display: flex; align-items: flex-start; gap: 9px; margin-bottom: 16px;">
+            <span style="flex: none; margin-top: 1px; font-size: 14px; color: ${A.accentBright};">❝</span>
+            <div style="font-size: 15px; font-weight: 700; color: var(--ds-text); line-height: 1.5;">${esc(d.q)}</div>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 16px;">${posts}</div>
+          <div style="padding: 14px 16px; border-radius: 12px; background: ${A.accentSoft}; border: 1px solid ${A.accentBorder}; border-left: 3px solid ${A.accent};">
+            <div style="font-size: 12px; font-weight: 700; color: ${A.accentBright}; margin-bottom: 5px;">⚖ 综述</div>
+            <div style="font-size: 13px; line-height: 1.7; color: ${UI.text};">${esc(d.synthesis)}</div>
+          </div>
+        </div>`;
+    }).join('');
+    const avatars4 = Object.entries(modelPersonas).map(([n,mp])=>`<span title="${esc(n)}" style="width: 26px; height: 26px; border-radius: 7px; display: inline-flex; align-items: center; justify-content: center; background: ${mp.bg}; border: 1px solid ${mp.border}; color: ${mp.color}; font-weight: 700; font-size: 12px; margin-left: -6px;">${mp.t}</span>`).join('');
+    body = `
+      <div style="display: flex; flex-direction: column; gap: 16px;">
+        <div style="padding: 18px 20px; border-radius: 14px; background: ${UI.panel}; border: 1px solid ${UI.border};">
+          <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 12px;">
+            <span style="display: inline-flex; padding-left: 6px;">${avatars4}</span>
+            <span style="font-size: 13px; color: ${UI.text2};">Claude · GPT-5 · Gemini · Grok 就你的问题多方辩论并给出综述</span>
+          </div>
+          <div style="display: flex; gap: 8px;">
+            <input id="debateInput" placeholder="抛一个决策问题,让四个模型辩论…如:是否自建向量库?" onkeydown="if(event.key==='Enter'){event.preventDefault();App.askDebate();}" style="flex: 1; height: 40px; padding: 0 14px; border-radius: 10px; border: 1px solid ${UI.border}; background: var(--ds-card); color: ${UI.text}; font-size: 13px; outline: none;" />
+            <button class="send-btn" onclick="App.askDebate()" style="height: 40px; padding: 0 20px; border-radius: 10px; border: none; background: ${A.accent}; color: #ffffff; font-size: 13px; font-weight: 700; cursor: pointer;">发起辩论</button>
+          </div>
+        </div>
+        ${debatesHtml}
+      </div>`;
+  }
+
+  else if(state.taskTab==='meetings'){
+    const stStyle = st => st==='已完成'
+      ? { color:'var(--ds-good)', bg:'var(--ds-good-bg)', border:'var(--ds-good-border)' }
+      : { color:'var(--ds-warn)', bg:'var(--ds-warn-bg)', border:'var(--ds-warn-border)' };
+    const cards = state.meetings.map(m=>{
+      const st = stStyle(m.status);
+      const sumHtml = m.summary.length ? `
+        <div style="font-size: 12px; font-weight: 700; color: ${UI.text2}; margin: 14px 0 8px;">纪要要点</div>
+        ${m.summary.map(x=>`<div style="display: flex; gap: 8px; align-items: baseline; margin-bottom: 6px;"><span style="flex: none; width: 5px; height: 5px; border-radius: 50%; background: ${A.accent}; position: relative; top: -2px;"></span><span style="font-size: 13px; line-height: 1.65; color: ${UI.text2};">${esc(x)}</span></div>`).join('')}` : '';
+      const actHtml = m.actions.length ? `
+        <div style="font-size: 12px; font-weight: 700; color: ${UI.text2}; margin: 14px 0 8px;">行动项</div>
+        ${m.actions.map(([who,what,due])=>`<div style="display: flex; align-items: center; gap: 9px; padding: 8px 11px; border-radius: 8px; border: 1px solid ${UI.border}; background: rgba(22,19,15,.02); margin-bottom: 6px;">
+          <span style="flex: none; width: 22px; height: 22px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; background: ${CAT[who.charCodeAt(0)%CAT.length]}; color: #fff; font-size: 11px; font-weight: 700;">${esc(who[0])}</span>
+          <span style="font-size: 12.5px; color: ${UI.text};">${esc(what)}</span>
+          <span style="margin-left: auto; font-size: 11px; color: ${UI.text3}; font-family: 'Geist Mono', monospace;">${esc(who)} · ${esc(due)}</span>
+        </div>`).join('')}` : '';
+      const waitingHtml = m.status==='待参会' ? `
+        <div style="margin-top: 12px; padding: 11px 13px; border-radius: 9px; border: 1px dashed ${UI.border2}; background: rgba(22,19,15,.02); font-size: 12.5px; line-height: 1.7; color: ${UI.text3};">会议开始时助手将自动入会:先检测是否有官方纪要,若无则调用 ${esc(m.tool)} 实时转录并主动总结,结束后纪要与行动项自动出现在这里。</div>` : '';
+      return `
+      <div style="padding: 20px 22px; border-radius: 14px; background: ${UI.panel}; border: 1px solid ${UI.border};">
+        <div style="display: flex; align-items: center; gap: 9px; flex-wrap: wrap;">
+          <span style="font-size: 15px; font-weight: 700; color: var(--ds-text);">${esc(m.title)}</span>
+          <span style="font-size: 10.5px; font-weight: 700; padding: 3px 9px; border-radius: 999px; background: ${st.bg}; color: ${st.color}; border: 1px solid ${st.border};">${esc(m.status)}</span>
+          <span style="font-size: 10.5px; font-weight: 600; padding: 3px 9px; border-radius: 999px; border: 1px solid ${UI.border}; color: ${UI.text2}; background: rgba(22,19,15,.03);">${esc(m.mode)}</span>
+          <span style="font-size: 10.5px; font-weight: 600; padding: 3px 9px; border-radius: 999px; border: 1px solid ${A.accentBorder}; color: ${A.accentBright}; background: ${A.accentSoft};">⚙ ${esc(m.tool)}</span>
+          <button onclick="App.removeMeeting(${m.id})" title="移除" style="margin-left: auto; width: 24px; height: 24px; border-radius: 7px; border: 1px solid ${UI.border}; background: transparent; color: ${UI.text3}; cursor: pointer; font-size: 13px;">×</button>
+        </div>
+        <div style="display: flex; gap: 16px; flex-wrap: wrap; margin-top: 8px; font-size: 11.5px; color: ${UI.text3}; font-family: 'Geist Mono', monospace;">
+          <span>${esc(m.time)}</span><span>${esc(m.link)}</span>${m.mins?`<span>${m.mins} 分钟 · ${m.participants} 人</span>`:''}
+        </div>
+        ${sumHtml}${actHtml}${waitingHtml}
+      </div>`;
+    }).join('');
+    body = `
+      <div style="display: flex; flex-direction: column; gap: 16px;">
+        <div style="padding: 18px 20px; border-radius: 14px; background: ${UI.panel}; border: 1px solid ${UI.border};">
+          <div style="display: flex; align-items: center; gap: 9px; margin-bottom: 4px;">
+            <span style="width: 8px; height: 8px; border-radius: 50%; background: ${A.accent};"></span>
+            <span style="font-size: 13.5px; font-weight: 700; color: var(--ds-text);">会议助手</span>
+            <span style="font-size: 11px; color: ${UI.text3};">自动参会 · 自动纪要的 Agent</span>
+          </div>
+          <p style="margin: 0 0 12px; font-size: 12.5px; line-height: 1.7; color: ${UI.text2};">粘贴会议链接即可接入:助手先尝试获取官方纪要;若会议没有官方纪要,则自动参会(调用 Fathom AI / 飞书妙记等工具)实时转录并主动总结,产出纪要要点与行动项。</p>
+          <div style="display: flex; gap: 8px;">
+            <input id="meetInput" placeholder="粘贴会议链接:飞书 / Zoom / Teams / 腾讯会议…" onkeydown="if(event.key==='Enter'){event.preventDefault();App.addMeeting();}" style="flex: 1; height: 40px; padding: 0 14px; border-radius: 10px; border: 1px solid ${UI.border}; background: var(--ds-card); color: ${UI.text}; font-size: 13px; outline: none; font-family: 'Geist Mono', ui-monospace, Menlo, monospace;" />
+            <button class="send-btn" onclick="App.addMeeting()" style="height: 40px; padding: 0 20px; border-radius: 10px; border: none; background: ${A.accent}; color: #ffffff; font-size: 13px; font-weight: 700; cursor: pointer;">＋ 接入会议</button>
+          </div>
+          <div style="display: flex; gap: 14px; margin-top: 12px; flex-wrap: wrap; font-size: 11px; color: ${UI.text3};">
+            <span>① 粘贴链接</span><span>→</span><span>② 检测官方纪要</span><span>→</span><span>③ 无纪要则自动参会转录</span><span>→</span><span>④ 生成纪要与行动项</span>
+          </div>
+        </div>
+        ${cards}
+      </div>`;
+  }
+
+  else {
+    const builtIn = Object.keys(timelineData);
+    const custom = Object.keys(state.customTimelines).filter(e=>!builtIn.includes(e));
+    const entities = [...builtIn, ...custom];
+    const ent = getTimeline(state.timelineEntity).length ? state.timelineEntity : entities[0];
+    const events = getTimeline(ent).slice().sort((a,b)=>a.date.localeCompare(b.date));
+    const entBtns = entities.map(e=>{ const on=e===ent; const isCustom=!!state.customTimelines[e]; return `<button onclick="App.setTimelineEntity('${e}')" class="chip-btn" style="height: 32px; padding: 0 14px; border-radius: 999px; border: 1px solid ${on?A.accentBorder:UI.border}; background: ${on?A.accentSoft:'transparent'}; color: ${on?A.accentBright:UI.text2}; font-size: 12.5px; font-weight: ${on?700:600}; cursor: pointer;">${isCustom?'✎ ':''}${esc(e)}</button>`; }).join('');
+    const tl = events.map((ev,i)=>{ const last=i===events.length-1; return `
+      <div style="position: relative; padding: 0 0 ${last?'0':'26px'} 30px;">
+        <span style="position: absolute; left: 0; top: 2px; width: 14px; height: 14px; border-radius: 50%; background: ${A.accent}; box-shadow: 0 0 0 4px ${A.accentSoft};"></span>
+        ${last?'':`<span style="position: absolute; left: 6px; top: 18px; bottom: 0; width: 2px; background: linear-gradient(${A.accentBorder}, ${UI.border});"></span>`}
+        <div style="font-family: 'Geist Mono', monospace; font-size: 11.5px; color: ${A.accentBright}; margin-bottom: 5px;">${ev.date}</div>
+        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 5px; flex-wrap: wrap;">
+          <span style="font-size: 14px; font-weight: 700; color: var(--ds-text);">${esc(ev.title)}</span>
+          ${ev.ref?refChip(A,ev.ref):''}
+        </div>
+        <div style="font-size: 12.5px; line-height: 1.65; color: ${UI.text2};">${esc(ev.desc)}</div>
+      </div>`; }).join('');
+    body = `
+      <div style="display: flex; flex-direction: column; gap: 18px;">
+        <div style="padding: 16px 18px; border-radius: 14px; background: ${UI.panel}; border: 1px solid ${UI.border};">
+          <div style="font-size: 13px; font-weight: 700; color: var(--ds-text); margin-bottom: 4px;">追踪你关心的对象</div>
+          <p style="margin: 0 0 12px; font-size: 12px; color: ${UI.text3};">输入机构 / 人物 / 技术,系统会聚合相关信号并按时间维度追踪其动向。</p>
+          <div style="display: flex; gap: 8px;">
+            <input id="trackInput" placeholder="例如:Anthropic / 黄仁勋 / 投机解码 / 向量数据库…" onkeydown="if(event.key==='Enter'){event.preventDefault();App.trackEntity();}" style="flex: 1; height: 40px; padding: 0 14px; border-radius: 10px; border: 1px solid ${UI.border}; background: ${UI.panelSolid}; color: ${UI.text}; font-size: 13px; outline: none;" />
+            <button class="send-btn" onclick="App.trackEntity()" style="height: 40px; padding: 0 20px; border-radius: 10px; border: none; background: ${A.accent}; color: #ffffff; font-size: 13px; font-weight: 700; cursor: pointer;">＋ 追踪</button>
+          </div>
+        </div>
+        <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+          <span style="font-size: 12.5px; color: ${UI.text3}; margin-right: 4px;">已追踪</span>${entBtns}
+        </div>
+        <div style="max-width: 760px; padding: 26px 28px; border-radius: 16px; background: ${UI.panel}; border: 1px solid ${UI.border};">
+          <div style="display: flex; align-items: baseline; gap: 10px; margin-bottom: 22px;">
+            <h2 style="margin: 0; font-size: 20px; font-weight: 700; color: var(--ds-text);">${esc(ent)}</h2>
+            <span style="font-size: 12px; color: ${UI.text3};">时间维度动向 · ${events.length} 条</span>
+          </div>
+          ${tl || `<div style="font-size: 13px; color: ${UI.text3};">该对象暂无记录 · 新增匹配将自动出现在此时间线</div>`}
+        </div>
+      </div>`;
+  }
+
+  return `
+  <main style="position: relative;">
+    <div style="max-width: 1180px; margin: 0 auto; padding: 40px 36px 72px;">
+      <section style="margin-bottom: 20px;">
+        <div style="display: flex; align-items: baseline; gap: 12px; margin-bottom: 8px;">
+          <h1 style="margin: 0; font-size: 27px; font-weight: 700; letter-spacing: -.015em; color: var(--ds-text);">任务视图</h1>
+          <span style="font-size: 12.5px; color: ${UI.text3};">周报 · 多模型辩论 · 动向追踪 · 会议助手</span>
+        </div>
+        <p style="margin: 0; font-size: 13.5px; line-height: 1.7; color: ${UI.text2}; max-width: 720px;">由 AI 基于信号库自动生成的周报、可发起的多模型交叉辩论、机构 / 人物 / 技术的动向追踪,以及自动参会记纪要的会议助手。</p>
+      </section>
+      <div style="display: flex; gap: 8px; margin-bottom: 24px; flex-wrap: wrap;">${tabNav}</div>
+      ${body}
+    </div>
+  </main>`;
+}
+
+// 右侧收藏栏(深色底,按主题 / 时间归类)
+function favPanelHtml(A){
+  const n = state.favorites.length;
+  // 深色面板配色
+  const FT = '#f3efe6', FT2 = '#c9c2b4', FT3 = '#8f887a', FB = 'rgba(255,255,255,.13)', FFill = 'rgba(255,255,255,.05)';
+  if(!state.favOpen){
+    return `<button onclick="App.toggleFavPanel()" title="展开收藏栏" style="position: fixed; right: 0; top: 50%; transform: translateY(-50%); z-index: 70; display: flex; flex-direction: column; align-items: center; gap: 5px; padding: 12px 8px; border-radius: 12px 0 0 12px; border: 1px solid ${FB}; border-right: none; background: rgba(24,21,17,.96); backdrop-filter: blur(10px); color: ${A.accentBright}; cursor: pointer; font-size: 15px;">★<span style="font-size: 11px; color: ${FT2}; font-family: 'Geist Mono', monospace;">${n}</span></button>`;
+  }
+  const favSignals = state.favorites.map(r=>signals.find(x=>x.rank===r)).filter(Boolean);
+  const groups = {};
+  favSignals.forEach(s=>{ (groups[s.cat]=groups[s.cat]||[]).push(s); });
+  const order = filters.filter(f=>f!=='全部' && f!==EDGE_FILTER);
+  const groupHtml = order.filter(c=>groups[c]).map(c=>{
+    const arr = groups[c].slice().sort((a,b)=>b.date.localeCompare(a.date));
+    const rows = arr.map(s=>{ const inPend=state.pending.includes(s.rank); return `
+      <div style="display: flex; gap: 7px; align-items: flex-start; padding: 8px; border-radius: 9px; border: 1px solid ${FB}; background: ${FFill};">
+        <button onclick="App.addPending(${s.rank})" title="${inPend?'已在待分析':'加入报告待分析'}" ${inPend?'disabled':''} style="flex: none; width: 22px; height: 22px; border-radius: 6px; border: 1px solid ${inPend?A.accentBorder:FB}; background: ${inPend?A.accentSoft:'transparent'}; color: ${inPend?A.accentBright:FT2}; cursor: ${inPend?'default':'pointer'}; font-size: 13px; line-height: 1;">${inPend?'✓':'＋'}</button>
+        <div onclick="App.openDetail(${s.rank})" style="flex: 1; min-width: 0; cursor: pointer;">
+          <div style="font-size: 12px; font-weight: 600; color: ${FT}; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">${esc(s.zhTitle)}</div>
+          <div style="margin-top: 2px; font-size: 10px; color: ${FT3}; font-family: 'Geist Mono', monospace;">#${s.rank} · ${s.date}</div>
+        </div>
+        <button onclick="App.removeFav(${s.rank})" title="移除收藏" style="flex: none; width: 22px; height: 22px; border-radius: 6px; border: 1px solid ${FB}; background: transparent; color: ${FT3}; cursor: pointer; font-size: 12px; line-height: 1;">×</button>
+      </div>`; }).join('');
+    return `<div style="margin-bottom: 16px;">
+      <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 8px;"><span style="width: 6px; height: 6px; border-radius: 2px; background: ${A.accent};"></span><span style="font-size: 11px; font-weight: 700; letter-spacing: .04em; color: ${FT2};">${esc(c)}</span><span style="font-size: 10px; color: ${FT3}; font-family: 'Geist Mono', monospace;">${arr.length}</span></div>
+      <div style="display: flex; flex-direction: column; gap: 7px;">${rows}</div>
+    </div>`;
+  }).join('');
+  return `
+  <aside style="position: fixed; right: 12px; top: 70px; bottom: 104px; z-index: 70; width: 288px; display: flex; flex-direction: column; border-radius: 16px; background: rgba(24,21,17,.97); backdrop-filter: blur(14px); border: 1px solid ${FB}; box-shadow: 0 20px 50px -18px rgba(0,0,0,.55); overflow: hidden;">
+    <div style="display: flex; align-items: center; gap: 8px; padding: 14px 16px; border-bottom: 1px solid ${FB};">
+      <span style="color: ${A.accentBright}; font-size: 15px;">★</span>
+      <span style="font-size: 13.5px; font-weight: 700; color: ${FT};">收藏栏</span>
+      <span style="font-size: 11px; color: ${FT3}; font-family: 'Geist Mono', monospace;">${n}</span>
+      <button onclick="App.toggleFavPanel()" title="收起" style="margin-left: auto; width: 26px; height: 26px; border-radius: 7px; border: 1px solid ${FB}; background: transparent; color: ${FT3}; cursor: pointer; font-size: 14px;">→</button>
+    </div>
+    <div style="flex: 1; overflow-y: auto; padding: 14px 16px;">
+      ${n ? groupHtml : `<div style="font-size: 12px; color: ${FT3}; line-height: 1.9; text-align: center; padding: 30px 6px;">还没有收藏<br>点信号卡片右上角 ☆<br>收藏后自动按主题 / 时间归类到这里</div>`}
+    </div>
+    <div style="padding: 10px 16px; border-top: 1px solid ${FB}; font-size: 10.5px; color: ${FT3}; line-height: 1.5;">＋ 加入「报告待分析」· × 移除收藏</div>
+  </aside>`;
+}
+
+// 左侧:与 AI 交流的历史记录(来自底部 AI 助手对话)
+function historyPanelHtml(A){
+  const msgs = state.bottomChat;
+  const pairs = [];
+  for(let i=0;i<msgs.length;i++){ if(msgs[i].role==='user'){ pairs.push({ q: msgs[i].text, a: (msgs[i+1] && msgs[i+1].role==='ai') ? msgs[i+1].text : '' }); } }
+  const HT='#16130f', HT2='#4a453d', HT3='#6f685e', HB='rgba(22,19,15,.16)';
+  if(!state.historyOpen){
+    return `<button onclick="App.toggleHistory()" title="展开 AI 对话历史" style="position: fixed; left: 0; top: 50%; transform: translateY(-50%); z-index: 70; display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 13px 8px; border: 1.5px solid var(--ds-ink-line); border-left: none; background: #fff; color: ${A.accent}; cursor: pointer; font-size: 14px; box-shadow: 3px 3px 0 rgba(22,19,15,.08);">✦<span style="font-size: 11px; color: ${HT3}; font-family: 'Geist Mono', monospace; writing-mode: vertical-rl;">历史 ${pairs.length}</span></button>`;
+  }
+  const rows = pairs.slice().reverse().map((p,i)=>`
+    <div style="border: 1px solid var(--ds-ink-line); background: #fff; box-shadow: 2px 2px 0 rgba(22,19,15,.06);">
+      <div style="display: flex; gap: 7px; align-items: flex-start; padding: 9px 11px;">
+        <span style="flex: none; font-family: 'Geist Mono', monospace; font-size: 10px; font-weight: 700; color: #fff; background: ${A.accent}; padding: 2px 6px;">你</span>
+        <span style="font-size: 12.5px; font-weight: 600; line-height: 1.5; color: ${HT};">${esc(p.q)}</span>
+      </div>
+      ${p.a?`<div style="display: flex; gap: 7px; align-items: flex-start; padding: 9px 11px; border-top: 1px solid var(--ds-hair); background: ${A.accentFaint};">
+        <span style="flex: none; font-family: 'Geist Mono', monospace; font-size: 10px; font-weight: 700; color: ${A.accent}; border: 1px solid ${A.accentBorder}; padding: 2px 6px;">✦</span>
+        <span style="font-size: 12px; line-height: 1.6; color: ${HT2};">${esc(p.a)}</span>
+      </div>`:''}
+    </div>`).join('');
+  return `
+  <aside style="position: fixed; left: 12px; top: 70px; bottom: 158px; z-index: 70; width: 292px; display: flex; flex-direction: column; background: var(--ds-section); border: 1.5px solid var(--ds-ink-line); box-shadow: 5px 5px 0 rgba(22,19,15,.09);">
+    <div style="display: flex; align-items: center; gap: 8px; padding: 13px 14px; border-bottom: 1.5px solid var(--ds-ink-line); background: repeating-linear-gradient(135deg, rgba(22,19,15,.03) 0 6px, transparent 6px 12px);">
+      <span style="color: ${A.accent}; font-size: 14px;">✦</span>
+      <span style="font-size: 13.5px; font-weight: 700; color: ${HT};">AI 对话历史</span>
+      <span style="font-size: 11px; color: ${HT3}; font-family: 'Geist Mono', monospace;">${pairs.length}</span>
+      <button onclick="App.toggleHistory()" title="收起" style="margin-left: auto; width: 26px; height: 26px; border: 1px solid var(--ds-ink-line); background: #fff; color: ${HT2}; cursor: pointer; font-size: 14px;">←</button>
+    </div>
+    <div style="flex: 1; overflow-y: auto; padding: 13px 14px; display: flex; flex-direction: column; gap: 10px;">
+      ${rows || `<div style="font-size: 12px; color: ${HT3}; line-height: 1.9; text-align: center; padding: 30px 6px;">还没有对话记录<br>在底部「AI 助手」里提问<br>历史会按时间显示在这里</div>`}
+    </div>
+    <div style="padding: 9px 14px; border-top: 1px solid var(--ds-ink-line); font-size: 10.5px; color: ${HT3}; line-height: 1.5;">最新对话在最上 · 点底部输入框继续提问</div>
+  </aside>`;
+}
+
+function render(){
+  const A = computeAccents();
+  const page = state.page==='brief' ? briefHtml(A) : state.page==='sources' ? sourcesHtml(A) : tasksHtml(A);
+  document.getElementById('app').innerHTML = `<div style="position: relative; z-index: 1; min-height: 100vh; background: ${UI.canvas}; padding-bottom: 150px;">${headerHtml(A)}${page}</div>${bottomBarHtml(A)}${favPanelHtml(A)}${historyPanelHtml(A)}`;
+  renderDetailLayer();
+}
+
+// 详情浮层单独渲染:切换标签 / 开合折叠只重绘这一层,避免整页重排闪烁
+function renderDetailLayer(){
+  const A = computeAccents();
+  document.getElementById('detailLayer').innerHTML = state.detailRank!=null ? detailHtml(A) : '';
+}
+
+window.addEventListener('keydown', (e)=>{ if(e.key==='Escape'){ App.closeDetail(); } });
+render();
+loadBrief();
+loadSources();
+</script>
+</body>
+</html>
