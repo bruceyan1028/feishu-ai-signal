@@ -4,17 +4,29 @@ from __future__ import annotations
 import argparse
 import json
 import logging
+import re
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any
 
-from . import config, feishu, report, sources
+from . import config, feishu, report, rss, sources
 
 log = logging.getLogger("daily")
 CN_TZ = timezone(timedelta(hours=8))
 TOPIC_OPTIONS = {"AI", "LLM", "Agent", "RAG", "推理", "多模态", "开源", "硬件", "监管", "融资", "产品", "其他"}
 URGENCY_TO_TABLE = {"高": "High", "中": "Medium", "低": "Low"}
 URGENCY_TO_CN = {value: key for key, value in URGENCY_TO_TABLE.items()}
+
+
+def brief_bullet_title(text: str, suggested: str = "") -> str:
+    """确保简报标题表达具体结论，而不是“要点 1”一类占位文案。"""
+    title = suggested.strip()
+    if title and not re.fullmatch(r"要点\s*\d*", title):
+        return title
+    for separator in ("：", ":", "，", "。", "；", ";"):
+        if separator in text:
+            return text.split(separator, 1)[0].strip()[:28]
+    return text.strip()[:28]
 
 
 def scalar(value: Any) -> Any:
@@ -225,19 +237,58 @@ def generate(day: str | None = None) -> dict[str, Any]:
 
     analyzed.sort(key=lambda s: (s["impact"], s["novelty"], s["actionability"]), reverse=True)
     signals = analyzed[: config.DAILY_SIGNAL_LIMIT]
+    image_updates = []
+    seen_images: set[str] = set()
+    for signal in signals:
+        image_url = str(signal.get("imageUrl") or "").strip()
+        image_key = image_url.split("?", 1)[0].split("#", 1)[0].lower()
+        if image_key in seen_images:
+            image_url = ""
+        if not image_url:
+            candidate = rss.fetch_article_image(str(signal.get("url") or ""))
+            candidate_key = candidate.split("?", 1)[0].split("#", 1)[0].lower()
+            if candidate_key and candidate_key not in seen_images:
+                image_url = candidate
+                image_updates.append(
+                    {
+                        "record_id": signal["recordId"],
+                        "fields": {"图片链接": {"link": image_url, "text": "原文配图"}},
+                    }
+                )
+        signal["imageUrl"] = image_url
+        if image_url:
+            seen_images.add(image_url.split("?", 1)[0].split("#", 1)[0].lower())
+    if image_updates:
+        feishu.batch_update_records(token, config.FEISHU_ENTRY_TABLE_ID, image_updates)
+
     numbered = "\n".join(f'[{i}] {s["title"]} — {s["summary"]}' for i, s in enumerate(signals, 1))
     synth = report._llm_json(
         "你是 AI 情报主编。只依据以下信号输出严格 JSON："
-        "intro 为2句中文导语；bullets 为3-6个对象，每个含 text 和 refs（引用编号数组）。\n" + numbered
+        "intro 为2句中文导语；bullets 为3-6个对象，每个必须含 title、text 和 refs（引用编号数组）。"
+        "title 必须是概括具体结论的中文短标题，严禁使用“要点1”“要点2”等占位标题；"
+        "text 不要重复 title。\n" + numbered
     )
-    bullets = [
-        {"text": str(item.get("text") or ""), "refs": [int(x) for x in item.get("refs") or [] if str(x).isdigit()]}
-        for item in (synth.get("bullets") or [])
-        if str(item.get("text") or "").strip()
-    ][:6]
+    bullets = []
+    for item in synth.get("bullets") or []:
+        text = str(item.get("text") or "").strip()
+        if not text:
+            continue
+        bullets.append(
+            {
+                "title": brief_bullet_title(text, str(item.get("title") or "")),
+                "text": text,
+                "refs": [int(x) for x in item.get("refs") or [] if str(x).isdigit()],
+            }
+        )
+        if len(bullets) == 6:
+            break
     if not bullets:
         bullets = [
-            {"text": signal["summary"], "refs": [index]}
+            {
+                "title": brief_bullet_title(signal["summary"], signal["titleCn"]),
+                "text": signal["summary"],
+                "refs": [index],
+            }
             for index, signal in enumerate(signals[:3], 1)
         ]
     payload = {

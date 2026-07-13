@@ -64,6 +64,11 @@ class PipelineTests(unittest.TestCase):
     def test_rss_prefers_original_media_image(self) -> None:
         entry = {"media_content": [{"url": "https://example.com/original.jpg"}]}
         self.assertEqual(rss._best_image(entry, ""), "https://example.com/original.jpg")
+        meta = '<meta content="/images/article.jpg" property="og:image">'
+        self.assertEqual(
+            rss._meta_image_from_html(meta, "https://example.com/news/1"),
+            "https://example.com/images/article.jpg",
+        )
 
 
 class DailyTests(unittest.TestCase):
@@ -135,6 +140,11 @@ class DeliveryTests(unittest.TestCase):
         card = notify.build_card(brief, url)
         self.assertIn("真实中文标题", json.dumps(card, ensure_ascii=False))
         self.assertIn(url, json.dumps(card, ensure_ascii=False))
+
+    def test_brief_bullet_title_replaces_placeholder(self) -> None:
+        title = daily.brief_bullet_title("模型治理从原则走向工程，企业开始部署审计工具。", "要点1")
+        self.assertEqual(title, "模型治理从原则走向工程")
+        self.assertEqual(daily.brief_bullet_title("正文", "具体结论"), "具体结论")
 
     @patch("src.notify.feishu.send_interactive_message")
     @patch("src.notify.feishu.get_tenant_access_token", return_value="token")

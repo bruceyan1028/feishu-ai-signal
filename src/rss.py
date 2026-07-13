@@ -9,8 +9,10 @@ import logging
 import re
 from html import unescape
 from typing import Any
+from urllib.parse import urljoin
 
 import feedparser
+import requests
 
 log = logging.getLogger(__name__)
 
@@ -37,6 +39,38 @@ def _best_image(entry: Any, body: str) -> str:
             return str(enclosure["href"])
     match = re.search(r"<img[^>]+src=[\"']([^\"']+)", body or "", re.I)
     return unescape(match.group(1)) if match else ""
+
+
+def _meta_image_from_html(html: str, page_url: str) -> str:
+    """从原文 meta 标签提取与文章绑定的封面图。"""
+    for tag in re.findall(r"<meta\b[^>]*>", html, re.I):
+        attributes = {
+            key.lower(): unescape(value)
+            for key, _, value in re.findall(r"([\w:-]+)\s*=\s*([\"'])(.*?)\2", tag, re.I | re.S)
+        }
+        image_type = (attributes.get("property") or attributes.get("name") or "").lower()
+        image_url = attributes.get("content", "").strip()
+        if image_type in {"og:image", "og:image:url", "twitter:image", "twitter:image:src"} and image_url:
+            return urljoin(page_url, image_url)
+    return ""
+
+
+def fetch_article_image(page_url: str) -> str:
+    """RSS 未提供图片时，读取原文的 OG/Twitter 图片；失败不阻断简报。"""
+    if not page_url.startswith(("http://", "https://")):
+        return ""
+    try:
+        response = requests.get(
+            page_url,
+            headers={"User-Agent": "Mozilla/5.0 (compatible; AI-Signal/1.0)"},
+            timeout=12,
+        )
+        response.raise_for_status()
+        html = response.content[:1_500_000].decode(response.encoding or "utf-8", errors="replace")
+        return _meta_image_from_html(html, response.url)
+    except requests.RequestException as exc:
+        log.info("原文配图读取失败 %s: %s", page_url, exc)
+        return ""
 
 
 def fetch_feed_sources(feeds: list[dict[str, Any]]) -> list[dict[str, Any]]:
