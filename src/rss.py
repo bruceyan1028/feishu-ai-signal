@@ -6,6 +6,8 @@
 from __future__ import annotations
 
 import logging
+import re
+from html import unescape
 from typing import Any
 
 import feedparser
@@ -22,6 +24,21 @@ def _best_body(entry: Any) -> str:
     return entry.get("summary") or entry.get("description") or ""
 
 
+def _best_image(entry: Any, body: str) -> str:
+    for key in ("media_content", "media_thumbnail"):
+        values = entry.get(key) or []
+        if values and isinstance(values[0], dict) and values[0].get("url"):
+            return str(values[0]["url"])
+    for enclosure in entry.get("enclosures") or entry.get("links") or []:
+        if not isinstance(enclosure, dict):
+            continue
+        media_type = str(enclosure.get("type") or "")
+        if media_type.startswith("image/") and enclosure.get("href"):
+            return str(enclosure["href"])
+    match = re.search(r"<img[^>]+src=[\"']([^\"']+)", body or "", re.I)
+    return unescape(match.group(1)) if match else ""
+
+
 def fetch_feed_sources(feeds: list[dict[str, Any]]) -> list[dict[str, Any]]:
     """逐个抓取 RSS 源，容错：单个源失败不影响其它源（对应 onError: continueRegularOutput）。"""
     raw_items: list[dict[str, Any]] = []
@@ -36,11 +53,13 @@ def fetch_feed_sources(feeds: list[dict[str, Any]]) -> list[dict[str, Any]]:
             log.warning("RSS 无法解析或为空 %s", url)
             continue
         for entry in parsed.entries:
+            body = _best_body(entry)
             raw_items.append(
                 {
                     "title": entry.get("title", ""),
                     "url": entry.get("link") or entry.get("id") or "",
-                    "body": _best_body(entry),
+                    "body": body,
+                    "image_url": _best_image(entry, body),
                     "published_raw": (
                         entry.get("published")
                         or entry.get("updated")

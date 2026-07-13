@@ -43,6 +43,7 @@
     {
       "recordId": "recvoFuujUDmu5",
       "title": "NVIDIA and Hugging Face Bring New Models and Frameworks to LeRobot for the Open Robotics Community",
+      "titleCn": "NVIDIA 与 Hugging Face 为 LeRobot 引入新模型与框架",
       "source": "NVIDIA Blog",
       "url": "https://blogs.nvidia.com/blog/hugging-face-lerobot-models-frameworks-open-robotics",
       "category": "算力芯片云",
@@ -57,11 +58,13 @@
         "AI",
         "开源",
         "硬件"
-      ]
+      ],
+      "imageUrl": "https://blogs.nvidia.com/wp-content/uploads/2026/07/nv-gr00t-e2r-letobot-2up-KV-r2-1600x900-1.jpg"
     },
     {
       "recordId": "recvoF0NJRmBni",
       "title": "Run MiniMax models on Amazon Bedrock",
+      "titleCn": "MiniMax 模型登陆 Amazon Bedrock",
       "source": "AWS AI / Bedrock Blog",
       "url": "https://aws.amazon.com/blogs/machine-learning/run-minimax-models-on-amazon-bedrock",
       "category": "算力芯片云",
@@ -75,11 +78,13 @@
       "tags": [
         "LLM",
         "产品"
-      ]
+      ],
+      "imageUrl": "https://d2908q01vomqb2.cloudfront.net/f1f836cb4ea6efb2a0b1b99f41ad8b103eff4b59/2026/07/06/ML-21143.png"
     },
     {
       "recordId": "recvoF0NJRHOM2",
       "title": "Teaching models to forget: Selective unlearning with Amazon Nova",
+      "titleCn": "Amazon Nova 选择性机器遗忘：让模型精准忘记",
       "source": "AWS AI / Bedrock Blog",
       "url": "https://aws.amazon.com/blogs/machine-learning/teaching-models-to-forget-selective-unlearning-with-amazon-nova",
       "category": "算力芯片云",
@@ -94,11 +99,13 @@
         "AI",
         "监管",
         "推理"
-      ]
+      ],
+      "imageUrl": "https://d2908q01vomqb2.cloudfront.net/f1f836cb4ea6efb2a0b1b99f41ad8b103eff4b59/2026/07/06/ml-21116.png"
     },
     {
       "recordId": "recvoF0NJRbvaW",
       "title": "Deploying Multi-Turn RL Infrastructure for Amazon Nova on Amazon SageMaker HyperPod",
+      "titleCn": "在 SageMaker HyperPod 部署 Amazon Nova 多轮强化学习基础设施",
       "source": "AWS AI / Bedrock Blog",
       "url": "https://aws.amazon.com/blogs/machine-learning/deploying-multi-turn-rl-infrastructure-for-amazon-nova-on-amazon-sagemaker-hyperpod",
       "category": "算力芯片云",
@@ -113,11 +120,13 @@
         "Agent",
         "推理",
         "硬件"
-      ]
+      ],
+      "imageUrl": "https://d2908q01vomqb2.cloudfront.net/f1f836cb4ea6efb2a0b1b99f41ad8b103eff4b59/2026/06/25/20450.png"
     },
     {
       "recordId": "recvoF0NJRZu1X",
       "title": "How Open Models Are Driving AI Research",
+      "titleCn": "开放模型如何推动 AI 研究",
       "source": "NVIDIA Blog",
       "url": "https://blogs.nvidia.com/blog/open-models-icml-2026",
       "category": "算力芯片云",
@@ -131,11 +140,13 @@
       "tags": [
         "AI",
         "开源"
-      ]
+      ],
+      "imageUrl": "https://blogs.nvidia.com/wp-content/uploads/2026/07/ICML-Blog-Featured-Image.jpg"
     },
     {
       "recordId": "recvoF0NJRdA0m",
       "title": "Automatically redact PII in images with Amazon Nova",
+      "titleCn": "使用 Amazon Nova 自动遮盖图片中的个人信息",
       "source": "AWS AI / Bedrock Blog",
       "url": "https://aws.amazon.com/blogs/machine-learning/automatically-redact-pii-in-images-with-amazon-nova",
       "category": "算力芯片云",
@@ -150,11 +161,13 @@
         "多模态",
         "监管",
         "产品"
-      ]
+      ],
+      "imageUrl": "https://d2908q01vomqb2.cloudfront.net/f1f836cb4ea6efb2a0b1b99f41ad8b103eff4b59/2026/06/23/20185.png"
     },
     {
       "recordId": "recvoF0NJR754P",
       "title": "Accelerating Diffusers and xDiT Image Generation with MXFP4 using AMD Quark on AMD Instinct™ MI350 GPUs",
+      "titleCn": "AMD MI350 GPU 以 MXFP4 加速 Diffusers 与 xDiT 图像生成",
       "source": "AMD Instinct / ROCm",
       "url": "https://rocm.blogs.amd.com/artificial-intelligence/quark-xdit/readme.html",
       "category": "算力芯片云",
@@ -169,11 +182,13 @@
         "多模态",
         "推理",
         "硬件"
-      ]
+      ],
+      "imageUrl": ""
     },
     {
       "recordId": "recvoF0NJR5IqY",
       "title": "US investors will soon get access to SK Hynix, another memory maker riding the AI boom",
+      "titleCn": "美国投资者即将获得 SK Hynix 投资渠道",
       "source": "TechCrunch AI",
       "url": "https://techcrunch.com/2026/07/06/us-investors-will-soon-get-access-to-sk-hynix-another-memory-maker-riding-the-ai-boom",
       "category": "创业融资并购",
@@ -187,11 +202,13 @@
       "tags": [
         "硬件",
         "融资"
-      ]
+      ],
+      "imageUrl": "https://techcrunch.com/wp-content/uploads/2026/06/Chip-chips-dollar-signs-money.png?resize=1200,960"
     },
     {
       "recordId": "recvoF0NJReXRX",
       "title": "Shift into high gear with agents: Securing the software-defined vehicle",
+      "titleCn": "用 Agent 为软件定义汽车构建安全防线",
       "source": "Google Cloud AI Blog",
       "url": "https://cloud.google.com/blog/products/identity-security/shift-into-high-gear-with-agents-securing-the-software-defined-vehicle",
       "category": "算力芯片云",
@@ -206,11 +223,13 @@
         "Agent",
         "监管",
         "产品"
-      ]
+      ],
+      "imageUrl": ""
     },
     {
       "recordId": "recvoF0NJRUxam",
       "title": "From Hugging Face to Amazon SageMaker Studio in one click",
+      "titleCn": "Hugging Face 一键直达 Amazon SageMaker Studio",
       "source": "AWS AI / Bedrock Blog",
       "url": "https://aws.amazon.com/blogs/machine-learning/from-hugging-face-to-amazon-sagemaker-studio-in-one-click-2",
       "category": "算力芯片云",
@@ -224,7 +243,8 @@
       "tags": [
         "开源",
         "产品"
-      ]
+      ],
+      "imageUrl": "https://d2908q01vomqb2.cloudfront.net/f1f836cb4ea6efb2a0b1b99f41ad8b103eff4b59/2026/07/06/ml-21254.png"
     }
   ],
   "briefRecordId": "recvpeMeuxd8Nm",

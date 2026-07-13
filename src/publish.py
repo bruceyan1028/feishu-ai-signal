@@ -40,6 +40,7 @@ def _signal_from_record(record: dict[str, Any]) -> dict[str, Any]:
     return {
         "recordId": str(record.get("record_id") or ""),
         "title": str(daily.scalar(fields.get("标题")) or ""),
+        "titleCn": str(daily.scalar(fields.get("中文标题")) or daily.scalar(fields.get("标题")) or ""),
         "source": str(daily.scalar(fields.get("来源")) or ""),
         "url": daily.link(fields.get("链接")),
         "category": str(daily.scalar(fields.get("分类")) or "其他"),
@@ -51,6 +52,7 @@ def _signal_from_record(record: dict[str, Any]) -> dict[str, Any]:
         "actionability": int(float(daily.scalar(fields.get("可行动性")) or 0)),
         "urgency": urgency,
         "tags": [str(daily.scalar(item)) for item in fields.get("主题") or []],
+        "imageUrl": daily.link(fields.get("图片链接")),
     }
 
 

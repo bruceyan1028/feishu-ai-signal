@@ -92,6 +92,8 @@
   .brief-card { transition: transform .12s ease, box-shadow .12s ease; }
   .brief-card:hover { transform: translate(-2px,-2px); box-shadow: 6px 6px 0 var(--ds-accent) !important; }
   .brief-card .ref:hover { background: var(--ds-accent) !important; color: #fff !important; }
+  .brief-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); grid-auto-rows: minmax(170px, auto); gap: 16px; }
+  @media (max-width: 760px) { .brief-grid { grid-template-columns: 1fr; } }
   .src-row:hover { background: rgba(22,19,15,.03); }
   .src-link:hover { color: var(--accent-bright, #a78bff) !important; border-bottom-color: var(--accent-bright, #a78bff) !important; }
   .del-btn:hover { color: #ff8a8a !important; border-color: rgba(255,120,120,.4) !important; }
@@ -519,7 +521,7 @@ async function loadBrief(){
       impact: Number(s.impact) || 0,
       urgency: s.urgency || '中',
       kind: /arXiv/i.test(s.source || '') ? '论文' : '文章',
-      zhTitle: s.title || '未命名信号',
+      zhTitle: s.titleCn || s.title || '未命名信号',
       title: s.title || '',
       source: s.source || '未知来源',
       url: s.url || '',
@@ -530,6 +532,7 @@ async function loadBrief(){
       novel: Number(s.novelty) || 0,
       action: Number(s.actionability) || 0,
       tags: Array.isArray(s.tags) ? s.tags : [],
+      image: s.imageUrl || '',
     }));
     personal = signals.slice(0,3).map((s,index)=>({
       ref:s.rank,
@@ -867,9 +870,9 @@ const IMAGE_BY_RANK = {
 };
 function topicImageUrl(s){
   if(s.image) return s.image;
-  if(IMAGE_BY_RANK[s.rank]) return IMAGE_BY_RANK[s.rank];
+  if(!s.recordId && IMAGE_BY_RANK[s.rank]) return IMAGE_BY_RANK[s.rank];
   const hay = `${s.zhTitle} ${s.title} ${s.tags.join(' ')} ${s.cat}`;
-  const map = [[/GPU|NVIDIA|算力|token/i,'1591405351990-4726e331f141'],[/端侧|手机|NPU|Apple/i,'1510557880182-3d4d3cba35a5'],[/安全|诈骗|深伪|诉讼/i,'1550751827-4bd374c3f58b'],[/RAG|数据库|向量/i,'1544197150-b99a580bb7a8']];
+  const map = [[/机器人|robot|LeRobot/i,'1485827404703-89b55fcc595e'],[/GPU|NVIDIA|AMD|算力|token|HBM/i,'1591405351990-4726e331f141'],[/端侧|手机|NPU|Apple/i,'1510557880182-3d4d3cba35a5'],[/隐私|PII|安全|诈骗|深伪|诉讼|监管/i,'1550751827-4bd374c3f58b'],[/RAG|数据库|向量|记忆/i,'1544197150-b99a580bb7a8'],[/开源|模型|LLM|Bedrock|SageMaker/i,'1518770660439-4636190af475']];
   for(const [re,id] of map){ if(re.test(hay)) return IMG(id); }
   return IMG('1518770660439-4636190af475');
 }
@@ -885,7 +888,7 @@ function coverHtml(A, s, h){
     <div style="position: absolute; left: 0; right: 0; bottom: 0; padding: 12px 14px; background: linear-gradient(180deg, transparent, rgba(0,0,0,.72)); display: flex; align-items: center; gap: 9px;">
       ${avatarHtml(s.source)}
       <span style="font-size: 12px; font-weight: 600; color: #fff;">${esc(s.source)}</span>
-      <span style="margin-left: auto; font-family: 'Geist Mono', monospace; font-size: 10.5px; color: rgba(255,255,255,.75); background: rgba(0,0,0,.4); padding: 3px 8px;">配图 · 示意</span>
+      <span style="margin-left: auto; font-family: 'Geist Mono', monospace; font-size: 10.5px; color: rgba(255,255,255,.75); background: rgba(0,0,0,.4); padding: 3px 8px;">${s.image?'原文配图':'主题配图'}</span>
     </div>
   </div>`;
 }
@@ -1050,8 +1053,8 @@ function briefHtml(A){
           <p style="margin: 0 0 30px; font-size: 20px; line-height: 1.45; font-weight: 500; color: ${UI.text2}; max-width: 880px;">${esc(briefMeta.intro)}</p>
           <!-- 头条卡片 -->
           <div style="margin-bottom: 16px;">${featuredHtml}</div>
-          <!-- 三列要点栅格 -->
-          <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;">${gridHtml}</div>
+          <!-- 要点 2-5 自适应为两列两行,与头条同宽 -->
+          <div class="brief-grid">${gridHtml}</div>
         </div>
       </div>
     </section>
@@ -1204,15 +1207,17 @@ function detailCommentsHtml(A, s){
 
 // 事件聚合:按「事件」而非「文章」去重,附官方来源/媒体解读/第三方测试/社区反应/反面证据
 function eventSourcesHtml(A, s){
-  const n = 6 + (s.rank % 9);
   const t0 = s.tags[0] || s.cat;
+  const related = signals
+    .filter(x=>x.rank!==s.rank && x.url && (x.cat===s.cat || x.tags.some(tag=>s.tags.includes(tag))))
+    .slice(0,5);
   const groups = [
     { key:'官方来源', tone:'#16130f', items:[ { who: s.source, txt:`${esc(s.zhTitle)} —— 原始发布 / 公告。`, url: s.url||sourceUrls[s.source]||'#' } ] },
-    { key:'媒体解读', tone:'#2b6cb0', items:[ { who:'TechCrunch AI', txt:`从行业影响角度解读:${esc(t0)} 的商业化节奏与竞争格局变化。` }, { who:'机器之心', txt:`中文媒体梳理要点,补充与前代 / 竞品的对比。` } ] },
-    { key:'第三方测试', tone:'#1f7a45', items:[ { who: /arXiv/i.test(s.source)?'独立复现社区':'第三方评测', txt:`公开评测集上的独立验证:${s.impact>=80?'指标基本可复现':'与官方数据存在小幅差异,需按自有分布再测'}。` } ] },
-    { key:'社区反应', tone:'#a06600', items:[ { who:'X · AI 圈', txt:`讨论集中在落地成本与迁移代价;${s.urgency==='高'?'关注度高、转发密集':'反响中性、观望为主'}。` } ] },
-    { key:'反面证据', tone:'#c22f2a', items:[ { who:'质疑观点', txt:`也有声音提醒:官方基准 ≠ 你的业务分布,${s.tags.includes('端侧')?'端侧功耗与长时发热仍待验证':'需警惕对单点提升的过度解读'}。` } ] },
-  ];
+    { key:'相关报道', tone:'#2b6cb0', items:related.slice(0,2).map(x=>({ who:x.source, txt:`${esc(x.zhTitle)} —— 从 ${esc(t0)} 方向提供交叉信息。`, url:x.url })) },
+    { key:'交叉验证', tone:'#1f7a45', items:related.slice(2,4).map(x=>({ who:x.source, txt:`${esc(x.zhTitle)} —— 可用于对照影响、落地成本与适用边界。`, url:x.url })) },
+    { key:'补充视角', tone:'#a06600', items:related.slice(4,5).map(x=>({ who:x.source, txt:`${esc(x.zhTitle)} —— 补充同主题的产业或技术背景。`, url:x.url })) },
+  ].filter(group=>group.items.length);
+  const n = groups.reduce((sum, group)=>sum+group.items.length, 0);
   const blocks = groups.map(g=>`
     <div style="border: 1px solid var(--ds-ink-line); border-left: 3px solid ${g.tone}; background: #fff; margin-bottom: 10px;">
       <div style="display: flex; align-items: center; gap: 8px; padding: 8px 12px; border-bottom: 1px solid var(--ds-hair); background: rgba(22,19,15,.02);">
@@ -1222,8 +1227,8 @@ function eventSourcesHtml(A, s){
       ${g.items.map(it=>`<div style="display: flex; gap: 9px; padding: 9px 12px; border-top: 1px solid rgba(22,19,15,.05);">
         ${avatarHtml(it.who)}
         <div style="min-width: 0;">
-          <div style="font-size: 12px; font-weight: 700; color: ${UI.text};">${esc(it.who)}</div>
-          <div style="font-size: 12.5px; line-height: 1.6; color: ${UI.text2};">${it.txt}${it.url?` <a href="${esc(it.url)}" target="_blank" rel="noopener" style="color:${A.accent}; font-weight:600;">↗</a>`:''}</div>
+          <a href="${esc(it.url)}" target="_blank" rel="noopener" style="font-size: 12px; font-weight: 700; color: ${UI.text}; text-decoration: underline; text-decoration-style: dashed; text-underline-offset: 3px;">${esc(it.who)} ↗</a>
+          <div style="font-size: 12.5px; line-height: 1.6; color: ${UI.text2};">${it.txt}</div>
         </div>
       </div>`).join('')}
     </div>`).join('');
@@ -1231,7 +1236,7 @@ function eventSourcesHtml(A, s){
   <div style="margin: 6px 0 26px;">
     <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 12px;">
       <span style="font-size: 11px; font-weight: 700; letter-spacing: .06em; color: #fff; background: ${A.accent}; padding: 4px 10px; font-family: 'Geist Mono', monospace;">事件聚合</span>
-      <span style="font-size: 12.5px; color: ${UI.text2};">本事件由 <strong style="color:${UI.text};">${n}</strong> 篇报道去重合并 · 官方 / 媒体 / 测试 / 社区 / 反面 五路对照</span>
+      <span style="font-size: 12.5px; color: ${UI.text2};">本事件聚合 <strong style="color:${UI.text};">${n}</strong> 个可追溯来源 · 点击来源名称打开对应原文</span>
     </div>
     ${blocks}
   </div>`;

@@ -34,7 +34,7 @@ def build_card(brief: dict[str, Any], url: str) -> dict[str, Any]:
                 "text": {
                     "tag": "lark_md",
                     "content": (
-                        f"**{index}. {signal.get('title', '')}**\n"
+                        f"**{index}. {signal.get('titleCn') or signal.get('title', '')}**\n"
                         f"{signal.get('source', '')} · 影响分 {signal.get('impact', 0)} · "
                         f"紧迫度 {signal.get('urgency', '中')}\n{signal.get('summary', '')}"
                     ),

@@ -156,6 +156,7 @@ def process_and_clean(raw_items: list[dict[str, Any]]) -> list[dict[str, Any]]:
                 "published_ms": published_ms,
                 "collected_ms": collected_ms,
                 "raw_content": body_text[:15000],
+                "image_url": str(item.get("image_url") or "").strip(),
                 "topics": infer_topics(title, body_text),
                 "duplicate_key": duplicate_key,
             }
@@ -173,7 +174,7 @@ def _to_link(url: str, title: str) -> dict[str, str] | None:
 def format_for_feishu(item: dict[str, Any]) -> dict[str, Any]:
     """对应 Format for Feishu：转成飞书多维表字段。"""
     topics = item.get("topics") or []
-    return {
+    fields = {
         "标题": item["title"],
         "链接": _to_link(item["url"], item["title"]),
         "来源": item["source"],
@@ -195,6 +196,10 @@ def format_for_feishu(item: dict[str, Any]) -> dict[str, Any]:
         "去重键": item["duplicate_key"],
         "source_id": item.get("source_id") or "",
     }
+    image = _to_link(item.get("image_url") or "", "原文配图")
+    if image:
+        fields["图片链接"] = image
+    return fields
 
 
 def build_dify_payload(item: dict[str, Any]) -> dict[str, Any]:

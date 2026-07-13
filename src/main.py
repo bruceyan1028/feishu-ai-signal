@@ -53,6 +53,7 @@ def run() -> int:
 
     token = feishu.get_tenant_access_token()
     log.info("已获取飞书 tenant_access_token")
+    feishu.ensure_entry_enrichment_fields(token)
 
     records = feishu.read_param_records(token)
     log.info("读到源配置 %d 条", len(records))

@@ -106,7 +106,7 @@ def select_candidates(
 
 def analyze_signal(fields: dict[str, Any]) -> dict[str, Any]:
     prompt = f"""你是资深 AI 行业分析师。只依据给定原文输出严格 JSON，不得虚构。
-字段：summary_cn（中文1-2句）、why（中文1句）、impact/novelty/actionability（0-100整数）、
+字段：title_cn（准确简洁的中文标题）、summary_cn（中文1-2句）、why（中文1句）、impact/novelty/actionability（0-100整数）、
 urgency（高/中/低）、topics（从 AI、LLM、Agent、RAG、推理、多模态、开源、硬件、监管、融资、产品、其他中选2-4个）。
 标题：{scalar(fields.get("标题"))}
 来源：{scalar(fields.get("来源"))}
@@ -115,6 +115,7 @@ urgency（高/中/低）、topics（从 AI、LLM、Agent、RAG、推理、多模
     raw = report._llm_json(prompt)
     topics = [str(topic) for topic in raw.get("topics") or [] if str(topic) in TOPIC_OPTIONS][:4]
     return {
+        "title_cn": str(raw.get("title_cn") or scalar(fields.get("标题"))).strip(),
         "summary_cn": str(raw.get("summary_cn") or "").strip(),
         "why": str(raw.get("why") or "").strip(),
         "impact": max(0, min(100, int(raw.get("impact") or 0))),
@@ -130,6 +131,7 @@ def _signal_from_fields(record_id: str, fields: dict[str, Any], analysis: dict[s
     return {
         "recordId": record_id,
         "title": str(scalar(fields.get("标题"))),
+        "titleCn": analysis["title_cn"],
         "source": str(scalar(fields.get("来源"))),
         "url": link(fields.get("链接")),
         "category": str(scalar(fields.get("分类")) or "其他"),
@@ -141,6 +143,7 @@ def _signal_from_fields(record_id: str, fields: dict[str, Any], analysis: dict[s
         "actionability": analysis["actionability"],
         "urgency": analysis["urgency"],
         "tags": analysis["topics"],
+        "imageUrl": link(fields.get("图片链接")),
     }
 
 
@@ -150,6 +153,7 @@ def _existing_analysis(fields: dict[str, Any]) -> dict[str, Any] | None:
     table_urgency = str(scalar(fields.get("紧迫度")) or "Medium")
     topics = fields.get("主题") if isinstance(fields.get("主题"), list) else []
     return {
+        "title_cn": str(scalar(fields.get("中文标题")) or scalar(fields.get("标题"))),
         "summary_cn": str(scalar(fields.get("中文摘要"))),
         "why": str(scalar(fields.get("为何重要"))),
         "impact": int(float(scalar(fields.get("影响分")) or 0)),
@@ -185,6 +189,7 @@ def generate(day: str | None = None) -> dict[str, Any]:
     if not config.LLM_API_KEY:
         raise config.ConfigError("生成真实简报需要 LLM_API_KEY")
     token = feishu.get_tenant_access_token()
+    feishu.ensure_entry_enrichment_fields(token)
     params = feishu.read_param_records(token)
     entries = feishu.read_all_records_with_ids(token, config.FEISHU_ENTRY_TABLE_ID)
     candidates = select_candidates(entries, _priority_map(params), _rss_source_ids(params))
@@ -203,6 +208,7 @@ def generate(day: str | None = None) -> dict[str, Any]:
                 {
                     "record_id": item["record_id"],
                     "fields": {
+                        "中文标题": analysis["title_cn"],
                         "中文摘要": analysis["summary_cn"],
                         "为何重要": analysis["why"],
                         "影响分": analysis["impact"],

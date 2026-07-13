@@ -188,6 +188,33 @@ def list_tables(token: str) -> list[dict[str, Any]]:
     return (data.get("data") or {}).get("items") or []
 
 
+def ensure_entry_enrichment_fields(token: str) -> None:
+    """幂等补齐中文标题与原文图片字段。"""
+    base = (
+        f"{config.FEISHU_HOST}/open-apis/bitable/v1/apps/{config.FEISHU_BASE_ID}"
+        f"/tables/{config.FEISHU_ENTRY_TABLE_ID}/fields"
+    )
+    resp = _SESSION.get(f"{base}?page_size=100", headers={"Authorization": f"Bearer {token}"}, timeout=30)
+    data = resp.json()
+    if data.get("code") != 0:
+        raise FeishuError(f"Feishu list fields failed: {data.get('code')} {data.get('msg')}")
+    existing = {field.get("field_name") for field in (data.get("data") or {}).get("items") or []}
+    headers = {"Authorization": f"Bearer {token}", "Content-Type": "application/json; charset=utf-8"}
+    for field_name, field_type in (("中文标题", 1), ("图片链接", 15)):
+        if field_name in existing:
+            continue
+        created = _SESSION.post(
+            base,
+            headers=headers,
+            json={"field_name": field_name, "type": field_type},
+            timeout=30,
+        ).json()
+        if created.get("code") != 0:
+            raise FeishuError(
+                f"Feishu create field {field_name} failed: {created.get('code')} {created.get('msg')}"
+            )
+
+
 def ensure_daily_brief_table(token: str) -> str:
     """幂等创建每日简报表并返回 table_id。"""
     for table in list_tables(token):

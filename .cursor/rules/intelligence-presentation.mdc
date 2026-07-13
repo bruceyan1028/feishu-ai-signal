@@ -1,0 +1,14 @@
+---
+description: Enforce traceable, Chinese-first intelligence presentation
+globs: "{index.html,site/index.html,src/{daily,publish,notify,rss,process}.py}"
+alwaysApply: false
+---
+
+# Intelligence Presentation
+
+- Keep the featured briefing point full-width; arrange points 2–5 in a responsive two-column grid with balanced card heights and no orphaned whitespace.
+- Signal cards must use an accurate Chinese headline as the primary bold title. Preserve the original-language headline as secondary provenance text.
+- Prefer the article's own RSS/OG image. When unavailable, use a subject-matched fallback image; never bind real signals to stale rank-based demo images.
+- Persist `中文标题` and `图片链接` in Bitable so the card, webpage, and detail view share the same source of truth.
+- Every event-aggregation source label must be a working link to that source's corresponding original article. Do not render invented source rows without URLs.
+- Keep real news fields traceable to Bitable; comments, notes, meetings, and other explicitly mocked interactions may remain local demo data.

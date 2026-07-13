@@ -7,7 +7,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from unittest.mock import patch
 
-from src import config, daily, main, notify, process, publish, sources
+from src import config, daily, main, notify, process, publish, rss, sources
 
 
 class PipelineTests(unittest.TestCase):
@@ -54,10 +54,16 @@ class PipelineTests(unittest.TestCase):
                 "published_ms": 1,
                 "collected_ms": 2,
                 "duplicate_key": "key",
+                "image_url": "https://example.com/cover.jpg",
             }
         )
         self.assertEqual(fields["路由来源"], "RSS")
+        self.assertEqual(fields["图片链接"]["link"], "https://example.com/cover.jpg")
         self.assertNotIn("取值来源", fields)
+
+    def test_rss_prefers_original_media_image(self) -> None:
+        entry = {"media_content": [{"url": "https://example.com/original.jpg"}]}
+        self.assertEqual(rss._best_image(entry, ""), "https://example.com/original.jpg")
 
 
 class DailyTests(unittest.TestCase):
@@ -98,6 +104,7 @@ class DeliveryTests(unittest.TestCase):
                 {
                     "recordId": "rec1",
                     "title": "真实标题",
+                    "titleCn": "真实中文标题",
                     "source": "OpenAI",
                     "url": "https://example.com/news",
                     "category": "前沿模型公司",
@@ -109,6 +116,7 @@ class DeliveryTests(unittest.TestCase):
                     "actionability": 70,
                     "urgency": "高",
                     "tags": ["AI"],
+                    "imageUrl": "https://example.com/original.jpg",
                 }
             ],
             "briefRecordId": "brief1",
@@ -125,7 +133,7 @@ class DeliveryTests(unittest.TestCase):
         url = notify.detail_url("https://example.github.io/demo/", brief["date"])
         self.assertEqual(url, "https://example.github.io/demo/?date=2026-07-13")
         card = notify.build_card(brief, url)
-        self.assertIn("真实标题", json.dumps(card, ensure_ascii=False))
+        self.assertIn("真实中文标题", json.dumps(card, ensure_ascii=False))
         self.assertIn(url, json.dumps(card, ensure_ascii=False))
 
     @patch("src.notify.feishu.send_interactive_message")
