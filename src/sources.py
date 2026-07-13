@@ -7,6 +7,7 @@ from __future__ import annotations
 import json
 import re
 from typing import Any
+from urllib.parse import quote
 
 from . import config
 
@@ -52,7 +53,7 @@ def normalize_endpoint(endpoint: Any) -> str:
         return ""
     if not re.match(r"^https?://", url, re.I):
         url = f"https://{url}"
-    return url
+    return quote(url, safe=":/?&=%+#")
 
 
 def _parse_extra(f: dict[str, Any]) -> dict[str, Any] | None:

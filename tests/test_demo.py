@@ -19,6 +19,12 @@ class PipelineTests(unittest.TestCase):
         ]
         self.assertEqual([item["id"] for item in sources.map_feed_sources(records)], ["rss"])
 
+    def test_rss_endpoint_spaces_are_encoded(self) -> None:
+        self.assertEqual(
+            sources.normalize_endpoint("https://news.google.com/rss/search?q=artificial intelligence"),
+            "https://news.google.com/rss/search?q=artificial%20intelligence",
+        )
+
     def test_arxiv_is_capped_across_feeds(self) -> None:
         raw = []
         for index in range(config.MAX_ARXIV_ITEMS + 3):

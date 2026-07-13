@@ -118,20 +118,28 @@ ANALYSIS_PROMPT = """你是资深 AI 行业分析师。请阅读下面这条 AI 
 def _llm_json(prompt: str) -> dict[str, Any]:
     import requests
 
-    resp = requests.post(
-        f"{config.LLM_BASE_URL}/chat/completions",
-        headers={
-            "Authorization": f"Bearer {config.LLM_API_KEY}",
-            "Content-Type": "application/json",
-        },
-        json={
-            "model": config.LLM_MODEL,
-            "messages": [{"role": "user", "content": prompt}],
-            "temperature": 0.3,
-            "response_format": {"type": "json_object"},
-        },
-        timeout=120,
-    )
+    urls = [f"{config.LLM_BASE_URL}/chat/completions"]
+    if not config.LLM_BASE_URL.endswith("/v1"):
+        urls.append(f"{config.LLM_BASE_URL}/v1/chat/completions")
+    resp = None
+    for url in urls:
+        resp = requests.post(
+            url,
+            headers={
+                "Authorization": f"Bearer {config.LLM_API_KEY}",
+                "Content-Type": "application/json",
+            },
+            json={
+                "model": config.LLM_MODEL,
+                "messages": [{"role": "user", "content": prompt}],
+                "temperature": 0.3,
+                "response_format": {"type": "json_object"},
+            },
+            timeout=120,
+        )
+        if resp.status_code not in {404, 405}:
+            break
+    assert resp is not None
     resp.raise_for_status()
     content = resp.json()["choices"][0]["message"]["content"]
     return json.loads(content)
