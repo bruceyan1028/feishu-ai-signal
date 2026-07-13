@@ -153,6 +153,20 @@ class DeliveryTests(unittest.TestCase):
         self.assertEqual(title, "模型治理从原则走向工程")
         self.assertEqual(daily.brief_bullet_title("正文", "具体结论"), "具体结论")
 
+    def test_content_type_is_inferred_from_source(self) -> None:
+        self.assertEqual(
+            daily.content_type({"来源": "arXiv cs.CL", "链接": {"link": "https://arxiv.org/abs/1"}}),
+            "论文",
+        )
+        self.assertEqual(
+            daily.content_type({"来源类型": "Social", "链接": {"link": "https://x.com/a/status/1"}}),
+            "社交媒体帖子",
+        )
+        self.assertEqual(
+            daily.content_type({"链接": {"link": "https://mp.weixin.qq.com/s/demo"}}),
+            "公众号",
+        )
+
     @patch("src.notify.feishu.send_interactive_message")
     @patch("src.notify.feishu.get_tenant_access_token", return_value="token")
     @patch("src.notify.feishu.read_all_records_with_ids")
@@ -166,6 +180,23 @@ class DeliveryTests(unittest.TestCase):
         result = notify.send(self.sample_brief(), "https://example.com", "ou_test")
         self.assertTrue(result["skipped"])
         send_message.assert_not_called()
+
+    @patch("src.notify.feishu.update_record")
+    @patch("src.notify.feishu.send_interactive_message", side_effect=["msg1", "msg2"])
+    @patch("src.notify.feishu.get_tenant_access_token", return_value="token")
+    @patch("src.notify.feishu.read_all_records_with_ids")
+    def test_brief_can_send_to_multiple_recipients(
+        self, read_records, _token, send_message, update_record
+    ) -> None:
+        read_records.return_value = [
+            {"record_id": "brief1", "fields": {"简报ID": "2026-07-13", "发送状态": "待发送"}}
+        ]
+        result = notify.send_many(
+            self.sample_brief(), "https://example.com", ["ou_one", "ou_two", "ou_one"]
+        )
+        self.assertEqual(result["messageIds"], {"ou_one": "msg1", "ou_two": "msg2"})
+        self.assertEqual(send_message.call_count, 2)
+        update_record.assert_called_once()
 
 
 if __name__ == "__main__":

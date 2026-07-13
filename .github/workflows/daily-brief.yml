@@ -96,6 +96,7 @@ jobs:
           FEISHU_ENTRY_TABLE_ID: ${{ secrets.FEISHU_ENTRY_TABLE_ID }}
           FEISHU_BRIEF_TABLE_ID: ${{ secrets.FEISHU_BRIEF_TABLE_ID }}
           FEISHU_RECIPIENT_OPEN_ID: ${{ secrets.FEISHU_RECIPIENT_OPEN_ID }}
+          FEISHU_RECIPIENT_OPEN_IDS: ${{ secrets.FEISHU_RECIPIENT_OPEN_IDS }}
           PUBLIC_BASE_URL: ${{ steps.deployment.outputs.page_url }}
           FORCE_FLAG: ${{ inputs.force_send && '--force' || '' }}
         run: python -m src.notify --input output/daily-brief.json $FORCE_FLAG

@@ -44,6 +44,7 @@ def _signal_from_record(record: dict[str, Any]) -> dict[str, Any]:
         "source": str(daily.scalar(fields.get("来源")) or ""),
         "url": daily.link(fields.get("链接")),
         "category": str(daily.scalar(fields.get("分类")) or "其他"),
+        "contentType": daily.content_type(fields),
         "publishedDate": published,
         "summary": str(daily.scalar(fields.get("中文摘要")) or ""),
         "why": str(daily.scalar(fields.get("为何重要")) or ""),

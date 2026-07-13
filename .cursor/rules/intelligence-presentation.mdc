@@ -26,3 +26,6 @@ alwaysApply: false
 - Show 10 signal cards by default and only render progressive disclosure when more than 10 exist. Seed non-empty demo discussion threads for every signal without overwriting user comments.
 - Do not show ordinary article images in full-text details. Only place figures extracted from the paper's arXiv/PDF content inside research-paper details; keep supported video embeds in video reading mode and omit media blocks when no source media exists.
 - Keep real news fields traceable to Bitable; comments, notes, meetings, and other explicitly mocked interactions may remain local demo data.
+- Keep the AI-history and favorites side panels visually consistent: use a dark outer panel with light header typography, but render every text/content card on white with dark text. Use square-cornered panel and entry frames and preserve the favorites row information layout.
+- Add a content-format badge beside the signal's primary category for papers, videos, social-media posts, and WeChat official-account articles. Give this badge the same size and weight as the category badge, but use a green background to distinguish format from subject.
+- Expose those four content formats as filters in “全部信号”. Visually separate them from subject filters with green, squarer chips and a divider while retaining the existing subject-filter row.

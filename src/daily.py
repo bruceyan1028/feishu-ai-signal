@@ -58,6 +58,25 @@ def media_assets(value: Any) -> dict[str, Any]:
         return {"images": [], "videos": []}
 
 
+def content_type(fields: dict[str, Any]) -> str:
+    """从来源字段与链接识别需要显式展示的内容载体。"""
+    source = str(scalar(fields.get("来源")) or "")
+    source_type = str(scalar(fields.get("来源类型")) or "")
+    url = link(fields.get("链接"))
+    text = f"{source} {source_type} {url}".lower()
+    if any(token in text for token in ("mp.weixin.qq.com", "weixin.qq.com", "微信公众号", "公众号")):
+        return "公众号"
+    if any(token in text for token in ("youtube.com", "youtu.be", "bilibili.com", "vimeo.com", "视频")):
+        return "视频"
+    if any(token in text for token in ("arxiv.org", "openreview.net", "doi.org", "学术论文")):
+        return "论文"
+    if source_type.lower() == "social" or any(
+        token in text for token in ("x.com/", "twitter.com/", "weibo.com/", "linkedin.com/")
+    ):
+        return "社交媒体帖子"
+    return ""
+
+
 def date_ms(day: str) -> int:
     return int(datetime.strptime(day, "%Y-%m-%d").replace(tzinfo=CN_TZ).timestamp() * 1000)
 
@@ -158,6 +177,7 @@ def _signal_from_fields(record_id: str, fields: dict[str, Any], analysis: dict[s
         "source": str(scalar(fields.get("来源"))),
         "url": link(fields.get("链接")),
         "category": str(scalar(fields.get("分类")) or "其他"),
+        "contentType": content_type(fields),
         "publishedDate": datetime.fromtimestamp(published / 1000, CN_TZ).strftime("%Y-%m-%d") if published else "",
         "summary": analysis["summary_cn"],
         "why": analysis["why"],

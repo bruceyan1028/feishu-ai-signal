@@ -27,6 +27,12 @@ FEISHU_PARAM_TABLE_ID = _env("FEISHU_PARAM_TABLE_ID", "tblnJ0vumx8ITmlU")
 FEISHU_ENTRY_TABLE_ID = _env("FEISHU_ENTRY_TABLE_ID", "tblgeB5ArAD1ugoi")
 FEISHU_BRIEF_TABLE_ID = os.environ.get("FEISHU_BRIEF_TABLE_ID", "").strip()
 FEISHU_RECIPIENT_OPEN_ID = os.environ.get("FEISHU_RECIPIENT_OPEN_ID", "").strip()
+_recipient_open_ids = os.environ.get("FEISHU_RECIPIENT_OPEN_IDS", "").strip() or FEISHU_RECIPIENT_OPEN_ID
+FEISHU_RECIPIENT_OPEN_IDS = [
+    item.strip()
+    for item in _recipient_open_ids.split(",")
+    if item.strip()
+]
 PUBLIC_BASE_URL = os.environ.get("PUBLIC_BASE_URL", "").strip().rstrip("/")
 
 # --- Jina Reader ---

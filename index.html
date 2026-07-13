@@ -313,8 +313,19 @@ let signals = [
   { rank: 20, impact: 74, urgency: '中', kind: '论文', zhTitle: 'Apple 更新端侧基础模型:3B 参数对标 7B 能力', title: 'Apple Intelligence Foundation Models: On-device 3B with 7B-class quality', source: 'Apple ML Research', cat: '技术研究开源', date: '2026-07-03', summary: 'Apple 发布端侧基础模型技术报告:3B 参数模型通过混合精度量化(平均 3.7 bit)与任务适配器体系,在摘要、改写与工具调用上达到 7B 级开源模型质量,并保持端侧毫秒级首响与低内存占用,适配器可按 App 动态加载。', why: '端侧小模型的能力密度持续提升,「云端大模型 + 端侧小模型」的分层架构正在成为移动端标配。其适配器方案对多任务端侧部署有直接借鉴意义,值得纳入端侧路线评估。', novel: 74, action: 58, tags: ['端侧', 'Apple', '基础模型'] },
   { rank: 21, impact: 64, urgency: '低', kind: '视频', zhTitle: '视频解读:Gemma 4 全档位实测,4B 端侧表现超预期', title: 'Gemma 4 tested: 4B on-device performance is the real story', source: 'YouTube · AI Explained', cat: '技术研究开源', date: '2026-07-06', summary: 'AI Explained 频道对 Gemma 4 全档位独立实测:70B 接近闭源第一梯队,而最大亮点是 4B 端侧档位——在消费级手机上离线运行,多语言与工具调用能力保持完整,视频附全部测试数据与复现脚本。', why: '第三方独立实测是官方基准的重要交叉验证。4B 端侧档位的实测表现支持把端侧路线纳入正式评估,视频中的测试方法可直接复用到内部评测集。', novel: 55, action: 48, tags: ['端侧', 'Gemma', '实测'] },
 ];
-// 内容类型:未标注的按来源推断(arXiv → 论文,其余 → 文章)
-signals.forEach(s => { if(!s.kind) s.kind = /arXiv/i.test(s.source) ? '论文' : '文章'; });
+const SPECIAL_CONTENT_TYPES = ['论文','视频','社交媒体帖子','公众号'];
+function signalContentType(s){
+  const explicit = s.contentType || s.kind || '';
+  if(explicit === '社交媒体') return '社交媒体帖子';
+  if(SPECIAL_CONTENT_TYPES.includes(explicit)) return explicit;
+  const text = `${s.source||''} ${s.url||''}`.toLowerCase();
+  if(/mp\.weixin\.qq\.com|weixin\.qq\.com|微信公众号|公众号/.test(text)) return '公众号';
+  if(/youtube\.com|youtu\.be|bilibili\.com|vimeo\.com|视频/.test(text) || (s.mediaAssets?.videos||[]).length) return '视频';
+  if(/arxiv\.org|openreview\.net|doi\.org|学术论文|\barxiv\b/.test(text)) return '论文';
+  if(/x\.com\/|twitter\.com\/|weibo\.com\/|linkedin\.com\/|社交媒体/.test(text)) return '社交媒体帖子';
+  return '';
+}
+signals.forEach(s => { s.contentType = signalContentType(s); s.kind = s.contentType || '文章'; });
 let briefMeta = {
   date: '2026-07-07',
   title: 'AI 竞争主线正在切换',
@@ -322,9 +333,15 @@ let briefMeta = {
 };
 
 const filters = ['全部', '端侧模型', '算力芯片云', '政策监管地缘', '前沿模型公司', '技术研究开源', '创业融资并购'];
+const FORMAT_FILTERS = ['论文', '视频', '社交媒体帖子', '公众号'];
 // 「端侧模型」是标签驱动的横切专题,不是领域分类:按 tags 匹配
 const EDGE_FILTER = '端侧模型';
-function matchesFilter(s, f){ if(f==='全部') return true; if(f===EDGE_FILTER) return s.tags.includes('端侧'); return s.cat===f; }
+function matchesFilter(s, f){
+  if(f==='全部') return true;
+  if(f===EDGE_FILTER) return s.tags.includes('端侧');
+  if(FORMAT_FILTERS.includes(f)) return s.contentType===f;
+  return s.cat===f;
+}
 // 按「主体」分类,而非按格式(网页/RSS…)。端侧模型为横切维度(edge 标记)
 const SUBJECT_TYPES = ['国内大厂','国外大厂','权威媒体','KOL','学术论文','实验室','内部文档'];
 const EDGE_DIM = '端侧模型';
@@ -543,7 +560,8 @@ async function loadBrief(){
       recordId: s.recordId,
       impact: Number(s.impact) || 0,
       urgency: s.urgency || '中',
-      kind: /arXiv/i.test(s.source || '') ? '论文' : '文章',
+      contentType: s.contentType || s.kind || '',
+      kind: s.contentType || s.kind || '文章',
       zhTitle: s.titleCn || s.title || '未命名信号',
       title: s.title || '',
       source: s.source || '未知来源',
@@ -558,6 +576,7 @@ async function loadBrief(){
       image: s.imageUrl || '',
       mediaAssets: s.mediaAssets || {images:[], videos:[]},
     }));
+    signals.forEach(s => { s.contentType = signalContentType(s); s.kind = s.contentType || '文章'; });
     const seenImages = new Set();
     signals.forEach(s=>{
       const imageKey = s.image.split(/[?#]/)[0].toLowerCase();
@@ -1063,6 +1082,9 @@ function briefHtml(A){
     const active = state.filter===f;
     const isEdge = f===EDGE_FILTER;
     return `<button onclick="App.setFilter('${f}')" title="${isEdge?'专题:按「端侧」标签聚合,跨领域':''}" style="height: 30px; padding: 0 14px; border-radius: 15px; border: 1px ${isEdge?'dashed':'solid'} ${active?A.accentBorder:UI.border}; background: ${active?A.accentSoft:'transparent'}; color: ${active?A.accentBright:UI.text2}; font-size: 12.5px; font-weight: ${active?700:550}; cursor: pointer;">${isEdge?'✦ ':''}${f}</button>`;
+  }).join('') + `<span aria-hidden="true" style="width: 1px; height: 22px; margin: 0 3px; background: ${UI.border2};"></span>` + FORMAT_FILTERS.map(f => {
+    const active = state.filter===f;
+    return `<button onclick="App.setFilter('${f}')" title="按内容形式筛选" style="height: 30px; padding: 0 13px; border-radius: 4px; border: 1px solid ${active?'#2f7d4f':'#8bc7a0'}; background: ${active?'#2f7d4f':'#e8f5eb'}; color: ${active?'#fff':'#17613a'}; font-size: 12.5px; font-weight: ${active?700:600}; cursor: pointer;">▦ ${f}</button>`;
   }).join('');
 
   const sortOpts = [['impact','影响分'],['date','时间']]
@@ -1079,7 +1101,8 @@ function briefHtml(A){
     const imgUrl = topicImageUrl(s);
     const isEdge = s.tags.includes('端侧');
     const catChip = v => `<span style="font-family: ${mono}; font-weight: 700; color: ${A.accent}; background: ${A.accentFaint}; border: 1px solid ${A.accentBorder}; padding: 3px 9px;">${esc(v)}</span>`;
-    const catsHtml = catChip(s.cat) + (isEdge ? catChip(EDGE_FILTER) : '');
+    const typeChip = s.contentType ? `<span style="font-family: ${mono}; font-weight: 700; color: #17613a; background: #e5f5e9; border: 1px solid #8bc7a0; padding: 3px 9px;">${esc(s.contentType)}</span>` : '';
+    const catsHtml = catChip(s.cat) + typeChip + (isEdge ? catChip(EDGE_FILTER) : '');
     const tagsHtml = s.tags.map(t=>`<span style="font-family: ${mono}; font-size: 11px; color: ${UI.text3}; white-space: nowrap;">#${esc(t)}</span>`).join(`<span style="color: var(--ds-hair);">/</span>`);
     return `
     <article id="signal-${s.rank}" class="signal-card" onclick="App.openDetail(${s.rank})" style="position: relative; display: flex; background: ${UI.card}; border: 1.5px solid var(--ds-ink-line); box-shadow: 5px 5px 0 rgba(22,19,15,.07); overflow: hidden; min-height: 214px;">
@@ -2002,13 +2025,12 @@ function tasksHtml(A){
   </main>`;
 }
 
-// 右侧收藏栏(深色底,按主题 / 时间归类)
+// 右侧收藏栏(与 AI 历史统一的深色直角视觉,按主题 / 时间归类)
 function favPanelHtml(A){
   const n = state.favorites.length;
-  // 深色面板配色
-  const FT = '#f3efe6', FT2 = '#c9c2b4', FT3 = '#8f887a', FB = 'rgba(255,255,255,.13)', FFill = 'rgba(255,255,255,.05)';
+  const FT = '#f7f3eb', FT2 = '#d3ccbf', FT3 = '#968f83', FB = 'rgba(255,255,255,.18)', FFill = '#fff', FC = '#16130f', FC2 = '#6f685e';
   if(!state.favOpen){
-    return `<button onclick="App.toggleFavPanel()" title="展开收藏栏" style="position: fixed; right: 0; top: 50%; transform: translateY(-50%); z-index: 70; display: flex; flex-direction: column; align-items: center; gap: 5px; padding: 12px 8px; border-radius: 12px 0 0 12px; border: 1px solid ${FB}; border-right: none; background: rgba(24,21,17,.96); backdrop-filter: blur(10px); color: ${A.accentBright}; cursor: pointer; font-size: 15px;">★<span style="font-size: 11px; color: ${FT2}; font-family: 'Geist Mono', monospace;">${n}</span></button>`;
+    return `<button onclick="App.toggleFavPanel()" title="展开收藏栏" style="position: fixed; right: 0; top: 50%; transform: translateY(-50%); z-index: 70; display: flex; flex-direction: column; align-items: center; gap: 5px; padding: 12px 8px; border: 1px solid ${FB}; border-right: none; background: #1b1814; color: ${A.accentBright}; cursor: pointer; font-size: 15px;">★<span style="font-size: 11px; color: ${FT2}; font-family: 'Geist Mono', monospace;">${n}</span></button>`;
   }
   const favSignals = state.favorites.map(r=>signals.find(x=>x.rank===r)).filter(Boolean);
   const groups = {};
@@ -2017,13 +2039,13 @@ function favPanelHtml(A){
   const groupHtml = order.filter(c=>groups[c]).map(c=>{
     const arr = groups[c].slice().sort((a,b)=>b.date.localeCompare(a.date));
     const rows = arr.map(s=>{ const inPend=state.pending.includes(s.rank); return `
-      <div style="display: flex; gap: 7px; align-items: flex-start; padding: 8px; border-radius: 9px; border: 1px solid ${FB}; background: ${FFill};">
-        <button onclick="App.addPending(${s.rank})" title="${inPend?'已在待分析':'加入报告待分析'}" ${inPend?'disabled':''} style="flex: none; width: 22px; height: 22px; border-radius: 6px; border: 1px solid ${inPend?A.accentBorder:FB}; background: ${inPend?A.accentSoft:'transparent'}; color: ${inPend?A.accentBright:FT2}; cursor: ${inPend?'default':'pointer'}; font-size: 13px; line-height: 1;">${inPend?'✓':'＋'}</button>
+      <div style="display: flex; gap: 7px; align-items: flex-start; padding: 8px; border: 1px solid ${FB}; background: ${FFill};">
+        <button onclick="App.addPending(${s.rank})" title="${inPend?'已在待分析':'加入报告待分析'}" ${inPend?'disabled':''} style="flex: none; width: 22px; height: 22px; border: 1px solid ${inPend?A.accentBorder:'rgba(22,19,15,.2)'}; background: ${inPend?A.accentSoft:'transparent'}; color: ${inPend?A.accent:FC2}; cursor: ${inPend?'default':'pointer'}; font-size: 13px; line-height: 1;">${inPend?'✓':'＋'}</button>
         <div onclick="App.openDetail(${s.rank})" style="flex: 1; min-width: 0; cursor: pointer;">
-          <div style="font-size: 12px; font-weight: 600; color: ${FT}; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">${esc(s.zhTitle)}</div>
-          <div style="margin-top: 2px; font-size: 10px; color: ${FT3}; font-family: 'Geist Mono', monospace;">#${s.rank} · ${s.date}</div>
+          <div style="font-size: 12px; font-weight: 600; color: ${FC}; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">${esc(s.zhTitle)}</div>
+          <div style="margin-top: 2px; font-size: 10px; color: ${FC2}; font-family: 'Geist Mono', monospace;">#${s.rank} · ${s.date}</div>
         </div>
-        <button onclick="App.removeFav(${s.rank})" title="移除收藏" style="flex: none; width: 22px; height: 22px; border-radius: 6px; border: 1px solid ${FB}; background: transparent; color: ${FT3}; cursor: pointer; font-size: 12px; line-height: 1;">×</button>
+        <button onclick="App.removeFav(${s.rank})" title="移除收藏" style="flex: none; width: 22px; height: 22px; border: 1px solid rgba(22,19,15,.2); background: transparent; color: ${FC2}; cursor: pointer; font-size: 12px; line-height: 1;">×</button>
       </div>`; }).join('');
     return `<div style="margin-bottom: 16px;">
       <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 8px;"><span style="width: 6px; height: 6px; border-radius: 2px; background: ${A.accent};"></span><span style="font-size: 11px; font-weight: 700; letter-spacing: .04em; color: ${FT2};">${esc(c)}</span><span style="font-size: 10px; color: ${FT3}; font-family: 'Geist Mono', monospace;">${arr.length}</span></div>
@@ -2031,12 +2053,12 @@ function favPanelHtml(A){
     </div>`;
   }).join('');
   return `
-  <aside style="position: fixed; right: 12px; top: 70px; bottom: 104px; z-index: 70; width: 288px; display: flex; flex-direction: column; border-radius: 16px; background: rgba(24,21,17,.97); backdrop-filter: blur(14px); border: 1px solid ${FB}; box-shadow: 0 20px 50px -18px rgba(0,0,0,.55); overflow: hidden;">
+  <aside style="position: fixed; right: 12px; top: 70px; bottom: 104px; z-index: 70; width: 288px; display: flex; flex-direction: column; background: #1b1814; border: 1px solid ${FB}; box-shadow: 5px 5px 0 rgba(0,0,0,.22); overflow: hidden;">
     <div style="display: flex; align-items: center; gap: 8px; padding: 14px 16px; border-bottom: 1px solid ${FB};">
       <span style="color: ${A.accentBright}; font-size: 15px;">★</span>
       <span style="font-size: 13.5px; font-weight: 700; color: ${FT};">收藏栏</span>
       <span style="font-size: 11px; color: ${FT3}; font-family: 'Geist Mono', monospace;">${n}</span>
-      <button onclick="App.toggleFavPanel()" title="收起" style="margin-left: auto; width: 26px; height: 26px; border-radius: 7px; border: 1px solid ${FB}; background: transparent; color: ${FT3}; cursor: pointer; font-size: 14px;">→</button>
+      <button onclick="App.toggleFavPanel()" title="收起" style="margin-left: auto; width: 26px; height: 26px; border: 1px solid ${FB}; background: transparent; color: ${FT2}; cursor: pointer; font-size: 14px;">→</button>
     </div>
     <div style="flex: 1; overflow-y: auto; padding: 14px 16px;">
       ${n ? groupHtml : `<div style="font-size: 12px; color: ${FT3}; line-height: 1.9; text-align: center; padding: 30px 6px;">还没有收藏<br>点信号卡片右上角 ☆<br>收藏后自动按主题 / 时间归类到这里</div>`}
@@ -2050,33 +2072,33 @@ function historyPanelHtml(A){
   const msgs = state.bottomChat;
   const pairs = [];
   for(let i=0;i<msgs.length;i++){ if(msgs[i].role==='user'){ pairs.push({ q: msgs[i].text, a: (msgs[i+1] && msgs[i+1].role==='ai') ? msgs[i+1].text : '' }); } }
-  const HT='#16130f', HT2='#4a453d', HT3='#6f685e', HB='rgba(22,19,15,.16)';
+  const HT='#f7f3eb', HT2='#d3ccbf', HT3='#968f83', HB='rgba(255,255,255,.18)', HC='#16130f', HC2='#4a453d';
   if(!state.historyOpen){
-    return `<button onclick="App.toggleHistory()" title="展开 AI 对话历史" style="position: fixed; left: 0; top: 50%; transform: translateY(-50%); z-index: 70; display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 13px 8px; border: 1.5px solid var(--ds-ink-line); border-left: none; background: #fff; color: ${A.accent}; cursor: pointer; font-size: 14px; box-shadow: 3px 3px 0 rgba(22,19,15,.08);">✦<span style="font-size: 11px; color: ${HT3}; font-family: 'Geist Mono', monospace; writing-mode: vertical-rl;">历史 ${pairs.length}</span></button>`;
+    return `<button onclick="App.toggleHistory()" title="展开 AI 对话历史" style="position: fixed; left: 0; top: 50%; transform: translateY(-50%); z-index: 70; display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 13px 8px; border: 1px solid ${HB}; border-left: none; background: #1b1814; color: ${A.accentBright}; cursor: pointer; font-size: 14px; box-shadow: 3px 3px 0 rgba(0,0,0,.2);">✦<span style="font-size: 11px; color: ${HT2}; font-family: 'Geist Mono', monospace; writing-mode: vertical-rl;">历史 ${pairs.length}</span></button>`;
   }
   const rows = pairs.slice().reverse().map((p,i)=>`
-    <div style="border: 1px solid var(--ds-ink-line); background: #fff; box-shadow: 2px 2px 0 rgba(22,19,15,.06);">
+    <div style="border: 1px solid ${HB}; background: #fff;">
       <div style="display: flex; gap: 7px; align-items: flex-start; padding: 9px 11px;">
         <span style="flex: none; font-family: 'Geist Mono', monospace; font-size: 10px; font-weight: 700; color: #fff; background: ${A.accent}; padding: 2px 6px;">你</span>
-        <span style="font-size: 12.5px; font-weight: 600; line-height: 1.5; color: ${HT};">${esc(p.q)}</span>
+        <span style="font-size: 12.5px; font-weight: 600; line-height: 1.5; color: ${HC};">${esc(p.q)}</span>
       </div>
-      ${p.a?`<div style="display: flex; gap: 7px; align-items: flex-start; padding: 9px 11px; border-top: 1px solid var(--ds-hair); background: ${A.accentFaint};">
+      ${p.a?`<div style="display: flex; gap: 7px; align-items: flex-start; padding: 9px 11px; border-top: 1px solid rgba(22,19,15,.14); background: ${A.accentFaint};">
         <span style="flex: none; font-family: 'Geist Mono', monospace; font-size: 10px; font-weight: 700; color: ${A.accent}; border: 1px solid ${A.accentBorder}; padding: 2px 6px;">✦</span>
-        <span style="font-size: 12px; line-height: 1.6; color: ${HT2};">${esc(p.a)}</span>
+        <span style="font-size: 12px; line-height: 1.6; color: ${HC2};">${esc(p.a)}</span>
       </div>`:''}
     </div>`).join('');
   return `
-  <aside style="position: fixed; left: 12px; top: 70px; bottom: 158px; z-index: 70; width: 292px; display: flex; flex-direction: column; background: var(--ds-section); border: 1.5px solid var(--ds-ink-line); box-shadow: 5px 5px 0 rgba(22,19,15,.09);">
-    <div style="display: flex; align-items: center; gap: 8px; padding: 13px 14px; border-bottom: 1.5px solid var(--ds-ink-line); background: repeating-linear-gradient(135deg, rgba(22,19,15,.03) 0 6px, transparent 6px 12px);">
-      <span style="color: ${A.accent}; font-size: 14px;">✦</span>
+  <aside style="position: fixed; left: 12px; top: 70px; bottom: 158px; z-index: 70; width: 292px; display: flex; flex-direction: column; background: #1b1814; border: 1px solid ${HB}; box-shadow: 5px 5px 0 rgba(0,0,0,.22);">
+    <div style="display: flex; align-items: center; gap: 8px; padding: 13px 14px; border-bottom: 1px solid ${HB}; background: #1b1814;">
+      <span style="color: ${A.accentBright}; font-size: 14px;">✦</span>
       <span style="font-size: 13.5px; font-weight: 700; color: ${HT};">AI 对话历史</span>
       <span style="font-size: 11px; color: ${HT3}; font-family: 'Geist Mono', monospace;">${pairs.length}</span>
-      <button onclick="App.toggleHistory()" title="收起" style="margin-left: auto; width: 26px; height: 26px; border: 1px solid var(--ds-ink-line); background: #fff; color: ${HT2}; cursor: pointer; font-size: 14px;">←</button>
+      <button onclick="App.toggleHistory()" title="收起" style="margin-left: auto; width: 26px; height: 26px; border: 1px solid ${HB}; background: transparent; color: ${HT2}; cursor: pointer; font-size: 14px;">←</button>
     </div>
     <div style="flex: 1; overflow-y: auto; padding: 13px 14px; display: flex; flex-direction: column; gap: 10px;">
       ${rows || `<div style="font-size: 12px; color: ${HT3}; line-height: 1.9; text-align: center; padding: 30px 6px;">还没有对话记录<br>在底部「AI 助手」里提问<br>历史会按时间显示在这里</div>`}
     </div>
-    <div style="padding: 9px 14px; border-top: 1px solid var(--ds-ink-line); font-size: 10.5px; color: ${HT3}; line-height: 1.5;">最新对话在最上 · 点底部输入框继续提问</div>
+    <div style="padding: 9px 14px; border-top: 1px solid ${HB}; font-size: 10.5px; color: ${HT3}; line-height: 1.5;">最新对话在最上 · 点底部输入框继续提问</div>
   </aside>`;
 }
 

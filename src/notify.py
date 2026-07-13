@@ -77,11 +77,14 @@ def _brief_record(token: str, table_id: str, day: str) -> dict[str, Any] | None:
     return None
 
 
-def send(brief: dict[str, Any], base_url: str, open_id: str, force: bool = False) -> dict[str, Any]:
+def send_many(
+    brief: dict[str, Any], base_url: str, open_ids: list[str], force: bool = False
+) -> dict[str, Any]:
     if not base_url:
         raise config.ConfigError("缺少 PUBLIC_BASE_URL")
-    if not open_id:
-        raise config.ConfigError("缺少 FEISHU_RECIPIENT_OPEN_ID")
+    recipients = list(dict.fromkeys(item.strip() for item in open_ids if item.strip()))
+    if not recipients:
+        raise config.ConfigError("缺少 FEISHU_RECIPIENT_OPEN_IDS")
     token = feishu.get_tenant_access_token()
     table_id = str(brief.get("briefTableId") or config.FEISHU_BRIEF_TABLE_ID or feishu.ensure_daily_brief_table(token))
     record = _brief_record(token, table_id, str(brief["date"]))
@@ -91,22 +94,40 @@ def send(brief: dict[str, Any], base_url: str, open_id: str, force: bool = False
     if str(daily.scalar(fields.get("发送状态"))) == "已发送" and not force:
         return {
             "skipped": True,
-            "messageId": str(daily.scalar(fields.get("消息ID")) or ""),
+            "messageIds": str(daily.scalar(fields.get("消息ID")) or ""),
             "detailUrl": detail_url(base_url, str(brief["date"])),
         }
     url = detail_url(base_url, str(brief["date"]))
+    message_ids: dict[str, str] = {}
     try:
-        message_id = feishu.send_interactive_message(token, open_id, build_card(brief, url))
+        card = build_card(brief, url)
+        for open_id in recipients:
+            message_ids[open_id] = feishu.send_interactive_message(token, open_id, card)
         feishu.update_record(
             token,
             table_id,
             str(record["record_id"]),
-            {"发送状态": "已发送", "发送时间": int(datetime.now(timezone.utc).timestamp() * 1000), "消息ID": message_id},
+            {
+                "发送状态": "已发送",
+                "发送时间": int(datetime.now(timezone.utc).timestamp() * 1000),
+                "消息ID": json.dumps(message_ids, ensure_ascii=False),
+            },
         )
     except Exception:
         feishu.update_record(token, table_id, str(record["record_id"]), {"发送状态": "失败"})
         raise
-    return {"skipped": False, "messageId": message_id, "detailUrl": url}
+    return {"skipped": False, "messageIds": message_ids, "detailUrl": url}
+
+
+def send(brief: dict[str, Any], base_url: str, open_id: str, force: bool = False) -> dict[str, Any]:
+    """向单个接收人发送，保留原有调用兼容性。"""
+    result = send_many(brief, base_url, [open_id], force)
+    message_ids = result.pop("messageIds", {})
+    if isinstance(message_ids, dict):
+        result["messageId"] = message_ids.get(open_id, "")
+    else:
+        result["messageId"] = message_ids
+    return result
 
 
 def run() -> int:
@@ -115,6 +136,7 @@ def run() -> int:
     parser.add_argument("--date", help="未提供 input 时发送指定日期，默认最新")
     parser.add_argument("--base-url", default=config.PUBLIC_BASE_URL)
     parser.add_argument("--open-id", default=config.FEISHU_RECIPIENT_OPEN_ID)
+    parser.add_argument("--open-ids", default=",".join(config.FEISHU_RECIPIENT_OPEN_IDS))
     parser.add_argument("--force", action="store_true")
     args = parser.parse_args()
     if args.input:
@@ -125,7 +147,10 @@ def run() -> int:
         brief = next((item for item in briefs if not args.date or item["date"] == args.date), None)
         if not brief:
             raise RuntimeError("没有找到可发送的已发布简报")
-    print(json.dumps(send(brief, args.base_url, args.open_id, args.force), ensure_ascii=False))
+    recipients = [item.strip() for item in args.open_ids.split(",") if item.strip()]
+    if not recipients and args.open_id:
+        recipients = [args.open_id]
+    print(json.dumps(send_many(brief, args.base_url, recipients, args.force), ensure_ascii=False))
     return 0
 
 

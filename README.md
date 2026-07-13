@@ -44,7 +44,8 @@ python -m src.notify --input output/daily-brief.json --force
 - 以应用身份发送消息权限；
 - 现有多维表格需授权给该应用。
 
-接收人使用用户 `open_id`，配置在 `FEISHU_RECIPIENT_OPEN_ID`。
+接收人使用用户 `open_id`。多人用英文逗号配置在
+`FEISHU_RECIPIENT_OPEN_IDS=ou_xxx,ou_yyy`；单人变量 `FEISHU_RECIPIENT_OPEN_ID` 仍兼容。
 
 ## GitHub Pages 自动化
 
@@ -55,7 +56,7 @@ python -m src.notify --input output/daily-brief.json --force
 
 在 GitHub Actions Secrets 中配置：
 
-- 必填：`FEISHU_APP_ID`、`FEISHU_APP_SECRET`、`LLM_API_KEY`、`FEISHU_RECIPIENT_OPEN_ID`
+- 必填：`FEISHU_APP_ID`、`FEISHU_APP_SECRET`、`LLM_API_KEY`、`FEISHU_RECIPIENT_OPEN_IDS`
 - 可选：`FEISHU_BASE_ID`、`FEISHU_PARAM_TABLE_ID`、`FEISHU_ENTRY_TABLE_ID`、`FEISHU_BRIEF_TABLE_ID`
 - 可选 LLM 覆盖：`LLM_BASE_URL`、`LLM_MODEL`
 
