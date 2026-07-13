@@ -15,4 +15,5 @@ alwaysApply: false
 - Every event-aggregation source label must be a working link to that source's corresponding original article. Do not render invented source rows without URLs.
 - Initially show a concise subset of “全部信号” and place a clear “查看更多” control below the cards to progressively reveal the remaining filtered results.
 - The generated brief should normally retain up to 30 ranked signals so “查看更多” has meaningful depth; the initial viewport may still show only a small subset.
+- Treat “内部文档” as its own source category, separate from “实验室”. Demonstrate multiple internal Feishu source forms, including cloud documents, spreadsheets, multidimensional tables, and knowledge bases.
 - Keep real news fields traceable to Bitable; comments, notes, meetings, and other explicitly mocked interactions may remain local demo data.
