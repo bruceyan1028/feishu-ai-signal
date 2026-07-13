@@ -92,7 +92,7 @@
   .brief-card { transition: transform .12s ease, box-shadow .12s ease; }
   .brief-card:hover { transform: translate(-2px,-2px); box-shadow: 6px 6px 0 var(--ds-accent) !important; }
   .brief-card .ref:hover { background: var(--ds-accent) !important; color: #fff !important; }
-  .brief-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); grid-auto-rows: auto; align-items: start; gap: 16px; }
+  .brief-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); grid-auto-rows: auto; gap: 16px; }
   @media (max-width: 760px) { .brief-grid { grid-template-columns: 1fr; } }
   .src-row:hover { background: rgba(22,19,15,.03); }
   .src-link:hover { color: var(--accent-bright, #a78bff) !important; border-bottom-color: var(--accent-bright, #a78bff) !important; }
@@ -257,9 +257,9 @@ let bullets = [
 ];
 
 let personal = [
-  { ref: 12, match: 94, title: 'HippoRAG: Neurobiologically inspired RAG using Amazon Bedrock', reason: '命中关注方向「RAG 后端选型」— 图结构 + 个性化 PageRank 的检索方案,可直接对比你当前的向量方案。' },
-  { ref: 9, match: 88, title: 'Building a serverless A2A gateway for agent discovery, routing, and access control', reason: '命中关注方向「Agent 基础设施」— serverless A2A 网关与你在评估的多智能体路由架构高度重合。' },
-  { ref: 6, match: 82, title: "How NVIDIA's Inference Software Stack Powers the Lowest Token Cost", reason: '命中关注方向「推理成本」— 每 token 成本拆解框架,可用于本季度推理预算测算。' },
+  { ref: 12, match: 94, title: 'HippoRAG: Neurobiologically inspired RAG using Amazon Bedrock', reason: '命中关注方向「RAG 后端选型」— 图结构 + 个性化 PageRank 的检索方案,可直接对比你当前的向量方案。', basis: [['内部相关文档','模型选型评测表'],['追踪动向','RAG / 向量与图数据层']] },
+  { ref: 9, match: 88, title: 'Building a serverless A2A gateway for agent discovery, routing, and access control', reason: '命中关注方向「Agent 基础设施」— serverless A2A 网关与你在评估的多智能体路由架构高度重合。', basis: [['内部相关文档','技术决策记录库'],['追踪动向','Agent 路由 / A2A 协议']] },
+  { ref: 6, match: 82, title: "How NVIDIA's Inference Software Stack Powers the Lowest Token Cost", reason: '命中关注方向「推理成本」— 每 token 成本拆解框架,可用于本季度推理预算测算。', basis: [['内部相关文档','产品路线图与发布计划'],['追踪动向','推理成本 / GPU 供给']] },
 ];
 
 const sourceUrls = {
@@ -549,11 +549,16 @@ async function loadBrief(){
       if(seenImages.has(imageKey)) s.image = '';
       else seenImages.add(imageKey);
     });
+    const relatedDocs = ['模型选型评测表', '技术决策记录库', 'AI 团队知识库'];
     personal = signals.slice(0,3).map((s,index)=>({
       ref:s.rank,
       match:Math.max(82, 96-index*5),
       title:s.zhTitle,
       reason:`命中你的高优先级情报范围「${s.tags[0] || s.cat}」；该信号影响分 ${s.impact}，建议优先查看。`,
+      basis:[
+        ['内部相关文档', relatedDocs[index]],
+        ['追踪动向', `${(s.tags.slice(0,2).join(' / ') || s.cat)} · ${s.source}`],
+      ],
     }));
     render();
   } catch(error) {
@@ -974,19 +979,25 @@ function briefHtml(A){
       </div>`;
     }
     return `
-      <div class="brief-card" style="position: relative; display: flex; flex-direction: column; gap: 10px; padding: 16px 16px 14px; background: ${tint}; border: 1.5px solid var(--ds-ink-line); box-shadow: 4px 4px 0 rgba(22,19,15,.06);">
+      <div class="brief-card" style="position: relative; display: flex; flex-direction: column; gap: 10px; height: 100%; box-sizing: border-box; padding: 16px 16px 14px; background: ${tint}; border: 1.5px solid var(--ds-ink-line); box-shadow: 4px 4px 0 rgba(22,19,15,.06);">
         <div style="display: flex; align-items: flex-start; gap: 12px;">
           <span style="font-family: ${mono}; font-size: 34px; font-weight: 700; line-height: .9; color: ${c}; letter-spacing: -.03em; flex: none;">${num}</span>
-          <div style="font-size: 15px; font-weight: 700; line-height: 1.35; letter-spacing: -.01em; color: var(--ds-text); background: ${chip}; border-left: 3px solid ${c}; padding: 6px 10px;">${esc(title)}</div>
+          <div style="font-size: 20px; font-weight: 700; line-height: 1.35; letter-spacing: -.01em; color: var(--ds-text); background: ${chip}; border-left: 3px solid ${c}; padding: 6px 10px;">${esc(title)}</div>
           <div style="margin-left:auto; display:flex; align-items:center; gap:6px; flex:none;">${refsHtml}</div>
         </div>
-        <div style="font-size: 15px; line-height: 1.7; color: ${UI.text2}; border-top: 1px solid ${cbd}; padding-top: 10px;">${esc(rest)}</div>
+        <div style="font-size: 16px; line-height: 1.75; color: ${UI.text2}; border-top: 1px solid ${cbd}; padding-top: 10px;">${esc(rest)}</div>
       </div>`;
   };
   const featuredHtml = bullets.length ? briefCard(bullets[0], 0, true) : '';
   const gridHtml = bullets.slice(1).map((b,i)=>briefCard(b, i+1, false)).join('');
 
-  const personalHtml = personal.map(p => `
+  const personalHtml = personal.map(p => {
+    const basisHtml = (p.basis || []).map(([label,value])=>`
+      <div style="display:grid; grid-template-columns:84px minmax(0,1fr); gap:8px; align-items:start;">
+        <span style="font-family:${mono}; font-size:10.5px; color:${UI.text3};">${esc(label)}</span>
+        <span style="font-size:11.5px; line-height:1.45; color:${UI.text2};">${esc(value)}</span>
+      </div>`).join('');
+    return `
     <div class="personal-card" onclick="App.openDetail(${p.ref})" style="cursor: pointer; display: flex; flex-direction: column; background: ${UI.card}; border: 1.5px solid var(--ds-ink-line); box-shadow: 3px 3px 0 ${A.accentBorder}; overflow: hidden;">
       <div style="display: flex; align-items: center; gap: 8px; padding: 9px 13px; border-bottom: 1px solid var(--ds-ink-line);">
         <span style="font-family: ${mono}; font-size: 10.5px; font-weight: 700; letter-spacing: .04em; color: #fff; background: ${A.accent}; padding: 3px 9px;">匹配 ${p.match}%</span>
@@ -996,8 +1007,10 @@ function briefHtml(A){
       <div style="display: flex; flex-direction: column; gap: 11px; padding: 15px 14px 16px;">
         <div style="font-size: 15px; font-weight: 700; line-height: 1.5; color: var(--ds-text);">${esc(p.title)}</div>
         <div style="font-size: 12.5px; line-height: 1.7; color: ${UI.text2}; border-left: 3px solid ${A.accent}; padding-left: 11px;">${esc(p.reason)}</div>
+        <div style="display:flex; flex-direction:column; gap:7px; padding-top:10px; border-top:1px dashed ${UI.border};">${basisHtml}</div>
       </div>
-    </div>`).join('');
+    </div>`;
+  }).join('');
 
   const sortFns = {
     impact: (a,b)=>b.impact-a.impact,
