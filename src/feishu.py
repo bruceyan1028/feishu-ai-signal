@@ -200,7 +200,7 @@ def ensure_entry_enrichment_fields(token: str) -> None:
         raise FeishuError(f"Feishu list fields failed: {data.get('code')} {data.get('msg')}")
     existing = {field.get("field_name") for field in (data.get("data") or {}).get("items") or []}
     headers = {"Authorization": f"Bearer {token}", "Content-Type": "application/json; charset=utf-8"}
-    for field_name, field_type in (("中文标题", 1), ("图片链接", 15)):
+    for field_name, field_type in (("中文标题", 1), ("图片链接", 15), ("媒体资源", 1)):
         if field_name in existing:
             continue
         created = _SESSION.post(

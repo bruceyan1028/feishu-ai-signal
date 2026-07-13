@@ -116,35 +116,81 @@ ANALYSIS_PROMPT = """你是资深 AI 行业分析师。请阅读下面这条 AI 
 
 
 def _llm_json(prompt: str) -> dict[str, Any]:
+    import time
+
     import requests
 
-    if config.LLM_BASE_URL.endswith("/chat/completions"):
-        urls = [config.LLM_BASE_URL]
+    base = config.LLM_BASE_URL.rstrip("/")
+    if base.endswith("/chat/completions"):
+        endpoints = [
+            ("chat", base),
+            ("responses", f"{base[:-len('chat/completions')]}responses"),
+        ]
+    elif base.endswith("/responses"):
+        endpoints = [("responses", base)]
     else:
-        urls = [f"{config.LLM_BASE_URL}/chat/completions"]
-    if not config.LLM_BASE_URL.endswith(("/v1", "/chat/completions")):
-        urls.append(f"{config.LLM_BASE_URL}/v1/chat/completions")
+        chat_url = f"{base}/chat/completions"
+        if not base.endswith("/v1"):
+            chat_url = f"{base}/v1/chat/completions"
+        endpoints = [
+            ("chat", chat_url),
+            ("responses", chat_url.replace("/chat/completions", "/responses")),
+        ]
+
     resp = None
-    for url in urls:
-        resp = requests.post(
-            url,
-            headers={
-                "Authorization": f"Bearer {config.LLM_API_KEY}",
-                "Content-Type": "application/json",
-            },
-            json={
-                "model": config.LLM_MODEL,
-                "messages": [{"role": "user", "content": prompt}],
-                "temperature": 0.3,
-                "response_format": {"type": "json_object"},
-            },
-            timeout=120,
-        )
-        if resp.status_code not in {404, 405}:
+    response_mode = "chat"
+    for mode, url in endpoints:
+        body: dict[str, Any] = {"model": config.LLM_MODEL}
+        if mode == "responses":
+            body["input"] = prompt
+        else:
+            body.update(
+                {
+                    "messages": [{"role": "user", "content": prompt}],
+                    "temperature": 0.3,
+                    "response_format": {"type": "json_object"},
+                }
+            )
+        for attempt in range(3):
+            try:
+                resp = requests.post(
+                    url,
+                    headers={
+                        "Authorization": f"Bearer {config.LLM_API_KEY}",
+                        "Content-Type": "application/json",
+                    },
+                    json=body,
+                    timeout=180,
+                )
+            except (requests.Timeout, requests.ConnectionError):
+                if attempt == 2:
+                    raise
+                time.sleep(2**attempt)
+                continue
+            if resp.status_code in {429, 500, 502, 503, 504} and attempt < 2:
+                time.sleep(2**attempt)
+                continue
+            break
+        if resp is not None and resp.status_code not in {404, 405}:
+            response_mode = mode
             break
     assert resp is not None
     resp.raise_for_status()
-    content = resp.json()["choices"][0]["message"]["content"]
+    payload = resp.json()
+    if response_mode == "chat":
+        content = payload["choices"][0]["message"]["content"]
+    else:
+        content = str(payload.get("output_text") or "")
+        if not content:
+            content = "".join(
+                str(part.get("text") or "")
+                for item in payload.get("output") or []
+                for part in item.get("content") or []
+                if isinstance(part, dict) and part.get("type") in {"output_text", "text"}
+            )
+    content = content.strip()
+    if content.startswith("```"):
+        content = content.removeprefix("```json").removeprefix("```").removesuffix("```").strip()
     return json.loads(content)
 
 

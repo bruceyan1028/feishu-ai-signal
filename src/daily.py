@@ -47,6 +47,17 @@ def link(value: Any) -> str:
     return str(value or "")
 
 
+def media_assets(value: Any) -> dict[str, Any]:
+    raw = scalar(value)
+    if not raw:
+        return {"images": [], "videos": []}
+    try:
+        parsed = json.loads(str(raw))
+        return parsed if isinstance(parsed, dict) else {"images": [], "videos": []}
+    except (TypeError, ValueError):
+        return {"images": [], "videos": []}
+
+
 def date_ms(day: str) -> int:
     return int(datetime.strptime(day, "%Y-%m-%d").replace(tzinfo=CN_TZ).timestamp() * 1000)
 
@@ -156,6 +167,7 @@ def _signal_from_fields(record_id: str, fields: dict[str, Any], analysis: dict[s
         "urgency": analysis["urgency"],
         "tags": analysis["topics"],
         "imageUrl": link(fields.get("图片链接")),
+        "mediaAssets": media_assets(fields.get("媒体资源")),
     }
 
 
@@ -232,6 +244,9 @@ def generate(day: str | None = None) -> dict[str, Any]:
                     },
                 }
             )
+            if len(updates) >= 3:
+                feishu.batch_update_records(token, config.FEISHU_ENTRY_TABLE_ID, updates)
+                updates.clear()
         analyzed.append(_signal_from_fields(str(item["record_id"]), fields, analysis))
     feishu.batch_update_records(token, config.FEISHU_ENTRY_TABLE_ID, updates)
 
@@ -240,6 +255,18 @@ def generate(day: str | None = None) -> dict[str, Any]:
     image_updates = []
     seen_images: set[str] = set()
     for signal in signals:
+        media = signal.get("mediaAssets") or {"images": [], "videos": []}
+        if "arxiv.org/" in str(signal.get("url") or "") and not media.get("images"):
+            figures = rss.fetch_arxiv_figures(str(signal.get("url") or ""))
+            if figures:
+                media["images"] = figures
+                signal["mediaAssets"] = media
+                image_updates.append(
+                    {
+                        "record_id": signal["recordId"],
+                        "fields": {"媒体资源": json.dumps(media, ensure_ascii=False)},
+                    }
+                )
         image_url = str(signal.get("imageUrl") or "").strip()
         image_key = image_url.split("?", 1)[0].split("#", 1)[0].lower()
         if image_key in seen_images:
@@ -259,7 +286,15 @@ def generate(day: str | None = None) -> dict[str, Any]:
         if image_url:
             seen_images.add(image_url.split("?", 1)[0].split("#", 1)[0].lower())
     if image_updates:
-        feishu.batch_update_records(token, config.FEISHU_ENTRY_TABLE_ID, image_updates)
+        merged_updates: dict[str, dict[str, Any]] = {}
+        for update in image_updates:
+            record_id = str(update["record_id"])
+            merged_updates.setdefault(record_id, {}).update(update["fields"])
+        feishu.batch_update_records(
+            token,
+            config.FEISHU_ENTRY_TABLE_ID,
+            [{"record_id": record_id, "fields": fields} for record_id, fields in merged_updates.items()],
+        )
 
     numbered = "\n".join(f'[{i}] {s["title"]} — {s["summary"]}' for i, s in enumerate(signals, 1))
     synth = report._llm_json(

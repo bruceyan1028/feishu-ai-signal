@@ -41,6 +41,21 @@ def _best_image(entry: Any, body: str) -> str:
     return unescape(match.group(1)) if match else ""
 
 
+def _media_assets(entry: Any, body: str, page_url: str) -> dict[str, Any]:
+    images = []
+    for raw in re.findall(r"<img[^>]+src=[\"']([^\"']+)", body or "", re.I):
+        url = urljoin(page_url, unescape(raw))
+        if url.startswith(("http://", "https://")) and url not in images:
+            images.append(url)
+    videos = []
+    for raw in re.findall(r"<iframe[^>]+src=[\"']([^\"']+)", body or "", re.I):
+        url = urljoin(page_url, unescape(raw))
+        match = re.search(r"(?:youtube\.com/embed/|youtu\.be/)([\w-]+)", url)
+        if match:
+            videos.append({"url": url, "embedUrl": f"https://www.youtube-nocookie.com/embed/{match.group(1)}"})
+    return {"images": [{"url": url, "alt": ""} for url in images[:4]], "videos": videos[:1]}
+
+
 def _meta_image_from_html(html: str, page_url: str) -> str:
     """从原文 meta 标签提取与文章绑定的封面图。"""
     for tag in re.findall(r"<meta\b[^>]*>", html, re.I):
@@ -73,6 +88,44 @@ def fetch_article_image(page_url: str) -> str:
         return ""
 
 
+def fetch_arxiv_figures(page_url: str, limit: int = 3) -> list[dict[str, str]]:
+    """从 arXiv HTML 版提取论文图表；它们与 PDF 中的 figure 对应。"""
+    match = re.search(r"arxiv\.org/(?:abs|pdf|html)/([^?#/]+)", page_url, re.I)
+    if not match:
+        return []
+    paper_id = match.group(1).removesuffix(".pdf")
+    for html_url in (f"https://arxiv.org/html/{paper_id}", f"https://ar5iv.labs.arxiv.org/html/{paper_id}"):
+        try:
+            response = requests.get(
+                html_url,
+                headers={"User-Agent": "Mozilla/5.0 (compatible; AI-Signal/1.0)"},
+                timeout=30,
+            )
+            if response.status_code == 404:
+                continue
+            response.raise_for_status()
+        except requests.RequestException:
+            continue
+        figures = []
+        for block in re.findall(r"<figure\b[\s\S]*?</figure>", response.text, re.I):
+            image = re.search(r"<img[^>]+src=[\"']([^\"']+)", block, re.I)
+            if not image:
+                continue
+            caption = re.search(r"<figcaption\b[^>]*>([\s\S]*?)</figcaption>", block, re.I)
+            alt = re.sub(r"<[^>]+>", " ", caption.group(1)) if caption else ""
+            figures.append(
+                {
+                    "url": urljoin(response.url, unescape(image.group(1))),
+                    "alt": re.sub(r"\s+", " ", unescape(alt)).strip(),
+                }
+            )
+            if len(figures) >= limit:
+                break
+        if figures:
+            return figures
+    return []
+
+
 def fetch_feed_sources(feeds: list[dict[str, Any]]) -> list[dict[str, Any]]:
     """逐个抓取 RSS 源，容错：单个源失败不影响其它源（对应 onError: continueRegularOutput）。"""
     raw_items: list[dict[str, Any]] = []
@@ -88,12 +141,14 @@ def fetch_feed_sources(feeds: list[dict[str, Any]]) -> list[dict[str, Any]]:
             continue
         for entry in parsed.entries:
             body = _best_body(entry)
+            page_url = entry.get("link") or entry.get("id") or ""
             raw_items.append(
                 {
                     "title": entry.get("title", ""),
-                    "url": entry.get("link") or entry.get("id") or "",
+                    "url": page_url,
                     "body": body,
                     "image_url": _best_image(entry, body),
+                    "media_assets": _media_assets(entry, body, page_url),
                     "published_raw": (
                         entry.get("published")
                         or entry.get("updated")

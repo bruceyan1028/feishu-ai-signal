@@ -69,6 +69,13 @@ class PipelineTests(unittest.TestCase):
             rss._meta_image_from_html(meta, "https://example.com/news/1"),
             "https://example.com/images/article.jpg",
         )
+        media = rss._media_assets(
+            {},
+            '<img src="/figure-1.png"><iframe src="https://www.youtube.com/embed/demo123"></iframe>',
+            "https://example.com/paper",
+        )
+        self.assertEqual(media["images"][0]["url"], "https://example.com/figure-1.png")
+        self.assertEqual(media["videos"][0]["embedUrl"], "https://www.youtube-nocookie.com/embed/demo123")
 
 
 class DailyTests(unittest.TestCase):

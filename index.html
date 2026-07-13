@@ -158,7 +158,7 @@ const state = {
   filter: '全部',
   srcTab: '全部',
   sortKey: 'impact',
-  signalLimit: 6,
+  signalLimit: 10,
   showScoreBars: true,
   detailRank: null,
   detailTab: '正文',
@@ -261,6 +261,21 @@ let personal = [
   { ref: 9, match: 88, title: 'Building a serverless A2A gateway for agent discovery, routing, and access control', reason: '命中关注方向「Agent 基础设施」— serverless A2A 网关与你在评估的多智能体路由架构高度重合。', basis: [['内部相关文档','技术决策记录库'],['追踪动向','Agent 路由 / A2A 协议']] },
   { ref: 6, match: 82, title: "How NVIDIA's Inference Software Stack Powers the Lowest Token Cost", reason: '命中关注方向「推理成本」— 每 token 成本拆解框架,可用于本季度推理预算测算。', basis: [['内部相关文档','产品路线图与发布计划'],['追踪动向','推理成本 / GPU 供给']] },
 ];
+
+const demoCommentPool = [
+  ['李晨','这条对我们当前的技术选型很有参考价值，建议补一轮内部基准测试。'],
+  ['王珂','原文里的工程约束比跑分更值得关注，可以纳入下次架构评审。'],
+  ['陈默','已加入持续追踪，后续如果有独立复现或定价变化再同步。'],
+];
+function seedDemoComments(list){
+  list.forEach((s,index)=>{
+    if((state.comments[s.rank]||[]).length) return;
+    state.comments[s.rank] = demoCommentPool.slice(0,2).map(([user,text],offset)=>({
+      id:1000+index*10+offset, user, dept:offset?'产品策略':'平台架构',
+      text, likes:12-index%5-offset*3, liked:false, time:offset?'2 小时前':'45 分钟前',
+    }));
+  });
+}
 
 const sourceUrls = {
   'AWS AI / Bedrock Blog': 'https://aws.amazon.com/blogs/machine-learning/',
@@ -541,6 +556,7 @@ async function loadBrief(){
       action: Number(s.actionability) || 0,
       tags: Array.isArray(s.tags) ? s.tags : [],
       image: s.imageUrl || '',
+      mediaAssets: s.mediaAssets || {images:[], videos:[]},
     }));
     const seenImages = new Set();
     signals.forEach(s=>{
@@ -554,12 +570,13 @@ async function loadBrief(){
       ref:s.rank,
       match:Math.max(82, 96-index*5),
       title:s.zhTitle,
-      reason:`命中你的高优先级情报范围「${s.tags[0] || s.cat}」；该信号影响分 ${s.impact}，建议优先查看。`,
+      reason:s.summary,
       basis:[
         ['内部相关文档', relatedDocs[index]],
         ['追踪动向', `${(s.tags.slice(0,2).join(' / ') || s.cat)} · ${s.source}`],
       ],
     }));
+    seedDemoComments(signals);
     render();
   } catch(error) {
     console.warn('真实简报加载失败，保留内置演示数据：', error);
@@ -569,6 +586,7 @@ const App = {
   goBrief(){ state.page='brief'; state.detailRank=null; render(); },
   goSources(){ state.page='sources'; state.detailRank=null; render(); },
   goTasks(){ state.page='tasks'; state.detailRank=null; render(); },
+  goTimeline(){ state.page='tasks'; state.taskTab='timeline'; state.detailRank=null; render(); },
   setTaskTab(t){ state.taskTab=t; render(); },
   setTimelineEntity(e){ state.timelineEntity=e; render(); },
   openDetail(rank){ state.detailRank=rank; state.detailTab='正文'; state.notesOpen=false; state.dialogueOpen=false; renderDetailLayer(); const ov=document.querySelector('.detail-overlay'); if(ov) ov.scrollTop=0; },
@@ -651,9 +669,9 @@ const App = {
     };
     requestAnimationFrame(()=>requestAnimationFrame(go));
   },
-  setFilter(f){ state.filter=f; state.signalLimit=6; render(); },
+  setFilter(f){ state.filter=f; state.signalLimit=10; render(); },
   setSort(v){ state.sortKey=v; render(); },
-  showMoreSignals(){ state.signalLimit += 6; render(); },
+  showMoreSignals(){ state.signalLimit += 10; render(); },
   setSrcTab(t){ state.srcTab=t; render(); },
   toggleBars(){ state.showScoreBars=!state.showScoreBars; render(); },
   async reloadSources(){ await loadSources(); },
@@ -963,6 +981,11 @@ function briefHtml(A){
     const rest = m ? m[2] : clause ? clause[2] : b.text;
     const num = String(i+1).padStart(2,'0');
     const refsHtml = b.refs.map(r=>`<button class="ref" onclick="event.stopPropagation(); App.jumpTo(${r})" title="跳转到 #${r} 信号卡片" style="display: inline-flex; align-items: center; justify-content: center; min-width: 20px; height: 19px; padding: 0 6px; border: 1px solid ${cbd}; background: ${chip}; color: ${c}; font-size: 11px; font-weight: 700; font-family: ${mono}; cursor: pointer;">${r}</button>`).join(`<span style="color:${cbd}; font-weight:700;">/</span>`);
+    const compactRefs = title.length > 18 || b.refs.length > 4;
+    const refsGridHtml = b.refs.map(r=>`<button class="ref" onclick="event.stopPropagation(); App.jumpTo(${r})" title="跳转到 #${r} 信号卡片" style="display:inline-flex; align-items:center; justify-content:center; min-width:${compactRefs?17:20}px; height:${compactRefs?17:20}px; padding:0 ${compactRefs?3:5}px; border:1px solid ${cbd}; background:${chip}; color:${c}; font-size:${compactRefs?9.5:10.5}px; font-weight:700; font-family:${mono}; cursor:pointer;">${r}</button>`).join('');
+    const balancedTitle = title.length > 22
+      ? `${esc(title.slice(0,Math.floor(title.length*.45)))}<br>${esc(title.slice(Math.floor(title.length*.45)))}`
+      : esc(title);
     if(featured){
       return `
       <div class="brief-card" style="position: relative; display: flex; align-items: stretch; background: ${tint}; border: 1.5px solid var(--ds-ink-line); box-shadow: 5px 5px 0 rgba(22,19,15,.08); overflow: hidden;">
@@ -982,32 +1005,44 @@ function briefHtml(A){
       <div class="brief-card" style="position: relative; display: flex; flex-direction: column; gap: 10px; height: 100%; box-sizing: border-box; padding: 16px 16px 14px; background: ${tint}; border: 1.5px solid var(--ds-ink-line); box-shadow: 4px 4px 0 rgba(22,19,15,.06);">
         <div style="display: flex; align-items: flex-start; gap: 12px;">
           <span style="font-family: ${mono}; font-size: 34px; font-weight: 700; line-height: .9; color: ${c}; letter-spacing: -.03em; flex: none;">${num}</span>
-          <div style="font-size: 20px; font-weight: 700; line-height: 1.35; letter-spacing: -.01em; color: var(--ds-text); background: ${chip}; border-left: 3px solid ${c}; padding: 6px 10px;">${esc(title)}</div>
-          <div style="margin-left:auto; display:flex; align-items:center; gap:6px; flex:none;">${refsHtml}</div>
+          <div style="flex:1; min-width:0; font-size:20px; font-weight:700; line-height:1.35; letter-spacing:-.01em; color:var(--ds-text); background:${chip}; border-left:3px solid ${c}; padding:6px 10px; white-space:${title.length<=22?'nowrap':'normal'};">${balancedTitle}</div>
+          <div style="margin-left:auto; display:grid; grid-template-columns:repeat(2,minmax(0,auto)); gap:${compactRefs?3:5}px; flex:none;">${refsGridHtml}</div>
         </div>
         <div style="font-size: 16px; line-height: 1.75; color: ${UI.text2}; border-top: 1px solid ${cbd}; padding-top: 10px;">${esc(rest)}</div>
       </div>`;
   };
   const featuredHtml = bullets.length ? briefCard(bullets[0], 0, true) : '';
-  const gridHtml = bullets.slice(1).map((b,i)=>briefCard(b, i+1, false)).join('');
+  const promoteLast = bullets.length > 2 && bullets.length % 2 === 0;
+  const gridBullets = promoteLast ? bullets.slice(1,-1) : bullets.slice(1);
+  const gridHtml = gridBullets.map((b,i)=>briefCard(b, i+1, false)).join('');
+  const trailingFeaturedHtml = promoteLast
+    ? `<div style="margin-top:16px;">${briefCard(bullets[bullets.length-1], bullets.length-1, true)}</div>`
+    : '';
 
   const personalHtml = personal.map(p => {
-    const basisHtml = (p.basis || []).map(([label,value])=>`
-      <div style="display:grid; grid-template-columns:84px minmax(0,1fr); gap:8px; align-items:start;">
-        <span style="font-family:${mono}; font-size:10.5px; color:${UI.text3};">${esc(label)}</span>
-        <span style="font-size:11.5px; line-height:1.45; color:${UI.text2};">${esc(value)}</span>
-      </div>`).join('');
+    const basisHtml = (p.basis || []).map(([label,value])=>{
+      const isDoc = label==='内部相关文档';
+      const color = isDoc ? '#2563a6' : '#187a56';
+      const bg = isDoc ? '#edf5ff' : '#edf9f3';
+      const action = isDoc ? 'App.goSources()' : 'App.goTimeline()';
+      return `<button onclick="event.stopPropagation();${action}" title="${esc(value)}" style="min-width:0; flex:1; display:flex; align-items:center; gap:6px; padding:7px 9px; border:0; border-left:3px solid ${color}; background:${bg}; color:${color}; cursor:pointer;">
+        <span style="flex:none; font-family:${mono}; font-size:10.5px; font-weight:750;">${esc(label)}</span>
+        <span style="min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-size:11.5px;">${esc(value)}</span>
+      </button>`;
+    }).join('');
     return `
-    <div class="personal-card" onclick="App.openDetail(${p.ref})" style="cursor: pointer; display: flex; flex-direction: column; background: ${UI.card}; border: 1.5px solid var(--ds-ink-line); box-shadow: 3px 3px 0 ${A.accentBorder}; overflow: hidden;">
+    <div class="personal-card" onclick="App.openDetail(${p.ref})" style="cursor: pointer; display: flex; flex-direction: column; height:100%; box-sizing:border-box; background: ${UI.card}; border: 1.5px solid var(--ds-ink-line); box-shadow: 3px 3px 0 ${A.accentBorder}; overflow: hidden;">
       <div style="display: flex; align-items: center; gap: 8px; padding: 9px 13px; border-bottom: 1px solid var(--ds-ink-line);">
         <span style="font-family: ${mono}; font-size: 10.5px; font-weight: 700; letter-spacing: .04em; color: #fff; background: ${A.accent}; padding: 3px 9px;">匹配 ${p.match}%</span>
         <span style="font-family: ${mono}; font-size: 11px; color: ${UI.text3};">#${p.ref}</span>
         <span style="margin-left: auto; font-size: 11px; font-weight: 600; color: ${A.accent};">查看详情 →</span>
       </div>
-      <div style="display: flex; flex-direction: column; gap: 11px; padding: 15px 14px 16px;">
-        <div style="font-size: 15px; font-weight: 700; line-height: 1.5; color: var(--ds-text);">${esc(p.title)}</div>
-        <div style="font-size: 12.5px; line-height: 1.7; color: ${UI.text2}; border-left: 3px solid ${A.accent}; padding-left: 11px;">${esc(p.reason)}</div>
-        <div style="display:flex; flex-direction:column; gap:7px; padding-top:10px; border-top:1px dashed ${UI.border};">${basisHtml}</div>
+      <div style="flex:1; display:flex; flex-direction:column; padding:15px 14px 0;">
+        <div style="flex:1; display:flex; flex-direction:column; justify-content:center; gap:11px; padding:10px 0 14px;">
+          <div style="font-size: 18px; font-weight: 700; line-height: 1.45; color: var(--ds-text);">${esc(p.title)}</div>
+          <div style="font-size: 14.5px; line-height: 1.7; color: ${UI.text2}; border-left: 3px solid ${A.accent}; padding-left: 11px;">${esc(p.reason)}</div>
+        </div>
+        <div style="display:flex; gap:7px; padding:10px 0 14px; border-top:1px dashed ${UI.border};">${basisHtml}</div>
       </div>
     </div>`;
   }).join('');
@@ -1100,6 +1135,7 @@ function briefHtml(A){
           <div style="margin-bottom: 16px;">${featuredHtml}</div>
           <!-- 要点 2-5 自适应为两列两行,与头条同宽 -->
           <div class="brief-grid">${gridHtml}</div>
+          ${trailingFeaturedHtml}
         </div>
       </div>
     </section>
@@ -1115,8 +1151,7 @@ function briefHtml(A){
               <h2 style="margin: 0; font-size: 21px; font-weight: 700; letter-spacing: -.01em; color: #faf7f0;">与我相关</h2>
               <span style="font-size: 12px; color: #8f887a;">基于你的关注方向匹配 · RAG 后端选型 / Agent 基础设施 / 推理成本</span>
             </div>
-            <p style="margin: 0 0 24px; font-size: 12px; color: #6f685e;">匹配规则可在「数据源定制」页调整优先级</p>
-            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;">${personalHtml}</div>
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 24px;">${personalHtml}</div>
           </div>
         </div>
       </div>
@@ -1212,8 +1247,8 @@ function detailMediaHtml(A, s){
       ${clips.map((c,i)=>`<div style="display: flex; gap: 9px; align-items: baseline; margin-bottom: 5px;"><span style="flex: none; font-family: 'Geist Mono', monospace; font-size: 10.5px; color: ${A.accentBright};">0${i*6+2}:${(i*17+11)%60 < 10 ? '0' : ''}${(i*17+11)%60}</span><span style="font-size: 12.5px; line-height: 1.6; color: ${UI.text2};">${esc(c)}</span></div>`).join('')}
     </div>`;
   }
-  // 默认:文章 → 相关配图封面
-  return `<div style="margin-bottom: 24px;">${coverHtml(A, s, 300)}</div>`;
+  // 文章原图在正文语境中展示，避免与信号卡封面重复占位。
+  return '';
 }
 
 // 团队评论区(飞书同公司可见,按点赞排序)
@@ -1313,6 +1348,14 @@ function articleBody(A, s){
   const cmt = (x, who, note) => `<span class="note-cmt">${x}<span class="cmt-pop"><b>${esc(who)}</b> · ${esc(note)}</span></span>`;
   const P = html => `<p style="margin: 0 0 16px; font-size: 15px; line-height: 2; color: ${UI.text2};">${html}</p>`;
   const lead = `<p style="margin: 0 0 18px; font-size: 16px; line-height: 1.9; font-weight: 600; color: var(--ds-text);">${hl(esc(s.summary))}</p>`;
+  const images = s.kind==='论文'
+    ? (s.mediaAssets?.images || []).filter(item=>item?.url).slice(0,3)
+    : [];
+  const videos = (s.mediaAssets?.videos || []).filter(item=>item?.embedUrl).slice(0,1);
+  const mediaHtml = [
+    ...images.map((item,index)=>`<figure style="margin:24px 0; border:1px solid ${UI.border}; background:#fff;"><img src="${esc(item.url)}" alt="${esc(item.alt||s.zhTitle)}" loading="lazy" style="display:block; width:100%; max-height:560px; object-fit:contain;"><figcaption style="padding:9px 12px; font-size:11.5px; color:${UI.text3};">原文${s.kind==='论文'?'图表':'图片'} ${index+1}${item.alt?` · ${esc(item.alt)}`:''}</figcaption></figure>`),
+    ...videos.map(item=>`<div style="position:relative; padding-top:56.25%; margin:24px 0; background:#000;"><iframe src="${esc(item.embedUrl)}" title="${esc(s.zhTitle)}" allow="accelerometer; autoplay; encrypted-media; picture-in-picture" allowfullscreen style="position:absolute; inset:0; width:100%; height:100%; border:0;"></iframe></div>`),
+  ].join('');
   // 完整报道体(叙事为主):导语 + 多段正文,内嵌划线与批注
   const paras = [
     lead,
@@ -1323,6 +1366,7 @@ function articleBody(A, s){
     P(`不过,${esc(s.source)} 也没有回避局限。文章在结尾提醒,官方给出的数据是在特定设定下取得的,${ul('与具体业务分布之间仍可能存在差距')};在做出替换或大规模采用的决定前,最稳妥的做法仍然是在自有评测集上跑一次回归。对于${s.tags.includes('端侧')?'端侧场景,还需要额外验证功耗与长时发热等工程指标':'对时延与稳定性敏感的场景,还应关注 p95 表现与回退方案'}。`),
     P(`从更长的时间线看,${esc(s.cat)} 领域近一个季度的竞争焦点,正在从"谁的能力更强"转向"谁能更便宜、更可靠、更合规地把它跑进生产"。${t2?`围绕 ${esc(t2)} 的讨论、`:''}配套工具链的成熟,以及第三方复现的跟进(详见「事件聚合」),共同说明这一方向已经从概念走向了工程。接下来值得持续跟踪的,是独立复现能否支持官方数据、定价与供给在放量后的走向,以及它对现有工作负载的实际迁移收益。`),
   ];
+  if(mediaHtml) paras.splice(3,0,mediaHtml);
   return paras.join('');
 }
 

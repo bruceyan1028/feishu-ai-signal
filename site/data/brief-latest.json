@@ -1,250 +1,939 @@
 {
   "date": "2026-07-13",
   "title": "AI Signal 每日情报 · 2026-07-13",
-  "intro": "今日真实 RSS 信号集中在开放机器人、企业模型托管、机器遗忘与多轮强化学习基础设施。与此同时，隐私处理、Agent 安全和推理硬件优化继续成为生产落地的关键约束。",
+  "intro": "企业级AI竞争正从模型能力转向生产部署、治理体系与推理效率，云平台正在加速补齐智能体和开放模型的工程化能力。与此同时，最新研究持续检验RAG、潜在推理和模型对齐的真实边界，强调评测质量与实验控制的重要性。",
   "bullets": [
     {
-      "text": "开放生态继续向机器人与研究工具链扩展，NVIDIA 与 Hugging Face 围绕 LeRobot 加强模型和框架供给。",
+      "title": "智能体平台进入生产治理阶段",
+      "text": "AlphaEvolve已通过Google Cloud面向企业商用，AWS也在身份认证、策略控制、持久化上下文、多租户和案例管理等环节推出配套能力，显示企业智能体的落地重点已转向部署、审计与规模化运营。",
       "refs": [
         1,
-        5
+        8,
+        11,
+        20
       ]
     },
     {
-      "text": "企业多模型平台加速扩容，MiniMax 进入 Bedrock，Hugging Face 到 SageMaker 的使用路径进一步缩短。",
+      "title": "语义层与工具设计决定智能体可靠性",
+      "text": "Stardog方案通过统一业务实体、指标和访问规则降低跨数据源查询冲突；MCP实践则指出，上下文膨胀、含混命名和参数设计会直接损害调用表现，应以精简响应、枚举约束和可操作错误信息提升准确率。",
+      "refs": [
+        9,
+        21
+      ]
+    },
+    {
+      "title": "推理基础设施加速精细化降本",
+      "text": "SageMaker正同时推进Nemotron 3无服务器微调、HyperPod可观测性与NVMe加载、预填充和解码分离，以及Unsloth动态量化部署，使企业能够分别优化定制成本、冷启动、首Token延迟和显存占用。",
+      "refs": [
+        6,
+        10,
+        18,
+        19
+      ]
+    },
+    {
+      "title": "工作流适配比工具升级更关键",
+      "text": "GitHub Copilot代码审查在切换到共享CLI工具后曾出现成本上升和有效评论减少，团队通过重写贴合拉取请求审查流程的指令，在维持质量的同时将平均成本降低约20%。",
+      "refs": [
+        16
+      ]
+    },
+    {
+      "title": "研究转向验证增益是否真实稳健",
+      "text": "AgentKGV借助两阶段训练将长尾事实核验的宏平均F1提高9.4个百分点并减少搜索调用，HALO以选择性潜在精炼提高计算利用率；但失准研究发现部分再对齐现象受回答长度和数据表面特征影响，Discovery Bench也表明评测案例本身需要接受系统审查。",
+      "refs": [
+        5,
+        14,
+        15,
+        23
+      ]
+    },
+    {
+      "title": "AI资本与算力建设继续升温",
+      "text": "SK海力士完成创纪录的265亿美元美国融资并面临赴美建厂压力，Meta计划在加拿大首座数据中心投入逾130亿加元，语音初创公司Gradium则以1亿美元种子轮扩张湾区团队，资本继续向芯片、数据中心和垂直模型集中。",
       "refs": [
         2,
-        10
-      ]
-    },
-    {
-      "text": "模型治理从原则走向工程：选择性机器遗忘与图像 PII 自动遮盖分别覆盖知识删除和多模态隐私。",
-      "refs": [
-        3,
-        6
-      ]
-    },
-    {
-      "text": "Agent 与模型后训练基础设施继续深化，多轮强化学习和安全关键系统中的身份防护值得优先关注。",
-      "refs": [
-        4,
-        9
-      ]
-    },
-    {
-      "text": "AMD 的 MXFP4 图像生成优化与 SK Hynix 资本动向共同反映推理硬件和 HBM 供应链竞争。",
-      "refs": [
-        7,
-        8
+        13,
+        17
       ]
     }
   ],
   "signals": [
     {
-      "recordId": "recvoFuujUDmu5",
-      "title": "NVIDIA and Hugging Face Bring New Models and Frameworks to LeRobot for the Open Robotics Community",
-      "titleCn": "NVIDIA 与 Hugging Face 为 LeRobot 引入新模型与框架",
-      "source": "NVIDIA Blog",
-      "url": "https://blogs.nvidia.com/blog/hugging-face-lerobot-models-frameworks-open-robotics",
+      "recordId": "recvpeQOcTwTJH",
+      "title": "Solve harder problems with AlphaEvolve, now available to everyone on Google Cloud",
+      "titleCn": "Google Cloud全面开放算法优化智能体AlphaEvolve",
+      "source": "Google Cloud AI Blog",
+      "url": "https://cloud.google.com/blog/products/ai-machine-learning/alphaevolve-is-available-for-everyone",
       "category": "算力芯片云",
-      "publishedDate": "2026-07-07",
-      "summary": "NVIDIA 与 Hugging Face 为 LeRobot 引入新的模型与框架，面向开放机器人社区扩展机器人开发工具链。",
-      "why": "开源机器人模型与工具链的结合会降低具身智能实验门槛，值得机器人团队评估兼容性。",
+      "publishedDate": "2026-07-10",
+      "summary": "基于Gemini的代码优化与算法发现智能体AlphaEvolve已在Gemini Enterprise Agent Platform正式商用，可通过定义、评估、优化和部署四步流程生成面向生产环境的优化代码。早期用户已将其用于供应链、需求预测、半导体、基因组学、高性能计算和金融服务等领域。",
+      "why": "AlphaEvolve将智能体式代码搜索转化为可部署的企业云产品，并已展示供应链模型提升逾80%和需求预测误差降低逾5%的实际效果。",
       "impact": 88,
       "novelty": 82,
-      "actionability": 78,
-      "urgency": "高",
+      "actionability": 91,
+      "urgency": "中",
       "tags": [
         "AI",
-        "开源",
-        "硬件"
-      ],
-      "imageUrl": "https://blogs.nvidia.com/wp-content/uploads/2026/07/nv-gr00t-e2r-letobot-2up-KV-r2-1600x900-1.jpg"
-    },
-    {
-      "recordId": "recvoF0NJRmBni",
-      "title": "Run MiniMax models on Amazon Bedrock",
-      "titleCn": "MiniMax 模型登陆 Amazon Bedrock",
-      "source": "AWS AI / Bedrock Blog",
-      "url": "https://aws.amazon.com/blogs/machine-learning/run-minimax-models-on-amazon-bedrock",
-      "category": "算力芯片云",
-      "publishedDate": "2026-07-07",
-      "summary": "AWS 发布在 Amazon Bedrock 上运行 MiniMax 模型的实践，扩充托管模型选择。",
-      "why": "更多模型进入统一托管平台，会影响企业的模型路由、采购和多模型架构选择。",
-      "impact": 86,
-      "novelty": 74,
-      "actionability": 86,
-      "urgency": "高",
-      "tags": [
-        "LLM",
-        "产品"
-      ],
-      "imageUrl": "https://d2908q01vomqb2.cloudfront.net/f1f836cb4ea6efb2a0b1b99f41ad8b103eff4b59/2026/07/06/ML-21143.png"
-    },
-    {
-      "recordId": "recvoF0NJRHOM2",
-      "title": "Teaching models to forget: Selective unlearning with Amazon Nova",
-      "titleCn": "Amazon Nova 选择性机器遗忘：让模型精准忘记",
-      "source": "AWS AI / Bedrock Blog",
-      "url": "https://aws.amazon.com/blogs/machine-learning/teaching-models-to-forget-selective-unlearning-with-amazon-nova",
-      "category": "算力芯片云",
-      "publishedDate": "2026-07-07",
-      "summary": "AWS 介绍基于 Amazon Nova 的选择性机器遗忘方法，使模型能够定向移除特定知识或训练影响。",
-      "why": "机器遗忘关系到隐私删除、版权合规和模型治理，是生产模型生命周期的重要能力。",
-      "impact": 84,
-      "novelty": 88,
-      "actionability": 70,
-      "urgency": "高",
-      "tags": [
-        "AI",
-        "监管",
+        "Agent",
+        "产品",
         "推理"
       ],
-      "imageUrl": "https://d2908q01vomqb2.cloudfront.net/f1f836cb4ea6efb2a0b1b99f41ad8b103eff4b59/2026/07/06/ml-21116.png"
+      "imageUrl": "https://storage.googleapis.com/gweb-cloudblog-publish/images/1-Blog_hero_pic.max-2000x2000.png",
+      "mediaAssets": {
+        "images": [],
+        "videos": []
+      }
     },
     {
-      "recordId": "recvoF0NJRbvaW",
-      "title": "Deploying Multi-Turn RL Infrastructure for Amazon Nova on Amazon SageMaker HyperPod",
-      "titleCn": "在 SageMaker HyperPod 部署 Amazon Nova 多轮强化学习基础设施",
-      "source": "AWS AI / Bedrock Blog",
-      "url": "https://aws.amazon.com/blogs/machine-learning/deploying-multi-turn-rl-infrastructure-for-amazon-nova-on-amazon-sagemaker-hyperpod",
-      "category": "算力芯片云",
-      "publishedDate": "2026-07-07",
-      "summary": "AWS 介绍在 SageMaker HyperPod 上为 Amazon Nova 部署多轮强化学习基础设施的方法。",
-      "why": "多轮强化学习基础设施是提升 Agent 长任务表现和定制模型能力的关键工程环节。",
-      "impact": 80,
-      "novelty": 81,
-      "actionability": 72,
-      "urgency": "中",
-      "tags": [
-        "Agent",
-        "推理",
-        "硬件"
-      ],
-      "imageUrl": "https://d2908q01vomqb2.cloudfront.net/f1f836cb4ea6efb2a0b1b99f41ad8b103eff4b59/2026/06/25/20450.png"
-    },
-    {
-      "recordId": "recvoF0NJRZu1X",
-      "title": "How Open Models Are Driving AI Research",
-      "titleCn": "开放模型如何推动 AI 研究",
-      "source": "NVIDIA Blog",
-      "url": "https://blogs.nvidia.com/blog/open-models-icml-2026",
-      "category": "算力芯片云",
-      "publishedDate": "2026-07-07",
-      "summary": "NVIDIA 讨论开放模型如何推动 AI 研究，并聚焦 ICML 2026 相关开放生态进展。",
-      "why": "开放模型生态的成熟度决定研究复现、私有部署和供应商多元化的可行性。",
-      "impact": 79,
-      "novelty": 67,
-      "actionability": 66,
+      "recordId": "recvpeQOcT7UDm",
+      "title": "SK Hynix raises $26.5B in the biggest foreign IPO in US history, is urged to build new US fabs",
+      "titleCn": "SK海力士完成265亿美元美国史上最大外国企业IPO，并被敦促赴美建厂",
+      "source": "TechCrunch AI",
+      "url": "https://techcrunch.com/2026/07/10/sk-hynix-raises-26-5b-in-the-biggest-foreign-ipo-in-us-history-is-urged-to-build-new-us-fabs",
+      "category": "创业融资并购",
+      "publishedDate": "2026-07-11",
+      "summary": "AI芯片热潮推动SK海力士完成265亿美元融资，创下外国企业在美国IPO的最高纪录。与此同时，SK海力士和三星被要求在美国建设芯片工厂。",
+      "why": "这反映出AI芯片需求正同时推高半导体企业的融资规模，并加速美国本土制造布局。",
+      "impact": 88,
+      "novelty": 82,
+      "actionability": 67,
       "urgency": "中",
       "tags": [
         "AI",
-        "开源"
-      ],
-      "imageUrl": "https://blogs.nvidia.com/wp-content/uploads/2026/07/ICML-Blog-Featured-Image.jpg"
-    },
-    {
-      "recordId": "recvoF0NJRdA0m",
-      "title": "Automatically redact PII in images with Amazon Nova",
-      "titleCn": "使用 Amazon Nova 自动遮盖图片中的个人信息",
-      "source": "AWS AI / Bedrock Blog",
-      "url": "https://aws.amazon.com/blogs/machine-learning/automatically-redact-pii-in-images-with-amazon-nova",
-      "category": "算力芯片云",
-      "publishedDate": "2026-07-07",
-      "summary": "AWS 展示使用 Amazon Nova 自动识别并遮盖图片中个人身份信息的方案。",
-      "why": "图像 PII 自动处理可直接降低数据流转和多模态应用中的隐私合规风险。",
-      "impact": 78,
-      "novelty": 68,
-      "actionability": 84,
-      "urgency": "高",
-      "tags": [
-        "多模态",
-        "监管",
-        "产品"
-      ],
-      "imageUrl": "https://d2908q01vomqb2.cloudfront.net/f1f836cb4ea6efb2a0b1b99f41ad8b103eff4b59/2026/06/23/20185.png"
-    },
-    {
-      "recordId": "recvoF0NJR754P",
-      "title": "Accelerating Diffusers and xDiT Image Generation with MXFP4 using AMD Quark on AMD Instinct™ MI350 GPUs",
-      "titleCn": "AMD MI350 GPU 以 MXFP4 加速 Diffusers 与 xDiT 图像生成",
-      "source": "AMD Instinct / ROCm",
-      "url": "https://rocm.blogs.amd.com/artificial-intelligence/quark-xdit/readme.html",
-      "category": "算力芯片云",
-      "publishedDate": "2026-07-06",
-      "summary": "AMD 展示在 Instinct MI350 GPU 上结合 AMD Quark 与 MXFP4 加速 Diffusers 和 xDiT 图像生成。",
-      "why": "低精度推理优化会改变图像生成吞吐与单位成本，也增强 AMD 在 AI 推理市场的竞争力。",
-      "impact": 77,
-      "novelty": 76,
-      "actionability": 74,
-      "urgency": "中",
-      "tags": [
-        "多模态",
-        "推理",
-        "硬件"
-      ],
-      "imageUrl": ""
-    },
-    {
-      "recordId": "recvoF0NJR5IqY",
-      "title": "US investors will soon get access to SK Hynix, another memory maker riding the AI boom",
-      "titleCn": "美国投资者即将获得 SK Hynix 投资渠道",
-      "source": "TechCrunch AI",
-      "url": "https://techcrunch.com/2026/07/06/us-investors-will-soon-get-access-to-sk-hynix-another-memory-maker-riding-the-ai-boom",
-      "category": "创业融资并购",
-      "publishedDate": "2026-07-07",
-      "summary": "TechCrunch 报道 SK Hynix 计划让美国投资者获得投资渠道，反映 AI 热潮对高带宽内存厂商的持续推动。",
-      "why": "HBM 供给和资本扩张直接影响 AI 加速器成本与交付周期。",
-      "impact": 76,
-      "novelty": 62,
-      "actionability": 55,
-      "urgency": "中",
-      "tags": [
         "硬件",
         "融资"
       ],
-      "imageUrl": "https://techcrunch.com/wp-content/uploads/2026/06/Chip-chips-dollar-signs-money.png?resize=1200,960"
+      "imageUrl": "https://techcrunch.com/wp-content/uploads/2026/07/SK-Hynix.jpg?resize=1200,675",
+      "mediaAssets": {
+        "images": [],
+        "videos": []
+      }
     },
     {
-      "recordId": "recvoF0NJReXRX",
-      "title": "Shift into high gear with agents: Securing the software-defined vehicle",
-      "titleCn": "用 Agent 为软件定义汽车构建安全防线",
-      "source": "Google Cloud AI Blog",
-      "url": "https://cloud.google.com/blog/products/identity-security/shift-into-high-gear-with-agents-securing-the-software-defined-vehicle",
-      "category": "算力芯片云",
-      "publishedDate": "2026-07-07",
-      "summary": "Google Cloud 讨论在软件定义汽车中部署 Agent 时的安全措施与身份防护。",
-      "why": "Agent 进入汽车等安全关键系统后，权限边界、身份认证和审计必须前置设计。",
-      "impact": 74,
-      "novelty": 73,
-      "actionability": 75,
+      "recordId": "recvpeQOcTQMBD",
+      "title": "How GitHub gave every repository a durable owner",
+      "titleCn": "GitHub 为每个活跃仓库建立持久所有权机制",
+      "source": "Microsoft Copilot / GitHub Copilot",
+      "url": "https://github.blog/security/application-security/how-github-gave-every-repository-a-durable-owner",
+      "category": "产品化企业采用",
+      "publishedDate": "2026-07-10",
+      "summary": "GitHub 使用自定义属性将仓库所有权设为可查询、可实施策略的一等属性，并在约一个半月内验证所有活跃仓库的归属、归档约 8,000 个废弃仓库。此后，新建仓库必须从一开始指定服务、团队或个人所有者。",
+      "why": "明确且可查询的仓库所有权能降低密钥扫描整改、漏洞管理、事件响应和合规流程中的路由成本与操作风险。",
+      "impact": 86,
+      "novelty": 68,
+      "actionability": 94,
       "urgency": "中",
       "tags": [
-        "Agent",
+        "产品",
         "监管",
-        "产品"
+        "其他"
       ],
-      "imageUrl": ""
+      "imageUrl": "https://github.blog/wp-content/uploads/2026/01/generic-github-invertocat-mona-logo.png",
+      "mediaAssets": {
+        "images": [],
+        "videos": []
+      }
     },
     {
-      "recordId": "recvoF0NJRUxam",
-      "title": "From Hugging Face to Amazon SageMaker Studio in one click",
-      "titleCn": "Hugging Face 一键直达 Amazon SageMaker Studio",
+      "recordId": "recvpeQOcTyI36",
+      "title": "Real-time dental image verification with Amazon SageMaker AI at Henry Schein One",
+      "titleCn": "Henry Schein One借助Amazon SageMaker实现牙科X光实时质量验证",
       "source": "AWS AI / Bedrock Blog",
-      "url": "https://aws.amazon.com/blogs/machine-learning/from-hugging-face-to-amazon-sagemaker-studio-in-one-click-2",
+      "url": "https://aws.amazon.com/blogs/machine-learning/real-time-dental-image-verification-with-amazon-sagemaker-ai-at-henry-schein-one",
       "category": "算力芯片云",
-      "publishedDate": "2026-07-07",
-      "summary": "AWS 打通从 Hugging Face 到 Amazon SageMaker Studio 的一键使用路径，简化模型导入与开发流程。",
-      "why": "更低的模型迁移摩擦有助于团队更快比较开源模型并进入托管部署。",
-      "impact": 72,
-      "novelty": 64,
-      "actionability": 82,
+      "publishedDate": "2026-07-10",
+      "summary": "Henry Schein One在Amazon SageMaker AI上构建Image Verify，在牙科X光拍摄时实时评估清晰度、对齐和完整性，并以1至5分返回质量评分，低分图像可在患者离开前重拍。该系统数月内扩展至超过1万个活跃地点，已处理逾1100万张X光片，正计划覆盖全球4个区域的4万个地点。",
+      "why": "该案例显示面向高并发医疗工作流的AI视觉推理，可通过低延迟、成本优化和非诊断定位快速实现规模化部署。",
+      "impact": 86,
+      "novelty": 68,
+      "actionability": 78,
       "urgency": "中",
       "tags": [
+        "AI",
+        "多模态",
+        "产品",
+        "硬件"
+      ],
+      "imageUrl": "https://d2908q01vomqb2.cloudfront.net/f1f836cb4ea6efb2a0b1b99f41ad8b103eff4b59/2026/07/10/ml-21121.png",
+      "mediaAssets": {
+        "images": [],
+        "videos": []
+      }
+    },
+    {
+      "recordId": "recvpeQOcTLVND",
+      "title": "AgentKGV: Agentic LLM-RAG Framework with Two-Stage Training for the Fact Verification of Knowledge Graphs",
+      "titleCn": "AgentKGV：面向知识图谱事实验证的智能体式LLM-RAG与两阶段训练框架",
+      "source": "arXiv cs.CL",
+      "url": "https://arxiv.org/abs/2607.09092",
+      "category": "技术研究开源",
+      "publishedDate": "2026-07-13",
+      "summary": "AgentKGV通过动态路由和迭代式查询改写缓解文档检索中的表述不匹配，并采用蒸馏SFT与轨迹级GRPO提升小模型的推理及搜索效率。在T-REx长尾谓词划分上，两阶段训练使宏平均F1较单轮RAG提高9.4个百分点，同时将平均搜索调用次数从3.24次降至1.63次且未降低准确率。",
+      "why": "该研究为工业规模知识图谱事实验证提供了兼顾准确率、长尾能力与检索成本的可训练智能体方案。",
+      "impact": 82,
+      "novelty": 79,
+      "actionability": 76,
+      "urgency": "中",
+      "tags": [
+        "AI",
+        "LLM",
+        "Agent",
+        "RAG"
+      ],
+      "imageUrl": "https://arxiv.org/static/browse/0.3.4/images/arxiv-logo-fb.png",
+      "mediaAssets": {
+        "images": [
+          {
+            "url": "https://arxiv.org/html/2607.09092v1/fig1.png",
+            "alt": "Figure 1: Overview of the proposed Agentic LLM-RAG framework. The agent dynamically routes between internal verification and external retrieval, and iteratively rewrites the triple into retrieval-compatible queries until it produces a final judgment."
+          },
+          {
+            "url": "https://arxiv.org/html/2607.09092v1/figure2.png",
+            "alt": "Figure 2: Overview of the two-stage training strategy. Stage 1 (Distillation-based SFT) distills the last turn of correct teacher trajectories into two state–action pairs that supervise query rewriting and evidence-grounded reasoning. Stage 2 (GRPO) optimizes the search policy with a trajectory-level reward combining final correctness and a per-turn search penalty, reducing redundant retrieval while preserving accuracy."
+          }
+        ],
+        "videos": []
+      }
+    },
+    {
+      "recordId": "recvpeQOcTnk6o",
+      "title": "Fine-tune NVIDIA Nemotron 3 models with Amazon SageMaker AI serverless model customization",
+      "titleCn": "Amazon SageMaker AI推出NVIDIA Nemotron 3无服务器模型定制",
+      "source": "AWS AI / Bedrock Blog",
+      "url": "https://aws.amazon.com/blogs/machine-learning/fine-tune-nvidia-nemotron-3-models-with-amazon-sagemaker-ai-serverless-model-customization",
+      "category": "算力芯片云",
+      "publishedDate": "2026-07-10",
+      "summary": "Amazon SageMaker AI现支持对NVIDIA Nemotron 3 Nano和Super开放权重模型进行无服务器定制，提供SFT、RLVR和RLAIF等微调方式，无需配置或管理基础设施。两款模型采用混合Mamba-Transformer MoE架构，原生支持最长100万词元上下文，并以较少的激活参数降低推理计算成本。",
+      "why": "该服务降低了企业定制高效开放权重模型的基础设施门槛，并适用于推理、编码和多智能体工作流。",
+      "impact": 82,
+      "novelty": 78,
+      "actionability": 91,
+      "urgency": "中",
+      "tags": [
+        "LLM",
+        "Agent",
         "开源",
         "产品"
       ],
-      "imageUrl": "https://d2908q01vomqb2.cloudfront.net/f1f836cb4ea6efb2a0b1b99f41ad8b103eff4b59/2026/07/06/ml-21254.png"
+      "imageUrl": "https://d2908q01vomqb2.cloudfront.net/f1f836cb4ea6efb2a0b1b99f41ad8b103eff4b59/2026/07/09/ml-21327.png",
+      "mediaAssets": {
+        "images": [],
+        "videos": []
+      }
+    },
+    {
+      "recordId": "recvpeQOcTJbiS",
+      "title": "Fidji Simo steps down from OpenAI’s No. 2 role",
+      "titleCn": "Fidji Simo卸任OpenAI二号高管全职职务",
+      "source": "TechCrunch AI",
+      "url": "https://techcrunch.com/2026/07/09/fidji-simo-steps-down-from-openais-no-2-role",
+      "category": "创业融资并购",
+      "publishedDate": "2026-07-10",
+      "summary": "因医疗休假时间超出预期，Fidji Simo将卸任OpenAI二号高管的全职职务。此举造成的领导层空缺正值OpenAI考虑潜在IPO并追赶Anthropic企业市场业务之际。",
+      "why": "关键高管离任可能影响OpenAI的上市筹备及企业市场竞争进程。",
+      "impact": 82,
+      "novelty": 76,
+      "actionability": 58,
+      "urgency": "高",
+      "tags": [
+        "AI",
+        "融资",
+        "产品"
+      ],
+      "imageUrl": "https://techcrunch.com/wp-content/uploads/2026/07/Fidji-Simo.jpg?w=1024",
+      "mediaAssets": {
+        "images": [],
+        "videos": []
+      }
+    },
+    {
+      "recordId": "recvpeQOcT6Z7s",
+      "title": "Introducing Claude apps gateway for AWS",
+      "titleCn": "AWS 推出 Claude 应用网关，集中管控访问、策略与成本",
+      "source": "AWS AI / Bedrock Blog",
+      "url": "https://aws.amazon.com/blogs/machine-learning/introducing-claude-apps-gateway-for-aws",
+      "category": "算力芯片云",
+      "publishedDate": "2026-07-09",
+      "summary": "AWS 宣布 Claude apps gateway for AWS，这是一个面向 Claude Code 和 Claude Desktop 的自托管控制平面，可集中管理身份认证、策略、遥测、请求路由及支出上限。企业可通过 Amazon Bedrock 或 AWS 上的 Claude Platform 部署，并使用 OIDC 单点登录、短期令牌和 PostgreSQL 支持统一治理。",
+      "why": "该网关解决了企业规模化部署 Claude 开发工具时凭证分散、策略难统一和成本难控制的问题。",
+      "impact": 82,
+      "novelty": 72,
+      "actionability": 90,
+      "urgency": "中",
+      "tags": [
+        "AI",
+        "产品",
+        "Agent",
+        "监管"
+      ],
+      "imageUrl": "https://d2908q01vomqb2.cloudfront.net/f1f836cb4ea6efb2a0b1b99f41ad8b103eff4b59/2026/07/02/21305.png",
+      "mediaAssets": {
+        "images": [],
+        "videos": []
+      }
+    },
+    {
+      "recordId": "recvpeQOcTI9cb",
+      "title": "Build a semantic layer for agentic AI on AWS with Stardog and Amazon Bedrock AgentCore",
+      "titleCn": "在 AWS 上使用 Stardog 与 Amazon Bedrock AgentCore 构建智能体语义层",
+      "source": "AWS AI / Bedrock Blog",
+      "url": "https://aws.amazon.com/blogs/machine-learning/build-a-semantic-layer-for-agentic-ai-on-aws-with-stardog-and-amazon-bedrock-agentcore",
+      "category": "算力芯片云",
+      "publishedDate": "2026-07-10",
+      "summary": "该方案以 Stardog 在 Amazon Aurora 和 Amazon Redshift 之上构建统一语义层，并通过 Bedrock AgentCore 托管 Strands Agents 智能体，无需 ETL 即可跨数据源回答客户 360 分析问题。语义层统一业务实体、指标和访问规则，降低智能体直接查询碎片化企业数据时产生错误或冲突答案的风险。",
+      "why": "企业级智能体分析的关键瓶颈正从基础模型能力转向跨数据源的业务语义一致性、实时查询和可信治理。",
+      "impact": 82,
+      "novelty": 70,
+      "actionability": 88,
+      "urgency": "中",
+      "tags": [
+        "Agent",
+        "RAG",
+        "产品",
+        "其他"
+      ],
+      "imageUrl": "https://d2908q01vomqb2.cloudfront.net/f1f836cb4ea6efb2a0b1b99f41ad8b103eff4b59/2026/07/10/ml-21021.png",
+      "mediaAssets": {
+        "images": [],
+        "videos": []
+      }
+    },
+    {
+      "recordId": "recvpeQOcTlgb8",
+      "title": "Enhancing enterprise inference on Amazon SageMaker HyperPod with data capture, Hugging Face, NVMe, and Route 53 integration",
+      "titleCn": "Amazon SageMaker HyperPod增强企业级大模型推理能力",
+      "source": "AWS AI / Bedrock Blog",
+      "url": "https://aws.amazon.com/blogs/machine-learning/enhancing-enterprise-inference-on-amazon-sagemaker-hyperpod-with-data-capture-hugging-face-nvme-and-route-53-integration",
+      "category": "算力芯片云",
+      "publishedDate": "2026-07-10",
+      "summary": "Amazon SageMaker HyperPod新增三层推理数据捕获、Hugging Face模型直连部署、本地NVMe权重加载和Route 53域名管理能力，并支持细粒度Pod级IAM权限。相关功能旨在降低冷启动延迟，同时提升生产推理的可观测性、安全性和治理能力。",
+      "why": "这些增强覆盖模型部署、性能优化、监控审计和权限隔离，有助于企业更高效地运行大模型推理服务。",
+      "impact": 82,
+      "novelty": 69,
+      "actionability": 88,
+      "urgency": "中",
+      "tags": [
+        "LLM",
+        "推理",
+        "硬件",
+        "产品"
+      ],
+      "imageUrl": "https://d2908q01vomqb2.cloudfront.net/f1f836cb4ea6efb2a0b1b99f41ad8b103eff4b59/2026/07/09/ML-21090.png",
+      "mediaAssets": {
+        "images": [],
+        "videos": []
+      }
+    },
+    {
+      "recordId": "recvpeQOcTVUWm",
+      "title": "How KTern.AI built agentic AI for SAP on Amazon Bedrock AgentCore",
+      "titleCn": "KTern.AI基于Amazon Bedrock AgentCore构建SAP企业级智能体平台",
+      "source": "AWS AI / Bedrock Blog",
+      "url": "https://aws.amazon.com/blogs/machine-learning/how-ktern-ai-built-agentic-ai-for-sap-on-amazon-bedrock-agentcore",
+      "category": "算力芯片云",
+      "publishedDate": "2026-07-10",
+      "summary": "KTern.AI使用Amazon Bedrock AgentCore和Strands Agents SDK构建并部署面向SAP数字化转型的多智能体系统，可自主编排逆向工程、标准适配、代码分析及财务和销售流程异常挖掘等工作流。该架构提供持久化上下文、安全工具访问、多租户配置、动态扩展和生产级可观测性，无需自建智能体基础设施。",
+      "why": "该案例展示了智能体如何在严格安全与合规约束下支撑持续数月或数年的复杂企业级SAP转型任务。",
+      "impact": 82,
+      "novelty": 68,
+      "actionability": 79,
+      "urgency": "中",
+      "tags": [
+        "AI",
+        "Agent",
+        "产品",
+        "其他"
+      ],
+      "imageUrl": "https://d2908q01vomqb2.cloudfront.net/f1f836cb4ea6efb2a0b1b99f41ad8b103eff4b59/2026/07/10/ml-20577.png",
+      "mediaAssets": {
+        "images": [],
+        "videos": []
+      }
+    },
+    {
+      "recordId": "recvpeQOcTcLJn",
+      "title": "GitHub availability report: June 2026",
+      "titleCn": "GitHub 2026年6月可用性报告：Azure迁移进展与Copilot代码审查故障",
+      "source": "Microsoft Copilot / GitHub Copilot",
+      "url": "https://github.blog/news-insights/company-news/github-availability-report-june-2026",
+      "category": "产品化企业采用",
+      "publishedDate": "2026-07-09",
+      "summary": "GitHub在Azure迁移和服务拆分方面取得进展：pullsd已承载全部匿名PR读取，用户服务峰值卸载约50万QPS，网关处理约97%的API限流；但Monolith与Git流量迁移均未达既定目标，并因稳定性、Redis容量和延迟风险主动放缓。6月发生6起影响GitHub服务性能的事件，其中6月4日Copilot代码审查因新依赖兼容性问题出现大规模失败。",
+      "why": "该报告体现了GitHub以可用性优先的企业级Copilot基础设施治理，以及AI代码审查功能对底层依赖稳定性的敏感性。",
+      "impact": 82,
+      "novelty": 68,
+      "actionability": 74,
+      "urgency": "中",
+      "tags": [
+        "AI",
+        "LLM",
+        "产品",
+        "其他"
+      ],
+      "imageUrl": "https://github.blog/wp-content/uploads/2025/08/github-generic-wallpaper-pink.png",
+      "mediaAssets": {
+        "images": [],
+        "videos": []
+      }
+    },
+    {
+      "recordId": "recvpeQOcTjGS9",
+      "title": "Breaking Ground on Meta’s First Data Center in Canada",
+      "titleCn": "Meta在加拿大开建首座1吉瓦AI数据中心",
+      "source": "Meta Newsroom AI",
+      "url": "https://about.fb.com/news/2026/07/breaking-ground-on-metas-first-data-center-in-canada",
+      "category": "前沿模型公司",
+      "publishedDate": "2026-07-09",
+      "summary": "Meta在加拿大阿尔伯塔省斯特金县开建其全球第33座、加拿大首座数据中心，项目针对AI工作负载优化，计划投资超过130亿加元。该中心将采用闭环液冷与干式冷却系统，并以100%清洁和可再生能源匹配用电。",
+      "why": "该项目体现了Meta持续扩充AI算力基础设施的战略，并将对当地电网、就业和基础设施产生显著影响。",
+      "impact": 82,
+      "novelty": 61,
+      "actionability": 55,
+      "urgency": "中",
+      "tags": [
+        "AI",
+        "硬件",
+        "其他"
+      ],
+      "imageUrl": "https://about.fb.com/wp-content/uploads/2026/07/SCDC_Social-Share.png?w=1200",
+      "mediaAssets": {
+        "images": [],
+        "videos": []
+      }
+    },
+    {
+      "recordId": "recvpeQOcTSQv2",
+      "title": "Frontier and Center: Who evaluates the evaluations?",
+      "titleCn": "谁来评估评估体系？用信息论衡量 AI Agent 的数据发现能力",
+      "source": "Google Cloud AI Blog",
+      "url": "https://cloud.google.com/blog/products/data-analytics/evaluate-agent-performance",
+      "category": "算力芯片云",
+      "publishedDate": "2026-07-11",
+      "summary": "Google Data Cloud 团队提出元基准 Discovery Bench，通过生成难易变体并利用信息论中的“惊奇度”调节查询难度，以描绘 Agent 在数据发现与检索任务中的能力边界。该方法还揭示了现有评测案例本身可能存在的质量问题。",
+      "why": "相比固定分数，该方法能更细致、可扩展地定位 Agent 在模糊查询下何时以及为何检索失败。",
+      "impact": 78,
+      "novelty": 82,
+      "actionability": 76,
+      "urgency": "中",
+      "tags": [
+        "Agent",
+        "RAG",
+        "推理"
+      ],
+      "imageUrl": "https://storage.googleapis.com/gweb-cloudblog-publish/images/09_-_Data_Analytics_tFH57V6.max-2600x2600.jpg",
+      "mediaAssets": {
+        "images": [],
+        "videos": []
+      }
+    },
+    {
+      "recordId": "recvpeQOcT0Hdw",
+      "title": "HALO: Hybrid Adaptive Latent Reasoning for Language Models",
+      "titleCn": "HALO：面向语言模型的混合自适应潜在推理",
+      "source": "arXiv cs.CL",
+      "url": "https://arxiv.org/abs/2607.08775",
+      "category": "技术研究开源",
+      "publishedDate": "2026-07-13",
+      "summary": "HALO通过粗粒度精炼、令牌评分和单调令牌停止机制，仅对部分令牌执行第二阶段潜在精炼，以更有效地为冻结的预训练语言模型分配额外计算。在MMLU-Pro与GPQA-Diamond组成的主要公开基准上，HALO的总体平均表现优于冻结骨干及固定一轮、两轮精炼方法，同时使用更少的平均精炼步骤和控制器计算。",
+      "why": "该研究表明，自适应地将潜在精炼计算分配给关键令牌，可能比统一增加全序列计算更高效。",
+      "impact": 78,
+      "novelty": 82,
+      "actionability": 68,
+      "urgency": "中",
+      "tags": [
+        "LLM",
+        "推理",
+        "开源"
+      ],
+      "imageUrl": "",
+      "mediaAssets": {
+        "images": [
+          {
+            "url": "https://arxiv.org/html/2607.08775v1/x1.png",
+            "alt": "Figure 1: HALO architecture. Left: overall model pipeline. A frozen pretrained language model produces base hidden states, which are passed to HALO before final prediction. HALO uses a coarse refinement stage together with token scoring and monotonic token halting to decide where additional computation is needed. In the winning evaluated configuration, the first adaptive keep decision is made token by token from gate features derived from the current logits and the change from the previous step’s logits, so the coarse refinement stage denotes an architectural path rather than a universally forced first update on every token. Selected tokens undergo latent scratchpad refinement, while bypassed tokens skip the expensive path and are merged back before producing final logits. Right: selected-token latent refinement block. Selected token states are combined with a latent scratchpad state and updated through a latent refinement step to produce refined selected representations. This design concentrates extra computation on a subset of tokens rather than forcing additional full-sequence refinement everywhere."
+          },
+          {
+            "url": "https://arxiv.org/html/2607.08775v1/x2.png",
+            "alt": "Figure 2: Public quality versus compute. The y-axis shows the average of MMLU-Pro and GPQA-Diamond from the verified public benchmark table, and the x-axis shows average applied refine steps as a compute proxy, i.e. the average number of refinement updates actually executed by the controller. Error bars show variation across seeds. HALO achieves higher public-benchmark average than the one-step single-state baseline while using fewer applied refinement updates than fixed-1 and far fewer than fixed-2, and it exhibits lower seed-to-seed variability than the single-state baselines."
+          },
+          {
+            "url": "https://arxiv.org/html/2607.08775v1/x3.png",
+            "alt": "Figure 3: Seed-level public benchmark averages for the paper-facing methods. Each point corresponds to one seed for a trainable method, and the frozen backbone is shown as a reference. This plot is the visual companion to Table 3 and makes the public variance pattern easier to inspect."
+          }
+        ],
+        "videos": []
+      }
+    },
+    {
+      "recordId": "recvpeQOcT1wHy",
+      "title": "Better tools made Copilot code review worse. Here’s how we actually improved it.",
+      "titleCn": "更好的工具为何让 Copilot 代码审查变差，以及如何修复",
+      "source": "Microsoft Copilot / GitHub Copilot",
+      "url": "https://github.blog/ai-and-ml/github-copilot/better-tools-made-copilot-code-review-worse-heres-how-we-actually-improved-it",
+      "category": "产品化企业采用",
+      "publishedDate": "2026-07-10",
+      "summary": "GitHub Copilot 将代码审查代理迁移到共享的 CLI 探索工具后，因指令与审查工作流不匹配，出现成本上升、有效评论减少的问题。团队重写指令以贴合拉取请求审查方式后，在保持相同审查质量的同时将平均成本降低约 20%。",
+      "why": "这表明代理产品的效果不仅取决于工具能力，更取决于指令、工具调用方式与具体任务流程是否匹配。",
+      "impact": 78,
+      "novelty": 72,
+      "actionability": 90,
+      "urgency": "中",
+      "tags": [
+        "Agent",
+        "LLM",
+        "产品"
+      ],
+      "imageUrl": "https://github.blog/wp-content/uploads/2026/01/generic-github-copilot-commit-logo.png",
+      "mediaAssets": {
+        "images": [],
+        "videos": []
+      }
+    },
+    {
+      "recordId": "recvpeQOcThqip",
+      "title": "Paris-based AI voice startup Gradium raises $100M seed, backed by Nvidia",
+      "titleCn": "巴黎 AI 语音初创公司 Gradium 获英伟达支持的 1 亿美元种子轮融资",
+      "source": "TechCrunch AI",
+      "url": "https://techcrunch.com/2026/07/09/paris-based-ai-voice-startup-gradium-raises-100m-seed-backed-by-nvidia",
+      "category": "创业融资并购",
+      "publishedDate": "2026-07-10",
+      "summary": "巴黎 AI 语音初创公司 Gradium 完成 1 亿美元种子轮融资，获得英伟达支持。公司计划利用资金在湾区设立办公室并招募人才，以加强其在全球 AI 生态核心区域的竞争位置。",
+      "why": "大额种子融资及英伟达背书显示，AI 语音赛道的人才与技术竞争正在加速。",
+      "impact": 78,
+      "novelty": 72,
+      "actionability": 58,
+      "urgency": "中",
+      "tags": [
+        "AI",
+        "融资",
+        "产品"
+      ],
+      "imageUrl": "https://techcrunch.com/wp-content/uploads/2024/02/GettyImages-1424498694.jpg?resize=1200,800",
+      "mediaAssets": {
+        "images": [],
+        "videos": []
+      }
+    },
+    {
+      "recordId": "recvpeQOcT6jla",
+      "title": "Disaggregated prefill and decode for LLM inference on SageMaker HyperPod",
+      "titleCn": "SageMaker HyperPod实现大模型预填充与解码分离推理",
+      "source": "AWS AI / Bedrock Blog",
+      "url": "https://aws.amazon.com/blogs/machine-learning/disaggregated-prefill-and-decode-for-llm-inference-on-sagemaker-hyperpod",
+      "category": "算力芯片云",
+      "publishedDate": "2026-07-10",
+      "summary": "AWS介绍了在SageMaker HyperPod上结合vLLM、EFA RDMA与LMCache，将LLM预填充和解码部署到独立GPU池的方案。该架构可分别优化首Token延迟与Token间延迟，并通过路由阈值自动处理长短提示混合流量。",
+      "why": "该方案可减少长上下文预填充对并发解码请求的阻塞，适合高并发、流式及RAG等长上下文推理负载。",
+      "impact": 78,
+      "novelty": 67,
+      "actionability": 88,
+      "urgency": "中",
+      "tags": [
+        "LLM",
+        "推理",
+        "硬件",
+        "产品"
+      ],
+      "imageUrl": "https://d2908q01vomqb2.cloudfront.net/f1f836cb4ea6efb2a0b1b99f41ad8b103eff4b59/2026/07/08/20985-1.png",
+      "mediaAssets": {
+        "images": [],
+        "videos": []
+      }
+    },
+    {
+      "recordId": "recvpeQOcTUqiP",
+      "title": "Deploying quantized models on Amazon SageMaker AI with Unsloth",
+      "titleCn": "使用 Unsloth 在 Amazon SageMaker AI 部署量化模型",
+      "source": "AWS AI / Bedrock Blog",
+      "url": "https://aws.amazon.com/blogs/machine-learning/deploying-quantized-models-on-amazon-sagemaker-ai-with-unsloth",
+      "category": "算力芯片云",
+      "publishedDate": "2026-07-10",
+      "summary": "AWS 介绍了四种部署模式，用于将经 Unsloth 量化的基础模型部署到 EC2、SageMaker AI、EKS 或 ECS。Unsloth Dynamic 通过逐层分析和动态位宽分配，在显著降低模型内存、存储及推理成本的同时尽量保持准确率。",
+      "why": "动态量化可让大型模型适配更小的 GPU 实例，并缩短启动和迭代时间，为 AWS 上的低成本生产推理提供可操作路径。",
+      "impact": 78,
+      "novelty": 65,
+      "actionability": 91,
+      "urgency": "中",
+      "tags": [
+        "AI",
+        "LLM",
+        "硬件",
+        "产品"
+      ],
+      "imageUrl": "https://d2908q01vomqb2.cloudfront.net/f1f836cb4ea6efb2a0b1b99f41ad8b103eff4b59/2026/07/10/ml-20601.png",
+      "mediaAssets": {
+        "images": [],
+        "videos": []
+      }
+    },
+    {
+      "recordId": "recvpeQOcT1OoA",
+      "title": "Scaling agentic workflows with native case management in Amazon Quick Automate",
+      "titleCn": "Amazon Quick Automate原生案例管理扩展智能体工作流",
+      "source": "AWS AI / Bedrock Blog",
+      "url": "https://aws.amazon.com/blogs/machine-learning/scaling-agentic-workflows-with-native-case-management-in-amazon-quick-automate",
+      "category": "算力芯片云",
+      "publishedDate": "2026-07-10",
+      "summary": "Amazon Quick Automate通过原生案例管理，将长流程拆分为可持久跟踪、并行处理的工作项，并支持状态更新、异常处理和人工介入。该能力结合智能体、确定性自动化与企业工作流编排，增强大规模业务自动化的可见性、审计性和动态扩展能力。",
+      "why": "它针对智能体从概念验证走向百万级生产任务时的状态管理、故障定位、治理与弹性扩展难题提供了原生方案。",
+      "impact": 78,
+      "novelty": 65,
+      "actionability": 82,
+      "urgency": "中",
+      "tags": [
+        "AI",
+        "Agent",
+        "产品"
+      ],
+      "imageUrl": "https://d2908q01vomqb2.cloudfront.net/f1f836cb4ea6efb2a0b1b99f41ad8b103eff4b59/2026/07/10/ml-20703.png",
+      "mediaAssets": {
+        "images": [],
+        "videos": []
+      }
+    },
+    {
+      "recordId": "recvpeQOcTe6vM",
+      "title": "MCP tool design: Practical approaches and tradeoffs",
+      "titleCn": "MCP 工具设计实践：平衡上下文膨胀与调用混淆",
+      "source": "AWS AI / Bedrock Blog",
+      "url": "https://aws.amazon.com/blogs/machine-learning/mcp-tool-design-practical-approaches-and-tradeoffs",
+      "category": "算力芯片云",
+      "publishedDate": "2026-07-10",
+      "summary": "文章指出，MCP 工具表现不佳通常源于工具设计，而非协议本身，核心问题是工具定义与响应造成的上下文膨胀，以及命名、参数和选项引发的模型混淆。作者建议通过精简描述和默认响应、按需返回详情、提供可操作的错误信息，并使用枚举和默认值等模式约束来提升调用准确性与效率。",
+      "why": "这些方法可直接减少 Agent 的错误工具调用、无效重试和上下文消耗，提高 MCP 应用的可靠性与成本效率。",
+      "impact": 78,
+      "novelty": 62,
+      "actionability": 91,
+      "urgency": "中",
+      "tags": [
+        "Agent",
+        "LLM",
+        "产品"
+      ],
+      "imageUrl": "https://d2908q01vomqb2.cloudfront.net/f1f836cb4ea6efb2a0b1b99f41ad8b103eff4b59/2026/06/26/20889.png",
+      "mediaAssets": {
+        "images": [],
+        "videos": []
+      }
+    },
+    {
+      "recordId": "recvpeQOcTAVBL",
+      "title": "Creativity, honesty and designed forgetting emerge in small hyperbolic language models",
+      "titleCn": "小型双曲语言模型涌现创造力、诚实性与设计性遗忘",
+      "source": "arXiv cs.CL",
+      "url": "https://arxiv.org/abs/2607.09306",
+      "category": "技术研究开源",
+      "publishedDate": "2026-07-13",
+      "summary": "研究提出三个共享双曲底层、参数量为1.46亿至30亿的小型语言模型，分别用于审计伴侣模型行为、生成创意框架和实现指数衰减式设计性遗忘。实验显示，行为审计器可识别迎合、依赖诱导和虚构记忆，创意模型在已决成对比较中全部胜出，而选择性检索门控使预期的记忆分层得以出现。",
+      "why": "该研究展示了以小模型构建可信伴侣式AI的潜在路径，并针对人格风险、谄媚行为和长期记忆治理提供了可量化机制。",
+      "impact": 76,
+      "novelty": 84,
+      "actionability": 67,
+      "urgency": "中",
+      "tags": [
+        "LLM",
+        "开源",
+        "产品",
+        "其他"
+      ],
+      "imageUrl": "",
+      "mediaAssets": {
+        "images": [
+          {
+            "url": "https://arxiv.org/html/2607.09306v1/figs/fig1_overview.png",
+            "alt": ""
+          },
+          {
+            "url": "https://arxiv.org/html/2607.09306v1/figs/fig2_hyperbolic_substrate.png",
+            "alt": ""
+          },
+          {
+            "url": "https://arxiv.org/html/2607.09306v1/figs/fig3_pillar1_creativity.png",
+            "alt": ""
+          }
+        ],
+        "videos": []
+      }
+    },
+    {
+      "recordId": "recvpeQOcTotIc",
+      "title": "An Emergent Mirage: Is Emergent Misalignment and Realignment Indeed a Robust Phenomenon?",
+      "titleCn": "涌现失准或为表象：数据集表面特征削弱其稳健性",
+      "source": "arXiv cs.CL",
+      "url": "https://arxiv.org/abs/2607.09053",
+      "category": "技术研究开源",
+      "publishedDate": "2026-07-13",
+      "summary": "研究通过受控微调循环复现了涌现失准，但发现失准与再对齐对数据集表面特征高度敏感；控制回答长度差异后，所谓快速再对齐现象大幅减弱。LoRA空间中的表征相变等机制特征也未能在训练过程中与行为失准保持稳定相关。",
+      "why": "该研究质疑涌现失准及快速再对齐的稳健性，并指出后续评估必须严格控制回答长度等数据集伪影。",
+      "impact": 76,
+      "novelty": 72,
+      "actionability": 74,
+      "urgency": "中",
+      "tags": [
+        "AI",
+        "LLM",
+        "开源",
+        "其他"
+      ],
+      "imageUrl": "",
+      "mediaAssets": {
+        "images": [
+          {
+            "url": "https://arxiv.org/html/2607.09053v1/hysteresis.png",
+            "alt": "Figure 1: We attempt to repeatedly align and misalign our language model to understand behavioral and neural shifts within the model."
+          },
+          {
+            "url": "https://arxiv.org/html/2607.09053v1/Figures/training_dynamics/gradient_norms_all_adapter_risky_safe_risky.png",
+            "alt": "Figure 2: Gradient norms observed while training the Qwen2.5-14B model on the risky-financial dataset across the phases of risky - safe - risky data for the all adapter case. Each intermediate spike at step ∼ 700 \\sim 700 and step ∼ 1400 \\sim 1400 represents a change in phases during training (risky-safe) and (safe-risky). We notice that safer datapoints (between step 700-1400) result in lower gradient norms, implying they require weaker updates."
+          },
+          {
+            "url": "https://arxiv.org/html/2607.09053v1/Figures/training_dynamics/bad_good_bad_response_rate.png",
+            "alt": "Figure 3: Emergently misaligned response rate on Bad-Good-Bad Loop for Qwen2.5-14B in the single adapter setting. Step count is present on the Y-axis. We start from 0 at every phase (good/bad). The y-axis presents the percent of misaligned responses for each checkpoint."
+          }
+        ],
+        "videos": []
+      }
+    },
+    {
+      "recordId": "recvpeQOcT0NUO",
+      "title": "An AI agent startup just let its agent run its $100M fundraise",
+      "titleCn": "AI Agent 创企 Lyzr 用自家智能体推进 1 亿美元融资",
+      "source": "TechCrunch AI",
+      "url": "https://techcrunch.com/2026/07/09/an-ai-agent-startup-just-let-its-agent-run-its-100-million-fundraise",
+      "category": "创业融资并购",
+      "publishedDate": "2026-07-10",
+      "summary": "面向企业开发 AI Agent 的初创公司 Lyzr，使用自家 AI Agent 开展一轮 1 亿美元融资。该公司将此视为产品实际有效的证明。",
+      "why": "这展示了 AI Agent 在企业融资流程中的实际应用，也是 Lyzr 对自身产品能力的一次公开验证。",
+      "impact": 68,
+      "novelty": 82,
+      "actionability": 55,
+      "urgency": "中",
+      "tags": [
+        "AI",
+        "Agent",
+        "融资",
+        "产品"
+      ],
+      "imageUrl": "https://techcrunch.com/wp-content/uploads/2026/07/Lyzr-graphic.png?resize=1200,658",
+      "mediaAssets": {
+        "images": [],
+        "videos": []
+      }
+    },
+    {
+      "recordId": "recvpeQOcThTGD",
+      "title": "PRecG: Legal Precedent Retrieval with Graph Neural Networks and Rhetorical Role Segmentation",
+      "titleCn": "PRecG：结合图神经网络与修辞角色分割的法律判例检索",
+      "source": "arXiv cs.CL",
+      "url": "https://arxiv.org/abs/2607.09094",
+      "category": "技术研究开源",
+      "publishedDate": "2026-07-13",
+      "summary": "PRecG先按句子的修辞角色分割法律文书，再为各语义片段构建法律实体关系知识图谱，通过分层聚合生成文档表示并计算判例相似度。研究在印度法律基准数据集上与先进基线进行了实验比较。",
+      "why": "该方法将法律文书的修辞结构与实体关系纳入检索表示，有望改善传统整体文本嵌入对细粒度法律语义的忽略。",
+      "impact": 68,
+      "novelty": 76,
+      "actionability": 52,
+      "urgency": "低",
+      "tags": [
+        "AI",
+        "开源",
+        "其他"
+      ],
+      "imageUrl": "",
+      "mediaAssets": {
+        "images": [
+          {
+            "url": "https://arxiv.org/html/2607.09094v1/figures/manual_citation.drawio.png",
+            "alt": "Figure 1 : Manual procedure for finding valid and reliable citations."
+          },
+          {
+            "url": "https://arxiv.org/html/2607.09094v1/figures/inlegalonto.png",
+            "alt": "Figure 2 : A snapshot from the constructed legal ontology."
+          },
+          {
+            "url": "https://arxiv.org/html/2607.09094v1/figures/arch_upper_view.png",
+            "alt": "Figure 3 : Technical details of the PRecG pipeline."
+          }
+        ],
+        "videos": []
+      }
+    },
+    {
+      "recordId": "recvpeQOcTxnCt",
+      "title": "Automatic Thematic Indexing of Large Literary Corpora: A Machine Learning Approach to Voltaire's Complete Works",
+      "titleCn": "用机器学习自动为伏尔泰全集建立主题索引",
+      "source": "arXiv cs.CL",
+      "url": "https://arxiv.org/abs/2607.09316",
+      "category": "技术研究开源",
+      "publishedDate": "2026-07-13",
+      "summary": "论文将大型文学语料的主题索引任务建模为多标签分类，以《伏尔泰全集》中的两个子语料为案例，对比编码器分类模型与经 LoRA 微调的生成式大语言模型。最佳的 4 位量化 Mistral 系列模型 F1 最高达 0.67，并评估了跨语料泛化及文学修辞特征带来的自动化难点。",
+      "why": "该研究展示了 LLM 可降低文学与历史文献结构化主题检索的人工标注成本，但结果仍受专业索引主观性与复杂文本特征限制。",
+      "impact": 68,
+      "novelty": 70,
+      "actionability": 62,
+      "urgency": "低",
+      "tags": [
+        "AI",
+        "LLM",
+        "开源",
+        "其他"
+      ],
+      "imageUrl": "",
+      "mediaAssets": {
+        "images": [
+          {
+            "url": "https://arxiv.org/html/2607.09316v1/distr_labels_EM.png",
+            "alt": "Fig. 1: Label frequencies for the EM dataset."
+          },
+          {
+            "url": "https://arxiv.org/html/2607.09316v1/distr_labels_QE.png",
+            "alt": "Fig. 2: Label frequencies for QE the dataset."
+          },
+          {
+            "url": "https://arxiv.org/html/2607.09316v1/OCV_vol24_page193_crop2.png",
+            "alt": "Fig. 3: Example of a page of EM containing a small amount of primary text."
+          }
+        ],
+        "videos": []
+      }
+    },
+    {
+      "recordId": "recvpeQOcTHmhT",
+      "title": "Letting the Data Speak: Extracting Keywords from Crowdsourced Collections with AI",
+      "titleCn": "AI赋能众包馆藏关键词提取：开放权重抽取式模型更适合负责任部署",
+      "source": "arXiv cs.CL",
+      "url": "https://arxiv.org/abs/2607.09324",
+      "category": "技术研究开源",
+      "publishedDate": "2026-07-13",
+      "summary": "研究以牛津大学二战众包数字馆藏为案例，评估命名实体识别、关键词提取和主题建模三类自然语言处理方法及多种传统统计与生成式AI技术。结果显示，没有单一方法能够完整解决规模化关键词提取问题；开放权重的抽取式模型更适合负责任部署，而生成式AI存在问责风险。",
+      "why": "该研究表明众包馆藏的自动化元数据建设不仅取决于模型性能，还必须同时考虑贡献者参与、数据治理和可问责性。",
+      "impact": 67,
+      "novelty": 61,
+      "actionability": 75,
+      "urgency": "中",
+      "tags": [
+        "AI",
+        "LLM",
+        "开源",
+        "其他"
+      ],
+      "imageUrl": "",
+      "mediaAssets": {
+        "images": [],
+        "videos": []
+      }
+    },
+    {
+      "recordId": "recvpeQOcTE3Ak",
+      "title": "Augmenting Fundamental Analysis with Large Language Models: A RAG-Based System for Generating Investor Briefs",
+      "titleCn": "基于 RAG 与大语言模型生成投资者简报的基本面分析系统",
+      "source": "arXiv cs.CL",
+      "url": "https://arxiv.org/abs/2607.09121",
+      "category": "技术研究开源",
+      "publishedDate": "2026-07-13",
+      "summary": "研究将公司报告、宏观经济数据、SEC EDGAR 文件及基于基钦周期的投资知识预处理后，通过 API 交由 GPT-4o 以类 RAG 方式生成投资者简报。系统连续4周跟踪9家公司，并由9名个人投资者评估简报的实用性，但节选未披露评估结果。",
+      "why": "该研究展示了 LLM 与 RAG 整合多源金融资料、自动辅助公司基本面分析的具体实践。",
+      "impact": 58,
+      "novelty": 52,
+      "actionability": 61,
+      "urgency": "低",
+      "tags": [
+        "LLM",
+        "RAG",
+        "AI",
+        "开源"
+      ],
+      "imageUrl": "",
+      "mediaAssets": {
+        "images": [
+          {
+            "url": "https://arxiv.org/html/2607.09121v1/LULUFigure_1.png",
+            "alt": "Figure 1: Word map used in the brief representing a cluster of similar news articles about Lululemon on 5th and begining of 6th of December"
+          },
+          {
+            "url": "https://arxiv.org/html/2607.09121v1/LULUFigure_2.png",
+            "alt": "Figure 2: Word map used in the brief representing a cluster of similar news articles about Lululemon on 5th and begining of 6th of December"
+          }
+        ],
+        "videos": []
+      }
+    },
+    {
+      "recordId": "recvpeQOcTJenl",
+      "title": "Complexity-Guided Component-wise Initialization for Language Model Pretraining",
+      "titleCn": "复杂度引导的语言模型分组件初始化方法",
+      "source": "arXiv cs.CL",
+      "url": "https://arxiv.org/abs/2607.09204",
+      "category": "技术研究开源",
+      "publishedDate": "2026-07-13",
+      "summary": "研究分析了11个不同规模、语言、分词器和语料的GPT-2式检查点，并利用其分层、分组件的权重幅度与频谱特征设计初始化方案。实验显示，频谱匹配虽能改变模型结构模式，却未带来明确性能优势，直接复用预训练权重仍更具竞争力。",
+      "why": "该研究表明，仅复用组件尺度和奇异值形状不足以改善预训练，未来初始化策略需要保留更丰富的权重结构信息。",
+      "impact": 48,
+      "novelty": 62,
+      "actionability": 36,
+      "urgency": "低",
+      "tags": [
+        "AI",
+        "LLM",
+        "开源"
+      ],
+      "imageUrl": "",
+      "mediaAssets": {
+        "images": [
+          {
+            "url": "https://arxiv.org/html/2607.09204v1/x1.png",
+            "alt": "(a) Layer Frobenius norm."
+          },
+          {
+            "url": "https://arxiv.org/html/2607.09204v1/x2.png",
+            "alt": "(b) Layer effective entropy."
+          },
+          {
+            "url": "https://arxiv.org/html/2607.09204v1/x3.png",
+            "alt": "(a) W Q ​ K ​ V W_{QKV} Frobenius norm."
+          }
+        ],
+        "videos": []
+      }
+    },
+    {
+      "recordId": "recvpeQOcTFBMV",
+      "title": "Letter Lemmatization: One-to-one and Banded RNNs for Reversing Character-Set Simplification and Abbreviation in Medieval Text",
+      "titleCn": "字母词形还原：用一对一与带状 RNN 逆转中世纪文本字符简化及缩写",
+      "source": "arXiv cs.CL",
+      "url": "https://arxiv.org/abs/2607.09291",
+      "category": "技术研究开源",
+      "publishedDate": "2026-07-13",
+      "summary": "研究提出字符级一对一 RNN，通过自监督学习逆转字符映射，在仅有 20 行文本时也能恢复约一半的字符错误率，并改善手写文本识别后校正。作者进一步提出带状 RNN，用平行语料的字符对齐标注扩展中世纪文献缩写，并开源了相关 Python 工具库。",
+      "why": "该方法为字符集不统一、标注数据稀缺的历史文献数字化提供了兼顾低资源训练、缩写还原与工程复用的解决方案。",
+      "impact": 46,
+      "novelty": 67,
+      "actionability": 61,
+      "urgency": "低",
+      "tags": [
+        "开源",
+        "产品",
+        "其他"
+      ],
+      "imageUrl": "",
+      "mediaAssets": {
+        "images": [
+          {
+            "url": "https://arxiv.org/html/2607.09291v1/x1.png",
+            "alt": "Figure 1: Architecture of a de-mapping (one-to-one) RNN, unrolled over the input “SERVVS”. Each input character is embedded, passed through a stack of bidirectional LSTM layers with weights shared across positions, and projected by a per-position linear layer to a probability distribution over the destination characters. Input and output are aligned one-to-one, so the network is trained with per-position cross-entropy."
+          },
+          {
+            "url": "https://arxiv.org/html/2607.09291v1/x2.png",
+            "alt": "Figure 2: Indicative distance matrix of characters for letter lemmatization."
+          },
+          {
+            "url": "https://arxiv.org/html/2607.09291v1/x3.png",
+            "alt": "Figure 3: De-mapping CER as a function of training set size (MUFI to ASCII CSM, 110 → 72 110\\rightarrow 72 characters, Königsfelden corpus). Error bars reflect training dynamics; the horizontal reference marks the original CSM CER. De-mapping halves the mapping error from as few as 20 training lines, with gains plateauing near 4,000 lines."
+          }
+        ],
+        "videos": []
+      }
     }
   ],
   "briefRecordId": "recvpeMeuxd8Nm",

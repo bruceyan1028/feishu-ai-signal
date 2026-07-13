@@ -53,6 +53,7 @@ def _signal_from_record(record: dict[str, Any]) -> dict[str, Any]:
         "urgency": urgency,
         "tags": [str(daily.scalar(item)) for item in fields.get("主题") or []],
         "imageUrl": daily.link(fields.get("图片链接")),
+        "mediaAssets": daily.media_assets(fields.get("媒体资源")),
     }
 
 

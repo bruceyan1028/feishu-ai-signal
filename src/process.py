@@ -5,6 +5,7 @@
 from __future__ import annotations
 
 import logging
+import json
 import re
 from datetime import datetime, timezone
 from typing import Any
@@ -157,6 +158,7 @@ def process_and_clean(raw_items: list[dict[str, Any]]) -> list[dict[str, Any]]:
                 "collected_ms": collected_ms,
                 "raw_content": body_text[:15000],
                 "image_url": str(item.get("image_url") or "").strip(),
+                "media_assets": item.get("media_assets") or {"images": [], "videos": []},
                 "topics": infer_topics(title, body_text),
                 "duplicate_key": duplicate_key,
             }
@@ -196,6 +198,9 @@ def format_for_feishu(item: dict[str, Any]) -> dict[str, Any]:
         "去重键": item["duplicate_key"],
         "source_id": item.get("source_id") or "",
     }
+    media_assets = item.get("media_assets") or {}
+    if media_assets.get("images") or media_assets.get("videos"):
+        fields["媒体资源"] = json.dumps(media_assets, ensure_ascii=False)
     image = _to_link(item.get("image_url") or "", "原文配图")
     if image:
         fields["图片链接"] = image
