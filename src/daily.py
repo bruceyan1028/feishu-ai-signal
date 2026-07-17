@@ -102,12 +102,14 @@ def _priority_map(param_records: list[dict[str, Any]]) -> dict[str, str]:
     return result
 
 
-def _rss_source_ids(param_records: list[dict[str, Any]]) -> set[str]:
+def _active_source_ids(param_records: list[dict[str, Any]]) -> set[str]:
+    # 简报候选来源白名单：active 的 RSS 与 Scrape 源（含公众号、hf/pwc 论文），
+    # 让抓取型来源也能进入每日简报，而不只是 RSS。
     return {
         str(sources.cell((record.get("fields") or {}).get("source_id")) or "")
         for record in param_records
         if sources.cell((record.get("fields") or {}).get("status")) == "active"
-        and sources.cell((record.get("fields") or {}).get("fetch_method")) == "RSS"
+        and sources.cell((record.get("fields") or {}).get("fetch_method")) in {"RSS", "Scrape"}
     } - {""}
 
 
@@ -268,9 +270,9 @@ def generate(day: str | None = None) -> dict[str, Any]:
     params = feishu.read_param_records(token)
     entries = feishu.read_all_records_with_ids(token, config.FEISHU_ENTRY_TABLE_ID)
     priorities = _priority_map(params)
-    candidates = select_candidates(entries, priorities, _rss_source_ids(params))
+    candidates = select_candidates(entries, priorities, _active_source_ids(params))
     if not candidates:
-        raise RuntimeError("近七日没有可用于简报的 RSS 信号")
+        raise RuntimeError("近七日没有可用于简报的信号")
 
     # 同事件折叠：标题近似者只保留最优主条目进分析，其它源留给事件聚合
     candidates = cluster.collapse_for_brief(
