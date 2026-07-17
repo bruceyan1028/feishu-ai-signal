@@ -1,9 +1,8 @@
 name: AI Signal Ingest
 
 on:
-  schedule:
-    # 每 6 小时（UTC）。GitHub Actions 定时可能有几分钟延迟。
-    - cron: "0 */6 * * *"
+  # 每日拉取由 daily-brief 工作流统一完成（其 Ingest 步骤即 src.main）。
+  # 这里不再定时跑，仅保留手动触发用于临时补采/调试。
   workflow_dispatch: {}
 
 concurrency:

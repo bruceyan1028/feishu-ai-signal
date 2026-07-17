@@ -313,12 +313,14 @@ let signals = [
   { rank: 20, impact: 74, urgency: '中', kind: '论文', zhTitle: 'Apple 更新端侧基础模型:3B 参数对标 7B 能力', title: 'Apple Intelligence Foundation Models: On-device 3B with 7B-class quality', source: 'Apple ML Research', cat: '技术研究开源', date: '2026-07-03', summary: 'Apple 发布端侧基础模型技术报告:3B 参数模型通过混合精度量化(平均 3.7 bit)与任务适配器体系,在摘要、改写与工具调用上达到 7B 级开源模型质量,并保持端侧毫秒级首响与低内存占用,适配器可按 App 动态加载。', why: '端侧小模型的能力密度持续提升,「云端大模型 + 端侧小模型」的分层架构正在成为移动端标配。其适配器方案对多任务端侧部署有直接借鉴意义,值得纳入端侧路线评估。', novel: 74, action: 58, tags: ['端侧', 'Apple', '基础模型'] },
   { rank: 21, impact: 64, urgency: '低', kind: '视频', zhTitle: '视频解读:Gemma 4 全档位实测,4B 端侧表现超预期', title: 'Gemma 4 tested: 4B on-device performance is the real story', source: 'YouTube · AI Explained', cat: '技术研究开源', date: '2026-07-06', summary: 'AI Explained 频道对 Gemma 4 全档位独立实测:70B 接近闭源第一梯队,而最大亮点是 4B 端侧档位——在消费级手机上离线运行,多语言与工具调用能力保持完整,视频附全部测试数据与复现脚本。', why: '第三方独立实测是官方基准的重要交叉验证。4B 端侧档位的实测表现支持把端侧路线纳入正式评估,视频中的测试方法可直接复用到内部评测集。', novel: 55, action: 48, tags: ['端侧', 'Gemma', '实测'] },
 ];
-const SPECIAL_CONTENT_TYPES = ['论文','视频','社交媒体帖子','公众号'];
+const SPECIAL_CONTENT_TYPES = ['论文','视频','社交媒体帖子','公众号','Github热榜'];
 function signalContentType(s){
   const explicit = s.contentType || s.kind || '';
   if(explicit === '社交媒体') return '社交媒体帖子';
+  if(explicit === 'github' || explicit === 'github-trending') return 'Github热榜';
   if(SPECIAL_CONTENT_TYPES.includes(explicit)) return explicit;
   const text = `${s.source||''} ${s.url||''}`.toLowerCase();
+  if(/github\.com/.test(text)) return 'Github热榜';
   if(/mp\.weixin\.qq\.com|weixin\.qq\.com|微信公众号|公众号/.test(text)) return '公众号';
   if(/youtube\.com|youtu\.be|bilibili\.com|vimeo\.com|视频/.test(text) || (s.mediaAssets?.videos||[]).length) return '视频';
   if(/arxiv\.org|openreview\.net|doi\.org|学术论文|\barxiv\b/.test(text)) return '论文';
@@ -333,7 +335,7 @@ let briefMeta = {
 };
 
 const filters = ['全部', '端侧模型', '算力芯片云', '政策监管地缘', '前沿模型公司', '技术研究开源', '创业融资并购'];
-const FORMAT_FILTERS = ['论文', '视频', '社交媒体帖子', '公众号'];
+const FORMAT_FILTERS = ['论文', '视频', '社交媒体帖子', '公众号', 'Github热榜'];
 // 「端侧模型」是标签驱动的横切专题,不是领域分类:按 tags 匹配
 const EDGE_FILTER = '端侧模型';
 function matchesFilter(s, f){
@@ -588,6 +590,9 @@ async function loadBrief(){
       tags: Array.isArray(s.tags) ? s.tags : [],
       image: s.imageUrl || '',
       mediaAssets: s.mediaAssets || {images:[], videos:[]},
+      eventAggregation: s.eventAggregation || null,
+      tier: s.tier || '',
+      priority: s.priority || '',
     }));
     signals.forEach(s => { s.contentType = signalContentType(s); s.kind = s.contentType || '文章'; });
     const seenImages = new Set();
@@ -1233,7 +1238,7 @@ function briefHtml(A){
 }
 
 // Perplexity 风信号详情覆盖层:文章 / 论文 / 视频 分型展示 + 团队评论 + 悬浮 AI 提问
-const KIND_META = { '文章': { icon: '📄', label: '文章' }, '论文': { icon: '📑', label: '论文' }, '视频': { icon: '▶', label: '视频' } };
+const KIND_META = { '文章': { icon: '📄', label: '文章' }, '论文': { icon: '📑', label: '论文' }, '视频': { icon: '▶', label: '视频' }, 'Github热榜': { icon: '★', label: 'Github热榜' } };
 
 // 按内容类型生成头部媒体区
 function detailMediaHtml(A, s){
@@ -1324,19 +1329,52 @@ function detailCommentsHtml(A, s){
   </div>`;
 }
 
-// 事件聚合:按「事件」而非「文章」去重,附官方来源/媒体解读/第三方测试/社区反应/反面证据
+// 事件聚合:优先用后端同事件聚类结果；否则按标题近似在当前简报内兜底
+function titleSim(a, b){
+  const norm = t => String(t||'').toLowerCase().replace(/[^\w\u4e00-\u9fff]+/g,'').replace(/(独家|详解|速递|刚刚|突发|重磅|报道)/g,'');
+  const x = norm(a), y = norm(b);
+  if(!x || !y) return 0;
+  if(x===y) return 1;
+  const max = Math.max(x.length, y.length);
+  let hit = 0;
+  const gram = s => {
+    const out = new Set();
+    for(let i=0;i<s.length-1;i++) out.add(s.slice(i,i+2));
+    return out;
+  };
+  const A = gram(x), B = gram(y);
+  A.forEach(g=>{ if(B.has(g)) hit++; });
+  const union = A.size + B.size - hit;
+  return union ? hit/union : 0;
+}
 function eventSourcesHtml(A, s){
-  const t0 = s.tags[0] || s.cat;
-  const related = signals
-    .filter(x=>x.rank!==s.rank && x.url && (x.cat===s.cat || x.tags.some(tag=>s.tags.includes(tag))))
-    .slice(0,5);
-  const groups = [
-    { key:'官方来源', tone:'#16130f', items:[ { who: s.source, txt:`${esc(s.zhTitle)} —— 原始发布 / 公告。`, url: s.url||sourceUrls[s.source]||'#' } ] },
-    { key:'相关报道', tone:'#2b6cb0', items:related.slice(0,2).map(x=>({ who:x.source, txt:`${esc(x.zhTitle)} —— 从 ${esc(t0)} 方向提供交叉信息。`, url:x.url })) },
-    { key:'交叉验证', tone:'#1f7a45', items:related.slice(2,4).map(x=>({ who:x.source, txt:`${esc(x.zhTitle)} —— 可用于对照影响、落地成本与适用边界。`, url:x.url })) },
-    { key:'补充视角', tone:'#a06600', items:related.slice(4,5).map(x=>({ who:x.source, txt:`${esc(x.zhTitle)} —— 补充同主题的产业或技术背景。`, url:x.url })) },
-  ].filter(group=>group.items.length);
+  const fromData = s.eventAggregation && Array.isArray(s.eventAggregation.groups) ? s.eventAggregation.groups : null;
+  let groups;
+  if(fromData && fromData.length){
+    groups = fromData.map(g=>({
+      key: g.key,
+      tone: g.tone || '#16130f',
+      items: (g.items||[]).filter(it=>it && it.url).map(it=>({
+        who: it.source || it.who || '来源',
+        txt: it.text || `${esc(it.title||'')} —— ${esc(it.note||'同事件报道。')}`,
+        url: it.url,
+      })),
+    })).filter(g=>g.items.length);
+  } else {
+    const related = signals
+      .filter(x=>x.rank!==s.rank && x.url && titleSim(x.zhTitle||x.title, s.zhTitle||s.title) >= 0.82)
+      .slice(0,5);
+    groups = [
+      { key:'官方来源', tone:'#16130f', items:[ { who: s.source, txt:`${esc(s.zhTitle)} —— 原始发布 / 公告。`, url: s.url||sourceUrls[s.source]||'#' } ] },
+      { key:'相关报道', tone:'#2b6cb0', items:related.slice(0,2).map(x=>({ who:x.source, txt:`${esc(x.zhTitle)} —— 同事件的其它源头报道。`, url:x.url })) },
+      { key:'交叉验证', tone:'#1f7a45', items:related.slice(2,4).map(x=>({ who:x.source, txt:`${esc(x.zhTitle)} —— 可用于交叉印证事实与影响边界。`, url:x.url })) },
+      { key:'补充视角', tone:'#a06600', items:related.slice(4,5).map(x=>({ who:x.source, txt:`${esc(x.zhTitle)} —— 补充同事件的背景或旁证。`, url:x.url })) },
+    ].filter(group=>group.items.length);
+  }
   const n = groups.reduce((sum, group)=>sum+group.items.length, 0);
+  if(!n){
+    return `<div style="margin: 6px 0 26px; padding: 14px 16px; border: 1px dashed var(--ds-ink-line); color: ${UI.text3}; font-size: 13px;">暂无其它同源报道可聚合。新简报生成后，同事件的其它源头会自动出现在这里。</div>`;
+  }
   const blocks = groups.map(g=>`
     <div style="border: 1px solid var(--ds-ink-line); border-left: 3px solid ${g.tone}; background: #fff; margin-bottom: 10px;">
       <div style="display: flex; align-items: center; gap: 8px; padding: 8px 12px; border-bottom: 1px solid var(--ds-hair); background: rgba(22,19,15,.02);">

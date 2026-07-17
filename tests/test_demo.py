@@ -7,7 +7,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from unittest.mock import patch
 
-from src import config, daily, main, notify, process, publish, rss, sources
+from src import config, daily, main, notify, process, publish, rss, scrape, sources
 
 
 class PipelineTests(unittest.TestCase):
@@ -18,6 +18,202 @@ class PipelineTests(unittest.TestCase):
             {"fields": {"source_id": "paused", "status": "paused", "fetch_method": "RSS", "endpoint": "https://example.com/paused"}},
         ]
         self.assertEqual([item["id"] for item in sources.map_feed_sources(records)], ["rss"])
+
+    def test_explicit_source_type_overrides_heuristics(self) -> None:
+        records = [
+            {
+                "fields": {
+                    "source_id": "openai-news",
+                    "name": "OpenAI",
+                    "status": "active",
+                    "fetch_method": "RSS",
+                    "endpoint": "https://openai.com/news/rss.xml",
+                    "来源类型": "论文",
+                }
+            }
+        ]
+        feeds = sources.map_feed_sources(records)
+        self.assertEqual(feeds[0]["source_type"], "论文")
+        self.assertTrue(sources.is_paper_source(source_id="jmlr", entity_type="paper"))
+        self.assertEqual(
+            sources.catalog_signal_format("Hugging Face Papers Trending"),
+            "论文",
+        )
+
+    def test_scrape_diag_mapping_includes_b_class(self) -> None:
+        records = [
+            {
+                "fields": {
+                    "source_id": "chatbot-arena",
+                    "name": "Arena",
+                    "status": "active",
+                    "fetch_method": "Scrape",
+                    "endpoint": "https://lmarena.ai/",
+                }
+            },
+            {
+                "fields": {
+                    "source_id": "anthropic-news",
+                    "name": "Anthropic",
+                    "status": "active",
+                    "fetch_method": "Scrape",
+                    "endpoint": "https://www.anthropic.com/news",
+                }
+            },
+        ]
+        prod = sources.map_scrape_sources(records)
+        self.assertEqual([f["id"] for f in prod], ["anthropic-news"])
+        diag = sources.map_scrape_sources_for_diag(records)
+        self.assertEqual({f["id"] for f in diag}, {"chatbot-arena", "anthropic-news"})
+        self.assertEqual(sources.scrape_cohort("openai-careers"), "招聘")
+        self.assertEqual(sources.scrape_cohort("hf-papers-trending"), "论文站")
+
+    def test_hf_pwc_extracts_only_paper_urls(self) -> None:
+        recent = datetime.now(timezone.utc).strftime("%Y-%m-%dT00:00:00.000Z")
+        props = {
+            "dailyPapers": [
+                {
+                    "title": "Paper Alpha",
+                    "paper": {
+                        "id": "2607.11111",
+                        "title": "Paper Alpha",
+                        "publishedAt": recent,
+                        "upvotes": 40,
+                    },
+                },
+                {
+                    "title": "Paper Beta",
+                    "paper": {
+                        "id": "2607.11886",
+                        "title": "Paper Beta",
+                        "publishedAt": recent,
+                        "upvotes": 50,
+                    },
+                },
+                {
+                    "title": "Old Cold",
+                    "paper": {
+                        "id": "2403.08299",
+                        "title": "Old Cold",
+                        "publishedAt": "2024-03-13T00:00:00.000Z",
+                        "upvotes": 15,
+                    },
+                },
+                {
+                    "title": "Old Hot",
+                    "paper": {
+                        "id": "2412.20138",
+                        "title": "Old Hot",
+                        "publishedAt": "2024-12-28T00:00:00.000Z",
+                        "upvotes": 120,
+                    },
+                },
+            ],
+            "isTrending": True,
+        }
+        # HTML 实体编码的 data-props（与 HF 页面一致）
+        encoded = (
+            json.dumps(props, separators=(",", ":"))
+            .replace("&", "&amp;")
+            .replace('"', "&quot;")
+        )
+        html = f"""
+        <a href="/papers/trending">Trending</a>
+        <a href="/papers/date/2026-07-14">Jul 14</a>
+        <a href="/join/discord">Discord</a>
+        <a href="/inference/models">Models</a>
+        <div class="SVELTE_HYDRATER" data-target="DailyPapers" data-props="{encoded}"></div>
+        <a href="https://huggingface.co/papers/2607.11111">dup</a>
+        """
+        feed = {
+            "id": "hf-papers-trending",
+            "url": "https://huggingface.co/papers/trending",
+            "max_articles": 10,
+            "extra_config": {
+                "recent_days": 7,
+                "min_upvotes": 30,
+                "high_upvote_threshold": 100,
+            },
+        }
+        links = scrape._extract_hf_pwc_paper_links(html, feed)
+        urls = [x["url"] for x in links]
+        self.assertEqual(
+            urls,
+            [
+                "https://huggingface.co/papers/2607.11111",
+                "https://huggingface.co/papers/2607.11886",
+                "https://huggingface.co/papers/2412.20138",
+            ],
+        )
+        self.assertEqual(links[0]["title"], "Paper Alpha")
+        self.assertFalse(links[0]["heat_keep"])
+        self.assertTrue(links[2]["heat_keep"])
+        # PwC source_id 同样走专用抽取
+        self.assertTrue(
+            scrape._is_hf_pwc_paper_feed(
+                {"id": "papers-with-code-trending", "url": "https://paperswithcode.com/"}
+            )
+        )
+        self.assertEqual(
+            scrape._extract_links_for_feed(html, feed, use_jina=False),
+            links,
+        )
+
+    def test_pwc_co_uses_trending_api(self) -> None:
+        payload = [
+            {
+                "paper_id": "1",
+                "arxiv_id": "2607.04439",
+                "title": "ResearchStudio-Idea",
+                "date_published": datetime.now(timezone.utc).strftime("%Y-%m-%d"),
+                "paper_age_days": 2,
+                "trending": {"stars_gained_24h": 10},
+            },
+            {
+                "paper_id": "2",
+                "arxiv_id": "2605.23904",
+                "title": "Old Hot SkillOpt",
+                "date_published": "2026-05-22",
+                "paper_age_days": 54,
+                "trending": {"stars_gained_24h": 131},
+            },
+            {
+                "paper_id": "3",
+                "arxiv_id": "2403.08299",
+                "title": "Old Cold",
+                "date_published": "2024-03-13",
+                "paper_age_days": 800,
+                "trending": {"stars_gained_24h": 5},
+            },
+        ]
+
+        class _Resp:
+            def raise_for_status(self) -> None:
+                return None
+
+            def json(self) -> list:
+                return payload
+
+        feed = {
+            "id": "papers-with-code-trending",
+            "url": "https://paperswithcode.co/",
+            "max_articles": 10,
+            "extra_config": {"recent_days": 7, "high_stars_gained_24h": 100},
+        }
+        with patch("src.scrape.requests.get", return_value=_Resp()) as mocked:
+            links = scrape._extract_hf_pwc_paper_links("<html></html>", feed)
+        mocked.assert_called()
+        self.assertEqual(
+            [x["url"] for x in links],
+            [
+                "https://huggingface.co/papers/2607.04439",
+                "https://huggingface.co/papers/2605.23904",
+            ],
+        )
+        self.assertEqual(links[0]["title"], "ResearchStudio-Idea")
+        self.assertFalse(links[0]["heat_keep"])
+        self.assertTrue(links[1]["heat_keep"])
+
 
     def test_rss_endpoint_spaces_are_encoded(self) -> None:
         self.assertEqual(
@@ -30,14 +226,23 @@ class PipelineTests(unittest.TestCase):
         for index in range(config.MAX_ARXIV_ITEMS + 3):
             raw.append(
                 {
-                    "title": f"Paper {index}",
+                    "title": f"LLM reasoning paper {index}",
                     "url": f"https://arxiv.org/abs/2607.{index:05d}",
-                    "body": "A" * 250,
+                    "body": "A study of agent planning and LLM inference. " * 20,
                     "published_raw": datetime.now(timezone.utc).isoformat(),
-                    "feed": {"id": f"arxiv-{index % 2}", "name": "arXiv", "fetch_method": "RSS", "lookback_hours": 168},
+                    "feed": {
+                        "id": f"arxiv-{index % 2}",
+                        "name": "arXiv",
+                        "fetch_method": "RSS",
+                        "lookback_hours": 168,
+                        "keyword_regex": r"(llm|agent|reasoning)",
+                        "min_content_chars": 100,
+                        "source_type": "论文",
+                    },
                 }
             )
-        cleaned = process.process_and_clean(raw)
+        with patch.object(config, "PAPER_ENRICH_ENABLED", False):
+            cleaned = process.process_and_clean(raw)
         self.assertGreater(len(cleaned), config.MAX_ARXIV_ITEMS)
         self.assertEqual(len(main.filter_new_items(cleaned, set())), config.MAX_ARXIV_ITEMS)
 
@@ -47,7 +252,7 @@ class PipelineTests(unittest.TestCase):
                 "title": "Title",
                 "url": "https://example.com",
                 "source": "Source",
-                "source_type": "Company Blog",
+                "source_type": "纯网页",
                 "fetch_method": "RSS",
                 "category": "前沿模型公司",
                 "tier": "L1 一级官方",
@@ -159,7 +364,7 @@ class DeliveryTests(unittest.TestCase):
             "论文",
         )
         self.assertEqual(
-            daily.content_type({"来源类型": "Social", "链接": {"link": "https://x.com/a/status/1"}}),
+            daily.content_type({"来源类型": "社交媒体", "链接": {"link": "https://x.com/a/status/1"}}),
             "社交媒体帖子",
         )
         self.assertEqual(

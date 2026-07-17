@@ -8,7 +8,7 @@ from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any
 
-from . import config, daily, feishu
+from . import cluster, config, daily, feishu
 
 CN_TZ = timezone(timedelta(hours=8))
 ROOT = Path(__file__).resolve().parent.parent
@@ -73,6 +73,8 @@ def load_recent_briefs(token: str, days: int = 7) -> list[dict[str, Any]]:
         signals = [entries[record_id] for record_id in signal_ids if record_id in entries]
         if not date or not signals:
             continue
+        # 从全量条目池补齐同事件其它源头，供详情页「事件聚合」展示
+        signals = cluster.enrich_with_pool(signals, list(entries.values()), threshold=0.85)
         briefs.append(
             {
                 "date": date,

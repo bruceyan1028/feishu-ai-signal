@@ -9,7 +9,7 @@ from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any
 
-from . import config, feishu, report, rss, sources
+from . import cluster, config, feishu, report, rss, sources
 
 log = logging.getLogger("daily")
 CN_TZ = timezone(timedelta(hours=8))
@@ -64,14 +64,21 @@ def content_type(fields: dict[str, Any]) -> str:
     source_type = str(scalar(fields.get("来源类型")) or "")
     url = link(fields.get("链接"))
     text = f"{source} {source_type} {url}".lower()
+    # 来源类型已是载体分类时直接沿用（社交媒体帖子保持前端文案）
+    if source_type in ("论文", "视频", "公众号", "播客", "Github热榜"):
+        return source_type
+    if source_type in ("社交媒体", "Social"):
+        return "社交媒体帖子"
+    if source_type.lower() in ("github", "github-trending") or "github.com" in text:
+        return "Github热榜"
     if any(token in text for token in ("mp.weixin.qq.com", "weixin.qq.com", "微信公众号", "公众号")):
         return "公众号"
     if any(token in text for token in ("youtube.com", "youtu.be", "bilibili.com", "vimeo.com", "视频")):
         return "视频"
-    if any(token in text for token in ("arxiv.org", "openreview.net", "doi.org", "学术论文")):
+    if any(token in text for token in ("arxiv.org", "openreview.net", "doi.org", "学术论文", "论文")):
         return "论文"
     if source_type.lower() == "social" or any(
-        token in text for token in ("x.com/", "twitter.com/", "weibo.com/", "linkedin.com/")
+        token in text for token in ("x.com/", "twitter.com/", "weibo.com/", "linkedin.com/", "社交媒体")
     ):
         return "社交媒体帖子"
     return ""
@@ -132,7 +139,13 @@ def select_candidates(
                 "stamp": stamp,
             }
         )
-    candidates.sort(key=lambda item: ({"P0": 0, "P1": 1, "P2": 2}.get(item["priority"], 3), -item["stamp"]))
+    candidates.sort(
+        key=lambda item: (
+            {"P0": 0, "P1": 1, "P2": 2}.get(item["priority"], 3),
+            -float(scalar(item["fields"].get("质量分")) or 0),
+            -item["stamp"],
+        )
+    )
     selected: list[dict[str, Any]] = []
     arxiv_count = 0
     for item in candidates:
@@ -147,16 +160,23 @@ def select_candidates(
 
 
 def analyze_signal(fields: dict[str, Any]) -> dict[str, Any]:
+    is_paper = content_type(fields) == "论文"
+    paper_extra = ""
+    if is_paper:
+        paper_extra = (
+            "额外字段：rigor/novelty_paper/relevance（0-100整数，分别表示方法严谨度、学术新颖度、"
+            "与产业/工程实践的相关度）。\n"
+        )
     prompt = f"""你是资深 AI 行业分析师。只依据给定原文输出严格 JSON，不得虚构。
 字段：title_cn（准确简洁的中文标题）、summary_cn（中文1-2句）、why（中文1句）、impact/novelty/actionability（0-100整数）、
 urgency（高/中/低）、topics（从 AI、LLM、Agent、RAG、推理、多模态、开源、硬件、监管、融资、产品、其他中选2-4个）。
-标题：{scalar(fields.get("标题"))}
+{paper_extra}标题：{scalar(fields.get("标题"))}
 来源：{scalar(fields.get("来源"))}
 分类：{scalar(fields.get("分类"))}
 原文节选：{str(scalar(fields.get("原文")))[:4000]}"""
     raw = report._llm_json(prompt)
     topics = [str(topic) for topic in raw.get("topics") or [] if str(topic) in TOPIC_OPTIONS][:4]
-    return {
+    result = {
         "title_cn": str(raw.get("title_cn") or scalar(fields.get("标题"))).strip(),
         "summary_cn": str(raw.get("summary_cn") or "").strip(),
         "why": str(raw.get("why") or "").strip(),
@@ -166,9 +186,18 @@ urgency（高/中/低）、topics（从 AI、LLM、Agent、RAG、推理、多模
         "urgency": str(raw.get("urgency")) if raw.get("urgency") in URGENCY_TO_TABLE else "中",
         "topics": topics or ["其他"],
     }
+    if is_paper:
+        rigor = max(0, min(100, int(raw.get("rigor") or raw.get("novelty") or 0)))
+        novelty_paper = max(0, min(100, int(raw.get("novelty_paper") or raw.get("novelty") or 0)))
+        relevance = max(0, min(100, int(raw.get("relevance") or raw.get("actionability") or 0)))
+        result["rigor"] = rigor
+        result["novelty_paper"] = novelty_paper
+        result["relevance"] = relevance
+        result["llm_quality"] = round((rigor + novelty_paper + relevance) / 3, 1)
+    return result
 
 
-def _signal_from_fields(record_id: str, fields: dict[str, Any], analysis: dict[str, Any]) -> dict[str, Any]:
+def _signal_from_fields(record_id: str, fields: dict[str, Any], analysis: dict[str, Any], *, priority: str = "P2", tier: str = "") -> dict[str, Any]:
     published = int(float(scalar(fields.get("发布时间")) or 0))
     return {
         "recordId": record_id,
@@ -178,6 +207,8 @@ def _signal_from_fields(record_id: str, fields: dict[str, Any], analysis: dict[s
         "url": link(fields.get("链接")),
         "category": str(scalar(fields.get("分类")) or "其他"),
         "contentType": content_type(fields),
+        "tier": tier or str(scalar(fields.get("层级")) or ""),
+        "priority": priority,
         "publishedDate": datetime.fromtimestamp(published / 1000, CN_TZ).strftime("%Y-%m-%d") if published else "",
         "summary": analysis["summary_cn"],
         "why": analysis["why"],
@@ -236,9 +267,18 @@ def generate(day: str | None = None) -> dict[str, Any]:
     feishu.ensure_entry_enrichment_fields(token)
     params = feishu.read_param_records(token)
     entries = feishu.read_all_records_with_ids(token, config.FEISHU_ENTRY_TABLE_ID)
-    candidates = select_candidates(entries, _priority_map(params), _rss_source_ids(params))
+    priorities = _priority_map(params)
+    candidates = select_candidates(entries, priorities, _rss_source_ids(params))
     if not candidates:
         raise RuntimeError("近七日没有可用于简报的 RSS 信号")
+
+    # 同事件折叠：标题近似者只保留最优主条目进分析，其它源留给事件聚合
+    candidates = cluster.collapse_for_brief(
+        candidates,
+        threshold=0.85,
+        limit=config.DAILY_CANDIDATE_LIMIT,
+    )
+    log.info("同事件折叠后候选 %d 条", len(candidates))
 
     updates: list[dict[str, Any]] = []
     analyzed: list[dict[str, Any]] = []
@@ -248,30 +288,94 @@ def generate(day: str | None = None) -> dict[str, Any]:
         if analysis is None:
             log.info("分析 %d/%d: %s", index, len(candidates), scalar(fields.get("标题")))
             analysis = analyze_signal(fields)
+            update_fields: dict[str, Any] = {
+                "中文标题": analysis["title_cn"],
+                "中文摘要": analysis["summary_cn"],
+                "为何重要": analysis["why"],
+                "影响分": analysis["impact"],
+                "新颖度": analysis["novelty"],
+                "可行动性": analysis["actionability"],
+                "紧迫度": URGENCY_TO_TABLE[analysis["urgency"]],
+                "主题": analysis["topics"],
+                "状态": "已分析",
+            }
+            if analysis.get("llm_quality") is not None:
+                base_q = float(scalar(fields.get("质量分")) or 0)
+                final_q = round(0.6 * base_q + 0.4 * float(analysis["llm_quality"]), 1) if base_q else float(analysis["llm_quality"])
+                update_fields["质量分"] = final_q
+                analysis["final_quality"] = final_q
+                try:
+                    metrics = json.loads(str(scalar(fields.get("论文指标")) or "{}") or "{}")
+                except (TypeError, ValueError):
+                    metrics = {}
+                if not isinstance(metrics, dict):
+                    metrics = {}
+                metrics["llm"] = {
+                    "rigor": analysis.get("rigor"),
+                    "novelty_paper": analysis.get("novelty_paper"),
+                    "relevance": analysis.get("relevance"),
+                    "llm_quality": analysis.get("llm_quality"),
+                }
+                metrics["quality_score_final"] = final_q
+                update_fields["论文指标"] = json.dumps(metrics, ensure_ascii=False)
             updates.append(
                 {
                     "record_id": item["record_id"],
-                    "fields": {
-                        "中文标题": analysis["title_cn"],
-                        "中文摘要": analysis["summary_cn"],
-                        "为何重要": analysis["why"],
-                        "影响分": analysis["impact"],
-                        "新颖度": analysis["novelty"],
-                        "可行动性": analysis["actionability"],
-                        "紧迫度": URGENCY_TO_TABLE[analysis["urgency"]],
-                        "主题": analysis["topics"],
-                        "状态": "已分析",
-                    },
+                    "fields": update_fields,
                 }
             )
             if len(updates) >= 3:
                 feishu.batch_update_records(token, config.FEISHU_ENTRY_TABLE_ID, updates)
                 updates.clear()
-        analyzed.append(_signal_from_fields(str(item["record_id"]), fields, analysis))
+        signal = _signal_from_fields(
+            str(item["record_id"]),
+            fields,
+            analysis,
+            priority=str(item.get("priority") or priorities.get(item.get("source_id") or "", "P2")),
+            tier=str(item.get("tier") or scalar(fields.get("层级")) or ""),
+        )
+        # 把折叠掉的同事件其它源转成可展示 peers
+        peers = []
+        for peer in item.get("eventPeers") or []:
+            pf = peer.get("fields") or {}
+            peer_analysis = _existing_analysis(pf) or {
+                "title_cn": str(scalar(pf.get("中文标题")) or scalar(pf.get("标题")) or peer.get("titleCn") or peer.get("title") or ""),
+                "summary_cn": str(scalar(pf.get("中文摘要")) or ""),
+                "why": str(scalar(pf.get("为何重要")) or ""),
+                "impact": int(float(scalar(pf.get("影响分")) or 0)),
+                "novelty": int(float(scalar(pf.get("新颖度")) or 0)),
+                "actionability": int(float(scalar(pf.get("可行动性")) or 0)),
+                "urgency": "中",
+                "topics": [str(scalar(x)) for x in (pf.get("主题") or [])] or ["其他"],
+            }
+            peers.append(
+                _signal_from_fields(
+                    str(peer.get("record_id") or ""),
+                    pf,
+                    peer_analysis,
+                    priority=str(peer.get("priority") or "P2"),
+                    tier=str(peer.get("tier") or scalar(pf.get("层级")) or ""),
+                )
+            )
+        signal["eventPeers"] = peers
+        signal["qualityScore"] = float(
+            analysis.get("final_quality")
+            or scalar(fields.get("质量分"))
+            or 0
+        )
+        analyzed.append(signal)
     feishu.batch_update_records(token, config.FEISHU_ENTRY_TABLE_ID, updates)
 
-    analyzed.sort(key=lambda s: (s["impact"], s["novelty"], s["actionability"]), reverse=True)
-    signals = analyzed[: config.DAILY_SIGNAL_LIMIT]
+    analyzed.sort(
+        key=lambda s: (
+            float(s.get("qualityScore") or 0),
+            s["impact"],
+            s["novelty"],
+            s["actionability"],
+        ),
+        reverse=True,
+    )
+    signals = cluster.attach_aggregations(analyzed[: config.DAILY_SIGNAL_LIMIT])
     image_updates = []
     seen_images: set[str] = set()
     for signal in signals:

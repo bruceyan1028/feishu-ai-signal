@@ -83,6 +83,24 @@
       "mediaAssets": {
         "images": [],
         "videos": []
+      },
+      "eventAggregation": {
+        "total": 1,
+        "groups": [
+          {
+            "key": "官方来源",
+            "tone": "#16130f",
+            "items": [
+              {
+                "source": "Google Cloud AI Blog",
+                "title": "Google Cloud全面开放算法优化智能体AlphaEvolve",
+                "url": "https://cloud.google.com/blog/products/ai-machine-learning/alphaevolve-is-available-for-everyone",
+                "note": "原始发布 / 公告。",
+                "text": "Google Cloud全面开放算法优化智能体AlphaEvolve —— 原始发布 / 公告。"
+              }
+            ]
+          }
+        ]
       }
     },
     {
@@ -108,6 +126,24 @@
       "mediaAssets": {
         "images": [],
         "videos": []
+      },
+      "eventAggregation": {
+        "total": 1,
+        "groups": [
+          {
+            "key": "官方来源",
+            "tone": "#16130f",
+            "items": [
+              {
+                "source": "TechCrunch AI",
+                "title": "SK海力士完成265亿美元美国史上最大外国企业IPO，并被敦促赴美建厂",
+                "url": "https://techcrunch.com/2026/07/10/sk-hynix-raises-26-5b-in-the-biggest-foreign-ipo-in-us-history-is-urged-to-build-new-us-fabs",
+                "note": "原始发布 / 公告。",
+                "text": "SK海力士完成265亿美元美国史上最大外国企业IPO，并被敦促赴美建厂 —— 原始发布 / 公告。"
+              }
+            ]
+          }
+        ]
       }
     },
     {
@@ -133,6 +169,24 @@
       "mediaAssets": {
         "images": [],
         "videos": []
+      },
+      "eventAggregation": {
+        "total": 1,
+        "groups": [
+          {
+            "key": "官方来源",
+            "tone": "#16130f",
+            "items": [
+              {
+                "source": "Microsoft Copilot / GitHub Copilot",
+                "title": "GitHub 为每个活跃仓库建立持久所有权机制",
+                "url": "https://github.blog/security/application-security/how-github-gave-every-repository-a-durable-owner",
+                "note": "原始发布 / 公告。",
+                "text": "GitHub 为每个活跃仓库建立持久所有权机制 —— 原始发布 / 公告。"
+              }
+            ]
+          }
+        ]
       }
     },
     {
@@ -159,6 +213,24 @@
       "mediaAssets": {
         "images": [],
         "videos": []
+      },
+      "eventAggregation": {
+        "total": 1,
+        "groups": [
+          {
+            "key": "官方来源",
+            "tone": "#16130f",
+            "items": [
+              {
+                "source": "AWS AI / Bedrock Blog",
+                "title": "Henry Schein One借助Amazon SageMaker实现牙科X光实时质量验证",
+                "url": "https://aws.amazon.com/blogs/machine-learning/real-time-dental-image-verification-with-amazon-sagemaker-ai-at-henry-schein-one",
+                "note": "原始发布 / 公告。",
+                "text": "Henry Schein One借助Amazon SageMaker实现牙科X光实时质量验证 —— 原始发布 / 公告。"
+              }
+            ]
+          }
+        ]
       }
     },
     {
@@ -194,6 +266,24 @@
           }
         ],
         "videos": []
+      },
+      "eventAggregation": {
+        "total": 1,
+        "groups": [
+          {
+            "key": "官方来源",
+            "tone": "#16130f",
+            "items": [
+              {
+                "source": "arXiv cs.CL",
+                "title": "AgentKGV：面向知识图谱事实验证的智能体式LLM-RAG与两阶段训练框架",
+                "url": "https://arxiv.org/abs/2607.09092",
+                "note": "原始发布 / 公告。",
+                "text": "AgentKGV：面向知识图谱事实验证的智能体式LLM-RAG与两阶段训练框架 —— 原始发布 / 公告。"
+              }
+            ]
+          }
+        ]
       }
     },
     {
@@ -220,6 +310,24 @@
       "mediaAssets": {
         "images": [],
         "videos": []
+      },
+      "eventAggregation": {
+        "total": 1,
+        "groups": [
+          {
+            "key": "官方来源",
+            "tone": "#16130f",
+            "items": [
+              {
+                "source": "AWS AI / Bedrock Blog",
+                "title": "Amazon SageMaker AI推出NVIDIA Nemotron 3无服务器模型定制",
+                "url": "https://aws.amazon.com/blogs/machine-learning/fine-tune-nvidia-nemotron-3-models-with-amazon-sagemaker-ai-serverless-model-customization",
+                "note": "原始发布 / 公告。",
+                "text": "Amazon SageMaker AI推出NVIDIA Nemotron 3无服务器模型定制 —— 原始发布 / 公告。"
+              }
+            ]
+          }
+        ]
       }
     },
     {
@@ -245,6 +353,24 @@
       "mediaAssets": {
         "images": [],
         "videos": []
+      },
+      "eventAggregation": {
+        "total": 1,
+        "groups": [
+          {
+            "key": "官方来源",
+            "tone": "#16130f",
+            "items": [
+              {
+                "source": "TechCrunch AI",
+                "title": "Fidji Simo卸任OpenAI二号高管全职职务",
+                "url": "https://techcrunch.com/2026/07/09/fidji-simo-steps-down-from-openais-no-2-role",
+                "note": "原始发布 / 公告。",
+                "text": "Fidji Simo卸任OpenAI二号高管全职职务 —— 原始发布 / 公告。"
+              }
+            ]
+          }
+        ]
       }
     },
     {
@@ -271,6 +397,24 @@
       "mediaAssets": {
         "images": [],
         "videos": []
+      },
+      "eventAggregation": {
+        "total": 1,
+        "groups": [
+          {
+            "key": "官方来源",
+            "tone": "#16130f",
+            "items": [
+              {
+                "source": "AWS AI / Bedrock Blog",
+                "title": "AWS 推出 Claude 应用网关，集中管控访问、策略与成本",
+                "url": "https://aws.amazon.com/blogs/machine-learning/introducing-claude-apps-gateway-for-aws",
+                "note": "原始发布 / 公告。",
+                "text": "AWS 推出 Claude 应用网关，集中管控访问、策略与成本 —— 原始发布 / 公告。"
+              }
+            ]
+          }
+        ]
       }
     },
     {
@@ -297,6 +441,24 @@
       "mediaAssets": {
         "images": [],
         "videos": []
+      },
+      "eventAggregation": {
+        "total": 1,
+        "groups": [
+          {
+            "key": "官方来源",
+            "tone": "#16130f",
+            "items": [
+              {
+                "source": "AWS AI / Bedrock Blog",
+                "title": "在 AWS 上使用 Stardog 与 Amazon Bedrock AgentCore 构建智能体语义层",
+                "url": "https://aws.amazon.com/blogs/machine-learning/build-a-semantic-layer-for-agentic-ai-on-aws-with-stardog-and-amazon-bedrock-agentcore",
+                "note": "原始发布 / 公告。",
+                "text": "在 AWS 上使用 Stardog 与 Amazon Bedrock AgentCore 构建智能体语义层 —— 原始发布 / 公告。"
+              }
+            ]
+          }
+        ]
       }
     },
     {
@@ -323,6 +485,24 @@
       "mediaAssets": {
         "images": [],
         "videos": []
+      },
+      "eventAggregation": {
+        "total": 1,
+        "groups": [
+          {
+            "key": "官方来源",
+            "tone": "#16130f",
+            "items": [
+              {
+                "source": "AWS AI / Bedrock Blog",
+                "title": "Amazon SageMaker HyperPod增强企业级大模型推理能力",
+                "url": "https://aws.amazon.com/blogs/machine-learning/enhancing-enterprise-inference-on-amazon-sagemaker-hyperpod-with-data-capture-hugging-face-nvme-and-route-53-integration",
+                "note": "原始发布 / 公告。",
+                "text": "Amazon SageMaker HyperPod增强企业级大模型推理能力 —— 原始发布 / 公告。"
+              }
+            ]
+          }
+        ]
       }
     },
     {
@@ -349,6 +529,24 @@
       "mediaAssets": {
         "images": [],
         "videos": []
+      },
+      "eventAggregation": {
+        "total": 1,
+        "groups": [
+          {
+            "key": "官方来源",
+            "tone": "#16130f",
+            "items": [
+              {
+                "source": "AWS AI / Bedrock Blog",
+                "title": "KTern.AI基于Amazon Bedrock AgentCore构建SAP企业级智能体平台",
+                "url": "https://aws.amazon.com/blogs/machine-learning/how-ktern-ai-built-agentic-ai-for-sap-on-amazon-bedrock-agentcore",
+                "note": "原始发布 / 公告。",
+                "text": "KTern.AI基于Amazon Bedrock AgentCore构建SAP企业级智能体平台 —— 原始发布 / 公告。"
+              }
+            ]
+          }
+        ]
       }
     },
     {
@@ -375,6 +573,24 @@
       "mediaAssets": {
         "images": [],
         "videos": []
+      },
+      "eventAggregation": {
+        "total": 1,
+        "groups": [
+          {
+            "key": "官方来源",
+            "tone": "#16130f",
+            "items": [
+              {
+                "source": "Microsoft Copilot / GitHub Copilot",
+                "title": "GitHub 2026年6月可用性报告：Azure迁移进展与Copilot代码审查故障",
+                "url": "https://github.blog/news-insights/company-news/github-availability-report-june-2026",
+                "note": "原始发布 / 公告。",
+                "text": "GitHub 2026年6月可用性报告：Azure迁移进展与Copilot代码审查故障 —— 原始发布 / 公告。"
+              }
+            ]
+          }
+        ]
       }
     },
     {
@@ -400,6 +616,24 @@
       "mediaAssets": {
         "images": [],
         "videos": []
+      },
+      "eventAggregation": {
+        "total": 1,
+        "groups": [
+          {
+            "key": "官方来源",
+            "tone": "#16130f",
+            "items": [
+              {
+                "source": "Meta Newsroom AI",
+                "title": "Meta在加拿大开建首座1吉瓦AI数据中心",
+                "url": "https://about.fb.com/news/2026/07/breaking-ground-on-metas-first-data-center-in-canada",
+                "note": "原始发布 / 公告。",
+                "text": "Meta在加拿大开建首座1吉瓦AI数据中心 —— 原始发布 / 公告。"
+              }
+            ]
+          }
+        ]
       }
     },
     {
@@ -425,6 +659,24 @@
       "mediaAssets": {
         "images": [],
         "videos": []
+      },
+      "eventAggregation": {
+        "total": 1,
+        "groups": [
+          {
+            "key": "官方来源",
+            "tone": "#16130f",
+            "items": [
+              {
+                "source": "Google Cloud AI Blog",
+                "title": "谁来评估评估体系？用信息论衡量 AI Agent 的数据发现能力",
+                "url": "https://cloud.google.com/blog/products/data-analytics/evaluate-agent-performance",
+                "note": "原始发布 / 公告。",
+                "text": "谁来评估评估体系？用信息论衡量 AI Agent 的数据发现能力 —— 原始发布 / 公告。"
+              }
+            ]
+          }
+        ]
       }
     },
     {
@@ -463,6 +715,24 @@
           }
         ],
         "videos": []
+      },
+      "eventAggregation": {
+        "total": 1,
+        "groups": [
+          {
+            "key": "官方来源",
+            "tone": "#16130f",
+            "items": [
+              {
+                "source": "arXiv cs.CL",
+                "title": "HALO：面向语言模型的混合自适应潜在推理",
+                "url": "https://arxiv.org/abs/2607.08775",
+                "note": "原始发布 / 公告。",
+                "text": "HALO：面向语言模型的混合自适应潜在推理 —— 原始发布 / 公告。"
+              }
+            ]
+          }
+        ]
       }
     },
     {
@@ -488,6 +758,24 @@
       "mediaAssets": {
         "images": [],
         "videos": []
+      },
+      "eventAggregation": {
+        "total": 1,
+        "groups": [
+          {
+            "key": "官方来源",
+            "tone": "#16130f",
+            "items": [
+              {
+                "source": "Microsoft Copilot / GitHub Copilot",
+                "title": "更好的工具为何让 Copilot 代码审查变差，以及如何修复",
+                "url": "https://github.blog/ai-and-ml/github-copilot/better-tools-made-copilot-code-review-worse-heres-how-we-actually-improved-it",
+                "note": "原始发布 / 公告。",
+                "text": "更好的工具为何让 Copilot 代码审查变差，以及如何修复 —— 原始发布 / 公告。"
+              }
+            ]
+          }
+        ]
       }
     },
     {
@@ -513,6 +801,24 @@
       "mediaAssets": {
         "images": [],
         "videos": []
+      },
+      "eventAggregation": {
+        "total": 1,
+        "groups": [
+          {
+            "key": "官方来源",
+            "tone": "#16130f",
+            "items": [
+              {
+                "source": "TechCrunch AI",
+                "title": "巴黎 AI 语音初创公司 Gradium 获英伟达支持的 1 亿美元种子轮融资",
+                "url": "https://techcrunch.com/2026/07/09/paris-based-ai-voice-startup-gradium-raises-100m-seed-backed-by-nvidia",
+                "note": "原始发布 / 公告。",
+                "text": "巴黎 AI 语音初创公司 Gradium 获英伟达支持的 1 亿美元种子轮融资 —— 原始发布 / 公告。"
+              }
+            ]
+          }
+        ]
       }
     },
     {
@@ -539,6 +845,24 @@
       "mediaAssets": {
         "images": [],
         "videos": []
+      },
+      "eventAggregation": {
+        "total": 1,
+        "groups": [
+          {
+            "key": "官方来源",
+            "tone": "#16130f",
+            "items": [
+              {
+                "source": "AWS AI / Bedrock Blog",
+                "title": "SageMaker HyperPod实现大模型预填充与解码分离推理",
+                "url": "https://aws.amazon.com/blogs/machine-learning/disaggregated-prefill-and-decode-for-llm-inference-on-sagemaker-hyperpod",
+                "note": "原始发布 / 公告。",
+                "text": "SageMaker HyperPod实现大模型预填充与解码分离推理 —— 原始发布 / 公告。"
+              }
+            ]
+          }
+        ]
       }
     },
     {
@@ -565,6 +889,24 @@
       "mediaAssets": {
         "images": [],
         "videos": []
+      },
+      "eventAggregation": {
+        "total": 1,
+        "groups": [
+          {
+            "key": "官方来源",
+            "tone": "#16130f",
+            "items": [
+              {
+                "source": "AWS AI / Bedrock Blog",
+                "title": "使用 Unsloth 在 Amazon SageMaker AI 部署量化模型",
+                "url": "https://aws.amazon.com/blogs/machine-learning/deploying-quantized-models-on-amazon-sagemaker-ai-with-unsloth",
+                "note": "原始发布 / 公告。",
+                "text": "使用 Unsloth 在 Amazon SageMaker AI 部署量化模型 —— 原始发布 / 公告。"
+              }
+            ]
+          }
+        ]
       }
     },
     {
@@ -590,6 +932,24 @@
       "mediaAssets": {
         "images": [],
         "videos": []
+      },
+      "eventAggregation": {
+        "total": 1,
+        "groups": [
+          {
+            "key": "官方来源",
+            "tone": "#16130f",
+            "items": [
+              {
+                "source": "AWS AI / Bedrock Blog",
+                "title": "Amazon Quick Automate原生案例管理扩展智能体工作流",
+                "url": "https://aws.amazon.com/blogs/machine-learning/scaling-agentic-workflows-with-native-case-management-in-amazon-quick-automate",
+                "note": "原始发布 / 公告。",
+                "text": "Amazon Quick Automate原生案例管理扩展智能体工作流 —— 原始发布 / 公告。"
+              }
+            ]
+          }
+        ]
       }
     },
     {
@@ -615,6 +975,24 @@
       "mediaAssets": {
         "images": [],
         "videos": []
+      },
+      "eventAggregation": {
+        "total": 1,
+        "groups": [
+          {
+            "key": "官方来源",
+            "tone": "#16130f",
+            "items": [
+              {
+                "source": "AWS AI / Bedrock Blog",
+                "title": "MCP 工具设计实践：平衡上下文膨胀与调用混淆",
+                "url": "https://aws.amazon.com/blogs/machine-learning/mcp-tool-design-practical-approaches-and-tradeoffs",
+                "note": "原始发布 / 公告。",
+                "text": "MCP 工具设计实践：平衡上下文膨胀与调用混淆 —— 原始发布 / 公告。"
+              }
+            ]
+          }
+        ]
       }
     },
     {
@@ -654,6 +1032,24 @@
           }
         ],
         "videos": []
+      },
+      "eventAggregation": {
+        "total": 1,
+        "groups": [
+          {
+            "key": "官方来源",
+            "tone": "#16130f",
+            "items": [
+              {
+                "source": "arXiv cs.CL",
+                "title": "小型双曲语言模型涌现创造力、诚实性与设计性遗忘",
+                "url": "https://arxiv.org/abs/2607.09306",
+                "note": "原始发布 / 公告。",
+                "text": "小型双曲语言模型涌现创造力、诚实性与设计性遗忘 —— 原始发布 / 公告。"
+              }
+            ]
+          }
+        ]
       }
     },
     {
@@ -693,6 +1089,24 @@
           }
         ],
         "videos": []
+      },
+      "eventAggregation": {
+        "total": 1,
+        "groups": [
+          {
+            "key": "官方来源",
+            "tone": "#16130f",
+            "items": [
+              {
+                "source": "arXiv cs.CL",
+                "title": "涌现失准或为表象：数据集表面特征削弱其稳健性",
+                "url": "https://arxiv.org/abs/2607.09053",
+                "note": "原始发布 / 公告。",
+                "text": "涌现失准或为表象：数据集表面特征削弱其稳健性 —— 原始发布 / 公告。"
+              }
+            ]
+          }
+        ]
       }
     },
     {
@@ -719,6 +1133,24 @@
       "mediaAssets": {
         "images": [],
         "videos": []
+      },
+      "eventAggregation": {
+        "total": 1,
+        "groups": [
+          {
+            "key": "官方来源",
+            "tone": "#16130f",
+            "items": [
+              {
+                "source": "TechCrunch AI",
+                "title": "AI Agent 创企 Lyzr 用自家智能体推进 1 亿美元融资",
+                "url": "https://techcrunch.com/2026/07/09/an-ai-agent-startup-just-let-its-agent-run-its-100-million-fundraise",
+                "note": "原始发布 / 公告。",
+                "text": "AI Agent 创企 Lyzr 用自家智能体推进 1 亿美元融资 —— 原始发布 / 公告。"
+              }
+            ]
+          }
+        ]
       }
     },
     {
@@ -757,6 +1189,24 @@
           }
         ],
         "videos": []
+      },
+      "eventAggregation": {
+        "total": 1,
+        "groups": [
+          {
+            "key": "官方来源",
+            "tone": "#16130f",
+            "items": [
+              {
+                "source": "arXiv cs.CL",
+                "title": "PRecG：结合图神经网络与修辞角色分割的法律判例检索",
+                "url": "https://arxiv.org/abs/2607.09094",
+                "note": "原始发布 / 公告。",
+                "text": "PRecG：结合图神经网络与修辞角色分割的法律判例检索 —— 原始发布 / 公告。"
+              }
+            ]
+          }
+        ]
       }
     },
     {
@@ -796,6 +1246,24 @@
           }
         ],
         "videos": []
+      },
+      "eventAggregation": {
+        "total": 1,
+        "groups": [
+          {
+            "key": "官方来源",
+            "tone": "#16130f",
+            "items": [
+              {
+                "source": "arXiv cs.CL",
+                "title": "用机器学习自动为伏尔泰全集建立主题索引",
+                "url": "https://arxiv.org/abs/2607.09316",
+                "note": "原始发布 / 公告。",
+                "text": "用机器学习自动为伏尔泰全集建立主题索引 —— 原始发布 / 公告。"
+              }
+            ]
+          }
+        ]
       }
     },
     {
@@ -822,6 +1290,24 @@
       "mediaAssets": {
         "images": [],
         "videos": []
+      },
+      "eventAggregation": {
+        "total": 1,
+        "groups": [
+          {
+            "key": "官方来源",
+            "tone": "#16130f",
+            "items": [
+              {
+                "source": "arXiv cs.CL",
+                "title": "AI赋能众包馆藏关键词提取：开放权重抽取式模型更适合负责任部署",
+                "url": "https://arxiv.org/abs/2607.09324",
+                "note": "原始发布 / 公告。",
+                "text": "AI赋能众包馆藏关键词提取：开放权重抽取式模型更适合负责任部署 —— 原始发布 / 公告。"
+              }
+            ]
+          }
+        ]
       }
     },
     {
@@ -857,6 +1343,24 @@
           }
         ],
         "videos": []
+      },
+      "eventAggregation": {
+        "total": 1,
+        "groups": [
+          {
+            "key": "官方来源",
+            "tone": "#16130f",
+            "items": [
+              {
+                "source": "arXiv cs.CL",
+                "title": "基于 RAG 与大语言模型生成投资者简报的基本面分析系统",
+                "url": "https://arxiv.org/abs/2607.09121",
+                "note": "原始发布 / 公告。",
+                "text": "基于 RAG 与大语言模型生成投资者简报的基本面分析系统 —— 原始发布 / 公告。"
+              }
+            ]
+          }
+        ]
       }
     },
     {
@@ -895,6 +1399,24 @@
           }
         ],
         "videos": []
+      },
+      "eventAggregation": {
+        "total": 1,
+        "groups": [
+          {
+            "key": "官方来源",
+            "tone": "#16130f",
+            "items": [
+              {
+                "source": "arXiv cs.CL",
+                "title": "复杂度引导的语言模型分组件初始化方法",
+                "url": "https://arxiv.org/abs/2607.09204",
+                "note": "原始发布 / 公告。",
+                "text": "复杂度引导的语言模型分组件初始化方法 —— 原始发布 / 公告。"
+              }
+            ]
+          }
+        ]
       }
     },
     {
@@ -933,6 +1455,24 @@
           }
         ],
         "videos": []
+      },
+      "eventAggregation": {
+        "total": 1,
+        "groups": [
+          {
+            "key": "官方来源",
+            "tone": "#16130f",
+            "items": [
+              {
+                "source": "arXiv cs.CL",
+                "title": "字母词形还原：用一对一与带状 RNN 逆转中世纪文本字符简化及缩写",
+                "url": "https://arxiv.org/abs/2607.09291",
+                "note": "原始发布 / 公告。",
+                "text": "字母词形还原：用一对一与带状 RNN 逆转中世纪文本字符简化及缩写 —— 原始发布 / 公告。"
+              }
+            ]
+          }
+        ]
       }
     }
   ],
