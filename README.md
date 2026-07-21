@@ -1,104 +1,179 @@
 # 飞书真实情报 Demo
 
-这是一个可直接演示的真实 AI 情报闭环：
+一个可端到端跑通的 AI 情报闭环：
 
-`飞书参数表 → 真实 RSS → 条目表 → LLM 分析回写 → 每日简报表 → GitHub Pages → 飞书消息卡片`
+`飞书参数表 → 真实 RSS / Scrape 抓取 → 条目表 → LLM 分析回写 → 每日简报表 → GitHub Pages → 飞书消息卡片`
 
-网页严格沿用 `ai-signal-dashboard/demo/index.html` 的视觉与交互。今日简报、信号列表和详情使用真实数据；评论、笔记、周报、辩论和会议等演示功能仍为本地模拟。
+网页沿用 `ai-signal-dashboard/demo/index.html` 的视觉与交互；今日简报、信号列表与详情为真实数据，评论/笔记/周报等演示功能仍为本地模拟。
 
-## 类型化筛选配置表
+---
 
-不同类型的信息源筛选参数很多，为避免把稀疏字段全塞进参数表，按类型拆成 4 张独立配置表（多维表）：
+## 快速开始（本地部署）
 
-| 类型 | 表名 | 默认 table_id | 环境变量 |
-| --- | --- | --- | --- |
-| 论文 | 论文筛选配置 | `tblhTzn8NyjeU779` | `FEISHU_PAPER_CONFIG_TABLE_ID` |
-| 公众号 | 公众号筛选配置 | `tblNLmDgL2HpI29U` | `FEISHU_WECHAT_CONFIG_TABLE_ID` |
-| 视频 | 视频筛选配置 | `tblh8FXqPevU7pBq` | `FEISHU_VIDEO_CONFIG_TABLE_ID` |
-| 社交 | 社交筛选配置 | `tbl7lTtZRBajtmrQ` | `FEISHU_SOCIAL_CONFIG_TABLE_ID` |
+> 目标：在自己的机器上把「采集 → 分析 → 生成网页」跑通。发送飞书卡片、GitHub Pages 部署为可选进阶步骤。
 
-约定与生效方式：
+### 0. 前置条件
 
-- **一源一行，主键 `source_id`。** 一个源出现在哪张表里，就说明它属于那个类型，走对应的类型过滤。
-- **信号源表 / 参数表「来源类型」**（论文 / 纯网页 / 视频 / 社交媒体 / 公众号 / 播客 / 其他）为显式载体类型；采集时优先读该字段，再回落到论文配置表归属与 id/URL 启发式。可用 `python -m src.backfill_source_type` 回填。
-- **留空即不过滤**，可随时增量填参数。
-- **立即生效**（当前抓取层已有数据）：必含/排除关键词、正文/摘要最小字数、论文期刊会议白/黑名单（文本匹配）、从摘要推断的代码链接与论文信号分。
-- **当前正式入库仍只抓 `active` + `RSS`**：OpenReview / HF Papers / PwC 等论文源若是 Scrape/API，会标成「论文」但不会自动进条目表，需改抓取方式或补适配器。
-- **Scrape 诊断**：`python -m src.diag_scrape [--engine auto|jina|direct] [--limit N]`，只跑 Scrape、默认不写飞书，报告见 `output/scrape-pipeline-diag.json`。
-- **arXiv 降噪（已启用）**：`lookback_window` 按配置生效（如 `24h`，不再强制 168h）；arXiv 同样走 `keyword_regex` 与长度过滤；论文配置表默认摘要≥500、排除课件/作业类词；轻量 `signal_score`（默认阈值 `ARXIV_MIN_SIGNAL_SCORE=55`，可在备注写 `min_signal_score=60` 覆盖）。
-- **论文质量分（A/D/E）**：
-  - A 录用：解析 arXiv comment / journal_ref 的 `Accepted to …`（仅常见会议/期刊），对照「期刊会议白/黑名单」
-  - D 社区热度：Hugging Face Papers upvotes
-  - E LLM：仅对简报候选打 `rigor / novelty_paper / relevance`，并与入库质量分合成最终分
-  - 综合：`0.40*录用 + 0.25*社区 + 0.35*signal_score`（缺社区数据时按可用维归一化）；默认飞书可配 `最低质量分`；入库与简报均按质量分优先截断 `MAX_ARXIV_ITEMS`
-  - arXiv 源按配置的 `lookback_window`（通常 `24h`）过滤；某类 RSS 在窗口内为空属正常（公告日滞后时下一轮再进）
-  - 录用解析只认常见会议/期刊名；白名单仅在解析到可信录用时才硬过滤
-  - 飞书可配：`要求已录用`、`最低质量分`、`最低社区热度`
-  - 正式采集日志会输出清洗漏斗（各原因丢弃计数）
-  - **已去掉作者影响力维**（不再调用 Semantic Scholar）
-- **留钩子、待抓取层补数据后自动生效**：影响因子、阅读量、播放量、时长、粉丝/互动等。
+- Python 3.11+（CI 用 3.12）
+- 一个**飞书企业自建应用**（拿 App ID / App Secret）
+- 一个 **OpenAI 兼容的 LLM**（DeepSeek / 通义 / OpenAI 等，仅生成每日简报时需要）
+- 可选：[Jina Reader](https://jina.ai/reader/) 的 `JINA_API_KEY`（Scrape 抓取更稳定）
 
-## 数据规则
-
-- 只采集参数表中 `status=active`、`fetch_method=RSS` 的来源。
-- arXiv 每轮和每份简报合计最多 10 条。
-- 原文链接、来源、发布时间、摘要和评分均保存在飞书多维表。
-- 去重键沿用现有“条目表”；“每日简报”表首次运行时自动创建。
-
-## 本地运行
+### 1. 克隆与安装
 
 ```bash
+git clone https://github.com/bruceyan1028/feishu-ai-signal.git
+cd feishu-ai-signal
+
 python3 -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
+```
+
+### 2. 准备飞书应用与多维表
+
+1. 在[飞书开放平台](https://open.feishu.cn/)创建**企业自建应用**，开启**机器人**能力。
+2. 开通权限：多维表格数据表/记录的**读取、新增、更新**；以应用身份**发送消息**（`im:message`）。
+3. 准备一个多维表（Base），至少包含：
+   - **参数表**（信号源配置）、**条目表**（采集入库）、**每日简报表**（留空会自动创建）。
+   - 5 张**类型化筛选配置表**（论文 / 公众号 / 视频 / 社交 / GitHub，见下文），可留空默认。
+   - 把该 Base **授权给你的应用**（多维表右上角「…」→ 添加文档应用）。
+4. 从各表 URL 里取 `base_id`（`app_token`）与 `table_id` 填进 `.env`。
+
+> 默认 `.env.example` 里的 base/table id 指向**作者的多维表**，其他人**没有写入权限**，务必换成你自己的。最省事的做法是把作者的 Base「另存为副本」到自己空间，字段结构即可保持一致。
+
+### 3. 配置环境变量
+
+```bash
 cp .env.example .env
+# 编辑 .env，填 FEISHU_APP_ID / FEISHU_APP_SECRET / 你自己的 base、table id / LLM_API_KEY
+```
+
+关键变量：
+
+| 变量 | 说明 |
+| --- | --- |
+| `FEISHU_APP_ID` / `FEISHU_APP_SECRET` | 必填，应用凭证 |
+| `FEISHU_BASE_ID` | 多维表 app_token |
+| `FEISHU_PARAM_TABLE_ID` / `FEISHU_ENTRY_TABLE_ID` | 参数表 / 条目表 |
+| `FEISHU_BRIEF_TABLE_ID` | 每日简报表，留空自动创建 |
+| `FEISHU_*_CONFIG_TABLE_ID` | 5 张类型化配置表，可留空用默认 |
+| `LLM_API_KEY` / `LLM_BASE_URL` / `LLM_MODEL` | 生成每日简报用（OpenAI 兼容） |
+| `JINA_API_KEY` | 可选，Scrape 抓取 |
+| `FEISHU_RECIPIENT_OPEN_IDS` | 卡片接收人 `open_id`，逗号分隔（发卡片时需要） |
+| `PUBLIC_BASE_URL` | 卡片里跳转的公网站点地址 |
+
+### 4. 跑一遍流水线
+
+```bash
+# 加载 .env 到当前 shell
 set -a && source .env && set +a
 
+# ① 采集 RSS 源写入条目表
 python -m src.main
+
+# ② 采集 Scrape 源（公众号 / GitHub热榜 / HF·PwC 论文等）写入条目表
+python -m src.diag_scrape --write
+
+# ③ LLM 分析近七日候选，生成每日简报（需要 LLM_API_KEY）
 python -m src.daily --output output/daily-brief.json
+
+# ④ 从飞书拉数据生成静态站点
 python -m src.publish --input output/daily-brief.json
+
+# ⑤ 本地预览
 python -m http.server 4173 --directory site
 ```
 
-打开 <http://localhost:4173>。发送卡片前还需配置公网 `PUBLIC_BASE_URL`：
+打开 <http://localhost:4173> 查看。
+
+### 5.（可选）发送飞书卡片
 
 ```bash
 python -m src.notify --input output/daily-brief.json
-# 演示时强制重发
-python -m src.notify --input output/daily-brief.json --force
+python -m src.notify --input output/daily-brief.json --force   # 强制重发
 ```
 
-## 飞书应用权限
+### 只想验证飞书连通性？
 
-企业自建应用需要启用机器人，并开通：
+```bash
+# 只跑一个源、写入条目表，最快确认「凭证 + 表权限 + 写入」是否 OK
+python -m src.diag_scrape --write --source-id huxiu --limit 1
+```
 
-- 多维表格数据表与记录的读取、新增、更新权限；
-- 以应用身份发送消息权限；
-- 现有多维表格需授权给该应用。
+---
 
-接收人使用用户 `open_id`。多人用英文逗号配置在
-`FEISHU_RECIPIENT_OPEN_IDS=ou_xxx,ou_yyy`；单人变量 `FEISHU_RECIPIENT_OPEN_ID` 仍兼容。
+## 信息源类型与筛选
+
+参数表（一级）字段 `来源类型` 为显式载体类型：`论文 / 纯网页 / 视频 / 社交媒体 / 公众号 / Github热榜 / 播客 / 其他`。采集时优先读该字段，再回落到配置表归属与 id/URL 启发式。可用 `python -m src.backfill_source_type` 回填。
+
+不同类型的筛选参数很多，按类型拆成独立配置表（一源一行，主键 `source_id`；留空即不过滤）：
+
+| 类型 | 默认 table_id | 环境变量 |
+| --- | --- | --- |
+| 论文 | `tblhTzn8NyjeU779` | `FEISHU_PAPER_CONFIG_TABLE_ID` |
+| 公众号 | `tblNLmDgL2HpI29U` | `FEISHU_WECHAT_CONFIG_TABLE_ID` |
+| 视频 | `tblh8FXqPevU7pBq` | `FEISHU_VIDEO_CONFIG_TABLE_ID` |
+| 社交 | `tbl7lTtZRBajtmrQ` | `FEISHU_SOCIAL_CONFIG_TABLE_ID` |
+| GitHub热榜 | `tblpZTJWyTRzkQyF` | `FEISHU_GITHUB_CONFIG_TABLE_ID` |
+
+### 关键词过滤（含密度门）
+
+- 每个源可配 `keyword_regex`（AI 相关词的正则）；正文/摘要过短会被丢弃。
+- `extra_config.keyword_min_hits`（默认 1）：**标题命中直接通过**；否则正文关键词命中次数需 ≥ 该值。用于压制正文导航/推荐位蹭词造成的假阳性（公众号站点常见）。噪音大的源可设 2+。
+- `extra_config.link_path_include`：列表页抽链时只保留匹配路径的 URL（如 `^/article/`），挡掉个人页/标签页。
+- `extra_config.force_direct`：强制直连抓取（跳过 Jina），适合 Jina 渲染后抽链失败的站点。
+
+### 论文质量（A/D/E）
+
+- **A 录用**：解析 arXiv comment / journal_ref 的 `Accepted to …`（仅常见会议/期刊），对照「期刊会议白/黑名单」。
+- **D 社区热度**：Hugging Face Papers upvotes。
+- **E LLM**：仅对简报候选打 `rigor / novelty_paper / relevance`，与入库质量分合成最终分。
+- 综合分 `0.40*录用 + 0.25*社区 + 0.35*signal_score`（缺维时归一化）；默认阈值 `PAPER_QUALITY_MIN_SCORE=60`。
+- **arXiv 长尾降噪**：预印本默认要求**有社区热度**（HF upvotes）才保留，已录用会议/顶刊豁免；`ARXIV_REQUIRE_COMMUNITY_HEAT=0` 可关闭。轻量 `signal_score` 阈值 `ARXIV_MIN_SIGNAL_SCORE=55`，可在配置表备注写 `min_signal_score=60` 覆盖。
+- arXiv 每轮和每份简报合计最多 `MAX_ARXIV_ITEMS`（默认 10）条，按质量分优先截断。
+- 已去掉作者影响力维（不再调用 Semantic Scholar）。
+
+---
+
+## 数据规则
+
+- **采集**：参数表中 `status=active` 的 `RSS` 源走 `python -m src.main`；`Scrape` 源走 `python -m src.diag_scrape --write`。
+- **简报候选**：近七日、`active` 的 **RSS + Scrape** 源（公众号、GitHub热榜、HF/PwC 论文都能进简报）。官方源优先，arXiv 受 `MAX_ARXIV_ITEMS` 限制。
+- 原文链接、来源、发布时间、摘要、评分、路由来源（RSS/Scrape）均写入条目表；去重键沿用条目表；每日简报表首次运行自动创建。
+
+---
 
 ## GitHub Pages 自动化
 
-仓库包含两个工作流：
+两个工作流：
 
-- `ingest.yml`：每 6 小时采集一次真实 RSS。
-- `daily-brief.yml`：北京时间每天 09:00 采集、分析、部署 Pages，再发送飞书卡片；也支持手动运行和强制重发。
+- `daily-brief.yml`：北京时间每天 09:00 采集 RSS、LLM 分析、部署 Pages、发送飞书卡片；支持手动运行（`workflow_dispatch`）与强制重发。
+- `ingest.yml`：仅手动触发（`workflow_dispatch`）的 RSS 采集，日常采集已并入 `daily-brief.yml`（每日一次）。
 
-在 GitHub Actions Secrets 中配置：
+在 GitHub Actions Secrets 配置：
 
 - 必填：`FEISHU_APP_ID`、`FEISHU_APP_SECRET`、`LLM_API_KEY`、`FEISHU_RECIPIENT_OPEN_IDS`
 - 可选：`FEISHU_BASE_ID`、`FEISHU_PARAM_TABLE_ID`、`FEISHU_ENTRY_TABLE_ID`、`FEISHU_BRIEF_TABLE_ID`
-- 可选论文质量：`PAPER_QUALITY_MIN_SCORE`、`MAX_ARXIV_ITEMS`、`PAPER_ENRICH_ENABLED`
-- 可选 LLM 覆盖：`LLM_BASE_URL`、`LLM_MODEL`
+- 可选论文/LLM：`PAPER_QUALITY_MIN_SCORE`、`MAX_ARXIV_ITEMS`、`PAPER_ENRICH_ENABLED`、`LLM_BASE_URL`、`LLM_MODEL`
 
-仓库 Settings → Pages 的 Source 选择 **GitHub Actions**。首次可在 Actions 中手动运行 `Daily AI Signal Brief`。
+仓库 Settings → Pages 的 Source 选择 **GitHub Actions**，首次可在 Actions 手动运行 `Daily AI Signal Brief`。
 
-## 测试
+> 注：本地 `python -m src.daily` 若因 LLM 端点仅限内网/CI 而报 405，改用 CI 的 `daily-brief` 工作流生成简报即可。
+
+---
+
+## 诊断与测试
 
 ```bash
+# Scrape 源诊断（默认不写飞书），报告见 output/scrape-pipeline-diag.json
+python -m src.diag_scrape [--engine auto|jina|direct] [--limit N] [--source-id xxx]
+
+# 论文富集诊断
+python -m src.diag_paper
+
+# 单元测试
 python -m unittest discover -s tests -v
 ```
 
-不要提交 `.env` 或任何真实密钥。若旧工作流曾包含明文密钥，应先在飞书与数据供应商后台轮换。
+不要提交 `.env` 或任何真实密钥。若旧提交曾包含明文密钥，应先在飞书与数据供应商后台轮换。
