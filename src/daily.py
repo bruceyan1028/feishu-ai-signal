@@ -141,21 +141,36 @@ def select_candidates(
                 "stamp": stamp,
             }
         )
+    def _is_arxiv(item: dict[str, Any]) -> bool:
+        return item["source_id"].startswith("arxiv-") or "arxiv.org/" in link(
+            item["fields"].get("链接")
+        )
+
+    def _eff_quality(item: dict[str, Any]) -> float:
+        q = float(scalar(item["fields"].get("质量分")) or 0)
+        return q * config.ARXIV_QUALITY_WEIGHT if _is_arxiv(item) else q
+
     candidates.sort(
         key=lambda item: (
             {"P0": 0, "P1": 1, "P2": 2}.get(item["priority"], 3),
-            -float(scalar(item["fields"].get("质量分")) or 0),
+            -_eff_quality(item),
             -item["stamp"],
         )
     )
     selected: list[dict[str, Any]] = []
     arxiv_count = 0
+    paper_count = 0
     for item in candidates:
-        is_arxiv = item["source_id"].startswith("arxiv-") or "arxiv.org/" in link(item["fields"].get("链接"))
+        is_arxiv = _is_arxiv(item)
+        is_paper = content_type(item["fields"]) == "论文"
+        # 论文总数硬上限：避免论文挤占「快速读新闻」的名额
+        if is_paper and paper_count >= config.DAILY_MAX_PAPERS:
+            continue
         if is_arxiv and arxiv_count >= config.MAX_ARXIV_ITEMS:
             continue
         selected.append(item)
         arxiv_count += int(is_arxiv)
+        paper_count += int(is_paper)
         if len(selected) >= (limit or config.DAILY_CANDIDATE_LIMIT):
             break
     return selected
@@ -368,9 +383,15 @@ def generate(day: str | None = None) -> dict[str, Any]:
         analyzed.append(signal)
     feishu.batch_update_records(token, config.FEISHU_ENTRY_TABLE_ID, updates)
 
+    def _display_quality(s: dict[str, Any]) -> float:
+        q = float(s.get("qualityScore") or 0)
+        if "arxiv.org/" in str(s.get("url") or ""):
+            q *= config.ARXIV_QUALITY_WEIGHT
+        return q
+
     analyzed.sort(
         key=lambda s: (
-            float(s.get("qualityScore") or 0),
+            _display_quality(s),
             s["impact"],
             s["novelty"],
             s["actionability"],
