@@ -306,7 +306,10 @@ class DailyTests(unittest.TestCase):
             limit=50,
         )
         self.assertEqual(selected[0]["record_id"], "official")
-        self.assertEqual(len([item for item in selected if item["source_id"].startswith("arxiv-")]), config.MAX_ARXIV_ITEMS)
+        # arXiv 条目均为论文，受论文上限 DAILY_MAX_PAPERS 约束（比 MAX_ARXIV_ITEMS 更紧）
+        arxiv_selected = [item for item in selected if item["source_id"].startswith("arxiv-")]
+        self.assertEqual(len(arxiv_selected), config.DAILY_MAX_PAPERS)
+        self.assertLessEqual(len(arxiv_selected), config.MAX_ARXIV_ITEMS)
         self.assertNotIn("scrape", [item["record_id"] for item in selected])
 
 
