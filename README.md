@@ -32,38 +32,44 @@ pip install -r requirements.txt
 
 ### 2. 准备飞书应用与多维表
 
-1. 在[飞书开放平台](https://open.feishu.cn/)创建**企业自建应用**，开启**机器人**能力。
-2. 开通权限：多维表格数据表/记录的**读取、新增、更新**；以应用身份**发送消息**（`im:message`）。
-3. 准备一个多维表（Base），至少包含：
-   - **参数表**（信号源配置）、**条目表**（采集入库）、**每日简报表**（留空会自动创建）。
-   - 5 张**类型化筛选配置表**（论文 / 公众号 / 视频 / 社交 / GitHub，见下文），可留空默认。
-   - 把该 Base **授权给你的应用**（多维表右上角「…」→ 添加文档应用）。
-4. 从各表 URL 里取 `base_id`（`app_token`）与 `table_id` 填进 `.env`。
+1. 在[飞书开放平台](https://open.feishu.cn/)创建**企业自建应用**，开启**机器人**能力，发布版本。
+2. 开通权限：多维表格数据表/记录的**读取、新增、更新**（含建表 `bitable:app`）；以应用身份**发送消息**（`im:message`）。
+3. 在飞书里**新建一个空的多维表格（Base）**，把它**授权给你的应用**（Base 右上角「…」→ 添加文档应用 → 选中你的应用）。
+4. 从浏览器地址栏取该 Base 的 `app_token`：形如 `https://xxx.feishu.cn/base/<app_token>?...`，`base/` 后面那一串就是 `FEISHU_BASE_ID`。
 
-> 默认 `.env.example` 里的 base/table id 指向**作者的多维表**，其他人**没有写入权限**，务必换成你自己的。最省事的做法是把作者的 Base「另存为副本」到自己空间，字段结构即可保持一致。
+> 无需手动建任何数据表、也无需复制作者的模板——下一步的初始化命令会在**你自己的 Base** 里自动建好全部 8 张表和字段。
 
 ### 3. 配置环境变量
 
 ```bash
 cp .env.example .env
-# 编辑 .env，填 FEISHU_APP_ID / FEISHU_APP_SECRET / 你自己的 base、table id / LLM_API_KEY
+# 编辑 .env，先填这三项：FEISHU_APP_ID / FEISHU_APP_SECRET / FEISHU_BASE_ID
 ```
 
-关键变量：
+### 4. 一键初始化多维表（重点）
+
+```bash
+set -a && source .env && set +a
+python -m src.bootstrap          # 想顺便写几个示例 RSS 源就加 --seed
+```
+
+命令会在你的 Base 里**幂等创建** 8 张表（参数表 / 条目表 / 每日简报 + 论文 / 公众号 / 视频 / 社交 / GitHub 5 张筛选配置表），
+并在结尾打印一段可直接粘贴的 `FEISHU_*_TABLE_ID`。**把它们复制回 `.env` 覆盖占位符**，再填上 LLM 相关变量：
 
 | 变量 | 说明 |
 | --- | --- |
-| `FEISHU_APP_ID` / `FEISHU_APP_SECRET` | 必填，应用凭证 |
-| `FEISHU_BASE_ID` | 多维表 app_token |
-| `FEISHU_PARAM_TABLE_ID` / `FEISHU_ENTRY_TABLE_ID` | 参数表 / 条目表 |
-| `FEISHU_BRIEF_TABLE_ID` | 每日简报表，留空自动创建 |
-| `FEISHU_*_CONFIG_TABLE_ID` | 5 张类型化配置表，可留空用默认 |
-| `LLM_API_KEY` / `LLM_BASE_URL` / `LLM_MODEL` | 生成每日简报用（OpenAI 兼容） |
-| `JINA_API_KEY` | 可选，Scrape 抓取 |
+| `FEISHU_APP_ID` / `FEISHU_APP_SECRET` | 必填，飞书自建应用凭证 |
+| `FEISHU_BASE_ID` | 你自己多维表的 app_token（必填） |
+| `FEISHU_PARAM_TABLE_ID` / `FEISHU_ENTRY_TABLE_ID` / `FEISHU_BRIEF_TABLE_ID` | bootstrap 输出，粘回来 |
+| `FEISHU_*_CONFIG_TABLE_ID` | 5 张类型化配置表，同样粘 bootstrap 输出 |
+| `LLM_API_KEY` / `LLM_BASE_URL` / `LLM_MODEL` | 生成每日简报用（OpenAI 兼容，如 DeepSeek / 通义 / OpenAI） |
+| `JINA_API_KEY` | 可选，Scrape 抓取更稳定 |
 | `FEISHU_RECIPIENT_OPEN_IDS` | 卡片接收人 `open_id`，逗号分隔（发卡片时需要） |
 | `PUBLIC_BASE_URL` | 卡片里跳转的公网站点地址 |
 
-### 4. 跑一遍流水线
+> 重复运行 `python -m src.bootstrap` 是安全的：只会补齐缺失的表/字段，不会清空或重建已有数据。日后升级若新增字段，再跑一次即可对齐。
+
+### 5. 跑一遍流水线
 
 ```bash
 # 加载 .env 到当前 shell
@@ -87,7 +93,7 @@ python -m http.server 4173 --directory site
 
 打开 <http://localhost:4173> 查看。
 
-### 5.（可选）发送飞书卡片
+### 6.（可选）发送飞书卡片
 
 ```bash
 python -m src.notify --input output/daily-brief.json
@@ -107,15 +113,15 @@ python -m src.diag_scrape --write --source-id huxiu --limit 1
 
 参数表（一级）字段 `来源类型` 为显式载体类型：`论文 / 纯网页 / 视频 / 社交媒体 / 公众号 / Github热榜 / 播客 / 其他`。采集时优先读该字段，再回落到配置表归属与 id/URL 启发式。可用 `python -m src.backfill_source_type` 回填。
 
-不同类型的筛选参数很多，按类型拆成独立配置表（一源一行，主键 `source_id`；留空即不过滤）：
+不同类型的筛选参数很多，按类型拆成独立配置表（一源一行，主键 `source_id`；表内没配到的源即不按该类型过滤）。这些表都由 `python -m src.bootstrap` 自动创建，`table_id` 见其输出，对应环境变量如下：
 
-| 类型 | 默认 table_id | 环境变量 |
-| --- | --- | --- |
-| 论文 | `tblhTzn8NyjeU779` | `FEISHU_PAPER_CONFIG_TABLE_ID` |
-| 公众号 | `tblNLmDgL2HpI29U` | `FEISHU_WECHAT_CONFIG_TABLE_ID` |
-| 视频 | `tblh8FXqPevU7pBq` | `FEISHU_VIDEO_CONFIG_TABLE_ID` |
-| 社交 | `tbl7lTtZRBajtmrQ` | `FEISHU_SOCIAL_CONFIG_TABLE_ID` |
-| GitHub热榜 | `tblpZTJWyTRzkQyF` | `FEISHU_GITHUB_CONFIG_TABLE_ID` |
+| 类型 | 环境变量 |
+| --- | --- |
+| 论文 | `FEISHU_PAPER_CONFIG_TABLE_ID` |
+| 公众号 | `FEISHU_WECHAT_CONFIG_TABLE_ID` |
+| 视频 | `FEISHU_VIDEO_CONFIG_TABLE_ID` |
+| 社交 | `FEISHU_SOCIAL_CONFIG_TABLE_ID` |
+| GitHub热榜 | `FEISHU_GITHUB_CONFIG_TABLE_ID` |
 
 ### 关键词过滤（含密度门）
 
