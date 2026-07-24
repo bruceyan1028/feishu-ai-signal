@@ -5,7 +5,8 @@
   2. 新建一个多维表格（Base），从地址栏复制 base 的 app_token（形如 bascnXXXX / RuI1b...）。
   3. 把上面三样填进 .env 的 FEISHU_APP_ID / FEISHU_APP_SECRET / FEISHU_BASE_ID。
   4. 运行：  python -m src.bootstrap
-     脚本会在你的 base 里幂等创建 8 张表（参数表 / 条目表 / 每日简报 + 5 张筛选配置表），
+     脚本会在你的 base 里幂等创建 9 张表（信号源表 / 一级参数 / 条目表 / 每日简报 + 5 张二级参数表），
+     并默认写入与作者母版一致的信号源与参数配置（条目表除外）。
      并把每张表的 table_id 以「可直接粘进 .env」的形式打印出来。
   5. 把打印出的 FEISHU_*_TABLE_ID 复制进 .env，再填上 LLM_API_KEY / LLM_BASE_URL 即可跑流水线。
 
@@ -289,66 +290,53 @@ def _ensure_table(
     return table_id, True
 
 
-# 示例源：第一次跑通用，端点均为稳定的公开 RSS。用户可随后在参数表增删改。
-_SEED_SOURCES = [
-    {
-        "source_id": "huggingface-blog",
-        "name": "Hugging Face Blog",
-        # endpoint 是 URL 字段：cell() 取显示文本，故 text 必须等于真实链接
-        "endpoint": {"link": "https://huggingface.co/blog/feed.xml", "text": "https://huggingface.co/blog/feed.xml"},
-        "fetch_method": "RSS",
-        "status": "active",
-        "来源类型": "纯网页",
-        "dimension": "开源生态",
-        "priority": "P1",
-    },
-    {
-        "source_id": "bair-blog",
-        "name": "Berkeley AI Research Blog",
-        "endpoint": {"link": "https://bair.berkeley.edu/blog/feed.xml", "text": "https://bair.berkeley.edu/blog/feed.xml"},
-        "fetch_method": "RSS",
-        "status": "active",
-        "来源类型": "纯网页",
-        "dimension": "学术前沿",
-        "priority": "P1",
-    },
-    {
-        "source_id": "arxiv-cs-ai",
-        "name": "arXiv cs.AI",
-        "endpoint": {"link": "http://export.arxiv.org/rss/cs.AI", "text": "http://export.arxiv.org/rss/cs.AI"},
-        "fetch_method": "RSS",
-        "status": "active",
-        "来源类型": "论文",
-        "dimension": "学术前沿",
-        "priority": "P2",
-    },
-]
+# 默认种子数据：从作者母版导出的信号源/各级参数配置，让每个新库开箱即与母版一致。
+# 由 tools/export_seed.py 重新生成；条目表（采集内容）不种。
+_SEED_FILE = Path(__file__).resolve().parent / "seed_default.json"
 
 
-def _seed_param_sources(token: str, param_table_id: str) -> int:
-    """仅当参数表为空时写入示例源，避免覆盖用户已有配置。"""
-    existing = feishu.read_all_records(token, param_table_id, field_names=["source_id"])
-    if existing:
-        log.info("参数表已有 %d 行，跳过示例源写入", len(existing))
-        return 0
+def _load_seed_bundle() -> dict[str, list[dict[str, Any]]]:
+    if not _SEED_FILE.is_file():
+        log.warning("未找到种子文件 %s，跳过默认数据写入", _SEED_FILE)
+        return {}
+    import json
+
+    return json.loads(_SEED_FILE.read_text(encoding="utf-8"))
+
+
+def _batch_create(token: str, table_id: str, records: list[dict[str, Any]], chunk: int = 100) -> int:
     url = (
         f"{config.FEISHU_HOST}/open-apis/bitable/v1/apps/{config.FEISHU_BASE_ID}"
-        f"/tables/{param_table_id}/records/batch_create"
+        f"/tables/{table_id}/records/batch_create"
     )
-    resp = feishu._SESSION.post(
-        url,
-        headers={"Authorization": f"Bearer {token}", "Content-Type": "application/json; charset=utf-8"},
-        json={"records": [{"fields": s} for s in _SEED_SOURCES]},
-        timeout=60,
-    )
-    data = resp.json()
-    if data.get("code") != 0:
-        raise feishu.FeishuError(f"写入示例源失败: {data.get('code')} {data.get('msg')}")
-    log.info("已写入 %d 个示例源", len(_SEED_SOURCES))
-    return len(_SEED_SOURCES)
+    hd = {"Authorization": f"Bearer {token}", "Content-Type": "application/json; charset=utf-8"}
+    total = 0
+    for i in range(0, len(records), chunk):
+        batch = records[i : i + chunk]
+        data = feishu._SESSION.post(
+            url, headers=hd, json={"records": [{"fields": f} for f in batch]}, timeout=60
+        ).json()
+        if data.get("code") != 0:
+            raise feishu.FeishuError(f"写入种子数据失败: {data.get('code')} {data.get('msg')}")
+        total += len(batch)
+    return total
 
 
-def run(seed: bool = False, dry_run: bool = False) -> dict[str, str]:
+def _seed_default(token: str, name_to_id: dict[str, str]) -> None:
+    """把母版配置写入对应表；仅对当前为空的表写，避免覆盖用户已有数据。"""
+    bundle = _load_seed_bundle()
+    for table_name, records in bundle.items():
+        table_id = name_to_id.get(table_name)
+        if not table_id or not records:
+            continue
+        if feishu.read_all_records(token, table_id):
+            log.info("表『%s』非空，跳过默认数据写入", table_name)
+            continue
+        n = _batch_create(token, table_id, records)
+        log.info("已向『%s』写入默认数据 %d 行", table_name, n)
+
+
+def run(seed: bool = True, dry_run: bool = False) -> dict[str, str]:
     if not config.FEISHU_APP_ID or config.FEISHU_APP_ID.startswith(("your_", "cli_xxxx")):
         raise config.ConfigError("请先在 .env 填写 FEISHU_APP_ID")
     if not config.FEISHU_APP_SECRET or config.FEISHU_APP_SECRET.startswith("your_"):
@@ -361,9 +349,11 @@ def run(seed: bool = False, dry_run: bool = False) -> dict[str, str]:
              "（dry-run，不做任何写入）" if dry_run else "")
 
     results: dict[str, str] = {}
+    name_to_id: dict[str, str] = {}
     for env_var, name, fields in _table_specs():
         table_id, _created = _ensure_table(token, name, fields, dry_run=dry_run)
         results[env_var] = table_id
+        name_to_id[name] = table_id
 
     # 每日简报表：复用 feishu 里已有的幂等建表逻辑（按名『每日简报』查找/创建）
     if dry_run:
@@ -377,12 +367,13 @@ def run(seed: bool = False, dry_run: bool = False) -> dict[str, str]:
         results["FEISHU_BRIEF_TABLE_ID"] = feishu.ensure_daily_brief_table(token)
         log.info("每日简报表 → %s", results["FEISHU_BRIEF_TABLE_ID"])
 
-    if seed and not dry_run:
-        _seed_param_sources(token, results["FEISHU_PARAM_TABLE_ID"])
-
     if dry_run:
         print("\n[dry-run] 预览结束，未做任何写入。去掉 --dry-run 即可真正创建。")
         return results
+
+    # 默认把母版配置写入空表，让新库开箱即与母版一致（--no-seed 可关闭）
+    if seed:
+        _seed_default(token, name_to_id)
 
     print("\n" + "=" * 68)
     print("初始化完成。把下面几行复制进你的 .env（覆盖同名项）：")
@@ -401,8 +392,6 @@ def run(seed: bool = False, dry_run: bool = False) -> dict[str, str]:
     ):
         print(f"{env_var}={results[env_var]}")
     print("=" * 68)
-    if not seed:
-        print("提示：想写入几个示例 RSS 源以便第一次跑通，可加 --seed 重跑本命令。")
     print("下一步：填好 .env 里的 LLM_API_KEY / LLM_BASE_URL，然后运行 python -m src.main")
     return results
 
@@ -410,9 +399,9 @@ def run(seed: bool = False, dry_run: bool = False) -> dict[str, str]:
 def main() -> None:
     parser = argparse.ArgumentParser(description="在你自己的飞书 base 里初始化本项目所需的全部表")
     parser.add_argument(
-        "--seed",
+        "--no-seed",
         action="store_true",
-        help="参数表为空时写入几个稳妥的示例 RSS 源",
+        help="不写入母版默认配置（默认会把与母版一致的信号源/参数写入空表）",
     )
     parser.add_argument(
         "--dry-run",
@@ -420,7 +409,7 @@ def main() -> None:
         help="只预览将创建/补齐哪些表和字段，不做任何写入",
     )
     args = parser.parse_args()
-    run(seed=args.seed, dry_run=args.dry_run)
+    run(seed=not args.no_seed, dry_run=args.dry_run)
 
 
 if __name__ == "__main__":

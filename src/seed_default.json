@@ -1,0 +1,2631 @@
+{
+ "信号源表": [
+  {
+   "主要看什么": "新模型、API、ChatGPT、Codex、企业功能",
+   "优先级": "P0",
+   "分类": "前沿模型公司",
+   "名称": "OpenAI News / Product Releases",
+   "层级": "L1 一级官方",
+   "来源类型": "纯网页",
+   "自动化状态": "待测",
+   "获取方式": "RSS",
+   "链接": {
+    "link": "https://openai.com/news/",
+    "text": "https://openai.com/news/"
+   }
+  },
+  {
+   "主要看什么": "Claude 模型、企业合作、安全研究、区域扩张",
+   "优先级": "P0",
+   "分类": "前沿模型公司",
+   "名称": "Anthropic News",
+   "层级": "L1 一级官方",
+   "来源类型": "纯网页",
+   "自动化状态": "已接入",
+   "获取方式": "RSS",
+   "链接": {
+    "link": "https://www.anthropic.com/news",
+    "text": "https://www.anthropic.com/news"
+   }
+  },
+  {
+   "主要看什么": "Gemini、DeepMind Research、科学 AI、产品整合",
+   "优先级": "P0",
+   "分类": "前沿模型公司",
+   "名称": "Google DeepMind Blog / Google AI",
+   "层级": "L1 一级官方",
+   "来源类型": "纯网页",
+   "自动化状态": "待测",
+   "获取方式": "RSS",
+   "链接": {
+    "link": "https://deepmind.google/blog/",
+    "text": "https://deepmind.google/blog/"
+   }
+  },
+  {
+   "主要看什么": "Llama、开源策略、AI 眼镜、基础设施投入",
+   "优先级": "P0",
+   "分类": "前沿模型公司",
+   "名称": "Meta AI / Meta Newsroom AI",
+   "层级": "L1 一级官方",
+   "来源类型": "纯网页",
+   "自动化状态": "已接入",
+   "获取方式": "RSS",
+   "链接": {
+    "link": "https://ai.meta.com/blog/",
+    "text": "https://ai.meta.com/blog/"
+   }
+  },
+  {
+   "主要看什么": "开源/开放权重模型、企业方案、欧洲主权 AI",
+   "优先级": "P1",
+   "分类": "前沿模型公司",
+   "名称": "Mistral AI News",
+   "层级": "L1 一级官方",
+   "来源类型": "纯网页",
+   "自动化状态": "已暂停",
+   "获取方式": "RSS",
+   "链接": {
+    "link": "https://mistral.ai/news",
+    "text": "https://mistral.ai/news"
+   }
+  },
+  {
+   "主要看什么": "企业模型、RAG、Command / North 系列、私有化部署",
+   "优先级": "P1",
+   "分类": "前沿模型公司",
+   "名称": "Cohere Blog",
+   "层级": "L1 一级官方",
+   "来源类型": "纯网页",
+   "自动化状态": "已接入",
+   "获取方式": "RSS",
+   "链接": {
+    "link": "https://cohere.com/blog",
+    "text": "https://cohere.com/blog"
+   }
+  },
+  {
+   "主要看什么": "Grok、X 平台集成、算力和模型能力信号",
+   "优先级": "P1",
+   "分类": "前沿模型公司",
+   "名称": "xAI Blog / Product Updates",
+   "层级": "L1 一级官方",
+   "来源类型": "纯网页",
+   "自动化状态": "已暂停",
+   "获取方式": "RSS",
+   "链接": {
+    "link": "https://x.ai/blog",
+    "text": "https://x.ai/blog"
+   }
+  },
+  {
+   "主要看什么": "开源模型、推理模型、训练效率、国产基础模型趋势",
+   "优先级": "P0",
+   "分类": "前沿模型公司",
+   "名称": "DeepSeek 官方发布渠道",
+   "备注": [
+    "国内渠道需 Bridge 或人工"
+   ],
+   "层级": "L1 一级官方",
+   "来源类型": "纯网页",
+   "自动化状态": "未开始",
+   "获取方式": "Manual",
+   "链接": {
+    "link": "https://www.deepseek.com/",
+    "text": "https://www.deepseek.com/"
+   }
+  },
+  {
+   "主要看什么": "开源模型、多模态、企业云集成、中文生态",
+   "优先级": "P0",
+   "分类": "前沿模型公司",
+   "名称": "ModelScope 首页新模型",
+   "层级": "L1 一级官方",
+   "来源类型": "纯网页",
+   "自动化状态": "已接入",
+   "获取方式": "Scrape",
+   "链接": {
+    "link": "https://modelscope.cn/home",
+    "text": "https://modelscope.cn/home"
+   }
+  },
+  {
+   "主要看什么": "国内大厂模型产品化、价格战、应用分发",
+   "优先级": "P0",
+   "分类": "前沿模型公司",
+   "名称": "字节 Seed / 豆包 / 火山引擎 AI",
+   "层级": "L1 一级官方",
+   "来源类型": "纯网页",
+   "自动化状态": "未开始",
+   "获取方式": "Manual",
+   "链接": {
+    "link": "https://www.volcengine.com/product/doubao",
+    "text": "https://www.volcengine.com/product/doubao"
+   }
+  },
+  {
+   "主要看什么": "通用 AI、智能体、规划、推理、安全",
+   "优先级": "P0",
+   "分类": "技术研究开源",
+   "名称": "arXiv cs.AI",
+   "层级": "L2 结构化平台",
+   "来源类型": "论文",
+   "自动化状态": "已接入",
+   "获取方式": "RSS",
+   "链接": {
+    "link": "https://arxiv.org/list/cs.AI/recent",
+    "text": "https://arxiv.org/list/cs.AI/recent"
+   }
+  },
+  {
+   "主要看什么": "LLM、NLP、多语言、对话、RAG",
+   "优先级": "P0",
+   "分类": "技术研究开源",
+   "名称": "arXiv cs.CL",
+   "层级": "L2 结构化平台",
+   "来源类型": "论文",
+   "自动化状态": "已接入",
+   "获取方式": "RSS",
+   "链接": {
+    "link": "https://arxiv.org/list/cs.CL/recent",
+    "text": "https://arxiv.org/list/cs.CL/recent"
+   }
+  },
+  {
+   "主要看什么": "训练方法、强化学习、优化、表示学习",
+   "优先级": "P0",
+   "分类": "技术研究开源",
+   "名称": "arXiv cs.LG",
+   "层级": "L2 结构化平台",
+   "来源类型": "论文",
+   "自动化状态": "已接入",
+   "获取方式": "RSS",
+   "链接": {
+    "link": "https://arxiv.org/list/cs.LG/recent",
+    "text": "https://arxiv.org/list/cs.LG/recent"
+   }
+  },
+  {
+   "主要看什么": "多模态、视觉语言模型、视频生成、机器人视觉",
+   "优先级": "P1",
+   "分类": "技术研究开源",
+   "名称": "arXiv cs.CV",
+   "层级": "L2 结构化平台",
+   "来源类型": "论文",
+   "自动化状态": "已接入",
+   "获取方式": "RSS",
+   "链接": {
+    "link": "https://arxiv.org/list/cs.CV/recent",
+    "text": "https://arxiv.org/list/cs.CV/recent"
+   }
+  },
+  {
+   "主要看什么": "论文是否有代码、benchmark 排名变化",
+   "优先级": "P1",
+   "分类": "技术研究开源",
+   "名称": "PwC.co Trending",
+   "层级": "L2 结构化平台",
+   "来源类型": "论文",
+   "自动化状态": "已接入",
+   "获取方式": "Scrape",
+   "链接": {
+    "link": "https://paperswithcode.co/",
+    "text": "https://paperswithcode.co/"
+   }
+  },
+  {
+   "主要看什么": "ICLR、NeurIPS、ICML、ACL 等会议投稿趋势",
+   "优先级": "P1",
+   "分类": "技术研究开源",
+   "名称": "OpenReview",
+   "层级": "L2 结构化平台",
+   "来源类型": "论文",
+   "自动化状态": "待测",
+   "获取方式": "Scrape",
+   "链接": {
+    "link": "https://openreview.net/",
+    "text": "https://openreview.net/"
+   }
+  },
+  {
+   "主要看什么": "社区关注度高的新论文和模型",
+   "优先级": "P0",
+   "分类": "技术研究开源",
+   "名称": "Hugging Face Papers Trending",
+   "层级": "L2 结构化平台",
+   "来源类型": "论文",
+   "自动化状态": "未开始",
+   "获取方式": "Scrape",
+   "链接": {
+    "link": "https://huggingface.co/papers",
+    "text": "https://huggingface.co/papers"
+   }
+  },
+  {
+   "主要看什么": "工程生态、Agent 框架、RAG、推理服务项目",
+   "优先级": "P0",
+   "分类": "技术研究开源",
+   "名称": "GitHub Trending / GitHub Topics",
+   "层级": "L2 结构化平台",
+   "来源类型": "纯网页",
+   "自动化状态": "已接入",
+   "获取方式": "API",
+   "链接": {
+    "link": "https://github.com/trending",
+    "text": "https://github.com/trending"
+   }
+  },
+  {
+   "主要看什么": "基础模型、AI 安全、政策研究、Foundation Model 生态",
+   "优先级": "P1",
+   "分类": "技术研究开源",
+   "名称": "Stanford CRFM / HELM",
+   "层级": "L1 一级官方",
+   "来源类型": "纯网页",
+   "自动化状态": "已接入",
+   "获取方式": "RSS",
+   "链接": {
+    "link": "https://crfm.stanford.edu/feed",
+    "text": "https://crfm.stanford.edu/feed"
+   }
+  },
+  {
+   "主要看什么": "人类偏好、通用对话、模型相对排名",
+   "优先级": "P0",
+   "分类": "模型评测基准",
+   "名称": "Chatbot Arena / LMSYS",
+   "层级": "L1 一级官方",
+   "来源类型": "纯网页",
+   "自动化状态": "已暂停",
+   "获取方式": "Scrape",
+   "链接": {
+    "link": "https://lmarena.ai/",
+    "text": "https://lmarena.ai/"
+   }
+  },
+  {
+   "主要看什么": "模型价格、速度、延迟、上下文、API 性能",
+   "优先级": "P0",
+   "分类": "模型评测基准",
+   "名称": "Artificial Analysis",
+   "层级": "L1 一级官方",
+   "来源类型": "纯网页",
+   "自动化状态": "已接入",
+   "获取方式": "Scrape",
+   "链接": {
+    "link": "https://artificialanalysis.ai/",
+    "text": "https://artificialanalysis.ai/"
+   }
+  },
+  {
+   "主要看什么": "准确率、鲁棒性、公平性、偏见、效率",
+   "优先级": "P1",
+   "分类": "模型评测基准",
+   "名称": "Stanford CRFM / HELM",
+   "层级": "L1 一级官方",
+   "来源类型": "纯网页",
+   "自动化状态": "已接入",
+   "获取方式": "RSS",
+   "链接": {
+    "link": "https://crfm.stanford.edu/feed",
+    "text": "https://crfm.stanford.edu/feed"
+   }
+  },
+  {
+   "主要看什么": "训练、推理、硬件、性能标准",
+   "优先级": "P1",
+   "分类": "模型评测基准",
+   "名称": "MLCommons / MLPerf",
+   "层级": "L1 一级官方",
+   "来源类型": "纯网页",
+   "自动化状态": "已接入",
+   "获取方式": "RSS",
+   "链接": {
+    "link": "https://mlcommons.org/",
+    "text": "https://mlcommons.org/"
+   }
+  },
+  {
+   "主要看什么": "私有集评测、难以刷榜的模型能力信号",
+   "优先级": "P1",
+   "分类": "模型评测基准",
+   "名称": "Scale SEAL Leaderboards",
+   "层级": "L1 一级官方",
+   "来源类型": "纯网页",
+   "自动化状态": "已暂停",
+   "获取方式": "Scrape",
+   "链接": {
+    "link": "https://scale.com/leaderboard",
+    "text": "https://scale.com/leaderboard"
+   }
+  },
+  {
+   "主要看什么": "编程能力和代码生成实时评估",
+   "优先级": "P1",
+   "分类": "模型评测基准",
+   "名称": "LiveCodeBench",
+   "层级": "L2 结构化平台",
+   "来源类型": "纯网页",
+   "自动化状态": "已暂停",
+   "获取方式": "Scrape",
+   "链接": {
+    "link": "https://livecodebench.github.io/",
+    "text": "https://livecodebench.github.io/"
+   }
+  },
+  {
+   "主要看什么": "知识、推理、数学、科学能力",
+   "优先级": "P2",
+   "分类": "模型评测基准",
+   "名称": "MMLU-Pro / GPQA / AIME 等学术基准",
+   "备注": [
+    "分散在论文/博客",
+    "人工跟踪"
+   ],
+   "层级": "L2 结构化平台",
+   "来源类型": "其他",
+   "自动化状态": "已暂停",
+   "获取方式": "Manual"
+  },
+  {
+   "主要看什么": "中文能力、国内模型、行业评测",
+   "优先级": "P0",
+   "分类": "模型评测基准",
+   "名称": "OpenCompass Releases",
+   "层级": "L2 结构化平台",
+   "来源类型": "纯网页",
+   "自动化状态": "已接入",
+   "获取方式": "RSS",
+   "链接": {
+    "link": "https://github.com/open-compass/OpenCompass/releases.atom",
+    "text": "https://github.com/open-compass/OpenCompass/releases.atom"
+   }
+  },
+  {
+   "主要看什么": "GPU、Blackwell、CUDA、TensorRT、推理优化",
+   "优先级": "P0",
+   "分类": "算力芯片云",
+   "名称": "NVIDIA Blog / Developer Blog",
+   "层级": "L1 一级官方",
+   "来源类型": "纯网页",
+   "自动化状态": "已接入",
+   "获取方式": "RSS",
+   "链接": {
+    "link": "https://blogs.nvidia.com/",
+    "text": "https://blogs.nvidia.com/"
+   }
+  },
+  {
+   "主要看什么": "MI 系列 GPU、替代生态、开源栈",
+   "优先级": "P1",
+   "分类": "算力芯片云",
+   "名称": "AMD Instinct / ROCm 官方渠道",
+   "层级": "L1 一级官方",
+   "来源类型": "纯网页",
+   "自动化状态": "已接入",
+   "获取方式": "RSS",
+   "链接": {
+    "link": "https://www.amd.com/en/blogs.html",
+    "text": "https://www.amd.com/en/blogs.html"
+   }
+  },
+  {
+   "主要看什么": "模型托管、Agent、企业云应用、价格",
+   "优先级": "P0",
+   "分类": "算力芯片云",
+   "名称": "AWS AI / Bedrock Blog",
+   "层级": "L1 一级官方",
+   "来源类型": "纯网页",
+   "自动化状态": "已接入",
+   "获取方式": "RSS",
+   "链接": {
+    "link": "https://aws.amazon.com/blogs/machine-learning/",
+    "text": "https://aws.amazon.com/blogs/machine-learning/"
+   }
+  },
+  {
+   "主要看什么": "超算集群、NVIDIA 合作、企业部署",
+   "优先级": "P1",
+   "分类": "算力芯片云",
+   "名称": "Microsoft Azure AI Infrastructure",
+   "层级": "L1 一级官方",
+   "来源类型": "纯网页",
+   "自动化状态": "已接入",
+   "获取方式": "RSS",
+   "链接": {
+    "link": "https://azure.microsoft.com/en-us/blog/",
+    "text": "https://azure.microsoft.com/en-us/blog/"
+   }
+  },
+  {
+   "主要看什么": "TPU、Vertex AI、Gemini API、云基础设施",
+   "优先级": "P0",
+   "分类": "算力芯片云",
+   "名称": "Google Cloud AI / Infrastructure Blog",
+   "层级": "L1 一级官方",
+   "来源类型": "纯网页",
+   "自动化状态": "未开始",
+   "获取方式": "RSS",
+   "链接": {
+    "link": "https://cloud.google.com/blog/products/ai-machine-learning",
+    "text": "https://cloud.google.com/blog/products/ai-machine-learning"
+   }
+  },
+  {
+   "主要看什么": "GPU 云供给、客户结构、资本开支",
+   "优先级": "P1",
+   "分类": "算力芯片云",
+   "名称": "CoreWeave Blog / Investor News",
+   "层级": "L2 结构化平台",
+   "来源类型": "纯网页",
+   "自动化状态": "已暂停",
+   "获取方式": "RSS",
+   "链接": {
+    "link": "https://www.coreweave.com/news",
+    "text": "https://www.coreweave.com/news"
+   }
+  },
+  {
+   "主要看什么": "长期算力趋势、训练成本、硬件进步",
+   "优先级": "P1",
+   "分类": "算力芯片云",
+   "名称": "Epoch AI Hardware / Compute Data",
+   "层级": "L2 结构化平台",
+   "来源类型": "纯网页",
+   "自动化状态": "未开始",
+   "获取方式": "Scrape",
+   "链接": {
+    "link": "https://epoch.ai/",
+    "text": "https://epoch.ai/"
+   }
+  },
+  {
+   "主要看什么": "企业采用率、组织变革、ROI、扩展难点",
+   "优先级": "P0",
+   "分类": "产品化企业采用",
+   "名称": "McKinsey State of AI",
+   "备注": [
+    "报告 PDF",
+    "人工摘要"
+   ],
+   "层级": "L3 媒体研报",
+   "来源类型": "纯网页",
+   "自动化状态": "待测",
+   "获取方式": "Manual",
+   "链接": {
+    "link": "https://www.mckinsey.com/capabilities/quantumblack/our-insights/the-state-of-ai",
+    "text": "https://www.mckinsey.com/capabilities/quantumblack/our-insights/the-state-of-ai"
+   }
+  },
+  {
+   "主要看什么": "企业转型、行业案例、咨询视角",
+   "优先级": "P1",
+   "分类": "产品化企业采用",
+   "名称": "Deloitte / PwC / BCG / Bain AI 报告",
+   "层级": "L3 媒体研报",
+   "来源类型": "其他",
+   "自动化状态": "已暂停",
+   "获取方式": "Manual"
+  },
+  {
+   "主要看什么": "企业 IT 采购、成熟度、技术预期",
+   "优先级": "P1",
+   "分类": "产品化企业采用",
+   "名称": "Gartner AI / Hype Cycle",
+   "备注": [
+    "订阅制"
+   ],
+   "层级": "L3 媒体研报",
+   "来源类型": "纯网页",
+   "自动化状态": "待测",
+   "获取方式": "Manual",
+   "链接": {
+    "link": "https://www.gartner.com/en/topics/artificial-intelligence",
+    "text": "https://www.gartner.com/en/topics/artificial-intelligence"
+   }
+  },
+  {
+   "主要看什么": "企业技术栈、开发者工具采用",
+   "优先级": "P2",
+   "分类": "产品化企业采用",
+   "名称": "StackShare",
+   "层级": "L2 结构化平台",
+   "来源类型": "纯网页",
+   "自动化状态": "已暂停",
+   "获取方式": "Scrape",
+   "链接": {
+    "link": "https://stackshare.io/",
+    "text": "https://stackshare.io/"
+   }
+  },
+  {
+   "主要看什么": "企业软件内嵌 AI、Agent 工作流",
+   "优先级": "P1",
+   "分类": "产品化企业采用",
+   "名称": "Salesforce / ServiceNow / SAP / Workday AI",
+   "备注": [
+    "可拆为 4 个子源"
+   ],
+   "层级": "L1 一级官方",
+   "来源类型": "纯网页",
+   "自动化状态": "未开始",
+   "获取方式": "RSS",
+   "链接": {
+    "link": "https://www.salesforce.com/news/",
+    "text": "https://www.salesforce.com/news/"
+   }
+  },
+  {
+   "主要看什么": "办公、代码、企业生产力场景",
+   "优先级": "P0",
+   "分类": "产品化企业采用",
+   "名称": "Microsoft Copilot / GitHub Copilot Updates",
+   "层级": "L1 一级官方",
+   "来源类型": "纯网页",
+   "自动化状态": "待测",
+   "获取方式": "RSS",
+   "链接": {
+    "link": "https://github.blog/",
+    "text": "https://github.blog/"
+   }
+  },
+  {
+   "主要看什么": "医疗、金融、法律、制造、教育、客服",
+   "优先级": "P2",
+   "分类": "产品化企业采用",
+   "名称": "行业垂直 AI 公司案例",
+   "层级": "L3 媒体研报",
+   "来源类型": "其他",
+   "自动化状态": "未开始",
+   "获取方式": "Manual"
+  },
+  {
+   "主要看什么": "融资、估值、投资人、并购、私募市场趋势",
+   "优先级": "P1",
+   "分类": "创业融资并购",
+   "名称": "PitchBook",
+   "备注": [
+    "订阅制"
+   ],
+   "层级": "L3 媒体研报",
+   "来源类型": "纯网页",
+   "自动化状态": "待测",
+   "获取方式": "Manual",
+   "链接": {
+    "link": "https://pitchbook.com/",
+    "text": "https://pitchbook.com/"
+   }
+  },
+  {
+   "主要看什么": "高潜 AI 公司、赛道分类、资本关注点",
+   "优先级": "P1",
+   "分类": "创业融资并购",
+   "名称": "CB Insights AI 100 / Research",
+   "层级": "L3 媒体研报",
+   "来源类型": "纯网页",
+   "自动化状态": "待测",
+   "获取方式": "Manual",
+   "链接": {
+    "link": "https://www.cbinsights.com/research/report-artificial-intelligence-top-startups-2024/",
+    "text": "https://www.cbinsights.com/research/report-artificial-intelligence-top-startups-2024/"
+   }
+  },
+  {
+   "主要看什么": "独家报道、人才流动、融资、商业内幕",
+   "优先级": "P0",
+   "分类": "创业融资并购",
+   "名称": "The Information AI Agenda",
+   "备注": [
+    "订阅制"
+   ],
+   "层级": "L3 媒体研报",
+   "来源类型": "纯网页",
+   "自动化状态": "待测",
+   "获取方式": "Manual",
+   "链接": {
+    "link": "https://www.theinformation.com/",
+    "text": "https://www.theinformation.com/"
+   }
+  },
+  {
+   "主要看什么": "大厂、监管、资本市场、全球新闻",
+   "优先级": "P0",
+   "分类": "创业融资并购",
+   "名称": "Reuters AI News",
+   "层级": "L3 媒体研报",
+   "来源类型": "纯网页",
+   "自动化状态": "待测",
+   "获取方式": "RSS",
+   "链接": {
+    "link": "https://www.reuters.com/technology/artificial-intelligence/",
+    "text": "https://www.reuters.com/technology/artificial-intelligence/"
+   }
+  },
+  {
+   "主要看什么": "大型交易、上市、云和芯片资本开支",
+   "优先级": "P1",
+   "分类": "创业融资并购",
+   "名称": "Bloomberg / WSJ Tech",
+   "备注": [
+    "订阅制"
+   ],
+   "层级": "L3 媒体研报",
+   "来源类型": "纯网页",
+   "自动化状态": "未开始",
+   "获取方式": "Manual",
+   "链接": {
+    "link": "https://www.bloomberg.com/technology",
+    "text": "https://www.bloomberg.com/technology"
+   }
+  },
+  {
+   "主要看什么": "初创公司发布、融资、产品早期信号",
+   "优先级": "P0",
+   "分类": "创业融资并购",
+   "名称": "TechCrunch AI",
+   "层级": "L3 媒体研报",
+   "来源类型": "纯网页",
+   "自动化状态": "已接入",
+   "获取方式": "RSS",
+   "链接": {
+    "link": "https://techcrunch.com/category/artificial-intelligence/",
+    "text": "https://techcrunch.com/category/artificial-intelligence/"
+   }
+  },
+  {
+   "主要看什么": "欧洲 AI 创业、主权 AI、区域生态",
+   "优先级": "P2",
+   "分类": "创业融资并购",
+   "名称": "Sifted / Dealroom",
+   "层级": "L3 媒体研报",
+   "来源类型": "纯网页",
+   "自动化状态": "已接入",
+   "获取方式": "RSS",
+   "链接": {
+    "link": "https://sifted.eu/feed",
+    "text": "https://sifted.eu/feed"
+   }
+  },
+  {
+   "主要看什么": "中国 AI 创业、融资、大厂动态",
+   "优先级": "P0",
+   "分类": "创业融资并购",
+   "名称": "36氪 / 晚点 LatePost / 机器之心",
+   "备注": [
+    "RSSHub 桥接"
+   ],
+   "层级": "L3 媒体研报",
+   "来源类型": "公众号",
+   "自动化状态": "待测",
+   "获取方式": "Bridge",
+   "链接": {
+    "link": "https://36kr.com/",
+    "text": "https://36kr.com/"
+   }
+  },
+  {
+   "主要看什么": "新实体、新地区、新办公室、战略转向",
+   "优先级": "P2",
+   "分类": "创业融资并购",
+   "名称": "公司注册和招聘变化",
+   "层级": "L4 补充源",
+   "来源类型": "其他",
+   "自动化状态": "待测",
+   "获取方式": "Manual"
+  },
+  {
+   "主要看什么": "行政令、基础设施、出口管制、国家战略",
+   "优先级": "P0",
+   "分类": "政策监管地缘",
+   "名称": "AI.gov / 美国 AI 政策",
+   "层级": "L1 一级官方",
+   "来源类型": "纯网页",
+   "自动化状态": "待测",
+   "获取方式": "RSS",
+   "链接": {
+    "link": "https://www.ai.gov/",
+    "text": "https://www.ai.gov/"
+   }
+  },
+  {
+   "主要看什么": "AI 风险管理、企业治理、安全框架",
+   "优先级": "P1",
+   "分类": "政策监管地缘",
+   "名称": "NIST AI RMF",
+   "层级": "L1 一级官方",
+   "来源类型": "纯网页",
+   "自动化状态": "待测",
+   "获取方式": "RSS",
+   "链接": {
+    "link": "https://www.nist.gov/artificial-intelligence",
+    "text": "https://www.nist.gov/artificial-intelligence"
+   }
+  },
+  {
+   "主要看什么": "高风险系统、通用 AI、合规义务",
+   "优先级": "P0",
+   "分类": "政策监管地缘",
+   "名称": "EU AI Act 官方页面",
+   "层级": "L1 一级官方",
+   "来源类型": "纯网页",
+   "自动化状态": "待测",
+   "获取方式": "Manual",
+   "链接": {
+    "link": "https://digital-strategy.ec.europa.eu/en/policies/regulatory-framework-ai",
+    "text": "https://digital-strategy.ec.europa.eu/en/policies/regulatory-framework-ai"
+   }
+  },
+  {
+   "主要看什么": "各国政策、国际比较、可信 AI 原则",
+   "优先级": "P1",
+   "分类": "政策监管地缘",
+   "名称": "OECD AI Policy Observatory",
+   "层级": "L1 一级官方",
+   "来源类型": "纯网页",
+   "自动化状态": "待测",
+   "获取方式": "RSS",
+   "链接": {
+    "link": "https://oecd.ai/",
+    "text": "https://oecd.ai/"
+   }
+  },
+  {
+   "主要看什么": "国家 AI 战略、产业扶持、人才和算力",
+   "优先级": "P2",
+   "分类": "政策监管地缘",
+   "名称": "Singapore NAIS 2.0",
+   "层级": "L1 一级官方",
+   "来源类型": "纯网页",
+   "自动化状态": "待测",
+   "获取方式": "Manual",
+   "链接": {
+    "link": "https://www.smartnation.gov.sg/",
+    "text": "https://www.smartnation.gov.sg/"
+   }
+  },
+  {
+   "主要看什么": "版权、数据抓取、合理使用、赔偿风险",
+   "优先级": "P1",
+   "分类": "政策监管地缘",
+   "名称": "Reuters Legal / 专业律所 AI Litigation Tracker",
+   "层级": "L3 媒体研报",
+   "来源类型": "纯网页",
+   "自动化状态": "待测",
+   "获取方式": "Manual",
+   "链接": {
+    "link": "https://www.reuters.com/legal/",
+    "text": "https://www.reuters.com/legal/"
+   }
+  },
+  {
+   "主要看什么": "风险分类、安全框架、治理术语",
+   "优先级": "P1",
+   "分类": "政策监管地缘",
+   "名称": "MIT AI Risk Repository",
+   "层级": "L2 结构化平台",
+   "来源类型": "纯网页",
+   "自动化状态": "已接入",
+   "获取方式": "Scrape",
+   "链接": {
+    "link": "https://airisk.mit.edu/",
+    "text": "https://airisk.mit.edu/"
+   }
+  },
+  {
+   "主要看什么": "事故案例、滥用、舆情和治理风险",
+   "优先级": "P1",
+   "分类": "政策监管地缘",
+   "名称": "AI Incident Database / Partnership on AI",
+   "层级": "L2 结构化平台",
+   "来源类型": "纯网页",
+   "自动化状态": "待测",
+   "获取方式": "RSS",
+   "链接": {
+    "link": "https://incidentdatabase.ai/",
+    "text": "https://incidentdatabase.ai/"
+   }
+  },
+  {
+   "主要看什么": "高价值 AI 公众号，需 RSSHub 桥接",
+   "优先级": "P2",
+   "分类": "其他",
+   "名称": "公众号文章",
+   "备注": [
+    "账号白名单待定义"
+   ],
+   "层级": "L4 补充源",
+   "来源类型": "公众号",
+   "自动化状态": "待测",
+   "获取方式": "Bridge"
+  },
+  {
+   "主要看什么": "AI 相关频道，转录+摘要",
+   "优先级": "P2",
+   "分类": "其他",
+   "名称": "视频（YouTube/B站）",
+   "备注": [
+    "频道白名单待定义"
+   ],
+   "层级": "L4 补充源",
+   "来源类型": "视频",
+   "自动化状态": "未开始",
+   "获取方式": "Media"
+  },
+  {
+   "主要看什么": "高价值研究者/CEO 账号",
+   "优先级": "P2",
+   "分类": "其他",
+   "名称": "社交媒体账号发言",
+   "备注": [
+    "X/微博 RSSHub"
+   ],
+   "层级": "L4 补充源",
+   "来源类型": "社交媒体",
+   "自动化状态": "已暂停",
+   "获取方式": "Bridge"
+  },
+  {
+   "主要看什么": "高引用论文下的优质讨论",
+   "优先级": "P2",
+   "分类": "其他",
+   "名称": "arXiv 评论区",
+   "层级": "L4 补充源",
+   "来源类型": "论文",
+   "自动化状态": "未开始",
+   "获取方式": "Manual",
+   "链接": {
+    "link": "https://alphaxiv.org/",
+    "text": "https://alphaxiv.org/"
+   }
+  },
+  {
+   "主要看什么": "AI 播客 RSS + Whisper 转录",
+   "优先级": "P2",
+   "分类": "其他",
+   "名称": "播客节目",
+   "层级": "L4 补充源",
+   "来源类型": "播客",
+   "自动化状态": "已暂停",
+   "获取方式": "Media"
+  },
+  {
+   "主要看什么": "YouTube 会议回放，并入视频链路",
+   "优先级": "P2",
+   "分类": "其他",
+   "名称": "在线会议（有回放）",
+   "层级": "L4 补充源",
+   "来源类型": "其他",
+   "自动化状态": "已暂停",
+   "获取方式": "Media"
+  },
+  {
+   "主要看什么": "Bot 参会摘要，高质量会议筛选",
+   "优先级": "P2",
+   "分类": "其他",
+   "名称": "在线会议（实时）",
+   "层级": "L4 补充源",
+   "来源类型": "其他",
+   "自动化状态": "已暂停",
+   "获取方式": "Manual"
+  },
+  {
+   "主要看什么": "参会速记、名片/演讲者追踪",
+   "优先级": "P2",
+   "分类": "其他",
+   "名称": "线下活动",
+   "层级": "L4 补充源",
+   "来源类型": "其他",
+   "自动化状态": "已暂停",
+   "获取方式": "Manual"
+  },
+  {
+   "主要看什么": "机器人、CV、RL、生成模型、具身智能",
+   "优先级": "P1",
+   "分类": "技术研究开源",
+   "名称": "Berkeley BAIR",
+   "层级": "L1 一级官方",
+   "来源类型": "纯网页",
+   "自动化状态": "待测",
+   "获取方式": "Manual",
+   "链接": {
+    "link": "https://bair.berkeley.edu/",
+    "text": "https://bair.berkeley.edu/"
+   }
+  },
+  {
+   "主要看什么": "机器人学习、具身 AI、人机协作、产业转化",
+   "优先级": "P1",
+   "分类": "技术研究开源",
+   "名称": "Berkeley RDI",
+   "层级": "L1 一级官方",
+   "来源类型": "纯网页",
+   "自动化状态": "已接入",
+   "获取方式": "RSS",
+   "链接": {
+    "link": "https://rdi.berkeley.edu/feed",
+    "text": "https://rdi.berkeley.edu/feed"
+   }
+  },
+  {
+   "主要看什么": "云原生 AI 系统、大模型训练推理基础设施、Sky 系列项目",
+   "优先级": "P1",
+   "分类": "技术研究开源",
+   "名称": "Berkeley Sky Computing Lab",
+   "层级": "L1 一级官方",
+   "来源类型": "纯网页",
+   "自动化状态": "已接入",
+   "获取方式": "RSS",
+   "链接": {
+    "link": "https://sky.cs.berkeley.edu/feed/",
+    "text": "https://sky.cs.berkeley.edu/feed/"
+   }
+  },
+  {
+   "主要看什么": "机器人、NLP、CV、HCI、分布式 AI 系统",
+   "优先级": "P1",
+   "分类": "技术研究开源",
+   "名称": "MIT CSAIL",
+   "层级": "L1 一级官方",
+   "来源类型": "纯网页",
+   "自动化状态": "已接入",
+   "获取方式": "RSS",
+   "链接": {
+    "link": "https://www.csail.mit.edu/rss.xml",
+    "text": "https://www.csail.mit.edu/rss.xml"
+   }
+  },
+  {
+   "主要看什么": "AI 与社会、医疗 AI、负责任 AI",
+   "优先级": "P1",
+   "分类": "技术研究开源",
+   "名称": "MIT Media Lab",
+   "层级": "L1 一级官方",
+   "来源类型": "纯网页",
+   "自动化状态": "已接入",
+   "获取方式": "Scrape",
+   "链接": {
+    "link": "https://www.media.mit.edu/",
+    "text": "https://www.media.mit.edu/"
+   }
+  },
+  {
+   "主要看什么": "视觉语言、多模态、3D 理解、生成模型",
+   "优先级": "P1",
+   "分类": "技术研究开源",
+   "名称": "NYU CILVR Lab",
+   "层级": "L1 一级官方",
+   "来源类型": "纯网页",
+   "自动化状态": "已接入",
+   "获取方式": "RSS",
+   "链接": {
+    "link": "https://wp.nyu.edu/cilvr/feed/",
+    "text": "https://wp.nyu.edu/cilvr/feed/"
+   }
+  },
+  {
+   "主要看什么": "理论 ML、优化、科学计算 AI",
+   "优先级": "P1",
+   "分类": "技术研究开源",
+   "名称": "Caltech CMS AI",
+   "层级": "L1 一级官方",
+   "来源类型": "纯网页",
+   "自动化状态": "已接入",
+   "获取方式": "Manual",
+   "链接": {
+    "link": "https://www.cms.caltech.edu/",
+    "text": "https://www.cms.caltech.edu/"
+   }
+  },
+  {
+   "主要看什么": "视觉几何、多模态、3D 重建、基础模型",
+   "优先级": "P1",
+   "分类": "技术研究开源",
+   "名称": "Oxford VGG / Oxford ML",
+   "层级": "L1 一级官方",
+   "来源类型": "纯网页",
+   "自动化状态": "已接入",
+   "获取方式": "Manual",
+   "链接": {
+    "link": "https://www.robots.ox.ac.uk/~vgg/",
+    "text": "https://www.robots.ox.ac.uk/~vgg/"
+   }
+  },
+  {
+   "主要看什么": "大模型、机器人、AI 医疗、产业合作",
+   "优先级": "P1",
+   "分类": "技术研究开源",
+   "名称": "上海交大 AI 研究院",
+   "层级": "L1 一级官方",
+   "来源类型": "纯网页",
+   "自动化状态": "未开始",
+   "获取方式": "Manual",
+   "链接": {
+    "link": "https://ai.sjtu.edu.cn/",
+    "text": "https://ai.sjtu.edu.cn/"
+   }
+  },
+  {
+   "主要看什么": "模式识别、CV、智能系统、紫东太初",
+   "优先级": "P1",
+   "分类": "技术研究开源",
+   "名称": "中科院自动化所",
+   "层级": "L1 一级官方",
+   "来源类型": "纯网页",
+   "自动化状态": "未开始",
+   "获取方式": "Manual",
+   "链接": {
+    "link": "http://www.ia.cas.cn/",
+    "text": "http://www.ia.cas.cn/"
+   }
+  },
+  {
+   "优先级": "P2",
+   "分类": "算力芯片云",
+   "名称": "Utility Dive",
+   "层级": "L3 媒体研报",
+   "来源类型": "纯网页",
+   "自动化状态": "已接入",
+   "获取方式": "RSS",
+   "链接": {
+    "link": "https://www.utilitydive.com/feeds/news/",
+    "text": "https://www.utilitydive.com/feeds/news/"
+   }
+  }
+ ],
+ "一级参数": [
+  {
+   "dedup_key": "normalize(url)",
+   "dimension": "前沿模型公司",
+   "endpoint": {
+    "link": "https://openai.com/news/rss.xml",
+    "text": "https://openai.com/news/rss.xml"
+   },
+   "fetch_method": "RSS",
+   "keyword_regex": "(model|gpt|claude|gemini|llama|qwen|deepseek|grok|command|mistral|doubao|seed|volc|agent|reasoning|multimodal|context|rlhf|inference|training|fine-tun|moe|rag|release|launch|announce|introducing|now available|update|preview|GA)",
+   "lookback_window": "24h",
+   "name": "OpenAI News",
+   "notes": "News与Blog已合并；官方RSS稳定",
+   "priority": "P0",
+   "source_id": "openai-news",
+   "status": "experimental",
+   "tier": "L1",
+   "来源类型": "纯网页"
+  },
+  {
+   "dedup_key": "normalize(url)",
+   "dimension": "前沿模型公司",
+   "endpoint": {
+    "link": "https://www.anthropic.com/news",
+    "text": "https://www.anthropic.com/news"
+   },
+   "fetch_method": "Scrape",
+   "keyword_regex": "(model|gpt|claude|gemini|llama|qwen|deepseek|grok|command|mistral|doubao|seed|volc|agent|reasoning|multimodal|context|rlhf|inference|training|fine-tun|moe|rag|release|launch|announce|introducing|now available|update|preview|GA)",
+   "lookback_window": "24h",
+   "name": "Anthropic News",
+   "notes": "无官方RSS；重点Announcements/Research",
+   "priority": "P0",
+   "source_id": "anthropic-news",
+   "status": "active",
+   "tier": "L1",
+   "来源类型": "纯网页"
+  },
+  {
+   "dedup_key": "normalize(url)",
+   "dimension": "前沿模型公司",
+   "endpoint": {
+    "link": "https://deepmind.google/blog/rss.xml",
+    "text": "https://deepmind.google/blog/rss.xml"
+   },
+   "fetch_method": "RSS",
+   "keyword_regex": "(model|gpt|claude|gemini|llama|qwen|deepseek|grok|command|mistral|doubao|seed|volc|agent|reasoning|multimodal|context|rlhf|inference|training|fine-tun|moe|rag|release|launch|announce|introducing|now available|update|preview|GA)",
+   "lookback_window": "24h",
+   "name": "Google DeepMind Blog",
+   "notes": "DeepMind无RSS",
+   "priority": "P0",
+   "source_id": "google-deepmind-blog",
+   "status": "experimental",
+   "tier": "L1",
+   "来源类型": "纯网页"
+  },
+  {
+   "dedup_key": "normalize(url)",
+   "dimension": "前沿模型公司",
+   "endpoint": {
+    "link": "https://ai.meta.com/blog/",
+    "text": "https://ai.meta.com/blog/"
+   },
+   "fetch_method": "Scrape",
+   "keyword_regex": "(model|gpt|claude|gemini|llama|qwen|deepseek|grok|command|mistral|doubao|seed|volc|agent|reasoning|multimodal|context|rlhf|inference|training|fine-tun|moe|rag|release|launch|announce|introducing|now available|update|preview|GA)",
+   "lookback_window": "24h",
+   "name": "Meta AI Blog",
+   "priority": "P0",
+   "source_id": "meta-ai-blog",
+   "status": "active",
+   "tier": "L1",
+   "来源类型": "纯网页"
+  },
+  {
+   "dedup_key": "normalize(url)",
+   "dimension": "前沿模型公司",
+   "endpoint": {
+    "link": "https://about.fb.com/news/feed/",
+    "text": "https://about.fb.com/news/feed/"
+   },
+   "fetch_method": "RSS",
+   "keyword_regex": "(model|gpt|claude|gemini|llama|qwen|deepseek|grok|command|mistral|doubao|seed|volc|agent|reasoning|multimodal|context|rlhf|inference|training|fine-tun|moe|rag|release|launch|announce|introducing|now available|update|preview|GA)",
+   "lookback_window": "24h",
+   "name": "Meta Newsroom AI",
+   "notes": "关注Llama系列发布",
+   "priority": "P0",
+   "source_id": "meta-newsroom-ai",
+   "status": "active",
+   "tier": "L1",
+   "来源类型": "纯网页"
+  },
+  {
+   "dedup_key": "normalize(url)",
+   "dimension": "前沿模型公司",
+   "endpoint": {
+    "link": "https://cohere.com/blog",
+    "text": "https://cohere.com/blog"
+   },
+   "fetch_method": "Scrape",
+   "keyword_regex": "(model|gpt|claude|gemini|llama|qwen|deepseek|grok|command|mistral|doubao|seed|volc|agent|reasoning|multimodal|context|rlhf|inference|training|fine-tun|moe|rag|release|launch|announce|introducing|now available|update|preview|GA)",
+   "lookback_window": "24h",
+   "name": "Cohere Blog",
+   "notes": "无官方RSS；重点：Command系列、企业客户案例",
+   "priority": "P1",
+   "source_id": "cohere-blog",
+   "status": "active",
+   "tier": "L1",
+   "来源类型": "纯网页"
+  },
+  {
+   "dedup_key": "hash(model_family+version)",
+   "dimension": "前沿模型公司",
+   "endpoint": {
+    "link": "https://github.com/deepseek-ai/DeepSeek-V3/releases.atom",
+    "text": "https://github.com/deepseek-ai/DeepSeek-V3/releases.atom"
+   },
+   "extra_config": "{\"repos\":[\"deepseek-ai/deepseek-llm\",\"deepseek-ai/DeepSeek-V3\"]}",
+   "fetch_method": "RSS",
+   "keyword_regex": "(model|gpt|claude|gemini|llama|qwen|deepseek|grok|command|mistral|doubao|seed|volc|agent|reasoning|multimodal|context|rlhf|inference|training|fine-tun|moe|rag|release|launch|announce|introducing|now available|update|preview|GA)",
+   "lookback_window": "24h",
+   "name": "DeepSeek GitHub Releases",
+   "notes": "模型/工具release最快信号",
+   "priority": "P0",
+   "source_id": "deepseek-github",
+   "status": "experimental",
+   "tier": "L1",
+   "来源类型": "纯网页"
+  },
+  {
+   "dedup_key": "hash(model_name+version)",
+   "dimension": "前沿模型公司",
+   "endpoint": {
+    "link": "https://qwenlm.github.io/blog/atom.xml",
+    "text": "https://qwenlm.github.io/blog/atom.xml"
+   },
+   "fetch_method": "RSS",
+   "keyword_regex": "(model|gpt|claude|gemini|llama|qwen|deepseek|grok|command|mistral|doubao|seed|volc|agent|reasoning|multimodal|context|rlhf|inference|training|fine-tun|moe|rag|release|launch|announce|introducing|now available|update|preview|GA)",
+   "lookback_window": "24h",
+   "name": "Qwen Blog",
+   "notes": "Jekyll站点，自带atom.xml",
+   "priority": "P0",
+   "source_id": "qwen-blog",
+   "status": "paused",
+   "tier": "L1",
+   "来源类型": "纯网页"
+  },
+  {
+   "dedup_key": "normalize(url)",
+   "dimension": "前沿模型公司",
+   "endpoint": {
+    "link": "https://modelscope.cn/home",
+    "text": "https://modelscope.cn/home"
+   },
+   "extra_config": "{\"modelscope_api\":true,\"modelscope_mode\":\"home\",\"recent_days\":14,\"max_articles\":8}",
+   "fetch_method": "Scrape",
+   "keyword_regex": "(model|modelscope|qwen|wan|gpt|claude|gemini|llama|deepseek|release|launch|instruct|multimodal|video|image|ocr|llm|ai)",
+   "lookback_window": "7d",
+   "name": "ModelScope 首页新模型",
+   "notes": "国内首发常在此",
+   "priority": "P0",
+   "source_id": "modelscope-home",
+   "status": "active",
+   "tier": "L1",
+   "来源类型": "纯网页"
+  },
+  {
+   "dedup_key": "normalize(url)",
+   "dimension": "前沿模型公司",
+   "endpoint": {
+    "link": "https://seed.bytedance.com/en/",
+    "text": "https://seed.bytedance.com/en/"
+   },
+   "extra_config": "{\"seed_api\":true,\"seed_article_type\":2,\"seed_locale\":\"en\",\"recent_days\":60,\"max_articles\":8}",
+   "fetch_method": "Scrape",
+   "keyword_regex": "(seed|seedream|model|release|agent|coding|multimodal|benchmark|research|blog|introducing|officially)",
+   "lookback_window": "7d",
+   "name": "ByteDance Seed",
+   "notes": "研究成果、新模型预告",
+   "priority": "P0",
+   "source_id": "bytedance-seed",
+   "status": "active",
+   "tier": "L1",
+   "来源类型": "纯网页"
+  },
+  {
+   "dedup_key": "arxiv_id(strip_version)",
+   "dimension": "技术研究开源",
+   "endpoint": {
+    "link": "https://rss.arxiv.org/rss/cs.AI",
+    "text": "https://rss.arxiv.org/rss/cs.AI"
+   },
+   "extra_config": "{\"min_pdf_pages\":6,\"code_link_bonus\":0.3,\"min_abstract_chars\":500}",
+   "fetch_method": "RSS",
+   "keyword_regex": "(transformer|moe|mamba|agent|tool-use|reasoning|planning|long-context|multimodal|rlhf|dpo|grpo|inference|rag|benchmark|sota|alignment|safety|llm|diffusion|world-model|code-generation)",
+   "lookback_window": "24h",
+   "name": "arXiv cs.AI",
+   "notes": "通用AI、Agent、规划、推理、安全；日均~120条",
+   "priority": "P0",
+   "source_id": "arxiv-cs-ai",
+   "status": "active",
+   "tier": "L2",
+   "来源类型": "论文"
+  },
+  {
+   "dedup_key": "arxiv_id(strip_version)",
+   "dimension": "技术研究开源",
+   "endpoint": {
+    "link": "https://rss.arxiv.org/rss/cs.CL",
+    "text": "https://rss.arxiv.org/rss/cs.CL"
+   },
+   "extra_config": "{\"min_pdf_pages\":6,\"code_link_bonus\":0.3,\"min_abstract_chars\":500}",
+   "fetch_method": "RSS",
+   "keyword_regex": "(transformer|moe|mamba|agent|tool-use|reasoning|planning|long-context|multimodal|rlhf|dpo|grpo|inference|rag|benchmark|sota|alignment|safety|llm|diffusion|world-model|code-generation)",
+   "lookback_window": "24h",
+   "name": "arXiv cs.CL",
+   "notes": "LLM、NLP、多语言、对话、RAG；日均~200条",
+   "priority": "P0",
+   "source_id": "arxiv-cs-cl",
+   "status": "active",
+   "tier": "L2",
+   "来源类型": "论文"
+  },
+  {
+   "dedup_key": "arxiv_id(strip_version)",
+   "dimension": "技术研究开源",
+   "endpoint": {
+    "link": "https://rss.arxiv.org/rss/cs.LG",
+    "text": "https://rss.arxiv.org/rss/cs.LG"
+   },
+   "extra_config": "{\"min_pdf_pages\":6,\"code_link_bonus\":0.3,\"min_abstract_chars\":500}",
+   "fetch_method": "RSS",
+   "keyword_regex": "(transformer|moe|mamba|agent|tool-use|reasoning|planning|long-context|multimodal|rlhf|dpo|grpo|inference|rag|benchmark|sota|alignment|safety|llm|diffusion|world-model|code-generation)",
+   "lookback_window": "24h",
+   "name": "arXiv cs.LG",
+   "notes": "训练方法、RL、优化、表示学习；日均~180条",
+   "priority": "P0",
+   "source_id": "arxiv-cs-lg",
+   "status": "active",
+   "tier": "L2",
+   "来源类型": "论文"
+  },
+  {
+   "dedup_key": "arxiv_id(strip_version)",
+   "dimension": "技术研究开源",
+   "endpoint": {
+    "link": "https://rss.arxiv.org/rss/cs.CV",
+    "text": "https://rss.arxiv.org/rss/cs.CV"
+   },
+   "extra_config": "{\"min_pdf_pages\":6,\"code_link_bonus\":0.3,\"min_abstract_chars\":500}",
+   "fetch_method": "RSS",
+   "keyword_regex": "(transformer|moe|mamba|agent|tool-use|reasoning|planning|long-context|multimodal|rlhf|dpo|grpo|inference|rag|benchmark|sota|alignment|safety|llm|diffusion|world-model|code-generation)",
+   "lookback_window": "24h",
+   "name": "arXiv cs.CV",
+   "notes": "多模态、VLM、视频生成、机器人视觉；日均~250条",
+   "priority": "P1",
+   "source_id": "arxiv-cs-cv",
+   "status": "active",
+   "tier": "L2",
+   "来源类型": "论文"
+  },
+  {
+   "dedup_key": "arxiv_id(strip_version)",
+   "dimension": "技术研究开源",
+   "endpoint": {
+    "link": "https://huggingface.co/papers/trending",
+    "text": "https://huggingface.co/papers/trending"
+   },
+   "extra_config": "{\"min_upvotes\":30,\"high_upvote_threshold\":100,\"max_articles\":20,\"recent_days\":7}",
+   "fetch_method": "Scrape",
+   "keyword_regex": "(transformer|moe|mamba|ssm|diffusion|rlhf|dpo|grpo|ppo|sft|pre-train|post-train|distill|quantiz|lora|peft|curriculum|agent|tool-use|reasoning|planning|long-context|multimodal|vision-language|video-generation|world-model|code-generation|math-reasoning|retrieval|rag|inference|serving|kv-cache|flash-attention|speculative-decoding|batching|throughput|latency|mlops|vector-database|embedding|benchmark|evaluation|sota|red-team|jailbreak|alignment|safety|interpretability|hallucination|llm|nlp)",
+   "lookback_window": "7d",
+   "name": "HF Papers Trending",
+   "notes": "社区关注度高的新论文；与arXiv按arxiv_id合并",
+   "priority": "P0",
+   "source_id": "hf-papers-trending",
+   "status": "active",
+   "tier": "L2",
+   "来源类型": "论文"
+  },
+  {
+   "dedup_key": "arxiv_id",
+   "dimension": "技术研究开源",
+   "endpoint": {
+    "link": "https://paperswithcode.co/",
+    "text": "https://paperswithcode.co/"
+   },
+   "extra_config": "{\"sota_delta_metric\":\"relative>=3%\",\"min_stars_of_impl\":50,\"max_articles\":20,\"recent_days\":7,\"high_stars_gained_24h\":100}",
+   "fetch_method": "Scrape",
+   "keyword_regex": "(transformer|moe|mamba|ssm|diffusion|rlhf|dpo|grpo|ppo|sft|pre-train|post-train|distill|quantiz|lora|peft|curriculum|agent|tool-use|reasoning|planning|long-context|multimodal|vision-language|video-generation|world-model|code-generation|math-reasoning|retrieval|rag|inference|serving|kv-cache|flash-attention|speculative-decoding|batching|throughput|latency|mlops|vector-database|embedding|benchmark|evaluation|sota|red-team|jailbreak|alignment|safety|interpretability|hallucination|llm|nlp)",
+   "lookback_window": "7d",
+   "name": "PwC Trending",
+   "notes": "首页trending papers",
+   "priority": "P0",
+   "source_id": "papers-with-code-trending",
+   "status": "active",
+   "tier": "L2",
+   "来源类型": "论文"
+  },
+  {
+   "dedup_key": "arxiv_id",
+   "dimension": "技术研究开源",
+   "endpoint": {
+    "link": "https://paperswithcode.co/",
+    "text": "https://paperswithcode.co/"
+   },
+   "extra_config": "{\"recent_days\": 7, \"high_stars_gained_24h\": 50, \"note\": \"原 SOTA 榜；.com 跳 HF。改 paperswithcode.co trending API\", \"pause_reason\": null}",
+   "fetch_method": "Scrape",
+   "keyword_regex": "(transformer|moe|mamba|ssm|diffusion|rlhf|dpo|grpo|ppo|sft|pre-train|post-train|distill|quantiz|lora|peft|curriculum|agent|tool-use|reasoning|planning|long-context|multimodal|vision-language|video-generation|world-model|code-generation|math-reasoning|retrieval|rag|inference|serving|kv-cache|flash-attention|speculative-decoding|batching|throughput|latency|mlops|vector-database|embedding|benchmark|evaluation|sota|red-team|jailbreak|alignment|safety|interpretability|hallucination|llm|nlp)",
+   "lookback_window": "7d",
+   "name": "PwC.co Trending",
+   "notes": "各任务SOTA榜单变化探测",
+   "priority": "P0",
+   "source_id": "papers-with-code-sota",
+   "status": "active",
+   "tier": "L2",
+   "来源类型": "论文"
+  },
+  {
+   "dedup_key": "normalize(url)",
+   "dimension": "技术研究开源",
+   "endpoint": {
+    "link": "https://github.com/trending",
+    "text": "https://github.com/trending"
+   },
+   "extra_config": "{\"query_terms\":[\"llm\",\"large language model\",\"agent\",\"rag\",\"inference\",\"diffusion\",\"multimodal\",\"fine-tuning\",\"mlops\"],\"topic_whitelist\":[\"llm\",\"large-language-models\",\"llmops\",\"agent\",\"ai-agents\",\"rag\",\"retrieval-augmented-generation\",\"inference\",\"llm-inference\",\"mlops\",\"transformers\",\"diffusion\",\"fine-tuning\",\"vector-database\",\"embeddings\",\"multimodal\",\"reasoning\",\"generative-ai\",\"text-to-image\",\"model-serving\",\"quantization\"],\"languages\":[\"python\",\"typescript\",\"javascript\",\"rust\",\"go\",\"c++\",\"cuda\",\"jupyter notebook\"],\"min_absolute_stars\":500,\"breakout_created_days\":60,\"breakout_min_stars\":300,\"active_pushed_days\":14,\"active_min_stars\":3000,\"exclude_topics\":[\"awesome\",\"awesome-list\",\"book\",\"tutorial\",\"roadmap\",\"interview\",\"cheatsheet\",\"course\"],\"exclude_name_regex\":\"(awesome|roadmap|interview|cheat-?sheet|tutorial|handbook|course|free-?code-?camp)\",\"wrapper_penalty\":-0.3,\"max_articles\":15}",
+   "fetch_method": "Scrape",
+   "keyword_regex": "(transformer|moe|mamba|agent|tool-use|reasoning|planning|long-context|multimodal|rlhf|dpo|grpo|inference|rag|benchmark|sota|alignment|safety|llm|diffusion|world-model|code-generation)",
+   "lookback_window": "30d",
+   "name": "GitHub Trending",
+   "notes": "Scrape trending页+REST API；需每日star快照",
+   "priority": "P0",
+   "source_id": "github-trending",
+   "status": "active",
+   "tier": "L2",
+   "来源类型": "Github热榜"
+  },
+  {
+   "dedup_key": "normalize(url)",
+   "dimension": "技术研究开源",
+   "endpoint": {
+    "link": "https://crfm.stanford.edu/feed",
+    "text": "https://crfm.stanford.edu/feed"
+   },
+   "extra_config": "{\"whitelist_review\":\"每季度\",\"cross_source_dedup\":\"与arXiv关联作者/项目名合并\"}",
+   "fetch_method": "RSS",
+   "keyword_regex": "(transformer|moe|mamba|agent|tool-use|reasoning|planning|long-context|multimodal|rlhf|dpo|grpo|inference|rag|benchmark|sota|alignment|safety|llm|diffusion|world-model|code-generation)",
+   "lookback_window": "14d",
+   "name": "Stanford CRFM",
+   "notes": "基础模型、AI 安全、政策研究、Foundation Model 生态",
+   "priority": "P1",
+   "source_id": "lab-stanford-crfm",
+   "status": "active",
+   "tier": "L1",
+   "来源类型": "纯网页"
+  },
+  {
+   "dedup_key": "normalize(url)",
+   "dimension": "技术研究开源",
+   "endpoint": {
+    "link": "https://bair.berkeley.edu/blog/feed.xml",
+    "text": "https://bair.berkeley.edu/blog/feed.xml"
+   },
+   "extra_config": "{\"whitelist_review\":\"每季度\",\"cross_source_dedup\":\"与arXiv关联作者/项目名合并\"}",
+   "fetch_method": "RSS",
+   "keyword_regex": "(transformer|moe|mamba|agent|tool-use|reasoning|planning|long-context|multimodal|rlhf|dpo|grpo|inference|rag|benchmark|sota|alignment|safety|llm|diffusion|world-model|code-generation)",
+   "lookback_window": "14d",
+   "name": "Berkeley BAIR",
+   "notes": "机器人、CV、RL、生成模型、具身智能",
+   "priority": "P1",
+   "source_id": "lab-berkeley-bair",
+   "status": "experimental",
+   "tier": "L1",
+   "来源类型": "纯网页"
+  },
+  {
+   "dedup_key": "normalize(url)",
+   "dimension": "技术研究开源",
+   "endpoint": {
+    "link": "https://www.csail.mit.edu/rss.xml",
+    "text": "https://www.csail.mit.edu/rss.xml"
+   },
+   "extra_config": "{\"whitelist_review\":\"每季度\",\"cross_source_dedup\":\"与arXiv关联作者/项目名合并\"}",
+   "fetch_method": "RSS",
+   "keyword_regex": "(transformer|moe|mamba|agent|tool-use|reasoning|planning|long-context|multimodal|rlhf|dpo|grpo|inference|rag|benchmark|sota|alignment|safety|llm|diffusion|world-model|code-generation)",
+   "lookback_window": "14d",
+   "name": "MIT CSAIL",
+   "notes": "机器人、NLP、CV、HCI、分布式 AI 系统",
+   "priority": "P1",
+   "source_id": "lab-mit-csail",
+   "status": "active",
+   "tier": "L1",
+   "来源类型": "纯网页"
+  },
+  {
+   "dedup_key": "normalize(url)",
+   "dimension": "技术研究开源",
+   "endpoint": {
+    "link": "https://wp.nyu.edu/cilvr/feed/",
+    "text": "https://wp.nyu.edu/cilvr/feed/"
+   },
+   "extra_config": "{\"whitelist_review\":\"每季度\",\"cross_source_dedup\":\"与arXiv关联作者/项目名合并\"}",
+   "fetch_method": "RSS",
+   "keyword_regex": "(transformer|moe|mamba|agent|tool-use|reasoning|planning|long-context|multimodal|rlhf|dpo|grpo|inference|rag|benchmark|sota|alignment|safety|llm|diffusion|world-model|code-generation)",
+   "lookback_window": "14d",
+   "name": "NYU CILVR Lab",
+   "notes": "视觉语言、多模态、3D 理解、生成模型",
+   "priority": "P1",
+   "source_id": "lab-nyu-cilvr",
+   "status": "active",
+   "tier": "L1",
+   "来源类型": "纯网页"
+  },
+  {
+   "dedup_key": "normalize(url)",
+   "dimension": "技术研究开源",
+   "endpoint": {
+    "link": "https://rdi.berkeley.edu/feed",
+    "text": "https://rdi.berkeley.edu/feed"
+   },
+   "extra_config": "{\"whitelist_review\":\"每季度\",\"cross_source_dedup\":\"与arXiv关联作者/项目名合并\"}",
+   "fetch_method": "RSS",
+   "keyword_regex": "(transformer|moe|mamba|agent|tool-use|reasoning|planning|long-context|multimodal|rlhf|dpo|grpo|inference|rag|benchmark|sota|alignment|safety|llm|diffusion|world-model|code-generation)",
+   "lookback_window": "14d",
+   "name": "Berkeley RDI",
+   "notes": "机器人学习、具身 AI、人机协作、产业转化",
+   "priority": "P1",
+   "source_id": "lab-berkeley-rdi",
+   "status": "active",
+   "tier": "L1",
+   "来源类型": "纯网页"
+  },
+  {
+   "dedup_key": "normalize(url)",
+   "dimension": "技术研究开源",
+   "endpoint": {
+    "link": "https://sky.cs.berkeley.edu/feed/",
+    "text": "https://sky.cs.berkeley.edu/feed/"
+   },
+   "extra_config": "{\"whitelist_review\":\"每季度\",\"cross_source_dedup\":\"与arXiv关联作者/项目名合并\"}",
+   "fetch_method": "RSS",
+   "keyword_regex": "(transformer|moe|mamba|agent|tool-use|reasoning|planning|long-context|multimodal|rlhf|dpo|grpo|inference|rag|benchmark|sota|alignment|safety|llm|diffusion|world-model|code-generation)",
+   "lookback_window": "14d",
+   "name": "Berkeley Sky Computing Lab",
+   "notes": "云原生 AI 系统、大模型训练推理基础设施、Sky 系列项目",
+   "priority": "P1",
+   "source_id": "lab-berkeley-sky",
+   "status": "active",
+   "tier": "L1",
+   "来源类型": "纯网页"
+  },
+  {
+   "dedup_key": "normalize(url)",
+   "dimension": "技术研究开源",
+   "endpoint": {
+    "link": "https://www.cms.caltech.edu/",
+    "text": "https://www.cms.caltech.edu/"
+   },
+   "extra_config": "{\"whitelist_review\":\"每季度\",\"cross_source_dedup\":\"与arXiv关联作者/项目名合并\"}",
+   "fetch_method": "Scrape",
+   "keyword_regex": "(transformer|moe|mamba|agent|tool-use|reasoning|planning|long-context|multimodal|rlhf|dpo|grpo|inference|rag|benchmark|sota|alignment|safety|llm|diffusion|world-model|code-generation)",
+   "lookback_window": "7d",
+   "name": "Caltech CMS AI",
+   "notes": "理论 ML、优化、科学计算 AI",
+   "priority": "P1",
+   "source_id": "lab-caltech-cms",
+   "status": "active",
+   "tier": "L1",
+   "来源类型": "纯网页"
+  },
+  {
+   "dedup_key": "hash(model_id+benchmark+date)",
+   "dimension": "模型评测基准",
+   "endpoint": {
+    "link": "https://artificialanalysis.ai/articles",
+    "text": "https://artificialanalysis.ai/articles"
+   },
+   "extra_config": "{\"link_path_include\":\"/articles/\",\"link_path_exclude\":\"_next/static|/login\",\"price_delta_alert\":0.1}",
+   "fetch_method": "Scrape",
+   "keyword_regex": "(model|gpt|claude|gemini|llama|grok|intelligence|benchmark|leaderboard|latency|throughput|pricing|evaluation|arena|sota|llm|ai)",
+   "lookback_window": "7d",
+   "name": "Artificial Analysis",
+   "priority": "P0",
+   "source_id": "artificial-analysis",
+   "status": "active",
+   "tier": "L1",
+   "来源类型": "纯网页"
+  },
+  {
+   "dedup_key": "hash(model_id+benchmark+date)",
+   "dimension": "模型评测基准",
+   "endpoint": {
+    "link": "https://crfm.stanford.edu/feed",
+    "text": "https://crfm.stanford.edu/feed"
+   },
+   "extra_config": "{\"note\": \"原 HELM leaderboard SPA；改采 CRFM RSS\", \"former\": \"https://crfm.stanford.edu/helm/\"}",
+   "fetch_method": "RSS",
+   "lookback_window": "7d",
+   "name": "Stanford CRFM / HELM",
+   "priority": "P1",
+   "source_id": "stanford-helm",
+   "status": "active",
+   "tier": "L1",
+   "来源类型": "纯网页"
+  },
+  {
+   "dedup_key": "hash(model_id+benchmark+date)",
+   "dimension": "模型评测基准",
+   "endpoint": {
+    "link": "https://mlcommons.org/category/news/feed/",
+    "text": "https://mlcommons.org/category/news/feed/"
+   },
+   "extra_config": "{\"snapshot_mode\":true,\"snapshot_retention_days\":365}",
+   "fetch_method": "RSS",
+   "lookback_window": "48h",
+   "name": "MLCommons / MLPerf",
+   "priority": "P1",
+   "source_id": "mlperf",
+   "status": "active",
+   "tier": "L1",
+   "来源类型": "纯网页"
+  },
+  {
+   "dedup_key": "hash(model_id+benchmark+date)",
+   "dimension": "模型评测基准",
+   "extra_config": "{\"snapshot_mode\":true,\"snapshot_retention_days\":365}",
+   "fetch_method": "Manual",
+   "lookback_window": "48h",
+   "name": "MMLU-Pro / GPQA / AIME",
+   "notes": "手工跟踪学术基准更新",
+   "priority": "P2",
+   "source_id": "academic-benchmarks",
+   "status": "paused",
+   "tier": "L2",
+   "来源类型": "纯网页"
+  },
+  {
+   "dedup_key": "hash(model_id+benchmark+date)",
+   "dimension": "模型评测基准",
+   "endpoint": {
+    "link": "https://github.com/open-compass/OpenCompass/releases.atom",
+    "text": "https://github.com/open-compass/OpenCompass/releases.atom"
+   },
+   "extra_config": "{\"note\": \"榜单 SPA；改采 GitHub Releases Atom\", \"former\": \"https://opencompass.org.cn/\"}",
+   "fetch_method": "RSS",
+   "lookback_window": "7d",
+   "name": "OpenCompass Releases",
+   "priority": "P0",
+   "source_id": "opencompass",
+   "status": "active",
+   "tier": "L2",
+   "来源类型": "纯网页"
+  },
+  {
+   "dedup_key": "normalize(url)",
+   "dimension": "算力芯片云",
+   "endpoint": {
+    "link": "https://blogs.nvidia.com/feed/",
+    "text": "https://blogs.nvidia.com/feed/"
+   },
+   "fetch_method": "RSS",
+   "keyword_regex": "(gpu|tpu|blackwell|h100|mi3|inference|training|bedrock|vertex|datacenter|cuda|rocm|pricing|chip|compute)",
+   "lookback_window": "24h",
+   "name": "NVIDIA Blog",
+   "priority": "P0",
+   "source_id": "nvidia-blog",
+   "status": "active",
+   "tier": "L1",
+   "来源类型": "纯网页"
+  },
+  {
+   "dedup_key": "normalize(url)",
+   "dimension": "算力芯片云",
+   "endpoint": {
+    "link": "https://rocm.blogs.amd.com/blog/atom.xml",
+    "text": "https://rocm.blogs.amd.com/blog/atom.xml"
+   },
+   "fetch_method": "RSS",
+   "keyword_regex": "(gpu|tpu|blackwell|h100|mi3|inference|training|bedrock|vertex|datacenter|cuda|rocm|pricing|chip|compute)",
+   "lookback_window": "24h",
+   "name": "AMD Instinct / ROCm",
+   "priority": "P1",
+   "source_id": "amd-instinct",
+   "status": "active",
+   "tier": "L1",
+   "来源类型": "纯网页"
+  },
+  {
+   "dedup_key": "normalize(url)",
+   "dimension": "算力芯片云",
+   "endpoint": {
+    "link": "https://azure.microsoft.com/en-us/blog/feed/",
+    "text": "https://azure.microsoft.com/en-us/blog/feed/"
+   },
+   "fetch_method": "RSS",
+   "keyword_regex": "(gpu|tpu|blackwell|h100|mi3|inference|training|bedrock|vertex|datacenter|cuda|rocm|pricing|chip|compute)",
+   "lookback_window": "24h",
+   "name": "Microsoft Azure AI Infrastructure",
+   "priority": "P1",
+   "source_id": "azure-ai-infra",
+   "status": "active",
+   "tier": "L1",
+   "来源类型": "纯网页"
+  },
+  {
+   "dedup_key": "normalize(url)",
+   "dimension": "算力芯片云",
+   "endpoint": {
+    "link": "https://cloudblog.withgoogle.com/products/ai-machine-learning/rss/",
+    "text": "https://cloudblog.withgoogle.com/products/ai-machine-learning/rss/"
+   },
+   "fetch_method": "RSS",
+   "keyword_regex": "(gpu|tpu|blackwell|h100|mi3|inference|training|bedrock|vertex|datacenter|cuda|rocm|pricing|chip|compute)",
+   "lookback_window": "24h",
+   "name": "Google Cloud AI Blog",
+   "priority": "P0",
+   "source_id": "gcp-ai-infra",
+   "status": "active",
+   "tier": "L1",
+   "来源类型": "纯网页"
+  },
+  {
+   "dedup_key": "normalize(url)",
+   "dimension": "算力芯片云",
+   "endpoint": {
+    "link": "https://www.together.ai/blog/rss.xml",
+    "text": "https://www.together.ai/blog/rss.xml"
+   },
+   "fetch_method": "RSS",
+   "keyword_regex": "(gpu|tpu|blackwell|h100|mi3|inference|training|bedrock|vertex|datacenter|cuda|rocm|pricing|chip|compute)",
+   "lookback_window": "24h",
+   "name": "Together AI Blog",
+   "priority": "P1",
+   "source_id": "together-ai",
+   "status": "active",
+   "tier": "L2",
+   "来源类型": "纯网页"
+  },
+  {
+   "dedup_key": "normalize(url)",
+   "dimension": "算力芯片云",
+   "endpoint": {
+    "link": "https://lambda.ai/blog/rss.xml",
+    "text": "https://lambda.ai/blog/rss.xml"
+   },
+   "fetch_method": "RSS",
+   "keyword_regex": "(gpu|tpu|blackwell|h100|mi3|inference|training|bedrock|vertex|datacenter|cuda|rocm|pricing|chip|compute)",
+   "lookback_window": "24h",
+   "name": "Lambda Labs Blog",
+   "priority": "P1",
+   "source_id": "lambda-labs",
+   "status": "active",
+   "tier": "L2",
+   "来源类型": "纯网页"
+  },
+  {
+   "dedup_key": "normalize(url)",
+   "dimension": "算力芯片云",
+   "endpoint": {
+    "link": "https://epoch.ai/latest",
+    "text": "https://epoch.ai/latest"
+   },
+   "fetch_method": "Scrape",
+   "keyword_regex": "(gpu|tpu|blackwell|h100|mi3|inference|training|bedrock|vertex|datacenter|cuda|rocm|pricing|chip|compute)",
+   "lookback_window": "24h",
+   "name": "Epoch AI Compute Data",
+   "priority": "P1",
+   "source_id": "epoch-compute",
+   "status": "active",
+   "tier": "L2",
+   "来源类型": "纯网页"
+  },
+  {
+   "dedup_key": "normalize(url)",
+   "dimension": "产品化企业采用",
+   "endpoint": {
+    "link": "https://www.mckinsey.com/capabilities/quantumblack/our-insights/the-state-of-ai",
+    "text": "https://www.mckinsey.com/capabilities/quantumblack/our-insights/the-state-of-ai"
+   },
+   "fetch_method": "Manual",
+   "keyword_regex": "(adoption|enterprise|roi|deployment|production|pilot|customer|copilot|saas|gartner|case study|案例)",
+   "lookback_window": "14d",
+   "name": "McKinsey State of AI",
+   "notes": "PDF报告人工导入",
+   "priority": "P0",
+   "source_id": "mckinsey-state-of-ai",
+   "status": "experimental",
+   "tier": "L3",
+   "来源类型": "纯网页"
+  },
+  {
+   "dedup_key": "normalize(url)",
+   "dimension": "产品化企业采用",
+   "fetch_method": "Manual",
+   "keyword_regex": "(adoption|enterprise|roi|deployment|production|pilot|customer|copilot|saas|gartner|case study|案例)",
+   "lookback_window": "14d",
+   "name": "Deloitte/PwC/BCG/Bain AI",
+   "notes": "报告PDF人工导入",
+   "priority": "P1",
+   "source_id": "consulting-ai-reports",
+   "status": "paused",
+   "tier": "L3",
+   "来源类型": "纯网页"
+  },
+  {
+   "dedup_key": "normalize(url)",
+   "dimension": "产品化企业采用",
+   "endpoint": {
+    "link": "https://www.gartner.com/en/topics/artificial-intelligence",
+    "text": "https://www.gartner.com/en/topics/artificial-intelligence"
+   },
+   "fetch_method": "Manual",
+   "keyword_regex": "(adoption|enterprise|roi|deployment|production|pilot|customer|copilot|saas|gartner|case study|案例)",
+   "lookback_window": "14d",
+   "name": "Gartner AI / Hype Cycle",
+   "notes": "订阅制",
+   "priority": "P1",
+   "source_id": "gartner-ai",
+   "status": "experimental",
+   "tier": "L3",
+   "来源类型": "纯网页"
+  },
+  {
+   "dedup_key": "normalize(url)",
+   "dimension": "产品化企业采用",
+   "endpoint": {
+    "link": "https://www.salesforce.com/news/feed/",
+    "text": "https://www.salesforce.com/news/feed/"
+   },
+   "fetch_method": "RSS",
+   "keyword_regex": "(adoption|enterprise|roi|deployment|production|pilot|customer|copilot|saas|gartner|case study|案例)",
+   "lookback_window": "14d",
+   "name": "Salesforce AI",
+   "priority": "P1",
+   "source_id": "salesforce-ai",
+   "status": "experimental",
+   "tier": "L1",
+   "来源类型": "纯网页"
+  },
+  {
+   "dedup_key": "normalize(url)",
+   "dimension": "产品化企业采用",
+   "endpoint": {
+    "link": "https://github.blog/feed/",
+    "text": "https://github.blog/feed/"
+   },
+   "fetch_method": "RSS",
+   "keyword_regex": "(adoption|enterprise|roi|deployment|production|pilot|customer|copilot|saas|gartner|case study|案例)",
+   "lookback_window": "14d",
+   "name": "Microsoft Copilot / GitHub Copilot",
+   "priority": "P0",
+   "source_id": "ms-copilot",
+   "status": "experimental",
+   "tier": "L1",
+   "来源类型": "纯网页"
+  },
+  {
+   "dedup_key": "normalize(url)",
+   "dimension": "产品化企业采用",
+   "fetch_method": "Manual",
+   "keyword_regex": "(adoption|enterprise|roi|deployment|production|pilot|customer|copilot|saas|gartner|case study|案例)",
+   "lookback_window": "14d",
+   "name": "行业垂直 AI 案例",
+   "notes": "医疗/金融/法律/制造/教育/客服；News API待接",
+   "priority": "P2",
+   "source_id": "vertical-ai-cases",
+   "status": "paused",
+   "tier": "L3",
+   "来源类型": "纯网页"
+  },
+  {
+   "dedup_key": "hash(company_name+event_type+round)",
+   "dimension": "创业融资并购",
+   "endpoint": {
+    "link": "https://pitchbook.com/",
+    "text": "https://pitchbook.com/"
+   },
+   "fetch_method": "Manual",
+   "keyword_regex": "(funding|raised|series [a-d]|valuation|acqui|merger|ipo|invest|融资|并购|估值|startup)",
+   "lookback_window": "24h",
+   "name": "PitchBook",
+   "notes": "订阅/API",
+   "priority": "P1",
+   "source_id": "pitchbook",
+   "status": "experimental",
+   "tier": "L3",
+   "来源类型": "纯网页"
+  },
+  {
+   "dedup_key": "hash(company_name+event_type+round)",
+   "dimension": "创业融资并购",
+   "endpoint": {
+    "link": "https://www.cbinsights.com/research/artificial-intelligence/",
+    "text": "https://www.cbinsights.com/research/artificial-intelligence/"
+   },
+   "fetch_method": "Manual",
+   "keyword_regex": "(funding|raised|series [a-d]|valuation|acqui|merger|ipo|invest|融资|并购|估值|startup)",
+   "lookback_window": "24h",
+   "name": "CB Insights AI 100",
+   "priority": "P1",
+   "source_id": "cb-insights",
+   "status": "experimental",
+   "tier": "L3",
+   "来源类型": "纯网页"
+  },
+  {
+   "dedup_key": "hash(company_name+event_type+round)",
+   "dimension": "创业融资并购",
+   "endpoint": {
+    "link": "https://www.theinformation.com/",
+    "text": "https://www.theinformation.com/"
+   },
+   "fetch_method": "Manual",
+   "keyword_regex": "(funding|raised|series [a-d]|valuation|acqui|merger|ipo|invest|融资|并购|估值|startup)",
+   "lookback_window": "24h",
+   "name": "The Information AI Agenda",
+   "notes": "订阅制",
+   "priority": "P0",
+   "source_id": "the-information",
+   "status": "experimental",
+   "tier": "L3",
+   "来源类型": "纯网页"
+  },
+  {
+   "dedup_key": "hash(company_name+event_type+round)",
+   "dimension": "创业融资并购",
+   "endpoint": {
+    "link": "https://news.google.com/rss/search?q=reuters.com%20artificial%20intelligence%20when:7d&hl=en-US&gl=US&ceid=US:en",
+    "text": "https://news.google.com/rss/search?q=reuters.com%20artificial%20intelligence%20when:7d&hl=en-US&gl=US&ceid=US:en"
+   },
+   "fetch_method": "RSS",
+   "keyword_regex": "(funding|raised|series [a-d]|valuation|acqui|merger|ipo|invest|融资|并购|估值|startup)",
+   "lookback_window": "24h",
+   "name": "Reuters AI News",
+   "priority": "P0",
+   "source_id": "reuters-ai",
+   "status": "experimental",
+   "tier": "L3",
+   "来源类型": "纯网页"
+  },
+  {
+   "dedup_key": "hash(company_name+event_type+round)",
+   "dimension": "创业融资并购",
+   "endpoint": {
+    "link": "https://www.bloomberg.com/technology",
+    "text": "https://www.bloomberg.com/technology"
+   },
+   "fetch_method": "Manual",
+   "keyword_regex": "(funding|raised|series [a-d]|valuation|acqui|merger|ipo|invest|融资|并购|估值|startup)",
+   "lookback_window": "24h",
+   "name": "Bloomberg Tech",
+   "notes": "订阅制",
+   "priority": "P1",
+   "source_id": "bloomberg-tech",
+   "status": "experimental",
+   "tier": "L3",
+   "来源类型": "纯网页"
+  },
+  {
+   "dedup_key": "hash(company_name+event_type+round)",
+   "dimension": "创业融资并购",
+   "endpoint": {
+    "link": "https://techcrunch.com/category/artificial-intelligence/feed/",
+    "text": "https://techcrunch.com/category/artificial-intelligence/feed/"
+   },
+   "fetch_method": "RSS",
+   "keyword_regex": "(funding|raised|series [a-d]|valuation|acqui|merger|ipo|invest|融资|并购|估值|startup)",
+   "lookback_window": "24h",
+   "name": "TechCrunch AI",
+   "priority": "P0",
+   "source_id": "techcrunch-ai",
+   "status": "active",
+   "tier": "L3",
+   "来源类型": "纯网页"
+  },
+  {
+   "dedup_key": "hash(company_name+event_type+round)",
+   "dimension": "创业融资并购",
+   "endpoint": {
+    "link": "https://sifted.eu/feed",
+    "text": "https://sifted.eu/feed"
+   },
+   "fetch_method": "RSS",
+   "keyword_regex": "(funding|raised|series [a-d]|valuation|acqui|merger|ipo|invest|融资|并购|估值|startup)",
+   "lookback_window": "7d",
+   "name": "Sifted",
+   "priority": "P2",
+   "source_id": "sifted",
+   "status": "active",
+   "tier": "L3",
+   "来源类型": "纯网页"
+  },
+  {
+   "dedup_key": "hash(company_name+event_type+round)",
+   "dimension": "创业融资并购",
+   "endpoint": {
+    "link": "https://36kr.com/feed",
+    "text": "https://36kr.com/feed"
+   },
+   "fetch_method": "Bridge",
+   "keyword_regex": "(funding|raised|series [a-d]|valuation|acqui|merger|ipo|invest|融资|并购|估值|startup)",
+   "lookback_window": "24h",
+   "name": "36氪 AI",
+   "priority": "P0",
+   "source_id": "36kr-ai",
+   "status": "experimental",
+   "tier": "L3",
+   "来源类型": "公众号"
+  },
+  {
+   "dedup_key": "hash(company_name+event_type+round)",
+   "dimension": "创业融资并购",
+   "endpoint": {
+    "link": "https://rsshub.app/latepost/latest",
+    "text": "https://rsshub.app/latepost/latest"
+   },
+   "fetch_method": "Bridge",
+   "keyword_regex": "(funding|raised|series [a-d]|valuation|acqui|merger|ipo|invest|融资|并购|估值|startup)",
+   "lookback_window": "24h",
+   "name": "晚点 LatePost",
+   "priority": "P0",
+   "source_id": "latepost-ai",
+   "status": "experimental",
+   "tier": "L3",
+   "来源类型": "公众号"
+  },
+  {
+   "dedup_key": "hash(company_name+event_type+round)",
+   "dimension": "创业融资并购",
+   "endpoint": {
+    "link": "https://www.jiqizhixin.com/rss",
+    "text": "https://www.jiqizhixin.com/rss"
+   },
+   "fetch_method": "Bridge",
+   "keyword_regex": "(funding|raised|series [a-d]|valuation|acqui|merger|ipo|invest|融资|并购|估值|startup)",
+   "lookback_window": "24h",
+   "name": "机器之心",
+   "priority": "P0",
+   "source_id": "jiqizhixin",
+   "status": "experimental",
+   "tier": "L3",
+   "来源类型": "公众号"
+  },
+  {
+   "dedup_key": "hash(company_name+event_type+round)",
+   "dimension": "创业融资并购",
+   "fetch_method": "Manual",
+   "keyword_regex": "(funding|raised|series [a-d]|valuation|acqui|merger|ipo|invest|融资|并购|估值|startup)",
+   "lookback_window": "24h",
+   "name": "公司注册和招聘变化",
+   "priority": "P2",
+   "source_id": "corp-signals",
+   "status": "experimental",
+   "tier": "L4",
+   "来源类型": "纯网页"
+  },
+  {
+   "dedup_key": "hash(title+agency)",
+   "dimension": "政策监管地缘",
+   "endpoint": {
+    "link": "https://www.ai.gov/",
+    "text": "https://www.ai.gov/"
+   },
+   "extra_config": "{\"policy_stage_extract\":true}",
+   "fetch_method": "RSS",
+   "keyword_regex": "(ai act|regulation|compliance|executive order|export control|备案|algorithm|governance|litigation|incident|policy)",
+   "lookback_window": "7d",
+   "name": "AI.gov / 美国 AI 政策",
+   "priority": "P0",
+   "source_id": "ai-gov-us",
+   "status": "experimental",
+   "tier": "L1",
+   "来源类型": "纯网页"
+  },
+  {
+   "dedup_key": "hash(title+agency)",
+   "dimension": "政策监管地缘",
+   "endpoint": {
+    "link": "https://www.nist.gov/news-events/news/rss.xml",
+    "text": "https://www.nist.gov/news-events/news/rss.xml"
+   },
+   "extra_config": "{\"policy_stage_extract\":true}",
+   "fetch_method": "RSS",
+   "keyword_regex": "(ai act|regulation|compliance|executive order|export control|备案|algorithm|governance|litigation|incident|policy)",
+   "lookback_window": "7d",
+   "name": "NIST AI RMF",
+   "priority": "P1",
+   "source_id": "nist-ai-rmf",
+   "status": "experimental",
+   "tier": "L1",
+   "来源类型": "纯网页"
+  },
+  {
+   "dedup_key": "hash(title+agency)",
+   "dimension": "政策监管地缘",
+   "endpoint": {
+    "link": "https://digital-strategy.ec.europa.eu/en/policies/regulatory-framework-ai",
+    "text": "https://digital-strategy.ec.europa.eu/en/policies/regulatory-framework-ai"
+   },
+   "extra_config": "{\"policy_stage_extract\":true}",
+   "fetch_method": "Manual",
+   "keyword_regex": "(ai act|regulation|compliance|executive order|export control|备案|algorithm|governance|litigation|incident|policy)",
+   "lookback_window": "7d",
+   "name": "EU AI Act 官方",
+   "notes": "每周人工巡检",
+   "priority": "P0",
+   "source_id": "eu-ai-act",
+   "status": "experimental",
+   "tier": "L1",
+   "来源类型": "纯网页"
+  },
+  {
+   "dedup_key": "hash(title+agency)",
+   "dimension": "政策监管地缘",
+   "endpoint": {
+    "link": "https://wp.oecd.ai/feed",
+    "text": "https://wp.oecd.ai/feed"
+   },
+   "extra_config": "{\"policy_stage_extract\":true}",
+   "fetch_method": "RSS",
+   "keyword_regex": "(ai act|regulation|compliance|executive order|export control|备案|algorithm|governance|litigation|incident|policy)",
+   "lookback_window": "7d",
+   "name": "OECD AI Policy Observatory",
+   "priority": "P1",
+   "source_id": "oecd-ai",
+   "status": "experimental",
+   "tier": "L1",
+   "来源类型": "纯网页"
+  },
+  {
+   "dedup_key": "hash(title+agency)",
+   "dimension": "政策监管地缘",
+   "endpoint": {
+    "link": "https://www.smartnation.gov.cn/",
+    "text": "https://www.smartnation.gov.cn/"
+   },
+   "extra_config": "{\"policy_stage_extract\":true}",
+   "fetch_method": "Manual",
+   "keyword_regex": "(ai act|regulation|compliance|executive order|export control|备案|algorithm|governance|litigation|incident|policy)",
+   "lookback_window": "7d",
+   "name": "Singapore NAIS 2.0",
+   "priority": "P2",
+   "source_id": "singapore-nais",
+   "status": "experimental",
+   "tier": "L1",
+   "来源类型": "纯网页"
+  },
+  {
+   "dedup_key": "hash(title+agency)",
+   "dimension": "政策监管地缘",
+   "endpoint": {
+    "link": "https://www.reuters.com/legal/",
+    "text": "https://www.reuters.com/legal/"
+   },
+   "extra_config": "{\"policy_stage_extract\":true}",
+   "fetch_method": "Manual",
+   "keyword_regex": "(ai act|regulation|compliance|executive order|export control|备案|algorithm|governance|litigation|incident|policy)",
+   "lookback_window": "7d",
+   "name": "律所 AI Litigation Tracker",
+   "priority": "P1",
+   "source_id": "litigation-tracker",
+   "status": "experimental",
+   "tier": "L3",
+   "来源类型": "纯网页"
+  },
+  {
+   "dedup_key": "hash(title+agency)",
+   "dimension": "政策监管地缘",
+   "endpoint": {
+    "link": "https://airisk.mit.edu/blog",
+    "text": "https://airisk.mit.edu/blog"
+   },
+   "extra_config": "{\"policy_stage_extract\":true}",
+   "fetch_method": "Scrape",
+   "keyword_regex": "(ai act|regulation|compliance|executive order|export control|备案|algorithm|governance|litigation|incident|policy)",
+   "lookback_window": "7d",
+   "name": "MIT AI Risk Repository",
+   "priority": "P1",
+   "source_id": "mit-ai-risk",
+   "status": "active",
+   "tier": "L2",
+   "来源类型": "纯网页"
+  },
+  {
+   "dedup_key": "hash(title+agency)",
+   "dimension": "政策监管地缘",
+   "endpoint": {
+    "link": "https://incidentdatabase.ai/rss.xml",
+    "text": "https://incidentdatabase.ai/rss.xml"
+   },
+   "extra_config": "{\"policy_stage_extract\":true}",
+   "fetch_method": "RSS",
+   "keyword_regex": "(ai act|regulation|compliance|executive order|export control|备案|algorithm|governance|litigation|incident|policy)",
+   "lookback_window": "7d",
+   "name": "AI Incident Database",
+   "priority": "P1",
+   "source_id": "ai-incident-db",
+   "status": "experimental",
+   "tier": "L2",
+   "来源类型": "纯网页"
+  },
+  {
+   "dedup_key": "normalize(url)",
+   "dimension": "其他",
+   "extra_config": "{\"duration_min\":5,\"duration_max\":90,\"view_to_sub_ratio\":0.1}",
+   "fetch_method": "Manual",
+   "lookback_window": "48h",
+   "name": "视频 YouTube/B站",
+   "priority": "P2",
+   "source_id": "video-channels",
+   "status": "experimental",
+   "tier": "L4",
+   "来源类型": "视频"
+  },
+  {
+   "dedup_key": "normalize(url)",
+   "dimension": "其他",
+   "endpoint": {
+    "link": "https://alphaxiv.org/",
+    "text": "https://alphaxiv.org/"
+   },
+   "fetch_method": "Manual",
+   "lookback_window": "48h",
+   "name": "arXiv 评论区 / AlphaXiv",
+   "priority": "P2",
+   "source_id": "arxiv-comments",
+   "status": "paused",
+   "tier": "L4",
+   "来源类型": "论文"
+  },
+  {
+   "dedup_key": "normalize(url)",
+   "dimension": "其他",
+   "fetch_method": "Manual",
+   "lookback_window": "48h",
+   "name": "播客节目",
+   "priority": "P2",
+   "source_id": "podcast",
+   "status": "paused",
+   "tier": "L4",
+   "来源类型": "播客"
+  },
+  {
+   "dedup_key": "normalize(url)",
+   "dimension": "其他",
+   "fetch_method": "Manual",
+   "lookback_window": "48h",
+   "name": "在线会议（有回放）",
+   "priority": "P2",
+   "source_id": "online-conf-replay",
+   "status": "paused",
+   "tier": "L4",
+   "来源类型": "纯网页"
+  },
+  {
+   "dedup_key": "normalize(url)",
+   "dimension": "其他",
+   "fetch_method": "Manual",
+   "lookback_window": "48h",
+   "name": "在线会议（实时）",
+   "priority": "P2",
+   "source_id": "online-conf-live",
+   "status": "paused",
+   "tier": "L4",
+   "来源类型": "纯网页"
+  },
+  {
+   "dedup_key": "normalize(url)",
+   "dimension": "其他",
+   "fetch_method": "Manual",
+   "lookback_window": "48h",
+   "name": "线下活动",
+   "priority": "P2",
+   "source_id": "offline-events",
+   "status": "paused",
+   "tier": "L4",
+   "来源类型": "纯网页"
+  },
+  {
+   "dedup_key": "normalize(url)",
+   "dimension": "技术研究开源",
+   "endpoint": {
+    "link": "https://www.nature.com/natmachintell.rss",
+    "text": "https://www.nature.com/natmachintell.rss"
+   },
+   "extra_config": "{\"entity_type\":\"paper\",\"venue\":\"Nature Machine Intelligence\"}",
+   "fetch_method": "RSS",
+   "keyword_regex": "(ai|artificial intelligence|machine learning|deep learning|llm|agent|foundation model|neural|transformer|reinforcement learning)",
+   "lookback_window": "每周",
+   "name": "Nature Machine Intelligence",
+   "notes": "P0 顶刊 RSS；领域本身即 AI，关键词仅作轻过滤",
+   "priority": "P0",
+   "source_id": "nature-machine-intelligence",
+   "status": "active",
+   "tier": "L1",
+   "来源类型": "论文"
+  },
+  {
+   "dedup_key": "normalize(url)",
+   "dimension": "技术研究开源",
+   "endpoint": {
+    "link": "https://www.nature.com/natcomputsci.rss",
+    "text": "https://www.nature.com/natcomputsci.rss"
+   },
+   "extra_config": "{\"entity_type\":\"paper\",\"venue\":\"Nature Computational Science\"}",
+   "fetch_method": "RSS",
+   "keyword_regex": "(ai|artificial intelligence|machine learning|deep learning|llm|neural|simulation|scientific machine learning|foundation model|agent)",
+   "lookback_window": "每周",
+   "name": "Nature Computational Science",
+   "notes": "P0 顶刊 RSS；偏 AI4Science / 计算科学",
+   "priority": "P0",
+   "source_id": "nature-computational-science",
+   "status": "active",
+   "tier": "L1",
+   "来源类型": "论文"
+  },
+  {
+   "dedup_key": "normalize(url)",
+   "dimension": "技术研究开源",
+   "endpoint": {
+    "link": "https://jmlr.org/jmlr.xml",
+    "text": "https://jmlr.org/jmlr.xml"
+   },
+   "extra_config": "{\"entity_type\":\"paper\",\"venue\":\"JMLR\"}",
+   "fetch_method": "RSS",
+   "keyword_regex": "(learning|neural|optimization|bayesian|reinforcement|kernel|representation|inference|llm|transformer|foundation)",
+   "lookback_window": "每周",
+   "name": "JMLR",
+   "notes": "P0 ML 顶刊 RSS；更新较慢、信噪比高",
+   "priority": "P0",
+   "source_id": "jmlr",
+   "status": "active",
+   "tier": "L1",
+   "来源类型": "论文"
+  },
+  {
+   "dedup_key": "normalize(url)",
+   "dimension": "算力芯片云",
+   "endpoint": {
+    "link": "https://www.utilitydive.com/feeds/news/",
+    "text": "https://www.utilitydive.com/feeds/news/"
+   },
+   "fetch_method": "RSS",
+   "keyword_regex": "(datacenter|data center|gpu|ai|artificial intelligence|power|grid|transmission|energy|hyperscale|inference|training|chip|compute|solar|battery)",
+   "lookback_window": "7d",
+   "name": "Utility Dive",
+   "priority": "P2",
+   "source_id": "utility-dive",
+   "status": "active",
+   "tier": "L3",
+   "来源类型": "纯网页"
+  },
+  {
+   "fetch_method": "Scrape"
+  },
+  {
+   "dimension": "中文科技媒体",
+   "endpoint": {
+    "link": "https://www.qbitai.com/feed",
+    "text": "https://www.qbitai.com/feed"
+   },
+   "fetch_method": "RSS",
+   "name": "量子位",
+   "notes": "A类·官网可抓(拟走Scrape),不必依赖微信。AI产业报道",
+   "source_id": "qbitai",
+   "status": "active",
+   "来源类型": "公众号"
+  },
+  {
+   "dimension": "中文科技媒体",
+   "endpoint": {
+    "link": "https://zhidx.com/rss",
+    "text": "https://zhidx.com/rss"
+   },
+   "fetch_method": "RSS",
+   "name": "智东西",
+   "notes": "A类·官网可抓。AI硬件/芯片/端侧,含车东西/芯东西",
+   "source_id": "zhidx",
+   "status": "active",
+   "来源类型": "公众号"
+  },
+  {
+   "dimension": "中文科技媒体",
+   "endpoint": {
+    "link": "https://www.jazzyear.com/",
+    "text": "https://www.jazzyear.com/"
+   },
+   "extra_config": "{\"keyword_min_hits\": 2}",
+   "fetch_method": "Scrape",
+   "keyword_regex": "(人工智能|智能体|大模型|大语言模型|生成式|多模态|具身|算力|算法|芯片|GPU|机器学习|深度学习|神经网络|强化学习|扩散模型|机器人|自动驾驶|开源模型|AIGC|LLM|GPT|Claude|Gemini|DeepSeek|文心|通义|千问|Kimi|豆包|Llama|OpenAI|Anthropic|英伟达|Transformer)",
+   "name": "甲子光年",
+   "notes": "A类·甲子光年·纯SPA首页无可抽 href 文章链接，Jina也拿不到，待接 API/专用抽取器",
+   "source_id": "jazzyear",
+   "status": "experimental",
+   "来源类型": "公众号"
+  },
+  {
+   "dimension": "中文科技媒体",
+   "endpoint": {
+    "link": "https://www.leiphone.com/feed",
+    "text": "https://www.leiphone.com/feed"
+   },
+   "fetch_method": "RSS",
+   "name": "AI科技评论 / 雷峰网",
+   "notes": "A类·雷峰网旗下(含新智驾)。AI前沿研究/落地",
+   "source_id": "leiphone",
+   "status": "active",
+   "来源类型": "公众号"
+  },
+  {
+   "dimension": "中文科技媒体",
+   "endpoint": {
+    "link": "https://www.huxiu.com/",
+    "text": "https://www.huxiu.com/"
+   },
+   "extra_config": "{\"keyword_min_hits\": 2, \"link_path_include\": \"^/article/\"}",
+   "fetch_method": "Scrape",
+   "keyword_regex": "(人工智能|智能体|大模型|大语言模型|生成式|多模态|具身|算力|算法|芯片|GPU|机器学习|深度学习|神经网络|强化学习|扩散模型|机器人|自动驾驶|开源模型|AIGC|LLM|GPT|Claude|Gemini|DeepSeek|文心|通义|千问|Kimi|豆包|Llama|OpenAI|Anthropic|英伟达|Transformer)",
+   "name": "虎嗅",
+   "notes": "A类·官网有RSS。科技商业",
+   "source_id": "huxiu",
+   "status": "active",
+   "来源类型": "公众号"
+  },
+  {
+   "dimension": "中文科技媒体",
+   "endpoint": {
+    "link": "https://www.geekpark.net/",
+    "text": "https://www.geekpark.net/"
+   },
+   "extra_config": "{\"link_path_include\": \"^/news/\\\\d|\\\\.html$\", \"keyword_min_hits\": 2}",
+   "fetch_method": "Scrape",
+   "keyword_regex": "(人工智能|智能体|大模型|大语言模型|生成式|多模态|具身|算力|算法|芯片|GPU|机器学习|深度学习|神经网络|强化学习|扩散模型|机器人|自动驾驶|开源模型|AIGC|LLM|GPT|Claude|Gemini|DeepSeek|文心|通义|千问|Kimi|豆包|Llama|OpenAI|Anthropic|英伟达|Transformer)",
+   "name": "极客公园 / Founder Park",
+   "notes": "A类·官网可抓。科技/AI创业",
+   "source_id": "geekpark",
+   "status": "active",
+   "来源类型": "公众号"
+  },
+  {
+   "dimension": "中文科技媒体",
+   "endpoint": {
+    "link": "https://www.pingwest.com/",
+    "text": "https://www.pingwest.com/"
+   },
+   "extra_config": "{\"force_direct\": true, \"keyword_min_hits\": 2}",
+   "fetch_method": "Scrape",
+   "keyword_regex": "(人工智能|智能体|大模型|大语言模型|生成式|多模态|具身|算力|算法|芯片|GPU|机器学习|深度学习|神经网络|强化学习|扩散模型|机器人|自动驾驶|开源模型|AIGC|LLM|GPT|Claude|Gemini|DeepSeek|文心|通义|千问|Kimi|豆包|Llama|OpenAI|Anthropic|英伟达|Transformer)",
+   "name": "品玩 / 硅星人",
+   "notes": "A类·官网可抓,含硅星人。科技/AI",
+   "source_id": "pingwest",
+   "status": "active",
+   "来源类型": "公众号"
+  },
+  {
+   "dimension": "中文综合媒体",
+   "endpoint": {
+    "link": "https://www.thepaper.cn/",
+    "text": "https://www.thepaper.cn/"
+   },
+   "extra_config": "{\"force_direct\": true, \"keyword_min_hits\": 2}",
+   "fetch_method": "Scrape",
+   "keyword_regex": "(人工智能|智能体|大模型|大语言模型|生成式|多模态|具身|算力|算法|芯片|GPU|机器学习|深度学习|神经网络|强化学习|扩散模型|机器人|自动驾驶|开源模型|AIGC|LLM|GPT|Claude|Gemini|DeepSeek|文心|通义|千问|Kimi|豆包|Llama|OpenAI|Anthropic|英伟达|Transformer)",
+   "name": "澎湃新闻·科技",
+   "notes": "A类·泛科技/时政·官网可抓",
+   "source_id": "thepaper",
+   "status": "active",
+   "来源类型": "公众号"
+  },
+  {
+   "dimension": "中文综合媒体",
+   "endpoint": {
+    "link": "https://a.jiemian.com/index.php?m=article&a=rss",
+    "text": "https://a.jiemian.com/index.php?m=article&a=rss"
+   },
+   "fetch_method": "RSS",
+   "name": "界面新闻",
+   "notes": "A类·财经商业·官网可抓",
+   "source_id": "jiemian",
+   "status": "active",
+   "来源类型": "公众号"
+  },
+  {
+   "dimension": "中文综合媒体",
+   "endpoint": {
+    "link": "https://wallstreetcn.com/",
+    "text": "https://wallstreetcn.com/"
+   },
+   "extra_config": "{\"link_path_include\": \"^/articles/\\\\d\", \"keyword_min_hits\": 2}",
+   "fetch_method": "Scrape",
+   "keyword_regex": "(人工智能|智能体|大模型|大语言模型|生成式|多模态|具身|算力|算法|芯片|GPU|机器学习|深度学习|神经网络|强化学习|扩散模型|机器人|自动驾驶|开源模型|AIGC|LLM|GPT|Claude|Gemini|DeepSeek|文心|通义|千问|Kimi|豆包|Llama|OpenAI|Anthropic|英伟达|Transformer)",
+   "name": "华尔街见闻",
+   "notes": "A类·财经/宏观·官网可抓",
+   "source_id": "wallstreetcn",
+   "status": "active",
+   "来源类型": "公众号"
+  },
+  {
+   "dimension": "中文综合媒体",
+   "endpoint": {
+    "link": "https://www.caixin.com/",
+    "text": "https://www.caixin.com/"
+   },
+   "extra_config": "{\"force_direct\": true, \"keyword_min_hits\": 2}",
+   "fetch_method": "Scrape",
+   "keyword_regex": "(人工智能|智能体|大模型|大语言模型|生成式|多模态|具身|算力|算法|芯片|GPU|机器学习|深度学习|神经网络|强化学习|扩散模型|机器人|自动驾驶|开源模型|AIGC|LLM|GPT|Claude|Gemini|DeepSeek|文心|通义|千问|Kimi|豆包|Llama|OpenAI|Anthropic|英伟达|Transformer)",
+   "name": "财新",
+   "notes": "A类·财经深度(部分付费墙)·官网可抓",
+   "source_id": "caixin",
+   "status": "active",
+   "来源类型": "公众号"
+  },
+  {
+   "dimension": "中文综合媒体",
+   "endpoint": {
+    "link": "https://www.guokr.com/",
+    "text": "https://www.guokr.com/"
+   },
+   "extra_config": "{\"link_path_include\": \"^/article/\\\\d\", \"keyword_min_hits\": 2}",
+   "fetch_method": "Scrape",
+   "keyword_regex": "(人工智能|智能体|大模型|大语言模型|生成式|多模态|具身|算力|算法|芯片|GPU|机器学习|深度学习|神经网络|强化学习|扩散模型|机器人|自动驾驶|开源模型|AIGC|LLM|GPT|Claude|Gemini|DeepSeek|文心|通义|千问|Kimi|豆包|Llama|OpenAI|Anthropic|英伟达|Transformer)",
+   "name": "果壳",
+   "notes": "A类·科普/思想·官网可抓",
+   "source_id": "guokr",
+   "status": "active",
+   "来源类型": "公众号"
+  }
+ ],
+ "二级参数-论文": [
+  {
+   "source_id": "arxiv-cs-ai",
+   "名称": "arXiv cs.AI",
+   "备注": "arXiv 质量：摘要≥500 + 排除课件；signal≥65；质量分≥65（已去掉作者维）。min_signal_score=65",
+   "排除关键词": "lecture notes, homework, coursework, course project, problem set, undergraduate, tutorial slides, retracted, withdrawn",
+   "期刊会议白名单": "neurips, iclr, icml, acl, emnlp, naacl, cvpr, eccv, iccv, aaai, nature, science, jmlr",
+   "需含代码仓库": false
+  },
+  {
+   "source_id": "arxiv-cs-cl",
+   "名称": "arXiv cs.CL",
+   "备注": "arXiv 质量：摘要≥500 + 排除课件；signal≥65；质量分≥65（已去掉作者维）。min_signal_score=65",
+   "排除关键词": "lecture notes, homework, coursework, course project, problem set, undergraduate, tutorial slides, retracted, withdrawn",
+   "期刊会议白名单": "neurips, iclr, icml, acl, emnlp, naacl, cvpr, eccv, iccv, aaai, nature, science, jmlr",
+   "需含代码仓库": false
+  },
+  {
+   "source_id": "arxiv-cs-lg",
+   "名称": "arXiv cs.LG",
+   "备注": "arXiv 质量：摘要≥500 + 排除课件；signal≥65；质量分≥65（已去掉作者维）。min_signal_score=65",
+   "排除关键词": "lecture notes, homework, coursework, course project, problem set, undergraduate, tutorial slides, retracted, withdrawn",
+   "期刊会议白名单": "neurips, iclr, icml, acl, emnlp, naacl, cvpr, eccv, iccv, aaai, nature, science, jmlr",
+   "需含代码仓库": false
+  },
+  {
+   "source_id": "arxiv-cs-cv",
+   "名称": "arXiv cs.CV",
+   "备注": "arXiv 质量：摘要≥500 + 排除课件；signal≥65；质量分≥65（已去掉作者维）。min_signal_score=65",
+   "排除关键词": "lecture notes, homework, coursework, course project, problem set, undergraduate, tutorial slides, retracted, withdrawn",
+   "期刊会议白名单": "neurips, iclr, icml, acl, emnlp, naacl, cvpr, eccv, iccv, aaai, nature, science, jmlr",
+   "需含代码仓库": false
+  },
+  {
+   "source_id": "openreview",
+   "名称": "OpenReview",
+   "备注": "OpenReview 批次更新；轻过滤即可",
+   "排除关键词": "retracted, withdrawn"
+  },
+  {
+   "source_id": "hf-papers-trending",
+   "名称": "HF Papers Trending",
+   "备注": "HF Papers 已是热度筛选，轻过滤",
+   "排除关键词": "retracted, withdrawn"
+  },
+  {
+   "source_id": "papers-with-code-trending",
+   "名称": "PwC Trending",
+   "备注": "PwC Trending 已是热度筛选"
+  },
+  {
+   "source_id": "papers-with-code-sota",
+   "名称": "PwC SOTA",
+   "备注": "SOTA 榜单快照，不做论文级过滤"
+  },
+  {
+   "source_id": "papers-with-code-api",
+   "名称": "PwC API",
+   "备注": "API 源，过滤在调用侧"
+  },
+  {
+   "source_id": "nature-machine-intelligence",
+   "名称": "Nature Machine Intelligence",
+   "备注": "顶刊，不做信号分阈值",
+   "排除关键词": "retracted, withdrawn"
+  },
+  {
+   "source_id": "nature-computational-science",
+   "名称": "Nature Computational Science",
+   "备注": "顶刊，不做信号分阈值",
+   "排除关键词": "retracted, withdrawn"
+  },
+  {
+   "source_id": "jmlr",
+   "名称": "JMLR",
+   "备注": "顶刊，不做信号分阈值",
+   "排除关键词": "retracted, withdrawn"
+  }
+ ],
+ "二级参数-公众号": [
+  {
+   "source_id": "deepseek-wechat",
+   "名称": "DeepSeek 微信"
+  },
+  {
+   "source_id": "qwen-wechat",
+   "名称": "Qwen 微信"
+  },
+  {
+   "source_id": "bytedance-wechat",
+   "名称": "豆包/火山微信"
+  },
+  {
+   "source_id": "wechat-mp",
+   "名称": "公众号文章"
+  },
+  {
+   "source_id": "36kr-ai",
+   "名称": "36氪 AI"
+  },
+  {
+   "source_id": "latepost-ai",
+   "名称": "晚点 LatePost"
+  },
+  {
+   "source_id": "jiqizhixin",
+   "名称": "机器之心"
+  }
+ ],
+ "二级参数-视频": [
+  {
+   "source_id": "video-channels",
+   "名称": "视频频道"
+  }
+ ],
+ "二级参数-社媒": [
+  {
+   "source_id": "social-media",
+   "名称": "社交媒体账号"
+  }
+ ],
+ "二级参数-GitHub": [
+  {
+   "source_id": "github-trending",
+   "主题白名单": "llm,large-language-models,llmops,agent,ai-agent,ai-agents,rag,retrieval-augmented-generation,inference,llm-inference,mlops,transformers,diffusion,diffusion-models,fine-tuning,vector-database,embeddings,multimodal,reasoning,generative-ai,deep-learning,machine-learning,nlp,computer-vision,model-serving,quantization",
+   "备注": "纯沉淀型：绝对星标+近期活跃，去掉增速/爆发加权",
+   "排除主题": "awesome,awesome-list,book,books,tutorial,tutorials,roadmap,interview,interviews,cheatsheet,cheat-sheet,course,courses,learning-resources",
+   "检索关键词": "llm,agent,rag,inference,diffusion,multimodal,transformer,fine-tuning"
+  }
+ ]
+}
