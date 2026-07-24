@@ -56,61 +56,80 @@ DATETIME = 5
 CHECKBOX = 7
 URL = 15
 
+# 各字段的固定单选项（自由单选如 dimension/分类 用空列表，写入时飞书自动补选项）
 _FETCH_METHODS = ("RSS", "Scrape", "Bridge", "API", "Manual")
 _STATUSES = ("active", "experimental", "paused")
 _PRIORITIES = ("P0", "P1", "P2")
+_TIERS = ("L1", "L2", "L3", "L4")
 _URGENCY = ("Pending", "高", "中", "低")
 _ENTRY_STATUS = ("待分析", "已分析")
+_AUTO_STATUS = ("已接入", "待测", "已暂停")
 
 
 def _f(name: str, ftype: int, options: tuple[str, ...] | None = None) -> dict[str, Any]:
     field: dict[str, Any] = {"field_name": name, "type": ftype}
-    if options:
-        field["property"] = {"options": [{"name": o} for o in options]}
+    # 单选/多选必须带 property.options；自由项传空列表即可，写记录时飞书会自动补
+    if ftype in (SELECT, MULTI):
+        field["property"] = {"options": [{"name": o} for o in (options or ())]}
     return field
 
 
-# 参数表：源配置 + 采集统计回写字段（对应 sources._base_feed 读取 & feishu 统计回写）
+# ⚠️ 下列表结构与作者线上 base 完全对齐（表名/字段/类型一致），便于他人建出同构的库。
+
+# 信号源表：人工维护的信号源清单（与一级参数的自动化状态对齐，见 source-status 规则）
+_SOURCE_FIELDS = [
+    _f("名称", TEXT),  # 主键
+    _f("分类", SELECT),
+    _f("层级", SELECT, _TIERS),
+    _f("优先级", SELECT, _PRIORITIES),
+    _f("获取方式", SELECT, _FETCH_METHODS),
+    _f("链接", URL),
+    _f("主要看什么", TEXT),
+    _f("自动化状态", SELECT, _AUTO_STATUS),
+    _f("备注", MULTI),
+    _f("来源类型", SELECT, feishu.SIGNAL_FORMAT_OPTIONS),
+]
+
+# 一级参数：源配置 + 采集统计回写字段（sources._base_feed 读取 & feishu 统计回写）
 _PARAM_FIELDS = [
     _f("source_id", TEXT),  # 主键
-    _f("name", TEXT),
-    # endpoint 存纯文本 URL：sources.cell() 对 URL 字段会返回显示文本而非 link，
-    # 用文本字段直接存原始地址，读出来即可用。
-    _f("endpoint", TEXT),
-    _f("fetch_method", SELECT, _FETCH_METHODS),
     _f("status", SELECT, _STATUSES),
-    _f("来源类型", SELECT, feishu.SIGNAL_FORMAT_OPTIONS),
-    _f("dimension", TEXT),
-    _f("tier", TEXT),
-    _f("priority", SELECT, _PRIORITIES),
-    _f("lookback_window", TEXT),
-    _f("keyword_regex", TEXT),
-    _f("dedup_key", TEXT),
-    _f("extra_config", TEXT),
-    _f("min_content_chars", NUMBER),
+    _f("name", TEXT),
     _f("通过", CHECKBOX),
     _f("最近采集时间", DATETIME),
     _f("条目数", NUMBER),
-    _f("查重过滤", NUMBER),
     _f("时间窗过滤", NUMBER),
+    _f("查重过滤", NUMBER),
+    _f("lookback_window", TEXT),
+    _f("来源类型", SELECT, feishu.SIGNAL_FORMAT_OPTIONS),
+    _f("dimension", SELECT),
+    _f("fetch_method", SELECT, _FETCH_METHODS),
+    _f("endpoint", URL),
+    _f("tier", SELECT, _TIERS),
+    _f("priority", SELECT, _PRIORITIES),
+    _f("keyword_regex", TEXT),
+    _f("min_content_chars", NUMBER),
+    _f("dedup_key", TEXT),
+    _f("extra_config", TEXT),
+    _f("notes", TEXT),
 ]
 
-# 条目表：对应 process.format_for_feishu 与 daily.py 写回的全部字段
+# 条目表：process.format_for_feishu 与 daily.py 写回的全部字段
 _ENTRY_FIELDS = [
     _f("标题", TEXT),  # 主键
+    _f("待查", CHECKBOX),
     _f("链接", URL),
     _f("来源", TEXT),
     _f("来源类型", SELECT, feishu.SIGNAL_FORMAT_OPTIONS),
-    _f("路由来源", TEXT),
-    _f("分类", TEXT),
-    _f("层级", TEXT),
-    _f("发布时间", DATETIME),
+    _f("路由来源", SELECT, _FETCH_METHODS),
+    _f("分类", SELECT),
+    _f("层级", SELECT, _TIERS),
     _f("采集时间", DATETIME),
+    _f("发布时间", DATETIME),
     _f("原文", TEXT),
-    _f("中文标题", TEXT),
     _f("中文摘要", TEXT),
     _f("为何重要", TEXT),
-    _f("主题", MULTI, ("AI", "LLM", "Agent")),
+    _f("主题", MULTI),
     _f("影响分", NUMBER),
     _f("新颖度", NUMBER),
     _f("可行动性", NUMBER),
@@ -118,42 +137,95 @@ _ENTRY_FIELDS = [
     _f("状态", SELECT, _ENTRY_STATUS),
     _f("去重键", TEXT),
     _f("source_id", TEXT),
-    _f("媒体资源", TEXT),
+    _f("中文标题", TEXT),
     _f("图片链接", URL),
+    _f("媒体资源", TEXT),
     _f("质量分", NUMBER),
     _f("录用会议", TEXT),
+    _f("作者影响力", NUMBER),
     _f("社区热度", NUMBER),
     _f("论文指标", TEXT),
 ]
 
+# 二级参数（类型化筛选配置）：字段名与 typed_config 读取的键一一对应
+_PAPER_FIELDS = [
+    _f("source_id", TEXT),
+    _f("名称", TEXT),
+    _f("最低影响因子", NUMBER),
+    _f("期刊会议白名单", TEXT),
+    _f("期刊会议黑名单", TEXT),
+    _f("最低引用数", NUMBER),
+    _f("摘要最少字数", NUMBER),
+    _f("必含关键词", TEXT),
+    _f("排除关键词", TEXT),
+    _f("排除纯预印本", CHECKBOX),
+    _f("需含代码仓库", CHECKBOX),
+    _f("备注", TEXT),
+    _f("要求已录用", CHECKBOX),
+    _f("最低质量分", NUMBER),
+    _f("最低社区热度", NUMBER),
+]
+_WECHAT_FIELDS = [
+    _f("source_id", TEXT),
+    _f("名称", TEXT),
+    _f("账号白名单", TEXT),
+    _f("必含关键词", TEXT),
+    _f("排除关键词", TEXT),
+    _f("最低阅读量", NUMBER),
+    _f("正文最少字数", NUMBER),
+    _f("过滤软广", CHECKBOX),
+    _f("备注", TEXT),
+]
+_VIDEO_FIELDS = [
+    _f("source_id", TEXT),
+    _f("名称", TEXT),
+    _f("频道白名单", TEXT),
+    _f("最短时长秒", NUMBER),
+    _f("最长时长秒", NUMBER),
+    _f("最低播放量", NUMBER),
+    _f("需要转写", CHECKBOX),
+    _f("语言", TEXT),
+    _f("必含关键词", TEXT),
+    _f("备注", TEXT),
+]
+_SOCIAL_FIELDS = [
+    _f("source_id", TEXT),
+    _f("名称", TEXT),
+    _f("账号白名单", TEXT),
+    _f("最低粉丝数", NUMBER),
+    _f("最低互动数", NUMBER),
+    _f("排除转发", CHECKBOX),
+    _f("必含关键词", TEXT),
+    _f("排除关键词", TEXT),
+    _f("备注", TEXT),
+]
+_GITHUB_FIELDS = [
+    _f("source_id", TEXT),
+    _f("检索关键词", TEXT),
+    _f("主题白名单", TEXT),
+    _f("语言白名单", TEXT),
+    _f("必含关键词正则", TEXT),
+    _f("排除主题", TEXT),
+    _f("排除名称正则", TEXT),
+    _f("最低星标", NUMBER),
+    _f("最低Fork数", NUMBER),
+    _f("活跃天数", NUMBER),
+    _f("最大条目数", NUMBER),
+    _f("备注", TEXT),
+]
 
-def _config_fields(entity_type: str) -> list[dict[str, Any]]:
-    """按 typed_config._SCHEMAS 生成某张筛选配置表的字段（source_id + schema + 备注）。"""
-    from . import typed_config as tcfg
 
-    fields = [_f("source_id", TEXT)]  # 主键
-    for field_name, (_key, parser) in tcfg._SCHEMAS[entity_type].items():
-        if parser is tcfg._as_num:
-            ftype = NUMBER
-        elif parser is tcfg._as_bool:
-            ftype = CHECKBOX
-        else:
-            ftype = TEXT
-        fields.append(_f(field_name, ftype))
-    fields.append(_f("备注", TEXT))
-    return fields
-
-
-# (env 变量名, 表名, 字段列表)。顺序即创建顺序。
+# (env 变量名, 表名, 字段列表)。顺序即创建顺序；表名与作者线上 base 一致。
 def _table_specs() -> list[tuple[str, str, list[dict[str, Any]]]]:
     return [
-        ("FEISHU_PARAM_TABLE_ID", "参数表", _PARAM_FIELDS),
+        ("FEISHU_SOURCE_TABLE_ID", "信号源表", _SOURCE_FIELDS),
+        ("FEISHU_PARAM_TABLE_ID", "一级参数", _PARAM_FIELDS),
         ("FEISHU_ENTRY_TABLE_ID", "条目表", _ENTRY_FIELDS),
-        ("FEISHU_PAPER_CONFIG_TABLE_ID", "论文筛选配置", _config_fields("paper")),
-        ("FEISHU_WECHAT_CONFIG_TABLE_ID", "公众号筛选配置", _config_fields("wechat")),
-        ("FEISHU_VIDEO_CONFIG_TABLE_ID", "视频筛选配置", _config_fields("video")),
-        ("FEISHU_SOCIAL_CONFIG_TABLE_ID", "社交筛选配置", _config_fields("social")),
-        ("FEISHU_GITHUB_CONFIG_TABLE_ID", "GitHub筛选配置", _config_fields("github")),
+        ("FEISHU_PAPER_CONFIG_TABLE_ID", "二级参数-论文", _PAPER_FIELDS),
+        ("FEISHU_WECHAT_CONFIG_TABLE_ID", "二级参数-公众号", _WECHAT_FIELDS),
+        ("FEISHU_VIDEO_CONFIG_TABLE_ID", "二级参数-视频", _VIDEO_FIELDS),
+        ("FEISHU_SOCIAL_CONFIG_TABLE_ID", "二级参数-社媒", _SOCIAL_FIELDS),
+        ("FEISHU_GITHUB_CONFIG_TABLE_ID", "二级参数-GitHub", _GITHUB_FIELDS),
     ]
 
 
@@ -222,7 +294,8 @@ _SEED_SOURCES = [
     {
         "source_id": "huggingface-blog",
         "name": "Hugging Face Blog",
-        "endpoint": "https://huggingface.co/blog/feed.xml",
+        # endpoint 是 URL 字段：cell() 取显示文本，故 text 必须等于真实链接
+        "endpoint": {"link": "https://huggingface.co/blog/feed.xml", "text": "https://huggingface.co/blog/feed.xml"},
         "fetch_method": "RSS",
         "status": "active",
         "来源类型": "纯网页",
@@ -232,7 +305,7 @@ _SEED_SOURCES = [
     {
         "source_id": "bair-blog",
         "name": "Berkeley AI Research Blog",
-        "endpoint": "https://bair.berkeley.edu/blog/feed.xml",
+        "endpoint": {"link": "https://bair.berkeley.edu/blog/feed.xml", "text": "https://bair.berkeley.edu/blog/feed.xml"},
         "fetch_method": "RSS",
         "status": "active",
         "来源类型": "纯网页",
@@ -242,7 +315,7 @@ _SEED_SOURCES = [
     {
         "source_id": "arxiv-cs-ai",
         "name": "arXiv cs.AI",
-        "endpoint": "http://export.arxiv.org/rss/cs.AI",
+        "endpoint": {"link": "http://export.arxiv.org/rss/cs.AI", "text": "http://export.arxiv.org/rss/cs.AI"},
         "fetch_method": "RSS",
         "status": "active",
         "来源类型": "论文",
@@ -316,6 +389,7 @@ def run(seed: bool = False, dry_run: bool = False) -> dict[str, str]:
     print("=" * 68)
     print(f"FEISHU_BASE_ID={config.FEISHU_BASE_ID}")
     for env_var in (
+        "FEISHU_SOURCE_TABLE_ID",
         "FEISHU_PARAM_TABLE_ID",
         "FEISHU_ENTRY_TABLE_ID",
         "FEISHU_BRIEF_TABLE_ID",
