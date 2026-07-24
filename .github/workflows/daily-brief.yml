@@ -1,9 +1,10 @@
 name: Daily AI Signal Brief
 
 on:
-  schedule:
-    # 北京时间每天 09:00
-    - cron: "0 1 * * *"
+  # 已停用每日定时推送（迁移到新账号）。如需恢复，取消下面 schedule 的注释即可。
+  # schedule:
+  #   # 北京时间每天 09:00
+  #   - cron: "0 1 * * *"
   workflow_dispatch:
     inputs:
       force_send:
