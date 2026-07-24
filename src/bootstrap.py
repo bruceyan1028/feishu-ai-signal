@@ -74,7 +74,9 @@ def _f(name: str, ftype: int, options: tuple[str, ...] | None = None) -> dict[st
 _PARAM_FIELDS = [
     _f("source_id", TEXT),  # 主键
     _f("name", TEXT),
-    _f("endpoint", URL),
+    # endpoint 存纯文本 URL：sources.cell() 对 URL 字段会返回显示文本而非 link，
+    # 用文本字段直接存原始地址，读出来即可用。
+    _f("endpoint", TEXT),
     _f("fetch_method", SELECT, _FETCH_METHODS),
     _f("status", SELECT, _STATUSES),
     _f("来源类型", SELECT, feishu.SIGNAL_FORMAT_OPTIONS),
@@ -220,7 +222,7 @@ _SEED_SOURCES = [
     {
         "source_id": "huggingface-blog",
         "name": "Hugging Face Blog",
-        "endpoint": {"link": "https://huggingface.co/blog/feed.xml", "text": "Hugging Face Blog"},
+        "endpoint": "https://huggingface.co/blog/feed.xml",
         "fetch_method": "RSS",
         "status": "active",
         "来源类型": "纯网页",
@@ -230,7 +232,7 @@ _SEED_SOURCES = [
     {
         "source_id": "bair-blog",
         "name": "Berkeley AI Research Blog",
-        "endpoint": {"link": "https://bair.berkeley.edu/blog/feed.xml", "text": "BAIR Blog"},
+        "endpoint": "https://bair.berkeley.edu/blog/feed.xml",
         "fetch_method": "RSS",
         "status": "active",
         "来源类型": "纯网页",
@@ -240,7 +242,7 @@ _SEED_SOURCES = [
     {
         "source_id": "arxiv-cs-ai",
         "name": "arXiv cs.AI",
-        "endpoint": {"link": "http://export.arxiv.org/rss/cs.AI", "text": "arXiv cs.AI"},
+        "endpoint": "http://export.arxiv.org/rss/cs.AI",
         "fetch_method": "RSS",
         "status": "active",
         "来源类型": "论文",
