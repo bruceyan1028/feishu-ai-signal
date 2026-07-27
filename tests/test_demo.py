@@ -5,7 +5,7 @@ import tempfile
 import unittest
 from datetime import datetime, timezone
 from pathlib import Path
-from unittest.mock import patch
+from unittest.mock import MagicMock, patch
 
 from src import config, daily, main, notify, process, publish, rss, scrape, sources
 
@@ -68,7 +68,9 @@ class PipelineTests(unittest.TestCase):
         self.assertEqual(sources.scrape_cohort("openai-careers"), "招聘")
         self.assertEqual(sources.scrape_cohort("hf-papers-trending"), "论文站")
 
-    def test_hf_pwc_extracts_only_paper_urls(self) -> None:
+    # 社区热度走 HF 实时接口，点赞数随时会变；固定住才能稳定比对两次抽取结果
+    @patch("src.scrape._hf_paper_community", return_value=("", {}))
+    def test_hf_pwc_extracts_only_paper_urls(self, _community: MagicMock) -> None:
         recent = datetime.now(timezone.utc).strftime("%Y-%m-%dT00:00:00.000Z")
         props = {
             "dailyPapers": [
