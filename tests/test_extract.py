@@ -50,7 +50,9 @@ class ReadmeToTextTest(unittest.TestCase):
         raw = "First paragraph.\n\nSecond paragraph.\n\n| Model | Size |\n| --- | --- |\n| a | 1B |\n"
         text = scrape.readme_to_text(raw)
         self.assertIn("First paragraph.\n\nSecond paragraph.", text)
-        self.assertIn("| Model | Size |", text)
+        # 与 HTML 表格统一成「单元格 | 单元格」，分隔行不再留在正文里
+        self.assertIn("Model | Size\na | 1B", text)
+        self.assertNotIn("---", text)
 
     def test_strips_markdown_links_and_headings(self):
         text = scrape.readme_to_text("## Title\n\nSee [the docs](https://example.com/docs) now.\n")

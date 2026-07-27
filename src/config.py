@@ -59,8 +59,15 @@ DAILY_CANDIDATE_LIMIT = int(os.environ.get("DAILY_CANDIDATE_LIMIT", "30"))
 DAILY_SIGNAL_LIMIT = int(os.environ.get("DAILY_SIGNAL_LIMIT", "30"))
 # 每份简报里「论文」类条目的硬上限，避免论文稀释「快速读新闻」体验
 DAILY_MAX_PAPERS = int(os.environ.get("DAILY_MAX_PAPERS", "4"))
-# 英文正文翻译的字数上限：绝大多数文章可全量覆盖，超长部分截断并提示读原文
-BODY_TRANSLATE_LIMIT = int(os.environ.get("BODY_TRANSLATE_LIMIT", "3000"))
+# 英文正文翻译的字数上限：超长部分截断并提示读原文。
+# 3000 字符只够译出一千余字中文，正文普遍断在句子中间，故普通条目抬到 6000。
+BODY_TRANSLATE_LIMIT = int(os.environ.get("BODY_TRANSLATE_LIMIT", "6000"))
+# P0 来源与高影响分条目走全译档，长文也能读完
+BODY_TRANSLATE_LIMIT_FULL = int(os.environ.get("BODY_TRANSLATE_LIMIT_FULL", "16000"))
+# 单次 LLM 调用的翻译片段大小：再长模型就会自己压缩甚至截断输出
+BODY_TRANSLATE_CHUNK = int(os.environ.get("BODY_TRANSLATE_CHUNK", "3000"))
+# 走全译档的影响分门槛
+BODY_TRANSLATE_FULL_IMPACT = int(os.environ.get("BODY_TRANSLATE_FULL_IMPACT", "80"))
 
 FEISHU_HOST = "https://open.feishu.cn"
 

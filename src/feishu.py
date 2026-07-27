@@ -203,6 +203,8 @@ def ensure_entry_enrichment_fields(token: str) -> None:
     for field_name, field_type in (
         ("中文标题", 1),
         ("中文正文", 1),
+        ("译文覆盖字数", 2),
+        ("AI深度解读", 1),
         ("图片链接", 15),
         ("媒体资源", 1),
         ("质量分", 2),

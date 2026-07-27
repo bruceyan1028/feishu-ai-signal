@@ -10,7 +10,7 @@ import re
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from html import unescape
 from typing import Any
-from urllib.parse import urljoin
+from urllib.parse import urljoin, urlsplit
 
 import feedparser
 import requests
@@ -136,30 +136,162 @@ def _pick_content_chunk(html: str) -> str:
     return best if _paragraph_score(best) >= _paragraph_score(html) * 0.4 else html
 
 
+_MONTHS = (
+    r"jan(?:uary)?|feb(?:ruary)?|mar(?:ch)?|apr(?:il)?|may|jun(?:e)?|jul(?:y)?|"
+    r"aug(?:ust)?|sep(?:t(?:ember)?)?|oct(?:ober)?|nov(?:ember)?|dec(?:ember)?"
+)
+_DATE_ONLY_RE = re.compile(
+    rf"^(?:published\s+)?(?:on\s+)?(?:"
+    rf"\d{{4}}\s*[-/年.]\s*\d{{1,2}}\s*[-/月.]\s*\d{{1,2}}\s*日?"
+    rf"|(?:{_MONTHS})\.?\s+\d{{1,2}}(?:st|nd|rd|th)?,?\s+\d{{4}}"
+    rf"|\d{{1,2}}\s+(?:{_MONTHS})\.?,?\s+\d{{4}}"
+    rf")\s*$",
+    re.I,
+)
+_BOILERPLATE_PARA_RE = re.compile(
+    r"^(?:"
+    r"(?:skip|jump)\s+to\b.{0,40}"
+    r"|(?:by|作者|编辑|编译|撰文|责编|来源)\s*[:：|｜]?\s*.{0,30}"
+    r"|\d+\s*(?:min(?:ute)?s?|分钟)\s*(?:read|阅读).{0,20}"
+    r"|share(?:\s+this)?.{0,20}"
+    r"|(?:read|learn)\s+more.{0,20}"
+    r"|(?:subscribe|sign\s*(?:in|up)|log\s*in)\b.{0,40}"
+    r"|(?:menu|home|blog|news(?:room)?|research|products?|company|about|careers?|contact|"
+    r"privacy|terms|docs|pricing|download|support|overview|announcements?)"
+    # 博客页的作者/互动条：Published / Update on GitHub / Upvote 138 / +132 / 某某 Follow
+    r"|published|updated?\s+on\s+\w+|upvotes?\s*\d*|\+\d+"
+    r"|\d+\s*(?:likes?|comments?|shares?|views?|min)"
+    r"|.{0,60}\bfollow(?:ing)?"
+    r")\s*$",
+    re.I,
+)
+_SENTENCE_END_RE = re.compile(r"[.。!！?？;；]")
+# 没有句末标点的短碎片基本都是栏目名/作者行/按钮文案，不会是正文段落
+_BOILERPLATE_FRAGMENT_CHARS = 45
+
+
+def _is_leading_boilerplate(para: str, title_norm: str) -> bool:
+    """判断开头这一段是不是样板：标题回声、署名、日期、栏目名或按钮文案。"""
+    text = para.strip()
+    if not text:
+        return True
+    normalized = re.sub(r"\W+", "", text).lower()
+    # 标题回声要长度也相当才算：正文第一句里恰好含标题词组的情况很常见，
+    # 只按包含关系判断会把真正的开头当成重复的标题丢掉
+    if title_norm and (
+        normalized in title_norm
+        or (title_norm in normalized and len(normalized) <= len(title_norm) * 1.6)
+    ):
+        return True
+    if _DATE_ONLY_RE.match(text) or _BOILERPLATE_PARA_RE.match(text):
+        return True
+    # 没有句末标点又很短的碎片：栏目标签、面包屑、按钮文案
+    return len(text) < _BOILERPLATE_FRAGMENT_CHARS and not _SENTENCE_END_RE.search(text)
+
+
 def _drop_leading_boilerplate(text: str, title: str = "") -> str:
     """去掉正文开头的站点标题、栏目名、作者与时间戳等样板段。
 
     这些内容混进正文后会被一起翻译，读者看到的开头就全是噪音。
-    以「第一段足够长且不与标题重复」为正文起点；全部被判为样板时按原样返回。
+    只按「像样板」判断，不按长度：有的文章第一段本身就是一句短导语，
+    单凭字数少就丢会把真正的开头砍掉。全部被判为样板时按原样返回。
     """
-    def norm(value: str) -> str:
-        return re.sub(r"\W+", "", value).lower()
-
     paragraphs = text.split("\n\n")
-    title_norm = norm(title)
+    title_norm = re.sub(r"\W+", "", title).lower()
     start = 0
     for index, para in enumerate(paragraphs):
-        stripped = para.strip()
-        if not stripped:
-            start = index + 1
+        if not _is_leading_boilerplate(para, title_norm):
+            start = index
+            break
+        start = index + 1
+    kept = paragraphs[start:]
+    # 「副标题 + 发布日期」是博客页的常见开头，副标题留着有用，
+    # 孤零零的日期行不是正文，往后几段里也要清掉
+    kept = [
+        para
+        for index, para in enumerate(kept)
+        if index > 2 or not _DATE_ONLY_RE.match(para.strip())
+    ]
+    return "\n\n".join(kept).strip() or text.strip()
+
+
+_LABEL_NOISE_RE = re.compile(
+    r"^(?:"
+    r"read\s+more|see\s+more|learn\s+more|more\s+from\b.*|related\b.*|share\s+this\b.*"
+    r"|follow\s+us\b.*|subscribe\b.*|sign\s*up\b.*|newsletter\b.*|copyright\b.*|©.*"
+    r"|阅读更多|查看更多|了解更多|相关阅读|相关文章|推荐阅读|关注我们|订阅.*|版权所有.*"
+    r")\s*$",
+    re.I,
+)
+# 关联文章卡片上的跳转按钮
+_CTA_LABEL_RE = re.compile(r"^(?:read|see|learn)\s+more|^(?:阅读更多|查看更多|了解更多)$", re.I)
+_FOOTER_RE = re.compile(r"(?i)(©|\ball rights reserved\b|版权所有)")
+_CHROME_LABEL_CHARS = 30
+
+
+def _is_label_paragraph(para: str) -> bool:
+    """按钮文案与栏目标签：够短或没有句末标点才算，避免误删正常长句。"""
+    return bool(_LABEL_NOISE_RE.match(para)) and (
+        len(para) < 40 or not _SENTENCE_END_RE.search(para)
+    )
+
+
+def _cut_related_card_grid(paragraphs: list[str]) -> list[str]:
+    """砍掉文末的「关联文章」卡片网格。
+
+    每张卡片都是「标题 + 一句摘要 + Read more」，正文里不会连着出现两个这种按钮。
+    一旦出现，说明正文已经结束——否则读者会在正文末尾读到另外几篇文章的梗概。
+    按钮间距就是每张卡片的段数，据此把第一张卡片的标题和摘要也一并切掉。
+    """
+    labels = [index for index, para in enumerate(paragraphs) if _CTA_LABEL_RE.match(para)]
+    if len(labels) < 2 or labels[0] < len(paragraphs) * 0.5:
+        return paragraphs
+    lead = max(labels[1] - labels[0] - 1, 0)
+    return paragraphs[: max(labels[0] - lead, 0)]
+
+
+def _looks_like_nav_row(text: str) -> bool:
+    """页脚导航常被压成一行标题式短语，如「Meta AI Assistant Media Generation」：
+    每个词都大写开头，通篇没有标点。正常句子做不到这两条同时成立。
+    """
+    if len(text) > 80 or _SENTENCE_END_RE.search(text) or "," in text or "，" in text:
+        return False
+    words = text.split()
+    if len(words) < 3:
+        return False
+    titled = sum(1 for word in words if word[:1].isupper())
+    return titled >= len(words) * 0.7
+
+
+def _drop_footer_lines(paragraphs: list[str]) -> list[str]:
+    """剥掉正文末尾的页脚残渣：版权行、Mastodon / Cookies 这类短标签、整行导航。
+
+    正文最后一段是完整句子，页脚不是。
+    """
+    while paragraphs:
+        last = paragraphs[-1]
+        copyright_line = _FOOTER_RE.search(last) and len(last) < 60
+        bare_label = len(last) <= _CHROME_LABEL_CHARS and not _SENTENCE_END_RE.search(last)
+        if not (copyright_line or bare_label or _looks_like_nav_row(last)):
+            break
+        paragraphs.pop()
+    return paragraphs
+
+
+def _drop_label_paragraphs(text: str) -> str:
+    """清掉夹在正文里的链接标签段（Read more / 相关阅读）与紧邻的重复段。
+
+    以前正文被截在三千字符内，这些文末残渣看不到；篇幅放开后就露出来了。
+    """
+    paragraphs = [para.strip() for para in text.split("\n\n") if para.strip()]
+    kept: list[str] = []
+    for para in _cut_related_card_grid(paragraphs):
+        if _is_label_paragraph(para):
             continue
-        para_norm = norm(stripped)
-        is_title_echo = bool(title_norm) and (title_norm in para_norm or para_norm in title_norm)
-        if len(stripped) < 60 or is_title_echo:
-            start = index + 1
+        if kept and para == kept[-1]:  # 源站自己重复的段落，读者看着像 bug
             continue
-        break
-    return "\n\n".join(paragraphs[start:]).strip() or text.strip()
+        kept.append(para)
+    return "\n\n".join(_drop_footer_lines(kept))
 
 
 _IMG_TAG_RE = re.compile(r"(?is)<img\b[^>]*>")
@@ -169,9 +301,17 @@ _IMG_SKIP_RE = re.compile(
     r"(?i)(logo|icon|avatar|sprite|pixel|spacer|badge|button|tracking|1x1|blank"
     r"|/emoji/|s\.w\.org|gravatar|wp-includes)"
 )
+# 光看 URL 认不出的站点装饰：/img/RSS.gif 这种要靠 alt / class 才知道是页头图标
+_IMG_ATTR_SKIP_RE = re.compile(
+    r"(?i)\b(logo|icon|avatar|rss|feed|sprite|navbar|nav|header|footer|share|social|subscribe)\b"
+)
+_SITE_LABEL_SKIP = frozenset(
+    {"www", "com", "org", "net", "edu", "gov", "io", "ai", "co", "cn", "me", "dev", "blog"}
+)
 # WordPress 缩略图会把尺寸写进文件名，如 foo-150x150.png
 _IMG_SIZE_SUFFIX_RE = re.compile(r"-(\d{2,4})x(\d{2,4})\.(?:jpe?g|png|webp|gif)$", re.I)
 _MIN_IMG_SIDE = 200
+_WIDE_IMG_SIDE = 600
 
 
 def _attr(tag: str, name: str) -> str:
@@ -179,13 +319,29 @@ def _attr(tag: str, name: str) -> str:
     return match.group(1).strip() if match else ""
 
 
+_PIXEL_DIM_RE = re.compile(r"^\s*(\d{1,5})(?:\s*px)?\s*$", re.I)
+
+
 def _img_too_small(tag: str, url: str) -> bool:
-    """明显偏小的基本是图标而不是插图：先看标签尺寸，再看文件名里的尺寸后缀。"""
+    """明显偏小的基本是图标而不是插图：先看标签尺寸，再看文件名里的尺寸后缀。
+
+    尺寸只认纯像素值。width="100%" 这类响应式写法去掉非数字后会变成 100，
+    当成 100px 判断就会把整张主图误当图标丢掉。
+    """
     for dim in ("width", "height"):
-        raw = re.sub(r"\D", "", _attr(tag, dim))
-        if raw and int(raw) < _MIN_IMG_SIDE:
+        match = _PIXEL_DIM_RE.match(_attr(tag, dim))
+        if match and int(match.group(1)) < _MIN_IMG_SIDE:
             return True
     return _url_too_small(url)
+
+
+def _img_declared_wide(tag: str) -> bool:
+    """标签上写明了大尺寸。装饰性图标不会声明自己有 600px 宽。"""
+    for dim in ("width", "height"):
+        match = _PIXEL_DIM_RE.match(_attr(tag, dim))
+        if match and int(match.group(1)) >= _WIDE_IMG_SIDE:
+            return True
+    return False
 
 
 def _url_too_small(url: str) -> bool:
@@ -200,6 +356,15 @@ def _image_ok(url: str) -> bool:
         and not _IMG_SKIP_RE.search(url)
         and not _url_too_small(url)
     )
+
+
+def _is_site_logo(url: str, page_url: str) -> bool:
+    """文件名正好是站点名的图基本都是页头 logo，例如 jmlr.org 上的 /img/jmlr.jpg。"""
+    stem = urlsplit(url).path.rsplit("/", 1)[-1].rsplit(".", 1)[0].lower()
+    host = (urlsplit(page_url).hostname or "").lower()
+    return bool(stem) and stem in {
+        label for label in host.split(".") if label and label not in _SITE_LABEL_SKIP
+    }
 
 
 def extract_article_images(html_chunk: str, page_url: str, limit: int = 4) -> list[dict[str, str]]:
@@ -218,7 +383,13 @@ def extract_article_images(html_chunk: str, page_url: str, limit: int = 4) -> li
             continue
         if url.lower().split("?")[0].endswith(".svg") or _IMG_SKIP_RE.search(url):
             continue
-        if _img_too_small(tag, url):
+        # alt / class 只是弱信号：README 里常有把正文大图的 alt 照抄成 "logo" 的，
+        # 所以明确声明了大尺寸的图不受这条约束
+        if _IMG_ATTR_SKIP_RE.search(
+            f'{_attr(tag, "alt")} {_attr(tag, "class")}'
+        ) and not _img_declared_wide(tag):
+            continue
+        if _is_site_logo(url, page_url) or _img_too_small(tag, url):
             continue
         key = url.split("?")[0]
         if key in seen:
@@ -234,7 +405,7 @@ _MD_IMAGE_RE = re.compile(r"!\[([^\]]*)\]\(([^)\s]+)[^)]*\)")
 _MD_LINK_RE = re.compile(r"\[([^\]]*)\]\(([^)\s]+)[^)]*\)")
 
 
-def _from_jina_markdown(markdown: str, page_url: str, title: str, limit: int) -> dict[str, Any]:
+def parse_jina_markdown(markdown: str, page_url: str, title: str, limit: int) -> dict[str, Any]:
     """把 Jina Reader 的 markdown 还原成正文与插图。"""
     body = markdown.split("Markdown Content:", 1)[-1]
     images: list[dict[str, str]] = []
@@ -253,7 +424,7 @@ def _from_jina_markdown(markdown: str, page_url: str, title: str, limit: int) ->
     body = re.sub(r"(?m)^#{1,6}\s*", "", body)
     body = re.sub(r"(?m)^\s*[-*=_]{3,}\s*$", "", body)
     body = re.sub(r"[ \t]+", " ", body)
-    body = re.sub(r"\n{3,}", "\n\n", body).strip()
+    body = _drop_label_paragraphs(re.sub(r"\n{3,}", "\n\n", body).strip())
     return {"text": _drop_leading_boilerplate(body, title)[:limit], "images": images}
 
 
@@ -269,8 +440,10 @@ def parse_article_html(
     if not html:
         return {"text": "", "images": []}
     chunk = strip_trailing_promo(_pick_content_chunk(html))
-    images = extract_article_images(chunk, page_url) if page_url else []
-    text = scrape.html_to_text(_PAGE_NOISE_RE.sub(" ", chunk))
+    # 配图和正文取自同一块去噪后的 HTML：页头页脚里的 logo 不该混进正文插图
+    content = _PAGE_NOISE_RE.sub(" ", chunk)
+    images = extract_article_images(content, page_url) if page_url else []
+    text = _drop_label_paragraphs(scrape.html_to_text(content))
     return {"text": _drop_leading_boilerplate(text, title)[:limit], "images": images}
 
 
@@ -301,11 +474,25 @@ def fetch_article_content(page_url: str, title: str = "", limit: int = 15000) ->
             return result
     # openai.com 这类站点对直连返回 403，或整页由 JS 渲染，交给 Jina Reader 兜底
     markdown = scrape._safe_jina_get(page_url, False)
-    return _from_jina_markdown(markdown, page_url, title, limit) if markdown else empty
+    return parse_jina_markdown(markdown, page_url, title, limit) if markdown else empty
 
 
 def fetch_article_text(page_url: str, limit: int = 15000, title: str = "") -> str:
     return str(fetch_article_content(page_url, title=title, limit=limit)["text"])
+
+
+def _fill_missing_images(item: dict[str, Any], images: list[dict[str, str]]) -> None:
+    """把回源抓到的正文插图补进条目，已有配图则保持不动。"""
+    if not images:
+        return
+    media = item.get("media_assets")
+    if not isinstance(media, dict):
+        media = {"images": [], "videos": []}
+        item["media_assets"] = media
+    if not media.get("images"):
+        media["images"] = images
+    if not str(item.get("image_url") or "").strip():
+        item["image_url"] = images[0]["url"]
 
 
 def backfill_full_text(items: list[dict[str, Any]]) -> int:
@@ -324,23 +511,33 @@ def backfill_full_text(items: list[dict[str, Any]]) -> int:
     if not targets:
         return 0
     filled = 0
+    imaged = 0
     with ThreadPoolExecutor(max_workers=6) as pool:
         futures = {
-            pool.submit(fetch_article_text, str(item["url"]), title=str(item.get("title") or "")): item
+            pool.submit(
+                fetch_article_content, str(item["url"]), title=str(item.get("title") or "")
+            ): item
             for item in targets
         }
         for future in as_completed(futures):
             item = futures[future]
             try:
-                text = future.result()
+                result = future.result()
             except Exception as exc:  # noqa: BLE001 - 单条失败不影响整轮
                 log.info("原文正文补全异常 %s: %s", item.get("url"), exc)
                 continue
+            text = str(result.get("text") or "")
             # 抓回来的内容明显更长才替换，避免把正文换成导航栏碎片
             if len(text) > max(len(str(item.get("raw_content") or "")) * 2, FULLTEXT_MIN_CHARS):
                 item["raw_content"] = text
                 filled += 1
-    log.info("正文补全：尝试 %d 条，成功 %d 条", len(targets), filled)
+            # 同一次请求已经把正文插图抽出来了：RSS 摘要里基本没有图，
+            # 丢掉这批就等于正文来自原文、配图却还停在空摘要上
+            before = len((item.get("media_assets") or {}).get("images") or [])
+            _fill_missing_images(item, result.get("images") or [])
+            if len((item.get("media_assets") or {}).get("images") or []) > before:
+                imaged += 1
+    log.info("正文补全：尝试 %d 条，成功 %d 条，补配图 %d 条", len(targets), filled, imaged)
     return filled
 
 

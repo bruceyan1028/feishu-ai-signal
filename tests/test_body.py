@@ -2,8 +2,9 @@
 from __future__ import annotations
 
 import unittest
+from unittest import mock
 
-from src import daily, rss, scrape
+from src import config, daily, rss, scrape
 
 
 class CleanBodyTest(unittest.TestCase):
@@ -128,6 +129,358 @@ class ArticleMediaTest(unittest.TestCase):
         main = "<div class='entry'><p>" + "real article body. " * 80 + "</p></div>"
         chunk = rss._pick_content_chunk(f"<body>{cards}{main}</body>")
         self.assertIn("real article body.", chunk)
+
+    def test_keeps_responsive_sized_images(self):
+        html = (
+            '<img src="/hero.jpg" width="100%" height="auto">'
+            '<img src="/chart.png" width="1200px">'
+            '<img src="/icon.png" width="32" height="32">'
+        )
+        self.assertEqual(
+            [item["url"] for item in rss.extract_article_images(html, self.PAGE)],
+            ["https://example.com/hero.jpg", "https://example.com/chart.png"],
+        )
+
+    def test_skips_site_chrome_images(self):
+        html = (
+            '<a href="/"><img class="jmlr" src="/img/jmlr.jpg"></a>'
+            '<img src="/img/RSS.gif" class="rss" alt="RSS Feed">'
+            '<img src="/img/figure-2.png" alt="Approximation error">'
+        )
+        self.assertEqual(
+            [item["url"] for item in rss.extract_article_images(html, "http://jmlr.org/papers/v27/25-1549.html")],
+            ["http://jmlr.org/img/figure-2.png"],
+        )
+
+    def test_wide_figure_survives_a_misleading_alt(self):
+        # README 里常见把正文大图的 alt 照抄成 "logo"，尺寸才是可靠信号
+        html = (
+            '<img src="https://cdn.example.com/brand.png" alt="logo" width="400">'
+            '<img src="https://cdn.example.com/adoption.png" alt="logo" width="800">'
+        )
+        self.assertEqual(
+            [item["url"] for item in rss.extract_article_images(html, "https://example.com/x")],
+            ["https://cdn.example.com/adoption.png"],
+        )
+
+    def test_page_header_images_stay_out_of_the_body(self):
+        html = (
+            '<header><img src="https://example.com/brand-wide.png" alt="Acme"></header>'
+            "<article><p>" + "body text. " * 40 + "</p>"
+            '<img src="https://example.com/chart-wide.png" alt="Chart"></article>'
+        )
+        parsed = rss.parse_article_html(html, "https://example.com/post", "")
+        self.assertEqual(
+            [item["url"] for item in parsed["images"]], ["https://example.com/chart-wide.png"]
+        )
+
+    def test_backfilled_images_land_on_the_item(self):
+        item = {"media_assets": {"images": [], "videos": []}, "image_url": ""}
+        rss._fill_missing_images(item, [{"url": "https://example.com/a.jpg", "alt": "图"}])
+        self.assertEqual(item["media_assets"]["images"][0]["url"], "https://example.com/a.jpg")
+        self.assertEqual(item["image_url"], "https://example.com/a.jpg")
+
+    def test_backfill_does_not_overwrite_existing_images(self):
+        item = {
+            "media_assets": {"images": [{"url": "https://example.com/rss.jpg", "alt": ""}], "videos": []},
+            "image_url": "https://example.com/rss.jpg",
+        }
+        rss._fill_missing_images(item, [{"url": "https://example.com/new.jpg", "alt": ""}])
+        self.assertEqual(
+            [image["url"] for image in item["media_assets"]["images"]],
+            ["https://example.com/rss.jpg"],
+        )
+
+
+class LeadingBoilerplateTest(unittest.TestCase):
+    def test_keeps_short_lede(self):
+        text = "Claude Opus 5 is available today.\n\nA longer paragraph with the details follows."
+        self.assertTrue(
+            rss._drop_leading_boilerplate(text, "Introducing Claude Opus 5").startswith(
+                "Claude Opus 5 is available today."
+            )
+        )
+
+    def test_drops_date_byline_and_reading_time(self):
+        text = "Jul 24, 2026\n\nBy Jane Doe\n\n5 min read\n\nThe real body starts here."
+        self.assertEqual(rss._drop_leading_boilerplate(text, "Some Title"), "The real body starts here.")
+
+    def test_drops_section_labels(self):
+        text = "Announcements\n\nProduct\n\n我们今天上线了新功能。"
+        self.assertEqual(rss._drop_leading_boilerplate(text, "新功能"), "我们今天上线了新功能。")
+
+    def test_drops_date_line_that_follows_a_subtitle(self):
+        text = "Update Claude Fable 5 and Mythos 5 redeployed\n\nJul 1, 2026\n\nAccess is restored today."
+        self.assertEqual(
+            rss._drop_leading_boilerplate(text, "Redeploying Claude Fable 5"),
+            "Update Claude Fable 5 and Mythos 5 redeployed\n\nAccess is restored today.",
+        )
+
+    def test_drops_author_and_engagement_block(self):
+        text = (
+            "Training Sparse Embedding Models\n\nPublished\n\nJuly 1, 2025\n\nUpdate on GitHub\n\n"
+            "Upvote 138\n\n+132\n\nArthur BRESNU arthurbresnu Follow\n\n"
+            "Sentence Transformers is a Python library for training embedding models."
+        )
+        self.assertEqual(
+            rss._drop_leading_boilerplate(text, "Training Sparse Embedding Models"),
+            "Sentence Transformers is a Python library for training embedding models.",
+        )
+
+
+class LabelParagraphTest(unittest.TestCase):
+    def test_drops_link_labels_and_adjacent_duplicates(self):
+        text = (
+            "Sonnet 5 is available today across all plans.\n\n"
+            "Read more\n\n"
+            "Cost-performance curves at different effort levels.\n\n"
+            "Cost-performance curves at different effort levels.\n\n"
+            "相关阅读\n\n"
+            "Developers can use claude-sonnet-5 via the API."
+        )
+        self.assertEqual(
+            rss._drop_label_paragraphs(text),
+            "Sonnet 5 is available today across all plans.\n\n"
+            "Cost-performance curves at different effort levels.\n\n"
+            "Developers can use claude-sonnet-5 via the API.",
+        )
+
+    def test_cuts_the_related_article_grid_at_the_tail(self):
+        text = "\n\n".join(
+            [
+                "Sonnet 5 is available today across all plans and in Claude Code.",
+                "Developers can use claude-sonnet-5 via the API from today onwards.",
+                "Introducing Claude Opus 5",
+                "Opus 5 is a step change improvement for the Opus tier.",
+                "Read more",
+                "A research agenda for the Economic Futures Research Fund",
+                "We are sharing the research agenda for the fund.",
+                "Read more",
+            ]
+        )
+        self.assertEqual(
+            rss._drop_label_paragraphs(text),
+            "Sonnet 5 is available today across all plans and in Claude Code.\n\n"
+            "Developers can use claude-sonnet-5 via the API from today onwards.",
+        )
+
+    def test_drops_the_footer_copyright_line(self):
+        text = "The model is available today.\n\nMeta © 2026"
+        self.assertEqual(rss._drop_label_paragraphs(text), "The model is available today.")
+
+    def test_drops_trailing_footer_nav_labels(self):
+        text = "The paper is available as a PDF.\n\nRSS Feed\n\nMastodon\n\nCookies"
+        self.assertEqual(rss._drop_label_paragraphs(text), "The paper is available as a PDF.")
+
+    def test_drops_trailing_footer_nav_rows(self):
+        text = (
+            "Muse Spark is available today at meta.ai.\n\n"
+            "Meta AI Assistant Media Generation Vibes AI Studio\n\n"
+            "Our approach About AI at Meta People Careers"
+        )
+        self.assertEqual(
+            rss._drop_label_paragraphs(text), "Muse Spark is available today at meta.ai."
+        )
+
+    def test_keeps_a_trailing_fragment_that_reads_like_prose(self):
+        text = (
+            "The report covers three research directions.\n\n"
+            "Model weights available on Hugging Face under Apache 2.0"
+        )
+        self.assertEqual(rss._drop_label_paragraphs(text), text)
+
+    def test_keeps_a_trailing_sentence_even_when_short(self):
+        text = "Longer opening paragraph of the article body.\n\nThat is all."
+        self.assertEqual(rss._drop_label_paragraphs(text), text)
+
+    def test_a_single_read_more_does_not_truncate_the_body(self):
+        text = "\n\n".join(
+            [
+                "The first paragraph of a real article body goes here.",
+                "Read more",
+                "The article keeps going for several more paragraphs after that.",
+            ]
+        )
+        self.assertEqual(
+            rss._drop_label_paragraphs(text),
+            "The first paragraph of a real article body goes here.\n\n"
+            "The article keeps going for several more paragraphs after that.",
+        )
+
+    def test_keeps_full_sentences_that_start_like_a_label(self):
+        text = "More from our team on this topic is available in the appendix section."
+        self.assertEqual(rss._drop_label_paragraphs(text), text)
+
+
+class ScrapeMediaTest(unittest.TestCase):
+    def test_jina_item_carries_article_images(self):
+        markdown = (
+            "Title: Introducing Claude Sonnet 5\n\nPublished Time: 2026-07-27T00:00:00Z\n\n"
+            "Markdown Content:\n"
+            "![Hero](https://cdn.anthropic.com/hero-2880x1620.jpg)\n\n"
+            "Sonnet 5 is designed to be our most capable Sonnet model yet, with tool use.\n"
+        )
+        item = scrape._build_item(
+            markdown,
+            {"url": "https://www.anthropic.com/news/claude-sonnet-5", "title": ""},
+            {"id": "anthropic-news"},
+        )
+        self.assertEqual(item["title"], "Introducing Claude Sonnet 5")
+        self.assertEqual(
+            [image["url"] for image in item["media_assets"]["images"]],
+            ["https://cdn.anthropic.com/hero-2880x1620.jpg"],
+        )
+        self.assertNotIn("![", item["body"])
+
+    def test_readme_images_resolve_repo_relative_paths_and_skip_badges(self):
+        readme = (
+            '<img src="docs/hero.png" alt="架构" width="100%">\n'
+            "[![Build](https://img.shields.io/badge/build-passing-green)](https://ci)\n"
+            "![Bench](/docs/bench.png)\n"
+        )
+        self.assertEqual(
+            [image["url"] for image in scrape._github_readme_images(readme, "acme/repo")],
+            [
+                "https://raw.githubusercontent.com/acme/repo/HEAD/docs/hero.png",
+                "https://raw.githubusercontent.com/acme/repo/HEAD/docs/bench.png",
+            ],
+        )
+
+
+class ReadmeNoiseTest(unittest.TestCase):
+    def test_drops_language_switcher_and_code_blocks(self):
+        readme = (
+            "<p><b>English</b> |\n"
+            '<a href="./i18n/README_zh.md">简体中文</a> |\n'
+            '<a href="./i18n/README_ja.md">日本語</a></p>\n\n'
+            "Transformers is a model-definition framework.\n\n"
+            "## Installation\n\n```py\npython -m venv .my-env\n```\n"
+        )
+        text = scrape.readme_to_text(readme)
+        self.assertEqual(text, "Transformers is a model-definition framework.")
+
+    def test_keeps_prose_that_merely_contains_a_link(self):
+        text = scrape.readme_to_text("See [the docs](https://example.com/docs) now.\n")
+        self.assertEqual(text, "See the docs now.")
+
+    def test_drops_pipe_delimited_link_bar_but_keeps_real_tables(self):
+        readme = (
+            "| [Documentation](https://docs.example.com) | [Blog](https://blog.example.com) |"
+            " [Paper](https://arxiv.org/abs/1) |\n\n"
+            "vLLM is a fast library for LLM serving.\n\n"
+            "| Model | Params |\n| --- | --- |\n| Phi-4 | 14B |\n"
+        )
+        text = scrape.readme_to_text(readme)
+        self.assertNotIn("Documentation", text)
+        self.assertIn("vLLM is a fast library for LLM serving.", text)
+        self.assertIn("Model | Params\nPhi-4 | 14B", text)
+
+    def test_cut_on_boundary_never_splits_a_word(self):
+        text = "First sentence here. Second sentence follows. Third trails off"
+        self.assertFalse(scrape.cut_on_boundary(text, 40).endswith("Secon"))
+        self.assertEqual(scrape.cut_on_boundary(text, 500), text)
+
+
+class TranslateBodyTest(unittest.TestCase):
+    BODY = "\n\n".join(f"Paragraph {index} " + "word " * 120 for index in range(12))
+
+    @staticmethod
+    def _echo_first_paragraph(prompt: str) -> dict[str, str]:
+        """用片段的首个段落号当译文，方便断言拼接顺序。"""
+        return {"body_cn": prompt.split("正文：\n", 1)[1].split(" ", 2)[1]}
+
+    def test_splits_long_body_and_joins_in_order(self):
+        with mock.patch.object(
+            daily.report, "_llm_json", side_effect=self._echo_first_paragraph
+        ) as llm:
+            text, covered = daily.translate_body(self.BODY, config.BODY_TRANSLATE_LIMIT_FULL)
+        self.assertEqual(llm.call_count, 3)
+        self.assertEqual(text.split("\n\n"), ["0", "4", "8"])
+        self.assertEqual(covered, len(self.BODY.strip()))
+
+    def test_keeps_successful_prefix_when_a_chunk_fails(self):
+        def flaky(prompt: str) -> dict[str, str]:
+            snippet = prompt.split("正文：\n", 1)[1]
+            if "Paragraph 4" in snippet:  # 第二段片段失败
+                raise RuntimeError("rate limited")
+            return self._echo_first_paragraph(prompt)
+
+        with mock.patch.object(daily.report, "_llm_json", side_effect=flaky):
+            text, covered = daily.translate_body(self.BODY, config.BODY_TRANSLATE_LIMIT_FULL)
+        self.assertEqual(text, "0")
+        self.assertLess(covered, len(self.BODY.strip()))
+
+    def test_tier_sends_p0_and_high_impact_to_the_full_limit(self):
+        self.assertEqual(daily.translate_limit_for("P0", 0), config.BODY_TRANSLATE_LIMIT_FULL)
+        self.assertEqual(daily.translate_limit_for("P2", 95), config.BODY_TRANSLATE_LIMIT_FULL)
+        self.assertEqual(daily.translate_limit_for("P2", 40), config.BODY_TRANSLATE_LIMIT)
+
+    def test_truncated_flag_follows_recorded_coverage(self):
+        fields = {"原文": "a" * 9000, "中文正文": "译文。", daily.TRANSLATED_CHARS_FIELD: 9000}
+        self.assertFalse(daily.display_body(fields)["bodyTruncated"])
+        fields[daily.TRANSLATED_CHARS_FIELD] = 6000
+        self.assertTrue(daily.display_body(fields)["bodyTruncated"])
+
+    def test_skips_retranslation_when_coverage_already_complete(self):
+        fields = {
+            "原文": "English body. " * 40,
+            "中文正文": "已有译文。",
+            daily.TRANSLATED_CHARS_FIELD: 10_000,
+        }
+        with mock.patch.object(daily.report, "_llm_json") as llm:
+            self.assertEqual(daily._ensure_body_cn(fields), {})
+        llm.assert_not_called()
+
+    def test_retranslates_when_promoted_to_the_full_limit(self):
+        fields = {
+            "原文": "English body sentence. " * 400,
+            "中文正文": "旧的截断译文。",
+            daily.TRANSLATED_CHARS_FIELD: config.BODY_TRANSLATE_LIMIT,
+        }
+        with mock.patch.object(
+            daily.report,
+            "_llm_json",
+            side_effect=lambda prompt: {"body_cn": "译:" + prompt.split("正文：\n", 1)[1][:7]},
+        ):
+            updates = daily._ensure_body_cn(fields, priority="P0", impact=10)
+        self.assertTrue(updates["中文正文"].startswith("译:English"))
+        self.assertGreater(updates[daily.TRANSLATED_CHARS_FIELD], config.BODY_TRANSLATE_LIMIT)
+
+
+class DeepAnalysisTest(unittest.TestCase):
+    def test_backfills_structured_deep_analysis(self):
+        fields = {
+            "标题": "A new model",
+            "来源": "Official Blog",
+            "原文": "The model improves tool use and lowers inference cost. " * 20,
+        }
+        analysis = {"summary_cn": "模型能力提升。", "why": "有助于降低部署成本。"}
+        deep = (
+            "【核心内容】\n模型发布。\n\n【关键细节】\n工具调用提升。\n\n"
+            "【价值与影响】\n成本下降。\n\n【局限与风险】\n原文未披露评测细节。\n\n"
+            "【行动建议】\n在内部数据集复测。"
+        )
+        with mock.patch.object(
+            daily.report, "_llm_json", return_value={"deep_analysis_cn": deep}
+        ) as llm:
+            updates = daily._ensure_deep_analysis(fields, analysis)
+        self.assertEqual(updates, {"AI深度解读": deep})
+        self.assertEqual(fields["AI深度解读"], deep)
+        self.assertEqual(analysis["deep_analysis_cn"], deep)
+        prompt = llm.call_args.args[0]
+        self.assertIn("【局限与风险】", prompt)
+        self.assertIn("不得虚构", prompt)
+
+    def test_reuses_cached_deep_analysis(self):
+        fields = {
+            "原文": "English body. " * 30,
+            "AI深度解读": "【核心内容】\n已有解读。",
+        }
+        analysis = {"summary_cn": "摘要", "why": "重要"}
+        with mock.patch.object(daily.report, "_llm_json") as llm:
+            self.assertEqual(daily._ensure_deep_analysis(fields, analysis), {})
+        llm.assert_not_called()
+        self.assertEqual(analysis["deep_analysis_cn"], "【核心内容】\n已有解读。")
 
 
 if __name__ == "__main__":

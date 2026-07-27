@@ -80,6 +80,8 @@ _SEED_SOURCE_IDS = frozenset({"bytedance-seed"})
 _SEED_ARTICLE_TYPE_BLOG = 2
 _GITHUB_SEARCH_API = "https://api.github.com/search/repositories"
 _GITHUB_SOURCE_IDS = frozenset({"github-trending"})
+# README 正文摘录上限：1500 字符只够放完徽章和安装步骤，真正的项目介绍会被切掉
+README_EXCERPT_CHARS = 4000
 _DEFAULT_RECENT_DAYS = 7
 _DEFAULT_HIGH_UPVOTES = 100
 _DEFAULT_HIGH_STARS_24H = 100
@@ -162,6 +164,8 @@ def _table_to_text(match: re.Match[str]) -> str:
 def html_to_text(html: str) -> str:
     text = re.sub(r"(?is)<script[^>]*>.*?</script>", " ", html)
     text = re.sub(r"(?is)<style[^>]*>.*?</style>", " ", text)
+    # 正文块是从整页切出来的，闭合标签可能被切在外面，剩下的脚本要连尾巴一起丢
+    text = re.sub(r"(?is)<(script|style)[^>]*>.*$", " ", text)
     # 表格要在通用去标签之前单独处理，保住行列结构
     text = _TABLE_RE.sub(_table_to_text, text)
     # 先把块级边界落成换行，再去标签：否则段落结构会被整体压成一行，前端只能渲染出字墙。
@@ -854,15 +858,161 @@ def _github_search(query: str, per_page: int) -> list[dict[str, Any]]:
         return []
 
 
+_MD_FENCE_RE = re.compile(r"(?ms)^[ \t]*(`{3,}|~{3,})[^\n]*\n.*?^[ \t]*\1[ \t]*$")
+_MD_FENCE_OPEN_RE = re.compile(r"(?ms)^[ \t]*(?:`{3,}|~{3,})[^\n]*\n.*\Z")
+_PRE_CODE_RE = re.compile(r"(?is)<(pre|code)\b[^>]*>.*?</\1>")
+_MD_LINK_ONLY_RE = re.compile(r"\[([^\]]*)\]\([^)]*\)")
+_HEADING_RE = re.compile(r"^\s{0,3}#{1,6}\s+(.+?)\s*#*\s*$")
+# README 里与「这个项目做了什么」无关的样板小节：装环境、许可、引用、贡献指南……
+# 留着只会挤掉真正的项目介绍，翻译时还要按字符收费。
+_README_SKIP_SECTION_RE = re.compile(
+    r"^(?:"
+    r"table\s+of\s+contents|contents|installation|install(?:ing)?|setup|requirements?|"
+    r"prerequisites?|dependencies|quick\s*start|getting\s+started|usage|examples?|"
+    r"development|developing|building|build\s+from\s+source|docker|deployment|deploy|"
+    r"testing|tests|contributing|contributions?|contributors|code\s+of\s+conduct|"
+    r"licen[sc]e|licensing|citation|citing|cite|acknowledge?ments?|"
+    r"(?:seeking|getting)\s+help.*|community.*|contact(?:\s+us)?|media\s+kit.*|"
+    r"stay\s+(?:up\s*to\s*date|updated|tuned).*|who(?:['’]s)?\s+using.*|disclaimer.*|"
+    r"star\s+history|sponsors?|support|faq|changelog|release\s+notes|roadmap|security|"
+    r"目录|安装|安装说明|部署|环境要求|依赖|快速开始|快速上手|快速入门|使用方法|使用说明|"
+    r"用法|示例|样例|贡献|贡献指南|许可|许可证|开源许可|引用|致谢|更新日志|路线图|常见问题"
+    r")\s*[:：]?$",
+    re.I,
+)
+
+
+_NAV_SEP_RE = re.compile(r"[|·•/\\\-—–>»\s]+")
+_ANCHOR_PAIR_RE = re.compile(r"(?is)<a\b.*?</a>")
+
+
+def _readme_nav_kind(line: str) -> str:
+    """给一行打标：link=只剩链接/徽章，row=挤在一行的语言切换器，pipe=以竖线收尾的短行。
+
+    README 顶部普遍有「English | 简体中文 | 日本語 | …」，去标签后变成一串以「|」
+    结尾的短行；前端把连续带竖线的行当表格渲染，正文里就凭空多出一张右列全空的表。
+    真表格的单元格里有实义文字，据此和导航条区分开。
+    """
+    text = line.strip()
+    if not text or len(text) > 400:
+        return ""
+    # 删掉整段链接（而不是留下链接文字）后还有实义文字，就是夹了链接的正常句子
+    residue = _TAG_RE.sub("", _ANCHOR_PAIR_RE.sub("", _MD_LINK_ONLY_RE.sub("", text)))
+    if not _NAV_SEP_RE.sub("", residue):
+        # 「| 文档 | 博客 | 论文 |」这类整行都是链接的导航条同样以竖线开头，
+        # 所以这一条要排在表格行的保护之前
+        return "link"
+    if text.startswith("|"):  # markdown 表格行：靠单元格里的实义文字保住
+        return ""
+    plain = _TAG_RE.sub("", _MD_LINK_ONLY_RE.sub(r"\1", text)).strip()
+    cells = [cell for cell in (c.strip() for c in plain.split("|")) if cell]
+    if len(cells) >= 3 and all(len(cell) <= 16 for cell in cells):
+        return "row"
+    if plain.endswith("|") and len(plain) <= 40:
+        return "pipe"
+    return ""
+
+
+def _drop_readme_nav_lines(text: str) -> str:
+    """剔掉语言切换器与徽章行。
+
+    「以竖线收尾的短行」单独出现时可能是别的东西，只有和相邻的导航行连成一片
+    才算——`<b>English</b> |` 这种没有链接的行正是靠邻居才认得出来。
+    """
+    lines = text.split("\n")
+    kinds = [_readme_nav_kind(line) for line in lines]
+    filled = [index for index, line in enumerate(lines) if line.strip()]
+    drop: set[int] = set()
+    for position, index in enumerate(filled):
+        kind = kinds[index]
+        if kind in {"link", "row"}:
+            drop.add(index)
+        elif kind == "pipe":
+            neighbors = [
+                kinds[filled[other]]
+                for other in (position - 1, position + 1)
+                if 0 <= other < len(filled)
+            ]
+            if any(neighbor in {"link", "row", "pipe"} for neighbor in neighbors):
+                drop.add(index)
+    return "\n".join(line for index, line in enumerate(lines) if index not in drop)
+
+
+_MD_TABLE_DIVIDER_RE = re.compile(r"^\s*\|?(?:\s*:?-{2,}:?\s*\|)+\s*:?-{2,}:?\s*\|?\s*$")
+
+
+def _normalize_md_tables(text: str) -> str:
+    """markdown 表格改成与 HTML 表格一致的「单元格 | 单元格」写法。
+
+    前端靠这个约定还原行列；原样留着 `|---|---|` 分隔行会多渲染出一行破折号。
+    空单元格要保留，否则各行列数不一致，前端会判定不是表格。
+    """
+    kept: list[str] = []
+    for line in text.split("\n"):
+        stripped = line.strip()
+        if _MD_TABLE_DIVIDER_RE.match(stripped):
+            continue
+        if stripped.startswith("|") and stripped.endswith("|") and stripped.count("|") >= 3:
+            cells = [cell.strip() for cell in stripped.strip("|").split("|")]
+            kept.append(" | ".join(cells))
+            continue
+        kept.append(line)
+    return "\n".join(kept)
+
+
+def _drop_readme_boilerplate_sections(text: str) -> str:
+    """按小节标题整段剔掉样板内容，保留项目介绍与能力说明。"""
+    kept: list[str] = []
+    skipping = False
+    for line in text.split("\n"):
+        heading = _HEADING_RE.match(line)
+        name = heading.group(1) if heading else ""
+        if not name:
+            bare = line.strip()
+            # HTML 标题经 html_to_text 后只剩独立成行的短文本，同样当标题看
+            if bare and len(bare) <= 40 and _README_SKIP_SECTION_RE.match(bare):
+                name = bare
+        if name:
+            skipping = bool(_README_SKIP_SECTION_RE.match(_one_line(name)))
+            if skipping:
+                continue
+        if not skipping:
+            kept.append(line)
+    return "\n".join(kept)
+
+
+def cut_on_boundary(text: str, limit: int) -> str:
+    """按段落/句子边界截断，避免正文断在词或句子中间。"""
+    text = str(text or "")
+    if len(text) <= limit:
+        return text
+    head = text[:limit]
+    floor = limit * 0.5
+    for sep in ("\n\n", "\n", "。", "！", "？", ". ", "! ", "? ", "；", "; "):
+        idx = head.rfind(sep)
+        if idx >= floor:
+            return head[: idx + len(sep)].rstrip()
+    idx = head.rfind(" ")
+    return (head[:idx] if idx >= floor else head).rstrip()
+
+
 def readme_to_text(raw: str) -> str:
     """README 是 markdown 与 HTML 混排，按标签处理后再清 markdown 记号。
 
     直接删 ">" 会把 HTML 标签打散成 `<p align="center"` 这样的残片留在正文里；
     把空白全压成单空格则会让整篇变成一堵字墙，所以段落边界要保住。
+    代码块要整块剔掉：去掉围栏后剩下的 `python -m venv .my-env` 会被当句子翻译。
     """
     text = re.sub(r"(?is)<!--.*?-->", " ", str(raw or ""))
+    text = _MD_FENCE_RE.sub("\n", text)
+    text = _MD_FENCE_OPEN_RE.sub("\n", text)  # 未闭合的围栏：截到文末
+    text = _PRE_CODE_RE.sub(" ", text)
+    text = _IMG_RE.sub("", text)  # 徽章与插图：正文只留文字，配图另抽
+    text = _drop_readme_nav_lines(text)
     text = _html_to_text(text)
-    text = _IMG_RE.sub("", text)
+    # 标题记号在这一步之后才清，样板小节的识别要靠它
+    text = _drop_readme_boilerplate_sections(text)
+    text = _normalize_md_tables(text)
     text = re.sub(r"\[([^\]]*)\]\([^)]*\)", r"\1", text)
     text = re.sub(r"(?m)^\s*[#>]+\s*", "", text)  # 标题/引用前缀只出现在行首
     text = re.sub(r"[*`~]+", "", text)
@@ -870,18 +1020,50 @@ def readme_to_text(raw: str) -> str:
     return re.sub(r"\n{3,}", "\n\n", text).strip()
 
 
-def _github_readme_excerpt(full_name: str, limit: int = 1500) -> str:
+def _github_readme_raw(full_name: str) -> str:
+    """取仓库 README 原文（markdown/HTML 混排），失败降级空串。"""
     try:
         resp = requests.get(
             f"https://api.github.com/repos/{full_name}/readme",
             headers=_github_headers(raw=True),
             timeout=min(config.JINA_TIMEOUT, 20),
         )
-        if resp.status_code != 200:
-            return ""
-        return readme_to_text(resp.text)[:limit]
+        return resp.text if resp.status_code == 200 else ""
     except Exception:  # noqa: BLE001
         return ""
+
+
+def _github_readme_excerpt(readme_raw: str, limit: int = README_EXCERPT_CHARS) -> str:
+    return cut_on_boundary(readme_to_text(readme_raw), limit)
+
+
+_MD_IMAGE_PAIR_RE = re.compile(r"!\[([^\]]*)\]\(\s*<?([^)\s>]+)>?[^)]*\)")
+_GITHUB_BADGE_RE = re.compile(
+    r"(?i)(shields\.io|badgen\.net|badge\.fury\.io|travis-ci|circleci|codecov|coveralls|"
+    r"codacy|snyk\.io|opencollective|contrib\.rocks|visitor-badge|hits\.dwyl|star-history|"
+    r"forthebadge|repostatus\.org)"
+)
+
+
+def _github_readme_images(
+    readme_raw: str, full_name: str, limit: int = 3
+) -> list[dict[str, str]]:
+    """README 里的架构图/效果图：markdown 与 HTML 两种写法都要认。
+
+    仓库内的相对路径在 README 里是相对仓库根的，直接当页面链接解析会 404，
+    统一拼到 raw.githubusercontent.com 上。
+    """
+    from . import rss  # 延迟导入，避免采集模块之间的加载顺序耦合
+
+    raw = str(readme_raw or "")
+    # markdown 图片改写成 <img>，和 README 里混排的 HTML 图片共用同一套过滤
+    html = _MD_IMAGE_PAIR_RE.sub(lambda m: f'<img src="{m.group(2)}" alt="{m.group(1)}">', raw)
+    # 「/docs/x.png」这类根路径写法同样按仓库根解析
+    html = re.sub(r'(?i)(<img\b[^>]*\bsrc=")/+', r"\1", html)
+    images = rss.extract_article_images(
+        html, f"https://raw.githubusercontent.com/{full_name}/HEAD/", limit=limit + 5
+    )
+    return [img for img in images if not _GITHUB_BADGE_RE.search(img["url"])][:limit]
 
 
 def _github_issue_feedback(full_name: str, n: int = 4) -> str:
@@ -1064,21 +1246,29 @@ def _fetch_github_items(feed: dict[str, Any]) -> list[dict[str, Any]]:
         repo_topics = [str(t) for t in (r.get("topics") or [])]
         pushed_raw = str(r.get("pushed_at") or r.get("updated_at") or "").strip()
         created_raw = str(r.get("created_at") or "").strip()
-        readme = _github_readme_excerpt(fn)
+        readme_raw = _github_readme_raw(fn)
+        readme = _github_readme_excerpt(readme_raw)
+        readme_images = _github_readme_images(readme_raw, fn)
         feedback = _github_issue_feedback(fn)  # 社区反响：热门 issue 用户反馈
-        body = (
-            f"{desc}\n\n"
-            f"⭐ Stars: {stars} | 🍴 Forks: {forks} | 语言: {lang or 'N/A'} | "
-            f"主题: {', '.join(repo_topics) or 'N/A'}\n"
-            f"创建: {created_raw[:10]} | 最近提交: {pushed_raw[:10]} | 沉淀分: {score:.2f}\n\n"
-            + (f"{feedback}\n\n" if feedback else "")
-            + f"{readme}"
-        ).strip()[:15000]
+        body = cut_on_boundary(
+            (
+                f"{desc}\n\n"
+                f"⭐ Stars: {stars} | 🍴 Forks: {forks} | 语言: {lang or 'N/A'} | "
+                f"主题: {', '.join(repo_topics) or 'N/A'}\n"
+                f"创建: {created_raw[:10]} | 最近提交: {pushed_raw[:10]} | 沉淀分: {score:.2f}\n\n"
+                + (f"{feedback}\n\n" if feedback else "")
+                + f"{readme}"
+            ).strip(),
+            15000,
+        )
         items.append(
             {
                 "title": fn[:200],
                 "url": str(r.get("html_url") or f"https://github.com/{fn}"),
                 "body": body,
+                # 卡片首图留空时由 daily 回落到仓库社交预览图（OG）
+                "image_url": readme_images[0]["url"] if readme_images else "",
+                "media_assets": {"images": readme_images, "videos": []},
                 "published_raw": pushed_raw or created_raw,
                 "heat_keep": True,  # 热榜=沉淀热度信号而非时效，跳过 lookback
                 "is_html": False,
@@ -1258,14 +1448,6 @@ def _extract_links(md: str, feed: dict[str, Any]) -> list[dict[str, str]]:
     return cand[:max_n]
 
 
-def _strip_md(s: str) -> str:
-    s = _IMG_RE.sub("", str(s or ""))
-    s = re.sub(r"\[([^\]]*)\]\([^)]*\)", r"\1", s)
-    s = re.sub(r"^[#>*`\-]+[ \t]*", "", s, flags=re.M)
-    s = re.sub(r"[`*_]", "", s)
-    return _normalize_paragraphs(s)
-
-
 def _build_item(article_md: str, link: dict[str, Any], feed: dict[str, Any]) -> dict[str, Any] | None:
     """对应 Build Scrape Items：把 Jina 正文组装成统一 RawItem。"""
     body = str(article_md or "")
@@ -1273,7 +1455,6 @@ def _build_item(article_md: str, link: dict[str, Any], feed: dict[str, Any]) -> 
         return None
     title = link.get("title") or ""
     published = str(link.get("published_raw") or "")
-    content = body
 
     mt = re.search(r"^Title:\s*(.+)$", body, re.M)
     if mt and mt.group(1).strip():
@@ -1283,21 +1464,25 @@ def _build_item(article_md: str, link: dict[str, Any], feed: dict[str, Any]) -> 
     mp = re.search(r"^Published Time:\s*(.+)$", body, re.M)
     if mp and not published:
         published = mp.group(1).strip()
-    marker = body.find("Markdown Content:")
-    if marker >= 0:
-        content = body[marker + len("Markdown Content:") :]
-
+    url = link.get("url") or ""
     block = str(link.get("community_block") or "")
-    content = _strip_md(content)[: (15000 - len(block) - 2) if block else 15000]
+    # 与 RSS 的 Jina 兜底走同一套还原：只做 _strip_md 会把正文插图一并删掉，
+    # 于是 Jina 引擎抓来的条目一张图都没有
+    from . import rss  # 延迟导入，避免采集模块之间的加载顺序耦合
+
+    parsed = rss.parse_jina_markdown(
+        body, url, title, (15000 - len(block) - 2) if block else 15000
+    )
+    content = parsed["text"]
     if block:
         content = f"{content}\n\n{block}"
-    url = link.get("url") or ""
     if not title or not url:
         return None
     item = {
         "title": title,
         "url": url,
         "body": content,
+        "media_assets": {"images": parsed["images"], "videos": []},
         "published_raw": published,
         "heat_keep": bool(link.get("heat_keep")),
         "is_html": False,

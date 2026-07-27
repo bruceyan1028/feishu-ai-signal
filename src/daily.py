@@ -5,12 +5,13 @@ import argparse
 import json
 import logging
 import re
+from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timedelta, timezone
 from html import unescape
 from pathlib import Path
 from typing import Any
 
-from . import cluster, config, feishu, report, rss, sources
+from . import cluster, config, feishu, report, rss, scrape, sources
 
 log = logging.getLogger("daily")
 CN_TZ = timezone(timedelta(hours=8))
@@ -63,12 +64,7 @@ def clean_body(text: str, source: str = "") -> str:
     return _WP_TAIL_RE.sub("", body).strip()
 
 
-def translate_body(text: str) -> str:
-    """把英文正文忠实译成中文（只译不改写），失败返回空串由调用方回退。"""
-    snippet = str(text or "").strip()[: config.BODY_TRANSLATE_LIMIT]
-    if not snippet:
-        return ""
-    prompt = f"""把下面的文章正文忠实翻译成简体中文。
+_TRANSLATE_PROMPT = """把下面的文章正文忠实翻译成简体中文。
 要求：
 1. 逐段翻译，保留原文段落划分，段落之间用空行分隔；
 2. 只翻译，不要概括、不要删减、不要添加任何评论或总结；
@@ -78,12 +74,95 @@ def translate_body(text: str) -> str:
 
 正文：
 {snippet}"""
+
+TRANSLATED_CHARS_FIELD = "译文覆盖字数"
+# 早先入库的条目没有覆盖字数记录，按当时的默认上限回推，避免整表无谓重译
+_LEGACY_TRANSLATE_LIMIT = 3000
+
+
+def split_for_translation(text: str, chunk: int | None = None) -> list[str]:
+    """按段落边界切成适合单次调用的片段；单段超长时退回句子边界。"""
+    size = max(1, chunk or config.BODY_TRANSLATE_CHUNK)
+    parts: list[str] = []
+    buffer = ""
+    for para in str(text or "").split("\n\n"):
+        para = para.strip()
+        if not para:
+            continue
+        if not buffer:
+            buffer = para
+        elif len(buffer) + 2 + len(para) <= size:
+            buffer = f"{buffer}\n\n{para}"
+        else:
+            parts.append(buffer)
+            buffer = para
+        while len(buffer) > size:
+            head = scrape.cut_on_boundary(buffer, size)
+            if not head or head == buffer:
+                head = buffer[:size]
+            parts.append(head)
+            buffer = buffer[len(head) :].strip()
+    if buffer:
+        parts.append(buffer)
+    return parts
+
+
+def _translate_chunk(snippet: str) -> str:
     try:
-        raw = report._llm_json(prompt)
+        raw = report._llm_json(_TRANSLATE_PROMPT.format(snippet=snippet))
     except Exception as exc:  # noqa: BLE001
         log.warning("正文翻译失败，回退原文：%s", exc)
         return ""
-    return clean_body(str(raw.get("body_cn") or ""))
+    return str(raw.get("body_cn") or "").strip()
+
+
+def translate_body(text: str, limit: int | None = None) -> tuple[str, int]:
+    """把英文正文忠实译成中文（只译不改写），返回 (译文, 已覆盖的原文字符数)。
+
+    必须分段：一次塞进上万字符，模型会自行压缩甚至半途收尾，
+    读者看到的就是断在句子中间的正文。某段失败时只保留已成功的前缀，
+    宁可短一截，也不能让正文中间出现空洞。
+    """
+    cap = limit or config.BODY_TRANSLATE_LIMIT
+    snippet = str(text or "").strip()[:cap]
+    chunks = split_for_translation(snippet)
+    if not chunks:
+        return "", 0
+    with ThreadPoolExecutor(max_workers=min(4, len(chunks))) as pool:
+        pieces = list(pool.map(_translate_chunk, chunks))
+    done: list[str] = []
+    for piece in pieces:
+        if not piece:
+            break
+        done.append(piece)
+    if not done:
+        return "", 0
+    covered = (
+        len(snippet) if len(done) == len(chunks) else sum(len(c) for c in chunks[: len(done)])
+    )
+    return clean_body("\n\n".join(done)), covered
+
+
+def translate_limit_for(priority: str = "P2", impact: Any = 0) -> int:
+    """P0 来源与高影响分条目走全译档，其余用默认档控制翻译成本。"""
+    try:
+        score = float(impact or 0)
+    except (TypeError, ValueError):
+        score = 0.0
+    if str(priority or "").upper() == "P0" or score >= config.BODY_TRANSLATE_FULL_IMPACT:
+        return config.BODY_TRANSLATE_LIMIT_FULL
+    return config.BODY_TRANSLATE_LIMIT
+
+
+def _translated_chars(fields: dict[str, Any]) -> int:
+    """这条译文覆盖了原文前多少字符。"""
+    try:
+        chars = int(float(scalar(fields.get(TRANSLATED_CHARS_FIELD)) or 0))
+    except (TypeError, ValueError):
+        chars = 0
+    if chars:
+        return chars
+    return _LEGACY_TRANSLATE_LIMIT if str(scalar(fields.get("中文正文")) or "").strip() else 0
 
 
 def display_body(fields: dict[str, Any]) -> dict[str, Any]:
@@ -93,10 +172,7 @@ def display_body(fields: dict[str, Any]) -> dict[str, Any]:
     translated = clean_body(str(scalar(fields.get("中文正文")) or ""), source)
     if translated:
         # 译文按上限截断过，原文更长时告诉前端还有后续内容
-        return {
-            "body": translated,
-            "bodyTruncated": len(raw) > config.BODY_TRANSLATE_LIMIT,
-        }
+        return {"body": translated, "bodyTruncated": len(raw) > _translated_chars(fields)}
     return {"body": raw, "bodyTruncated": False}
 
 
@@ -268,16 +344,33 @@ def analyze_signal(fields: dict[str, Any]) -> dict[str, Any]:
         )
     prompt = f"""你是资深 AI 行业分析师。只依据给定原文输出严格 JSON，不得虚构。
 字段：title_cn（准确简洁的中文标题）、summary_cn（中文1-2句）、why（中文1句）、impact/novelty/actionability（0-100整数）、
-urgency（高/中/低）、topics（从 AI、LLM、Agent、RAG、推理、多模态、开源、硬件、监管、融资、产品、其他中选2-4个）。
+urgency（高/中/低）、topics（从 AI、LLM、Agent、RAG、推理、多模态、开源、硬件、监管、融资、产品、其他中选2-4个）、
+deep_analysis_cn（800-1400字中文深度解读；短原文可缩至500字，但不要用空话凑字数）。
+deep_analysis_cn 必须使用以下结构，每个标题独占一行，标题与正文之间换行，各节之间空一行：
+【核心内容】
+交代事件或成果本身，保留关键数字、主体、时间、产品/模型名称。
+
+【关键细节】
+展开原理、功能、方法、实验结果、商业条款或落地方式；只写原文有依据的内容。
+
+【价值与影响】
+评价它相对现状带来的变化，对开发者、企业或行业意味着什么。
+
+【局限与风险】
+指出原文披露不足、适用边界、成本、安全、可复现性或营销偏差；无法确认时明确写“原文未披露”。
+
+【行动建议】
+给出2-4条具体、克制、可执行的验证或跟进建议。
 {paper_extra}标题：{scalar(fields.get("标题"))}
 来源：{scalar(fields.get("来源"))}
 分类：{scalar(fields.get("分类"))}
-原文节选：{str(scalar(fields.get("原文")))[:4000]}"""
+原文：{clean_body(str(scalar(fields.get("原文")) or ""), str(scalar(fields.get("来源")) or ""))[:12000]}"""
     raw = report._llm_json(prompt)
     topics = [str(topic) for topic in raw.get("topics") or [] if str(topic) in TOPIC_OPTIONS][:4]
     result = {
         "title_cn": str(raw.get("title_cn") or scalar(fields.get("标题"))).strip(),
         "summary_cn": str(raw.get("summary_cn") or "").strip(),
+        "deep_analysis_cn": str(raw.get("deep_analysis_cn") or "").strip(),
         "why": str(raw.get("why") or "").strip(),
         "impact": max(0, min(100, int(raw.get("impact") or 0))),
         "novelty": max(0, min(100, int(raw.get("novelty") or 0))),
@@ -318,22 +411,77 @@ def _signal_from_fields(record_id: str, fields: dict[str, Any], analysis: dict[s
         "tags": analysis["topics"],
         "imageUrl": link(fields.get("图片链接")),
         "mediaAssets": media_assets(fields.get("媒体资源")),
-        **display_body(fields),
+        "deepAnalysis": str(analysis.get("deep_analysis_cn") or "").strip(),
     }
 
 
-def _ensure_body_cn(fields: dict[str, Any]) -> str:
-    """英文正文缺译文时翻译一次，写回 fields 并返回待落库的译文；无需翻译返回空串。"""
-    if str(scalar(fields.get("中文正文")) or "").strip():
-        return ""
+def _ensure_body_cn(
+    fields: dict[str, Any], *, priority: str = "P2", impact: Any = 0
+) -> dict[str, Any]:
+    """英文正文缺译文时翻译一次，写回 fields 并返回待落库字段；无需翻译返回空 dict。
+
+    已有译文但只覆盖到更低档上限的条目（例如这次升进了全译档）会补译，
+    否则读者永远停在上一次的截断处。
+    """
     raw = clean_body(str(scalar(fields.get("原文")) or ""), str(scalar(fields.get("来源")) or ""))
     if len(raw) < 80 or is_chinese_text(raw):
-        return ""
-    translated = translate_body(raw)
+        return {}
+    limit = translate_limit_for(priority, impact)
+    cached = str(scalar(fields.get("中文正文")) or "").strip()
+    if cached and _translated_chars(fields) >= min(len(raw), limit):
+        return {}
+    translated, covered = translate_body(raw, limit)
     if not translated:
-        return ""
+        return {}
     fields["中文正文"] = translated
-    return translated
+    fields[TRANSLATED_CHARS_FIELD] = covered
+    return {"中文正文": translated, TRANSLATED_CHARS_FIELD: covered}
+
+
+def _ensure_deep_analysis(
+    fields: dict[str, Any], analysis: dict[str, Any]
+) -> dict[str, Any]:
+    """为已分析的存量条目补齐详情页深度解读，新条目由 analyze_signal 一次生成。"""
+    cached = str(
+        analysis.get("deep_analysis_cn")
+        or scalar(fields.get("AI深度解读"))
+        or ""
+    ).strip()
+    if cached:
+        analysis["deep_analysis_cn"] = cached
+        return {}
+    source = str(scalar(fields.get("来源")) or "")
+    raw_text = clean_body(str(scalar(fields.get("原文")) or ""), source)
+    if len(raw_text) < 80:
+        return {}
+    prompt = f"""你是资深 AI 行业分析师。只依据给定原文撰写中文深度解读，输出严格 JSON：
+{{"deep_analysis_cn":"..."}}。
+
+要求：
+1. 总长800-1400字；短原文可缩至500字，不得用套话凑长度；
+2. 保留原文中的关键数字、技术机制、功能、实验结果、商业条款和适用条件；
+3. 区分原文事实与分析判断，不得虚构；资料不足时明确写“原文未披露”；
+4. 必须按以下五节组织，每个标题独占一行，各节之间空一行：
+【核心内容】、【关键细节】、【价值与影响】、【局限与风险】、【行动建议】；
+5. 行动建议给出2-4条具体、可验证的建议，不写泛泛口号。
+
+标题：{scalar(fields.get("标题"))}
+来源：{source}
+已有短摘要：{analysis.get("summary_cn") or ""}
+为何重要：{analysis.get("why") or ""}
+原文：
+{raw_text[:12000]}"""
+    try:
+        result = report._llm_json(prompt)
+    except Exception as exc:  # noqa: BLE001
+        log.warning("深度解读生成失败：%s", exc)
+        return {}
+    deep = str(result.get("deep_analysis_cn") or "").strip()
+    if not deep:
+        return {}
+    analysis["deep_analysis_cn"] = deep
+    fields["AI深度解读"] = deep
+    return {"AI深度解读": deep}
 
 
 def _existing_analysis(fields: dict[str, Any]) -> dict[str, Any] | None:
@@ -344,6 +492,7 @@ def _existing_analysis(fields: dict[str, Any]) -> dict[str, Any] | None:
     return {
         "title_cn": str(scalar(fields.get("中文标题")) or scalar(fields.get("标题"))),
         "summary_cn": str(scalar(fields.get("中文摘要"))),
+        "deep_analysis_cn": str(scalar(fields.get("AI深度解读")) or ""),
         "why": str(scalar(fields.get("为何重要"))),
         "impact": int(float(scalar(fields.get("影响分")) or 0)),
         "novelty": int(float(scalar(fields.get("新颖度")) or 0)),
@@ -406,6 +555,7 @@ def generate(day: str | None = None) -> dict[str, Any]:
             update_fields = {
                 "中文标题": analysis["title_cn"],
                 "中文摘要": analysis["summary_cn"],
+                "AI深度解读": analysis.get("deep_analysis_cn") or "",
                 "为何重要": analysis["why"],
                 "影响分": analysis["impact"],
                 "新颖度": analysis["novelty"],
@@ -433,10 +583,8 @@ def generate(day: str | None = None) -> dict[str, Any]:
                 }
                 metrics["quality_score_final"] = final_q
                 update_fields["论文指标"] = json.dumps(metrics, ensure_ascii=False)
-        # 译文与分析解耦：早先已分析、但还没有中文正文的老条目也要补齐
-        translated = _ensure_body_cn(fields)
-        if translated:
-            update_fields["中文正文"] = translated
+        # 详情页展示深度解读而不是整篇译文；存量条目在首次入选时补齐。
+        update_fields.update(_ensure_deep_analysis(fields, analysis))
         if update_fields:
             updates.append(
                 {
@@ -461,6 +609,7 @@ def generate(day: str | None = None) -> dict[str, Any]:
             peer_analysis = _existing_analysis(pf) or {
                 "title_cn": str(scalar(pf.get("中文标题")) or scalar(pf.get("标题")) or peer.get("titleCn") or peer.get("title") or ""),
                 "summary_cn": str(scalar(pf.get("中文摘要")) or ""),
+                "deep_analysis_cn": str(scalar(pf.get("AI深度解读")) or ""),
                 "why": str(scalar(pf.get("为何重要")) or ""),
                 "impact": int(float(scalar(pf.get("影响分")) or 0)),
                 "novelty": int(float(scalar(pf.get("新颖度")) or 0)),

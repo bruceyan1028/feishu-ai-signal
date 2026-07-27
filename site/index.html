@@ -582,9 +582,8 @@ async function loadBrief(){
       cat: s.category || '其他',
       date: s.publishedDate || data.date || '',
       summary: s.summary || '',
+      deepAnalysis: s.deepAnalysis || '',
       why: s.why || '',
-      body: s.body || '',
-      bodyTruncated: !!s.bodyTruncated,
       novel: Number(s.novelty) || 0,
       action: Number(s.actionability) || 0,
       tags: Array.isArray(s.tags) ? s.tags : [],
@@ -1435,6 +1434,10 @@ function tableBlockHtml(block){
   const rows = lines.map(line=>line.split('|').map(cell=>cell.trim()));
   const width = rows[0].length;
   if(width < 2 || rows.some(row=>row.length !== width)) return '';
+  // 「英语 |」这类语言切换行会被切成整列为空的两列,那不是表格
+  for(let col = 0; col < width; col++){
+    if(rows.every(row=>!row[col])) return '';
+  }
   const cell = (text, head)=>{
     const tag = head ? 'th' : 'td';
     const extra = head ? `font-weight:700; background:${UI.chip};` : '';
@@ -1444,48 +1447,47 @@ function tableBlockHtml(block){
   return `<div style="margin:22px 0; overflow-x:auto;"><table style="width:100%; border-collapse:collapse; background:#fff;">${body}</table></div>`;
 }
 
-// 正文:以原文内容为主体(英文源展示译文),原文配图按间隔穿插
+// 详情正文只展示 AI 提炼内容与原文配图；原文保留在跳转链接中，不再整篇贴入卡片
 function articleBody(A, s){
   const proseStyle = 'font-family:"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif; letter-spacing:0; word-spacing:0; text-align:left; text-justify:none; word-break:normal; overflow-wrap:break-word;';
-  const P = html => `<p style="margin: 0 0 16px; font-size: 15px; line-height: 2; color: ${UI.text2}; ${proseStyle}">${zhProseHtml(html)}</p>`;
+  const P = html => `<p style="margin: 0 0 18px; font-size: 15px; line-height: 2; color: ${UI.text2}; ${proseStyle}">${zhProseHtml(html)}</p>`;
   // 仅当原图自带说明文字时才显示图注，不再加「原文配图 N」这类编号标签
   const figure = item => `<figure style="margin:24px 0; border:1px solid ${UI.border}; background:#fff;"><img src="${esc(item.url)}" alt="${esc(item.alt||s.zhTitle)}" loading="lazy" onerror="this.closest('figure').remove()" style="display:block; width:100%; max-height:560px; object-fit:contain;">${item.alt?`<figcaption style="padding:9px 12px; font-size:11.5px; color:${UI.text3};">${esc(item.alt)}</figcaption>`:''}</figure>`;
 
-  // AI 只占开头一小段,正文主体交给原文
-  const lead = s.summary
+  // 短摘要负责速览，主体使用独立生成的五节深度解读
+  const summary = s.summary || `${s.source} 的这条内容暂未生成摘要，可点击下方「阅读原文」查看。`;
+  const lead = s.kind !== '论文' || !s.deepAnalysis
     ? `<div style="margin: 0 0 20px; padding: 12px 14px; background: ${A.accentSoft}; border: 1px solid ${A.accentBorder}; border-left: 3px solid ${A.accent};">
-        <div style="font-size: 11px; font-weight: 700; letter-spacing: .04em; color: ${A.accentDeep}; margin-bottom: 5px;">✦ AI 摘要</div>
-        <div style="font-size: 14px; line-height: 1.85; color: ${UI.text2}; ${proseStyle}">${zhProseHtml(esc(s.summary))}</div>
+        <div style="font-size: 11px; font-weight: 700; letter-spacing: .04em; color: ${A.accentDeep}; margin-bottom: 7px;">✦ 结论速览</div>
+        <div style="font-size: 15px; line-height: 2; color: ${UI.text2}; ${proseStyle}">${zhProseHtml(esc(summary))}</div>
       </div>`
     : '';
 
-  const paras = splitParagraphs(s.body);
-  if(!paras.length){
-    const fallback = P(`${esc(s.source)} 的这条内容暂未抓取到可展示的正文,可点击下方「阅读原文」查看完整内容。`);
-    return `${lead}${fallback}${originalLink(A, s)}`;
-  }
-
   const images = (s.mediaAssets?.images || []).filter(item=>item?.url).slice(0,4);
   const videos = (s.mediaAssets?.videos || []).filter(item=>item?.embedUrl).slice(0,1);
-  // 原文里的图片位置已丢失,按段落数均匀铺开,避免全部堆在开头
-  const step = images.length ? Math.max(2, Math.floor(paras.length / (images.length + 1))) : 0;
+  const deepParas = splitParagraphs(s.deepAnalysis);
   const blocks = [];
-  paras.forEach((para, index)=>{
-    blocks.push(tableBlockHtml(para) || P(esc(para).replace(/\n/g, '<br>')));
-    if(step){
-      const slot = images.findIndex((_, i)=> (i + 1) * step === index + 1);
-      if(slot >= 0) blocks.push(figure(images[slot]));
+  const imageStep = images.length && deepParas.length
+    ? Math.max(1, Math.ceil(deepParas.length / images.length))
+    : 0;
+  deepParas.forEach((para, index)=>{
+    const section = para.match(/^【([^】]+)】\s*([\s\S]*)$/);
+    if(section){
+      blocks.push(`<h3 style="margin: 26px 0 10px; padding-bottom: 8px; border-bottom: 1px solid ${UI.border}; font-size: 16px; color: ${UI.text};">${esc(section[1])}</h3>`);
+      if(section[2].trim()) blocks.push(P(esc(section[2].trim()).replace(/\n/g, '<br>')));
+    } else {
+      blocks.push(P(esc(para).replace(/\n/g, '<br>')));
+    }
+    if(imageStep && (index + 1) % imageStep === 0){
+      const imageIndex = Math.floor((index + 1) / imageStep) - 1;
+      if(images[imageIndex]) blocks.push(figure(images[imageIndex]));
     }
   });
-  // 没排进去的图(段落太少时)统一补在正文末尾
-  const placed = step ? images.filter((_, i)=> (i + 1) * step <= paras.length).length : 0;
+  const placed = imageStep ? Math.min(images.length, Math.floor(deepParas.length / imageStep)) : 0;
   images.slice(placed).forEach(item=> blocks.push(figure(item)));
   videos.forEach(item=> blocks.push(`<div style="position:relative; padding-top:56.25%; margin:24px 0; background:#000;"><iframe src="${esc(item.embedUrl)}" title="${esc(s.zhTitle)}" allow="accelerometer; autoplay; encrypted-media; picture-in-picture" allowfullscreen style="position:absolute; inset:0; width:100%; height:100%; border:0;"></iframe></div>`));
 
-  const truncated = s.bodyTruncated
-    ? `<div style="margin: 4px 0 0; padding: 10px 13px; border: 1px dashed var(--ds-ink-line); font-size: 12.5px; color: ${UI.text3};">译文按篇幅上限截断,完整内容请见原文。</div>`
-    : '';
-  return `${lead}${blocks.join('')}${truncated}${originalLink(A, s)}`;
+  return `${lead}${blocks.join('')}${originalLink(A, s)}`;
 }
 
 function originalLink(A, s){
@@ -1600,7 +1602,7 @@ function detailHtml(A){
     </div>`).join('');
 
   const tabs = [
-    { key:'正文', label:'正文全文' },
+    { key:'正文', label:'AI 摘要' },
     { key:'事件聚合', label:'事件聚合' },
     { key:'讨论', label:'讨论 · 反馈' },
   ];
@@ -1614,12 +1616,7 @@ function detailHtml(A){
         ${detailMediaHtml(A, s)}
         <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
           <span style="width: 22px; height: 22px; border-radius: 6px; display: inline-flex; align-items: center; justify-content: center; background: ${A.accentSoft}; border: 1px solid ${A.accentBorder}; color: ${A.accentBright}; font-size: 12px;">✦</span>
-          <span style="font-size: 13px; font-weight: 700; color: ${UI.text};">正文全文</span>
-        </div>
-        <!-- 选中操作条(仿微信读书) -->
-        <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 14px; font-size: 11.5px; color: ${UI.text3}; flex-wrap: wrap;">
-          <span>选中文字可:</span>
-          ${['复制','划线','写想法','AI 问书'].map(x=>`<span style="display:inline-flex; align-items:center; gap:4px; padding:3px 9px; border:1px solid ${UI.border}; background:#fff; color:${UI.text2}; font-weight:600;">${x}</span>`).join('')}
+          <span style="font-size: 13px; font-weight: 700; color: ${UI.text};">AI 提炼内容</span>
         </div>
         ${articleBody(A, s)}
         <div style="display: flex; flex-wrap: wrap; gap: 7px; margin: 20px 0 4px;">${points}</div>

@@ -47,6 +47,7 @@ def _signal_from_record(record: dict[str, Any]) -> dict[str, Any]:
         "contentType": daily.content_type(fields),
         "publishedDate": published,
         "summary": str(daily.scalar(fields.get("中文摘要")) or ""),
+        "deepAnalysis": str(daily.scalar(fields.get("AI深度解读")) or ""),
         "why": str(daily.scalar(fields.get("为何重要")) or ""),
         "impact": int(float(daily.scalar(fields.get("影响分")) or 0)),
         "novelty": int(float(daily.scalar(fields.get("新颖度")) or 0)),
@@ -55,7 +56,6 @@ def _signal_from_record(record: dict[str, Any]) -> dict[str, Any]:
         "tags": [str(daily.scalar(item)) for item in fields.get("主题") or []],
         "imageUrl": daily.link(fields.get("图片链接")),
         "mediaAssets": daily.media_assets(fields.get("媒体资源")),
-        **daily.display_body(fields),
     }
 
 
