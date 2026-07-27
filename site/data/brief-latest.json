@@ -1,60 +1,104 @@
 {
   "date": "2026-07-27",
   "title": "AI Signal 每日情报 · 2026-07-27",
-  "intro": "本轮信号显示，AI竞争正从单纯扩大模型参数转向架构选择、仿真训练、数据治理与系统级能效优化。与此同时，脑科学启发模型、隐私保护医疗评测和模型压缩正在拓宽AI的技术与商业边界。",
+  "intro": "本期信号显示，生成模型正同时向原生高分辨率、长上下文工具调用和更低推理成本演进。与此同时，多智能体扩展并非总能带来收益，神经科学启发的规划与情绪解码则拓展了 AI 的研究边界。",
   "bullets": [
     {
-      "title": "单智能体能力可预判协作成败",
-      "text": "在任务提示、工具和计算预算一致的260种配置中，单体基线被证明是判断多智能体增益或退化的最稳健指标；研究提出的能力饱和阈值在SWE-bench Verified和Terminal-Bench配置上达到94%的预测准确率，可作为域内架构选择规则。",
+      "title": "Mage-Flow在单张A100上实现亚秒级1024²生成",
+      "text": "该4B参数模型通过Mage-VAE、原生分辨率多模态扩散Transformer和融合CUDA内核，统一处理文生图与指令式编辑；其覆盖512至2048分辨率及极端宽高比，原文报告生成一张1024²图像仅需0.59秒，峰值显存约18至20GB。",
       "refs": [
         1
       ]
     },
     {
-      "title": "神经活动研究同时推进规划与情绪解码",
-      "text": "一项脑启发生成模型通过认知地图、随机计算和组合编码完成目标导向规划，且仅依赖局部突触可塑性；另一项研究融合灰质与白质颅内信号，构建可跨任务实时识别情绪并定位关键脑网络的个性化模型。",
+      "title": "强单智能体可能削弱协作收益",
+      "text": "对260种配置的实验表明，在任务提示、工具和计算预算保持一致时，基线能力是预测多智能体系统增益或退化的最稳健指标。研究提出的能力饱和阈值，在SWE-bench Verified与Terminal-Bench验证配置中以94%的准确率判断协作效果，可作为域内架构选择规则。",
       "refs": [
-        2,
-        3
+        2
       ]
     },
     {
-      "title": "医疗AI治理转向持续校准与可信评测",
-      "text": "生物数据会随科学发现、分类和临床实践变化，模型因而需要围绕预期结果、适用假设、有效期限及保障措施持续更新。MedPerf与Google Cloud Confidential Space的脑肿瘤MRI演示进一步表明，患者数据可留在所有者环境内，同时保护模型权重、评测流程和加密汇总结果。",
+      "title": "脑启发模型推进规划与情绪实时解码",
+      "text": "一项工作结合认知地图、随机计算和组合编码，仅依赖局部突触可塑性完成目标导向想象、规划与问题求解；另一项研究则整合灰质和白质颅内活动，构建可跨任务运行的个性化情绪模型，并定位关键脑网络，为精神健康干预研究提供线索。",
       "refs": [
-        4,
-        12
+        3,
+        4
       ]
     },
     {
-      "title": "虚拟训练大幅压缩机器人真机成本",
-      "text": "英伟达的GPU原生医疗物理仿真可并行运行8192个机器人环境，把基准训练从五个多小时缩短到两分钟以内。Google与纽约大学团队则用两张A100训练可控视频世界模型，并结合视觉语言奖励与强化学习，使机器人从虚拟失败状态中学习恢复，真机表现超过监督微调和传统物理模拟基线。",
-      "refs": [
-        6,
-        11
-      ]
-    },
-    {
-      "title": "英伟达将Vera Rubin扩展为全栈基础设施",
-      "text": "NVL72初步测试显示，DeepSeek-R1每兆瓦吞吐量较Grace Blackwell NVL72提升10倍；配套Spectrum-6交换系统提供102.4 Tbps吞吐量，为上一代两倍。百时美施贵宝已计划用八套系统建设药物研发平台，纬创同步在得州扩充板卡产能，Cadence与Synopsys的部分EDA工作负载也获得最高1.5倍加速。",
+      "title": "Claude与Muse竞逐工具执行和长周期任务",
+      "text": "Anthropic称Opus 5在编码、知识工作、自动化和计算机操作方面达到领先水平，并以约一半任务成本接近Fable 5，同时强化结果验证、迭代执行、科研和视觉输出。Meta则以Muse Spark系列增强编程、多模态理解、多智能体编排及计算机使用，1.1版本可主动管理100万Token上下文，但早期版本在长周期智能体与编程流程上仍有差距。",
       "refs": [
         5,
+        12,
+        13
+      ]
+    },
+    {
+      "title": "开源AI栈已覆盖模型、推理、Agent与自托管应用",
+      "text": "Transformers承担多模态模型训练与推理，vLLM以PagedAttention、持续批处理和缓存机制优化服务效率；Ollama提供跨平台本地模型运行与REST API，LangChain、AutoGPT和Dify覆盖Agent、RAG及工作流开发，Open WebUI则补齐离线界面、权限控制、插件和容器化部署。各项目的高Star与Fork规模显示，社区关注点正转向本地LLM、多模态、Graph RAG、MCP、实时接口和高效推理。",
+      "refs": [
+        6,
         7,
         8,
         9,
-        14
-      ]
-    },
-    {
-      "title": "模型经济性催生高估值融资窗口",
-      "text": "Menlo Ventures称Anthropic截至5月的收入运行率已由2025年的90亿美元升至470亿美元，体现头部模型公司的异常高速增长。与此同时，Multiverse Computing正寻求5亿欧元C轮融资及20亿欧元投后估值，其技术宣称可将大语言模型缩小最多95%，以降低算力和云资源需求，但交易尚未完成。",
-      "refs": [
         10,
-        13
+        11,
+        14
       ]
     }
   ],
   "signals": [
+    {
+      "recordId": "recvqyrnvN0lL5",
+      "title": "Mage-Flow: An Efficient Native-Resolution Foundation Model for Image Generation and Editing",
+      "titleCn": "Mage-Flow：面向原生分辨率图像生成与编辑的高效4B基础模型",
+      "source": "HF Papers Trending",
+      "url": "https://huggingface.co/papers/2607.19064",
+      "category": "技术研究开源",
+      "contentType": "论文",
+      "tier": "L2 结构化平台",
+      "priority": "P0",
+      "publishedDate": "2026-07-21",
+      "summary": "Mage-Flow通过Mage-VAE、原生分辨率多模态扩散Transformer及融合CUDA内核的协同设计，以4B参数统一支持文本生成图像和指令式图像编辑。原文称其可覆盖512至2048分辨率和极端宽高比，并在单张A100上实现1024²图像0.59秒生成、约18至20GB峰值显存。",
+      "why": "该研究表明，模型组件与训练系统的联合优化可能让中等规模视觉生成模型在质量、延迟和显存占用上挑战更大模型。",
+      "impact": 87,
+      "novelty": 84,
+      "actionability": 89,
+      "urgency": "中",
+      "tags": [
+        "AI",
+        "多模态",
+        "开源",
+        "硬件"
+      ],
+      "imageUrl": "https://cdn-thumbnails.huggingface.co/social-thumbnails/papers/2607.19064/gradient.png",
+      "mediaAssets": {
+        "images": [],
+        "videos": []
+      },
+      "body": "论文页面 - Mage-Flow：用于图像生成与编辑的高效原生分辨率基础模型\n\nHugging Face\n\n模型\n\n数据集\n\nSpaces\n\nBuckets 新功能\n\n文档\n\n企业版\n\n定价\n\n网站\n\n任务\n\nHuggingChat\n\n合集\n\n语言\n\n组织\n\n社区\n\n博客\n\n文章\n\n每日论文\n\n硬件\n\n学习\n\nDiscord\n\n论坛\n\nGitHub\n\n解决方案\n\n团队与企业\n\nHugging Face PRO\n\n企业支持\n\n推理服务提供商\n\n推理端点\n\n存储桶\n\n登录\n\n注册\n\nMage-Flow 是一个紧凑的 40 亿参数规模生成式技术栈，可用于高效的文本生成图像和基于指令的图像编辑。Mage-Flow 并未将规模扩展到数百亿参数，而是通过对分词器—主干网络—系统进行精心的协同设计，达到可与最先进水平竞争的质量，因此在实际的计算预算下依然速度快、内存占用低且易于微调。\n\n该技术栈由两个共享且协同设计的组件构成：\n\nMage-VAE —— 一种轻量级、高保真的潜空间分词器（采用单步扩散编码/解码和锚点潜变量 KL 正则化）。\n\nNR-MMDiT —— 一个共享的 40 亿参数原生分辨率多模态扩散 Transformer，在 Mage-VAE 潜空间中使用整流流匹配进行训练。\n\n结合原生分辨率打包和融合内核训练基础设施，这个共享技术栈支持两种模型实例：用于文本生成图像的 Mage-Flow，以及用于基于指令的图像编辑的 Mage-Flow-Edit。二者均提供 Base、RL-aligned 和 4-step Turbo 变体。\n\n✨ 亮点\n\n紧凑且具有竞争力。一个统一的 40 亿参数模型家族即可完成生成和编辑，并能媲美或超越参数规模大得多的开放系统（Qwen-Image 20B、Z-Image 6B、FLUX.2 32B、FireRed-Image-Edit 20B）。\n\n高效的分词器。Mage-VAE 的重建保真度可媲美 FLUX.2-VAE，而每像素编码/解码的 MACs 分别减少约 12 倍/22 倍，从而消除了 VAE 这一高分辨率处理瓶颈。\n\n原生分辨率。一个检查点即可在任意宽高比下生成从 512 到 2048 分辨率的图像，包括极端的 4:1 宽高比（例如 512×2048、2048×512）。\n\n系统级速度。原生分辨率打包（FlashAttention 可变长度处理 + 每样本 2D RoPE）与融合 CUDA 内核相结合，使训练速度提升约 2.5 倍；CFG 的条件分支和无条件分支可在一次打包前向传播中运行。\n\n完整的模型家族。生成和编辑模型均提供 Base、RL-aligned 和 4-step Turbo 变体。\n\n多用途编辑。Mage-Flow-Edit 在一个统一的图像与文本条件模型中支持语义内容编辑、外观转换、图像修复以及结构感知输出。请参阅报告中的编辑效果图集。\n\n交互式延迟。在单张 A100 上以 1024² 分辨率运行时：Mage-Flow-Turbo 为 0.59 秒/图像，Mage-Flow-Edit-Turbo 为 1.02 秒/次编辑，峰值显存约为 18–20 GB（在对比系统中最低）。\n\n\",\"updatedAt\":\"2026-07-22T06:32:51.777Z\",\"author\":{\"_id\":\"64338d1c4521083b9d2d21da\",\"avatarUrl\":\"/avatars/54b809021d794f1c4b762fbc5d0c7c90.svg\",\"fullname\":\"Xinjie\",\"name\":\"Xinjie-Q\",\"type\":\"user\",\"isPro\":",
+      "bodyTruncated": true,
+      "qualityScore": 67.0,
+      "eventAggregation": {
+        "total": 1,
+        "groups": [
+          {
+            "key": "官方来源",
+            "tone": "#16130f",
+            "items": [
+              {
+                "source": "HF Papers Trending",
+                "title": "Mage-Flow：面向原生分辨率图像生成与编辑的高效4B基础模型",
+                "url": "https://huggingface.co/papers/2607.19064",
+                "note": "原始发布 / 公告。",
+                "text": "Mage-Flow：面向原生分辨率图像生成与编辑的高效4B基础模型 —— 原始发布 / 公告。"
+              }
+            ]
+          }
+        ]
+      }
+    },
     {
       "recordId": "recvqydR4AQ2gs",
       "title": "Capable language models can outgrow the benefits of collaboration",
@@ -63,6 +107,8 @@
       "url": "https://www.nature.com/articles/s42256-026-01268-y",
       "category": "技术研究开源",
       "contentType": "论文",
+      "tier": "L1 一级官方",
+      "priority": "P0",
       "publishedDate": "2026-07-24",
       "summary": "研究在保持任务提示、工具和计算预算不变的条件下，对260种配置进行实验，发现单智能体基线性能是判断多智能体协作增益或退化的最稳健指标。研究提出能力饱和阈值，在SWE-bench Verified和Terminal-Bench验证配置中以94%的准确率预测协作效果，并将其定位为域内架构选择的实用规则。",
       "why": "该研究为是否采用多智能体架构提供了可量化的判断依据，可避免强模型场景下协作带来的错误放大和额外开销。",
@@ -83,6 +129,7 @@
       },
       "body": "智能体是以语言模型为基础的系统，能够进行推理、规划并使用工具采取行动以完成任务。尽管智能体已被广泛部署，但多智能体协调何时能胜过强大的单智能体，仍不明确。在此，我们开展了一项对照实验，保持任务提示、工具和计算预算不变，仅改变协调结构和模型能力。在涵盖六个基准、五种架构和三个 LLM 系列的 260 种配置中，我们使用实证协调指标推导出一个预测模型。在各项基准中，单智能体基线性能成为判断协调会提升还是降低性能的最稳健预测因素。具体而言，我们确定了一个实证能力饱和阈值，超过该阈值后，增加智能体不太可能提升性能。该阈值在 SWE-bench Verified 和 Terminal-Bench 的验证配置中，有 94% 正确预测了多智能体协调对性能的影响。因此，我们将该阈值解释为一项实用的选择规则，而非普适的扩展原则。第二种效应——按基线缩放的错误放大——在聚类稳健推断下依然成立（P robust = 0.030），并为失效模式分类体系提供了支持。拟合模型取得了交叉验证 R 2 = 0.373（使用基于任务的能力指标时为 0.413），并在 87% 的留出配置中选出了最佳架构。这些结果为领域内的架构选择，以及估计多智能体协调何时可能提升性能或增加开销，提供了一个定量框架。\n\n其他人正在查看的类似内容\n\nFrom LLMs to AI agents: a systematic benchmark for SAO structure extraction in patent analytics\n\n文章\n开放获取\n2026 年 4 月 22 日\n\nWhen collaboration fails: persuasion driven adversarial influence in multi agent large language model debate\n\n文章\n开放获取\n2026 年 4 月 8 日\n\nA study on classification based concurrent API calls and optimal model combination for tool augmented LLMs for AI agent\n\n文章\n开放获取\n2025 年 7 月 1 日\n\n正文\n\n智能体 1 是由语言模型驱动的系统，通过推理、规划和行动的迭代循环来运行，并根据环境或工具生成的反馈调整其行为。它们已在多种应用中取得了优异表现，涵盖代码生成 2、3、网页浏览 4、5、医疗决策 6、7、8、金融 9、可持续发展 10 和科学发现 11、12、13。随着任务变得更加复杂，并需要与环境进行长时程交互，多智能体系统（MAS）作为一种分解任务、实现并行探索和增加验证的方式，已受到广泛关注。随后出现了一些前景乐观的主张，包括口号“More agents is all you need” 14、协作扩展定律的提出 15，以及多智能体系统（MAS）在复杂任务上优于单智能体系统（SAS）的实证展示 16、17。然而，同期也有一批研究对多智能体协",
       "bodyTruncated": true,
+      "qualityScore": 62.5,
       "eventAggregation": {
         "total": 1,
         "groups": [
@@ -110,6 +157,8 @@
       "url": "https://www.nature.com/articles/s42256-026-01254-4",
       "category": "技术研究开源",
       "contentType": "论文",
+      "tier": "L1 一级官方",
+      "priority": "P0",
       "publishedDate": "2026-07-21",
       "summary": "Lin 等人提出一种受大脑启发的生成模型，结合认知地图、随机计算与组合编码，实现规划和问题求解。该模型仅依赖局部突触可塑性。",
       "why": "该研究为以生物启发且局部可学习的机制构建规划与推理系统提供了新路径。",
@@ -129,6 +178,7 @@
       },
       "body": "人工智能系统正变得越来越智能，但其能源消耗和训练要求方面的成本非常高。相比之下，我们的大脑只需要 20 W 的能量，能够进行在线学习，并且可以立即适应不断变化的情势。这就引出了一个问题：究竟是什么样的数据结构、算法和学习方法使大脑能够做到这一点，以及这些方法能否移植到人工设备中。我们正针对智能的一项核心特征来研究这一问题：规划和解决问题的能力，包括解决涉及此前从未遇到过的状态的新问题。在此，我们考察大脑可能用于实现这一能力的三种工具：认知地图、随机计算和组合式编码。我们将这些工具整合到一个透明的神经网络模型中，并展示其在灵活规划和解决问题方面的强大能力。重要的是，这种方法适合通过存内计算和其他节能型神经形态硬件来实现。具体而言，它只需要适合片上学习的自监督局部突触可塑性。因此，大脑智能的一项核心特征——为此前从未遇到过的问题生成解决方案的能力——并不需要深度神经网络或大型语言模型，并且可以在节能型边缘设备中实现。\n\n其他人正在浏览的相似内容\n\n高维空间中的局部预测学习使神经网络能够进行规划\n\n文章\n开放获取\n2024 年 3 月 15 日\n\n神经形态技术在节能型随机游走计算中的扩展优势\n\n文章\n\n2022 年 2 月 14 日\n\n一种具有短期记忆、用于高能效神经形态计算的低功耗垂直双栅极神经递质晶体管\n\n文章\n开放获取\n2023 年 10 月 11 日\n\n正文\n\n规划和解决问题是人类智能的核心。这种能力体现在多个领域，例如在物理环境中规划到达目标位置的路线，或设想抽象问题的解决方案。重要的是，我们也可以运用这种能力来应对超出以往经验的新挑战。\n\n大量实验数据表明，认知地图——即通过编码状态与动作之间的关系信息，对习得经验进行连贯组织的数据结构——是大脑用于规划的重要工具。研究最广泛的是啮齿动物海马结构和内嗅皮层中的自我中心无关空间地图，它们将环境中的位置与由自身运动引起的变化联系起来 1 , 2 , 3 , 4 , 5 。这些地图的形成关键依赖于在很大程度上与生俱来的网格细胞系统 2 , 6 , 7 , 8 。这些认知地图通过提供自我定位以及朝向目标的方向感，支持目标导向的空间导航 9 , 10 , 11 。神经科学和认知科学近期的实验研究超越了对认知地图纯粹基于空间的定义，表明 th",
       "bodyTruncated": true,
+      "qualityScore": 57.6,
       "eventAggregation": {
         "total": 1,
         "groups": [
@@ -156,6 +206,8 @@
       "url": "https://www.nature.com/articles/s43588-026-01021-w",
       "category": "技术研究开源",
       "contentType": "论文",
+      "tier": "L1 一级官方",
+      "priority": "P0",
       "publishedDate": "2026-07-22",
       "summary": "该研究利用颅内脑活动记录构建个性化模型，可跨不同任务实时解码人类情绪状态，并识别与情绪相关的关键脑网络。研究结果可能为未来精神健康疾病治疗提供参考。",
       "why": "这项工作将跨任务泛化、实时解码与可解释脑网络识别相结合，具有潜在的临床转化价值。",
@@ -175,6 +227,7 @@
       },
       "body": "从颅内神经活动中解码人类情绪状态，是开发情感脑机接口和情感障碍新疗法的关键。然而，解码的现实应用需要具备高性能，能够整合来自灰质和白质的神经活动，在不同情境下实现稳定的泛化，具有充分的神经编码可解释性，并能稳健地实时实施，而所有这些目标仍未实现。在此，我们对18名个体在两项情绪诱发任务中的颅内脑电图（iEEG）以及大量自评效价和唤醒度评分进行了同步记录。随后，我们在深度学习框架内开发了个性化解码模型，实现了对连续效价和唤醒状态的高性能解码，并超越了先前EEG和iEEG解码的性能。关键的是，这些模型通过整合灰质和白质信号显著提升了性能，并展现出跨任务泛化能力。这些模型还揭示了对效价和唤醒度进行编码的共享及偏好性中脑边缘–丘脑–皮层子网络，体现出神经生理学可解释性。最后，这些模型在另外四名个体中实现了稳健的实时解码。我们的研究结果对于推动情绪解码神经技术向可部署的情感脑机接口和用于情感障碍的闭环治疗系统发展具有重要意义。\n\n通过您的机构访问\n\n购买或订阅\n\n这是订阅内容的预览，请通过您的机构访问\n\n访问选项\n\n通过您的机构访问\n\n访问Nature及另外54种Nature Portfolio期刊\n\n获取Nature+，我们最具性价比的在线访问订阅服务\n\n27,99欧元／30天\n\n可随时取消\n\n了解更多\n\n订阅本期刊\n\n获取12期数字版刊物及文章在线访问权限\n\n每年111,21欧元\n\n每期仅9,27欧元\n\n了解更多\n\n购买本文\n\n在SpringerLink上购买\n\n即时获取完整文章PDF。\n\n39,95欧元\n\n价格可能需要缴纳当地税费，税费将在结账时计算\n\n图1：实验设计、神经记录和解码分析概览。\n\n图2：对效价和唤醒状态进行高性能单任务解码。\n\n图3：在不同情绪诱发任务之间进行可互换、可迁移的解码。\n\n图4：对效价和唤醒度进行差异化编码的灰质区域和白质束。\n\n图5：神经解码模型的在线实施及稳健的实时情绪解码。\n\n其他人正在查看的类似内容\n\n基于多目标进化算法所选EEG通道，利用二维CNN区分人类情绪\n\n文章\n开放获取\n2022年3月3日\n\n利用时间自编码器进行半监督颅内EEG聚类和分类\n\n文章\n开放获取\n2023年1月13日\n\n一种基于情绪维度耦合约束的多任务EEG情绪识别方法\n\n文章\n开放获取\n2026年1月2日\n\n数据和",
       "bodyTruncated": true,
+      "qualityScore": 55.8,
       "eventAggregation": {
         "total": 1,
         "groups": [
@@ -195,418 +248,69 @@
       }
     },
     {
-      "recordId": "recvqydR4AXwJl",
-      "title": "Thinking and rethinking data AI readiness",
-      "titleCn": "重新审视生物数据的 AI 就绪性",
-      "source": "Nature Machine Intelligence",
-      "url": "https://www.nature.com/articles/s42256-026-01288-8",
-      "category": "技术研究开源",
-      "contentType": "论文",
-      "publishedDate": "2026-07-24",
-      "summary": "生物数据集会随科学发现、分类标准和临床实践持续变化，因此 AI 就绪性不应被视为数据集的静态属性，而应关注数据、模型与科学知识的长期一致性。文章建议围绕预期结果、适用假设、有效期限和保障措施持续评估并更新模型。",
-      "why": "数据演化可能使原本可靠的生物医学模型逐渐失准，甚至带来错误诊断等实际风险。",
-      "impact": 84,
-      "novelty": 68,
-      "actionability": 78,
-      "urgency": "高",
-      "tags": [
-        "AI",
-        "监管",
-        "其他"
-      ],
-      "imageUrl": "",
-      "mediaAssets": {
-        "images": [],
-        "videos": []
-      },
-      "body": "在高质量生物学数据集上训练机器学习模型，可以迅速产生丰富的成果。但由于数据集往往会随着时间推移而演变，因此还需要开展进一步工作来更新模型，并维持模型与数据集之间的一致性。\n\n人工智能（AI）在生物科学中的应用依赖于高质量的数据集，也依赖于社区在数据收集、整理、标注、格式化及其他数据管理任务方面的持续努力。FAIR 指南旨在鼓励良好实践，以确保数据集开放、可查找、可互操作和可复用（M. Wilkinson Sci. Data 3, 160018; 2016）。然而，随着 AI 工具的快速发展，仅有 FAIR 已不再足够，近年来，人们开始高度关注数据集的“AI 就绪性”，这要求超越 FAIR 原则。例如，National Institutes of Health（NIH）于 2022 年启动了 Bridge2AI，重点是为 AI 工具的广泛采用准备生物医学数据集。总部位于英国的非营利组织 Open Data Institute 最近发布了一个框架，从四个类别概述了数据集实现 AI 就绪所需满足的要求：数据集属性、元数据、周边基础设施和治理。此外，还出现了对 FAIR 的“AI-ready”扩展，例如 FAIR-R，其重点在于标注、来源、负责任使用和文档是否得到了充分完善，从而适用于机器学习。\n\n现有工作主要描述了 AI-ready 数据集的特征，但随着生物学知识不断变化，如何持续维持 AI 就绪性仍是一个研究不足的问题。在本期的一篇评论文章中，Amarda Shehu 和 Ruth Nussinov 强调了这一挑战。他们指出，AI 就绪性不可能是生物学数据集的内在属性，因为数据集会持续演变，以响应新的发现、更新后的分类、容量更高的新采集策略以及临床实践的变化。即便机器学习模型在技术上是可靠的，当输入数据分布或底层假设发生变化时，其预测也可能与领域知识不再一致。因此，作者认为，真正重要的是数据、模型与不断演进的科学记录之间的一致性。他们重点提出了关于 AI 就绪性的四个问题：预期结果是什么、基于哪些假设、能够持续多久，以及配备了哪些保障措施。这些问题的价值在于，它们承认持久性是数据集的一种主动属性，并强调需要明确使用场景、时间范围和局限性。\n\n作为数据集演变可能带来后果的一个例子，作者强调指出，在 2015 年至 2023 年期间，广泛使用的 ClinVar 数据集中 200 万个临床遗传变异里有 4.6% 被重新分类。该数据集由人类遗传变异及其与表型之间的关系组成，这些关系可以识别疾病，或至少可以指示",
-      "bodyTruncated": true,
-      "eventAggregation": {
-        "total": 1,
-        "groups": [
-          {
-            "key": "官方来源",
-            "tone": "#16130f",
-            "items": [
-              {
-                "source": "Nature Machine Intelligence",
-                "title": "重新审视生物数据的 AI 就绪性",
-                "url": "https://www.nature.com/articles/s42256-026-01288-8",
-                "note": "原始发布 / 公告。",
-                "text": "重新审视生物数据的 AI 就绪性 —— 原始发布 / 公告。"
-              }
-            ]
-          }
-        ]
-      }
-    },
-    {
-      "recordId": "recvq4wVKcWdGb",
-      "title": "NVIDIA Vera Rubin Driving Performance Per Watt, Lowest Token Cost for Partners Worldwide",
-      "titleCn": "英伟达 Vera Rubin NVL72 加速量产，主打更高能效与更低 Token 成本",
-      "source": "NVIDIA Blog",
-      "url": "https://blogs.nvidia.com/blog/vera-rubin",
-      "category": "算力芯片云",
+      "recordId": "recvqyrnvNThCA",
+      "title": "Introducing Claude Opus 5 \\ Anthropic",
+      "titleCn": "Anthropic 发布 Claude Opus 5，主打高性能与成本效率",
+      "source": "Anthropic News",
+      "url": "https://www.anthropic.com/news/claude-opus-5",
+      "category": "前沿模型公司",
       "contentType": "",
-      "publishedDate": "2026-07-21",
-      "summary": "英伟达称 Vera Rubin NVL72 已在 CoreWeave、Google Cloud、微软 Azure 和甲骨文 OCI 等合作伙伴处运行，其 DeepSeek-R1 初步基准显示每兆瓦吞吐量较 Grace Blackwell NVL72 提升10倍。该平台通过芯片、机架、网络和液冷协同设计提升性能与能效，并支持第三方 XPU 及跨站点扩展。",
-      "why": "Vera Rubin 的量产进展及每瓦性能提升可能直接影响大规模 AI 训练与推理的基础设施成本和部署效率。",
+      "tier": "L1 一级官方",
+      "priority": "P0",
+      "publishedDate": "2026-07-27",
+      "summary": "Anthropic 宣布 Claude Opus 5 正式可用，称其在编码、知识工作、自动化和计算机操作等多项评测中达到领先水平，并以约一半任务成本接近 Claude Fable 5。该模型成为 Claude Max 默认模型及 Claude Pro 最强模型，同时增强了工作验证、迭代执行、科研和视觉输出能力。",
+      "why": "Opus 5 在降低使用成本的同时显著提升编码与端到端任务能力，可能推动高性能模型在日常开发和知识工作中的普及。",
       "impact": 94,
       "novelty": 88,
-      "actionability": 82,
+      "actionability": 95,
       "urgency": "高",
       "tags": [
         "AI",
-        "硬件",
-        "产品",
-        "Agent"
-      ],
-      "imageUrl": "https://blogs.nvidia.com/wp-content/uploads/2026/07/vera-tech-blog-vera-rubin-nvl72-1920x1080-1.png",
-      "mediaAssets": {
-        "images": [
-          {
-            "url": "https://blogs.nvidia.com/wp-content/uploads/2026/07/rollingblog-open-models-pr-1920x1080-1-960x540.png",
-            "alt": ""
-          },
-          {
-            "url": "https://blogs.nvidia.com/wp-content/uploads/2026/07/CoreWeave-VeraRubin-NVL72.jpg",
-            "alt": ""
-          },
-          {
-            "url": "https://blogs.nvidia.com/wp-content/uploads/2026/07/GoogleCloudA5xVeraRubin-1-960x720.jpg",
-            "alt": ""
-          },
-          {
-            "url": "https://blogs.nvidia.com/wp-content/uploads/2026/07/cpu-press-vera-activation-1920x1080-5305300-960x540.png",
-            "alt": ""
-          }
-        ],
-        "videos": []
-      },
-      "body": "NVIDIA Vera Rubin 已经到来，而且正迈向十亿级规模。\n\nVera Rubin NVL72 的生产正在加速，目前合作伙伴 CoreWeave、Google Cloud、Microsoft Azure、Oracle Cloud Infrastructure 和 Nebius 均已有机架投入运行。Vera Rubin 的供应链横跨 30 个国家的 350 多个工厂，是迄今为满足客户算力需求而组建的规模最大、最成熟的机架级供应链。\n\nVera Rubin 平台从芯片到电网进行整体构建，以提供最高的每瓦性能和最低的 token 成本。CoreWeave 在 DeepSeek-R1 上的首个基准测试说明了一切：其每兆瓦吞吐量是 Grace Blackwell NVL72 的 10 倍——直接命中了对电力受限的 AI 工厂而言最重要的指标。\n\n通过极致协同设计提升性能\n\n实现这一点的关键，是对七款芯片和五种机架托盘进行极致协同设计——Vera Rubin NVL72、Vera CPU rack、Groq 3 LPX、Spectrum-6 SPX 和 Vera BlueField-4 STX——它们被作为一个统一系统来设计，而不是由彼此独立的现成产品组装而成。\n\nNVIDIA Vera CPU 是其核心。它重新定义了 AI 工厂 CPU 的形态。它专为智能体时代设计和构建，其定制 Olympus 核心与竞品小芯片设计相比，可提供 2 倍单线程性能、3 倍核心间带宽，并将内存延迟降低 40%，使其成为对最重要的智能体工作负载而言效率最高的单线程 CPU。\n\n以专用网络加速 AI 工厂\n\n在网络方面，该平台的第六代 NVLink 纵向扩展技术在复杂工作负载上的吞吐量比现成 Ethernet 高出 2 倍以上，延迟低 3 倍，数据包处理速率高 10 倍。在横向扩展方面，Spectrum-X Ethernet 结合了 102.4T Spectrum-6 交换机系统、1.6T ConnectX-9 SuperNIC、自适应路由、高级拥塞控制、遥测和开放操作系统支持，使 RDMA 带宽比现成 Ethernet 高出 1.6 倍。\n\n全球领先的 AI 基础设施建设者——包括 CoreWeave、Microsoft、SpaceXAI 和 Tesla——是首批引入 Spectrum-6 交换机以加速其 AI 工厂的企业。用于横向扩展、采用共封装光学技术的 NVIDIA Photonics——业界首款实现量产的此类交换机——与可插拔收发器相比，功耗低 5 倍，MTBI 高 10 倍，CoreWeave、Lambda 和 OCI 是首批采用者。\n\nSpectrum-XGS Ethernet 将性能扩展到不同站点，多站点吞吐量提高 1.9 倍，因为十亿级规模 AI 并非单栋建筑能够解决的问题。\n\n而 NVLink Fusion 向第三方 XPU 开放了 NVIDIA 基础设施平台，使合作伙伴能够基于经过验证的 NVLink 纵向扩展技术栈和生态系统，更快地将产品推向市场。\n\n节省安装时间和用水\n\nNVIDIA 经过三代机架级协同设计，打造出托盘内没有线缆、风扇或软管的 Vera Rubin NVL72 系统，将计算托盘的组装时间从数小时缩短至一分钟。\n\n45 摄氏度的液冷入口温度设计可实现无需冷水机的干式冷却器运行。对于新的 AI 工厂，这种更高温度的",
-      "bodyTruncated": true,
-      "eventAggregation": {
-        "total": 1,
-        "groups": [
-          {
-            "key": "官方来源",
-            "tone": "#16130f",
-            "items": [
-              {
-                "source": "NVIDIA Blog",
-                "title": "英伟达 Vera Rubin NVL72 加速量产，主打更高能效与更低 Token 成本",
-                "url": "https://blogs.nvidia.com/blog/vera-rubin",
-                "note": "原始发布 / 公告。",
-                "text": "英伟达 Vera Rubin NVL72 加速量产，主打更高能效与更低 Token 成本 —— 原始发布 / 公告。"
-              }
-            ]
-          }
-        ]
-      }
-    },
-    {
-      "recordId": "recvqbfcciLlbV",
-      "title": "NVIDIA Open Sources First GPU-Accelerated Medical Physics Simulation Framework",
-      "titleCn": "英伟达开源首个GPU加速医疗物理仿真框架",
-      "source": "NVIDIA Blog",
-      "url": "https://blogs.nvidia.com/blog/medical-physics-simulation-open-source",
-      "category": "算力芯片云",
-      "contentType": "",
-      "publishedDate": "2026-07-22",
-      "summary": "英伟达发布Isaac for Healthcare中的开源Medical Physics Simulation框架，可模拟解剖结构、医疗器械交互、传感器输入并训练或评估医疗机器人策略。其GPU原生仿真可并行运行8192个机器人训练环境，将基准训练时间从五个多小时缩短至两分钟以内。",
-      "why": "该框架以可复用、高并行且透明的仿真基础设施缓解医疗机器人训练数据稀缺和实体测试成本高的问题，并有助于性能验证与监管审查。",
-      "impact": 88,
-      "novelty": 87,
-      "actionability": 84,
-      "urgency": "中",
-      "tags": [
-        "AI",
-        "开源",
-        "硬件",
+        "LLM",
+        "Agent",
         "产品"
       ],
-      "imageUrl": "https://blogs.nvidia.com/wp-content/uploads/2026/07/medical-physica-simulation.png",
+      "imageUrl": "https://cdn.sanity.io/images/4zrzovbb/website/54b7ab1d2c2521f83ae5d2da5f9d99321c370d24-2880x1620.png",
       "mediaAssets": {
         "images": [],
         "videos": []
       },
-      "body": "在医疗机器人能够在现实世界中发挥作用之前，它必须先了解物理世界会如何对其施加反作用力。人体解剖结构因人而异。器械会弯曲、按压、滑动，并与组织发生相互作用。成像可能存在噪声或不完整。而开发者最需要了解的罕见边缘场景，并不会按计划出现。\n\n这造成了医疗机器人领域最大的瓶颈之一：获取开发者训练、测试和改进机器人行为所需的海量多样化数据。\n\n今天发布的 NVIDIA Medical Physics Simulation framework，是 NVIDIA Isaac for Healthcare 中一项全新的开源 GPU 加速能力，可帮助医疗机器人开发者对人体解剖结构与设备之间的相互作用进行建模，生成难以捕捉的场景，开展计算机模拟测试，并在进行大量依赖硬件的测试之前训练或评估机器人策略。\n\n该框架将人体解剖结构和医疗设备行为与传感器仿真及机器人学习结合起来，使团队能够创建可复用的仿真环境，而不必为每个工作流程重新构建定制场景，从而节省开发者的时间，并让创新成果更快进入市场。\n\n由于 Medical Physics Simulation 是开源的，医疗机器人开发者可以检查该框架，使其适配自己的设备和工作流程，并在一个可与更广泛的 NVIDIA 技术栈无缝协作的 GPU 加速基础之上进行构建。\n\n开源在医疗保健领域尤为重要，因为团队需要了解塑造系统行为的数据、模型和权重。获得开放模型和模型权重，可以帮助开发者复现结果、评估不同人体解剖结构和场景下的性能、识别局限性，并为监管审查建立证据。\n\n医疗机器人的虚拟训练场\n\n对于 physical AI 而言，经验就是动态的数据。开发者需要训练机器人，使其即使在人体解剖结构发生变化、设备表现不同、条件改变或策略意外失效时，也能正确运行。\n\nMedical Physics Simulation 可帮助开发者仿真人体解剖结构、设备接触、摩擦和传感器输入，然后在各种交互和环境中进行测试，以评估机器人在这些变化下的表现。该框架由 NVIDIA CUDA 提供支持，是 Isaac for Healthcare 的一部分，并构建于 NVIDIA Warp、Newton 和 Cosmos 仿真及生成式 AI 技术之上。它可以并行运行数百个仿真环境，帮助团队探索更多场景，并在开发早期识别失效模式。\n\n对于机器人制造商而言，这使仿真从一个需要专门定制的工程项目转变为可复用的基础设施。如今的不同之处在于规模：基准测试显示，借助 GPU 原生仿真并行运行 8,192 个机器人训练环境，可将训练时间从五个多小时缩短至不到两分钟。\n\n借助该框架，开发者可以将血管解剖结构、导管和导丝等柔性器械、模拟 X 射线成像以及强化学习连接起来。该框架旨在从这个示例扩展到更多设备、anat",
+      "body": "推出 Claude Opus 5 \\ Anthropic\n\n跳至主要内容 跳至页脚\n\n研究\n\n政策\n\n承诺\n\n学习\n\n新闻\n\n试用 Claude\n\n产品公告\n\n推出 Claude Opus 5\n\n2026年7月24日\n\nClaude Opus 5 今日正式推出。它是一款深思熟虑且积极主动的模型，智能水平接近前沿模型 Claude Fable 5，而价格仅为后者的一半。\n\n在 Frontier-Bench 和 GDPval-AA 等编码与知识工作评测中，Opus 5 成为新的最先进模型，不过在网络安全任务上仍落后于 Mythos 5。\n\nOpus 5 专为日常使用而设计：它的运行效率高于其他模型。它是 Claude Max 上新的默认模型，也是 Claude Pro 上最强大的模型。\n\n性能与成本效益\n\nClaude Opus 5 在成本与其前代 Opus 4.8 相同的情况下，性能得到了大幅提升。本节图表展示了性能如何随模型的 effort 设置而变化，客户可以利用该设置优化智能水平，或节省 token，以获得更快、更便宜的结果。\n\nOpus 5 在高价值的软件工程任务上表现出色。例如，在 Frontier-Bench v0.1 上，Opus 5 超越了所有其他模型，并且在单项任务成本更低的情况下，性能达到 Opus 4.8 的两倍以上。在 CursorBench 3.2 上，当 effort 设置为 max 时，该模型的表现与 Fable 5 的最高得分相差不到 0.5%，但单项任务成本仅为其一半；在 effort 设置为 high、xhigh 和 max 时，它还以相同成本实现了高于所有其他模型的性能。\n\nFrontier-Bench v0.1 CursorBench AA Coding Agent Index\n\n我们在知识工作和问题解决任务上也看到了类似的结果。例如：\n\n在 ARC-AGI 3 这一要求模型解决新颖问题的评测中，Opus 5 的得分是排名第二模型的三倍。\n\n在衡量模型能否从头到尾完成业务任务的 Zapier AutomationBench 上，在单项任务成本相同的情况下，Opus 5 的通过率约为排名第二模型的 1.5 倍。即使在最低 effort 设置下，Opus 5 通过的任务数量也多于任何其他模型。\n\n在计算机使用基准测试 OSWorld 2.0 上，无论成本为何，Opus 5 的表现都优于其他所有模型，并且仅用略高于三分之一的成本便超越了 Fable 5 的最佳结果。\n\n在几项相关评测中，它也是我们表现最好且成本效益最高的模型：\n\nARC-AGI 3 GDPval-AA v2 OSWorld 2.0 HLE AutomationBench DeepSearchQA\n\n对于科学研究而言，Opus 5 相较 Opus 4.8 实现了显著提升。在我们所有生命科学评测中，它的表现均优于 Opus 4.8，这些评测涵盖结构生物学、有机化学和生物信息学等主题。其提升在有机化学任务上最为显著，例如根据光谱数据推断分子结构（在我们的内部基准测试中，它的得分比 Opus 4.8 高 10.2 个百分点）；在蛋白质相关任务上同样如此，例如预测蛋白质序列中的变异会如何影响其功能（在这方面，它的得分高出 7.7 个百分点）。\n\n最后，Opus 5 能够生成强大得多的视觉输出",
       "bodyTruncated": true,
+      "qualityScore": 0.0,
       "eventAggregation": {
-        "total": 1,
+        "total": 3,
         "groups": [
           {
             "key": "官方来源",
             "tone": "#16130f",
             "items": [
               {
-                "source": "NVIDIA Blog",
-                "title": "英伟达开源首个GPU加速医疗物理仿真框架",
-                "url": "https://blogs.nvidia.com/blog/medical-physics-simulation-open-source",
+                "source": "Anthropic News",
+                "title": "Anthropic 发布 Claude Opus 5，主打高性能与成本效率",
+                "url": "https://www.anthropic.com/news/claude-opus-5",
                 "note": "原始发布 / 公告。",
-                "text": "英伟达开源首个GPU加速医疗物理仿真框架 —— 原始发布 / 公告。"
+                "text": "Anthropic 发布 Claude Opus 5，主打高性能与成本效率 —— 原始发布 / 公告。"
               }
             ]
-          }
-        ]
-      }
-    },
-    {
-      "recordId": "recvq4wVKcswm2",
-      "title": "Built for Vera Rubin, NVIDIA Spectrum-6 Arrives in Gigascale AI Factories",
-      "titleCn": "面向Vera Rubin平台的NVIDIA Spectrum-6进入超大规模AI工厂",
-      "source": "NVIDIA Blog",
-      "url": "https://blogs.nvidia.com/blog/nvidia-spectrum-six-arrives-in-gigascale-ai-factories",
-      "category": "算力芯片云",
-      "contentType": "",
-      "publishedDate": "2026-07-21",
-      "summary": "NVIDIA发布Spectrum-6以太网交换系统，提供102.4 Tbps吞吐量，是上一代系统的2倍，面向训练前沿模型和部署推理服务的超大规模AI工厂。CoreWeave、微软、Nebius、SpaceX AI和特斯拉等基础设施建设者将率先采用该系统。",
-      "why": "随着AI集群扩展至数十万级GPU和CPU，网络通信已成为影响算力利用率、训练速度和推理效率的关键因素。",
-      "impact": 88,
-      "novelty": 86,
-      "actionability": 79,
-      "urgency": "高",
-      "tags": [
-        "硬件",
-        "推理",
-        "产品",
-        "其他"
-      ],
-      "imageUrl": "https://blogs.nvidia.com/wp-content/uploads/2026/07/ethernet-spectrum-x-corp-blog-1920x1080-5205700.jpg",
-      "mediaAssets": {
-        "images": [],
-        "videos": []
-      },
-      "body": "AI 已进入十亿级规模时代。\n\n全球最先进的 AI 工厂正在汇聚数十万块 GPU 和 CPU，以训练前沿模型、为智能体 AI 提供算力，并以前所未有的规模生成智能。在这一层级，网络成为推动 token 生成的关键算力倍增器。\n\nNVIDIA Spectrum-6 的到来标志着一个网络技术里程碑。这是一套每秒 102.4 太比特的 Ethernet 交换机系统，容量达到上一代系统的 2 倍，并作为 NVIDIA Vera Rubin 平台的一部分构建；如今，它正进入全球各地的十亿级规模 AI 工厂。\n\nSpectrum-6 是下一代 NVIDIA Spectrum-X Ethernet 平台的核心支柱，可提供将 AI 工厂作为一个端到端计算系统运行所需的带宽、规模和智能。\n\n领先的 AI 建设者率先行动\n\n全球领先的 AI 基础设施建设者——包括 CoreWeave、Microsoft、Nebius、SpaceXAI 和 Tesla——将成为首批引入 Spectrum-6 以加速其 AI 工厂的企业。\n\n对于云服务提供商而言，Spectrum-6 意味着更多计算能力可以作为统一的高性能资源运行，从而帮助客户更快地训练模型并部署推理服务。\n\n“CoreWeave 专为要求最严苛的 AI 工作负载而构建，而网络是在大规模环境中实现这种性能的核心，”CoreWeave 网络产品总监 Min Jun 表示。“将 NVIDIA Spectrum-6 和液冷 Spectrum-X Ethernet 基础设施引入我们的 AI 工厂，将帮助我们提供客户训练前沿模型和更快部署推理所需的带宽、韧性与效率。”\n\n“在十亿级规模下，性能归根结底取决于协同：让每块 GPU 保持同步，从而避免一条缓慢的链路拖慢整个任务，”Nebius 全球合作伙伴关系副总裁 Laurelle Roseman 表示。“这正是 NVIDIA Spectrum-6 着力解决的问题，也是我们早期引入它的原因——随着客户最严苛的工作负载不断扩展，这一网络结构仍能保持高速和韧性。”\n\n对于自行构建基础设施的 AI 先驱而言，Spectrum-6 意味着更多 GPU 能够同步工作，在要求严苛的集合操作期间实现更高的利用率，并为长时间运行的任务提供更强的韧性。\n\n在各种用例中，其成果都是更快获得结果，并在超大规模下实现更优的经济效益。\n\nCoreWeave、Microsoft 和 Nebius 将成为首批部署采用 Spectrum-6 的 NVIDIA Vera Rubin 基础设施的服务提供商，从而让广泛的开发者、初创企业和企业群体能够使用该平台。\n\nAI 性能是一个网络问题\n\n仅凭 GPU 峰值性能，已无法预测 AI 工厂的性能。\n\n大规模训练和推理工作负载依赖数千个加速器持续交换数据。集合通信是跨 GPU 同步工作的基础操作，会产生密集的东西向流量，通常还会有许多系统同时进行传输。\n\nEthernet 最初主要是为 ent 而设计的",
-      "bodyTruncated": true,
-      "eventAggregation": {
-        "total": 1,
-        "groups": [
-          {
-            "key": "官方来源",
-            "tone": "#16130f",
-            "items": [
-              {
-                "source": "NVIDIA Blog",
-                "title": "面向Vera Rubin平台的NVIDIA Spectrum-6进入超大规模AI工厂",
-                "url": "https://blogs.nvidia.com/blog/nvidia-spectrum-six-arrives-in-gigascale-ai-factories",
-                "note": "原始发布 / 公告。",
-                "text": "面向Vera Rubin平台的NVIDIA Spectrum-6进入超大规模AI工厂 —— 原始发布 / 公告。"
-              }
-            ]
-          }
-        ]
-      }
-    },
-    {
-      "recordId": "recvpV8MZSAorO",
-      "title": "Bristol Myers Squibb Building Life Science Industry’s Most Advanced AI Factory on NVIDIA Vera Rubin",
-      "titleCn": "百时美施贵宝将基于英伟达 Vera Rubin 建设生命科学 AI 工厂",
-      "source": "NVIDIA Blog",
-      "url": "https://blogs.nvidia.com/blog/bristol-myers-squibb-building-life-science-industrys-most-advanced-ai-factory-on-nvidia-vera-rubin",
-      "category": "算力芯片云",
-      "contentType": "",
-      "publishedDate": "2026-07-20",
-      "summary": "百时美施贵宝宣布部署第二套 NVIDIA DGX SuperPOD，由八套 DGX Vera Rubin NVL72 系统组成，单位功耗性能最高可达其所替代基础设施的 10 倍。该平台将向公司科学家开放，用于模型训练、预测及覆盖药物发现全流程的智能体工作流。",
-      "why": "此次部署显示大型药企正将高性能 AI 基础设施从局部科研工具升级为覆盖药物发现全流程的生产平台。",
-      "impact": 88,
-      "novelty": 82,
-      "actionability": 68,
-      "urgency": "中",
-      "tags": [
-        "AI",
-        "Agent",
-        "硬件"
-      ],
-      "imageUrl": "https://blogs.nvidia.com/wp-content/uploads/2026/07/Image-7.png",
-      "mediaAssets": {
-        "images": [
-          {
-            "url": "https://blogs.nvidia.com/wp-content/uploads/2026/07/Image-1.jpg",
-            "alt": ""
-          }
-        ],
-        "videos": []
-      },
-      "body": "Erin Davis 称其为“SuperDuperPOD”。这个名称包含两层含义：制药巨头 Bristol Myers Squibb（BMS）已经在运行生命科学领域规模最大的 AI 集群之一，并取得了显著成果。而且，他们正在进一步加大投入。\n\nBMS 今天宣布，正在部署其第二套 NVIDIA DGX SuperPOD；这套系统基于八套 DGX Vera Rubin NVL72 系统构建，是生命科学领域性能最强、能效最高的 AI 集群。\n\n“我们并不是只让一小部分研究人员使用这台超级计算机，而是要向所有科学家开放，”BMS 研究业务洞察与技术副总裁 Davis 表示。“任何人都不必等待，也没有人会被告知存在使用限额。”\n\n这八套机架级系统均由 NVIDIA Vera CPU 和 Rubin GPU 组成，每兆瓦可提供最高达其所替代基础设施 10 倍的性能。它将使这家全球制药巨头的研究人员能够使用一个统一的 AI 平台——其中包括用于生物 AI 的 NVIDIA BioNeMo Agent Toolkit——从而在整个药物发现流程中运行预测、训练模型并驱动智能体工作流。\n\nDavis 和 BMS 其他顶尖研究人员真正追求的，是这种访问能力所带来的可能性：更快的迭代周期、更大的化学空间，以及一条完整的药物发现流程，让研究人员能够专注于科学本身，而不是协调资源的后勤事务。\n\nPayal Sheth 表示，这项任务是从“关于 AI 能做什么的某种抽象定位，转向真正将其转化为可衡量的影响”。Sheth 曾长期在药物发现实验室工作，随后于今年 1 月出任 BMS 治疗发现科学高级副总裁，承担范围更广的职责。\n\nBMS 运营 DGX SuperPOD 已有大约三年，并取得了切实成果。由 AI 支持的靶点识别已经为科学家省去了数周的人工工作，使他们能够腾出时间，专注于价值最高的科学决策。BMS 团队利用 AI 扩充了其 CELMoD 化合物库——这些分子经过工程设计，能够选择性降解致癌蛋白，可应用于血液癌症治疗及其他领域。这为在更广泛的疾病范围内发现新靶点和潜在新药打开了大门。在药物发现的先导化合物优化阶段，AI 也得到了应用，采用的是 Sheth 所称的“Predict First”方法，该方法根据设计预测为实验筛选提供依据。\n\nBristol Myers Squibb 的团队正在审查一个分子结构的计算模型，这是预测性设计流程的一部分，可帮助科学家预判分子在临床中的表现。图片来源：Bristol Myers Squibb\n\n“我们利用预测来确定需要合成的分子的优先顺序，并进行多参数优化，”她解释道，“以剔除那些未必符合我们所追求的性质范围的分子。这确保了宝贵的实验室实验能够与推进成功概率最高的分子保持一致。",
-      "bodyTruncated": true,
-      "eventAggregation": {
-        "total": 1,
-        "groups": [
-          {
-            "key": "官方来源",
-            "tone": "#16130f",
-            "items": [
-              {
-                "source": "NVIDIA Blog",
-                "title": "百时美施贵宝将基于英伟达 Vera Rubin 建设生命科学 AI 工厂",
-                "url": "https://blogs.nvidia.com/blog/bristol-myers-squibb-building-life-science-industrys-most-advanced-ai-factory-on-nvidia-vera-rubin",
-                "note": "原始发布 / 公告。",
-                "text": "百时美施贵宝将基于英伟达 Vera Rubin 建设生命科学 AI 工厂 —— 原始发布 / 公告。"
-              }
-            ]
-          }
-        ]
-      }
-    },
-    {
-      "recordId": "recvq4wVKcV3Gy",
-      "title": "Built in Fort Worth: Wistron Opens Advanced Manufacturing Plant to Produce NVIDIA AI Systems",
-      "titleCn": "纬创在得州启用美国首座工厂，量产英伟达GB300与Vera Rubin超级芯片",
-      "source": "NVIDIA Blog",
-      "url": "https://blogs.nvidia.com/blog/wistron-manufacturing-texas",
-      "category": "算力芯片云",
-      "contentType": "",
-      "publishedDate": "2026-07-22",
-      "summary": "纬创在得州沃思堡启用一座32.4万平方英尺的先进制造工厂，目前生产英伟达GB300 Grace Blackwell Ultra，并计划生产Vera Rubin超级芯片，年内将扩产至每月数万块板卡。该项目投资7亿美元，已创造逾500个岗位，并计划年底前增至1000个。",
-      "why": "该工厂将先进AI系统的本土化量产能力落地美国，是英伟达最高5000亿美元美国AI平台制造承诺的重要组成部分。",
-      "impact": 88,
-      "novelty": 80,
-      "actionability": 72,
-      "urgency": "中",
-      "tags": [
-        "AI",
-        "硬件",
-        "产品"
-      ],
-      "imageUrl": "https://blogs.nvidia.com/wp-content/uploads/2026/07/Wistron_D1_Grand_Opening_Ceremony-Factory_Tour-21-MY-edit-scaled.jpg",
-      "mediaAssets": {
-        "images": [
-          {
-            "url": "https://blogs.nvidia.com/wp-content/uploads/2026/07/Wistron_D1_Grand_Opening_Ceremony-Factory_Tour-40-960x540.jpeg",
-            "alt": ""
           },
           {
-            "url": "https://blogs.nvidia.com/wp-content/uploads/2026/07/wistron-event-july2026-kv-3840x2160-1-960x640.jpg",
-            "alt": ""
-          }
-        ],
-        "videos": []
-      },
-      "body": "AI 时代依靠 AI 基础设施运行。许多这样的先进系统都在 Texas 建造和测试。\n\nWistron 今天在 Fort Worth 启用了其首座美国制造工厂——一座占地 324,000 平方英尺、从零新建的工厂，生产位于全球一些最强大 AI 系统核心的超级芯片。\n\n在 Wistron 高管、Taiwan 政府官员和 Fort Worth 当地领导人组成的观众面前，NVIDIA 创始人兼首席执行官 Jensen Huang 与 Wistron 董事长 Simon Lin 在工厂开幕典礼上登台，共同探讨在美国建设 AI 时代基础设施意味着什么。\n\n“制造业是每个经济体和每个国家的重要支柱，”Huang 说。“在全美各地建设芯片工厂、封装工厂、像这样的计算机系统工厂以及 AI 工厂，使美国真正实现了长期以来的首次再工业化。”\n\n该工厂——Wistron 的 D1 设施——目前运行着两个制造单元：一个生产 NVIDIA GB300 Grace Blackwell Ultra Superchip，另一个将生产 NVIDIA Vera Rubin Superchip。D1 今年正在扩大产能，以便每月生产数万块采用业内最先进技术的板卡。\n\n大规模构建 AI 所需要的不只是芯片和代码。它还需要工厂、供应链和熟练工人——一个能够进行大批量生产，并随着技术发展而调整的本土制造基地。Fort Worth 工厂正是这种产能成形的地方。\n\n7 亿美元的投入\n\n这座最先进的设施代表着对美国先进制造业 7 亿美元的投入，并已在 Texas 的这座工厂创造了 500 多个新工作岗位，计划到今年年底将这一数字扩大至 1,000 个。\n\n“它正在为管道工程、建筑、制造和电气行业创造就业机会，”Huang 说。“在美国这里创造了如此多不同类型的工作岗位。”\n\nWistron 位于 Texas 州 Fort Worth 的最新一流制造工厂内部。\n\n“从整个 AI 世界的宏观视角，到社区和国家——这是一个宏伟的愿景，”Lin 说。“我认为我们将会享受下一个 AI 生活时代。我希望我们会更加幸福、更加健康。”\n\nNVIDIA 已承诺在美国制造价值高达 5,000 亿美元的先进 AI 平台。Wistron 的 Fort Worth 工厂是让这一数字成为现实的项目之一。\n\n先在虚拟世界中建造\n\n在施工开始前，Wistron 已在基于 NVIDIA 开放平台构建的数字孪生中设计并全面模拟了整座设施，其中包括 Nemotron 和 Cosmos 前沿模型、Omniverse 和 Metropolis 库，以及包括 PhysicsNeMo 在内的开放框架。\n\n这使 Wistron 的工程师能够以虚拟方式验证装配线布局、优化生产流程，并就标准操作程序培训工人——所有这些都在真实工厂中的任何系统上线之前完成。\n\n赢得每一层\n\nAI 时代不只关乎芯片——它关乎在技术栈的每一层取得胜利，从半",
-      "bodyTruncated": true,
-      "eventAggregation": {
-        "total": 1,
-        "groups": [
-          {
-            "key": "官方来源",
-            "tone": "#16130f",
-            "items": [
-              {
-                "source": "NVIDIA Blog",
-                "title": "纬创在得州启用美国首座工厂，量产英伟达GB300与Vera Rubin超级芯片",
-                "url": "https://blogs.nvidia.com/blog/wistron-manufacturing-texas",
-                "note": "原始发布 / 公告。",
-                "text": "纬创在得州启用美国首座工厂，量产英伟达GB300与Vera Rubin超级芯片 —— 原始发布 / 公告。"
-              }
-            ]
-          }
-        ]
-      }
-    },
-    {
-      "recordId": "recvqbfccil3nP",
-      "title": "Menlo Ventures’ Matt Murphy explains what AI startups founders must do differently",
-      "titleCn": "Menlo Ventures合伙人谈AI初创企业的差异化要求",
-      "source": "TechCrunch AI",
-      "url": "https://techcrunch.com/podcast/menlo-ventures-matt-murphy-explains-what-ai-startups-founders-must-do-differently",
-      "category": "创业融资并购",
-      "contentType": "",
-      "publishedDate": "2026-07-22",
-      "summary": "Menlo Ventures的Matt Murphy表示，Anthropic截至5月的收入运行率从2025年的90亿美元跃升至470亿美元，这种增长速度是他25年投资生涯中从未见过的。Menlo曾领投Anthropic的5亿美元D轮融资，并见证其从尚无收入阶段快速发展。",
-      "why": "Anthropic的超高速增长显示AI初创企业正呈现超越互联网、移动和早期云计算浪潮的扩张潜力。",
-      "impact": 88,
-      "novelty": 76,
-      "actionability": 42,
-      "urgency": "中",
-      "tags": [
-        "AI",
-        "融资"
-      ],
-      "imageUrl": "https://techcrunch.com/wp-content/uploads/2026/07/Matt-Murphy-Menlo-Ventures.jpeg?resize=1200,1200",
-      "mediaAssets": {
-        "images": [],
-        "videos": []
-      },
-      "body": "截至5月，Anthropic的收入年化运行率跃升至470亿美元，而2025年为90亿美元。Menlo Ventures的Matt Murphy表示，这是他在25年投资生涯中从未见过的增长，无论是在互联网浪潮、移动互联网浪潮，还是最初的云计算繁荣时期，都未曾出现过。Menlo领投了Anthropic的5亿美元D轮融资，而Murphy一直身处前排，亲眼见证这家公司从尚未产生收入的阶段，[…]",
-      "bodyTruncated": false,
-      "eventAggregation": {
-        "total": 1,
-        "groups": [
-          {
-            "key": "官方来源",
-            "tone": "#16130f",
-            "items": [
-              {
-                "source": "TechCrunch AI",
-                "title": "Menlo Ventures合伙人谈AI初创企业的差异化要求",
-                "url": "https://techcrunch.com/podcast/menlo-ventures-matt-murphy-explains-what-ai-startups-founders-must-do-differently",
-                "note": "原始发布 / 公告。",
-                "text": "Menlo Ventures合伙人谈AI初创企业的差异化要求 —— 原始发布 / 公告。"
-              }
-            ]
-          }
-        ]
-      }
-    },
-    {
-      "recordId": "recvqydR4AQd4J",
-      "title": "现场直击：高昂真机成本锁死具身进化，Google 科学家用视频世界模型破局｜RSS 2026",
-      "titleCn": "World Gym用视频世界模型降低机器人真机试错成本",
-      "source": "AI科技评论 / 雷峰网",
-      "url": "https://www.leiphone.com/category/private/prwtba7cyaucgwly.html",
-      "category": "中文科技媒体",
-      "contentType": "公众号",
-      "publishedDate": "2026-07-27",
-      "summary": "Google实验室与纽约大学助理教授Sherry Yang介绍World Gym：以可控视频生成模型模拟机器人交互，仅用两张A100即可训练，并可标准化评估不同机器人策略。其World Gymnast项目进一步结合视觉语言奖励模型与强化学习，让机器人在虚拟失败状态中学习恢复，真机测试表现优于监督微调和传统物理模拟器基线。",
-      "why": "该方法有望以低成本、可复现的云端训练和评估替代大量高风险真机试错，加速具身智能策略迭代。",
-      "impact": 86,
-      "novelty": 88,
-      "actionability": 82,
-      "urgency": "中",
-      "tags": [
-        "AI",
-        "Agent",
-        "多模态",
-        "开源"
-      ],
-      "imageUrl": "https://static.leiphone.com/uploads/new/images/20260727/6a66c291d24cf.jpg?imageMogr2/quality/90",
-      "mediaAssets": {
-        "images": [
-          {
-            "url": "https://static.leiphone.com/uploads/new/images/20260727/6a66c291d24cf.jpg?imageMogr2/quality/90",
-            "alt": ""
-          },
-          {
-            "url": "https://static.leiphone.com/uploads/new/images/20260727/6a66c2920f484.png?imageMogr2/quality/90",
-            "alt": ""
-          },
-          {
-            "url": "https://static.leiphone.com/uploads/new/images/20260727/6a66c29239d69.jpg?imageMogr2/quality/90",
-            "alt": ""
-          },
-          {
-            "url": "https://static.leiphone.com/uploads/new/images/20260727/6a66c2926b64c.jpg?imageMogr2/quality/90",
-            "alt": "图片"
-          }
-        ],
-        "videos": []
-      },
-      "body": "Sherry Yang 独家解密 World Gym：两张 A100 跑通云端演练，让机器人从失败中自我恢复\n\n作者丨 张 璐\n\n编辑丨 齐铖湧\n\n在机器人技术狂飙突进的今天，具身智能领域正面临着一个行业性的 核心困境 ： 我们已经拥有了高容量的深度神经网络，但 现实世界中高昂的交互与试错成本，成为了阻碍机器人通往AGI的最大瓶颈 。\n\n在虚拟世界里，游戏和代码的执行成本几乎为零，因此我们见证了 AlphaGo 的奇迹和大语言模型在编程大赛中夺冠。但在物理世界中，机器人每一次真机试错，都伴随着昂贵的时间成本、设备损耗与安全隐患。\n\n如果无法将这种高交互成本降下来，机器人就无法像大模型那样利用海量数据疯狂自我进化。\n\n在机器人顶级学术会议 RSS 的现场，来自 Google 实验室和纽约大学（NYU）的助理教授 Sherry Yang 给出了答案。\n\n她的演讲题目是： 《在世界模型中评估与提升物理代理》（Evaluating and Improving Physical Agents in a World Model） ，在演讲中，她提出了一个极具颠覆性的范式： 直接利用可控的视频生成模型来作为真实世界的“替身” ，让机器人在云端虚拟场景里完成无限次的低成本演练。\n\n以下是 Sherry Yang 在 RSS 大会上发表的演讲精编稿，雷峰网AI科技评论基于原英文演讲的内容进行了翻译和编辑：\n\n01\n\n真机试错成本太贵！\n\n物理世界成了AI演化的阻碍\n\n大家好，我是 Sherry Yang。很高兴今天能在这里和大家聊聊我们在评估和提升物理代理方面的一些最新探索。\n\n在学术界，我们已经非常熟悉“代理与环境交互”的标准设定：神经网络模型采取行动，环境给出反馈，并告诉模型接下来会发生什么。\n\n在这个设定下，我们见证了 AlphaGo 的超级表现，也看到了大语言模型在编程大赛里拿金牌。\n\n我们之所以能在这些虚拟领域取得超越人类的成就，是因为我们满足了两个关键标准：第一是拥有高容量的模型，第二则是拥有 极低成本的交互环境 。\n\n然而，当我们要训练一个物理世界中的 AI 时，这个低成本的基石就不复存在了。在物理世界中，交互成本极其高昂，你必须真正去操作真机，才能知道一个动作到底会带来什么后果。\n\n但是，如果我们可以从机器人交互数据中，学会一个“世界模型”（World Model）来代替真实世界呢？\n\n一旦这个模型训练成功，我们就相当于把物理代理重新带回了 AlphaGo 的低成本跑道。\n\n我们可以直接在云端运行无数次模拟，通过强化学习不断训练、改进模型，直到它达到超级代理的水平。这也是我们团队近期工作的重中之重。\n\n02\n\n两张 A100 就能跑！\n\n用 World Gym 搭建云端模拟器\n\n想要提升机器人，第一步永远是评估。\n\n但在现实中评估策略太痛苦了：人类坐在那里耗费大量时间干等、硬件随时面临损坏风险，而且由于各家实验室机器人设备不同，论文结果根本无法标准化复现。\n\n传统的软件模拟器虽然能在云端跑，但在处理复杂的物体交互时往往失真，而且很难横向扩展到成千上万种日常任务中。\n\n为此，我们推出了 World Gym 。\n\n我们完整保留了机器人原始动作的所有维度信息，采用了可扩展的 Transformer 架构（具体来说是 Diffusion Transformer，即 DiT 架构）。这个模型可以通过接收前序图像和当前的控制指令，持续生成未来的视频画面。\n\n这里我想强调的是， 世界模型的研究并不是只有资源垄断的超级大厂才能做。我们仅仅用了两张 A100 GPU，就在 Bridge 数据集下训出了一个泛化能力非常出色的模型 。\n\n欢迎大家去我们的 GitHub 下载代码，在自己的机器上跑跑看。\n\n我们在包含 22 种机器人形态的多样化数据集上进行了训练。当我们在留存数据集上，将预设动作输入给世界模型，它生成的视频与真实机器人在真机上执行的动作画面表现出了极高的一致性。\n\n03\n\n加个电脑屏幕：在云端给机器人各种调试\n\n一旦拥有了这个可控的视频世界模型，它就成了所有机器人策略模型的标准化评估层。\n\n我们把目前业内主流的策略（例如 Octo、OpenVLA、RT-1）放进世界模型里进行滚动测试。\n\n在一个“把茄子放进锅里”的任务中，各家策略的真实水平一目了然：OpenVLA 表现完美，顺利完成；Octo 动作做了一半，未能完全把茄子送进去；而几年前的老模型 RT-1，因为输出的控制动作完全超出了当前的分布（OOD），甚至直接把我们的世界模型都给“带崩”了——但这也正是世界模型的价值所在，它提醒我们，这种动作如果直接在真机上运行，是会把机器人搞坏的。\n\n更有意思的是，我们不再需要费尽心思在现实中搭建各种奇奇怪怪的长尾场景，世界模型允许我们直接通过 图像编辑 ，来定制任意的超出分布（OOD）安全测试。\n\n比如，我们用图像编辑模型在场景里加了一张电脑屏幕，屏幕里画着一根胡萝卜，然后命令策略模型“去把胡萝卜拔出来”。\n\n结果发现策略模型纠结了半天，最后居然冲着电脑屏幕去了。\n\n我们还通过加入小黄鸭、玩具车等干扰物，发现策略模型的成功率瞬间暴跌；我们甚至用它来调试原因，发现目前的模型理解“颜色指令”的能力远好于理解“形状指令”。\n\n数据证明， 世界模型得出的评估结果，与真机实测的成功率呈现出强烈的正相关性 。\n\n我们在云端找到了一个极其廉价、可定制且100%可复现的质检标准。\n\n04\n\nWorld Gymnast：\n\n让机器人从失败中学会自我恢复\n\n能够评估之后，下一步就是如何利用世界模型来提升策略。我们推出了 World Gymnast 项目，让机器人代理在世界模型中通过强化学习（RL）疯狂演练。\n\n现在绝大多数机器人学习都依赖人类遥控的数据来做监督微调。但大语言模型的发展历史（从 GPT-3 到 ChatGPT）告诉我们， 真正带来能力跨越的，是利用验证器（Verifier）和强化学习（RL）去大规模地扩增和解决训练任务 。\n\n在 World Gymnast 中，机器人数据集里的任意一个画面都可以作为强化学习的起始点。 哪怕是一张机器人已经操作失败、干砸了的画面，我们也可以将其作为 RL 的起点，逼着策略模型在世界模型里学会如何从错误状态中恢复（Failure Recovery ） 。\n\n我们利用视觉语言模型（VLM）作为通用的奖励模型（Reward Model），输入任务指令和世界模型生成的视频，让 VLM 像裁判一样给出成功或失败的反馈。\n\n随后，这个反馈通过策略梯度（Policy Gradient）直接对策略网络进行在线更新。\n\n我们通过第三方自动化重置平台对开门、关门、放茄子等 4 个完全没有见过的全新留存任务进行了真机测试。\n\n结果令人振奋： 在世界模型里跑过强化学习的模型，其表现不仅显著优于监督微调，也击败了在传统物理模拟器（如 Simpler）中训练的基准模型 。\n\n传统的软件模拟器在面对复杂的物体物理接触时经常失真，而世界模型由于直接从海量数据中进行最大似然学习，天然具备极强的接触动力学拟合能力。\n\n05\n\n未来怎么走？用内环与外环的\n\n“数据飞轮”撬开通用大门\n\n尽管目前的视频世界模型并不完美，偶尔还是会出现轻微的幻觉，或者改变物体的颜色，但即使是不完美的模型，也已经能够提供足够正确的改进信号，让策略模型变得更强。\n\n展望未来，通往具身智能 AGI 的关键在于建立一个 混合数据飞轮 ：\n\n1.内环 ： 策略模型在参数化的视频世界模型里，进行成千上万种虚拟任务的低成本强化学习进化。\n\n2.外环 ： 机器人自主探索并产生失败数据，这些失败数据是完美的燃料，可以直接用来梯度更新我们的世界模型，让世界模型更精确。\n\n互联网上庞大的 第一视角人类交互视频是极大的宝藏。人类是地球上最强大的物理代理，我们可以通过端到端控制，把人类视频转化为机器人的世界先验。\n\n未来，通过世界模型将互联网视频的“广度”与机器人具身控制数据的“精度”桥接起来，我们就能真正敲开通用机器人的大门。谢谢大家。\n\n06\n\n现场 Q&A 环节\n\n▎ Q：感谢您的精彩演讲。在前半部分关于世界模型评估的介绍中，您提到当年测试 RT-1 模型时，由于动作太过于超出分布（OOD），直接把世界模型也给“带崩”（产生严重幻觉）了。\n\n这看起来像是一个“鸡生蛋、蛋生鸡”的悖论：策略模型不工作，导致世界模型也不工作。当世界模型无法泛化到这种极端分布外的错误动作时，我们该怎么打破这个死局？\n\nSherry Yang ：这确实是一个非常切中要害的问题。如果动作完全超出了分布，且在没有任何真机数据补充的情况下，单靠世界模型去打破这个 deadlock确实很难。\n\n但如果我们换一个视角，把机器人看作是一个可以自主探索的自动化代理，情况就会发生改变。在真机落地中，机器人一定会自主产生大量的失败数据。\n\n我们的解法是：利用这些真机踩坑碰壁的失败数据，优先去更新和微调我们的世界模型，让世界模型首先去理解这个“新分布”；当世界模型的模拟边界被这些失败数据拓宽之后，它反过来就能够产生正确的信号，继续指导和训练策略模型。这正是一个相互促进的飞轮过程。\n\n一个人读论文太孤单，一群人刷顶会才好玩。\n\nRSS 2026 召开在即，我们正在召集一波含金量极高的 AI 研究者。群内主打 实时论文跟踪 与 硬核技术探讨 ，拒绝灌水。\n\n? 进群传送门： 扫码进群或添加 微信 Luyoyo_2026 ，备注： 论文群 + 关注的 AI 方向 。\n\n搞科研/搞技术，信息差很重要。\n\n来，一起快人一步！\n\n上车，带你看遍全球 AI 顶会精华\n\n可独家畅览：\n\n专家演讲PPT\n\n大会报告全文\n\n热门论文解读\n\n学术新星访谈\n\n扫描上方二维码\n\n或点击 「 阅读原文 」 关注专区。",
-      "bodyTruncated": false,
-      "eventAggregation": {
-        "total": 1,
-        "groups": [
-          {
-            "key": "官方来源",
-            "tone": "#16130f",
+            "key": "相关报道",
+            "tone": "#2b6cb0",
             "items": [
               {
                 "source": "AI科技评论 / 雷峰网",
-                "title": "World Gym用视频世界模型降低机器人真机试错成本",
-                "url": "https://www.leiphone.com/category/private/prwtba7cyaucgwly.html",
-                "note": "原始发布 / 公告。",
-                "text": "World Gym用视频世界模型降低机器人真机试错成本 —— 原始发布 / 公告。"
+                "title": "Claude Opus 5 被曝今晚发布，Fable 5 的水平，腰斩的价格",
+                "url": "https://www.leiphone.com/category/yanxishe/ngoq8jwhvy9eaqhp.html",
+                "note": "同事件的其它源头报道。",
+                "text": "Claude Opus 5 被曝今晚发布，Fable 5 的水平，腰斩的价格 —— 同事件的其它源头报道。"
+              },
+              {
+                "source": "智东西",
+                "title": "Claude Opus 5来了，Fable 5性能、一半价格",
+                "url": "https://zhidx.com/p/579603.html",
+                "note": "同事件的其它源头报道。",
+                "text": "Claude Opus 5来了，Fable 5性能、一半价格 —— 同事件的其它源头报道。"
               }
             ]
           }
@@ -614,42 +318,36 @@
       }
     },
     {
-      "recordId": "recvqbfccicnQL",
-      "title": "MedPerf Meets Google Cloud Confidential Computing: Secure AI Benchmarking for Brain Tumor Research",
-      "titleCn": "MedPerf 集成 Google Cloud 机密计算，安全评测脑肿瘤分割模型",
-      "source": "MLCommons / MLPerf",
-      "url": "https://mlcommons.org/2026/07/medperf-google-cloud-confidential",
-      "category": "模型评测基准",
-      "contentType": "",
-      "publishedDate": "2026-07-23",
-      "summary": "MLCommons 医疗 AI 工作组与 Google Cloud 宣布将联邦评测编排工具 MedPerf 部署于 Confidential Space 可信执行环境，并以真实脑肿瘤 MRI 分割任务进行演示。该方案使患者数据保留在数据所有者环境中，同时保护模型权重、评测过程与加密汇总结果。",
-      "why": "这一集成补足了联邦评测在模型知识产权和结果防篡改方面的缺口，有助于提升医疗 AI 跨机构真实数据评测的可信度。",
-      "impact": 84,
-      "novelty": 78,
-      "actionability": 70,
+      "recordId": "recvqyrnvNsLpQ",
+      "title": "ollama/ollama",
+      "titleCn": "Ollama：本地运行与集成多种开放模型的平台",
+      "source": "GitHub Trending",
+      "url": "https://github.com/ollama/ollama",
+      "category": "技术研究开源",
+      "contentType": "Github热榜",
+      "tier": "L2 结构化平台",
+      "priority": "P0",
+      "publishedDate": "2026-07-27",
+      "summary": "Ollama 提供 macOS、Windows、Linux 与 Docker 部署方式，可运行 Kimi-K2.6、GLM-5.2、DeepSeek、Qwen、Gemma 等模型，并通过 REST API 接入 Claude Code、Codex、Copilot CLI 等工具。项目获 176963 星，社区正关注重排序模型、多模态模型和原生 Go 推理引擎。",
+      "why": "Ollama 已成为开发者本地部署开放模型并连接 Agent 与应用的重要开源基础设施。",
+      "impact": 94,
+      "novelty": 68,
+      "actionability": 95,
       "urgency": "中",
       "tags": [
-        "AI",
-        "硬件",
-        "监管",
-        "其他"
+        "LLM",
+        "开源",
+        "产品",
+        "Agent"
       ],
-      "imageUrl": "https://mlcommons.org/wp-content/uploads/2026/06/image.jpeg",
+      "imageUrl": "https://opengraph.githubassets.com/9608831d2185d7a7f043c2fdbed47faa0ff231375e1e1db0c98857383a1aad76/ollama/ollama",
       "mediaAssets": {
-        "images": [
-          {
-            "url": "https://mlcommons.org/wp-content/uploads/2026/06/image.jpeg",
-            "alt": ""
-          },
-          {
-            "url": "https://mlcommons.org/wp-content/uploads/2026/06/image-5.png",
-            "alt": ""
-          }
-        ],
+        "images": [],
         "videos": []
       },
-      "body": "在拉斯维加斯举行的 Google Cloud Next 2026 大会期间，MLCommons Medical AI 工作组与 Google Cloud 宣布，MLCommons 的联邦基准测试编排器 MedPerf 已可在 Google Cloud 的机密计算能力上运行。双方团队还通过一个极具吸引力的真实临床用例展示了这一集成：脑肿瘤分割。\n\n脑肿瘤（胶质母细胞瘤）是一种罕见疾病，会对预期寿命造成毁灭性影响。AI 有望通过多种自动化流程改善脑肿瘤患者的诊断和预后，其中包括边界界定/分割、肿瘤分类和肿瘤量化。得益于由 Indiana University School of Medicine 的 Dr. Spyridon Bakas 和 Response Assessment in Neuro-Oncology (RANO) 合作组协调的 Federated Tumor Segmentation (FeTS) 联盟，MedPerf 团队展示了如何在真实世界的脑肿瘤 MRI 数据上评估一个具有临床价值的 AI 模型——该模型由 Duke University 的 Dr. Evan Calabrese 团队设计。\n\n借助在 Google Cloud Confidential Computing 上运行的 MedPerf，我们旨在推动全球医学 AI 研究，同时在医疗数据上安全地评估模型。通过使用作为可信执行环境（TEE）的 Google Cloud Confidential Space，医疗数据、模型权重和基准测试在整个基准测试过程中都能得到全面保护。\n\n问题：危及生命的疾病，受到严格限制的数据\n\n在医疗领域，保护 AI 模型和患者数据都至关重要，这是出于隐私、伦理、主权和监管方面的考量。与此同时，在真实世界的患者数据上衡量 AI 模型的性能，对于推动临床医生、患者、监管机构和付款方信任并采用 AI 至关重要。\n\nMLCommons 社区构建了 MedPerf，正是为了弥合这一差距。MedPerf 采用了由 Dr. Bakas 团队引入医疗领域的联邦方法：AI 模型移动至医疗数据所有者（例如医疗保健机构、医院和数据经纪商）处，而不是要求将数据移动至基准测试运营方。这使数据所有者能够将其数据保密，同时仅与基准测试运营方共享汇总结果。\n\n然而，尽管这种联邦方法可以保护患者数据，但它并未完全解决围绕模型盗窃、知识产权和基准测试完整性的担忧。如果没有额外保障，就无法确保模型权重不会泄露，也无法确保基准测试结果在执行时不会遭到篡改——这引发了人们对基准测试本身的可信度和参与意愿的严重担忧。\n\n解决方案：Google Cloud Confidential Space 上的 MedPerf\n\nMedPerf 与 Google Cloud Confidential Space 的集成恰好解决了这一问题：在保护医疗数据的同时，也保护模型权重和基准测试结果。\n\n这一集成为 MedPerf 用户带来了四项主要优势：\n\n面向医疗 AI 的全球测试数据集——支持评估",
-      "bodyTruncated": true,
+      "body": "快速上手 Kimi-K2.6、GLM-5.2、MiniMax、DeepSeek、gpt-oss、Qwen、Gemma 及其他模型。\n\n⭐ 星标: 176963 | 🍴 复刻: 17126 | 语言: Go | 主题: deepseek, gemma, gemma3, glm, go, golang, gpt-oss, llama, llama3, llm, llms, minimax, mistral, ollama, qwen\n创建: 2023-06-26 | 最近提交: 2026-07-27 | 沉淀分: 8.16\n\n【社区反响·热门 Issue】\n- [已关闭] 👍381 💬96 MLX 后端\n- [开放中] 👍379 💬106 重排序模型\n- [已关闭] 👍348 💬149 添加 Qwen2-VL/Qwen2.5-VL\n- [开放中] 👍293 💬69 原生 ollama-go-engine：TurboQuant+RotorQuant 实现\n\n<p align=\"center\" <a href=\"https://ollama.com\" <img src=\"https://github.com/ollama/ollama/assets/3325447/0d0b44e2-8f4a-4e99-9b52-a5c1c741c8f7\" alt=\"ollama\" width=\"200\"/ </a </p Ollama 开始使用开放模型进行构建。下载 macOS shell curl -fsSL https://ollama.com/install.sh sh 或手动下载 Windows shell irm https://ollama.com/install.ps1 iex 或手动下载 Linux shell curl -fsSL https://ollama.com/install.sh sh 手动安装说明 Docker 官方 Ollama Docker 镜像 ollama/ollama 可在 Docker Hub 上获取。库 - ollama-python - ollama-js 社区 - Discord - 𝕏 (Twitter) - Reddit 开始使用 ollama 系统会提示你运行一个模型，或将 Ollama 连接到你现有的智能体或应用程序，例如 Claude Code、OpenClaw、OpenCode、Codex、Copilot 等。编程 要启动特定集成：ollama launch claude 支持的集成包括 Claude Code、Codex、Copilot CLI、Droid 和 OpenCode。AI 助手 使用 OpenClaw 将 Ollama 变成可在 WhatsApp、Telegram、Slack、Discord 等平台使用的个人 AI 助手：ollama launch openclaw 与模型聊天 运行 Gemma 4 并与其聊天：ollama run gemma4 完整列表请参阅 ollama.com/library。更多详情请参阅快速入门指南。REST API Ollama 提供用于运行和管理模型的 REST API。curl http://localhost:11434/api/chat -d '{ \"model\": \"gemma4\", \"messages\": [{ \"role\": \"user\", \"content\": \"为什么天空是蓝色的？\" }], \"stream\": false }' 有关所有端点，请参阅 API 文档",
+      "bodyTruncated": false,
+      "qualityScore": 0.0,
       "eventAggregation": {
         "total": 1,
         "groups": [
@@ -658,11 +356,11 @@
             "tone": "#16130f",
             "items": [
               {
-                "source": "MLCommons / MLPerf",
-                "title": "MedPerf 集成 Google Cloud 机密计算，安全评测脑肿瘤分割模型",
-                "url": "https://mlcommons.org/2026/07/medperf-google-cloud-confidential",
+                "source": "GitHub Trending",
+                "title": "Ollama：本地运行与集成多种开放模型的平台",
+                "url": "https://github.com/ollama/ollama",
                 "note": "原始发布 / 公告。",
-                "text": "MedPerf 集成 Google Cloud 机密计算，安全评测脑肿瘤分割模型 —— 原始发布 / 公告。"
+                "text": "Ollama：本地运行与集成多种开放模型的平台 —— 原始发布 / 公告。"
               }
             ]
           }
@@ -670,148 +368,36 @@
       }
     },
     {
-      "recordId": "recvqydR4Au0tS",
-      "title": "Multiverse Computing targeting €500m round at unicorn valuation",
-      "titleCn": "Multiverse Computing拟融资5亿欧元，估值达20亿欧元",
-      "source": "Sifted",
-      "url": "https://sifted.eu/articles/multiverse-computing-series-c-unicorn",
-      "category": "创业融资并购",
-      "contentType": "",
+      "recordId": "recvqyrnvNVqAT",
+      "title": "huggingface/transformers",
+      "titleCn": "Hugging Face Transformers：面向多模态模型训练与推理的开源框架",
+      "source": "GitHub Trending",
+      "url": "https://github.com/huggingface/transformers",
+      "category": "技术研究开源",
+      "contentType": "Github热榜",
+      "tier": "L2 结构化平台",
+      "priority": "P0",
       "publishedDate": "2026-07-27",
-      "summary": "西班牙AI模型压缩公司Multiverse Computing正推进5亿欧元C轮融资，投后估值目标为20亿欧元，融资尚未完成。其CompactifAI技术据称可将大语言模型缩小最多95%且仅造成较小精度损失，从而降低算力和云基础设施需求。",
-      "why": "若融资及技术指标兑现，Multiverse有望推动大模型在手机、工业设备和主权数据中心等算力受限环境中的部署。",
-      "impact": 84,
-      "novelty": 76,
-      "actionability": 68,
+      "summary": "Transformers 是用于定义先进文本、视觉、音频及多模态机器学习模型的 Python 框架，支持训练与推理。该项目拥有 163022 个 Star 和 34029 个 Fork，热门开放 Issue 聚焦最大更新参数化（muP）的实现。",
+      "why": "其广泛的模型与模态覆盖、高社区采用度及持续技术讨论，使其成为重要的开源模型基础设施。",
+      "impact": 94,
+      "novelty": 45,
+      "actionability": 92,
       "urgency": "中",
       "tags": [
         "AI",
         "LLM",
-        "硬件",
-        "融资"
+        "多模态",
+        "开源"
       ],
-      "imageUrl": "https://images.sifted.eu/wp-content/uploads/2026/07/25105229/MultiverseComputing-SeriesC-scaled.jpg?w=2048&h=1365&q=75&fit=crop&auto=compress,format",
+      "imageUrl": "https://repository-images.githubusercontent.com/155220641/a16c4880-a501-11ea-9e8f-646cf611702e",
       "mediaAssets": {
         "images": [],
         "videos": []
       },
-      "body": "总部位于西班牙 Donostia 的 Multiverse 对大型 AI 模型进行“压缩”，以降低计算需求\n\nDaphné Leprince-Ringuet\n\n阅读时长 3 分钟\n\n分享\n\n致力于开发降低大型 AI 模型计算需求工具的西班牙规模化企业 Multiverse Computing 宣布，公司正寻求完成一轮 5 亿欧元的 C 轮融资，投后估值为 20 亿欧元。\n\n本轮融资仍未结束，将成为西班牙私营科技公司有史以来获得的最大规模融资之一。本轮融资由美国投资者 Forgepoint Capital、英国 Bullhound Capital，以及法国银行 BNP Paribas 旗下专注于气候领域的 Solar Impulse Venture Fund（SIVF）共同领投。\n\n参与方还包括 European Innovation Council（EIC）Fund、西班牙国有投资机构 SETT、Qatar Development Bank，以及 National Bank of Canada 的企业风险投资部门 NAVentures。Santander Alternative Investments、HP Inc 和 Orange Ventures 也参与了本轮融资；该轮融资已进入最后阶段，但仍向其他战略投资者开放。\n\n广告\n\n这将使 Multiverse 的融资总额超过 7 亿欧元，而就在一年多前，这家西班牙规模化企业刚刚完成 2.15 亿美元（1.9 亿欧元）的 B 轮融资。\n\nMultiverse 是做什么的？\n\nMultiverse 总部位于西班牙 Donostia，开发了一项名为 CompactifAI 的技术，该技术利用一种受量子物理学启发的方法来压缩大型 AI 模型。\n\n该公司称，CompactifAI 可以将美国巨头 OpenAI 等公司发布的大语言模型（LLM）的体积缩小多达 95%，同时几乎不损失准确性。压缩后的模型所需计算资源更少，从而能够显著提升客户的效率。\n\n这意味着 Multiverse 的模型不需要使用美国超大规模云服务商提供的大规模基础设施。联合创始人兼 CEO Enrique Lizaso 在一份声明中表示：“多年来，AI 行业一直接受一个错误的限制——即强大的模型需要昂贵的基础设施。这个限制已经不复存在。”\n\n“我们已经证明，AI 可以在智能手机上、主权数据中心内部，以及没有云连接的工厂车间中以完整性能运行。”\n\n该公司表示，其模型已嵌入无人机、摄像头、卫星、车辆和电信基础设施等设备中。\n\nMultiverse 还在开发一个平台，帮助客户以更高效的方式为每项工作负载部署合适的模型，将模型压缩、GPU 管理、AI 服务和控制系统整合在一起。\n\n商业化\n\nMultiverse 表示，目前其在欧洲和北美拥有 100 多家客户，涉及制造、金融、能源、航空航天、网络安全、国防和生命科学等领域。\n\n其客户包括 Bank of Canada、德国跨国公司 Bosch、西班牙电信公司 Telefónica 和保险公司 Allianz。\n\nLizaso 此前在接受 Sifted 采访时表示，Multiverse 有望在 2026 年实现 2 亿欧元的年度经常性收入。该公司表示，其年化收入增长了 10 倍以上 co",
-      "bodyTruncated": true,
-      "eventAggregation": {
-        "total": 1,
-        "groups": [
-          {
-            "key": "官方来源",
-            "tone": "#16130f",
-            "items": [
-              {
-                "source": "Sifted",
-                "title": "Multiverse Computing拟融资5亿欧元，估值达20亿欧元",
-                "url": "https://sifted.eu/articles/multiverse-computing-series-c-unicorn",
-                "note": "原始发布 / 公告。",
-                "text": "Multiverse Computing拟融资5亿欧元，估值达20亿欧元 —— 原始发布 / 公告。"
-              }
-            ]
-          }
-        ]
-      }
-    },
-    {
-      "recordId": "recvqydR4AlOMO",
-      "title": "NVIDIA Harnesses Vera CPU to Speed Up Design of Next-Generation CPUs and GPUs",
-      "titleCn": "英伟达采用 Vera CPU 加速下一代 CPU 与 GPU 设计",
-      "source": "NVIDIA Blog",
-      "url": "https://blogs.nvidia.com/blog/vera-cpu-eda",
-      "category": "算力芯片云",
-      "contentType": "",
-      "publishedDate": "2026-07-27",
-      "summary": "英伟达正与 Cadence、Synopsys 合作优化面向 Vera CPU 的关键 EDA 应用，并将其部署到下一代处理器设计流程中。早期测试显示，Cadence Jasper 和 Synopsys VCS 在部分选定工作负载上的性能最高提升 1.5 倍。",
-      "why": "Vera 有望加快芯片验证与设计迭代，缩短下一代 CPU 和 GPU 推向流片阶段所需的时间。",
-      "impact": 84,
-      "novelty": 73,
-      "actionability": 58,
-      "urgency": "中",
-      "tags": [
-        "硬件",
-        "AI",
-        "产品"
-      ],
-      "imageUrl": "https://blogs.nvidia.com/wp-content/uploads/2026/07/cpu-corp-blog-vera-superchip-1280x680-4939150.jpg",
-      "mediaAssets": {
-        "images": [
-          {
-            "url": "https://blogs.nvidia.com/wp-content/uploads/2026/07/image3-960x720.jpeg",
-            "alt": ""
-          }
-        ],
-        "videos": []
-      },
-      "body": "随着工程团队致力于开发日益复杂的 CPU、GPU 和 AI 系统，现代芯片设计的复杂性持续增长。为帮助应对这一挑战，NVIDIA 正与行业领导者 Cadence 和 Synopsys 合作，针对 NVIDIA Vera CPU 优化关键的电子设计自动化（EDA）应用程序。\n\nNVIDIA 目前正在将 Vera 部署到用于开发其下一代 CPU 和 GPU 的 EDA 工作流中，展示高性能 CPU 架构如何帮助加速业内一些要求最严苛的工程工作负载。\n\n加速关键 EDA 工作负载\n\n事关芯片生产的速度。进而也关系到有望受益于 EDA 工作负载加速的行业技术的发展节奏，从而推动开发势头。\n\n仿真、验证和实现技术在半导体开发中发挥着核心作用。早在芯片进入制造阶段之前，工程师就要花费数年时间来验证行为、识别边界情况，并通过数千次迭代完善设计。\n\n尽管 GPU 和 AI 已经加速了芯片设计的许多环节，但一些关键的 EDA 工作负载仍然高度依赖 CPU 性能。逻辑仿真、形式验证以及数字实现的部分环节通常依赖高速的单个核心、高效的内存系统和强大的整体吞吐量。\n\n这使得 CPU 架构成为决定工程团队能以多快速度验证设计、探索替代方案并推动产品进入流片阶段的重要因素。\n\nNVIDIA Portland 数据中心内的 Vera 集群。\n\n重点介绍与 Cadence 和 Synopsys 合作取得的初步成果\n\nNVIDIA 的初步测试涵盖了多款领先的 EDA 应用程序。结果突显了 Vera 加速现代芯片设计中两个计算最密集阶段的能力。对选定生产级工作流进行的早期测试显示出了可喜的结果。\n\n形式验证平台 Cadence Jasper 使用智能证明技术和机器学习来发现并修复错误，并在设计周期早期提高验证生产力。\n\nSynopsys VCS 是一种高性能功能验证解决方案，用于在制造前仿真并验证复杂的芯片设计；该方案在测试中使用了相同数量的核心。\n\n在选定的工作负载上，这两款应用程序的性能均提升至多 1.5 倍。\n\n除基准测试结果外，NVIDIA 还在与这两家公司密切合作，开展应用程序性能分析、软件优化和系统级调优，旨在随着时间推移，提高更广泛工作流中的工程生产力。\n\n将 Vera 引入设计流程\n\nNVIDIA 正在把 Vera 部署到用于打造未来 NVIDIA 处理器的整个 EDA 工作流中。\n\nVera 将 88 个定制 NVIDIA Olympus CPU 核心与高能效 LPDDR5X 内存子系统和第二代 NVIDIA Scalable Coherent Fabric 相结合，旨在为要求严苛的工程应用提供强大的单核性能、高内存带宽和始终如一的低延迟。",
-      "bodyTruncated": true,
-      "eventAggregation": {
-        "total": 1,
-        "groups": [
-          {
-            "key": "官方来源",
-            "tone": "#16130f",
-            "items": [
-              {
-                "source": "NVIDIA Blog",
-                "title": "英伟达采用 Vera CPU 加速下一代 CPU 与 GPU 设计",
-                "url": "https://blogs.nvidia.com/blog/vera-cpu-eda",
-                "note": "原始发布 / 公告。",
-                "text": "英伟达采用 Vera CPU 加速下一代 CPU 与 GPU 设计 —— 原始发布 / 公告。"
-              }
-            ]
-          }
-        ]
-      }
-    },
-    {
-      "recordId": "recvqydR4ADBvj",
-      "title": "光计算来到商业化拐点，中国企业开始创造自己的“硬件彩票”",
-      "titleCn": "曦智光计算一体机落地高频民用场景，PACE 3面向低延迟大模型推理",
-      "source": "智东西",
-      "url": "https://zhidx.com/p/577765.html",
-      "category": "中文科技媒体",
-      "contentType": "公众号",
-      "publishedDate": "2026-07-27",
-      "summary": "曦智科技在WAIC 2026展示光电智算一体机“天枢·光立方”，并将其用于门禁视觉识别，实现长期、高频、毫秒级运行。其矩阵规模超过256×256的PACE 3光计算芯片已回片，目标场景包括低延迟大模型推理、金融量化、边缘智能和商业航天。",
-      "why": "光计算正从技术可行性验证转向真实场景和商业闭环验证，但软件生态、制造成本及整机可靠性仍制约规模化部署。",
-      "impact": 82,
-      "novelty": 86,
-      "actionability": 68,
-      "urgency": "中",
-      "tags": [
-        "AI",
-        "推理",
-        "硬件",
-        "产品"
-      ],
-      "imageUrl": "https://oss.zhidx.com/uploads/2026/07/6a5dff0e61b30_6a5dff0e5e7f8_6a5dff0e5e7c3_微信图片_2026-07-20_185618_779.jpg/_zdx",
-      "mediaAssets": {
-        "images": [
-          {
-            "url": "https://oss.zhidx.com/uploads/2026/07/6a5dff0e61b30_6a5dff0e5e7f8_6a5dff0e5e7c3_微信图片_2026-07-20_185618_779.jpg/_zdx",
-            "alt": ""
-          },
-          {
-            "url": "https://oss.zhidx.com/uploads/2026/07/6a5dfcea6c676_6a5dfcea6765f_6a5dfcea67624_图片1.png/_zdx",
-            "alt": "光计算来到商业化拐点，中国企业开始创造自己的“硬件彩票”"
-          },
-          {
-            "url": "https://oss.zhidx.com/uploads/2026/07/6a5dfd1162539_6a5dfd115f874_6a5dfd115f83a_图片2.png/_zdx",
-            "alt": "光计算来到商业化拐点，中国企业开始创造自己的“硬件彩票”"
-          },
-          {
-            "url": "https://oss.zhidx.com/uploads/2026/07/6a5dfd51cd63a_6a5dfd51ca330_6a5dfd51ca2fd_图片3.png/_zdx",
-            "alt": "光计算来到商业化拐点，中国企业开始创造自己的“硬件彩票”"
-          }
-        ],
-        "videos": []
-      },
-      "body": "智东西7月27日报道，在上周闭幕的WAIC 2026上，光计算成为被受关注的新技术方向之一。但与往年侧重展示技术突破不同，今年行业讨论的重点已转向商业落地。\n\n会上，国内光电混合算力龙头企业曦智科技举办了WAIC历史上首个完整聚焦AI光算力的专题论坛，光计算部分开始聚焦更现实的问题： 哪些场景适合率先部署光计算、哪些行业最需要光计算，以及如何推动规模化落地。\n\n论坛之外，曦智科技首次展示了全球首款光电智算一体机“天枢·光立方”，并基于这一产品打造了一套实时视觉感知系统，在WAIC现场供观众体验。\n\n这套系统也在曦智自己的办公楼里完成了“压力测试”。“天枢·光立方”被用于驱动门禁系统，每天运行数百次目标检测任务，并在毫秒级的时长中准确完成图像识别任务。\n\n▲ “天枢·光立方”\n\n这是光计算 首次进入真实高频民用场景 ，实现长期稳定运行，也意味着光计算开始拥有 可持续运行、可验证效果、可复制推广 的商业案例。\n\n同样值得关注的是，曦智创始人兼董事长沈亦晨博士透露，曦智最新一代 PACE 3光计算芯片已在今年6月成功回片 ， 这代芯片的光子矩阵规模 超过256×256 ，主要面向 低延迟大模型推理设计 ，有望解锁更丰富的使用场景。\n\n从讨论“光计算能不能做”，到思考“光计算应该先在哪里落地”，今年WAIC释放出一个清晰信号：光计算正从验证技术可行性，迈向验证商业可行性的关键阶段，产业化窗口正在开启。\n\n一、理论优势显著，光计算商业化的卡点是什么？\n\n过去几年，随着硅光技术逐渐成熟、AI算力需求持续爆发，光计算再次成为全球AI算力领域的重要方向。光子具备带宽高、传输损耗低、天然支持并行计算等优势，理论上能突破芯片功耗和带宽瓶颈， 被认为是后摩尔时代最具潜力的新型计算架构之一。\n\n全球范围内，光计算的创新生态正加速成型。初创企业纷纷涌现，呈雨后春笋之势；学术界相关论文发表量连年稳步增长；技术路径上，多条路线并行推进；美国、欧洲、日本等地区亦围绕硅光芯片、光互连与光计算器件展开长期系统性布局。\n\n国内，曦智科技是较早布局光计算产业化的企业之一。2017年，沈亦晨博士在《自然·光子学》发表论文，首次验证了利用光进行计算的可行性。同年曦智科技成立，围绕光计算、光互连、光交换持续投入，成为全球首家实现光电混合算力大规模部署的企业和首家光计算上市公司。\n\n但与行业升温形成反差的是， 光计算的规模化商业部署进度仍然滞后。\n\n技术层面 ，瓶颈来自软硬件两端。硬件上，光学器件协同复杂度高，温漂、噪声、制造一致性都会影响计算稳定性；光电混合架构也无法脱离电子系统，设计与集成的难度被进一步放大。软件上，光计算缺少统一的软件栈和标准化框架，不同架构之间的迁移成本居高不下，开发者生态尚未形成。\n\n商业层面 ， 光计算面临的是“先有鸡还是先有蛋”的困境。下游客户没有动力为一套尚未验证的硬件体系重构算法和软件，上游产业链又缺乏足够的市场需求来摊薄光学器件的制造成本。这种双向冷启动的局面，使得光计算的商业化进程比技术本身的成熟度更慢一拍。\n\n曦智高管以英伟达、特斯拉等企业的发展路径来理解这种落差。沈亦晨谈道，新一批GPU公司落地比光计算快是正常的，正如二十年前，当满街都是燃油车时，新成立的燃油车企业大概率会比特斯拉落地更快， 因为它完全兼容现有的一整套生态链。\n\n曦智科技联合创始人兼CTO孟怀宇博士进一步补充道，今天的大模型和英伟达是 锁和钥匙的关系 ，换言之，两者是相辅相成、共生共荣的。目前光计算真正需要做的事，不是为了一个已经成型的锁配一把更好的钥匙， 而是让芯片和算法在全新的分支上共同构成一个飞轮，长成完整的新生态，才有可能真正实现更大的增长空间。\n\n回看英伟达的成长史，其显卡最初只服务于单一的游戏渲染场景，正是在与学界的长期合作中，研究者们发现卷积神经网络可以在这类硬件上跑得更快，由此使得深度学习算法有了物理基础，进而有了今天的大模型。算法和应用，是反过来基于GPU“长”出来的。\n\n沈亦晨认为，光计算很有可能重演这一过程。曦智正与高校、科研院所合作，将光子计算模拟器LTSimulator、光子计算评估板Gazelle等教具送进课堂和实验室，让下一代算法从光计算的硬件上自然生长出来。\n\n二、把实验室技术变成商业产品，曦智如何创造光计算的“硬件彩票”？\n\n如果说神经网络拿到了英伟达在20年前创造的那张“硬件彩票”，进而实现飞速发展，那么 曦智如今在做的事情，其实是为某些尚未诞生、或者仍处在萌芽期的应用，提前造出一张光计算的“硬件彩票”。\n\nGPU原本为图形计算而设计，天然擅长大规模并行执行规则、重复的数值运算；神经网络训练恰好可以转化为大规模矩阵乘法、卷积和向量运算，两者高度匹配，于是神经网络突然获得了远超其他算法的可扩展算力。成功之后，资金、人才、软件和新硬件继续围绕神经网络建设，形成正反馈。\n\n但神经网络当年能兑现这张彩票，靠的不只是GPU这颗芯片本身，而是随后十几年围绕它建起的一整套软硬件体系。 光计算同样如此，造出一张彩票，和让这张彩票真正兑现，是两件事。\n\n因此，在完成光计算可行性验证后，曦智一直走在推动光电混合计算从实验室走向产业化落地的前沿。一方面，他们不断迭代光电混合计算产品、提升芯片集成度；另一方面，曦智也围绕电子芯片设计、先进封装、软件生态和系统部署等环节补齐工程能力。\n\n值得一提的是，在参数竞赛愈演愈烈的当下，曦智却主动“降温”。沈亦晨认为， 以矩阵规模衡量光计算能力是一种误导 。大模型计算需要的是不同规模矩阵的高效协同，而非一味做大。\n\n例如，10000×10000的光子计算矩阵在真实AI任务中根本无法被充分利用，实际商用场景往往需要拆分成多个小矩阵并行计算。英伟达Tensor Core矩阵仅64×64，谷歌TPU停留在256×256多年，也印证了这一“甜点区”。 PACE 3光子矩阵规模超过256×256 ，并非追求单纯参数，而是 围绕真实AI负载寻找平衡点。\n\n同样的思路，也体现在曦智对性能竞争的重新思考上。过去行业热衷于比较光计算相比电子计算快100倍、1000倍，把各种理论指标当作成绩单；但过去一段时间，曦智淡化了这些“打榜式”竞争， 把关注点从转向“能不能真正用起来” 。\n\n做出一颗芯片只是开始，更难的是做出能稳定跑高频AI商用算法、可批量交付的机器。 去年4月发布PACE 2芯片后，曦智经历了大半年才推出一体机产品，中间大量工作是外界看不见的软件和算法，曦智在光交换领域也有同样的经历。沈亦晨说道：“做出硬件到交付稳定商用集群，工作量可能是做出那颗芯片的10倍以上”。\n\n有了产品之后，曦智也没有急于向客户推广， 而是 做第一个吃螃蟹的人 。光立方一体机最早的商用场景是曦智自己大楼的门禁。由光计算驱动的门禁系统上线第一天一度因识别不稳定造成园区拥堵，因为沈亦晨要求曦智员工必须从正门刷脸进入。经历了一两个月的打磨，系统才做到让人“丝滑到感受不出来是个全新生态的黑科技产品”。\n\n下一步，曦智还打算把公司自身的芯片设计流程也跑在光计算上。在沈亦晨看来，只有”自己敢用、效果很好”，才有资格让客户跟着用。\n\n三、从AI推理到行业计算，光计算正在打开广阔应用空间\n\n光计算产业对于落地路径也逐渐形成了更多共识。在WAIC 2026“光计算+光互连，双轮驱动的AI基础设施新范式论坛”的圆桌讨论中，沈亦晨与王成、熊胤江、杨其晟、钟翰森等光计算初创企业创始人一致认为， 相比追求覆盖所有计算场景，当下更重要的或许是结合不同技术路线的优势，在大模型推理、科学计算、边缘智能、通信等细分领域率先跑通真实应用，完成产品闭环和客户验证。\n\n围绕上述思路，曦智正在推动光计算与产业生态的协同。 曦智已与企业商汤科技、阶跃星辰、晶泰科技、申万宏源、中科天算、东方空间等企业启动战略合作 ， 围绕视觉智能、大模型、AI for Science、金融量化、太空算力等方向探索落地。\n\n从目前产业探索来看， 低延迟AI推理和商业航天 正成为光计算最具代表性的两个应用方向。\n\n在AI推理过程中 ，影响用户体验和商业价值的一大因素是推理时延。尤其是在Agent、具身智能等新兴应用，以及金融量化、实时风控等典型低时延场景中，推理速度正逐渐成为决定系统价值的关键指标。\n\n以金融行业为例，实时风控、量化投资等业务，本质上都在争夺 毫秒级甚至微秒级的响应时间 ；具身智能对时延要求同样严苛，机器人需要持续完成视觉感知、环境理解、路径规划和运动控制，整个系统必须形成实时闭环， 一旦推理延迟过高，就可能导致动作迟缓、控制误差累积，甚至影响系统安全。\n\n相比传统电子计算，光计算天然适合矩阵运算，具备高速并行处理优势。如果能够将神经网络中的大量矩阵计算放到光域完成，再结合电子控制系统，就有望进一步降低端到端推理时延。\n\n另一个备受关注的方向是商业航天。 随着遥感卫星、通信卫星和星座建设加速，越来越多AI计算开始从地面走向太空。曦智的合作伙伴们反馈， 对于星载计算平台而言，系统关注的重点并不仅仅是算力，而是功耗、重量和环境适应性等综合能力。\n\n每增加一瓦功耗，都会提高供电和散热压力；每增加一公斤重量，都意味着更高的发射成本，因此，提升能效、降低重量比单纯提升芯片性能更具现实意义。\n\n而光计算天然适合与光互连协同设计，相比传统大规模铜缆互联，光互联能够减少高速连接所需的铜缆和连接器， 在系统层面具备轻量化潜力 。\n\n此外，光信号理论上具备更好的 抗电磁干扰能力 ，在空间环境中具有一定抗辐射潜力。不过，目前光计算仍以光电混合架构为主，整机可靠性仍需经过工程验证。\n\n对于任何新型计算架构而言，产业化都不是一步到位的过程，而是一个由点及面、逐步扩大的过程。随着光计算底层技术持续成熟，产业链上下游协同不断加强，其应用探索也有望从少数实验性项目，逐渐延伸到更多具有商业价值的行业方向。\n\n结语：光计算进入“价值验证”阶段\n\n光计算正在从“证明可行”迈向“验证价值”的关键阶段，未来2至3年，将是商业化验证的重要窗口期。在这一过程中，以曦智为代表的一批企业，正选择从具体场景切入，将光计算能力融入真实业务环境。\n\n随着应用不断积累真实反馈，上游芯片、器件、封装、软件等环节也将持续迭代优化，下游开发者、行业客户和合作伙伴的参与度不断提升，逐步形成技术演进与产业落地相互促进的正向循环。\n\n更值得关注的是，光计算正在成为中国少数具备全球领先优势的新兴计算赛道。与光互连、光交换等领域相比，中国企业在光计算的技术研发、产品成熟度和产业探索方面已走在全球前列。过去几年，国内企业持续投入光电混合计算架构、芯片设计和系统工程，而海外由于传统电子计算路线仍保持领先，产业转向动力相对有限，这也为中国光计算企业创造了宝贵的发展窗口。\n\n正如曦智科技创始人兼CEO沈亦晨所总结的那样，曦智创始团队始终相信，硅光的技术潜力远不止于其在今天光模块市场所展现的价值，未来也不会局限于光互连这一单一场景，而是有望成为新一代AI基础设施的重要组成部分，在整个算力体系中释放更大的产业价值。",
+      "body": "🤗 Transformers：面向文本、视觉、音频和多模态模型中最先进机器学习模型的模型定义框架，同时支持推理和训练。\n\n⭐ 星标: 163022 | 🍴 分叉: 34029 | 语言: Python | 主题: 音频, 深度学习, deepseek, gemma, glm, hacktoberfest, 大语言模型, 机器学习, 模型中心, 自然语言处理, nlp, 预训练模型, python, pytorch, pytorch-transformers, qwen, 语音识别, transformer, 视觉语言模型\n创建: 2018-10-29 | 最近提交: 2026-07-27 | 沉淀分: 8.28\n\n【社区反响·热门议题】\n- [开放] 👍211 💬18 实现最大更新参数化（muP）\n- [已关闭] 👍179 💬35 🌟 BigBird\n- [已关闭] 👍159 💬41 添加即将推出的 GPT-3 模型\n- [已关闭] 👍112 💬57 如何处理这条警告消息：“bert-base-uncased 的模型检查点中的某些权重 we\n\n<!--- 版权所有 2020 HuggingFace Team。保留所有权利。根据 Apache License, Version 2.0（“许可证”）获得许可；除非遵守该许可证，否则不得使用此文件。您可以在 http://www.apache.org/licenses/LICENSE-2.0 获取该许可证的副本。除非适用法律要求或书面同意，否则根据许可证分发的软件按“原样”提供，不附带任何明示或暗示的保证或条件。有关许可证所规定权限和限制的具体条款，请参阅许可证。-- <p align=\"center\" <picture <source media=\"(prefers-color-scheme: dark)\" srcset=\"https://huggingface.co/datasets/huggingface/documentation-images/raw/main/transformers-logo-dark.svg\" <source media=\"(prefers-color-scheme: light)\" srcset=\"https://huggingface.co/datasets/huggingface/documentation-images/raw/main/transformers-logo-light.svg\" <img alt=\"Hugging Face Transformers 库\" src=\"https://huggingface.co/datasets/huggingface/documentation-images/raw/main/transformers-logo-light.svg\" width=\"352\" height=\"59\" style=\"max-width: 100%;\" </picture <br/ <br/ </p <p align=\"center\" <a href=\"https://huggingface.com/models\" <img alt=\"Hub 上的检查点\" src=\"https://img.shields.io/endpoint?url=https://huggingface.co/api/shields/models&color=brightgreen\" </a <a href=\"https://circleci.com/gh/huggingface/transformers\" <img alt=\"构建\" src=\"https://img.shields.io/circleci/build/github/huggingface/transformers/main",
       "bodyTruncated": false,
+      "qualityScore": 0.0,
       "eventAggregation": {
         "total": 1,
         "groups": [
@@ -820,11 +406,411 @@
             "tone": "#16130f",
             "items": [
               {
-                "source": "智东西",
-                "title": "曦智光计算一体机落地高频民用场景，PACE 3面向低延迟大模型推理",
-                "url": "https://zhidx.com/p/577765.html",
+                "source": "GitHub Trending",
+                "title": "Hugging Face Transformers：面向多模态模型训练与推理的开源框架",
+                "url": "https://github.com/huggingface/transformers",
                 "note": "原始发布 / 公告。",
-                "text": "曦智光计算一体机落地高频民用场景，PACE 3面向低延迟大模型推理 —— 原始发布 / 公告。"
+                "text": "Hugging Face Transformers：面向多模态模型训练与推理的开源框架 —— 原始发布 / 公告。"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "recordId": "recvqyrnvNeajz",
+      "title": "Significant-Gravitas/AutoGPT",
+      "titleCn": "AutoGPT：构建并运行 AI Agent 的开源平台",
+      "source": "GitHub Trending",
+      "url": "https://github.com/significant-gravitas/autogpt",
+      "category": "技术研究开源",
+      "contentType": "Github热榜",
+      "tier": "L2 结构化平台",
+      "priority": "P0",
+      "publishedDate": "2026-07-27",
+      "summary": "AutoGPT 是一个 Python 开源 AI Agent 平台，可根据任务描述构建、运行智能体并反馈结果。项目拥有 185702 个 Star 和 46066 个 Fork，社区重点关注递归自我改进、离线运行及本地 LLM 支持。",
+      "why": "其庞大的开发者社区和对自主智能体工作流的聚焦，使其成为观察 Agent 产品与开源生态的重要项目。",
+      "impact": 92,
+      "novelty": 72,
+      "actionability": 88,
+      "urgency": "中",
+      "tags": [
+        "AI",
+        "LLM",
+        "Agent",
+        "开源"
+      ],
+      "imageUrl": "https://opengraph.githubassets.com/99a93dba9e5f1cb7276f907035197dcd69b972a4579c1bf51fa361342c502c87/Significant-Gravitas/AutoGPT",
+      "mediaAssets": {
+        "images": [],
+        "videos": []
+      },
+      "body": "AutoGPT 的愿景是让每个人都能使用 AI，并在其基础上进行构建。我们的使命是提供工具，让你可以专注于真正重要的事情。\n\n⭐ 星标: 185702 | 🍴 复刻: 46066 | 语言: Python | 主题: agentic-ai, agents, ai, artificial-intelligence, autonomous-agents, claude, gpt, llama-api, llm, openai, python\n创建: 2023-03-16 | 最近提交: 2026-07-26 | 沉淀分: 8.40\n\n【社区反响·热门 Issue】\n- [已关闭] 👍156 💬270 Auto-GPT 递归式自我改进\n- [已关闭] 👍101 💬33 💡完全物理隔离的离线 Auto-GPT\n- [已关闭] 👍35 💬95 支持使用其他/本地 LLM\n- [已关闭] 👍31 💬23 本地模型使用说明\n\n<p align=\"center\" <a href=\"https://platform.agpt.co/signup?utm source=github&utm medium=referral&utm campaign=autogpt readme&utm content=hero banner\" <img src=\"docs/home/.gitbook/assets/Banner image.png\" alt=\"AutoGPT\" width=\"100%\" / </a </p <h1 align=\"center\" AutoGPT — 完成工作的 AI 智能体</h1 <p align=\"center\" <strong 每周为你节省 10 小时。</strong <br / 描述你想完成的事情。AutoGPT 会构建智能体、运行它，并向你报告结果。 </p <p align=\"center\" <a href=\"https://platform.agpt.co/signup?utm source=github&utm medium=referral&utm campaign=autogpt readme&utm content=header get started\" <strong 开始使用</strong </a · <a href=\"https://platform.agpt.co/tour?utm source=github&utm medium=referral&utm campaign=autogpt readme&utm content=tour header\" 产品导览</a · <a href=\"https://agpt.co/pricing?utm source=github&utm medium=referral&utm campaign=autogpt readme&utm content=header pricing\" 定价</a · <a href=\"https://docs.agpt.co\" 文档</a · <a href=\"https://discord.gg/autogpt\" Discord</a · <a href=\" self-host-autogpt\" 自托管</a </p <p align=\"center\" <a href=\"https://discord.gg/autogpt\" <img src=\"https://img.shields.io/badge/Discord-join-5865F2?logo=discord&logoColor=white\" alt=\"加入 Discord\" / </a <a href=\"https://docs.agpt.co\" <img src=\"https://img.shields.io/badge/Docs-read-0A7AFF?logo=gitbook&logoColor=white\" alt=\"阅读文档\" / </a </p --- 面向 AI 智能体的开源平台 AutoGPT 让你能够构建，",
+      "bodyTruncated": false,
+      "qualityScore": 0.0,
+      "eventAggregation": {
+        "total": 1,
+        "groups": [
+          {
+            "key": "官方来源",
+            "tone": "#16130f",
+            "items": [
+              {
+                "source": "GitHub Trending",
+                "title": "AutoGPT：构建并运行 AI Agent 的开源平台",
+                "url": "https://github.com/significant-gravitas/autogpt",
+                "note": "原始发布 / 公告。",
+                "text": "AutoGPT：构建并运行 AI Agent 的开源平台 —— 原始发布 / 公告。"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "recordId": "recvqyrnvNZ4rd",
+      "title": "langchain-ai/langchain",
+      "titleCn": "LangChain：面向 Agent 与 LLM 应用的开源工程平台",
+      "source": "GitHub Trending",
+      "url": "https://github.com/langchain-ai/langchain",
+      "category": "技术研究开源",
+      "contentType": "Github热榜",
+      "tier": "L2 结构化平台",
+      "priority": "P0",
+      "publishedDate": "2026-07-27",
+      "summary": "LangChain 是一个用于构建 Agent 和 LLM 应用的 Python 开源框架，通过可互操作组件及第三方集成简化开发。项目拥有 142650 个 Star 和 23753 个 Fork，并提供更高层的 Deep Agents 包。",
+      "why": "其庞大的开发者社区、丰富的集成能力和 Agent 工程定位，使其成为 AI 应用开发的重要基础框架。",
+      "impact": 92,
+      "novelty": 55,
+      "actionability": 94,
+      "urgency": "中",
+      "tags": [
+        "Agent",
+        "LLM",
+        "开源",
+        "RAG"
+      ],
+      "imageUrl": "https://repository-images.githubusercontent.com/552661142/7392d590-2716-4261-b623-a0579df67e0d",
+      "mediaAssets": {
+        "images": [],
+        "videos": []
+      },
+      "body": "智能体工程平台。\n\n⭐ 星标数: 142650 | 🍴 Forks: 23753 | 语言: Python | 主题: agents, ai, ai-agents, anthropic, chatgpt, deepagents, enterprise, framework, gemini, generative-ai, langchain, langgraph, llm, multiagent, open-source, openai, pydantic, python, rag, typescript\n创建: 2022-10-17 | 最近提交: 2026-07-27 | 沉淀分: 8.14\n\n【社区反响·热门 Issue】\n- [已关闭] 👍124 💬82 ValueError：无法解析 LLM 输出：\n- [已关闭] 👍91 💬30 支持 Pydantic v2\n- [已关闭] 👍60 💬28 使用一个智能体，并且只想以流式方式输出最终响应\n- [已关闭] 👍56 💬23 考虑在 langchain 中引入 ToT 方法🐱🐱\n\n<div align=\"center\" <a href=\"https://docs.langchain.com/oss/python/langchain/overview\" <picture <source media=\"(prefers-color-scheme: dark)\" srcset=\".github/images/logo-dark.svg\" <source media=\"(prefers-color-scheme: light)\" srcset=\".github/images/logo-light.svg\" <img alt=\"LangChain 标志\" src=\".github/images/logo-dark.svg\" width=\"50%\" </picture </a </div <div align=\"center\" <h3 智能体工程平台。</h3 </div <div align=\"center\" <a href=\"https://opensource.org/licenses/MIT\" target=\" blank\" <img src=\"https://img.shields.io/pypi/l/langchain\" alt=\"PyPI - 许可证\" </a <a href=\"https://pypistats.org/packages/langchain\" target=\" blank\" <img src=\"https://img.shields.io/pepy/dt/langchain\" alt=\"PyPI - 下载量\" </a <a href=\"https://pypi.org/project/langchain/ history\" target=\" blank\" <img src=\"https://img.shields.io/pypi/v/langchain?label=%20\" alt=\"版本\" </a <a href=\"https://x.com/langchain oss\" target=\" blank\" <img src=\"https://img.shields.io/twitter/url/https/twitter.com/langchain oss.svg?style=social&label=Follow%20%40LangChain\" alt=\"Twitter / X\" </a </div <br LangChain 是一个用于构建智能体和由 LLM 驱动的应用程序的框架。它帮助你将可互操作的组件和第三方集成串联起来，从而简化 AI 应用程序开发，同时随着底层技术的发展，使所做的决策能够适应未来。[!TIP] 刚刚开始？请查看 Deep Agents——一个构建于 LangChain 之上的更高级软件包，面向内置了 co 能力的智能体",
+      "bodyTruncated": false,
+      "qualityScore": 0.0,
+      "eventAggregation": {
+        "total": 1,
+        "groups": [
+          {
+            "key": "官方来源",
+            "tone": "#16130f",
+            "items": [
+              {
+                "source": "GitHub Trending",
+                "title": "LangChain：面向 Agent 与 LLM 应用的开源工程平台",
+                "url": "https://github.com/langchain-ai/langchain",
+                "note": "原始发布 / 公告。",
+                "text": "LangChain：面向 Agent 与 LLM 应用的开源工程平台 —— 原始发布 / 公告。"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "recordId": "recvqyrnvNm6OC",
+      "title": "vllm-project/vllm",
+      "titleCn": "vLLM：高吞吐、内存高效的大语言模型推理与服务引擎",
+      "source": "GitHub Trending",
+      "url": "https://github.com/vllm-project/vllm",
+      "category": "技术研究开源",
+      "contentType": "Github热榜",
+      "tier": "L2 结构化平台",
+      "priority": "P0",
+      "publishedDate": "2026-07-27",
+      "summary": "vLLM 是一个源自加州大学伯克利分校 Sky Computing Lab 的开源 LLM 推理与服务库，通过 PagedAttention、持续批处理、分块预填充和前缀缓存提升吞吐量与内存效率。项目拥有 87272 个 Star、19904 个 Fork，并由来自学术界和企业的超过 2000 名贡献者共同维护。",
+      "why": "vLLM 已成为活跃度和采用度较高的开源 LLM 服务基础设施，可降低大模型部署与推理成本。",
+      "impact": 91,
+      "novelty": 78,
+      "actionability": 94,
+      "urgency": "中",
+      "tags": [
+        "LLM",
+        "推理",
+        "开源",
+        "产品"
+      ],
+      "imageUrl": "https://opengraph.githubassets.com/d90ea23a13ac74bbedae2cb6f0d538b29a5fea6adc98d079a5fd0c85a8e031b3/vllm-project/vllm",
+      "mediaAssets": {
+        "images": [],
+        "videos": []
+      },
+      "body": "面向 LLM 的高吞吐量、内存高效的推理与服务引擎\n\n⭐ 星标: 87272 | 🍴 派生: 19904 | 语言: Python | 主题: amd, blackwell, cuda, deepseek, deepseek-v3, gpt, gpt-oss, inference, kimi, llama, llm, llm-serving, model-serving, moe, openai, pytorch, qwen, qwen3, tpu, transformer\n创建: 2023-02-09 | 最近提交: 2026-07-27 | 沉淀分: 7.89\n\n<!-- markdownlint-disable MD001 MD041 -- <p align=\"center\" <picture <source media=\"(prefers-color-scheme: dark)\" srcset=\"https://raw.githubusercontent.com/vllm-project/vllm/main/docs/assets/logos/vllm-logo-text-dark.png\" <img alt=\"vLLM\" src=\"https://raw.githubusercontent.com/vllm-project/vllm/main/docs/assets/logos/vllm-logo-text-light.png\" width=55% </picture </p <h3 align=\"center\" 为每个人提供简单、快速且低成本的 LLM 服务 </h3 <p align=\"center\" <a href=\"https://docs.vllm.ai\" <b 文档</b </a <a href=\"https://blog.vllm.ai/\" <b 博客</b </a <a href=\"https://arxiv.org/abs/2309.06180\" <b 论文</b </a <a href=\"https://x.com/vllm project\" <b Twitter/X</b </a <a href=\"https://discuss.vllm.ai\" <b 用户论坛</b </a <a href=\"https://slack.vllm.ai\" <b 开发者 Slack</b </a </p 🔥 我们已经建立了一个 vLLM 网站，帮助你开始使用 vLLM。请访问 vllm.ai 了解更多信息。有关活动，请访问 vllm.ai/events 加入我们。--- 关于 vLLM 是一个用于 LLM 推理与服务的快速且易于使用的库。vLLM 最初由 UC Berkeley 的 Sky Computing Lab 开发，如今已发展成为最活跃的开源 AI 项目之一，由来自数十家学术机构和公司的多元化社区构建和维护，贡献者超过 2000 人。vLLM 的快速体现在：- 最先进的服务吞吐量 - 使用 PagedAttention 高效管理注意力键和值内存 - 对传入请求进行连续批处理、分块预填充、前缀缓存 - 快速 an",
+      "bodyTruncated": false,
+      "qualityScore": 0.0,
+      "eventAggregation": {
+        "total": 1,
+        "groups": [
+          {
+            "key": "官方来源",
+            "tone": "#16130f",
+            "items": [
+              {
+                "source": "GitHub Trending",
+                "title": "vLLM：高吞吐、内存高效的大语言模型推理与服务引擎",
+                "url": "https://github.com/vllm-project/vllm",
+                "note": "原始发布 / 公告。",
+                "text": "vLLM：高吞吐、内存高效的大语言模型推理与服务引擎 —— 原始发布 / 公告。"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "recordId": "recvqyrnvN3SAN",
+      "title": "langgenius/dify",
+      "titleCn": "Dify：面向 Agent 工作流与 RAG 的开源协作平台",
+      "source": "GitHub Trending",
+      "url": "https://github.com/langgenius/dify",
+      "category": "技术研究开源",
+      "contentType": "Github热榜",
+      "tier": "L2 结构化平台",
+      "priority": "P0",
+      "publishedDate": "2026-07-27",
+      "summary": "Dify 提供低代码式 Agent 工作流、RAG 管线以及多模型和工具支持，可部署于云端、VPC 或自托管环境。项目拥有超过 15 万颗 GitHub Stars，社区重点关注 Graph RAG、MCP 和 OpenAI Realtime API 等能力。",
+      "why": "其统一开发与多种部署能力可帮助团队减少从 AI 应用原型迁移到生产环境时的重复建设。",
+      "impact": 91,
+      "novelty": 72,
+      "actionability": 94,
+      "urgency": "中",
+      "tags": [
+        "Agent",
+        "RAG",
+        "开源",
+        "产品"
+      ],
+      "imageUrl": "https://repository-images.githubusercontent.com/626805178/6616f28b-ae4c-44e6-8b4c-e3c3396315e9",
+      "mediaAssets": {
+        "images": [],
+        "videos": []
+      },
+      "body": "在一个协作工作空间中构建智能体工作流和 RAG 流水线，并获得丰富的 AI 模型与工具支持。可部署在云端、VPC 或自托管环境中，让团队无需重建技术栈即可从原型迈向生产。\n\n⭐ 星标: 150365 | 🍴 复刻: 23688 | 语言: TypeScript | 主题: agent, agentic-ai, agentic-framework, agentic-workflow, ai, automation, claude, genai, gpt, llm, low-code, mcp, nextjs, no-code, openai, orchestration, python, rag, skills, workflow\n创建: 2023-04-12 | 最近提交: 2026-07-27 | 沉淀分: 8.16\n\n【社区反响·热门 Issue】\n- [已关闭] 👍102 💬89 能否将 Microsoft 的 Graph RAG 添加到新版本中？\n- [已关闭] 👍76 💬64 添加对 Model Context Protocol (MCP) 的支持\n- [已关闭] 👍52 💬31 实现 OpenAI 的 Realtime API\n- [已关闭] 👍49 💬12 让我们一起打造一些很棒的东西！💡✨\n\n<p align=\"center\" <a href=\"https://cloud.dify.ai\" Dify Cloud</a · <a href=\"https://docs.dify.ai/getting-started/install-self-hosted\" 自托管</a · <a href=\"https://docs.dify.ai\" 文档</a · <a href=\"https://dify.ai/pricing\" Dify 版本概览</a </p <p align=\"center\" <a href=\"https://dify.ai\" target=\" blank\" <img alt=\"静态徽章\" src=\"https://img.shields.io/badge/Product-F04438\" </a <a href=\"https://dify.ai/pricing\" target=\" blank\" <img alt=\"静态徽章\" src=\"https://img.shields.io/badge/free-pricing?logo=free&color=%20%23155EEF&label=pricing&labelColor=%20%23528bff\" </a <a href=\"https://discord.gg/FngNHpbcY7\" target=\" blank\" <img src=\"https://img.shields.io/discord/1082486657678311454?logo=discord&labelColor=%20%235462eb&logoColor=%20%23f5f5f5&color=%20%235462eb\" alt=\"在 Discord 上聊天\" </a <a href=\"https://reddit.com/r/difyai\" target=\" blank\" <img src=\"https://img.shields.io/reddit/subreddit-subscribers/difyai?style=plastic&logo=reddit&label=r%2Fdifyai&labelColor=white\" alt=\"加入 Reddit\" </a <a href=\"https://twitter.com/intent/follow?screen name=dify ai\" target=\" blank\" <img src=\"https://img.shields.io/twitter/follow/dify ai?logo=X&color=%20%23f5f5f5\" alt=\"在 X(Twitter) 上关注\" </a <a href=\"https://www.linkedin.com/company/langgenius/\" target=\" blank\" <img src=\"https://custom-icon-badges.demolab.com/badge/LinkedIn-0A66C2?logo=linkedin-white&logoColor=fff\" alt=\"在 LinkedIn 上关注\" </a <a href=\"https://hub.docker.com/u/langgenius\" target=\" blank\" <img alt=\"Dock",
+      "bodyTruncated": false,
+      "qualityScore": 0.0,
+      "eventAggregation": {
+        "total": 1,
+        "groups": [
+          {
+            "key": "官方来源",
+            "tone": "#16130f",
+            "items": [
+              {
+                "source": "GitHub Trending",
+                "title": "Dify：面向 Agent 工作流与 RAG 的开源协作平台",
+                "url": "https://github.com/langgenius/dify",
+                "note": "原始发布 / 公告。",
+                "text": "Dify：面向 Agent 工作流与 RAG 的开源协作平台 —— 原始发布 / 公告。"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "recordId": "recvqyrnvNtP9W",
+      "title": "Introducing Muse Spark 1.1",
+      "titleCn": "Meta 发布多模态智能体模型 Muse Spark 1.1",
+      "source": "Meta AI Blog",
+      "url": "https://ai.meta.com/blog/introducing-muse-spark-meta-model-api",
+      "category": "前沿模型公司",
+      "contentType": "",
+      "tier": "L1 一级官方",
+      "priority": "P0",
+      "publishedDate": "2026-07-27",
+      "summary": "Meta 推出 Muse Spark 1.1，重点提升工具与计算机使用、编程和多模态理解能力，并支持多智能体编排及主动管理100万Token上下文。该模型已通过 Meta Model API 公开预览，并在 Meta AI 应用和 meta.ai 上以“Thinking”模式提供。",
+      "why": "该模型将长上下文、多智能体协作和计算机操作整合到实际任务中，有望增强复杂工作流的自动化能力。",
+      "impact": 90,
+      "novelty": 87,
+      "actionability": 92,
+      "urgency": "高",
+      "tags": [
+        "AI",
+        "Agent",
+        "多模态",
+        "产品"
+      ],
+      "imageUrl": "https://scontent-sea1-1.xx.fbcdn.net/v/t39.2365-6/741906678_873652302465180_7764547737953411008_n.png?_nc_cat=104&ccb=1-7&_nc_sid=e280be&_nc_ohc=Glx_XCwH240Q7kNvwFqC0LX&_nc_oc=Adqd0Hzkqll_YZxkJfeyt_vq0Lsf38kp5_xn5epzA0Z1qpc63OowGe7Lx19JvF0f2cA&_nc_zt=14&_nc_ht=scontent-sea1-1.xx&_nc_gid=FYk3OUIajgsTuejPAY_4pg&_nc_ss=7c20f&oh=00_AQAskC7Jpqb1k3bwuJDwmJdme1Qpl_xvARaUXKPsrbbM8w&oe=6A813126",
+      "mediaAssets": {
+        "images": [],
+        "videos": []
+      },
+      "body": "Introducing Muse Spark 1.1\n\n产品\n\nAI 研究\n\n资源\n\n关于\n\nAI 开发者\n\n试用 Meta AI\n\nIntroducing Muse Spark 1.1\n\n2026 年 7 月 9 日 • 阅读时长 10 分钟\n\n今天，我们很高兴推出 Muse Spark 1.1，这是 Meta Superintelligence Labs 的最新模型，也是对 Muse Spark 的一次重大升级。Muse Spark 1.1 是一款面向智能体任务打造的多模态推理模型，在工具和计算机使用、编程以及多模态理解方面取得了显著提升。\n\n凭借这些改进，Muse Spark 1.1 推进了性能与效率的前沿。加上本周推出的 Muse Image，此次发布让我们离个人超级智能的愿景更近了一步：这些模型能帮助你追求目标、创造想象中的事物、加深人际关系，并为你最重视的事情采取行动。\n\n在此次发布的同时，我们还将推出新版 Meta Model API 的公开预览版，开发者可通过该 API 访问 Muse Spark 1.1。该模型现已在 Meta AI 应用和 meta.ai 上以“Thinking”模式提供。\n\n评测\n\n有关我们评测的更多详细信息，请参阅我们的报告。\n\n智能体\n\nMuse Spark 1.1 在需要跨一系列外部应用和服务进行规划与编排的个人智能体任务中表现卓越。它能够以零样本方式泛化到新的原生工具、MCP 服务器和自定义技能。\n\n它处理复杂项目的速度显著快于 Muse Spark，因为它经过训练，能够编排多智能体系统以优化端到端延迟。作为主智能体，它可以收集上下文、制定计划，并将执行工作委派给并行的子智能体。作为子智能体，它会恪守自身职责，理解可用工具，并知道何时应将问题上报给主智能体。\n\nMuse Spark 1.1 可以主动管理其 100 万 token 的上下文窗口。它会记住操作、检索早先工作中的信息，并以保留后续工作所需关键步骤的方式压缩上下文。\n\n计算机使用\n\nMuse Spark 1.1 擅长处理跨多个应用展开、且信息会即时变化的计算机使用工作流。它能在长时间会话中保持上下文，适应不断变化的需求，并在极少人工干预的情况下浏览不熟悉的界面。\n\nMuse Spark 1.1 不会逐次点击、一步步推理每一个桌面操作，而是能理解何时应自动化、何时应直接使用界面。我们训练该模型在自动化更快时编写脚本，在直接交互更简单时进行点击，并在每一步生成批量操作。\n\n智能体式晚宴组织：在现实世界的应用中，会出现改变任务的新上下文。Muse Spark 1.1 在下晚餐订单时会注意到这些变化，并在无需用户干预的情况下进行必要的更新。\n\n编程\n\nMuse Spark 1.1 在涉及大型复杂代码库的现实任务中的编程表现得到了大幅提升。它可以诊断并修复复杂的 bug，在企业级系统中实现新功能，并执行大规模代码迁移。在 u",
+      "bodyTruncated": true,
+      "qualityScore": 0.0,
+      "eventAggregation": {
+        "total": 1,
+        "groups": [
+          {
+            "key": "官方来源",
+            "tone": "#16130f",
+            "items": [
+              {
+                "source": "Meta AI Blog",
+                "title": "Meta 发布多模态智能体模型 Muse Spark 1.1",
+                "url": "https://ai.meta.com/blog/introducing-muse-spark-meta-model-api",
+                "note": "原始发布 / 公告。",
+                "text": "Meta 发布多模态智能体模型 Muse Spark 1.1 —— 原始发布 / 公告。"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "recordId": "recvqyrnvNc9sv",
+      "title": "Introducing Muse Spark: Scaling Towards Personal Superintelligence",
+      "titleCn": "Meta 发布原生多模态推理模型 Muse Spark",
+      "source": "Meta AI Blog",
+      "url": "https://ai.meta.com/blog/introducing-muse-spark-msl",
+      "category": "前沿模型公司",
+      "contentType": "",
+      "tier": "L1 一级官方",
+      "priority": "P0",
+      "publishedDate": "2026-07-27",
+      "summary": "Meta 推出 Muse 系列首款模型 Muse Spark，支持工具调用、视觉思维链和多智能体编排，并通过 Contemplating 模式并行协调多个智能体。该模型已上线 Meta AI，正面向部分用户开放 API 私测，但长周期智能体和编程工作流仍存在性能差距。",
+      "why": "Muse Spark 展示了 Meta 通过预训练、强化学习和测试时推理扩展模型能力并迈向“个人超级智能”的新路线。",
+      "impact": 90,
+      "novelty": 87,
+      "actionability": 76,
+      "urgency": "高",
+      "tags": [
+        "多模态",
+        "推理",
+        "Agent",
+        "产品"
+      ],
+      "imageUrl": "https://scontent-sea5-1.xx.fbcdn.net/v/t39.2365-6/667507363_1871749950191919_4996140970371485757_n.png?_nc_cat=109&ccb=1-7&_nc_sid=e280be&_nc_ohc=RR2btl8FBNsQ7kNvwFptGqC&_nc_oc=Adq7aferH2RGlv6cux_OrT_UI5YruIwBN8E9-ppdPBT2DVoGZilihpv9JilWqv_ntsY&_nc_zt=14&_nc_ht=scontent-sea5-1.xx&_nc_gid=RCkCPI3ADg2pxiaDcVLLqg&_nc_ss=7c20f&oh=00_AQDYT5L9eeWHjwMNTrM8ohglWpEFLunGevuOePhVkYASug&oe=6A813B2C",
+      "mediaAssets": {
+        "images": [],
+        "videos": []
+      },
+      "body": "推出 Muse Spark：向个人超级智能扩展\n\n产品\n\nAI 研究\n\n资源\n\n关于我们\n\nAI 开发者\n\n试用 Meta AI\n\n精选\n\n推出 Muse Spark：向个人超级智能扩展\n\n2026 年 4 月 8 日 • 阅读时长 15 分钟\n\n今天，我们很高兴推出 Muse Spark，这是由 Meta Superintelligence Labs 开发的 Muse 模型家族中的首个模型。Muse Spark 是一个原生多模态推理模型，支持工具使用、视觉思维链和多智能体编排。\n\nMuse Spark 是我们扩展阶梯上的第一步，也是我们从头彻底革新 AI 工作的首个成果。为支持进一步扩展，我们正在对整个技术栈进行战略性投资——从研究和模型训练到基础设施，包括 Hyperion 数据中心。\n\n在本文中，我们将首先探讨 Muse Spark 的新能力和应用。在介绍这些成果之后，我们将揭开帷幕，了解推动我们向个人超级智能迈进的各个扩展维度。\n\nMuse Spark 现已在 meta.ai 和 Meta AI 应用中上线。我们正面向部分用户开放私有 API 预览。\n\n面向个人超级智能的能力\n\nMuse Spark 在多模态感知、推理、健康和智能体任务方面展现出具有竞争力的表现。我们将继续投资于目前仍存在性能差距的领域，例如长时间跨度智能体系统和编码工作流。\n\n随着更大模型正在开发之中，这些结果表明，我们的技术栈正在有效扩展。\n\n我们还将发布 Contemplating mode，它可编排多个并行推理的智能体。这使 Muse Spark 能够与 Gemini Deep Think 和 GPT Pro 等前沿模型的极限推理模式相竞争。Contemplating mode 在高难度任务中显著提升了能力，在 Humanity’s Last Exam 中取得了 58% 的成绩，在 FrontierScience Research 中取得了 38% 的成绩。\n\nMuse Spark 现已上线，Contemplating mode 将逐步在 meta.ai 中推出。\n\n*有关我们评估的更多详细信息，请参阅我们的方法论文档。\n\n应用\n\nMuse Spark 是迈向能够理解你的世界的个人超级智能的第一步。从分析你周围的即时环境，到为你的健康提供支持，Muse Spark 的高级推理能力可实现强大且高度个性化的使用场景。\n\n多模态。Muse Spark 从零开始构建，旨在跨领域和工具整合视觉信息。它在视觉 STEM 问题、实体识别和定位方面表现出色。这些能力结合在一起，可以实现各种交互式体验，例如创建有趣的小游戏，或通过动态标注排查家用电器故障。\n\n健康。个人超级智能的一项主要应用，是帮助人们了解并改善自身健康。为了提升 Muse Spark 的健康推理能力，我们与 1,000 多名医生合作，策划训练数据，使其能够给出更符合事实且更全面的回答。Muse",
+      "bodyTruncated": true,
+      "qualityScore": 0.0,
+      "eventAggregation": {
+        "total": 1,
+        "groups": [
+          {
+            "key": "官方来源",
+            "tone": "#16130f",
+            "items": [
+              {
+                "source": "Meta AI Blog",
+                "title": "Meta 发布原生多模态推理模型 Muse Spark",
+                "url": "https://ai.meta.com/blog/introducing-muse-spark-msl",
+                "note": "原始发布 / 公告。",
+                "text": "Meta 发布原生多模态推理模型 Muse Spark —— 原始发布 / 公告。"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "recordId": "recvqyrnvNti8n",
+      "title": "open-webui/open-webui",
+      "titleCn": "Open WebUI：支持本地与多提供商模型的自托管 AI 平台",
+      "source": "GitHub Trending",
+      "url": "https://github.com/open-webui/open-webui",
+      "category": "技术研究开源",
+      "contentType": "Github热榜",
+      "tier": "L2 结构化平台",
+      "priority": "P0",
+      "publishedDate": "2026-07-27",
+      "summary": "Open WebUI 是一个可离线运行的开源自托管 AI 平台，支持 Ollama、OpenAI 兼容 API 及内置 RAG 推理引擎。项目还提供 RBAC、插件、MCP/OpenAPI 工具连接，以及 Docker、Kubernetes 等部署方式。",
+      "why": "其高社区热度、广泛模型兼容性和企业级部署能力，使其成为搭建私有 AI 服务的实用开源方案。",
+      "impact": 89,
+      "novelty": 68,
+      "actionability": 94,
+      "urgency": "中",
+      "tags": [
+        "AI",
+        "LLM",
+        "RAG",
+        "开源"
+      ],
+      "imageUrl": "https://repository-images.githubusercontent.com/701547123/275da62f-2139-4d2b-bcac-57c82872dd30",
+      "mediaAssets": {
+        "images": [],
+        "videos": []
+      },
+      "body": "用户友好的 AI 界面（支持 Ollama、OpenAI API……）\n\n⭐ 星标: 146866 | 🍴 复刻: 21341 | 语言: Python | 主题: ai, llm, llm-ui, llm-webui, llms, mcp, ollama, ollama-webui, open-webui, openai, openapi, rag, self-hosted, ui, webui\n创建: 2023-10-06 | 最近提交: 2026-07-27 | 沉淀分: 8.13\n\n【社区反响·热门 Issue】\n- [已关闭] 👍93 💬23 为 DeepSeek-R1 及类似模型提供更好的块渲染\n- [已关闭] 👍87 💬2 功能：通过 OpenRouter 支持新的 base64 图像生成\n- [已关闭] 👍83 💬54 功能：OAuth/OIDC\n- [已关闭] 👍71 💬23 功能：更好的 RAG\n\nOpen WebUI 👋 Open WebUI 是一个可扩展、功能丰富且用户友好的自托管 AI 平台，旨在完全离线运行。它支持 Ollama 和 OpenAI 兼容 API 等多种 LLM 运行器，并内置用于 RAG 的推理引擎，使其成为强大的 AI 部署解决方案。热衷于开源 AI？加入我们的团队 → [!TIP] 正在寻找企业计划？——立即联系我们的销售团队！获得增强功能，包括自定义主题和品牌、服务级别协议（SLA）支持、长期支持（LTS）版本等！有关更多信息，请务必查看我们的 Open WebUI 文档。Open WebUI 的主要功能 ⭐ - 🚀 轻松设置：通过 pip、uv、Docker 或 Kubernetes（kubectl、kustomize 或 helm）无缝安装，并提供带有 :ollama 和 :cuda 标签的镜像用于容器部署。- 🤝 广泛的模型与 API 集成：在本地 Ollama 模型之外，还可连接任何 OpenAI 兼容 API。将 API URL 指向 LMStudio、GroqCloud、Mistral、OpenRouter、vLLM 等，自由混合搭配不同的提供商。- 🔐 细粒度 RBAC 与用户组：管理员可以定义详细的角色、组和权限，让每位用户恰好获得其所需的访问权限。默认安全，并可为每个组提供量身定制的体验。- 🧩 插件支持：使用 Filters、Actions、Pipes、Tools 和 Skills 扩展 Open WebUI。通过 MCP、MCPO 和 OpenAPI 工具服务器连接外部服务。构建自定义集成、速率限制、审批流程、数据 con",
+      "bodyTruncated": false,
+      "qualityScore": 0.0,
+      "eventAggregation": {
+        "total": 1,
+        "groups": [
+          {
+            "key": "官方来源",
+            "tone": "#16130f",
+            "items": [
+              {
+                "source": "GitHub Trending",
+                "title": "Open WebUI：支持本地与多提供商模型的自托管 AI 平台",
+                "url": "https://github.com/open-webui/open-webui",
+                "note": "原始发布 / 公告。",
+                "text": "Open WebUI：支持本地与多提供商模型的自托管 AI 平台 —— 原始发布 / 公告。"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "recordId": "recvqyrnvNDyuN",
+      "title": "Redeploying Claude Fable 5 \\ Anthropic",
+      "titleCn": "Anthropic 恢复部署 Claude Fable 5 与 Mythos 5",
+      "source": "Anthropic News",
+      "url": "https://www.anthropic.com/news/redeploying-fable-5",
+      "category": "前沿模型公司",
+      "contentType": "",
+      "tier": "L1 一级官方",
+      "priority": "P0",
+      "publishedDate": "2026-07-27",
+      "summary": "美国政府解除出口管制后，Anthropic 于 2026 年 7 月 1 日恢复 Claude Fable 5 的全球访问，并面向部分美国机构恢复 Mythos 5。公司同时更新网络安全防护措施，并与政府及云服务商推动建立统一的模型越狱风险评估框架。",
+      "why": "此次事件显示，前沿模型的安全漏洞、出口管制和实时身份核验能力正直接影响模型发布与全球可用性。",
+      "impact": 88,
+      "novelty": 84,
+      "actionability": 78,
+      "urgency": "高",
+      "tags": [
+        "LLM",
+        "监管",
+        "产品",
+        "其他"
+      ],
+      "imageUrl": "https://cdn.sanity.io/images/4zrzovbb/website/6d4a0d28992ade92d6fa63646fd9c9d318245c6c-2400x1260.jpg",
+      "mediaAssets": {
+        "images": [],
+        "videos": []
+      },
+      "body": "重新部署 Claude Fable 5 \\ Anthropic\n\n跳至主要内容 跳至页脚\n\n研究\n\n政策\n\n承诺\n\n学习\n\n新闻\n\n试用 Claude\n\n公告\n\n重新部署 Fable 5\n\n2026 年 6 月 30 日\n\n更新：Claude Fable 5 和 Mythos 5 已重新部署\n\n2026 年 7 月 1 日\n\nClaude Fable 5 和 Mythos 5 的访问现已恢复。\n\n6 月 12 日星期五，美国政府对我们最新的模型 Claude Fable 5 和 Claude Mythos 5 实施了出口管制。这要求我们限制外国公民的访问，无论其身处美国境内还是境外。由于该命令立即生效，而我们没有可靠的方法实时核实国籍，因此我们暂停了所有用户对这两个模型的访问。\n\n截至今天，即 6 月 30 日，针对 Fable 5 和 Mythos 5 的出口管制已经解除。\n\n从明天，即 7 月 1 日星期三起，全球用户将可在 Claude Platform、Claude.ai、Claude Code 和 Claude Cowork 上使用 Fable 5。对于 Pro、Max、Team 和部分 Enterprise 方案，1 截至 7 月 7 日，Fable 5 将包含在每周使用限额的最多 50% 之内，此后将可通过使用额度使用。我们将尽快在 AWS、Google Cloud 和 Microsoft Foundry 上重新启用访问。\n\n在美国政府于 6 月 26 日批准后，我们也已为一批美国组织恢复了 Mythos 5 的访问。我们将继续与政府协调，以便将访问权限扩展至 Glasswing 计划中更广泛的国内外合作伙伴。\n\n在本文余下部分，我们将在以下四个方面提供更多细节和最新情况：\n\n事件时间线，包括我们对防护措施所做的更新。我们将讨论导致出口管制指令出台的事件，以及我们如何通过新的防护措施加以解决。\n\n我们对防护措施的一般方法。我们将提供更多背景信息，说明我们如何使用安全分类器来检测可能利用我们模型进行的危险网络安全活动。\n\n一套行业共享框架。尽管我们已经达成了建设性的解决方案，但这些事件清楚表明，行业需要一种一致的方法来评估和修复 AI 模型潜在的“越狱”（绕过模型防护措施的技术）。2 一套用于判定特定越狱严重程度的共享标准，将有助于 AI 开发者在新发现出现时确定其处理优先级，以更高的安全性推出能力强大的模型，并向政府和行业合作伙伴一致地传达风险级别。我们已与 Amazon、Microsoft、Google 及其他 Glasswing 合作伙伴共同着手制定这样一套框架，并将在下文概述。\n\n与政府开展更深入的合作。我们也在加强与美国政府在新的发布前测试、信息共享和研究合作方面的协作。我们将在最后一节介绍这种更深入的合作。\n\n时间线和防护措施更新\n\n我们于 6 月 9 日星期二发布了 Fable 5 和 Mythos 5。两者使用相同的底层模型，但 Fable 5 在发布时配备了强有力的防护措施，使其更适合一般用途。Mytho",
+      "bodyTruncated": true,
+      "qualityScore": 0.0,
+      "eventAggregation": {
+        "total": 1,
+        "groups": [
+          {
+            "key": "官方来源",
+            "tone": "#16130f",
+            "items": [
+              {
+                "source": "Anthropic News",
+                "title": "Anthropic 恢复部署 Claude Fable 5 与 Mythos 5",
+                "url": "https://www.anthropic.com/news/redeploying-fable-5",
+                "note": "原始发布 / 公告。",
+                "text": "Anthropic 恢复部署 Claude Fable 5 与 Mythos 5 —— 原始发布 / 公告。"
               }
             ]
           }

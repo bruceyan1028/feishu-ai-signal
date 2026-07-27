@@ -37,11 +37,87 @@ def title_similarity(a: str, b: str) -> float:
         return 0.0
     if na == nb:
         return 1.0
-    # 短标题被长标题包含（常见于「原题 + 媒体后缀」）
+    # 短标题被长标题包含（常见于「原题 + 媒体后缀」）。
+    # 阈值不能太低：像「Optimization」这种通用词标题会被任意长标题包含。
     shorter, longer = (na, nb) if len(na) <= len(nb) else (nb, na)
-    if len(shorter) >= 8 and shorter in longer:
+    if len(shorter) >= 16 and shorter in longer:
         return 0.92
     return SequenceMatcher(None, na, nb).ratio()
+
+
+_CJK_RE = re.compile(r"[\u4e00-\u9fff]")
+_LATIN_TOKEN_RE = re.compile(r"[a-z][a-z0-9]*(?:[.-][a-z0-9]+)*|\d+(?:\.\d+)*")
+# 通用词与「发布/介绍」类动词，留着会让不相干的两条凑够共同词
+_TOKEN_STOPWORDS = frozenset(
+    {
+        "the", "and", "for", "with", "new", "how", "why", "what", "from", "its", "our",
+        "are", "can", "will", "now", "you", "your", "this", "that", "than", "more", "next",
+        "first", "into", "但", "ai", "llm", "model", "models", "open", "source", "using",
+        "use", "launch", "launches", "launching", "introducing", "introduces", "announcing",
+        "announces", "release", "releases", "released", "update", "updates", "available",
+        "blog", "news", "post", "com", "www", "http", "https",
+    }
+)
+
+
+def _title_token_seq(text: str) -> list[str]:
+    """按出现顺序取标题里的拉丁词与版本号；中文转述通常原样保留产品名，可作跨语言锚点。"""
+    return [
+        token
+        for token in _LATIN_TOKEN_RE.findall(str(text or "").lower())
+        # 带数字的短词是型号（K3、V3、o3），要留；纯字母短词（an、of）是噪音
+        if token not in _TOKEN_STOPWORDS and (len(token) >= 3 or _has_digit(token))
+    ]
+
+
+def _title_tokens(text: str) -> set[str]:
+    return set(_title_token_seq(text))
+
+
+def _bigrams(seq: list[str]) -> set[tuple[str, str]]:
+    return {(seq[i], seq[i + 1]) for i in range(len(seq) - 1)}
+
+
+_YEAR_RE = re.compile(r"^(?:19|20)\d{2}$")
+_ANCHOR_MIN_SHARE = 0.55
+
+
+def _has_digit(token: str) -> bool:
+    return any(ch.isdigit() for ch in token)
+
+
+def entity_match(a: str, b: str) -> bool:
+    """靠共同的「产品名 + 版本号」判同事件。
+
+    「Introducing Claude Opus 5」与「Claude Opus 5来了，Fable 5性能、一半价格」
+    字面相似度极低，但共享 claude/opus/5 这组锚点。
+
+    只要共同词够多就合并会失控：同一场发布会的几十篇稿子都带 waic/2026，
+    同一平台的不同产品都带 vera/rubin。版本号才是「同一条消息」的强信号，
+    所以要求锚点里既有实词也有非年份的版本号。
+
+    锚点还必须是相邻词组（如 "opus 5"），否则 Claude Opus 5 与 Claude Sonnet 5
+    会因为共享 claude+5 被并成一条。
+
+    最后要求锚点在两边标题里占足够比重：不然「打败 Fable 5！Kimi K3 冲上第一」
+    这种只是顺带提到某个模型的报道，会被并进那个模型自己的发布里。
+    """
+    seq_a, seq_b = _title_token_seq(a), _title_token_seq(b)
+    tokens_a, tokens_b = set(seq_a), set(seq_b)
+    shared = tokens_a & tokens_b
+    if len(shared) < 2:
+        return False
+    has_name = any(len(t) >= 4 and not _has_digit(t) for t in shared)
+    has_version = any(_has_digit(t) and not _YEAR_RE.match(t) for t in shared)
+    if not (has_name and has_version):
+        return False
+    if not _bigrams(seq_a) & _bigrams(seq_b):
+        return False
+    return len(shared) / len(tokens_a | tokens_b) >= _ANCHOR_MIN_SHARE
+
+
+def same_event(a: str, b: str, threshold: float = 0.85) -> bool:
+    return title_similarity(a, b) >= threshold or entity_match(a, b)
 
 
 def _tier_code(raw: Any) -> str:
@@ -86,7 +162,7 @@ def cluster_by_title(
         title = str(item.get(title_key) or item.get("titleCn") or item.get("zhTitle") or "")
         placed = False
         for index, rep in enumerate(reps):
-            if title_similarity(title, rep) >= threshold:
+            if same_event(title, rep, threshold):
                 clusters[index].append(item)
                 placed = True
                 break
@@ -251,10 +327,11 @@ def attach_aggregations(signals: list[dict[str, Any]], *, threshold: float = 0.8
                 oid = str(other.get("recordId") or other.get("url") or id(other))
                 if oid == rid or oid in used:
                     continue
-                if title_similarity(
+                if same_event(
                     str(signal.get("titleCn") or signal.get("title")),
                     str(other.get("titleCn") or other.get("title")),
-                ) >= threshold:
+                    threshold,
+                ):
                     peers.append(other)
                     used.add(oid)
         used.add(rid)
@@ -277,7 +354,6 @@ def enrich_with_pool(
     """用条目池为每条信号补齐同事件其它源头，再生成 eventAggregation。"""
     if not signals:
         return []
-    signal_ids = {str(s.get("recordId") or "") for s in signals}
     for signal in signals:
         peers: list[dict[str, Any]] = list(signal.get("eventPeers") or [])
         seen = {str(signal.get("recordId") or ""), *(str(p.get("recordId") or "") for p in peers)}
@@ -287,10 +363,7 @@ def enrich_with_pool(
             if not oid or oid in seen:
                 continue
             other_title = str(other.get("titleCn") or other.get("title") or "")
-            sim = title_similarity(title, other_title)
-            if sim < threshold:
-                continue
-            if oid in signal_ids and sim < threshold:
+            if not same_event(title, other_title, threshold):
                 continue
             peers.append(other)
             seen.add(oid)

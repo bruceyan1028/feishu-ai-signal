@@ -59,11 +59,20 @@ def _signal_from_record(record: dict[str, Any]) -> dict[str, Any]:
     }
 
 
-def load_recent_briefs(token: str, days: int = 7) -> list[dict[str, Any]]:
+def load_entry_pool(token: str) -> dict[str, dict[str, Any]]:
+    """全量条目池，用于给简报信号补齐同事件的其它源头。"""
+    records = feishu.read_all_records_with_ids(token, config.FEISHU_ENTRY_TABLE_ID)
+    return {str(record.get("record_id")): _signal_from_record(record) for record in records}
+
+
+def load_recent_briefs(
+    token: str,
+    days: int = 7,
+    entries: dict[str, dict[str, Any]] | None = None,
+) -> list[dict[str, Any]]:
     table_id = config.FEISHU_BRIEF_TABLE_ID or feishu.ensure_daily_brief_table(token)
     brief_records = feishu.read_all_records_with_ids(token, table_id)
-    entry_records = feishu.read_all_records_with_ids(token, config.FEISHU_ENTRY_TABLE_ID)
-    entries = {str(record.get("record_id")): _signal_from_record(record) for record in entry_records}
+    entries = load_entry_pool(token) if entries is None else entries
     briefs: list[dict[str, Any]] = []
     for record in brief_records:
         fields = record.get("fields") or {}
@@ -117,9 +126,14 @@ def run() -> int:
     parser.add_argument("--site-dir", default=str(ROOT / "site"))
     args = parser.parse_args()
     token = feishu.get_tenant_access_token()
-    briefs = load_recent_briefs(token)
+    entries = load_entry_pool(token)
+    briefs = load_recent_briefs(token, entries=entries)
     if args.input:
         current = json.loads(Path(args.input).read_text(encoding="utf-8"))
+        # 当天简报走的是本地 JSON，同样要补齐同事件其它源头，否则只有历史简报有事件聚合
+        current["signals"] = cluster.enrich_with_pool(
+            current.get("signals") or [], list(entries.values()), threshold=0.85
+        )
         briefs = [current, *[item for item in briefs if item["date"] != current["date"]]][:7]
     site = build_site(briefs, args.site_dir)
     print(site)
