@@ -974,7 +974,6 @@ function coverHtml(A, s, h){
     <div style="position: absolute; left: 0; right: 0; bottom: 0; padding: 12px 14px; background: linear-gradient(180deg, transparent, rgba(0,0,0,.72)); display: flex; align-items: center; gap: 9px;">
       ${avatarHtml(s.source)}
       <span style="font-size: 12px; font-weight: 600; color: #fff;">${esc(s.source)}</span>
-      <span style="margin-left: auto; font-family: 'Geist Mono', monospace; font-size: 10.5px; color: rgba(255,255,255,.75); background: rgba(0,0,0,.4); padding: 3px 8px;">${s.image?'原文配图':'主题配图'}</span>
     </div>
   </div>`;
 }
@@ -1432,7 +1431,8 @@ function splitParagraphs(text){
 function articleBody(A, s){
   const proseStyle = 'font-family:"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif; letter-spacing:0; word-spacing:0; text-align:left; text-justify:none; word-break:normal; overflow-wrap:break-word;';
   const P = html => `<p style="margin: 0 0 16px; font-size: 15px; line-height: 2; color: ${UI.text2}; ${proseStyle}">${zhProseHtml(html)}</p>`;
-  const figure = (item, index) => `<figure style="margin:24px 0; border:1px solid ${UI.border}; background:#fff;"><img src="${esc(item.url)}" alt="${esc(item.alt||s.zhTitle)}" loading="lazy" onerror="this.closest('figure').remove()" style="display:block; width:100%; max-height:560px; object-fit:contain;"><figcaption style="padding:9px 12px; font-size:11.5px; color:${UI.text3};">原文${s.kind==='论文'?'图表':'配图'} ${index+1}${item.alt?` · ${esc(item.alt)}`:''}</figcaption></figure>`;
+  // 仅当原图自带说明文字时才显示图注，不再加「原文配图 N」这类编号标签
+  const figure = item => `<figure style="margin:24px 0; border:1px solid ${UI.border}; background:#fff;"><img src="${esc(item.url)}" alt="${esc(item.alt||s.zhTitle)}" loading="lazy" onerror="this.closest('figure').remove()" style="display:block; width:100%; max-height:560px; object-fit:contain;">${item.alt?`<figcaption style="padding:9px 12px; font-size:11.5px; color:${UI.text3};">${esc(item.alt)}</figcaption>`:''}</figure>`;
 
   // AI 只占开头一小段,正文主体交给原文
   const lead = s.summary
@@ -1457,12 +1457,12 @@ function articleBody(A, s){
     blocks.push(P(esc(para)));
     if(step){
       const slot = images.findIndex((_, i)=> (i + 1) * step === index + 1);
-      if(slot >= 0) blocks.push(figure(images[slot], slot));
+      if(slot >= 0) blocks.push(figure(images[slot]));
     }
   });
   // 没排进去的图(段落太少时)统一补在正文末尾
   const placed = step ? images.filter((_, i)=> (i + 1) * step <= paras.length).length : 0;
-  images.slice(placed).forEach((item, i)=> blocks.push(figure(item, placed + i)));
+  images.slice(placed).forEach(item=> blocks.push(figure(item)));
   videos.forEach(item=> blocks.push(`<div style="position:relative; padding-top:56.25%; margin:24px 0; background:#000;"><iframe src="${esc(item.embedUrl)}" title="${esc(s.zhTitle)}" allow="accelerometer; autoplay; encrypted-media; picture-in-picture" allowfullscreen style="position:absolute; inset:0; width:100%; height:100%; border:0;"></iframe></div>`));
 
   const truncated = s.bodyTruncated
