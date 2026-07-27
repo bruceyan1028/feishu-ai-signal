@@ -1,10 +1,9 @@
 name: Daily AI Signal Brief
 
 on:
-  # 已停用每日定时推送（迁移到新账号）。如需恢复，取消下面 schedule 的注释即可。
-  # schedule:
-  #   # 北京时间每天 09:00
-  #   - cron: "0 1 * * *"
+  schedule:
+    # 北京时间每天 09:00（UTC 01:00）。GitHub 定时有延迟，实际触发可能晚 10~30 分钟。
+    - cron: "0 1 * * *"
   workflow_dispatch:
     inputs:
       force_send:
@@ -28,6 +27,28 @@ jobs:
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
+    # 所有步骤共享的配置：一处集中，避免各步骤漏传导致新库回退到旧库默认表 ID。
+    env:
+      FEISHU_APP_ID: ${{ secrets.FEISHU_APP_ID }}
+      FEISHU_APP_SECRET: ${{ secrets.FEISHU_APP_SECRET }}
+      FEISHU_BASE_ID: ${{ secrets.FEISHU_BASE_ID }}
+      FEISHU_SOURCE_TABLE_ID: ${{ secrets.FEISHU_SOURCE_TABLE_ID }}
+      FEISHU_PARAM_TABLE_ID: ${{ secrets.FEISHU_PARAM_TABLE_ID }}
+      FEISHU_ENTRY_TABLE_ID: ${{ secrets.FEISHU_ENTRY_TABLE_ID }}
+      FEISHU_BRIEF_TABLE_ID: ${{ secrets.FEISHU_BRIEF_TABLE_ID }}
+      FEISHU_PAPER_CONFIG_TABLE_ID: ${{ secrets.FEISHU_PAPER_CONFIG_TABLE_ID }}
+      FEISHU_WECHAT_CONFIG_TABLE_ID: ${{ secrets.FEISHU_WECHAT_CONFIG_TABLE_ID }}
+      FEISHU_VIDEO_CONFIG_TABLE_ID: ${{ secrets.FEISHU_VIDEO_CONFIG_TABLE_ID }}
+      FEISHU_SOCIAL_CONFIG_TABLE_ID: ${{ secrets.FEISHU_SOCIAL_CONFIG_TABLE_ID }}
+      FEISHU_GITHUB_CONFIG_TABLE_ID: ${{ secrets.FEISHU_GITHUB_CONFIG_TABLE_ID }}
+      FEISHU_RECIPIENT_OPEN_ID: ${{ secrets.FEISHU_RECIPIENT_OPEN_ID }}
+      FEISHU_RECIPIENT_OPEN_IDS: ${{ secrets.FEISHU_RECIPIENT_OPEN_IDS }}
+      LLM_API_KEY: ${{ secrets.LLM_API_KEY }}
+      LLM_BASE_URL: ${{ secrets.LLM_BASE_URL }}
+      LLM_MODEL: ${{ secrets.LLM_MODEL }}
+      JINA_API_KEY: ${{ secrets.JINA_API_KEY }}
+      # 论文社区热度富集在海外 runner 上易超时，默认关闭；如需可在 Secrets/Variables 覆盖。
+      PAPER_ENRICH_ENABLED: "0"
     steps:
       - uses: actions/checkout@v4
 
@@ -43,38 +64,12 @@ jobs:
         run: python -m unittest discover -s tests -v
 
       - name: Ingest real RSS signals
-        env:
-          FEISHU_APP_ID: ${{ secrets.FEISHU_APP_ID }}
-          FEISHU_APP_SECRET: ${{ secrets.FEISHU_APP_SECRET }}
-          FEISHU_BASE_ID: ${{ secrets.FEISHU_BASE_ID }}
-          FEISHU_PARAM_TABLE_ID: ${{ secrets.FEISHU_PARAM_TABLE_ID }}
-          FEISHU_ENTRY_TABLE_ID: ${{ secrets.FEISHU_ENTRY_TABLE_ID }}
-          FEISHU_BRIEF_TABLE_ID: ${{ secrets.FEISHU_BRIEF_TABLE_ID }}
-          LLM_API_KEY: ${{ secrets.LLM_API_KEY }}
-          LLM_BASE_URL: ${{ secrets.LLM_BASE_URL }}
-          LLM_MODEL: ${{ secrets.LLM_MODEL }}
         run: python -m src.main
 
       - name: Analyze and write daily brief
-        env:
-          FEISHU_APP_ID: ${{ secrets.FEISHU_APP_ID }}
-          FEISHU_APP_SECRET: ${{ secrets.FEISHU_APP_SECRET }}
-          FEISHU_BASE_ID: ${{ secrets.FEISHU_BASE_ID }}
-          FEISHU_PARAM_TABLE_ID: ${{ secrets.FEISHU_PARAM_TABLE_ID }}
-          FEISHU_ENTRY_TABLE_ID: ${{ secrets.FEISHU_ENTRY_TABLE_ID }}
-          FEISHU_BRIEF_TABLE_ID: ${{ secrets.FEISHU_BRIEF_TABLE_ID }}
-          LLM_API_KEY: ${{ secrets.LLM_API_KEY }}
-          LLM_BASE_URL: ${{ secrets.LLM_BASE_URL }}
-          LLM_MODEL: ${{ secrets.LLM_MODEL }}
         run: python -m src.daily --output output/daily-brief.json
 
       - name: Build static site from Feishu
-        env:
-          FEISHU_APP_ID: ${{ secrets.FEISHU_APP_ID }}
-          FEISHU_APP_SECRET: ${{ secrets.FEISHU_APP_SECRET }}
-          FEISHU_BASE_ID: ${{ secrets.FEISHU_BASE_ID }}
-          FEISHU_ENTRY_TABLE_ID: ${{ secrets.FEISHU_ENTRY_TABLE_ID }}
-          FEISHU_BRIEF_TABLE_ID: ${{ secrets.FEISHU_BRIEF_TABLE_ID }}
         run: python -m src.publish --input output/daily-brief.json
 
       - uses: actions/configure-pages@v5
@@ -91,13 +86,6 @@ jobs:
 
       - name: Send Feishu card
         env:
-          FEISHU_APP_ID: ${{ secrets.FEISHU_APP_ID }}
-          FEISHU_APP_SECRET: ${{ secrets.FEISHU_APP_SECRET }}
-          FEISHU_BASE_ID: ${{ secrets.FEISHU_BASE_ID }}
-          FEISHU_ENTRY_TABLE_ID: ${{ secrets.FEISHU_ENTRY_TABLE_ID }}
-          FEISHU_BRIEF_TABLE_ID: ${{ secrets.FEISHU_BRIEF_TABLE_ID }}
-          FEISHU_RECIPIENT_OPEN_ID: ${{ secrets.FEISHU_RECIPIENT_OPEN_ID }}
-          FEISHU_RECIPIENT_OPEN_IDS: ${{ secrets.FEISHU_RECIPIENT_OPEN_IDS }}
           PUBLIC_BASE_URL: ${{ steps.deployment.outputs.page_url }}
           FORCE_FLAG: ${{ inputs.force_send && '--force' || '' }}
         run: python -m src.notify --input output/daily-brief.json $FORCE_FLAG

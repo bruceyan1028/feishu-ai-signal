@@ -32,7 +32,14 @@ jobs:
           FEISHU_APP_ID: ${{ secrets.FEISHU_APP_ID }}
           FEISHU_APP_SECRET: ${{ secrets.FEISHU_APP_SECRET }}
           FEISHU_BASE_ID: ${{ secrets.FEISHU_BASE_ID }}
+          FEISHU_SOURCE_TABLE_ID: ${{ secrets.FEISHU_SOURCE_TABLE_ID }}
           FEISHU_PARAM_TABLE_ID: ${{ secrets.FEISHU_PARAM_TABLE_ID }}
           FEISHU_ENTRY_TABLE_ID: ${{ secrets.FEISHU_ENTRY_TABLE_ID }}
+          FEISHU_PAPER_CONFIG_TABLE_ID: ${{ secrets.FEISHU_PAPER_CONFIG_TABLE_ID }}
+          FEISHU_WECHAT_CONFIG_TABLE_ID: ${{ secrets.FEISHU_WECHAT_CONFIG_TABLE_ID }}
+          FEISHU_VIDEO_CONFIG_TABLE_ID: ${{ secrets.FEISHU_VIDEO_CONFIG_TABLE_ID }}
+          FEISHU_SOCIAL_CONFIG_TABLE_ID: ${{ secrets.FEISHU_SOCIAL_CONFIG_TABLE_ID }}
+          FEISHU_GITHUB_CONFIG_TABLE_ID: ${{ secrets.FEISHU_GITHUB_CONFIG_TABLE_ID }}
+          JINA_API_KEY: ${{ secrets.JINA_API_KEY }}
           DIFY_WEBHOOK_URL: ${{ secrets.DIFY_WEBHOOK_URL }}
         run: python -m src.main
