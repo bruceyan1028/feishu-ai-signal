@@ -313,14 +313,12 @@ let signals = [
   { rank: 20, impact: 74, urgency: '中', kind: '论文', zhTitle: 'Apple 更新端侧基础模型:3B 参数对标 7B 能力', title: 'Apple Intelligence Foundation Models: On-device 3B with 7B-class quality', source: 'Apple ML Research', cat: '技术研究开源', date: '2026-07-03', summary: 'Apple 发布端侧基础模型技术报告:3B 参数模型通过混合精度量化(平均 3.7 bit)与任务适配器体系,在摘要、改写与工具调用上达到 7B 级开源模型质量,并保持端侧毫秒级首响与低内存占用,适配器可按 App 动态加载。', why: '端侧小模型的能力密度持续提升,「云端大模型 + 端侧小模型」的分层架构正在成为移动端标配。其适配器方案对多任务端侧部署有直接借鉴意义,值得纳入端侧路线评估。', novel: 74, action: 58, tags: ['端侧', 'Apple', '基础模型'] },
   { rank: 21, impact: 64, urgency: '低', kind: '视频', zhTitle: '视频解读:Gemma 4 全档位实测,4B 端侧表现超预期', title: 'Gemma 4 tested: 4B on-device performance is the real story', source: 'YouTube · AI Explained', cat: '技术研究开源', date: '2026-07-06', summary: 'AI Explained 频道对 Gemma 4 全档位独立实测:70B 接近闭源第一梯队,而最大亮点是 4B 端侧档位——在消费级手机上离线运行,多语言与工具调用能力保持完整,视频附全部测试数据与复现脚本。', why: '第三方独立实测是官方基准的重要交叉验证。4B 端侧档位的实测表现支持把端侧路线纳入正式评估,视频中的测试方法可直接复用到内部评测集。', novel: 55, action: 48, tags: ['端侧', 'Gemma', '实测'] },
 ];
-const SPECIAL_CONTENT_TYPES = ['论文','视频','社交媒体帖子','公众号','Github热榜'];
+const SPECIAL_CONTENT_TYPES = ['论文','视频','社交媒体帖子','公众号'];
 function signalContentType(s){
   const explicit = s.contentType || s.kind || '';
   if(explicit === '社交媒体') return '社交媒体帖子';
-  if(explicit === 'github' || explicit === 'github-trending') return 'Github热榜';
   if(SPECIAL_CONTENT_TYPES.includes(explicit)) return explicit;
   const text = `${s.source||''} ${s.url||''}`.toLowerCase();
-  if(/github\.com/.test(text)) return 'Github热榜';
   if(/mp\.weixin\.qq\.com|weixin\.qq\.com|微信公众号|公众号/.test(text)) return '公众号';
   if(/youtube\.com|youtu\.be|bilibili\.com|vimeo\.com|视频/.test(text) || (s.mediaAssets?.videos||[]).length) return '视频';
   if(/arxiv\.org|openreview\.net|doi\.org|学术论文|\barxiv\b/.test(text)) return '论文';
@@ -335,7 +333,7 @@ let briefMeta = {
 };
 
 const filters = ['全部', '端侧模型', '算力芯片云', '政策监管地缘', '前沿模型公司', '技术研究开源', '创业融资并购'];
-const FORMAT_FILTERS = ['论文', '视频', '社交媒体帖子', '公众号', 'Github热榜'];
+const FORMAT_FILTERS = ['论文', '视频', '社交媒体帖子', '公众号'];
 // 「端侧模型」是标签驱动的横切专题,不是领域分类:按 tags 匹配
 const EDGE_FILTER = '端侧模型';
 function matchesFilter(s, f){
@@ -1238,7 +1236,7 @@ function briefHtml(A){
 }
 
 // Perplexity 风信号详情覆盖层:文章 / 论文 / 视频 分型展示 + 团队评论 + 悬浮 AI 提问
-const KIND_META = { '文章': { icon: '📄', label: '文章' }, '论文': { icon: '📑', label: '论文' }, '视频': { icon: '▶', label: '视频' }, 'Github热榜': { icon: '★', label: 'Github热榜' } };
+const KIND_META = { '文章': { icon: '📄', label: '文章' }, '论文': { icon: '📑', label: '论文' }, '视频': { icon: '▶', label: '视频' }, '公众号': { icon: '📱', label: '公众号' }, '社交媒体帖子': { icon: '💬', label: '社媒' }, 'Github热榜': { icon: '⭐', label: 'GitHub' } };
 
 // 按内容类型生成头部媒体区
 function detailMediaHtml(A, s){
@@ -1535,7 +1533,7 @@ function detailHtml(A){
   if(!s) return '';
   const ib = scoreBadgeD(s.impact); const u = urgD[s.urgency];
   const sourceUrl = s.url || sourceUrls[s.source] || '#';
-  const km = KIND_META[s.kind || '文章'];
+  const km = KIND_META[s.kind || '文章'] || KIND_META['文章'];
   const points = s.tags.map(t=>`<span style="font-size: 12px; color: ${A.accentBright}; background: ${A.accentSoft}; border: 1px solid ${A.accentBorder}; padding: 4px 11px; border-radius: 999px;">#${esc(t)}</span>`).join('');
   const related = signals.filter(x=>x.cat===s.cat && x.rank!==s.rank).slice(0,3);
   const relatedHtml = related.map(r=>`
