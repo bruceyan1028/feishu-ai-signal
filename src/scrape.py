@@ -137,13 +137,18 @@ def _one_line(text: str) -> str:
     return re.sub(r"\s+", " ", str(text or "")).strip()
 
 
-def _html_to_text(html: str) -> str:
+def html_to_text(html: str) -> str:
     text = re.sub(r"(?is)<script[^>]*>.*?</script>", " ", html)
     text = re.sub(r"(?is)<style[^>]*>.*?</style>", " ", text)
     # 先把块级边界落成换行，再去标签：否则段落结构会被整体压成一行，前端只能渲染出字墙。
     text = _BLOCK_BOUNDARY_RE.sub("\n\n", text)
     text = _TAG_RE.sub(" ", text)
-    return _normalize_paragraphs(text)
+    # 去标签后再解实体，否则 &nbsp;/&#8217; 会原样出现在正文里
+    return _normalize_paragraphs(unescape(text))
+
+
+# 模块内沿用旧私有名，同时对外暴露给 rss/process 复用同一套段落保留逻辑
+_html_to_text = html_to_text
 
 
 def _norm_arxiv_paper_id(raw: str) -> str:

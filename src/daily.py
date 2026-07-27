@@ -6,6 +6,7 @@ import json
 import logging
 import re
 from datetime import datetime, timedelta, timezone
+from html import unescape
 from pathlib import Path
 from typing import Any
 
@@ -37,7 +38,8 @@ def is_chinese_text(text: str) -> bool:
 
 def clean_body(text: str, source: str = "") -> str:
     """去掉栏目抬头噪音并规整段落，供前端直接分段渲染。"""
-    body = str(text or "").strip()
+    # 存量条目里残留着 &nbsp;/&#8217; 之类实体，展示前统一解码
+    body = unescape(str(text or "")).strip()
     if not body:
         return ""
     # 抬头是中文媒体的写法且总在第一句之前，只在这段内清理，

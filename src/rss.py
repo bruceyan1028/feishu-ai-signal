@@ -7,6 +7,7 @@ from __future__ import annotations
 
 import logging
 import re
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from html import unescape
 from typing import Any
 from urllib.parse import urljoin
@@ -86,6 +87,96 @@ def fetch_article_image(page_url: str) -> str:
     except requests.RequestException as exc:
         log.info("原文配图读取失败 %s: %s", page_url, exc)
         return ""
+
+
+# 只有 RSS 摘要、没有全文的条目：回源抓正文，否则前端只能显示一两句话
+FULLTEXT_MIN_CHARS = 600
+FULLTEXT_MAX_FETCH = 40
+_ARTICLE_RE = re.compile(r"(?is)<article[^>]*>(.*?)</article>")
+_PAGE_NOISE_RE = re.compile(r"(?is)<(nav|header|footer|aside|form|figure|noscript)[^>]*>.*?</\1>")
+
+
+def _drop_leading_boilerplate(text: str, title: str = "") -> str:
+    """去掉正文开头的站点标题、栏目名、作者与时间戳等样板段。
+
+    这些内容混进正文后会被一起翻译，读者看到的开头就全是噪音。
+    以「第一段足够长且不与标题重复」为正文起点；全部被判为样板时按原样返回。
+    """
+    def norm(value: str) -> str:
+        return re.sub(r"\W+", "", value).lower()
+
+    paragraphs = text.split("\n\n")
+    title_norm = norm(title)
+    start = 0
+    for index, para in enumerate(paragraphs):
+        stripped = para.strip()
+        if not stripped:
+            start = index + 1
+            continue
+        para_norm = norm(stripped)
+        is_title_echo = bool(title_norm) and (title_norm in para_norm or para_norm in title_norm)
+        if len(stripped) < 60 or is_title_echo:
+            start = index + 1
+            continue
+        break
+    return "\n\n".join(paragraphs[start:]).strip() or text.strip()
+
+
+def fetch_article_text(page_url: str, limit: int = 15000, title: str = "") -> str:
+    """读取原文页正文（保留段落）。失败返回空串，不阻断采集。"""
+    if not str(page_url or "").startswith(("http://", "https://")):
+        return ""
+    try:
+        response = requests.get(
+            page_url,
+            headers={"User-Agent": "Mozilla/5.0 (compatible; AI-Signal/1.0)"},
+            timeout=12,
+        )
+        response.raise_for_status()
+        html = response.content[:1_500_000].decode(response.encoding or "utf-8", errors="replace")
+    except requests.RequestException as exc:
+        log.info("原文正文读取失败 %s: %s", page_url, exc)
+        return ""
+    from . import scrape  # 延迟导入，避免采集模块之间的加载顺序耦合
+
+    matches = _ARTICLE_RE.findall(html)
+    # 页面可能有多个 <article>（如相关推荐），取最长的那个当正文
+    chunk = max(matches, key=len) if matches else html
+    text = scrape.html_to_text(_PAGE_NOISE_RE.sub(" ", chunk))
+    return _drop_leading_boilerplate(text, title)[:limit]
+
+
+def backfill_full_text(items: list[dict[str, Any]]) -> int:
+    """给正文过短的条目补全原文，返回补全成功的条数。"""
+    targets = [
+        item
+        for item in items
+        if len(str(item.get("raw_content") or "")) < FULLTEXT_MIN_CHARS
+        and str(item.get("url") or "").startswith(("http://", "https://"))
+        # arXiv 的摘要就是合适的正文，抓 HTML 全文只会引入噪音
+        and "arxiv.org/" not in str(item.get("url") or "")
+    ][:FULLTEXT_MAX_FETCH]
+    if not targets:
+        return 0
+    filled = 0
+    with ThreadPoolExecutor(max_workers=6) as pool:
+        futures = {
+            pool.submit(fetch_article_text, str(item["url"]), title=str(item.get("title") or "")): item
+            for item in targets
+        }
+        for future in as_completed(futures):
+            item = futures[future]
+            try:
+                text = future.result()
+            except Exception as exc:  # noqa: BLE001 - 单条失败不影响整轮
+                log.info("原文正文补全异常 %s: %s", item.get("url"), exc)
+                continue
+            # 抓回来的内容明显更长才替换，避免把正文换成导航栏碎片
+            if len(text) > max(len(str(item.get("raw_content") or "")) * 2, FULLTEXT_MIN_CHARS):
+                item["raw_content"] = text
+                filled += 1
+    log.info("正文补全：尝试 %d 条，成功 %d 条", len(targets), filled)
+    return filled
 
 
 def fetch_arxiv_figures(page_url: str, limit: int = 3) -> list[dict[str, str]]:

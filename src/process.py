@@ -57,6 +57,13 @@ def strip_html(text: Any) -> str:
     return _WS_RE.sub(" ", s).strip()
 
 
+def strip_html_body(text: Any) -> str:
+    """正文专用：保留段落边界，避免整篇被压成一行导致前端只能渲染字墙。"""
+    from . import scrape
+
+    return scrape.html_to_text(str(text or ""))
+
+
 def build_dedup_key(url: str, title: str, feed: dict[str, Any]) -> str:
     strategy = feed.get("dedup_key") or "normalize(url)"
     if "arxiv_id" in strategy:
@@ -158,7 +165,7 @@ def process_and_clean(
 
         url = normalize_url(item.get("url"))
         title = strip_html(item.get("title"))
-        body_text = strip_html(item.get("body"))
+        body_text = strip_html_body(item.get("body"))
         published_ms = parse_date_ms(item.get("published_raw"))
         duplicate_key = build_dedup_key(url, title, feed)
         combined = f"{title} {body_text}"

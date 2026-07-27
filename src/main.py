@@ -111,6 +111,9 @@ def run() -> int:
         len(cleaned),
         len(new_items),
     )
+    # 只对确定入库的条目回源补全正文：RSS 常常只给一段摘要，前端就没内容可展示
+    rss.backfill_full_text(new_items)
+
     arxiv_in = sum(
         1
         for it in new_items
