@@ -1,11 +1,11 @@
-"""真实 RSS 情报采集：读配置、抓取、清洗去重并写入飞书。"""
+"""真实情报采集：读配置、抓取（RSS + Scrape）、清洗去重并写入飞书。"""
 from __future__ import annotations
 
 import logging
 
 import requests
 
-from . import config, feishu, process, rss, sources, typed_config
+from . import config, feishu, process, rss, scrape, sources, typed_config
 
 logging.basicConfig(
     level=logging.INFO,
@@ -56,6 +56,47 @@ def filter_new_items(cleaned: list[dict], existing: set[str]) -> list[dict]:
     return non_arxiv + arxiv_items[: config.MAX_ARXIV_ITEMS]
 
 
+def _drop_still_too_short(items: list[dict]) -> list[dict]:
+    """复判内容长度：清洗阶段放行的摘要型条目，补全后仍太短就丢掉。"""
+    kept, dropped = [], 0
+    for item in items:
+        if item.get("needs_fulltext") and len(str(item.get("raw_content") or "")) < int(
+            item.get("min_content_chars") or 0
+        ):
+            dropped += 1
+            continue
+        kept.append(item)
+    if dropped:
+        log.info("补全后仍过短丢弃 %d 条", dropped)
+    return kept
+
+
+def _prepare_scrape_sources(
+    *, feishu_records: list[dict], type_configs: dict
+) -> list[dict]:
+    """筛出正式 Scrape 源并补齐抽取所需的类型/榜单参数。"""
+    feeds = sources.map_scrape_sources(feishu_records)
+    for feed in feeds:
+        cfg = type_configs.get(feed.get("id") or "") or {}
+        if cfg.get("entity_type"):
+            feed["source_type"] = sources.infer_signal_format(
+                feed.get("id") or "",
+                endpoint=feed.get("url") or "",
+                extra=feed.get("extra_config"),
+                fetch_method="Scrape",
+                entity_type=cfg.get("entity_type"),
+                explicit_type=feed.get("source_type"),
+            )
+        if cfg.get("entity_type") == "github":
+            feed["github_config"] = cfg.get("params") or {}
+        feed["cohort"] = sources.scrape_cohort(
+            str(feed.get("id") or ""),
+            category=str(feed.get("category") or ""),
+            url=str(feed.get("url") or ""),
+        )
+    return feeds
+
+
 def run() -> int:
     config.validate()
 
@@ -92,9 +133,19 @@ def run() -> int:
     paper_n = sum(1 for f in feed_sources if f.get("source_type") == sources.SIGNAL_FORMAT_PAPER)
     log.info("启用的 RSS 源 %d 个（其中论文 %d）", len(feed_sources), paper_n)
 
+    scrape_sources = _prepare_scrape_sources(feishu_records=records, type_configs=type_configs)
+    log.info("启用的 Scrape 源 %d 个", len(scrape_sources))
+
     raw_items: list[dict] = []
     if feed_sources:
         raw_items += rss.fetch_feed_sources(feed_sources)
+    if scrape_sources:
+        # 官方博客（Anthropic/Meta 等）与中文站点只有 Scrape 一条路，缺了它们
+        # 重大发布只能靠公众号转述进来
+        try:
+            raw_items += scrape.fetch_scrape_sources(scrape_sources, engine="auto")
+        except Exception as exc:  # noqa: BLE001 - 与 RSS 一致：单条链路失败不拖垮整轮
+            log.warning("Scrape 采集失败，本轮跳过：%s", exc)
     log.info("抓取到原始条目 %d 条", len(raw_items))
 
     drop_stats: dict[str, int] = {}
@@ -113,6 +164,7 @@ def run() -> int:
     )
     # 只对确定入库的条目回源补全正文：RSS 常常只给一段摘要，前端就没内容可展示
     rss.backfill_full_text(new_items)
+    new_items = _drop_still_too_short(new_items)
 
     arxiv_in = sum(
         1
@@ -124,7 +176,7 @@ def run() -> int:
         log.info("其中 arXiv %d 条（上限 %d）", arxiv_in, config.MAX_ARXIV_ITEMS)
 
     # 回写本轮采集统计（最近采集时间 / 条目数 / 查重过滤；即使 0 条入库也要写）
-    attempted_ids = {f["id"] for f in feed_sources}
+    attempted_ids = {f["id"] for f in feed_sources} | {f["id"] for f in scrape_sources}
     try:
         feishu.sync_param_collect_stats(
             token,

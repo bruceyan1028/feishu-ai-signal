@@ -64,6 +64,11 @@ def strip_html_body(text: Any) -> str:
     return scrape.html_to_text(str(text or ""))
 
 
+def _can_backfill_fulltext(url: str) -> bool:
+    """能否回源补全正文：arXiv 的摘要本身就是正文，不走补全。"""
+    return url.startswith(("http://", "https://")) and "arxiv.org/" not in url
+
+
 def build_dedup_key(url: str, title: str, feed: dict[str, Any]) -> str:
     strategy = feed.get("dedup_key") or "normalize(url)"
     if "arxiv_id" in strategy:
@@ -187,7 +192,10 @@ def process_and_clean(
             ):
                 drop_stats[feed_id] = drop_stats.get(feed_id, 0) + 1
             continue
-        if len(combined) < min_chars:
+        # 摘要型 RSS（OpenAI / DeepMind 等官方源）只给一两百字，用它判长度会把整源判死。
+        # 这类条目先放行并标记，等去重后回源抓到全文，再由调用方按最终正文复判。
+        needs_fulltext = len(combined) < min_chars
+        if needs_fulltext and not _can_backfill_fulltext(url):
             funnel["min_content_chars"] += 1
             continue
         if not skip_keyword and not _keyword_ok(keyword_re, title, body_text, kw_min_hits):
@@ -297,6 +305,8 @@ def process_and_clean(
             "topics": infer_topics(title, body_text),
             "duplicate_key": duplicate_key,
             "quality_score": float(quality_fields.get("quality_score") or 0),
+            "needs_fulltext": needs_fulltext,
+            "min_content_chars": min_chars,
         }
         row.update(quality_fields)
         result.append(row)

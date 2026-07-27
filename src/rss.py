@@ -185,8 +185,21 @@ def _img_too_small(tag: str, url: str) -> bool:
         raw = re.sub(r"\D", "", _attr(tag, dim))
         if raw and int(raw) < _MIN_IMG_SIDE:
             return True
+    return _url_too_small(url)
+
+
+def _url_too_small(url: str) -> bool:
     suffix = _IMG_SIZE_SUFFIX_RE.search(url.split("?")[0])
     return bool(suffix) and min(int(suffix.group(1)), int(suffix.group(2))) < _MIN_IMG_SIDE
+
+
+def _image_ok(url: str) -> bool:
+    return (
+        url.startswith(("http://", "https://"))
+        and not url.lower().split("?")[0].endswith(".svg")
+        and not _IMG_SKIP_RE.search(url)
+        and not _url_too_small(url)
+    )
 
 
 def extract_article_images(html_chunk: str, page_url: str, limit: int = 4) -> list[dict[str, str]]:
@@ -217,11 +230,42 @@ def extract_article_images(html_chunk: str, page_url: str, limit: int = 4) -> li
     return images
 
 
+_MD_IMAGE_RE = re.compile(r"!\[([^\]]*)\]\(([^)\s]+)[^)]*\)")
+_MD_LINK_RE = re.compile(r"\[([^\]]*)\]\(([^)\s]+)[^)]*\)")
+
+
+def _from_jina_markdown(markdown: str, page_url: str, title: str, limit: int) -> dict[str, Any]:
+    """把 Jina Reader 的 markdown 还原成正文与插图。"""
+    body = markdown.split("Markdown Content:", 1)[-1]
+    images: list[dict[str, str]] = []
+    seen: set[str] = set()
+    for alt, raw in _MD_IMAGE_RE.findall(body):
+        url = urljoin(page_url, raw)
+        key = url.split("?")[0]
+        if key in seen or not _image_ok(url):
+            continue
+        seen.add(key)
+        images.append({"url": url, "alt": alt[:120]})
+        if len(images) >= 4:
+            break
+    body = _MD_IMAGE_RE.sub(" ", body)
+    body = _MD_LINK_RE.sub(r"\1", body)
+    body = re.sub(r"(?m)^#{1,6}\s*", "", body)
+    body = re.sub(r"(?m)^\s*[-*=_]{3,}\s*$", "", body)
+    body = re.sub(r"[ \t]+", " ", body)
+    body = re.sub(r"\n{3,}", "\n\n", body).strip()
+    return {"text": _drop_leading_boilerplate(body, title)[:limit], "images": images}
+
+
 def fetch_article_content(page_url: str, title: str = "", limit: int = 15000) -> dict[str, Any]:
     """一次请求同时取回原文正文与正文插图。失败返回空结果，不阻断采集。"""
     empty: dict[str, Any] = {"text": "", "images": []}
     if not str(page_url or "").startswith(("http://", "https://")):
         return empty
+    from . import scrape  # 延迟导入，避免采集模块之间的加载顺序耦合
+
+    html = ""
+    final_url = page_url
     try:
         response = requests.get(
             page_url,
@@ -230,17 +274,20 @@ def fetch_article_content(page_url: str, title: str = "", limit: int = 15000) ->
         )
         response.raise_for_status()
         html = response.content[:1_500_000].decode(response.encoding or "utf-8", errors="replace")
+        final_url = response.url or page_url
     except requests.RequestException as exc:
-        log.info("原文读取失败 %s: %s", page_url, exc)
-        return empty
-    from . import scrape  # 延迟导入，避免采集模块之间的加载顺序耦合
+        log.info("原文直连读取失败 %s: %s", page_url, exc)
 
-    chunk = _pick_content_chunk(html)
-    # 推广卡在正文尾部，先截掉，否则它的装饰插画会被当成正文配图
-    chunk = strip_trailing_promo(chunk)
-    images = extract_article_images(chunk, response.url or page_url)
-    text = scrape.html_to_text(_PAGE_NOISE_RE.sub(" ", chunk))
-    return {"text": _drop_leading_boilerplate(text, title)[:limit], "images": images}
+    if html:
+        chunk = strip_trailing_promo(_pick_content_chunk(html))
+        images = extract_article_images(chunk, final_url)
+        text = scrape.html_to_text(_PAGE_NOISE_RE.sub(" ", chunk))
+        result = {"text": _drop_leading_boilerplate(text, title)[:limit], "images": images}
+        if len(result["text"]) >= FULLTEXT_MIN_CHARS:
+            return result
+    # openai.com 这类站点对直连返回 403，或整页由 JS 渲染，交给 Jina Reader 兜底
+    markdown = scrape._safe_jina_get(page_url, False)
+    return _from_jina_markdown(markdown, page_url, title, limit) if markdown else empty
 
 
 def fetch_article_text(page_url: str, limit: int = 15000, title: str = "") -> str:
@@ -249,14 +296,17 @@ def fetch_article_text(page_url: str, limit: int = 15000, title: str = "") -> st
 
 def backfill_full_text(items: list[dict[str, Any]]) -> int:
     """给正文过短的条目补全原文，返回补全成功的条数。"""
-    targets = [
+    candidates = [
         item
         for item in items
         if len(str(item.get("raw_content") or "")) < FULLTEXT_MIN_CHARS
         and str(item.get("url") or "").startswith(("http://", "https://"))
         # arXiv 的摘要就是合适的正文，抓 HTML 全文只会引入噪音
         and "arxiv.org/" not in str(item.get("url") or "")
-    ][:FULLTEXT_MAX_FETCH]
+    ]
+    # 摘要型源的条目补不到全文就会被长度门槛丢掉，名额优先给它们
+    candidates.sort(key=lambda item: not item.get("needs_fulltext"))
+    targets = candidates[:FULLTEXT_MAX_FETCH]
     if not targets:
         return 0
     filled = 0
