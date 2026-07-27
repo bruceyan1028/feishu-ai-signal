@@ -1,37 +1,27 @@
 {
   "date": "2026-07-27",
   "title": "AI Signal 每日情报 · 2026-07-27",
-  "intro": "本轮信号显示，前沿模型正强化自主执行、多智能体协作与跨模态生成能力，开源工具链则加速智能体和工作流进入生产环境。与此同时，机器学习基础方法、无创脑机通信与AI社会影响研究也在同步推进。",
+  "intro": "前沿模型正从单一生成能力转向工具调用、多智能体协作和跨模态推理，开源基础设施也在加速承接生产部署需求。与此同时，机器学习研究继续突破大规模近似、可微决策、结构化输出和聚类方法，AI治理则进一步延伸至出口安全与经济影响研究。",
   "bullets": [
     {
-      "title": "Claude与Muse竞逐高自主性模型",
-      "text": "Claude Opus 5以与Opus 4.8相同的成本提升软件工程、知识工作和计算机操作表现，侧重自主验证与端到端交付；Meta的Muse Spark则加入工具调用、视觉思维链和多智能体编排，并通过新预训练方案将达到同等能力所需算力较Llama 4 Maverick降低超过一个数量级。",
+      "title": "Claude Sonnet 5强化智能体并下探价格",
+      "text": "新模型支持规划、浏览器与终端操作及自主运行，在推理、编程和知识工作等任务上超过Sonnet 4.6，部分表现接近Opus 4.8。其已覆盖全部计划和API，限时价格为每百万输入、输出token分别2美元和10美元，2026年8月31日后将调整至3美元和15美元。",
       "refs": [
-        6,
-        8
+        6
       ]
     },
     {
-      "title": "Meta将Muse扩展至图像和视频生成",
-      "text": "Muse Image已支持精准生成与编辑、多参考图合成，还能调用搜索和代码工具进行自我优化；基于相同预训练底座的Muse Video强调高视觉保真度和原生音频，计划面向创作者及Meta AI推出。",
+      "title": "Meta将超级智能布局扩展至推理、媒体与脑机通信",
+      "text": "Muse Spark借助工具调用、视觉思维链和并行智能体处理复杂任务；Muse Image与Muse Video分别面向可迭代图像生成以及高保真、原生音频视频生成。Brain2Qwerty v2则以端到端模型实时解码非侵入式MEG信号，整体词准确率达到61%，最佳参与者达到78%。",
       "refs": [
-        14
-      ]
-    },
-    {
-      "title": "开源智能体栈覆盖开发、编排与长期记忆",
-      "text": "ECC面向多种编程助手整合技能、Hooks、安全扫描和MCP配置；Dify与Langflow提供可视化工作流、RAG、多智能体协作、调试及生产部署；Hermes Agent进一步支持技能自我改进、跨会话记忆和多渠道交互。Transformers则以统一模型定义和超过100万个Hub检查点继续充当底层模型生态枢纽。",
-      "refs": [
-        5,
-        7,
-        9,
         10,
-        12
+        12,
+        13
       ]
     },
     {
-      "title": "结构化学习方法同时提升规模、可微性与统一性",
-      "text": "VIF结合全局诱导点和局部Vecchia近似以改善高斯过程的效率与稳定性；E2M通过加权Fréchet均值预测分布、网络和对称正定矩阵；DTSemNet把硬斜决策树可逆地映射为神经网络以直接进行梯度训练；LoRD则从核k均值松弛视角统一多类图聚类方法。",
+      "title": "四项新方法推进高效与结构化机器学习",
+      "text": "VIF结合诱导点和Vecchia近似提升大规模高斯过程效率；DTSemNet把硬斜决策树可逆映射为神经网络以实现梯度训练；E2M利用加权Fréchet均值直接预测度量空间输出；LoRD与B-LoRD则从核k-means松弛视角统一并改进图聚类。",
       "refs": [
         1,
         2,
@@ -40,25 +30,36 @@
       ]
     },
     {
-      "title": "无创脑信号解码迈向实时句子输出",
-      "text": "Brain2Qwerty v2利用端到端深度学习和按神经数据微调的大语言模型，将MEG信号实时转为句子，整体词准确率达到61%，最佳参与者达到78%；Meta将开放两代系统的完整训练代码，BCBL也将发布首代数据集。",
+      "title": "开源AI栈覆盖模型、推理与应用编排全链路",
+      "text": "Transformers提供跨文本、视觉、音频、视频和多模态任务的统一模型接口；vLLM与SGLang通过分页注意力、连续批处理、缓存、推测解码及多硬件适配提高服务效率；Dify和AutoGPT进一步提供工作流、RAG、智能体构建、部署、触发执行与可观测能力。",
       "refs": [
-        13
+        5,
+        7,
+        8,
+        9,
+        11
       ]
     },
     {
-      "title": "Anthropic以两亿美元资助AI经济适应研究",
-      "text": "该基金聚焦职场影响、转型适应、收入支持、员工分享增长收益及公共投资证据，目标是扩大AI收益共享并缓解就业冲击，评审将优先考虑大规模随机对照试验和创新试点。",
+      "title": "Anthropic同步调整全球访问与安全协作",
+      "text": "在美国政府解除相关出口管制后，Claude Fable 5将恢复面向全球用户，Mythos 5已向部分获批美国机构重新开放。公司同时升级防护措施，并与亚马逊、微软、谷歌等推动统一的越狱风险评估、预发布测试和政府信息共享机制。",
       "refs": [
-        11
+        14
+      ]
+    },
+    {
+      "title": "两亿美元基金瞄准AI经济冲击实证研究",
+      "text": "Anthropic计划在全球资助就业、收入保障和经济韧性相关研究与试点，优先支持大规模随机对照试验及创新项目，单项资金通常介于500万至3000万美元。",
+      "refs": [
+        15
       ]
     }
   ],
   "signals": [
     {
-      "recordId": "recvqyJpBUxZlG",
+      "recordId": "recvqyTyyWWUL3",
       "title": "Vecchia-Inducing-Points Full-Scale Approximations for Gaussian Processes",
-      "titleCn": "面向高斯过程的Vecchia-诱导点全尺度近似",
+      "titleCn": "基于Vecchia与诱导点的高斯过程全尺度近似",
       "source": "JMLR",
       "url": "http://jmlr.org/papers/v27/25-1549.html",
       "category": "技术研究开源",
@@ -66,11 +67,11 @@
       "tier": "L1 一级官方",
       "priority": "P0",
       "publishedDate": "2026-07-27",
-      "summary": "论文提出VIF近似，将全局诱导点与局部Vecchia近似结合，并通过基于相关性的邻居搜索和改进的覆盖树兼顾不同输入维度与协方差平滑度。该框架还扩展至非高斯似然，配合迭代算法、新型预条件器及理论收敛结果，在实验中表现出更高的效率、精度和数值稳定性，并已集成至开源库GPBoost。",
-      "why": "该方法为大规模高斯过程提供了兼顾全局与局部结构、支持非高斯似然且可直接工程落地的统一近似方案。",
+      "summary": "论文提出VIF近似方法，将全局诱导点与局部Vecchia近似结合，并通过基于相关性的邻居搜索和改进的覆盖树提升高斯过程在大规模数据集上的效率。该框架还支持非高斯似然，实验显示其较现有方法更准确、稳定且高效，并已集成至开源C++库GPBoost及其Python、R接口。",
+      "why": "该研究为不同输入维度和协方差平滑度下的大规模高斯过程提供了兼顾精度、稳定性与计算效率的可落地方案。",
       "impact": 82,
-      "novelty": 84,
-      "actionability": 89,
+      "novelty": 85,
+      "actionability": 88,
       "urgency": "中",
       "tags": [
         "AI",
@@ -82,9 +83,9 @@
         "images": [],
         "videos": []
       },
-      "body": "Gaussian processes 是灵活的、概率式的非参数模型，广泛应用于机器学习和统计学。然而，计算方面的限制制约了其在大型数据集上的可扩展性。为克服这些挑战，我们提出了 Vecchia-inducing-points full-scale（VIF）近似，将全局诱导点与局部 Vecchia 近似的优势结合起来。Vecchia 近似在输入维度较低且协方差函数平滑程度适中的情形下表现优异，而诱导点方法更适合输入维度较高且协方差函数更平滑的情形。我们的 VIF 方法通过对残差过程进行 Vecchia 近似，并采用一种基于相关性的高效邻居查找策略，弥合了这两类情形之间的差距；该策略通过一种经过修改的 cover tree 算法实现。我们还通过引入迭代方法，将该框架进一步扩展到非 Gaussian 似然；在使用 Laplace approximation 时，与基于 Cholesky 的计算相比，这些方法可将训练和预测的计算成本大幅降低数个数量级。具体而言，我们提出并比较了新型预条件器，并给出了理论收敛结果。对模拟数据集和真实世界数据集进行的大量数值实验表明，VIF 近似不仅具有较高的计算效率，而且比当前最先进的替代方法更准确、数值稳定性也更好。所有方法均已在开源 C++ 库 GPBoost 中实现，并提供高级 Python 和 R 接口。",
+      "body": "Gaussian processes 是灵活的、概率式的非参数模型，广泛应用于机器学习和统计学。然而，计算限制制约了它们扩展到大型数据集的能力。为克服这些挑战，我们提出了 Vecchia-inducing-points full-scale（VIF）近似，将全局诱导点与局部 Vecchia 近似的优势结合起来。Vecchia 近似在输入维度较低且协方差函数具有中等平滑度的场景中表现出色，而诱导点方法则更适合高维输入和更平滑的协方差函数。我们的 VIF 方法通过使用一种高效的、基于相关性的邻居查找策略，对残差过程进行 Vecchia 近似，从而连接了这两种适用情形；该策略通过一种经修改的覆盖树算法实现。我们还通过引入迭代方法，将该框架进一步扩展到非 Gaussian 似然；在使用 Laplace 近似时，与基于 Cholesky 分解的计算相比，这些方法将训练和预测的计算成本大幅降低了若干个数量级。具体而言，我们提出并比较了新型预条件器，并给出了理论收敛结果。基于模拟数据集和真实世界数据集的大量数值实验表明，VIF 近似不仅计算效率高，而且比当前最先进的替代方法更准确、数值稳定性也更强。所有方法均已在开源 C++ 库 GPBoost 中实现，并提供高级 Python 和 R 接口。",
       "bodyTruncated": false,
-      "qualityScore": 67.6,
+      "qualityScore": 67.4,
       "eventAggregation": {
         "total": 1,
         "groups": [
@@ -94,10 +95,10 @@
             "items": [
               {
                 "source": "JMLR",
-                "title": "面向高斯过程的Vecchia-诱导点全尺度近似",
+                "title": "基于Vecchia与诱导点的高斯过程全尺度近似",
                 "url": "http://jmlr.org/papers/v27/25-1549.html",
                 "note": "原始发布 / 公告。",
-                "text": "面向高斯过程的Vecchia-诱导点全尺度近似 —— 原始发布 / 公告。"
+                "text": "基于Vecchia与诱导点的高斯过程全尺度近似 —— 原始发布 / 公告。"
               }
             ]
           }
@@ -105,9 +106,58 @@
       }
     },
     {
-      "recordId": "recvqyJpBUvgJT",
+      "recordId": "recvqyTyyWF21d",
+      "title": "Approximation-Free Differentiable Oblique Decision Trees",
+      "titleCn": "无近似可微斜决策树 DTSemNet",
+      "source": "JMLR",
+      "url": "http://jmlr.org/papers/v27/25-2047.html",
+      "category": "技术研究开源",
+      "contentType": "论文",
+      "tier": "L1 一级官方",
+      "priority": "P0",
+      "publishedDate": "2026-07-27",
+      "summary": "论文提出 DTSemNet，将硬斜决策树表示为语义等价且可逆的神经网络，从而使用标准梯度下降进行端到端分类与回归训练。基准实验显示其优于现有可微决策树，并可作为强化学习环境中的程序化决策树策略。",
+      "why": "该方法旨在摆脱软化边界和直通估计器等近似手段，同时兼顾表格任务性能与决策树可解释性。",
+      "impact": 78,
+      "novelty": 87,
+      "actionability": 65,
+      "urgency": "低",
+      "tags": [
+        "AI",
+        "开源",
+        "其他"
+      ],
+      "imageUrl": "",
+      "mediaAssets": {
+        "images": [],
+        "videos": []
+      },
+      "body": "决策树（DTs）广泛应用于医疗诊断等安全关键领域，因其可解释性以及处理表格数据的有效性而备受重视。然而，由于优化空间复杂且存在过拟合风险，训练准确的斜决策树颇具挑战性，在回归任务中尤其如此。近期的进展提出了可微分形式，使得基于梯度的训练以及决策边界与叶节点回归器的联合优化成为可能。然而，现有方法通常依赖近似，无论是通过对边界进行概率软化（软决策树），还是采用诸如直通估计器（STE）之类的量化梯度。为克服这些局限，我们提出了 DTSemNet，这是一种将硬斜决策树表示为神经网络的新颖、语义等价且可逆的表示方法。DTSemNet 支持使用标准梯度下降进行端到端训练，从而在分类和回归中都不再需要近似。尽管分类与这种形式天然契合，但由于需要联合优化内部节点和叶节点回归器，回归仍然颇具挑战性。为解决这一问题，我们分析了 STE 的局限性，并引入了一种退火 Top-$k$ 方法，该方法无需近似即可提供准确的梯度信号。在分类和回归基准上的大量实验表明，由 DTSemNet 训练的斜决策树优于最先进的可微分决策树。此外，我们还证明了 DTSemNet 可以在强化学习环境中充当程序化决策树策略，从而拓宽其适用范围。",
+      "bodyTruncated": false,
+      "qualityScore": 63.5,
+      "eventAggregation": {
+        "total": 1,
+        "groups": [
+          {
+            "key": "官方来源",
+            "tone": "#16130f",
+            "items": [
+              {
+                "source": "JMLR",
+                "title": "无近似可微斜决策树 DTSemNet",
+                "url": "http://jmlr.org/papers/v27/25-2047.html",
+                "note": "原始发布 / 公告。",
+                "text": "无近似可微斜决策树 DTSemNet —— 原始发布 / 公告。"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "recordId": "recvqyTyyWTtCA",
       "title": "End-to-End Deep Learning for Predicting Metric Space-Valued Outputs",
-      "titleCn": "面向度量空间值输出的端到端深度学习框架 E2M",
+      "titleCn": "面向度量空间值输出的端到端深度学习",
       "source": "JMLR",
       "url": "http://jmlr.org/papers/v27/25-2364.html",
       "category": "技术研究开源",
@@ -115,22 +165,23 @@
       "tier": "L1 一级官方",
       "priority": "P0",
       "publishedDate": "2026-07-27",
-      "summary": "论文提出端到端度量回归框架 E2M，通过神经网络学习输入相关权重，并基于训练输出的加权 Fréchet 均值预测概率分布、网络及对称正定矩阵等非欧几里得对象。作者给出通用逼近与收敛保证，并通过模拟及真实应用验证了其性能和灵活性。",
-      "why": "该方法无需代理嵌入或严格参数假设即可保留输出空间的内在几何，为结构化非欧几里得输出预测提供了统一且有理论支撑的方案。",
-      "impact": 82,
+      "summary": "论文提出端到端度量回归框架 E2M，由神经网络根据输入学习权重，再对训练集输出计算加权 Fréchet 均值，从而在不使用替代嵌入或受限参数假设的情况下保留输出空间的内在几何。作者给出通用逼近与收敛性理论，并在概率分布、网络和对称正定矩阵等任务及真实数据应用中取得领先表现。",
+      "why": "该方法为非欧几里得结构化输出提供了兼具几何保持、理论保证和跨任务适用性的统一深度学习方案。",
+      "impact": 78,
       "novelty": 86,
       "actionability": 70,
-      "urgency": "低",
+      "urgency": "中",
       "tags": [
         "AI",
-        "开源"
+        "开源",
+        "其他"
       ],
       "imageUrl": "",
       "mediaAssets": {
         "images": [],
         "videos": []
       },
-      "body": "许多现代应用涉及预测结构化的非欧几里得输出，例如概率分布、网络和对称正定矩阵。这些输出可自然地建模为一般度量空间中的元素，而依赖向量空间结构的经典回归技术已不再适用。我们提出 E2M（End-to-End Metric regression），这是一种用于预测度量空间值输出的深度学习框架。E2M 通过对训练输出求加权 Fréchet 均值来进行预测，其中权重由一个以输入为条件的神经网络学习得到。这一构造为感知几何结构的预测提供了一种原则严谨的机制，既避免了使用替代嵌入和限制性参数假设，又完整保留了输出空间的内在几何结构。我们建立了理论保证，包括刻画模型表达能力的通用逼近定理，以及对熵正则化训练目标的收敛性分析。通过涉及概率分布、网络和对称正定矩阵的大量模拟实验，我们表明 E2M 始终能够达到当前最先进的性能，而且其优势会随着样本量增大而愈发显著。对人类死亡率分布和 New York City 出租车网络的应用进一步证明了该框架的灵活性和实际效用。",
+      "body": "许多现代应用都涉及预测结构化的非欧几里得输出，例如概率分布、网络和对称正定矩阵。这些输出可以自然地建模为一般度量空间中的元素，而依赖向量空间结构的经典回归技术不再适用。我们提出 E2M（End-to-End Metric regression），这是一种用于预测度量空间值输出的深度学习框架。E2M 通过对训练输出求加权 Fréchet 均值来进行预测，其中权重由一个以输入为条件的神经网络学习得到。这种构造为具备几何感知能力的预测提供了一种原则严谨的机制，既避免了替代嵌入和限制性参数假设，又完整保留了输出空间的内在几何结构。我们建立了理论保证，包括一个刻画模型表达能力的通用逼近定理，以及对熵正则化训练目标的收敛性分析。通过涉及概率分布、网络和对称正定矩阵的大量模拟实验，我们表明，E2M 始终能够达到当前最先进的性能，并且其优势会随着样本量的增大而更加显著。在人类死亡率分布和 New York City 出租车网络上的应用进一步展示了该框架的灵活性和实际效用。",
       "bodyTruncated": false,
       "qualityScore": 63.2,
       "eventAggregation": {
@@ -142,10 +193,10 @@
             "items": [
               {
                 "source": "JMLR",
-                "title": "面向度量空间值输出的端到端深度学习框架 E2M",
+                "title": "面向度量空间值输出的端到端深度学习",
                 "url": "http://jmlr.org/papers/v27/25-2364.html",
                 "note": "原始发布 / 公告。",
-                "text": "面向度量空间值输出的端到端深度学习框架 E2M —— 原始发布 / 公告。"
+                "text": "面向度量空间值输出的端到端深度学习 —— 原始发布 / 公告。"
               }
             ]
           }
@@ -153,58 +204,9 @@
       }
     },
     {
-      "recordId": "recvqyJpBUAXC9",
-      "title": "Approximation-Free Differentiable Oblique Decision Trees",
-      "titleCn": "无需近似的可微斜决策树",
-      "source": "JMLR",
-      "url": "http://jmlr.org/papers/v27/25-2047.html",
-      "category": "技术研究开源",
-      "contentType": "论文",
-      "tier": "L1 一级官方",
-      "priority": "P0",
-      "publishedDate": "2026-07-27",
-      "summary": "论文提出 DTSemNet，将硬斜决策树表示为语义等价且可逆的神经网络，从而使用标准梯度下降进行端到端分类与回归训练。实验显示其性能优于现有可微决策树，并可作为强化学习环境中的程序化决策树策略。",
-      "why": "该方法减少了可微决策树对边界软化或直通估计器的依赖，有望兼顾表格任务的预测性能、可解释性与训练能力。",
-      "impact": 76,
-      "novelty": 84,
-      "actionability": 67,
-      "urgency": "中",
-      "tags": [
-        "AI",
-        "开源",
-        "其他"
-      ],
-      "imageUrl": "",
-      "mediaAssets": {
-        "images": [],
-        "videos": []
-      },
-      "body": "决策树（DT）广泛应用于医疗诊断等安全关键领域，因其可解释性以及在表格数据上的有效性而备受重视。然而，由于优化空间复杂且存在过拟合风险，训练准确的斜决策树颇具挑战性，在回归任务中尤其如此。近期的进展提出了可微分形式，使基于梯度的训练以及决策边界与叶节点回归器的联合优化成为可能。然而，现有方法通常依赖近似，要么对边界进行概率软化（软决策树），要么采用量化梯度，例如 Straight-Through Estimator（STE）。为克服这些局限，我们提出了 DTSemNet，这是一种将硬斜决策树表示为神经网络的新颖、语义等价且可逆的表示方法。DTSemNet 支持使用标准梯度下降进行端到端训练，从而在分类和回归中均无需采用近似。尽管分类与这种形式天然契合，但由于需要联合优化内部节点和叶节点回归器，回归仍然颇具挑战。为解决这一问题，我们分析了 STE 的局限性，并提出了一种退火 Top-$k$ 方法，该方法无需近似即可提供准确的梯度信号。在分类和回归基准上的大量实验表明，由 DTSemNet 训练的斜决策树优于最先进的可微分决策树。此外，我们还证明，DTSemNet 可以在强化学习环境中充当程序化决策树策略，从而拓宽其适用范围。",
-      "bodyTruncated": false,
-      "qualityScore": 63.1,
-      "eventAggregation": {
-        "total": 1,
-        "groups": [
-          {
-            "key": "官方来源",
-            "tone": "#16130f",
-            "items": [
-              {
-                "source": "JMLR",
-                "title": "无需近似的可微斜决策树",
-                "url": "http://jmlr.org/papers/v27/25-2047.html",
-                "note": "原始发布 / 公告。",
-                "text": "无需近似的可微斜决策树 —— 原始发布 / 公告。"
-              }
-            ]
-          }
-        ]
-      }
-    },
-    {
-      "recordId": "recvqyJpBUnPqk",
+      "recordId": "recvqyTyyWXcsb",
       "title": "Graph-based Clustering Revisited: A Relaxation of Kernel k-Means Perspective",
-      "titleCn": "从核k均值松弛视角重审图聚类：LoRD与B-LoRD",
+      "titleCn": "重访图聚类：基于核 k-means 松弛的 LoRD 与 B-LoRD",
       "source": "JMLR",
       "url": "http://jmlr.org/papers/v27/25-2307.html",
       "category": "技术研究开源",
@@ -212,11 +214,11 @@
       "tier": "L1 一级官方",
       "priority": "P0",
       "publishedDate": "2026-07-27",
-      "summary": "论文将谱聚类、对称非负矩阵分解和双随机归一化统一解释为核k均值的松弛，并提出仅放松正交约束的低秩双随机聚类模型LoRD。进一步提出加入块对角正则化的B-LoRD及具有收敛保证的投影梯度算法，实验显示方法有效，代码已开源。",
-      "why": "该研究以更少的约束松弛和可证明的优化方法改进图聚类，为需要概率聚类与结构化相似度建模的工程实践提供了开源方案。",
-      "impact": 65,
-      "novelty": 74,
-      "actionability": 68,
+      "summary": "论文将谱聚类、对称非负矩阵分解和双随机归一化统一解释为核 k-means 的松弛，并提出仅放松正交约束的低秩双随机聚类 LoRD。进一步引入块对角正则得到 B-LoRD，给出投影梯度算法及收敛保证，实验显示其聚类性能有效，代码已开源。",
+      "why": "该研究以统一理论视角减少传统图聚类中的过度约束松弛，并兼顾概率聚类、可求解性和收敛保证。",
+      "impact": 58,
+      "novelty": 70,
+      "actionability": 62,
       "urgency": "低",
       "tags": [
         "AI",
@@ -228,9 +230,9 @@
         "images": [],
         "videos": []
       },
-      "body": "包括谱聚类、对称非负矩阵分解和双随机归一化在内的知名图聚类方法，都可被视为核 k-means 方法的松弛形式。然而，我们认为，为确保数值可行性，这些方法对其内在的低秩、非负、双随机和标准正交约束进行了过度松弛，这可能限制其聚类效果。在本文中，以系统的理论分析为指导，我们提出了 Low-Rank Doubly stochastic clustering（LoRD），该模型仅松弛标准正交约束，以得出概率聚类结果。此外，通过从理论上证明双随机约束下正交性与块对角性的等价关系，我们提出了 B-LoRD。通过将以 Frobenius 范数最大化形式表示的块对角正则化整合到 LoRD 中，我们提升了聚类性能。为确保数值可解性，我们通过引入类别概率参数，将非凸双随机约束转化为线性凸约束。通过从理论上证明 LoRD 和 B-LoRD 的梯度满足 Lipschitz 连续性，我们得以提出一种投影梯度算法，其精确迭代具有次线性收敛速率界，并可确保精确投影梯度迭代的每个聚点都满足一阶平稳性。大量实验突显了我们方法的有效性。代码已公开发布于 https://github.com/lwl-learning/LoRD。",
+      "body": "众所周知的基于图的聚类方法，包括谱聚类、对称非负矩阵分解和双随机归一化，均可被视为核 k-means 方法的松弛形式。然而，我们认为，这些方法为了确保数值可行性，过度松弛了其固有的低秩、非负、双随机和正交归一约束，这可能会限制其聚类效果。在本文中，在系统性理论分析的指导下，我们提出了 Low-Rank Doubly stochastic clustering（LoRD），该模型仅松弛正交归一约束，以获得概率聚类结果。此外，通过从理论上确立双随机约束下正交性与块对角性之间的等价关系，我们提出了 B-LoRD。通过将以 Frobenius 范数最大化表示的块对角正则化整合到 LoRD 中，我们提升了聚类性能。为确保数值可解性，我们通过引入类别概率参数，将非凸双随机约束转化为线性凸约束。通过从理论上证明 LoRD 和 B-LoRD 的梯度具有 Lipschitz 连续性，我们得以提出一种投影梯度算法，其精确迭代具有次线性收敛率界，并确保精确投影梯度迭代的每个聚点均满足一阶平稳性。大量实验凸显了我们方法的有效性。代码已公开发布于 https://github.com/lwl-learning/LoRD。",
       "bodyTruncated": false,
-      "qualityScore": 60.7,
+      "qualityScore": 59.1,
       "eventAggregation": {
         "total": 1,
         "groups": [
@@ -240,10 +242,10 @@
             "items": [
               {
                 "source": "JMLR",
-                "title": "从核k均值松弛视角重审图聚类：LoRD与B-LoRD",
+                "title": "重访图聚类：基于核 k-means 松弛的 LoRD 与 B-LoRD",
                 "url": "http://jmlr.org/papers/v27/25-2307.html",
                 "note": "原始发布 / 公告。",
-                "text": "从核k均值松弛视角重审图聚类：LoRD与B-LoRD —— 原始发布 / 公告。"
+                "text": "重访图聚类：基于核 k-means 松弛的 LoRD 与 B-LoRD —— 原始发布 / 公告。"
               }
             ]
           }
@@ -251,9 +253,9 @@
       }
     },
     {
-      "recordId": "recvqyJqKOPE3E",
+      "recordId": "recvqyRlD39yBL",
       "title": "huggingface/transformers",
-      "titleCn": "Hugging Face Transformers：多模态模型定义框架",
+      "titleCn": "Hugging Face Transformers：统一多模态模型定义的开源框架",
       "source": "GitHub Trending",
       "url": "https://github.com/huggingface/transformers",
       "category": "技术研究开源",
@@ -261,11 +263,11 @@
       "tier": "L2 结构化平台",
       "priority": "P0",
       "publishedDate": "2026-07-27",
-      "summary": "Transformers 为文本、视觉、音频、视频及多模态模型提供统一的推理与训练模型定义，并兼容主流训练框架、推理引擎和模型库。项目拥有超过 16.3 万颗星，且 Hugging Face Hub 上已有超过 100 万个可用模型检查点。",
-      "why": "其统一模型定义已成为连接模型、训练框架与推理引擎的重要开源基础设施，可显著降低先进模型的使用和集成门槛。",
-      "impact": 96,
-      "novelty": 58,
-      "actionability": 95,
+      "summary": "Transformers 为文本、视觉、音频、视频及多模态模型提供统一的模型定义，支持训练与推理，并兼容主流训练框架、推理引擎和相关建模库。项目拥有超过 16.3 万颗星，Hugging Face Hub 上已有超过 100 万个可用模型检查点。",
+      "why": "其统一模型定义连接模型、训练框架与推理引擎，是开源 AI 生态中影响广泛的基础设施。",
+      "impact": 98,
+      "novelty": 72,
+      "actionability": 96,
       "urgency": "中",
       "tags": [
         "AI",
@@ -278,7 +280,7 @@
         "images": [],
         "videos": []
       },
-      "body": "🤗 Transformers：面向文本、视觉、音频和多模态模型中最先进机器学习模型的模型定义框架，可用于推理和训练。\n\n⭐ 星标：163025 | 🍴 分叉：34032 | 语言：Python | 主题：audio, deep-learning, deepseek, gemma, glm, hacktoberfest, llm, machine-learning, model-hub, natural-language-processing, nlp, pretrained-models, python, pytorch, pytorch-transformers, qwen, speech-recognition, transformer, vlm\n创建：2018-10-29 | 最近提交：2026-07-27 | 沉淀分：8.28\n\n【社区反响·热门 Issue】\n- [开放] 👍211 💬18 实现最大更新参数化（muP）\n- [已关闭] 👍179 💬35 🌟 BigBird\n- [已关闭] 👍159 💬41 添加即将推出的 GPT-3 模型\n- [已关闭] 👍112 💬57 如何处理这条警告消息：\"bert-base-uncased 的模型检查点中的某些权重我\n\n英语 |\n简体中文 |\n繁体中文 |\n韩语 |\n西班牙语 |\n日语 |\n印地语 |\n俄语 |\n葡萄牙语 |\n泰卢固语 |\n法语 |\n德语 |\n意大利语 |\n越南语 |\n阿拉伯语 |\n乌尔都语 |\n孟加拉语 |\n波斯语 |\n土耳其语 |\n\n用于推理和训练的最先进预训练模型\n\nTransformers 是面向文本、计算机视觉、音频、视频和多模态模型的最先进机器学习模型定义框架，可用于推理和训练。\n\n它将模型定义集中起来，从而使整个生态系统对这一定义达成一致。transformers 是各框架之间的枢纽：如果一个模型定义受到支持，它就会与大多数训练框架（Axolotl、Unsloth、DeepSpeed、FSDP、PyTorch-Lightning……）、推理引擎（vLLM、SGLang、TGI……）以及利用 transformers 模型定义的相关建模库（llama.cpp、mlx……）兼容。\n\n我们承诺帮助支持新的最先进模型，并通过让其模型定义保持简单、可定制且高效，推动这些模型的普及使用。\n\nHugging Face Hub 上有超过 100 万个可供使用的 Transformers 模型检查点。\n\n立即探索 Hub，寻找模型，并使用 Transformers 帮助你马上开始。\n安装\n\nTransformers 支持 Python 3.10+ 和 PyTorch 2.4+。\n\n使用 venv 或 uv 创建并激活虚拟环境；uv 是一个基于 Rust 的快速 Python 包和项目管理器。\n\npy\nvenv\npython -m venv .my-env\nsource .my-env/bin/activate\nuv\nuv venv .my-env\nsource .my-env/b",
+      "body": "🤗 Transformers：用于文本、视觉、音频和多模态模型中最先进机器学习模型的模型定义框架，支持推理和训练。\n\n⭐ 星标: 163026 | 🍴 复刻: 34032 | 语言: Python | 主题: audio, deep-learning, deepseek, gemma, glm, hacktoberfest, llm, machine-learning, model-hub, natural-language-processing, nlp, pretrained-models, python, pytorch, pytorch-transformers, qwen, speech-recognition, transformer, vlm\n创建: 2018-10-29 | 最近提交: 2026-07-27 | 沉淀分: 8.28\n\n【社区反响·热门 Issue】\n- [开放] 👍211 💬18 实现最大更新参数化（muP）\n- [已关闭] 👍179 💬35 🌟 BigBird\n- [已关闭] 👍159 💬41 添加即将推出的 GPT-3 模型\n- [已关闭] 👍112 💬57 如何处理这条警告消息：“bert-base-uncased 上的模型检查点的部分权重 we\n\n英语 |\n简体中文 |\n繁體中文 |\n한국어 |\n西班牙语 |\n日本語 |\nहिन्दी |\nРусский |\n葡萄牙语 |\nతెలుగు |\n法语 |\n德语 |\n意大利语 |\nTiếng Việt |\nالعربية |\nاردو |\nবাংলা |\nفارسی |\nTürkçe |\n\n用于推理和训练的最先进预训练模型\n\nTransformers 是面向文本、计算机视觉、音频、视频和多模态模型的最先进机器学习模型定义框架，支持推理和训练。\n\n它将模型定义集中起来，从而使整个生态系统对该定义达成一致。transformers 是各框架之间的枢纽：如果一个模型定义受到支持，它就会与大多数训练框架（Axolotl、Unsloth、DeepSpeed、FSDP、PyTorch-Lightning……）、推理引擎（vLLM、SGLang、TGI……）以及利用 transformers 模型定义的相关建模库（llama.cpp、mlx……）兼容。\n\n我们承诺帮助支持新的最先进模型，并通过使其模型定义简单、可定制且高效，让更多人都能使用这些模型。\n\nHugging Face Hub 上有超过 100 万个可供使用的 Transformers 模型检查点。\n\n立即探索 Hub，寻找模型，并使用 Transformers 帮助你马上开始使用。\n安装\n\nTransformers 支持 Python 3.10+ 和 PyTorch 2.4+。\n\n使用 venv 或 uv（一个基于 Rust 的快速 Python 软件包和项目管理器）创建并激活虚拟环境。\n\npy\nvenv\npython -m venv .my-env\nsource .my-env/bin/activate\nuv\nuv venv .my-env\nsource .my-env/b",
       "bodyTruncated": false,
       "qualityScore": 0.0,
       "eventAggregation": {
@@ -290,10 +292,10 @@
             "items": [
               {
                 "source": "GitHub Trending",
-                "title": "Hugging Face Transformers：多模态模型定义框架",
+                "title": "Hugging Face Transformers：统一多模态模型定义的开源框架",
                 "url": "https://github.com/huggingface/transformers",
                 "note": "原始发布 / 公告。",
-                "text": "Hugging Face Transformers：多模态模型定义框架 —— 原始发布 / 公告。"
+                "text": "Hugging Face Transformers：统一多模态模型定义的开源框架 —— 原始发布 / 公告。"
               }
             ]
           }
@@ -301,38 +303,43 @@
       }
     },
     {
-      "recordId": "recvqyJqKOAmTY",
-      "title": "Introducing Claude Opus 5",
-      "titleCn": "Anthropic 发布 Claude Opus 5，主打高性能与成本效率",
+      "recordId": "recvqyRlD3Vd5V",
+      "title": "Introducing Claude Sonnet 5 \\ Anthropic",
+      "titleCn": "Anthropic发布Claude Sonnet 5：更强智能体能力与更高性价比",
       "source": "Anthropic News",
-      "url": "https://www.anthropic.com/news/claude-opus-5",
+      "url": "https://www.anthropic.com/news/claude-sonnet-5",
       "category": "前沿模型公司",
       "contentType": "",
       "tier": "L1 一级官方",
       "priority": "P0",
       "publishedDate": "2026-07-27",
-      "summary": "Claude Opus 5 已正式上线，在软件工程、知识工作、自动化和计算机操作等多项评测中取得领先成绩，并以 Opus 4.8 相同成本实现显著性能提升。该模型现为 Claude Max 默认模型及 Claude Pro 最强模型，强调自主验证、迭代执行和端到端任务完成能力。",
-      "why": "其在编码、复杂问题求解和智能体任务上的性能成本比提升，可能直接影响企业模型选型与开发工作流。",
+      "summary": "Claude Sonnet 5主打智能体能力，支持规划、浏览器和终端工具调用及自主运行，在推理、工具使用、编程和知识工作方面显著优于Sonnet 4.6，部分任务性能可接近Opus 4.8。该模型已面向所有计划和Claude API提供，API价格为每百万输入token 2美元、输出token 10美元的限时优惠价，2026年8月31日后调整为3美元和15美元。",
+      "why": "Sonnet 5以低于Opus 4.8的价格缩小了两者在智能体能力上的差距，可能提升复杂任务自动化的成本效率。",
       "impact": 92,
       "novelty": 86,
-      "actionability": 94,
+      "actionability": 91,
       "urgency": "高",
       "tags": [
-        "AI",
-        "LLM",
         "Agent",
+        "LLM",
+        "推理",
         "产品"
       ],
-      "imageUrl": "https://cdn.sanity.io/images/4zrzovbb/website/54b7ab1d2c2521f83ae5d2da5f9d99321c370d24-2880x1620.png",
+      "imageUrl": "https://cdn.sanity.io/images/4zrzovbb/website/2039cc549c023bc855671308211d20d3382828a9-2880x1620.jpg",
       "mediaAssets": {
-        "images": [],
+        "images": [
+          {
+            "url": "https://www.anthropic.com/_next/image?url=https%3A%2F%2Fwww-cdn.anthropic.com%2Fimages%2F4zrzovbb%2Fwebsite%2F2039cc549c023bc855671308211d20d3382828a9-2880x1620.jpg&w=3840&q=75",
+            "alt": "Introducing Claude Sonnet 5"
+          }
+        ],
         "videos": []
       },
-      "body": "Claude Opus 5 于今日正式推出。它是一款深思熟虑且积极主动的模型，以一半的价格达到了接近 Claude Fable 5 的前沿智能水平。\n\n在 Frontier-Bench 和 GDPval-AA 等编程与知识工作评测中，Opus 5 创下了新的最先进水平，不过在网络安全任务上仍落后于 Mythos 5。\n\nOpus 5 专为日常使用而设计：它的运行效率高于其他模型。它是 Claude Max 上新的默认模型，也是 Claude Pro 上最强大的模型。\n\n性能与成本效益\n\nClaude Opus 5 在成本与其前代模型 Opus 4.8 相同的情况下，性能得到了大幅提升。本节中的图表展示了性能如何随模型的投入程度设置而变化，客户可以利用这一设置优化智能水平，或节省 token，从而更快、更经济地获得结果。\n\nOpus 5 在具有高价值的软件工程任务上表现出色。例如，在 Frontier-Bench v0.1 上，Opus 5 超越了所有其他模型，并以更低的单任务成本实现了 Opus 4.8 两倍以上的性能。在 CursorBench 3.2 上，当投入程度设为 max 时，该模型的表现与 Fable 5 的最高得分相差不到 0.5%，但单任务成本仅为后者的一半；在 high、xhigh 和 max 投入程度下，它还以给定成本实现了高于所有其他模型的性能。\n\n我们在知识工作和问题解决任务上看到了类似的结果。例如：\n\n在 ARC-AGI 3 这项要求模型解决新颖问题的评测中，Opus 5 的得分是次优模型的三倍。\n在 Zapier AutomationBench 这项衡量模型能否从头到尾完成业务任务的评测中，在单任务成本相同的情况下，Opus 5 的通过率约为次优模型的 1.5 倍。即使在最低投入程度设置下，Opus 5 通过的任务也比其他任何模型都多。\n在计算机使用基准测试 OSWorld 2.0 上，无论给定成本是多少，Opus 5 的表现都优于其他所有模型，并且仅以略高于三分之一的成本便超越了 Fable 5 的最佳成绩。\n\n在若干相关评测中，它也是我们表现最佳且最具成本效益的模型：\n\n在科学研究方面，Opus 5 相比 Opus 4.8 有了显著提升。在我们的每一项生命科学评测中，它的表现都优于 Opus 4.8，这些评测涵盖结构生物学、有机化学和生物信息学等主题。它在有机化学任务上的进步最为显著，例如根据光谱数据推断分子结构（在我们的内部基准测试中，其得分比 Opus 4.8 高 10.2 个百分点）；在蛋白质相关任务上同样如此，例如预测蛋白质序列的变异会如何影响其功能（在这方面，其得分高出 7.7 个百分点）。\n\n最后，Opus 5 能够生成强大得多的视觉输出：\n\n使用 Claude Opus 5\n\nClaude Opus 5 在核验自己的工作以及谨慎迭代直至成功方面要强大得多。在评测和抢先体验测试中，我们和用户发现了许多展现 Opus 5 主动行动能力与周密性的例子：\n\n在一项 Frontier-Bench 任务中，Opus 5 得到了一张机器零件的图纸，并被要求",
+      "body": "Claude Sonnet 5 旨在成为迄今最具智能体能力的 Sonnet 模型。它可以制定计划，使用浏览器和终端等工具，并以仅仅几个月前还需要规模更大、价格更高的模型才能达到的水平自主运行。\n\n对许多开发者来说，智能体 AI 时代始于 Sonnet 级模型：Claude Sonnet 3.5、3.6 和 3.7 是最早在编码和工具使用方面展现出卓越能力的模型。不过，最近智能体能力方面最明显的进步出现在我们的 Opus 级模型中。\n\nSonnet 5 缩小了这一差距：其性能接近 Opus 4.8，但价格更低。在推理、工具使用、编码和知识工作等智能体性能的重要方面，它相比前代模型 Sonnet 4.6 有了显著提升：\n\nSonnet 5 在多项评测中的得分，并与 Sonnet 4.6 和 Opus 4.8（作为参考，后者是一款综合能力更强的模型）的得分进行比较。Claude Sonnet 5 System Card 详细报告了范围更广的一系列评测。\n\n我们的安全评估发现，与 Sonnet 4.6 相比，Sonnet 5 出现不良行为的总体比率更低，并且通常在智能体场景中使用更安全。评测还表明，它执行网络安全任务的能力远低于我们当前的 Opus 模型。\n\n从今天起，Claude Sonnet 5 面向所有套餐开放：它是 Free 和 Pro 套餐的默认模型，Max、Team 和 Enterprise 用户也可以使用。它还可用于 Claude Code 和 Claude Platform；在 Claude Platform 上，其首发优惠价格为每百万输入 token 2 美元、每百万输出 token 10 美元，优惠期截至 2026 年 8 月 31 日，之后价格将调整为每百万输入 token 3 美元、每百万输出 token 15 美元。开发者可以通过 Claude API 使用 claude-sonnet-5。\n\n使用 Claude Sonnet 5\n\n下图比较了 Sonnet 5、Sonnet 4.6 和 Opus 4.8 在不同投入程度下，在智能体搜索评测 BrowseComp 和计算机使用评测 OSWorld-Verified 中的表现。Sonnet 5（橙色线）严格优于 Sonnet 4.6（灰色线），并且相比 Opus 4.8（黄色线）涵盖了范围广得多的成本—性能选项。它在中等投入程度下显著提高了成本效率；在较高投入程度下，其性能在某些任务上可以与 Opus 4.8 相当。用户可以在 Sonnet 5 和 Opus 4.8 之间调整投入程度，以找到成本与性能之间的适当平衡。\n\n智能体搜索 智能体计算机使用\n\n不同投入程度下的成本—性能曲线。此前最好的 Sonnet 模型（Sonnet 4.6）与 Opus 4.8 相比仍有明显差距。Sonnet 5 提供了比 Sonnet 4.6 范围更广的成本—性能选项，并且在某些情况下可达到 Opus 4.8 的能力水平。图表按 Sonnet 5 每百万输入 token 3 美元、每百万输出 token 15 美元的价格绘制。按照截至 8 月 31 日的首发优惠价格（输入 2 美元/MTok，输出 10 美元/MTok），Sonnet 5 的实际成本甚至低于此处所示。Opus 4.8 的价格为 5 美元/M",
       "bodyTruncated": true,
       "qualityScore": 0.0,
       "eventAggregation": {
-        "total": 3,
+        "total": 2,
         "groups": [
           {
             "key": "官方来源",
@@ -340,10 +347,10 @@
             "items": [
               {
                 "source": "Anthropic News",
-                "title": "Anthropic 发布 Claude Opus 5，主打高性能与成本效率",
-                "url": "https://www.anthropic.com/news/claude-opus-5",
+                "title": "Anthropic发布Claude Sonnet 5：更强智能体能力与更高性价比",
+                "url": "https://www.anthropic.com/news/claude-sonnet-5",
                 "note": "原始发布 / 公告。",
-                "text": "Anthropic 发布 Claude Opus 5，主打高性能与成本效率 —— 原始发布 / 公告。"
+                "text": "Anthropic发布Claude Sonnet 5：更强智能体能力与更高性价比 —— 原始发布 / 公告。"
               }
             ]
           },
@@ -352,18 +359,11 @@
             "tone": "#2b6cb0",
             "items": [
               {
-                "source": "智东西",
-                "title": "Claude Opus 5来了，Fable 5性能、一半价格",
-                "url": "https://zhidx.com/p/579603.html",
-                "note": "同事件的其它源头报道。",
-                "text": "Claude Opus 5来了，Fable 5性能、一半价格 —— 同事件的其它源头报道。"
-              },
-              {
                 "source": "Anthropic News",
-                "title": "Anthropic 发布 Claude Sonnet 5，强化智能体能力并降低使用成本",
-                "url": "https://www.anthropic.com/news/claude-sonnet-5",
+                "title": "Anthropic恢复部署Claude Fable 5并推进越狱评估标准",
+                "url": "https://www.anthropic.com/news/redeploying-fable-5",
                 "note": "同事件的其它源头报道。",
-                "text": "Anthropic 发布 Claude Sonnet 5，强化智能体能力并降低使用成本 —— 同事件的其它源头报道。"
+                "text": "Anthropic恢复部署Claude Fable 5并推进越狱评估标准 —— 同事件的其它源头报道。"
               }
             ]
           }
@@ -371,34 +371,34 @@
       }
     },
     {
-      "recordId": "recvqyJqKODweQ",
-      "title": "affaan-m/ECC",
-      "titleCn": "ECC：跨平台 AI Agent 性能优化与操作系统",
+      "recordId": "recvqyTzwDsOrH",
+      "title": "vllm-project/vllm",
+      "titleCn": "vLLM：高吞吐、内存高效的大模型推理与服务引擎",
       "source": "GitHub Trending",
-      "url": "https://github.com/affaan-m/ecc",
+      "url": "https://github.com/vllm-project/vllm",
       "category": "技术研究开源",
       "contentType": "Github热榜",
       "tier": "L2 结构化平台",
       "priority": "P0",
       "publishedDate": "2026-07-27",
-      "summary": "ECC 是面向 Claude Code、Codex、Cursor、OpenCode 等开发工具的开源 Agent 操作系统，集成技能、记忆优化、持续学习、安全扫描、Hooks、规则及 MCP 配置。项目拥有超过 23 万 Stars，并支持多种语言生态与跨 Harness 工作流。",
-      "why": "其高社区热度和跨平台复用能力，使其成为构建生产级编码 Agent 工作流的重要开源基础设施。",
+      "summary": "vLLM 是由加州大学伯克利分校 Sky Computing Lab 发起的开源 LLM 推理与服务库，通过 PagedAttention、连续批处理、前缀缓存、量化和推测解码等技术提升吞吐量与内存效率。项目拥有超过 8.7 万颗星和 2000 多名贡献者，并支持 Hugging Face 模型及多种 GPU 内核和硬件平台。",
+      "why": "vLLM 已成为活跃度和采用度较高的开源大模型服务基础设施，可直接降低模型部署的性能与成本门槛。",
       "impact": 92,
-      "novelty": 82,
-      "actionability": 91,
+      "novelty": 74,
+      "actionability": 95,
       "urgency": "中",
       "tags": [
-        "Agent",
         "LLM",
         "开源",
-        "产品"
+        "推理",
+        "硬件"
       ],
-      "imageUrl": "https://opengraph.githubassets.com/3c8e75f9a8918f365b0bdded05f232a2af4ee00b6b261d8a80856052492a31a5/affaan-m/ECC",
+      "imageUrl": "https://opengraph.githubassets.com/1ef034326b149d338f98b8634eb3ef805701eeeb0e597f2dea5537dc40d28a0b/vllm-project/vllm",
       "mediaAssets": {
         "images": [],
         "videos": []
       },
-      "body": "智能体运行框架性能优化系统。为 Claude Code、Codex、Opencode、Cursor 及更多平台提供技能、本能、记忆、安全和研究优先的开发方式。\n\n⭐ 星标: 233776 | 🍴 分叉: 35638 | 语言: JavaScript | 主题: ai-agents, anthropic, claude, claude-code, developer-tools, llm, mcp, productivity\n创建: 2026-01-18 | 最近提交: 2026-07-27 | 沉淀分: 8.44\n\n【社区反响·热门 Issue】\n- [已关闭] 👍23 💬16 插件安装失败，出现 `plugins.0.source: Invalid input`\n- [已关闭] 👍6 💬2 功能：扩展 Swift/Apple 支持，使其逐步达到与 Kotlin、Python 和 TypeScript 工作流同等的水平\n- [已关闭] 👍4 💬4 插件安装失败：清单文件无效——agents 字段验证错误\n- [已关闭] 👍4 💬5 PreToolUse Hook 阻止创建计划文件\n\n语言: English | Português (Brasil) | 简体中文 | 繁體中文 | 日本語 | 한국어 | Türkçe | Русский | Tiếng Việt | ไทย | Deutsch | Español\n[!警告]\n仅限官方来源。请仅通过经过验证的渠道安装 ECC：GitHub 仓库 github.com/affaan-m/ECC、npm 软件包 ecc-universal 和 ecc-agentshield、GitHub App、插件标识 ecc@ecc，以及项目网站 ecc.tools。第三方重新上传的版本和非官方镜像不由本项目维护或审核，可能包含恶意软件。\n\n211.9K+ 星标 | 32.5K+ 分叉 | 230+ 贡献者 | 12+ 语言生态系统 | 跨运行框架智能体工作流\n\n---\n\n语言 / 语言 / 語言 / 语言 / 语言 / 语言 / 语言\n\nEnglish | Português (Brasil) | 简体中文 | 繁體中文 | 日本語 | 한국어\n| Türkçe | Русский | Tiếng Việt | ไทย | Deutsch | Español\n\n---\n\n面向智能体工作的运行框架原生操作员系统。基于真实的多运行框架工程工作流构建。\n\n不只是配置，而是一套完整的系统：技能、本能、记忆优化、持续学习、安全扫描和研究优先的开发方式。生产就绪的智能体、技能、Hook、规则、MCP 配置和旧版命令兼容层，历经 10 多个月高强度日常使用并构建真实产品后不断演进而成。\n\n可跨 Codex、Claude Code、Cursor、OpenCode、Gemini、Zed、GitHub Copilot 及其他 AI 智能体运行框架使用。\n\nECC v2.0.0 在这一可复用层之上增加了公开的 Hermes 操作员方案：从 Hermes 设置指南开始，然后查看 2.0.0 发布说明和跨运行框架架构。\n\n---",
+      "body": "一个高吞吐量、内存高效的 LLM 推理与服务引擎\n\n⭐ 星标: 87280 | 🍴 Forks: 19904 | 语言: Python | 主题: amd, blackwell, cuda, deepseek, deepseek-v3, gpt, gpt-oss, inference, kimi, llama, llm, llm-serving, model-serving, moe, openai, pytorch, qwen, qwen3, tpu, transformer\n创建: 2023-02-09 | 最近提交: 2026-07-27 | 沉淀分: 7.89\n\n面向所有人的简单、快速且低成本的 LLM 服务\n\n| 文档 | 博客 | 论文 | Twitter/X | 用户论坛 | 开发者 Slack |\n\n🔥 我们创建了一个 vLLM 网站，帮助你开始使用 vLLM。请访问 vllm.ai 了解更多信息。\n如需了解活动，请访问 vllm.ai/events 加入我们。\n\n---\n关于\n\nvLLM 是一个快速且易于使用的 LLM 推理与服务库。\n\nvLLM 最初由 UC Berkeley 的 Sky Computing Lab 开发，如今已发展成为最活跃的开源 AI 项目之一，由一个多元化社区构建和维护。该社区拥有来自数十家学术机构和公司的 2000 多名贡献者。\n\nvLLM 的高速得益于：\n\n- 最先进的服务吞吐量\n- 使用 PagedAttention 高效管理注意力键和值内存\n- 对传入请求进行连续批处理、分块预填充和前缀缓存\n- 使用分段式及完整的 CUDA/HIP 图实现快速、灵活的模型执行\n- 量化：FP8、MXFP8/MXFP4、NVFP4、INT8、INT4、GPTQ/AWQ、GGUF、compressed-tensors、ModelOpt、TorchAO 等\n- 优化的注意力内核，包括 FlashAttention、FlashInfer、TRTLLM-GEN、FlashMLA 和 Triton\n- 使用 CUTLASS、TRTLLM-GEN、CuTeDSL 为各种精度优化的 GEMM/MoE 内核\n- 推测解码，包括 n-gram、suffix、EAGLE、DFlash\n- 使用 torch.compile 自动生成内核并进行图级转换\n- 解耦式预填充、解码和编码\n\nvLLM 灵活且易于使用，具备：\n\n- 与热门 Hugging Face 模型无缝集成\n- H",
       "bodyTruncated": false,
       "qualityScore": 0.0,
       "eventAggregation": {
@@ -410,10 +410,10 @@
             "items": [
               {
                 "source": "GitHub Trending",
-                "title": "ECC：跨平台 AI Agent 性能优化与操作系统",
-                "url": "https://github.com/affaan-m/ecc",
+                "title": "vLLM：高吞吐、内存高效的大模型推理与服务引擎",
+                "url": "https://github.com/vllm-project/vllm",
                 "note": "原始发布 / 公告。",
-                "text": "ECC：跨平台 AI Agent 性能优化与操作系统 —— 原始发布 / 公告。"
+                "text": "vLLM：高吞吐、内存高效的大模型推理与服务引擎 —— 原始发布 / 公告。"
               }
             ]
           }
@@ -421,7 +421,107 @@
       }
     },
     {
-      "recordId": "recvqyJqKOAr8K",
+      "recordId": "recvqyRlD3GWUh",
+      "title": "sgl-project/sglang",
+      "titleCn": "SGLang：面向大语言模型与多模态模型的高性能推理服务框架",
+      "source": "GitHub Trending",
+      "url": "https://github.com/sgl-project/sglang",
+      "category": "技术研究开源",
+      "contentType": "Github热榜",
+      "tier": "L2 结构化平台",
+      "priority": "P0",
+      "publishedDate": "2026-07-27",
+      "summary": "SGLang 是一个使用 Python 开发的开源高性能模型服务框架，覆盖大语言模型、多模态模型、扩散模型及多种硬件后端。项目拥有 30782 个 Star，并持续提供新模型首日支持、推测解码与大规模推理优化。",
+      "why": "该项目兼具较高社区热度、广泛模型适配和明确的推理性能优化价值，值得模型部署团队关注。",
+      "impact": 90,
+      "novelty": 82,
+      "actionability": 91,
+      "urgency": "中",
+      "tags": [
+        "LLM",
+        "多模态",
+        "推理",
+        "开源"
+      ],
+      "imageUrl": "https://opengraph.githubassets.com/93ef7a05abaf42f04b7e69558b8577e54e80932329388865a16ee547558e1b40/sgl-project/sglang",
+      "mediaAssets": {
+        "images": [],
+        "videos": []
+      },
+      "body": "SGLang 是一个面向大型语言模型和多模态模型的高性能服务框架。\n\n⭐ Stars: 30782 | 🍴 Forks: 7418 | 语言: Python | 主题: attention, blackwell, cuda, deepseek, diffusion, glm, gpt-oss, inference, llama, llm, minimax, moe, qwen, qwen-image, reinforcement-learning, transformer, vlm, wan\n创建: 2024-01-08 | 最近提交: 2026-07-27 | 沉淀分: 7.22\n\n【社区反响·热门 Issue】\n- [已关闭] 👍197 💬14 开发路线图（2026 年第一季度）\n- [已关闭] 👍162 💬11 开发路线图（2025 年第三季度）\n- [已关闭] 👍109 💬24 开发路线图（2025 年上半年）\n- [已关闭] 👍107 💬53 [跟踪] OpenAI gpt-oss 首日支持\n\n--------------------------------------------------------------------------------\n\n博客 |\n文档 |\n路线图 |\n加入 Slack |\n每周开发会议 |\n幻灯片\n新闻\n- [2026/06] 🔥 下一代推测解码：DFlash 和 Spec V2（博客）。\n- [2026/04] 🔥 首日支持 DeepSeek-V4：从快速推理到使用 SGLang 和 Miles 进行经验证的强化学习（博客）。\n- [2026/06] SGLang 为最新开放模型提供首日支持（Nemotron 3 Ultra、Nemotron 3 Super、Higgs Audio v3 TTS）。\n- [2026/02] 🔥 使用 SGLang 在 NVIDIA GB300 NVL72 上实现 25 倍推理性能提升（博客）。\n- [2026/01] SGLang Diffusion 加速视频和图像生成（博客）。\n- [2025/12] SGLang 为最新开放模型提供首日支持（MiMo-V2-Flash、Nemotron 3 Nano、Mistral Large 3、LLaDA 2.0 Diffusion LLM、MiniMax M2）。\n- [2025/10] SGLang 现在可通过 SGLang-Jax 后端在 TPU 上原生运行（博客）。\n\n更多\n\n- [2025/09] 使用 PD 和大规模 EP 在 GB200 NVL72 上部署 DeepSeek（第二部分）：预填充吞吐量提升 3.8 倍，解码吞吐量提升 4.8 倍（博客）。\n- [2025/09] SGLang 首日支持采用稀疏注意力的 DeepSeek-V3.2（博客）。\n- [2025/08] 8 月 22 日 SGLang x AMD 旧金山聚会：GPU 实操研讨会、AMD/xAI/SGLang 技术演讲及交流活动（路线图、大规模 EP、亮点、AITER/MoRI、Wave）。\n\n- [2025/11] SGLang Diffusion 加速视频和图像生成（博客）。\n- [2025/10] PyTorch Conference 2025 SGLang 演讲（幻灯片）。\n- [2025/10] 10 月 2 日 SGLang x Nvidia 旧金山聚会（回顾）。\n- [2025/08] SGLang 为 OpenAI 提供首日支持",
+      "bodyTruncated": false,
+      "qualityScore": 0.0,
+      "eventAggregation": {
+        "total": 1,
+        "groups": [
+          {
+            "key": "官方来源",
+            "tone": "#16130f",
+            "items": [
+              {
+                "source": "GitHub Trending",
+                "title": "SGLang：面向大语言模型与多模态模型的高性能推理服务框架",
+                "url": "https://github.com/sgl-project/sglang",
+                "note": "原始发布 / 公告。",
+                "text": "SGLang：面向大语言模型与多模态模型的高性能推理服务框架 —— 原始发布 / 公告。"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "recordId": "recvqyTzwDKDO8",
+      "title": "langgenius/dify",
+      "titleCn": "Dify：开源 LLM 应用与 Agent 工作流开发平台",
+      "source": "GitHub Trending",
+      "url": "https://github.com/langgenius/dify",
+      "category": "技术研究开源",
+      "contentType": "Github热榜",
+      "tier": "L2 结构化平台",
+      "priority": "P0",
+      "publishedDate": "2026-07-27",
+      "summary": "Dify 在统一协作空间中集成可视化 AI 工作流、RAG、Agent、模型管理与可观测性，支持从原型快速迁移至生产环境。平台可部署于云端、VPC 或自托管环境，并兼容大量闭源及开源模型。",
+      "why": "该项目拥有超过 15 万颗 GitHub Stars，功能覆盖 LLM 应用开发和部署全流程，具备较强的社区影响力与落地价值。",
+      "impact": 90,
+      "novelty": 72,
+      "actionability": 94,
+      "urgency": "中",
+      "tags": [
+        "LLM",
+        "Agent",
+        "RAG",
+        "开源"
+      ],
+      "imageUrl": "https://repository-images.githubusercontent.com/626805178/6616f28b-ae4c-44e6-8b4c-e3c3396315e9",
+      "mediaAssets": {
+        "images": [],
+        "videos": []
+      },
+      "body": "在一个协作式工作空间中构建智能体工作流和 RAG 流水线，并获得丰富的 AI 模型与工具支持。可部署在云端、VPC 或自行托管，使团队无需重建技术栈即可从原型迈向生产环境。\n\n⭐ 星标: 150376 | 🍴 复刻: 23691 | 语言: TypeScript | 主题: agent, agentic-ai, agentic-framework, agentic-workflow, ai, automation, claude, genai, gpt, llm, low-code, mcp, nextjs, no-code, openai, orchestration, python, rag, skills, workflow\n创建: 2023-04-12 | 最近提交: 2026-07-27 | 沉淀分: 8.16\n\n【社区反响·热门 Issue】\n- [已关闭] 👍102 💬89 能否将 Microsoft 的 Graph RAG 添加到新版本中？\n- [已关闭] 👍76 💬64 添加对 Model Context Protocol（MCP）的支持\n- [已关闭] 👍52 💬31 实现 OpenAI 的 Realtime API\n- [已关闭] 👍49 💬12 让我们一起打造一些很棒的东西！💡✨\n\nDify Cloud ·\n自行托管 ·\n文档 ·\nDify 版本概览\n\nDify 是一个开源的 LLM 应用开发平台。其直观的界面融合了 AI 工作流、RAG 流水线、智能体能力、模型管理、可观测性功能（包括 Opik、Langfuse 和 Arize Phoenix）等，让你能够快速从原型迈向生产环境。以下是核心功能列表：\n快速开始\n在安装 Dify 之前，请确保你的计算机满足以下最低系统要求：\n- CPU >= 2 核\n- RAM >= 4 GiB\n\n启动 Dify 服务器最简单的方式是使用 Docker Compose。在使用以下命令运行 Dify 之前，请确保你的计算机上已安装 Docker 和 Docker Compose v2.24.0 或更高版本：\n\nbash\ncd dify\ncd docker\ncp .env.example .env\ndocker compose up -d\n\n运行后，你可以在浏览器中访问 http://localhost/install 打开 Dify 控制面板，并开始初始化流程。\n寻求帮助\n\n如果你在设置 Dify 时遇到问题，请参阅我们的常见问题解答。如果问题仍未解决，请联系社区和我们。\n如果你想为 Dify 做出贡献或进行进一步开发，请参阅我们的源代码部署指南\n核心功能\n\n1. 工作流：\n在可视化画布上构建并测试强大的 AI 工作流，充分利用以下所有功能及更多能力。\n\n2. 全面的模型支持：\n与来自数十家推理服务提供商及自行托管解决方案的数百种专有／开源 LLM 无缝集成，涵盖 G",
+      "bodyTruncated": false,
+      "qualityScore": 0.0,
+      "eventAggregation": {
+        "total": 1,
+        "groups": [
+          {
+            "key": "官方来源",
+            "tone": "#16130f",
+            "items": [
+              {
+                "source": "GitHub Trending",
+                "title": "Dify：开源 LLM 应用与 Agent 工作流开发平台",
+                "url": "https://github.com/langgenius/dify",
+                "note": "原始发布 / 公告。",
+                "text": "Dify：开源 LLM 应用与 Agent 工作流开发平台 —— 原始发布 / 公告。"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "recordId": "recvqyRlD3Tll1",
       "title": "Introducing Muse Spark: Scaling Towards Personal Superintelligence",
       "titleCn": "Meta 发布原生多模态推理模型 Muse Spark",
       "source": "Meta AI Blog",
@@ -431,24 +531,41 @@
       "tier": "L1 一级官方",
       "priority": "P0",
       "publishedDate": "2026-07-27",
-      "summary": "Meta 推出 Muse 系列首款模型 Muse Spark，支持工具调用、视觉思维链和多智能体编排，并已上线 Meta AI，同时向部分用户开放私有 API 预览。其 Contemplating 模式在 Humanity’s Last Exam 和 FrontierScience Research 上分别取得 58% 和 38%，新预训练方案达到同等能力所需算力较 Llama 4 Maverick 降低超过一个数量级。",
-      "why": "这是 Meta 重构 AI 技术栈后迈向个人超级智能的首个产品，集中展示了多模态推理、多智能体协作与训练效率提升。",
-      "impact": 91,
+      "summary": "Meta 推出 Muse 系列首款模型 Muse Spark，支持工具调用、视觉思维链和多智能体编排，并上线 meta.ai 与 Meta AI 应用。其 Contemplating 模式通过并行智能体增强复杂推理，Meta 称该模式在 Humanity’s Last Exam 和 FrontierScience Research 上分别取得 58% 和 38%。",
+      "why": "这是 Meta 重构 AI 技术栈并迈向“个人超级智能”的首个产品成果，展示了其在多模态、测试时推理和多智能体协作上的新路线。",
+      "impact": 89,
       "novelty": 86,
-      "actionability": 72,
+      "actionability": 76,
       "urgency": "高",
       "tags": [
-        "AI",
         "多模态",
         "推理",
-        "Agent"
+        "Agent",
+        "产品"
       ],
-      "imageUrl": "https://scontent-sea5-1.xx.fbcdn.net/v/t39.2365-6/667507363_1871749950191919_4996140970371485757_n.png?_nc_cat=109&ccb=1-7&_nc_sid=e280be&_nc_ohc=RR2btl8FBNsQ7kNvwFptGqC&_nc_oc=Adq7aferH2RGlv6cux_OrT_UI5YruIwBN8E9-ppdPBT2DVoGZilihpv9JilWqv_ntsY&_nc_zt=14&_nc_ht=scontent-sea5-1.xx&_nc_gid=xpBGGN95fgRsPQizLmwT2w&_nc_ss=7c20f&oh=00_AQB86hMXaedbDmCmsBRDljsvS0B9Kd7UGxh8TtzdVejuPA&oe=6A81736C",
+      "imageUrl": "https://scontent-sea5-1.xx.fbcdn.net/v/t39.2365-6/667507363_1871749950191919_4996140970371485757_n.png?_nc_cat=109&ccb=1-7&_nc_sid=e280be&_nc_ohc=RR2btl8FBNsQ7kNvwFptGqC&_nc_oc=Adq7aferH2RGlv6cux_OrT_UI5YruIwBN8E9-ppdPBT2DVoGZilihpv9JilWqv_ntsY&_nc_zt=14&_nc_ht=scontent-sea5-1.xx&_nc_gid=cTspeG99Ob1rjOOyrGPalw&_nc_ss=7c20f&oh=00_AQBxMgvSXl6vgD8bL4lESpSoRnMjnq4NoZRBM5Jl6X3CIQ&oe=6A81736C",
       "mediaAssets": {
-        "images": [],
+        "images": [
+          {
+            "url": "https://scontent-sea5-1.xx.fbcdn.net/v/t39.2365-6/665581474_754379650958649_1048376096520346652_n.png?_nc_cat=105&ccb=1-7&_nc_sid=e280be&_nc_ohc=8io9QwJPSl8Q7kNvwG-Gzd2&_nc_oc=AdpxN8Jr83wg6-50ECBDbx2-1rCu5AmbcYnJ5fregaDVWsSRhvlx43VODCeAumVwzrw&_nc_zt=14&_nc_ht=scontent-sea5-1.xx&_nc_gid=GThuooND-ImQo-GBwkSS2A&_nc_ss=7c20f&oh=00_AQBNlivxzMer2UrJJ11Chj_3NkO-3lTBgVd644vKft-Bew&oe=6A815972",
+            "alt": ""
+          },
+          {
+            "url": "https://scontent-sea5-1.xx.fbcdn.net/v/t39.2365-6/665924660_1383428270484689_5397336232917598143_n.png?_nc_cat=105&ccb=1-7&_nc_sid=e280be&_nc_ohc=ggfNDflghesQ7kNvwHthJBi&_nc_oc=Adqk2nGpRoLdD9gmVeZx01TsQGl4AZuRc7Qr4E0n1deFhDhAz89rLP-5baTByacPhq0&_nc_zt=14&_nc_ht=scontent-sea5-1.xx&_nc_gid=GThuooND-ImQo-GBwkSS2A&_nc_ss=7c20f&oh=00_AQDedL9vjA1VTLoILS7x3-Umhb2-97vppgO_gG_KrTnfQQ&oe=6A816617",
+            "alt": ""
+          },
+          {
+            "url": "https://scontent-sea5-1.xx.fbcdn.net/v/t39.2365-6/667772255_4176091915975874_5759873660396683226_n.png?_nc_cat=108&ccb=1-7&_nc_sid=e280be&_nc_ohc=sLV8iDg-inkQ7kNvwFcC-2P&_nc_oc=Adq-Br_ofUXYwUnyXtO41i4SkSy7n_xMlwDxiVNtiGcEMVJHvyTysGmFy2FnwgjIruc&_nc_zt=14&_nc_ht=scontent-sea5-1.xx&_nc_gid=GThuooND-ImQo-GBwkSS2A&_nc_ss=7c20f&oh=00_AQDLBnPFMSWvZLbmKiE6mWqcUIPq7KFLyr9BQhg3BEM2PA&oe=6A814317",
+            "alt": ""
+          },
+          {
+            "url": "https://scontent-sea5-1.xx.fbcdn.net/v/t39.2365-6/667580961_1557898095990047_8798526624523628592_n.png?_nc_cat=108&ccb=1-7&_nc_sid=e280be&_nc_ohc=YvtqUfcYVicQ7kNvwGwlPGD&_nc_oc=Ado__gzIsCihe3Md_C-DLYwoS3k1YMv4fUTJhQ4DfRVDPj-bg8Thj5zk3lF0IVM7oH8&_nc_zt=14&_nc_ht=scontent-sea5-1.xx&_nc_gid=GThuooND-ImQo-GBwkSS2A&_nc_ss=7c20f&oh=00_AQBkdmGUGkX0vBwDSfbfYPz9kcedwSMShHqhzdsOOeirIA&oe=6A8173E3",
+            "alt": ""
+          }
+        ],
         "videos": []
       },
-      "body": "今天，我们很高兴推出 Muse Spark，这是由 Meta Superintelligence Labs 开发的 Muse 模型家族中的首个模型。Muse Spark 是一个原生多模态推理模型，支持工具使用、视觉思维链和多智能体编排。\n\nMuse Spark 是我们扩展阶梯上的第一步，也是我们从零开始全面革新 AI 工作的首个成果。为了支持进一步扩展，我们正在对整个技术栈进行战略性投资——从研究和模型训练到基础设施，包括 Hyperion 数据中心。\n\n在本文中，我们将首先探讨 Muse Spark 的新能力和应用。在介绍这些成果之后，我们将揭开幕后面纱，了解推动我们迈向个人超级智能的各个扩展维度。\n\nMuse Spark 现已在 meta.ai 和 Meta AI app 上推出。我们正在面向部分特定用户开放 API 私密预览。\n\n个人超级智能的能力\n\nMuse Spark 在多模态感知、推理、健康和智能体任务方面展现出有竞争力的表现。我们将继续对目前仍存在性能差距的领域进行投入，例如长时程智能体系统和编码工作流。\n\n随着更大型模型的开发不断推进，这些结果表明，我们的技术栈正在有效扩展。\n\n我们还将推出 Contemplating mode，它可以编排多个并行推理的智能体。这使 Muse Spark 能够与 Gemini Deep Think 和 GPT Pro 等前沿模型的极限推理模式一较高下。Contemplating mode 在高难度任务中带来了显著的能力提升，在 Humanity’s Last Exam 中取得了 58% 的成绩，在 FrontierScience Research 中取得了 38% 的成绩。\n\n应用\n\nMuse Spark 是迈向理解你所处世界的个人超级智能的第一步。从分析你身边的即时环境到为你的健康提供支持，Muse Spark 的先进推理能力可以实现强大且高度个性化的用例。\n\n多模态。Muse Spark 从零开始构建，旨在跨领域和工具整合视觉信息。它在视觉 STEM 问题、实体识别和定位方面表现出色。这些能力相互结合，可实现各种交互式体验，例如创建有趣的小游戏，或通过动态标注排查家用电器的故障。\n\n健康。个人超级智能的一项重要应用，是帮助人们了解并改善自身健康。为了提升 Muse Spark 的健康推理能力，我们与 1,000 多名医生合作，精心整理训练数据，使其能够给出更符合事实且更全面的回答。Muse Spark 可以生成交互式展示，深入解析并说明健康信息，例如各种食物的营养成分，或运动过程中被激活的肌肉。\n\n扩展维度\n\n为了构建个人超级智能，我们模型的能力应当以可预测且高效的方式扩展。下面，我们将介绍如何沿着三个维度研究和追踪 Muse Spark 的扩展特性：预训练、强化学习，以及",
+      "body": "今天，我们很高兴推出 Muse Spark，这是由 Meta Superintelligence Labs 开发的 Muse 模型家族中的首个模型。Muse Spark 是一个原生多模态推理模型，支持工具使用、视觉思维链和多智能体编排。\n\nMuse Spark 是我们扩展阶梯上的第一步，也是我们从头彻底改革 AI 工作的首个成果。为了支持进一步扩展，我们正在对整个技术栈进行战略性投资——涵盖从研究、模型训练到基础设施的各个方面，包括 Hyperion 数据中心。\n\n在本文中，我们将首先探讨 Muse Spark 的新能力和应用。在介绍这些成果之后，我们将揭开幕后面纱，了解推动我们向个人超级智能迈进的各个扩展维度。\n\nMuse Spark 现已在 meta.ai 和 Meta AI 应用中推出。我们正在面向部分用户开放 API 私密预览。\n\n面向个人超级智能的能力\n\nMuse Spark 在多模态感知、推理、健康和智能体任务方面展现出有竞争力的性能。我们会继续投资于目前仍存在性能差距的领域，例如长时程智能体系统和编码工作流。\n\n随着更大模型正在开发中，这些结果表明，我们的技术栈能够有效扩展。\n\n我们还将推出 Contemplating mode，它可以编排多个并行推理的智能体。这使 Muse Spark 能够与 Gemini Deep Think 和 GPT Pro 等前沿模型的极致推理模式一较高下。Contemplating mode 在高难度任务中显著提升了能力，在 Humanity’s Last Exam 中取得了 58% 的成绩，在 FrontierScience Research 中取得了 38% 的成绩。\n\nMuse Spark 现已推出，Contemplating mode 将逐步在 meta.ai 上线。\n\n*有关我们评估的更多详细信息，请参阅我们的方法论文档。\n\n应用\n\nMuse Spark 是迈向能够理解你所处世界的个人超级智能的第一步。从分析你周围的即时环境，到为你的健康生活提供支持，Muse Spark 的高级推理能力可实现强大且高度个性化的使用场景。\n\n多模态。Muse Spark 从一开始就被设计为能够跨领域和工具整合视觉信息。它在视觉 STEM 问题、实体识别和定位方面表现出色。这些能力结合在一起，可以实现各种交互式体验，例如创建有趣的迷你游戏，或通过动态标注帮助你排查家用电器故障。\n\n健康。个人超级智能的一项主要应用，是帮助人们了解并改善自身健康。为了提升 Muse Spark 的健康推理能力，我们与 1,000 多名医生合作，整理训练数据，使其能够给出更符合事实且更全面的回答。Muse Spark 可以生成交互式展示，对健康信息进行拆解和解释，例如各种食物的营养成分，或运动过程中被激活的肌肉。\n\n扩展维度\n\n为了构建个人超级智能，我们模型的能力",
       "bodyTruncated": true,
       "qualityScore": 0.0,
       "eventAggregation": {
@@ -471,84 +588,34 @@
       }
     },
     {
-      "recordId": "recvqyJqKOu9FZ",
-      "title": "langgenius/dify",
-      "titleCn": "Dify：开源智能体工作流与 RAG 应用开发平台",
+      "recordId": "recvqyTzwD0Ris",
+      "title": "Significant-Gravitas/AutoGPT",
+      "titleCn": "AutoGPT：开源 AI 智能体工作流平台",
       "source": "GitHub Trending",
-      "url": "https://github.com/langgenius/dify",
+      "url": "https://github.com/significant-gravitas/autogpt",
       "category": "技术研究开源",
       "contentType": "Github热榜",
       "tier": "L2 结构化平台",
       "priority": "P0",
       "publishedDate": "2026-07-27",
-      "summary": "Dify 将可视化 AI 工作流、RAG 管线、智能体、模型管理和可观测性整合到协作平台中，支持数百种专有及开源模型。平台可部署于云端、VPC 或自托管环境，帮助团队从原型快速过渡到生产。",
-      "why": "其超过 15 万 GitHub Stars、丰富的模型与工具支持以及灵活部署能力，使其成为成熟度较高的 LLM 应用开发基础设施。",
-      "impact": 91,
-      "novelty": 74,
-      "actionability": 95,
-      "urgency": "中",
-      "tags": [
-        "LLM",
-        "Agent",
-        "RAG",
-        "开源"
-      ],
-      "imageUrl": "https://repository-images.githubusercontent.com/626805178/6616f28b-ae4c-44e6-8b4c-e3c3396315e9",
-      "mediaAssets": {
-        "images": [],
-        "videos": []
-      },
-      "body": "在一个协作工作区中，借助丰富的 AI 模型和工具支持，构建智能体工作流、RAG 管道。可部署在云端、VPC 或自托管环境中，让团队无需重建技术栈即可从原型迈向生产环境。\n\n⭐ Stars: 150368 | 🍴 Forks: 23691 | 语言: TypeScript | 主题: agent, agentic-ai, agentic-framework, agentic-workflow, ai, automation, claude, genai, gpt, llm, low-code, mcp, nextjs, no-code, openai, orchestration, python, rag, skills, workflow\n创建: 2023-04-12 | 最近提交: 2026-07-27 | 沉淀分: 8.16\n\n【社区反响·热门 Issue】\n- [已关闭] 👍102 💬89 可以在新版本中加入 Microsoft's Graph RAG 吗？\n- [已关闭] 👍76 💬64 添加对 Model Context Protocol (MCP) 的支持\n- [已关闭] 👍52 💬31 实现 OpenAI's Realtime API\n- [已关闭] 👍49 💬12 让我们一起构建一些精彩的东西吧！💡✨\n\nDify Cloud ·\n自托管 ·\n文档 ·\nDify 版本概览\n\nDify 是一个开源的 LLM 应用开发平台。其直观的界面结合了 AI 工作流、RAG 管道、智能体能力、模型管理、可观测性功能（包括 Opik、Langfuse 和 Arize Phoenix）等，让你能够快速从原型迈向生产环境。以下是核心功能列表：\n快速开始\n在安装 Dify 之前，请确保你的机器满足以下最低系统要求：\n- CPU >= 2 Core\n- RAM >= 4 GiB\n\n启动 Dify 服务器最简单的方式是通过 Docker Compose。在使用以下命令运行 Dify 之前，请确保你的机器上已安装 Docker 和 Docker Compose v2.24.0 或更高版本：\n\nbash\ncd dify\ncd docker\ncp .env.example .env\ndocker compose up -d\n\n运行后，你可以在浏览器中访问 http://localhost/install 的 Dify 控制面板，并开始初始化流程。\n寻求帮助\n\n如果你在设置 Dify 时遇到问题，请参阅我们的 FAQ。如果问题仍未解决，请联系社区和我们。\n如果你想为 Dify 做出贡献或进行额外开发，请参阅我们的从源代码部署指南\n核心功能\n\n1. 工作流：\n在可视化画布上构建和测试强大的 AI 工作流，利用以下所有功能以及更多能力。\n\n2. 全面的模型支持：\n与来自数十家推理服务提供商和自托管解决方案的数百个专有 / 开源 LLM 无缝集成，涵盖 G",
-      "bodyTruncated": false,
-      "qualityScore": 0.0,
-      "eventAggregation": {
-        "total": 1,
-        "groups": [
-          {
-            "key": "官方来源",
-            "tone": "#16130f",
-            "items": [
-              {
-                "source": "GitHub Trending",
-                "title": "Dify：开源智能体工作流与 RAG 应用开发平台",
-                "url": "https://github.com/langgenius/dify",
-                "note": "原始发布 / 公告。",
-                "text": "Dify：开源智能体工作流与 RAG 应用开发平台 —— 原始发布 / 公告。"
-              }
-            ]
-          }
-        ]
-      }
-    },
-    {
-      "recordId": "recvqyJqKO7X1Q",
-      "title": "NousResearch/hermes-agent",
-      "titleCn": "Nous Research 开源自改进 AI 智能体 Hermes Agent",
-      "source": "GitHub Trending",
-      "url": "https://github.com/nousresearch/hermes-agent",
-      "category": "技术研究开源",
-      "contentType": "Github热榜",
-      "tier": "L2 结构化平台",
-      "priority": "P0",
-      "publishedDate": "2026-07-27",
-      "summary": "Hermes Agent 是一款支持自主创建和持续改进技能、跨会话记忆检索及用户建模的开源 AI 智能体。它兼容多种模型与部署环境，并可通过 Telegram、Discord、Slack、WhatsApp、Signal 和 CLI 统一交互。",
-      "why": "其内置闭环学习、模型自由切换和跨平台自动化能力，为构建可长期使用且避免模型锁定的个人智能体提供了完整方案。",
-      "impact": 90,
-      "novelty": 86,
+      "summary": "AutoGPT 支持通过自然语言或可视化构建器创建、部署和运行可完成完整工作流的 AI 智能体，并可按需、定时或由事件触发执行。项目拥有超过 18.5 万颗 GitHub Star，同时提供托管平台、智能体管理、市场和流程构建工具。",
+      "why": "其庞大的开源社区和端到端智能体平台能力，使其成为评估 AI Agent 落地与生态发展的重要项目。",
+      "impact": 89,
+      "novelty": 72,
       "actionability": 91,
       "urgency": "中",
       "tags": [
         "AI",
         "Agent",
-        "LLM",
-        "开源"
+        "开源",
+        "产品"
       ],
-      "imageUrl": "https://opengraph.githubassets.com/2850ad8ce9d89fc91a2e658eda11db8e86752007d30cb38cde95480059764694/NousResearch/hermes-agent",
+      "imageUrl": "https://opengraph.githubassets.com/7a514deed170d126afe3cbcc072c9e2ea3fa81bd616f9bfd376e5181a6e8b8c8/Significant-Gravitas/AutoGPT",
       "mediaAssets": {
         "images": [],
         "videos": []
       },
-      "body": "与你共同成长的智能体\n\n⭐ Stars: 221104 | 🍴 Forks: 42184 | 语言: Python | 主题: ai, ai-agent, ai-agents, anthropic, chatgpt, claude, claude-code, clawdbot, codex, hermes, hermes-agent, llm, moltbot, nous-research, openai, openclaw\n创建: 2025-07-22 | 最近提交: 2026-07-27 | 沉淀分: 8.46\n\n【社区反响·热门 Issue】\n- [已关闭] 👍62 💬13 [功能]: 仅安装桌面客户端\n- [已关闭] 👍62 💬28 [功能]: 改进 Dashboard 主题——目前难以阅读\n- [已关闭] 👍55 💬38 [Bug]: 错误：'NoneType' 对象不可迭代\n- [已关闭] 👍52 💬16 修复 Codex 流式输出为 None 时的恢复机制\n\nHermes Agent ☤\n\nHermes Agent | Hermes Desktop\n\n由 Nous Research 打造的自我改进型 AI 智能体。它是唯一内置学习闭环的智能体——它会从经验中创建技能，在使用过程中改进技能，推动自己持久保存知识，搜索自己过去的对话，并在一次次会话中不断深化对你的理解。你可以在每月 5 美元的 VPS、GPU 集群或空闲时几乎不产生成本的无服务器基础设施上运行它。它不受限于你的笔记本电脑——当它在云端虚拟机上工作时，你可以通过 Telegram 与它交流。\n\n使用你想要的任何模型——Nous Portal、OpenRouter、OpenAI、你自己的端点，以及许多其他模型。使用 hermes model 即可切换——无需更改代码，也没有供应商锁定。\n\n真正的终端界面 | 完整的 TUI，支持多行编辑、斜杠命令自动补全、对话历史记录、中断并重定向，以及流式工具输出。\n存在于你所在的平台 | Telegram、Discord、Slack、WhatsApp、Signal 和 CLI——全部由单个网关进程提供支持。支持语音备忘录转录和跨平台对话连续性。\n闭合的学习循环 | 由智能体管理的记忆，并提供周期性提醒。在完成复杂任务后自主创建技能。技能会在使用过程中自我改进。通过 FTS5 会话搜索和 LLM 摘要实现跨会话回忆。Honcho 辩证式用户建模。兼容 agentskills.io 开放标准。\n定时自动化 | 内置 cron 调度器，可将结果发送到任何平台。每日报告、夜间备份、每周审计——全部使用自然语言设置，并可无人值守运行。\n委派",
+      "body": "AutoGPT 的愿景是让每个人都能使用 AI，并在其基础上进行构建。我们的使命是提供工具，让你能够专注于真正重要的事情。\n\n⭐ 星标: 185702 | 🍴 复刻: 46066 | 语言: Python | 主题: agentic-ai, agents, ai, artificial-intelligence, autonomous-agents, claude, gpt, llama-api, llm, openai, python\n创建: 2023-03-16 | 最近提交: 2026-07-27 | 沉淀分: 8.40\n\n【社区反响·热门 Issue】\n- [已关闭] 👍156 💬270 Auto-GPT 递归式自我改进\n- [已关闭] 👍101 💬33 💡完全物理隔离的离线 Auto-GPT\n- [已关闭] 👍35 💬95 支持使用其他/本地 LLM\n- [已关闭] 👍31 💬23 本地模型使用说明\n\nAutoGPT——完成工作的 AI 智能体\n\n每周省下 10 小时。\n\n描述你想完成的事情。AutoGPT 会构建智能体、运行它并反馈结果。\n\n开始使用\n·\n导览\n·\n定价\n·\n文档\n·\nDiscord\n·\n自行托管\n\n---\nAI 智能体开源平台\n\nAutoGPT 让你能够构建、部署和运行执行完整工作流的 AI 智能体。用简单的英语描述预期结果，或在可视化构建器中设计每一个步骤，然后按需、按计划或通过触发器运行智能体。\n\nGitHub 星标超过 185,000。引用者包括：\n\n| | |\n|---|---|\n| “在我看来，提示工程的下一个前沿是：‘AutoGPTs’。” | OpenAI 创始成员 Andrej Karpathy |\n| “只要有一部手机，你就能运行 AutoGPT。你甚至不需要学习如何编程。” | Replit 联合创始人兼 CEO Amjad Masad |\n| “AutoGPT 可能会成为 AI 领域的下一个重大进展。” | AlphaSignal CEO Lior Alexander |\n\n---\n四个界面，一个平台\n\nAutoPilot 用简单的英语描述任务，并将对话转化为可正常运行的智能体。 | Agents 查看需要你关注的每个智能体、运行记录、成本和操作。\nMarketplace 从经过验证的智能体开始，将其添加到你的库中，并根据你的工作进行定制。 | Build 拖动、连接、创建分支并检查区块，精确控制每一个步骤。\n\n---\n开始使用\nAutoGPT Platform——公开、托管且代为管理\n\n托管版 Platform 已公开可用。我们负责管理基础设施、模型访问、凭据、可靠性和更新，让你能够专注于智能体所执行的工作。\n\n开始使用 Auto",
       "bodyTruncated": false,
       "qualityScore": 0.0,
       "eventAggregation": {
@@ -560,10 +627,10 @@
             "items": [
               {
                 "source": "GitHub Trending",
-                "title": "Nous Research 开源自改进 AI 智能体 Hermes Agent",
-                "url": "https://github.com/nousresearch/hermes-agent",
+                "title": "AutoGPT：开源 AI 智能体工作流平台",
+                "url": "https://github.com/significant-gravitas/autogpt",
                 "note": "原始发布 / 公告。",
-                "text": "Nous Research 开源自改进 AI 智能体 Hermes Agent —— 原始发布 / 公告。"
+                "text": "AutoGPT：开源 AI 智能体工作流平台 —— 原始发布 / 公告。"
               }
             ]
           }
@@ -571,9 +638,126 @@
       }
     },
     {
-      "recordId": "recvqyJqKO44GB",
-      "title": "Supporting ambitious external research through the Anthropic Economic Futures Research Fund",
-      "titleCn": "Anthropic设立2亿美元经济未来研究基金，支持AI经济影响研究",
+      "recordId": "recvqyTzwDOVKd",
+      "title": "From Brain Waves to Words: Brain2Qwerty Offers a New Path to Communication Without Surgery",
+      "titleCn": "Meta Brain2Qwerty v2实现非侵入式脑信号实时文本解码",
+      "source": "Meta AI Blog",
+      "url": "https://ai.meta.com/blog/brain2qwerty-brain-ai-human-communication",
+      "category": "前沿模型公司",
+      "contentType": "",
+      "tier": "L1 一级官方",
+      "priority": "P0",
+      "publishedDate": "2026-07-27",
+      "summary": "Brain2Qwerty v2通过端到端深度学习和基于神经数据微调的大语言模型，直接将非侵入式MEG脑信号实时解码为句子，整体词准确率达61%，最佳参与者达78%。Meta将公开v1和v2完整训练代码，合作方BCBL将发布v1数据集。",
+      "why": "该研究显著缩小了非侵入式脑机通信与需手术植入方案之间的准确率差距，并为沟通障碍患者提供了潜在的新路径。",
+      "impact": 88,
+      "novelty": 92,
+      "actionability": 76,
+      "urgency": "中",
+      "tags": [
+        "AI",
+        "LLM",
+        "多模态",
+        "开源"
+      ],
+      "imageUrl": "https://scontent-sea1-1.xx.fbcdn.net/v/t39.2365-6/731147471_987177500749005_1892166673921917145_n.gif?_nc_cat=101&ccb=1-7&_nc_sid=e280be&_nc_ohc=QUtfxxfQCoAQ7kNvwGHdpto&_nc_oc=AdopOCoVR8_Eo9KQ3iw_MJTcd5NPzFuFec2qrWcrtZNeapU54NvvdsI0RsDZWxOCOZ0&_nc_zt=14&_nc_ht=scontent-sea1-1.xx&_nc_gid=6rAmDQk0MS05K74K1vjq9Q&_nc_ss=7c20f&oh=00_AQCr8ViWQlWYScHblwH5l1RH-AnosLipuQ4F5v_jGDDUWw&oe=6A817C6D",
+      "mediaAssets": {
+        "images": [],
+        "videos": []
+      },
+      "body": "产品\nAI 研究\n资源\n关于\nAI 开发者\n\n体验 Meta AI\n\n返回\n\nMeta AI\n媒体生成\nVibes\nAI Studio\n\n概览\n项目\n资源与工具\n出版物\nGitHub\n\n博客\n学习中心\n演示\n\n概览\n开源\n职业机会\n\n清除\n\n清除\n产品 >\nAI 研究 >\n资源 >\n关于 >\nAI 开发者\n\n体验 Meta AI\n\n研究\n\n从脑波到文字：Brain2Qwerty 为无需手术的沟通提供新路径\n\n2026 年 6 月 29 日•\n\n阅读时长 3 分钟\n\n视频 2\n\n去年，我们推出了 Brain2Qwerty v1，这项研究利用 AI 将大脑活动解码为文本，无需植入任何外科装置。现在，我们将分享下一步成果：Brain2Qwerty v2，这是目前性能最高的端到端流程，能够根据非侵入式脑信号记录实时解码句子，其准确率正接近以往只有需要脑部手术的技术才能达到的水平。\n\n为了帮助加速神经科学领域的突破，我们将发布 Brain2Qwerty v1 和 v2 的完整训练代码，我们的合作伙伴 Basque Center on Cognition, Brain, and Language (BCBL) 也将发布 v1 数据集。我们相信，这项研究有望真正帮助数百万因脑损伤而无法交流的人。立体定向脑电图和皮层脑电图等侵入式手术已经表明，将信号传输给 AI 解码器的神经假体可以恢复沟通能力，但这些方法很难大规模推广。我们的非侵入式方法可以帮助弥合这一差距。\n\n我们使用来自九名志愿参与者的大约 22,000 个句子训练了 Brain2Qwerty v2。每名参与者都佩戴脑磁图（MEG）设备主动打字，并接受了 10 小时的记录。我们不依赖手工设计的流程来检测神经事件，而是使用端到端深度学习直接从原始脑信号中进行解码。\n\n在神经数据上对大型语言模型进行微调，使系统能够利用语义上下文，弥合嘈杂的脑信号记录与连贯语言之间的差距。我们还部署了 AI 智能体来探索解码流程的优化方案，最终的训练配置由工程师手动选定。\n\n结果是：Brain2Qwerty v2 能够从嘈杂的神经输入中连贯地还原句子，词准确率达到 61%，相比其他非侵入式方法 8% 的词准确率有了显著提升。对于表现最佳的参与者，我们实现了 78% 的词准确率，其中超过一半的句子在解码后只有一个或更少的词错误。\n\n我们还发现，解码准确率会随着数据量以对数线性方式提升，这表明，仅通过扩大数据规模，就可能进一步缩小与外科手术方法之间剩余的性能差距。这项工作助力我们构建开放的大脑基础模型；其中包括用于感知编码的 Tribev2 模型、用于大规模处理大脑数据的 NeuralSet，以及用于系统性评估模型的 NeuralBench。我们通过与社区密切合作来开展这项工作，包括我们最近的 500 万美元",
+      "bodyTruncated": true,
+      "qualityScore": 0.0,
+      "eventAggregation": {
+        "total": 1,
+        "groups": [
+          {
+            "key": "官方来源",
+            "tone": "#16130f",
+            "items": [
+              {
+                "source": "Meta AI Blog",
+                "title": "Meta Brain2Qwerty v2实现非侵入式脑信号实时文本解码",
+                "url": "https://ai.meta.com/blog/brain2qwerty-brain-ai-human-communication",
+                "note": "原始发布 / 公告。",
+                "text": "Meta Brain2Qwerty v2实现非侵入式脑信号实时文本解码 —— 原始发布 / 公告。"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "recordId": "recvqyRlD3bvZr",
+      "title": "Introducing Muse Image and Muse Video",
+      "titleCn": "Meta 发布智能体图像模型 Muse Image，并预告 Muse Video",
+      "source": "Meta AI Blog",
+      "url": "https://ai.meta.com/blog/introducing-muse-image-muse-video-msl",
+      "category": "前沿模型公司",
+      "contentType": "",
+      "tier": "L1 一级官方",
+      "priority": "P0",
+      "publishedDate": "2026-07-27",
+      "summary": "Meta 超级智能实验室推出首批媒体生成模型：Muse Image 可调用搜索与代码工具、自我改进，并通过增加测试时计算提升生成质量；Muse Video 则主打高视觉保真度和原生音频支持。Muse Image 已在 Meta AI、美国 Instagram Stories 及部分国家的 WhatsApp 上线，Muse Video 即将面向创作者和 Meta AI 推出。",
+      "why": "这标志着 Meta 将工具调用、推理和自我优化机制系统性引入多模态内容生成，并迅速部署至旗下大规模消费级产品。",
+      "impact": 88,
+      "novelty": 90,
+      "actionability": 82,
+      "urgency": "高",
+      "tags": [
+        "Agent",
+        "多模态",
+        "推理",
+        "产品"
+      ],
+      "imageUrl": "https://scontent-sea5-1.xx.fbcdn.net/v/t39.2365-6/740903239_1399413145578607_7846806312558871713_n.webp?_nc_cat=110&ccb=1-7&_nc_sid=e280be&_nc_ohc=oj9JXbManfwQ7kNvwEyBAD0&_nc_oc=AdpDLB2btNjSiA4roVxamnttbKGVg7qbMef4mtn4MepR_C7at-EVh1D4wURquRtk6JM&_nc_zt=14&_nc_ht=scontent-sea5-1.xx&_nc_gid=0KAX3R9wZN2jvFAsD9uWFw&_nc_ss=7c20f&oh=00_AQCVqRT53hO7czH4rBvgiqoZTVBbBFYDOEICK1Fp5XglIQ&oe=6A815661",
+      "mediaAssets": {
+        "images": [
+          {
+            "url": "https://lookaside.fbsbx.com/elementpath/media/?media_id=2140990336800598&version=1783727678",
+            "alt": "Muse Image hero gallery preview"
+          },
+          {
+            "url": "https://scontent-sea5-1.xx.fbcdn.net/v/t39.2365-6/338318848_238475658638014_6444534044370711549_n.gif?_nc_cat=108&ccb=1-7&_nc_sid=e280be&_nc_ohc=UHYzoBADodIQ7kNvwEOi3Gm&_nc_oc=AdqZGKpgiPEY0CE6PcLGSzXsufvxjxB3WMwK04AuzNFEa6nqJYwRcfE7sbSZ5uco0FQ&_nc_zt=14&_nc_ht=scontent-sea5-1.xx&_nc_gid=1rqGa_sfcZ6QEzDBR69zDw&_nc_ss=7c20f&oh=00_AQCZmJ_J5nZsvhl0NKWwR_sWDAE1pmWKZn8x3T8ZPtwvfw&oe=6A814969",
+            "alt": ""
+          },
+          {
+            "url": "https://scontent-sea5-1.xx.fbcdn.net/v/t39.2365-6/284099254_760295688673506_1047420741523524710_n.jpg?_nc_cat=103&ccb=1-7&_nc_sid=e280be&_nc_ohc=QF-9AUjDZQQQ7kNvwF48agT&_nc_oc=AdpHwPBYIxlFchOGoNCpaB34PzF2spQ5lSHw-5VpAgW1rJOuZA63Kg8Y42qpuwAZeuo&_nc_zt=14&_nc_ht=scontent-sea5-1.xx&_nc_gid=1rqGa_sfcZ6QEzDBR69zDw&_nc_ss=7c20f&oh=00_AQBJr92DJoFY9pUsAiGLlaMb0mWc-tMrOJAxRA05unRIig&oe=6A8155F6",
+            "alt": ""
+          },
+          {
+            "url": "https://scontent-sea1-1.xx.fbcdn.net/v/t39.2365-6/334793505_583125787173687_542838236294006040_n.png?_nc_cat=100&ccb=1-7&_nc_sid=e280be&_nc_ohc=5guW-dxwSAgQ7kNvwFWwkDF&_nc_oc=AdoiF39o4qQ0WGQBUnnlpWMqK1-BDlWIs0dK9efLidAbf08hz3uYBEdzvimR5N7fBK0&_nc_zt=14&_nc_ht=scontent-sea1-1.xx&_nc_gid=1rqGa_sfcZ6QEzDBR69zDw&_nc_ss=7c20f&oh=00_AQBi5VlTYZ8EswVfqaN_eiwTm01lnK2WOHwxJXlxcugvcw&oe=6A816984",
+            "alt": ""
+          }
+        ],
+        "videos": []
+      },
+      "body": "我们很高兴推出 Muse Image，并预览 Muse Video，这是由 Meta Superintelligence Labs 开发的首批媒体生成模型。\n\nMuse Image 是我们迄今最先进的图像生成模型：它能够忠实遵循指令、精准编辑，并根据多个参考素材进行创作。它还具备智能体式工具使用能力，并与 Muse Spark 集成。Muse Video 基于相同的预训练基础构建，可提供卓越的视觉保真度，并原生支持音频。\n\nMuse Image 现已在 Meta AI app 和 meta.ai、美国的 Instagram Stories，以及部分国家的 WhatsApp 中上线，并将很快登陆 Facebook。Muse Video 即将面向创作者和 Meta AI 推出。\n\nMuse Image：智能体式图像生成\n\nMuse Image 并非直接将提示映射为图像，而是以智能体的方式运行：它会调用搜索和编码工具来提高准确性，对自己生成的内容进行自我改进，并通过扩展测试时计算来提升效果。Muse Image 还与 Muse Spark 集成，使两个模型能够共享工具并联合规划，从而实现强大的智能体式媒体生成。\n\n工具使用\n\n我们让 Muse Image 能够使用各种工具，以增强其智能体能力。\n\n编码。在强化学习期间，Muse Image 学会编写并执行代码，以生成准确的图表和二维码，并以渲染后的图形为条件，提高生成图像的准确性。Muse Spark 和 Muse Image 还能够相互集成，将代码与媒体生成相结合，创建动画 GIF、嵌入图像的网站和交互式视觉游戏。\n\n搜索。Muse Image 学会搜索网络，让生成的图像以事实、实时信息和视觉参考为依据。启用搜索功能可以提高知识密集型提示的事实准确性，尤其是涉及时事和现实世界事实的提示。\n\nMuse Image 通过使用搜索工具得到改进。胜率来自内部消融实验。\n\n自我改进\n\nMuse Image 会在其思维链中反思并改进自己的作品。这种自我改进行为可以采取不同形式：当某个小细节有误时，对当前图像草稿进行局部编辑；当较大部分出现错误时，从头生成一张新图像；或者采用其他策略，例如使用工具，以生成在事实层面更加准确的内容。我们并未设计这种行为。相反，它在 RL 训练期间自然涌现，原因仅仅是自我改进能够生成更好的图像，从而获得更高的奖励。\n\nMuse Image 通过涌现出的自我改进能力得到提升。胜率来自内部消融实验。\n\n自我改进\n\n寻找参考图像\n\n自我改进\n\n编排跨页版面\n\n我正在制作这张光面杂志页面，将证明步骤、标题和时尚肖像编排成一个协调统一的版面，同时检查字体排印、间距和金色点缀细节，以营造精致的编辑设计质感。\n\n自我改进\n\n完善公式\n\n我正在修正公式，补上缺失的除号，并更新版面布局，使表达式显示为 S = n(n + 1) / 2，一个",
+      "bodyTruncated": true,
+      "qualityScore": 0.0,
+      "eventAggregation": {
+        "total": 1,
+        "groups": [
+          {
+            "key": "官方来源",
+            "tone": "#16130f",
+            "items": [
+              {
+                "source": "Meta AI Blog",
+                "title": "Meta 发布智能体图像模型 Muse Image，并预告 Muse Video",
+                "url": "https://ai.meta.com/blog/introducing-muse-image-muse-video-msl",
+                "note": "原始发布 / 公告。",
+                "text": "Meta 发布智能体图像模型 Muse Image，并预告 Muse Video —— 原始发布 / 公告。"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "recordId": "recvqyRlD3dz9P",
+      "title": "Supporting ambitious external research through the Anthropic Economic Futures Research Fund \\ Anthropic",
+      "titleCn": "Anthropic设立2亿美元经济未来研究基金",
       "source": "Anthropic News",
       "url": "https://www.anthropic.com/news/economic-futures-research-fund-agenda",
       "category": "前沿模型公司",
@@ -581,23 +765,28 @@
       "tier": "L1 一级官方",
       "priority": "P0",
       "publishedDate": "2026-07-27",
-      "summary": "Anthropic宣布投入2亿美元，资助旨在提升经济灵活性与韧性、扩大AI收益共享并降低就业冲击的外部研究。基金重点支持五大方向，包括职场影响、AI转型适应、收入支持、员工分享AI增长收益及公共投资证据研究，并优先考虑大规模随机对照试验和创新试点。",
-      "why": "该基金将通过大额外部资助和可规模化试点，为政府、企业和劳动者应对AI驱动的经济转型提供实证依据。",
-      "impact": 90,
-      "novelty": 83,
-      "actionability": 88,
-      "urgency": "高",
+      "summary": "Anthropic承诺投入2亿美元，支持外部机构研究和试点应对AI对就业、收入保障及经济韧性的影响。基金面向全球，重点资助大规模随机对照试验和创新项目，单个项目通常为500万至3000万美元。",
+      "why": "该基金将为政府、企业和劳动者应对AI驱动的经济转型提供可验证、可规模化的政策证据。",
+      "impact": 88,
+      "novelty": 76,
+      "actionability": 84,
+      "urgency": "中",
       "tags": [
+        "AI",
         "融资",
-        "监管",
         "其他"
       ],
       "imageUrl": "https://cdn.sanity.io/images/4zrzovbb/website/303a79341c6210020de254eaabc259548d27ba58-1200x630.jpg",
       "mediaAssets": {
-        "images": [],
+        "images": [
+          {
+            "url": "https://www.anthropic.com/_next/image?url=https%3A%2F%2Fwww-cdn.anthropic.com%2Fimages%2F4zrzovbb%2Fwebsite%2F1dee16ed8ebe3e7bdf82ed8b4186373cf882827c-2000x1125.jpg&w=3840&q=75",
+            "alt": "A research agenda for the Economic Futures Research Fund"
+          }
+        ],
         "videos": []
       },
-      "body": "我们正在分享 Anthropic Economic Futures Research Fund 的研究议程。我们承诺向该基金投入 2 亿美元，用于支持雄心勃勃的外部研究，探索帮助社会为 AI 的经济影响做好准备的干预措施。\n\n通过该基金支持的研究，我们希望探究哪些项目能够使经济更具灵活性和韧性，确保 AI 的益处得到共享，并最大限度地减少 AI 驱动的变革可能造成的伤害。\n\n在该基金中，我们将优先考虑五个研究领域：\n\n1. 在企业和工作场所层面塑造 AI 对劳动者的影响\n2. 帮助人们做好应对 AI 驱动的转型的准备\n3. 推动收入支持体系现代化，以应对 AI 驱动的岗位替代\n4. 在变革到来之前，让劳动者在 AI 驱动的增长中拥有利益\n5. 为公共投资提供新的证据\n\n该基金是什么？\n\nAI 的能力持续提升。但我们尚不清楚，在 AI 能力不断增强的同时，它将在多大程度上迅速渗透到整个经济中，也不清楚其经济影响将会如何。在我们于 6 月发布的 Economic Policy Framework（EPF）中，我们针对一系列情景提出了相关项目和政策。但对于哪些干预措施可能真正在 AI 重塑后的经济中奏效——哪些措施能使经济更具灵活性和韧性，并广泛分享收益——我们需要更多实证证据。面对这种不确定性，我们的目标是建立这一证据基础，从而为劳动者、企业和政府留出适应的空间。这项规模达 2 亿美元的基金将支持针对 EPF 中所提出干预措施以及其他开放性问题的外部研究。我们可能正在进入一个史无前例的时刻，其中最有希望的解决方案可能是此前无人尝试过的方案。我们愿意资助富有创意且雄心勃勃的试点项目，为那些仅靠随机对照试验或许只能提供渐进式证据的问题提供指导。\n\n这是对我们一年前启动的 Economic Futures 项目的一次重大演进。我们正在将重点转向雄心勃勃的项目和大额资助，因为我们认为这是我们能够产生最大影响的领域。我们一直认为，资助高投入、高潜力的外部研究非常重要；这一转变将使我们能够这样做。我们还通过 Economic Futures 项目了解到，要扩大自身能力以同时管理众多小额资助，对我们而言十分困难。除大规模 RCT 和试点项目外，我们也有兴趣与能够扩大有效小规模试点项目规模的合作伙伴开展合作。\n\n我们资助的研究类型\n\n从根本上说，我们希望资助尽可能雄心勃勃的提案。我们的目标是资助大规模 RCT，或雄心勃勃、富有创意的试点项目或项目评估，以拓展我们对哪些方案展现出潜力以及它们在哪些情境下有效的共同认知，填补证据薄弱领域的空白，并激发新的解决方案。下文列出的可资助方向提出了一系列可能性，但我们知道，我们尚未想出这一领域中的所有好点子。我们欢迎下文可能未涵盖的提案。\n\nAI",
+      "body": "我们正在分享 Anthropic Economic Futures Research Fund 的研究议程。我们承诺向该基金投入 2 亿美元，以支持雄心勃勃的外部研究，探索如何通过干预措施让社会为 AI 带来的经济影响做好准备。\n\n通过该基金支持的研究，我们希望探究哪些项目能够提高经济的灵活性与韧性，确保 AI 带来的益处得到共享，并最大限度地减少 AI 驱动的颠覆可能造成的伤害。\n\n在该基金中，我们将优先考虑五个研究领域：\n\n在企业和工作场所层面塑造 AI 对劳动者的影响\n\n帮助人们具备应对 AI 驱动的转型的能力\n\n为 AI 驱动的岗位流失实现收入支持现代化\n\n在颠覆到来之前，让劳动者能够分享 AI 驱动的增长成果\n\n就公共投资生成新的证据\n\n该基金是什么？\n\nAI 的能力持续提升。但我们尚不清楚，AI 在能力不断增强的同时会以多快的速度在整个经济中普及，以及这将产生哪些经济影响。在我们于 6 月发布的 Economic Policy Framework（EPF）中，我们针对一系列情景提出了项目和政策。但我们需要更多实证证据，以了解在 AI 改造后的经济中，哪些干预措施可能真正有效——哪些措施能够提高经济的灵活性与韧性，并广泛分享收益。面对这种不确定性，我们的目标是建立这一证据基础，从而为劳动者、企业和政府留出适应空间。这项规模为 2 亿美元的基金将支持针对 EPF 中所提干预措施以及其他开放性问题开展的外部研究。我们或许正在进入一个史无前例的时刻，最有希望的解决方案可能是此前从未有人尝试过的方案。我们愿意资助富有创意且雄心勃勃的试点项目，为那些仅凭随机对照试验可能只能获得渐进式证据的问题提供指导。\n\n这是对我们一年前启动的 Economic Futures 项目的一次重大演进。我们正在将重点转向雄心勃勃的项目和大额资助，因为我们认为这是我们能够产生最大影响的领域。我们一直认为，资助重大的外部研究尝试非常重要；这一转变将使我们能够这样做。通过 Economic Futures 项目，我们也了解到，我们很难扩大能力来同时管理许多小额资助。除了大规模 RCT 和试点项目外，我们也有兴趣与能够扩大有效小规模试点项目规模的合作伙伴展开合作。\n\n我们资助的研究类型\n\n从根本上说，我们希望资助尽可能雄心勃勃的提案。我们的目标是资助大规模 RCT，或雄心勃勃、富有创意的试点项目或项目评估，以拓展我们对于哪些方案展现出潜力以及它们在哪些情境下展现出潜力的共同认知，填补证据薄弱领域的空白，并激发新的解决方案。下文所列的可资助方向提出了一系列可能性，但我们知道，我们尚未构想出这一领域的所有好点子。我们欢迎可能未涵盖于下文的提案。\n\nAI 可能会转",
       "bodyTruncated": true,
       "qualityScore": 0.0,
       "eventAggregation": {
@@ -609,160 +798,10 @@
             "items": [
               {
                 "source": "Anthropic News",
-                "title": "Anthropic设立2亿美元经济未来研究基金，支持AI经济影响研究",
+                "title": "Anthropic设立2亿美元经济未来研究基金",
                 "url": "https://www.anthropic.com/news/economic-futures-research-fund-agenda",
                 "note": "原始发布 / 公告。",
-                "text": "Anthropic设立2亿美元经济未来研究基金，支持AI经济影响研究 —— 原始发布 / 公告。"
-              }
-            ]
-          }
-        ]
-      }
-    },
-    {
-      "recordId": "recvqyJqKORKFy",
-      "title": "langflow-ai/langflow",
-      "titleCn": "Langflow：可视化构建与部署 AI Agent 工作流",
-      "source": "GitHub Trending",
-      "url": "https://github.com/langflow-ai/langflow",
-      "category": "技术研究开源",
-      "contentType": "Github热榜",
-      "tier": "L2 结构化平台",
-      "priority": "P0",
-      "publishedDate": "2026-07-27",
-      "summary": "Langflow 是一个 Python 开源平台，提供可视化编排、交互式调试、多 Agent 协作与检索，并支持主流 LLM、向量数据库和 AI 工具。工作流可部署为 API 或 MCP 服务器，同时提供桌面版、可观测性集成及企业级安全能力。",
-      "why": "其高社区热度和从开发、测试到 API/MCP 部署的一体化能力，可显著降低 Agent 工作流的构建与集成门槛。",
-      "impact": 89,
-      "novelty": 76,
-      "actionability": 94,
-      "urgency": "中",
-      "tags": [
-        "AI",
-        "Agent",
-        "开源",
-        "产品"
-      ],
-      "imageUrl": "https://repository-images.githubusercontent.com/599320067/a9637c6a-7347-4a7a-8bf3-7bbdae6974b6",
-      "mediaAssets": {
-        "images": [],
-        "videos": []
-      },
-      "body": "Langflow 是一个用于构建和部署 AI 驱动的智能体与工作流的强大工具。\n\n⭐ 星标: 152461 | 🍴 复刻: 9664 | 语言: Python | 主题: agents, chatgpt, generative-ai, large-language-models, multiagent, react-flow\n创建: 2023-02-08 | 最近提交: 2026-07-27 | 沉淀分: 7.98\n\n【社区反响·热门 Issue】\n- [开放中] 👍63 💬21 [功能请求] 增强协作/访问控制\n- [已关闭] 👍59 💬36 支持使用 OIDC 或 OAuth2 的单点登录（SSO）\n- [已关闭] 👍28 💬3 [功能请求] Langflow Graph：集成直接管理工具，以用 Equiva 替代 LangGraph\n- [已关闭] 👍21 💬1 问题：是否可以在 Langflow 中使用 langgraph 实现多智能体流程？\n\nLangflow 是一个用于构建和部署 AI 驱动的智能体与工作流的强大平台。它既为开发者提供可视化创作体验，也提供内置的 API 和 MCP 服务器，可将每个工作流转化为一种工具，并集成到使用任何框架或技术栈构建的应用程序中。Langflow 功能齐备，支持所有主流 LLM、向量数据库以及不断扩充的 AI 工具库。\n✨ 亮点功能\n\n- 可视化构建器界面，帮助你快速上手并进行迭代。\n- 可访问源代码，让你能够使用 Python 自定义任何组件。\n- 交互式演练场，可通过逐步控制立即测试和优化流程。\n- 具备对话管理与检索功能的多智能体编排。\n- 部署为 API，或导出为 JSON 以用于 Python 应用程序。\n- 部署为 MCP 服务器，并将你的流程转化为供 MCP 客户端使用的工具。\n- 通过 LangSmith、LangFuse 及其他集成实现可观测性。\n- 面向企业的安全性与可扩展性。\n🖥️ Langflow Desktop\n\nLangflow Desktop 是开始使用 Langflow 最简单的方式。它包含所有依赖项，因此你无需管理 Python 环境或手动安装软件包。\n适用于 Windows 和 macOS。\n\n📥 下载 Langflow Desktop\n⚡️ 快速入门\n本地安装（推荐）\n\n需要 Python 3.10–3.14 和 uv（推荐的软件包管理器）。\n安装\n\n在一个新目录中运行：\nshell\nuv pip install langflow -U\n\n最新的 Langflow 软件包将被安装。\n有关更多信息，请参阅安装并运行 t",
-      "bodyTruncated": false,
-      "qualityScore": 0.0,
-      "eventAggregation": {
-        "total": 1,
-        "groups": [
-          {
-            "key": "官方来源",
-            "tone": "#16130f",
-            "items": [
-              {
-                "source": "GitHub Trending",
-                "title": "Langflow：可视化构建与部署 AI Agent 工作流",
-                "url": "https://github.com/langflow-ai/langflow",
-                "note": "原始发布 / 公告。",
-                "text": "Langflow：可视化构建与部署 AI Agent 工作流 —— 原始发布 / 公告。"
-              }
-            ]
-          }
-        ]
-      }
-    },
-    {
-      "recordId": "recvqyJqKO7qNM",
-      "title": "From Brain Waves to Words: Brain2Qwerty Offers a New Path to Communication Without Surgery",
-      "titleCn": "Meta发布Brain2Qwerty v2：无创脑信号实时解码文本",
-      "source": "Meta AI Blog",
-      "url": "https://ai.meta.com/blog/brain2qwerty-brain-ai-human-communication",
-      "category": "前沿模型公司",
-      "contentType": "",
-      "tier": "L1 一级官方",
-      "priority": "P0",
-      "publishedDate": "2026-07-27",
-      "summary": "Brain2Qwerty v2通过端到端深度学习和基于神经数据微调的大语言模型，直接将MEG脑信号实时解码为句子，整体词准确率达61%，最佳参与者达78%。Meta将开放v1和v2完整训练代码，合作方BCBL将发布v1数据集。",
-      "why": "该研究显著缩小了无创脑机通信与侵入式方案的准确率差距，并为失去语言能力者提供了更易扩展的潜在沟通路径。",
-      "impact": 88,
-      "novelty": 92,
-      "actionability": 76,
-      "urgency": "中",
-      "tags": [
-        "AI",
-        "LLM",
-        "多模态",
-        "开源"
-      ],
-      "imageUrl": "https://scontent-sea1-1.xx.fbcdn.net/v/t39.2365-6/731147471_987177500749005_1892166673921917145_n.gif?_nc_cat=101&ccb=1-7&_nc_sid=e280be&_nc_ohc=QUtfxxfQCoAQ7kNvwGHdpto&_nc_oc=AdopOCoVR8_Eo9KQ3iw_MJTcd5NPzFuFec2qrWcrtZNeapU54NvvdsI0RsDZWxOCOZ0&_nc_zt=14&_nc_ht=scontent-sea1-1.xx&_nc_gid=2Ofslp5c-QJV7HJ-TReDdw&_nc_ss=7c20f&oh=00_AQBCe8o96CZWFyVvRuQJfKKmICdfkIbDh3RRzdDa7NoSHw&oe=6A81442D",
-      "mediaAssets": {
-        "images": [],
-        "videos": []
-      },
-      "body": "产品\nAI 研究\n资源\n关于\nAI 开发者\n\n试用 Meta AI\n\n返回\n\nMeta AI\n媒体生成\nVibes\nAI Studio\n\n概览\n项目\n资源与工具\n出版物\nGitHub\n\n博客\n学习中心\n演示\n\n概览\n开源\n职业机会\n\n清除\n\n清除\n产品 >\nAI 研究 >\n资源 >\n关于 >\nAI 开发者\n\n试用 Meta AI\n\n研究\n\n从脑电波到文字：Brain2Qwerty 为无需手术的沟通提供了一条新路径\n\n2026年6月29日•\n\n阅读时长 3 分钟\n\n视频 2\n\n去年，我们推出了 Brain2Qwerty v1，这项研究利用 AI 将大脑活动解码为文本，无需任何手术植入物。现在，我们将分享下一步成果：Brain2Qwerty v2，这是目前表现最佳的端到端流程，能够根据非侵入式脑部记录实时解码句子，其准确率已接近过去只有需要脑部手术的技术才能达到的水平。\n\n为了帮助加速神经科学领域的突破，我们将发布 Brain2Qwerty v1 和 v2 的完整训练代码，我们的合作伙伴 Basque Center on Cognition, Brain, and Language (BCBL) 也将发布 v1 数据集。我们相信，这项研究有潜力真正帮助数百万因脑部病变而无法沟通的人。立体定向脑电图和皮层脑电图等侵入式手术已经证明，将信号传输至 AI 解码器的神经假体可以恢复沟通能力，但这些方法难以大规模推广。我们的非侵入式方法可以帮助弥合这一差距。\n\n我们使用来自九名志愿参与者的约 22,000 个句子训练了 Brain2Qwerty v2。每位参与者都佩戴脑磁图（MEG）设备主动打字，并接受了 10 小时的记录。我们没有依赖人工设计的流程来检测神经事件，而是使用端到端深度学习，直接从原始脑信号中进行解码。\n\n使用神经数据对大型语言模型进行微调，使系统能够利用语义上下文，弥合嘈杂的脑部记录与连贯语言之间的差距。我们还部署了 AI 智能体来探索解码流程的优化方案，最终的训练配置由工程师手动选定。\n\n结果是：Brain2Qwerty v2 能够从嘈杂的神经输入中连贯地还原句子，词准确率达到 61%，相比其他非侵入式方法 8% 的词准确率有了显著提升。对于表现最佳的参与者，我们实现了 78% 的词准确率，其中超过一半的句子在解码后只有一个或更少的词错误。\n\n我们还发现，解码准确率会随着数据量的增加而呈对数线性提升，这表明，仅通过扩大数据规模，就有可能进一步缩小与手术方法之间仍然存在的性能差距。这项工作为我们构建开放式大脑基础模型的努力作出了贡献，其中包括用于感知编码的 Tribev2 模型、用于大规模处理脑数据的 NeuralSet，以及用于系统评估模型的 NeuralBench。我们通过最近的 500 万美元，与社区密切合作开展这项工作",
-      "bodyTruncated": true,
-      "qualityScore": 0.0,
-      "eventAggregation": {
-        "total": 1,
-        "groups": [
-          {
-            "key": "官方来源",
-            "tone": "#16130f",
-            "items": [
-              {
-                "source": "Meta AI Blog",
-                "title": "Meta发布Brain2Qwerty v2：无创脑信号实时解码文本",
-                "url": "https://ai.meta.com/blog/brain2qwerty-brain-ai-human-communication",
-                "note": "原始发布 / 公告。",
-                "text": "Meta发布Brain2Qwerty v2：无创脑信号实时解码文本 —— 原始发布 / 公告。"
-              }
-            ]
-          }
-        ]
-      }
-    },
-    {
-      "recordId": "recvqyJqKOrEP1",
-      "title": "Introducing Muse Image and Muse Video",
-      "titleCn": "Meta 发布 Muse Image 并预览 Muse Video",
-      "source": "Meta AI Blog",
-      "url": "https://ai.meta.com/blog/introducing-muse-image-muse-video-msl",
-      "category": "前沿模型公司",
-      "contentType": "",
-      "tier": "L1 一级官方",
-      "priority": "P0",
-      "publishedDate": "2026-07-27",
-      "summary": "Meta 超级智能实验室推出首批媒体生成模型：Muse Image 已上线，支持精准图像生成与编辑、多参考图合成，并能以 Agent 方式调用搜索和代码工具进行自我优化；Muse Video 基于相同预训练底座，主打高视觉保真度与原生音频支持，即将面向创作者和 Meta AI 推出。",
-      "why": "Muse 将工具调用、测试时计算扩展和多模型协同引入媒体生成，显示 Meta 正推动生成式视觉模型从单次生成转向可规划、自我修正的 Agent 工作流。",
-      "impact": 88,
-      "novelty": 86,
-      "actionability": 73,
-      "urgency": "高",
-      "tags": [
-        "AI",
-        "Agent",
-        "多模态",
-        "产品"
-      ],
-      "imageUrl": "https://scontent-sea5-1.xx.fbcdn.net/v/t39.2365-6/740903239_1399413145578607_7846806312558871713_n.webp?_nc_cat=110&ccb=1-7&_nc_sid=e280be&_nc_ohc=oj9JXbManfwQ7kNvwEyBAD0&_nc_oc=AdpDLB2btNjSiA4roVxamnttbKGVg7qbMef4mtn4MepR_C7at-EVh1D4wURquRtk6JM&_nc_zt=14&_nc_ht=scontent-sea5-1.xx&_nc_gid=OH19v_3265XgOUmhbNRrpw&_nc_ss=7c20f&oh=00_AQCNP-4qqK-hV6XqYNAMRbr-67qjriRoZcBzlaJJ8lctXQ&oe=6A815661",
-      "mediaAssets": {
-        "images": [],
-        "videos": []
-      },
-      "body": "产品\nAI 研究\n资源\n关于\nAI 开发者\n\n体验 Meta AI\n\n返回\n\nMeta AI\n媒体生成\nVibes\nAI Studio\n\n概览\n项目\n资源与工具\n出版物\nGitHub\n\n博客\n学习中心\n演示\n\n概览\n开源\n招聘\n\n清除\n\n清除\n产品 >\nAI 研究 >\n资源 >\n关于 >\nAI 开发者\n\n体验 Meta AI\n\n精选\n\n研究\n\n推出 Muse Image 和 Muse Video\n\n2026 年 7 月 7 日•\n\n阅读时长 15 分钟\n\n视频 27\n\n视频 28\n\n视频 29\n\n视频 30\n\n视频 31\n\n视频 32\n\n视频 33\n\n视频 34\n\n视频 35\n\n视频 36\n\n视频 37\n\n视频 38\n\n我们很高兴推出 Muse Image，并抢先展示 Muse Video，这是由 Meta Superintelligence Labs 开发的首批媒体生成模型。\n\nMuse Image 是我们迄今最先进的图像生成模型：它能够忠实遵循指令、精准编辑，并基于多个参考进行构图。它还具备智能体式工具使用能力，并与 Muse Spark 集成。Muse Video 基于相同的预训练基础构建，可提供卓越的视觉保真度，并原生支持音频。\n\nMuse Image 现已在 Meta AI 应用和 meta.ai、美国的 Instagram Stories，以及部分国家的 WhatsApp 上线，并将很快登陆 Facebook。Muse Video 即将面向创作者和 Meta AI 推出。\n\nMuse Image：智能体式图像生成\n\nMuse Image 并非将提示词直接映射为图像，而是以智能体的方式运行：它会调用搜索和编码工具来提高准确性，对自己生成的内容进行自我优化，并通过扩展测试时计算来提升效果。Muse Image 还与 Muse Spark 集成，使两个模型能够共享工具并协同规划，从而实现强大的智能体式媒体生成。\n\n工具使用\n\n我们让 Muse Image 能够访问工具，以增强其智能体能力。\n\n编码。在强化学习期间，Muse Image 会学习编写并执行代码，以生成准确的图表和 QR 码，并以渲染后的图形为条件来提高所生成图像的准确性。Muse Spark 和 Muse Image 还可集成使用代码与媒体生成的组合，创建 GIF 动画、嵌入图像的网站以及交互式视觉游戏。\n\n会议 QR 码\n\n准备图稿\n\n我正在设置一个横向的韩式漫画风格场景，并加入准确的 QR 码，同时检查构图和线稿，确保最终图像符合用户的要求。\n\n会议 QR 码\n\n生成 QR 码\n\n我正在为 https://meta.ai 创建一个可扫描的 QR 码，并检查编码和纠错，以确保在将其放入场景之前能够可靠读取。\n\n会议 QR 码\n\n检查 QR 码图像\n\n我正在打开生成的 QR 码文件，以确认它可以被正确扫描，然后准备将它放到海报上，并按照用户指定的主体和会议详情设置韩式漫画场景。\n\n会议 QR 码\n\n构建漫画场景\n\n我正在制作一幅 3:2 横向韩式漫画风格插图，画面中一位年轻女子正在扫描 ICML 2025 海报上的 QR 码，并添加会议背景、光线和细节，以符合要求。\n\n会议",
-      "bodyTruncated": true,
-      "qualityScore": 0.0,
-      "eventAggregation": {
-        "total": 1,
-        "groups": [
-          {
-            "key": "官方来源",
-            "tone": "#16130f",
-            "items": [
-              {
-                "source": "Meta AI Blog",
-                "title": "Meta 发布 Muse Image 并预览 Muse Video",
-                "url": "https://ai.meta.com/blog/introducing-muse-image-muse-video-msl",
-                "note": "原始发布 / 公告。",
-                "text": "Meta 发布 Muse Image 并预览 Muse Video —— 原始发布 / 公告。"
+                "text": "Anthropic设立2亿美元经济未来研究基金 —— 原始发布 / 公告。"
               }
             ]
           }
@@ -770,6 +809,6 @@
       }
     }
   ],
-  "briefRecordId": "recvqygR1vcAio",
-  "briefTableId": "tblOZoliKFSTSVNG"
+  "briefRecordId": "recvqxvxUzF8fb",
+  "briefTableId": "tblL72CwS6RcQ41Z"
 }
