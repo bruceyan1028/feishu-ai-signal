@@ -854,6 +854,22 @@ def _github_search(query: str, per_page: int) -> list[dict[str, Any]]:
         return []
 
 
+def readme_to_text(raw: str) -> str:
+    """README 是 markdown 与 HTML 混排，按标签处理后再清 markdown 记号。
+
+    直接删 ">" 会把 HTML 标签打散成 `<p align="center"` 这样的残片留在正文里；
+    把空白全压成单空格则会让整篇变成一堵字墙，所以段落边界要保住。
+    """
+    text = re.sub(r"(?is)<!--.*?-->", " ", str(raw or ""))
+    text = _html_to_text(text)
+    text = _IMG_RE.sub("", text)
+    text = re.sub(r"\[([^\]]*)\]\([^)]*\)", r"\1", text)
+    text = re.sub(r"(?m)^\s*[#>]+\s*", "", text)  # 标题/引用前缀只出现在行首
+    text = re.sub(r"[*`~]+", "", text)
+    text = re.sub(r"[ \t]+", " ", text)
+    return re.sub(r"\n{3,}", "\n\n", text).strip()
+
+
 def _github_readme_excerpt(full_name: str, limit: int = 1500) -> str:
     try:
         resp = requests.get(
@@ -863,10 +879,7 @@ def _github_readme_excerpt(full_name: str, limit: int = 1500) -> str:
         )
         if resp.status_code != 200:
             return ""
-        text = _IMG_RE.sub("", resp.text)
-        text = re.sub(r"\[([^\]]*)\]\([^)]*\)", r"\1", text)
-        text = re.sub(r"[#>*`_~|]+", " ", text)
-        return re.sub(r"\s+", " ", text).strip()[:limit]
+        return readme_to_text(resp.text)[:limit]
     except Exception:  # noqa: BLE001
         return ""
 
@@ -1142,16 +1155,23 @@ def _build_item_direct(html: str, link: dict[str, Any], feed: dict[str, Any]) ->
         page_title = re.sub(r"^Paper page\s*[-–—]\s*", "", page_title, flags=re.I).strip()
         title = page_title or title
     block = str(link.get("community_block") or "")
-    content = _html_to_text(html)[: (15000 - len(block) - 2) if block else 15000]
+    url = link.get("url") or ""
+    # 与 RSS 回源同一套抽取：整页去标签会把导航栏、栏目名、页脚当成正文
+    from . import rss  # 延迟导入，避免采集模块之间的加载顺序耦合
+
+    parsed = rss.parse_article_html(
+        html, url, title, limit=(15000 - len(block) - 2) if block else 15000
+    )
+    content = parsed["text"]
     if block:
         content = f"{content}\n\n{block}"
-    url = link.get("url") or ""
     if not title or not url or len(content) < 40:
         return None
     item = {
         "title": title,
         "url": url,
         "body": content,
+        "media_assets": {"images": parsed["images"], "videos": []},
         "published_raw": str(link.get("published_raw") or ""),
         "heat_keep": bool(link.get("heat_keep")),
         "is_html": True,

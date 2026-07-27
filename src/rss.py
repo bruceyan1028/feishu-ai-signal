@@ -257,6 +257,23 @@ def _from_jina_markdown(markdown: str, page_url: str, title: str, limit: int) ->
     return {"text": _drop_leading_boilerplate(body, title)[:limit], "images": images}
 
 
+def parse_article_html(
+    html: str, page_url: str = "", title: str = "", limit: int = 15000
+) -> dict[str, Any]:
+    """从整页 HTML 里择出正文与插图：选内容块 → 去推广/噪音 → 转文本 → 裁开头样板。
+
+    直接对整页做去标签会把导航栏、栏目名、页脚一并当成正文。
+    """
+    from . import scrape  # 延迟导入，避免采集模块之间的加载顺序耦合
+
+    if not html:
+        return {"text": "", "images": []}
+    chunk = strip_trailing_promo(_pick_content_chunk(html))
+    images = extract_article_images(chunk, page_url) if page_url else []
+    text = scrape.html_to_text(_PAGE_NOISE_RE.sub(" ", chunk))
+    return {"text": _drop_leading_boilerplate(text, title)[:limit], "images": images}
+
+
 def fetch_article_content(page_url: str, title: str = "", limit: int = 15000) -> dict[str, Any]:
     """一次请求同时取回原文正文与正文插图。失败返回空结果，不阻断采集。"""
     empty: dict[str, Any] = {"text": "", "images": []}
@@ -279,10 +296,7 @@ def fetch_article_content(page_url: str, title: str = "", limit: int = 15000) ->
         log.info("原文直连读取失败 %s: %s", page_url, exc)
 
     if html:
-        chunk = strip_trailing_promo(_pick_content_chunk(html))
-        images = extract_article_images(chunk, final_url)
-        text = scrape.html_to_text(_PAGE_NOISE_RE.sub(" ", chunk))
-        result = {"text": _drop_leading_boilerplate(text, title)[:limit], "images": images}
+        result = parse_article_html(html, final_url, title, limit)
         if len(result["text"]) >= FULLTEXT_MIN_CHARS:
             return result
     # openai.com 这类站点对直连返回 403，或整页由 JS 渲染，交给 Jina Reader 兜底
