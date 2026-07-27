@@ -128,6 +128,7 @@ _ENTRY_FIELDS = [
     _f("采集时间", DATETIME),
     _f("发布时间", DATETIME),
     _f("原文", TEXT),
+    _f("中文正文", TEXT),
     _f("中文摘要", TEXT),
     _f("为何重要", TEXT),
     _f("主题", MULTI),

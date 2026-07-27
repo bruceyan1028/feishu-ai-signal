@@ -119,12 +119,31 @@ def _safe_direct_get(url: str) -> str:
         return ""
 
 
+_BLOCK_BOUNDARY_RE = re.compile(
+    r"(?is)</(?:p|div|section|article|header|footer|li|ul|ol|h[1-6]|blockquote|pre|table|tr|figure|figcaption)\s*>"
+    r"|<br\s*/?>"
+)
+
+
+def _normalize_paragraphs(text: str) -> str:
+    """压平行内空白但保留段落边界（空行）。"""
+    text = re.sub(r"[ \t\u00a0\u3000]+", " ", text)
+    text = re.sub(r" *\n *", "\n", text)
+    text = re.sub(r"\n{3,}", "\n\n", text)
+    return text.strip()
+
+
+def _one_line(text: str) -> str:
+    return re.sub(r"\s+", " ", str(text or "")).strip()
+
+
 def _html_to_text(html: str) -> str:
     text = re.sub(r"(?is)<script[^>]*>.*?</script>", " ", html)
     text = re.sub(r"(?is)<style[^>]*>.*?</style>", " ", text)
+    # 先把块级边界落成换行，再去标签：否则段落结构会被整体压成一行，前端只能渲染出字墙。
+    text = _BLOCK_BOUNDARY_RE.sub("\n\n", text)
     text = _TAG_RE.sub(" ", text)
-    text = re.sub(r"\s+", " ", text)
-    return text.strip()
+    return _normalize_paragraphs(text)
 
 
 def _norm_arxiv_paper_id(raw: str) -> str:
@@ -1090,7 +1109,7 @@ def _build_item_direct(html: str, link: dict[str, Any], feed: dict[str, Any]) ->
     title = link.get("title") or ""
     mt = re.search(r"(?is)<title[^>]*>(.*?)</title>", html)
     if mt:
-        page_title = _html_to_text(mt.group(1)) or ""
+        page_title = _one_line(_html_to_text(mt.group(1)))
         page_title = re.sub(r"^Paper page\s*[-–—]\s*", "", page_title, flags=re.I).strip()
         title = page_title or title
     block = str(link.get("community_block") or "")
@@ -1193,10 +1212,9 @@ def _extract_links(md: str, feed: dict[str, Any]) -> list[dict[str, str]]:
 def _strip_md(s: str) -> str:
     s = _IMG_RE.sub("", str(s or ""))
     s = re.sub(r"\[([^\]]*)\]\([^)]*\)", r"\1", s)
-    s = re.sub(r"^[#>*`\-\s]+", "", s, flags=re.M)
+    s = re.sub(r"^[#>*`\-]+[ \t]*", "", s, flags=re.M)
     s = re.sub(r"[`*_]", "", s)
-    s = re.sub(r"\s+", " ", s)
-    return s.strip()
+    return _normalize_paragraphs(s)
 
 
 def _build_item(article_md: str, link: dict[str, Any], feed: dict[str, Any]) -> dict[str, Any] | None:

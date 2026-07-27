@@ -583,6 +583,8 @@ async function loadBrief(){
       date: s.publishedDate || data.date || '',
       summary: s.summary || '',
       why: s.why || '',
+      body: s.body || '',
+      bodyTruncated: !!s.bodyTruncated,
       novel: Number(s.novelty) || 0,
       action: Number(s.actionability) || 0,
       tags: Array.isArray(s.tags) ? s.tags : [],
@@ -1242,15 +1244,15 @@ const KIND_META = { '文章': { icon: '📄', label: '文章' }, '论文': { ico
 function detailMediaHtml(A, s){
   const kind = s.kind || '文章';
   if(kind==='论文'){
-    const pid = `arXiv:2607.${String(10000 + s.rank * 37).slice(-5)}`;
+    const m = String(s.url||'').match(/arxiv\.org\/(?:abs|pdf)\/([\w.\-\/]+?)(?:v\d+)?(?:\.pdf)?$/i);
+    const pid = m ? `arXiv:${m[1]}` : '';
     return `
     <div style="border: 1px solid ${UI.border}; border-radius: 12px; overflow: hidden; margin-bottom: 24px; background: rgba(22,19,15,.02);">
       <div style="display: flex; align-items: center; gap: 10px; padding: 11px 14px; background: rgba(179,27,27,.08); border-bottom: 1px solid ${UI.border};">
         <span style="font-size: 10.5px; font-weight: 700; letter-spacing: .06em; color: #ffffff; background: #B31B1B; padding: 3px 9px; border-radius: 5px; font-family: 'Geist Mono', monospace;">PAPER</span>
-        <span style="font-size: 12px; color: ${UI.text2}; font-family: 'Geist Mono', monospace;">${pid}</span>
+        ${pid?`<span style="font-size: 12px; color: ${UI.text2}; font-family: 'Geist Mono', monospace;">${esc(pid)}</span>`:''}
         <span style="margin-left: auto; display: inline-flex; gap: 7px;">
-          <a href="${esc(s.url||sourceUrls[s.source]||'#')}" target="_blank" rel="noopener" style="font-size: 11.5px; font-weight: 600; color: ${UI.text}; padding: 4px 12px; border-radius: 6px; border: 1px solid ${UI.border2}; background: var(--ds-card);">PDF ↗</a>
-          <a href="${esc(s.url||sourceUrls[s.source]||'#')}" target="_blank" rel="noopener" style="font-size: 11.5px; font-weight: 600; color: ${UI.text}; padding: 4px 12px; border-radius: 6px; border: 1px solid ${UI.border2}; background: var(--ds-card);">代码 ↗</a>
+          <a href="${esc(s.url||sourceUrls[s.source]||'#')}" target="_blank" rel="noopener" style="font-size: 11.5px; font-weight: 600; color: ${UI.text}; padding: 4px 12px; border-radius: 6px; border: 1px solid ${UI.border2}; background: var(--ds-card);">原文 ↗</a>
         </span>
       </div>
       <div style="padding: 16px;">
@@ -1267,8 +1269,6 @@ function detailMediaHtml(A, s){
     </div>`;
   }
   if(kind==='视频'){
-    const dur = `${16 + (s.rank % 9)}:2${s.rank % 10}`;
-    const clips = s.summary.split(/[,。;]/).map(x=>x.trim()).filter(x=>x.length>6).slice(0,3);
     return `
     <div style="position: relative; height: 300px; border-radius: 12px; overflow: hidden; margin-bottom: 14px; border: 1px solid ${UI.border}; background: linear-gradient(135deg, #241f18, #0d0b08);">
       <div style="position: absolute; inset: 0; background-image: radial-gradient(rgba(255,255,255,.06) 1px, transparent 1px); background-size: 14px 14px;"></div>
@@ -1278,12 +1278,7 @@ function detailMediaHtml(A, s){
       <div style="position: absolute; bottom: 12px; left: 14px; right: 14px; display: flex; align-items: center; gap: 10px;">
         ${avatarHtml(s.source)}
         <span style="font-size: 12.5px; font-weight: 600; color: #f3efe6;">${esc(s.source)}</span>
-        <span style="margin-left: auto; font-size: 11px; font-weight: 700; color: #fff; background: rgba(0,0,0,.65); padding: 3px 9px; border-radius: 5px; font-family: 'Geist Mono', monospace;">${dur}</span>
       </div>
-    </div>
-    <div style="padding: 13px 15px; border-radius: 10px; border: 1px dashed ${UI.border2}; background: rgba(22,19,15,.02); margin-bottom: 24px;">
-      <div style="font-size: 11.5px; font-weight: 700; color: ${UI.text2}; margin-bottom: 8px;">✦ AI 转录要点(自动生成)</div>
-      ${clips.map((c,i)=>`<div style="display: flex; gap: 9px; align-items: baseline; margin-bottom: 5px;"><span style="flex: none; font-family: 'Geist Mono', monospace; font-size: 10.5px; color: ${A.accentBright};">0${i*6+2}:${(i*17+11)%60 < 10 ? '0' : ''}${(i*17+11)%60}</span><span style="font-size: 12.5px; line-height: 1.6; color: ${UI.text2};">${esc(c)}</span></div>`).join('')}
     </div>`;
   }
   // 文章原图在正文语境中展示，避免与信号卡封面重复占位。
@@ -1412,35 +1407,74 @@ function feedbackHtml(A, s){
   </div>`;
 }
 
-// 正文全文(非摘要):由字段展开为完整文章体,内嵌高亮/下划线/悬浮评论
+// 把正文切成段落:优先用原文自带的空行;老数据被抹平过,按句子聚合成段
+function splitParagraphs(text){
+  const raw = String(text||'').trim();
+  if(!raw) return [];
+  const byBlank = raw.split(/\n{2,}/).map(x=>x.replace(/\n/g,' ').trim()).filter(Boolean);
+  if(byBlank.length > 1) return byBlank;
+  const byLine = raw.split(/\n/).map(x=>x.trim()).filter(Boolean);
+  if(byLine.length > 1) return byLine;
+  const cjk = (raw.match(/[\u4e00-\u9fff]/g) || []).length / raw.length > 0.15;
+  const limit = cjk ? 170 : 340;
+  const sentences = raw.split(/(?<=[。！？!?；;])\s*|(?<=\.)\s+(?=[A-Z])/).filter(Boolean);
+  const out = [];
+  let buf = '';
+  sentences.forEach(sen=>{
+    buf += sen;
+    if(buf.length >= limit){ out.push(buf.trim()); buf = ''; }
+  });
+  if(buf.trim()) out.push(buf.trim());
+  return out.length ? out : [raw];
+}
+
+// 正文:以原文内容为主体(英文源展示译文),原文配图按间隔穿插
 function articleBody(A, s){
-  const t0 = s.tags[0]||s.cat, t1 = s.tags[1]||s.tags[0]||'', t2 = s.tags[2]||'';
-  const hl = x => `<mark class="note-hl">${x}</mark>`;
-  const ul = x => `<span class="note-ul">${x}</span>`;
-  const cmt = (x, who, note) => `<span class="note-cmt">${x}<span class="cmt-pop"><b>${esc(who)}</b> · ${esc(note)}</span></span>`;
   const proseStyle = 'font-family:"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif; letter-spacing:0; word-spacing:0; text-align:left; text-justify:none; word-break:normal; overflow-wrap:break-word;';
   const P = html => `<p style="margin: 0 0 16px; font-size: 15px; line-height: 2; color: ${UI.text2}; ${proseStyle}">${zhProseHtml(html)}</p>`;
-  const lead = `<p style="margin: 0 0 18px; font-size: 16px; line-height: 1.9; font-weight: 600; color: var(--ds-text); ${proseStyle}">${hl(esc(zhProse(s.summary)))}</p>`;
-  const images = s.kind==='论文'
-    ? (s.mediaAssets?.images || []).filter(item=>item?.url).slice(0,3)
-    : [];
+  const figure = (item, index) => `<figure style="margin:24px 0; border:1px solid ${UI.border}; background:#fff;"><img src="${esc(item.url)}" alt="${esc(item.alt||s.zhTitle)}" loading="lazy" onerror="this.closest('figure').remove()" style="display:block; width:100%; max-height:560px; object-fit:contain;"><figcaption style="padding:9px 12px; font-size:11.5px; color:${UI.text3};">原文${s.kind==='论文'?'图表':'配图'} ${index+1}${item.alt?` · ${esc(item.alt)}`:''}</figcaption></figure>`;
+
+  // AI 只占开头一小段,正文主体交给原文
+  const lead = s.summary
+    ? `<div style="margin: 0 0 20px; padding: 12px 14px; background: ${A.accentSoft}; border: 1px solid ${A.accentBorder}; border-left: 3px solid ${A.accent};">
+        <div style="font-size: 11px; font-weight: 700; letter-spacing: .04em; color: ${A.accentDeep}; margin-bottom: 5px;">✦ AI 摘要</div>
+        <div style="font-size: 14px; line-height: 1.85; color: ${UI.text2}; ${proseStyle}">${zhProseHtml(esc(s.summary))}</div>
+      </div>`
+    : '';
+
+  const paras = splitParagraphs(s.body);
+  if(!paras.length){
+    const fallback = P(`${esc(s.source)} 的这条内容暂未抓取到可展示的正文,可点击下方「阅读原文」查看完整内容。`);
+    return `${lead}${fallback}${originalLink(A, s)}`;
+  }
+
+  const images = (s.mediaAssets?.images || []).filter(item=>item?.url).slice(0,4);
   const videos = (s.mediaAssets?.videos || []).filter(item=>item?.embedUrl).slice(0,1);
-  const mediaHtml = [
-    ...images.map((item,index)=>`<figure style="margin:24px 0; border:1px solid ${UI.border}; background:#fff;"><img src="${esc(item.url)}" alt="${esc(item.alt||s.zhTitle)}" loading="lazy" style="display:block; width:100%; max-height:560px; object-fit:contain;"><figcaption style="padding:9px 12px; font-size:11.5px; color:${UI.text3};">原文${s.kind==='论文'?'图表':'图片'} ${index+1}${item.alt?` · ${esc(item.alt)}`:''}</figcaption></figure>`),
-    ...videos.map(item=>`<div style="position:relative; padding-top:56.25%; margin:24px 0; background:#000;"><iframe src="${esc(item.embedUrl)}" title="${esc(s.zhTitle)}" allow="accelerometer; autoplay; encrypted-media; picture-in-picture" allowfullscreen style="position:absolute; inset:0; width:100%; height:100%; border:0;"></iframe></div>`),
-  ].join('');
-  // 完整报道体(叙事为主):导语 + 多段正文,内嵌划线与批注
-  const paras = [
-    lead,
-    P(`${esc(s.date)},${esc(s.source)} 就此发布了完整内容。文章开篇便点明,这次围绕 <strong>「${esc(t0)}」</strong> 的进展并非一次例行更新——它给出了此前很少被公开披露的细节,包括具体的实现路径、可复现的配置,以及一组覆盖不同使用场景的数据。对长期跟踪该方向的读者而言,这些细节的价值,往往高于结论本身。`),
-    P(`按文中的描述,团队首先解释了他们要解决的核心问题。过去,${esc(t0)} 在真实生产环境里的表现,常常与实验室数据存在不小的落差:纸面上的提升,一旦放到高并发、长上下文或成本敏感的场景中,就会被各种工程约束稀释。为此,他们没有停留在"跑分更高"的叙述上,而是把${cmt('每一项改进都对应到一个可测量的工程指标','平台架构组·李晨','这正是我们评估时最看重的:能不能落到我们自己的指标体系里。')}上,并公开了完整的测量方法。`),
-    P(`具体到做法,文章分几个层面展开。在方法层面,团队描述了${esc(t1||t0)}相关的关键设计,并强调这些设计"不是为了刷榜,而是为了在给定预算下把系统跑稳"。在数据层面,他们给出了不同负载形态下的对照结果,并坦率指出了各自的适用边界——${ul('哪些场景收益明显,哪些场景提升有限,都写得相当清楚')}。在工程层面,配套的参考实现与部署脚本同步开放,复现门槛因此大幅下降。`),
-    P(`值得注意的是,文中对"成本"着墨很多。作者写道,当同等能力的单位成本持续下探,决策的重心就会从"能不能做到"转向"用什么代价做到";${hl('单位经济学的变化,往往比单点能力的提升更直接地改变一个团队的技术选择')}。这一判断,与本期其它几条信号所指向的趋势相互印证。`),
-    P(`不过,${esc(s.source)} 也没有回避局限。文章在结尾提醒,官方给出的数据是在特定设定下取得的,${ul('与具体业务分布之间仍可能存在差距')};在做出替换或大规模采用的决定前,最稳妥的做法仍然是在自有评测集上跑一次回归。对于${s.tags.includes('端侧')?'端侧场景,还需要额外验证功耗与长时发热等工程指标':'对时延与稳定性敏感的场景,还应关注 p95 表现与回退方案'}。`),
-    P(`从更长的时间线看,${esc(s.cat)} 领域近一个季度的竞争焦点,正在从"谁的能力更强"转向"谁能更便宜、更可靠、更合规地把它跑进生产"。${t2?`围绕 ${esc(t2)} 的讨论、`:''}配套工具链的成熟,以及第三方复现的跟进(详见「事件聚合」),共同说明这一方向已经从概念走向了工程。接下来值得持续跟踪的,是独立复现能否支持官方数据、定价与供给在放量后的走向,以及它对现有工作负载的实际迁移收益。`),
-  ];
-  if(mediaHtml) paras.splice(3,0,mediaHtml);
-  return paras.join('');
+  // 原文里的图片位置已丢失,按段落数均匀铺开,避免全部堆在开头
+  const step = images.length ? Math.max(2, Math.floor(paras.length / (images.length + 1))) : 0;
+  const blocks = [];
+  paras.forEach((para, index)=>{
+    blocks.push(P(esc(para)));
+    if(step){
+      const slot = images.findIndex((_, i)=> (i + 1) * step === index + 1);
+      if(slot >= 0) blocks.push(figure(images[slot], slot));
+    }
+  });
+  // 没排进去的图(段落太少时)统一补在正文末尾
+  const placed = step ? images.filter((_, i)=> (i + 1) * step <= paras.length).length : 0;
+  images.slice(placed).forEach((item, i)=> blocks.push(figure(item, placed + i)));
+  videos.forEach(item=> blocks.push(`<div style="position:relative; padding-top:56.25%; margin:24px 0; background:#000;"><iframe src="${esc(item.embedUrl)}" title="${esc(s.zhTitle)}" allow="accelerometer; autoplay; encrypted-media; picture-in-picture" allowfullscreen style="position:absolute; inset:0; width:100%; height:100%; border:0;"></iframe></div>`));
+
+  const truncated = s.bodyTruncated
+    ? `<div style="margin: 4px 0 0; padding: 10px 13px; border: 1px dashed var(--ds-ink-line); font-size: 12.5px; color: ${UI.text3};">译文按篇幅上限截断,完整内容请见原文。</div>`
+    : '';
+  return `${lead}${blocks.join('')}${truncated}${originalLink(A, s)}`;
+}
+
+function originalLink(A, s){
+  const href = s.url || sourceUrls[s.source] || '';
+  if(!href) return '';
+  return `<div style="margin: 18px 0 4px;"><a href="${esc(href)}" target="_blank" rel="noopener" style="display:inline-flex; align-items:center; gap:6px; padding:8px 14px; border:1.5px solid var(--ds-ink-line); background:#fff; color:${UI.text}; font-size:12.5px; font-weight:700; box-shadow:3px 3px 0 rgba(22,19,15,.08);">阅读原文 · ${esc(s.source)} ↗</a></div>`;
 }
 
 // 分析:为何重要 + 对我们的影响(保留)
@@ -1451,12 +1485,15 @@ function analysisHtml(A, s){
       <div style="font-size: 13px; font-weight: 700; color: ${A.accentDeep}; margin-bottom: 6px;">${title}</div>
       <div style="font-size: 13.5px; line-height: 1.85; color: ${UI.text2};">${body}</div>
     </div>`;
-  const impact = `落到本项目:建议把${(s.kind==='论文')?'这项研究':'这条'}纳入下一轮评估的对照材料,在真实数据 / 评测集上做一次小范围验证后再决定是否推进。影响分 <strong style="color:${ib.color};">${s.impact}</strong>、紧迫度 <strong style="color:${u.color};">${s.urgency}</strong> 表明其优先级${s.impact>=80?'较高,值得本周内跟进':'适中,可排入常规评估队列'};涉及 ${esc(s.tags.join(' / '))} 的内部项目应同步评估是否受影响。`;
+  if(!s.why) return '';
+  const meta = `影响分 <strong style="color:${ib.color};">${s.impact}</strong> · 紧迫度 <strong style="color:${u.color};">${s.urgency}</strong>`;
   return `
     <div style="margin-top: 24px; padding-top: 20px; border-top: 1.5px solid var(--ds-ink-line);">
-      <div style="font-size: 13px; font-weight: 700; letter-spacing: .04em; color: ${UI.text3}; margin-bottom: 10px;">分析 · AI 观点</div>
+      <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
+        <span style="font-size: 13px; font-weight: 700; letter-spacing: .04em; color: ${UI.text3};">分析 · AI 观点</span>
+        <span style="font-size: 11.5px; color: ${UI.text3};">${meta}</span>
+      </div>
       ${box('为何重要', esc(s.why))}
-      ${box('对我们的影响', impact)}
     </div>`;
 }
 

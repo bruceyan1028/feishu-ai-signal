@@ -202,6 +202,7 @@ def ensure_entry_enrichment_fields(token: str) -> None:
     headers = {"Authorization": f"Bearer {token}", "Content-Type": "application/json; charset=utf-8"}
     for field_name, field_type in (
         ("中文标题", 1),
+        ("中文正文", 1),
         ("图片链接", 15),
         ("媒体资源", 1),
         ("质量分", 2),

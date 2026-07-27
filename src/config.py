@@ -59,6 +59,8 @@ DAILY_CANDIDATE_LIMIT = int(os.environ.get("DAILY_CANDIDATE_LIMIT", "30"))
 DAILY_SIGNAL_LIMIT = int(os.environ.get("DAILY_SIGNAL_LIMIT", "30"))
 # 每份简报里「论文」类条目的硬上限，避免论文稀释「快速读新闻」体验
 DAILY_MAX_PAPERS = int(os.environ.get("DAILY_MAX_PAPERS", "4"))
+# 英文正文翻译的字数上限：绝大多数文章可全量覆盖，超长部分截断并提示读原文
+BODY_TRANSLATE_LIMIT = int(os.environ.get("BODY_TRANSLATE_LIMIT", "3000"))
 
 FEISHU_HOST = "https://open.feishu.cn"
 

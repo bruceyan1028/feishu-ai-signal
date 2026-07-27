@@ -18,6 +18,80 @@ URGENCY_TO_TABLE = {"高": "High", "中": "Medium", "低": "Low"}
 URGENCY_TO_CN = {value: key for key, value in URGENCY_TO_TABLE.items()}
 
 
+_CJK_RE = re.compile(r"[\u4e00-\u9fff]")
+# 正文里常见的栏目抬头噪音，如「智东西 作者 | ZeR0 编辑 | 漠影」
+_BYLINE_RE = re.compile(r"(?:作者|编译|编辑|撰文|责编|来源|文)\s*[|｜/:：]\s*\S{1,20}\s*")
+_BYLINE_HEAD = 120
+
+
+def cjk_ratio(text: str) -> float:
+    text = str(text or "").strip()
+    if not text:
+        return 0.0
+    return len(_CJK_RE.findall(text)) / len(text)
+
+
+def is_chinese_text(text: str) -> bool:
+    return cjk_ratio(text) >= 0.15
+
+
+def clean_body(text: str, source: str = "") -> str:
+    """去掉栏目抬头噪音并规整段落，供前端直接分段渲染。"""
+    body = str(text or "").strip()
+    if not body:
+        return ""
+    # 抬头是中文媒体的写法且总在第一句之前，只在这段内清理，
+    # 避免误删英文正文或后文里的「来源：」等正常表述
+    first_stop = re.search(r"[。！？]", body[:_BYLINE_HEAD])
+    cut = first_stop.start() if first_stop else min(len(body), _BYLINE_HEAD)
+    head, tail = body[:cut], body[cut:]
+    if cjk_ratio(head) >= 0.3:
+        head = _BYLINE_RE.sub("", head)
+        name = str(source or "").strip()
+        if name and head.lstrip().startswith(name):
+            head = head.lstrip()[len(name):]
+    body = f"{head.lstrip()}{tail}"
+    body = re.sub(r"[ \t\u00a0\u3000]+", " ", body)
+    body = re.sub(r" *\n *", "\n", body)
+    return re.sub(r"\n{3,}", "\n\n", body).strip()
+
+
+def translate_body(text: str) -> str:
+    """把英文正文忠实译成中文（只译不改写），失败返回空串由调用方回退。"""
+    snippet = str(text or "").strip()[: config.BODY_TRANSLATE_LIMIT]
+    if not snippet:
+        return ""
+    prompt = f"""把下面的文章正文忠实翻译成简体中文。
+要求：
+1. 逐段翻译，保留原文段落划分，段落之间用空行分隔；
+2. 只翻译，不要概括、不要删减、不要添加任何评论或总结；
+3. 公司名、产品名、模型名、论文名等专有名词保留英文原名；
+4. 只输出严格 JSON：{{"body_cn": "翻译后的正文"}}
+
+正文：
+{snippet}"""
+    try:
+        raw = report._llm_json(prompt)
+    except Exception as exc:  # noqa: BLE001
+        log.warning("正文翻译失败，回退原文：%s", exc)
+        return ""
+    return clean_body(str(raw.get("body_cn") or ""))
+
+
+def display_body(fields: dict[str, Any]) -> dict[str, Any]:
+    """给前端的正文：中文源直接用原文，英文源用缓存译文。"""
+    source = str(scalar(fields.get("来源")) or "")
+    raw = clean_body(str(scalar(fields.get("原文")) or ""), source)
+    translated = clean_body(str(scalar(fields.get("中文正文")) or ""), source)
+    if translated:
+        # 译文按上限截断过，原文更长时告诉前端还有后续内容
+        return {
+            "body": translated,
+            "bodyTruncated": len(raw) > config.BODY_TRANSLATE_LIMIT,
+        }
+    return {"body": raw, "bodyTruncated": False}
+
+
 def brief_bullet_title(text: str, suggested: str = "") -> str:
     """确保简报标题表达具体结论，而不是“要点 1”一类占位文案。"""
     title = suggested.strip()
@@ -236,7 +310,22 @@ def _signal_from_fields(record_id: str, fields: dict[str, Any], analysis: dict[s
         "tags": analysis["topics"],
         "imageUrl": link(fields.get("图片链接")),
         "mediaAssets": media_assets(fields.get("媒体资源")),
+        **display_body(fields),
     }
+
+
+def _ensure_body_cn(fields: dict[str, Any]) -> str:
+    """英文正文缺译文时翻译一次，写回 fields 并返回待落库的译文；无需翻译返回空串。"""
+    if str(scalar(fields.get("中文正文")) or "").strip():
+        return ""
+    raw = clean_body(str(scalar(fields.get("原文")) or ""), str(scalar(fields.get("来源")) or ""))
+    if len(raw) < 80 or is_chinese_text(raw):
+        return ""
+    translated = translate_body(raw)
+    if not translated:
+        return ""
+    fields["中文正文"] = translated
+    return translated
 
 
 def _existing_analysis(fields: dict[str, Any]) -> dict[str, Any] | None:
@@ -302,10 +391,11 @@ def generate(day: str | None = None) -> dict[str, Any]:
     for index, item in enumerate(candidates, 1):
         fields = item["fields"]
         analysis = _existing_analysis(fields)
+        update_fields: dict[str, Any] = {}
         if analysis is None:
             log.info("分析 %d/%d: %s", index, len(candidates), scalar(fields.get("标题")))
             analysis = analyze_signal(fields)
-            update_fields: dict[str, Any] = {
+            update_fields = {
                 "中文标题": analysis["title_cn"],
                 "中文摘要": analysis["summary_cn"],
                 "为何重要": analysis["why"],
@@ -335,6 +425,11 @@ def generate(day: str | None = None) -> dict[str, Any]:
                 }
                 metrics["quality_score_final"] = final_q
                 update_fields["论文指标"] = json.dumps(metrics, ensure_ascii=False)
+        # 译文与分析解耦：早先已分析、但还没有中文正文的老条目也要补齐
+        translated = _ensure_body_cn(fields)
+        if translated:
+            update_fields["中文正文"] = translated
+        if update_fields:
             updates.append(
                 {
                     "record_id": item["record_id"],
