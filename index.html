@@ -1410,7 +1410,8 @@ function feedbackHtml(A, s){
 function splitParagraphs(text){
   const raw = String(text||'').trim();
   if(!raw) return [];
-  const byBlank = raw.split(/\n{2,}/).map(x=>x.replace(/\n/g,' ').trim()).filter(Boolean);
+  // 段内的单换行要留着:原文表格就是靠它逐行保存的
+  const byBlank = raw.split(/\n{2,}/).map(x=>x.trim()).filter(Boolean);
   if(byBlank.length > 1) return byBlank;
   const byLine = raw.split(/\n/).map(x=>x.trim()).filter(Boolean);
   if(byLine.length > 1) return byLine;
@@ -1425,6 +1426,22 @@ function splitParagraphs(text){
   });
   if(buf.trim()) out.push(buf.trim());
   return out.length ? out : [raw];
+}
+
+// 原文表格在正文里按「单元格 | 单元格」逐行保存,还原成表格才对得上行列
+function tableBlockHtml(block){
+  const lines = String(block||'').split('\n').filter(x=>x.trim());
+  if(lines.length < 2 || !lines.every(line=>line.includes('|'))) return '';
+  const rows = lines.map(line=>line.split('|').map(cell=>cell.trim()));
+  const width = rows[0].length;
+  if(width < 2 || rows.some(row=>row.length !== width)) return '';
+  const cell = (text, head)=>{
+    const tag = head ? 'th' : 'td';
+    const extra = head ? `font-weight:700; background:${UI.chip};` : '';
+    return `<${tag} style="padding:9px 12px; border:1px solid ${UI.border}; font-size:13.5px; line-height:1.75; color:${UI.text2}; text-align:left; vertical-align:top; ${extra}">${zhProseHtml(esc(text))}</${tag}>`;
+  };
+  const body = rows.map((row, index)=>`<tr>${row.map(text=>cell(text, index===0)).join('')}</tr>`).join('');
+  return `<div style="margin:22px 0; overflow-x:auto;"><table style="width:100%; border-collapse:collapse; background:#fff;">${body}</table></div>`;
 }
 
 // 正文:以原文内容为主体(英文源展示译文),原文配图按间隔穿插
@@ -1454,7 +1471,7 @@ function articleBody(A, s){
   const step = images.length ? Math.max(2, Math.floor(paras.length / (images.length + 1))) : 0;
   const blocks = [];
   paras.forEach((para, index)=>{
-    blocks.push(P(esc(para)));
+    blocks.push(tableBlockHtml(para) || P(esc(para).replace(/\n/g, '<br>')));
     if(step){
       const slot = images.findIndex((_, i)=> (i + 1) * step === index + 1);
       if(slot >= 0) blocks.push(figure(images[slot]));

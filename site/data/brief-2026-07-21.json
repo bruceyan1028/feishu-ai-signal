@@ -1,0 +1,1577 @@
+{
+  "date": "2026-07-21",
+  "title": "AI Signal 每日情报 · 2026-07-21",
+  "intro": "本期信号显示，AI竞争正从基础模型能力扩展到后训练效率、智能体工程、安全防护与行业基础设施。与此同时，小模型本地化和新型强化学习方法正在降低专业任务的部署与训练门槛。",
+  "bullets": [
+    {
+      "title": "百时美施贵宝押注Vera Rubin药研工厂",
+      "text": "公司将部署由八套DGX Vera Rubin NVL72组成的第二套DGX SuperPOD，单位功耗性能最高可达被替代设施的10倍，并向科学家开放模型训练、预测和药物发现全流程智能体工作流。英伟达同时将“单位成本智能”确立为智能体后训练的关键指标，以NeMo Gym、NeMo RL和Nemotron 3 Ultra支撑可复用的分布式强化学习基础设施。",
+      "refs": [
+        1,
+        6
+      ]
+    },
+    {
+      "title": "掩码扩散模型更适合可控文本世界建模",
+      "text": "基于239403条轨迹的比较表明，双向锚点感知去噪可改善轨迹的连贯性、事实落地性与多样性；相较自回归语言模型，该方法在三个分布外环境中取得最高47%的绝对增益。",
+      "refs": [
+        2
+      ]
+    },
+    {
+      "title": "多智能体规划器暴露关联性安全盲区",
+      "text": "PlanFlip通过将四类提示注入伪装成工具输出污染规划阶段；覆盖9个前沿模型的3479次实验显示，模型能力增强不必然提升安全性，同构管线尤其容易出现共同失效。GoalAnchorCheck与CrossAgentConsensus的检测率最高达到1.00，异构模型组合因此成为重要防线。",
+      "refs": [
+        3
+      ]
+    },
+    {
+      "title": "苹果商业秘密诉讼加剧OpenAI上市变数",
+      "text": "诉讼指控OpenAI存在涉及其首席硬件官的系统性不当行为，并强调已有逾400名前苹果员工加入该公司。OpenAI回应谨慎，而案件恰逢其据报考虑IPO，可能增加法律、治理与估值层面的不确定性。",
+      "refs": [
+        4,
+        5
+      ]
+    },
+    {
+      "title": "智能体工具链补齐复现与生产部署环节",
+      "text": "开源框架agrepl可在传输层记录外部交互，并在完全断网环境中确定性重放执行，在250次测试中实现1.0重放保真度，同时将单步延迟中位数降低98.3%。Google Cloud则发布13个代码优先演示，覆盖MCP连接、动态界面、人工审批、持久化运行、评估、部署与监控。",
+      "refs": [
+        9,
+        11
+      ]
+    },
+    {
+      "title": "小模型训练与本地专家部署同步提效",
+      "text": "W2SPO仅需在目标模型中间轨迹插入通常8个Token的弱模型片段，即可扩展局部探索；在相同采样预算下，4B模型数学推理Pass@1由62.3%升至64.2%，训练速度达到标准GRPO的3.55倍。另一项评测中，Qwen Coder 3B基础准确率为75.67%，经4比特量化与参数高效微调后在留出集提升26.85个百分点，显示3B以下模型可承担部分结构化垂直任务。",
+      "refs": [
+        7,
+        19
+      ]
+    }
+  ],
+  "signals": [
+    {
+      "recordId": "recvpV8MZSAorO",
+      "title": "Bristol Myers Squibb Building Life Science Industry’s Most Advanced AI Factory on NVIDIA Vera Rubin",
+      "titleCn": "百时美施贵宝将基于英伟达 Vera Rubin 建设生命科学 AI 工厂",
+      "source": "NVIDIA Blog",
+      "url": "https://blogs.nvidia.com/blog/bristol-myers-squibb-building-life-science-industrys-most-advanced-ai-factory-on-nvidia-vera-rubin",
+      "category": "算力芯片云",
+      "contentType": "",
+      "publishedDate": "2026-07-20",
+      "summary": "百时美施贵宝宣布部署第二套 NVIDIA DGX SuperPOD，由八套 DGX Vera Rubin NVL72 系统组成，单位功耗性能最高可达其所替代基础设施的 10 倍。该平台将向公司科学家开放，用于模型训练、预测及覆盖药物发现全流程的智能体工作流。",
+      "why": "此次部署显示大型药企正将高性能 AI 基础设施从局部科研工具升级为覆盖药物发现全流程的生产平台。",
+      "impact": 88,
+      "novelty": 82,
+      "actionability": 68,
+      "urgency": "中",
+      "tags": [
+        "AI",
+        "Agent",
+        "硬件"
+      ],
+      "imageUrl": "https://blogs.nvidia.com/wp-content/uploads/2026/07/Image-7.png",
+      "mediaAssets": {
+        "images": [
+          {
+            "url": "https://blogs.nvidia.com/wp-content/uploads/2026/07/Image-1.jpg",
+            "alt": ""
+          }
+        ],
+        "videos": []
+      },
+      "body": "Erin Davis 称其为“SuperDuperPOD”。这个名称包含两层含义：制药巨头 Bristol Myers Squibb（BMS）已经在运行生命科学领域规模最大的 AI 集群之一，并取得了显著成果。而且，他们正在进一步加大投入。\n\nBMS 今天宣布，正在部署其第二套 NVIDIA DGX SuperPOD；这套系统基于八套 DGX Vera Rubin NVL72 系统构建，是生命科学领域性能最强、能效最高的 AI 集群。\n\n“我们并不是只让一小部分研究人员使用这台超级计算机，而是要向所有科学家开放，”BMS 研究业务洞察与技术副总裁 Davis 表示。“任何人都不必等待，也没有人会被告知存在使用限额。”\n\n这八套机架级系统均由 NVIDIA Vera CPU 和 Rubin GPU 组成，每兆瓦可提供最高达其所替代基础设施 10 倍的性能。它将使这家全球制药巨头的研究人员能够使用一个统一的 AI 平台——其中包括用于生物 AI 的 NVIDIA BioNeMo Agent Toolkit——从而在整个药物发现流程中运行预测、训练模型并驱动智能体工作流。\n\nDavis 和 BMS 其他顶尖研究人员真正追求的，是这种访问能力所带来的可能性：更快的迭代周期、更大的化学空间，以及一条完整的药物发现流程，让研究人员能够专注于科学本身，而不是协调资源的后勤事务。\n\nPayal Sheth 表示，这项任务是从“关于 AI 能做什么的某种抽象定位，转向真正将其转化为可衡量的影响”。Sheth 曾长期在药物发现实验室工作，随后于今年 1 月出任 BMS 治疗发现科学高级副总裁，承担范围更广的职责。\n\nBMS 运营 DGX SuperPOD 已有大约三年，并取得了切实成果。由 AI 支持的靶点识别已经为科学家省去了数周的人工工作，使他们能够腾出时间，专注于价值最高的科学决策。BMS 团队利用 AI 扩充了其 CELMoD 化合物库——这些分子经过工程设计，能够选择性降解致癌蛋白，可应用于血液癌症治疗及其他领域。这为在更广泛的疾病范围内发现新靶点和潜在新药打开了大门。在药物发现的先导化合物优化阶段，AI 也得到了应用，采用的是 Sheth 所称的“Predict First”方法，该方法根据设计预测为实验筛选提供依据。\n\nBristol Myers Squibb 的团队正在审查一个分子结构的计算模型，这是预测性设计流程的一部分，可帮助科学家预判分子在临床中的表现。图片来源：Bristol Myers Squibb\n\n“我们利用预测来确定需要合成的分子的优先顺序，并进行多参数优化，”她解释道，“以剔除那些未必符合我们所追求的性质范围的分子。这确保了宝贵的实验室实验能够与推进成功概率最高的分子保持一致。",
+      "bodyTruncated": true,
+      "eventAggregation": {
+        "total": 1,
+        "groups": [
+          {
+            "key": "官方来源",
+            "tone": "#16130f",
+            "items": [
+              {
+                "source": "NVIDIA Blog",
+                "title": "百时美施贵宝将基于英伟达 Vera Rubin 建设生命科学 AI 工厂",
+                "url": "https://blogs.nvidia.com/blog/bristol-myers-squibb-building-life-science-industrys-most-advanced-ai-factory-on-nvidia-vera-rubin",
+                "note": "原始发布 / 公告。",
+                "text": "百时美施贵宝将基于英伟达 Vera Rubin 建设生命科学 AI 工厂 —— 原始发布 / 公告。"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "recordId": "recvpYFWSkd3Rh",
+      "title": "Masked Diffusion Language Models are Strong and Steerable Text-Based World Models for Agentic RL",
+      "titleCn": "掩码扩散语言模型成为强大且可控的智能体强化学习文本世界模型",
+      "source": "arXiv cs.AI",
+      "url": "https://arxiv.org/abs/2607.16204",
+      "category": "技术研究开源",
+      "contentType": "论文",
+      "publishedDate": "2026-07-21",
+      "summary": "研究将文本世界建模形式化为可控的转移动态问题，并基于239,403条轨迹比较自回归语言模型与掩码扩散语言模型。结果显示，后者以双向锚点感知去噪获得更好的连贯性、事实落地性和轨迹多样性，并在三个分布外环境中实现最高47%的绝对增益。",
+      "why": "该研究表明，小参数量掩码扩散模型可作为低延迟、可控且可迁移的文本环境模拟器，为智能体强化学习按需扩展训练环境提供新路径。",
+      "impact": 86,
+      "novelty": 89,
+      "actionability": 78,
+      "urgency": "中",
+      "tags": [
+        "AI",
+        "LLM",
+        "Agent",
+        "开源"
+      ],
+      "imageUrl": "https://arxiv.org/static/browse/0.3.4/images/arxiv-logo-fb.png",
+      "mediaAssets": {
+        "images": [
+          {
+            "url": "https://arxiv.org/html/2607.16204v1/x2.png",
+            "alt": "Figure 1: Anchor-aware structured generation: autoregressive vs. masked diffusion LMs. (1) A tool-call output has anchor fields 𝒟 \\mathcal{D} fixed by schema or context ( ticket_id , user_id , trailing status : \"error\" ) interleaved with fields to be generated. (2) Left-to-right AR decoding cannot condition on the trailing anchor, yielding prefix-consistent but globally incoherent samples (e.g., refund_processed : true with status : \"error\" ). (3) An MDLM denoises masked positions while attending to anchors on both sides, producing completions consistent with the error status."
+          },
+          {
+            "url": "https://arxiv.org/html/2607.16204v1/x3.png",
+            "alt": "Figure 2: Training split counts and token length distributions per dataset. The sampled number of data points are proportional to openly available training tasks."
+          }
+        ],
+        "videos": []
+      },
+      "body": "arXiv:2607.16204v1 Announce Type: new Abstract: Recent growth in reinforcement learning (RL) has surfaced a need for diverse, specialized training environments. Hand-curated environments with fixed task and reward difficulties become ineffective signals as model performance improves, and sparse rewards over long horizons induce mode collapse on specific workflows or tool structures. World models that simulate environment states have matched pure rollout performance, making them promising for scaling diversity on-demand. However, autoregressive (AR) world models suffer from a left-to-right bias preventing conditioning on globally interdependent state anchors such as tool schemas, prior turns, and expected outcomes. We (i) formalize text-based world modeling as a steerable transition-dynamics problem decomposed into initial state, task context, tool schemas, domain rules, and steering directives, and (ii) curate 239,403 grounded state-action trajectories spanning nine open-source environments and twelve frontier model families. We compare AR LMs and masked diffusion language models (MDLMs), showing MDLMs, via bidirectional anchor-aware denoising, achieve better coherence, groundedness, and empirically validated rollout diversity than LLMs over 4x their parameter size, at comparable inference latency. We introduce a plug-and-play GRPO training framework with deterministic state checks, and perform zero-shot transfer ablations on three OOD environments (ScienceWorld, ALFWorld, AppWorld) across three 1.2B-7B agent backbones (LFM2.5, Qwen3, Mistral), achieving up to 47% absolute gains over baselines without environment-specific fine-tuning. We further conduct behavioral analysis of failure modes under adversarial scenarios and human evaluation on realism, outcome correctness, and training utility. We open-source our work to encourage research in this direction.",
+      "bodyTruncated": false,
+      "eventAggregation": {
+        "total": 1,
+        "groups": [
+          {
+            "key": "官方来源",
+            "tone": "#16130f",
+            "items": [
+              {
+                "source": "arXiv cs.AI",
+                "title": "掩码扩散语言模型成为强大且可控的智能体强化学习文本世界模型",
+                "url": "https://arxiv.org/abs/2607.16204",
+                "note": "原始发布 / 公告。",
+                "text": "掩码扩散语言模型成为强大且可控的智能体强化学习文本世界模型 —— 原始发布 / 公告。"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "recordId": "recvpYFWSk73li",
+      "title": "PlanFlip: Attacking Multi-Agent LLM Systems via Planning-Phase Prompt Injection",
+      "titleCn": "PlanFlip：针对多智能体大模型规划阶段的提示注入攻击",
+      "source": "arXiv cs.AI",
+      "url": "https://arxiv.org/abs/2607.16199",
+      "category": "技术研究开源",
+      "contentType": "论文",
+      "publishedDate": "2026-07-21",
+      "summary": "研究提出 PlanFlip，通过伪装成工具输出的四类提示注入攻击污染规划器，并在9个前沿模型的3479次实验中发现，模型能力增强未必带来更高安全性，同构智能体管线还存在关联性盲区。作者提出 GoalAnchorCheck 和 CrossAgentConsensus 两种防御方法，检测率最高达到1.00，并指出异构模型多样性是多智能体系统的重要安全前提。",
+      "why": "该研究揭示了单次规划阶段注入可级联破坏全部下游任务，并给出了可直接评估和缓解此类风险的防御方案。",
+      "impact": 86,
+      "novelty": 88,
+      "actionability": 85,
+      "urgency": "高",
+      "tags": [
+        "Agent",
+        "LLM",
+        "推理",
+        "开源"
+      ],
+      "imageUrl": "",
+      "mediaAssets": {
+        "images": [
+          {
+            "url": "https://arxiv.org/html/2607.16199v1/x1.png",
+            "alt": "Figure 1: The PlanFlip threat model and defenses. A Planner–Executor–Critic pipeline shares a single backbone θ \\theta (blue band). An adversary appends injection ϵ \\epsilon to the Planner’s context (red dashed arrow), disguised as a plausible tool output or retrieved document. The corrupted plan π \\pi propagates to all downstream sub-tasks ( cascade amplification , orange). Because 𝒫 θ \\mathcal{P}_{\\theta} and 𝒞 θ \\mathcal{C}_{\\theta} share θ \\theta , ϵ \\epsilon simultaneously biases both—the correlated-agent blind spot (red dashed box): the Critic reports aligned even as the plan deviates. D1 (GoalAnchorCheck) verifies each sub-task against g g ; D2 (CrossAgentConsensus) compares against a heterogeneous reference planner ( ≠ θ \\neq\\theta ), breaking the correlated failure mode."
+          },
+          {
+            "url": "https://arxiv.org/html/2607.16199v1/x2.png",
+            "alt": "Figure 2: ASR vs. Stealth per model for each attack type. Each point is one model; colour and marker encode vulnerability profile. Top-right (high ASR, high Stealth) is the most dangerous region; bottom-right (low ASR, high Stealth) is the correlated blind spot."
+          },
+          {
+            "url": "https://arxiv.org/html/2607.16199v1/x3.png",
+            "alt": "Figure 3: Semantic alignment scores (0=off-goal, 1=aligned) for benign and attacked+Critic=aligned episodes, scored by two independent heterogeneous judges (J1: DeepSeek-V3.1, J2: Llama-3.3-70B). The drop from benign to attacked confirms genuine semantic goal deviation despite the same-backbone Critic reporting aligned ."
+          }
+        ],
+        "videos": []
+      },
+      "body": "arXiv:2607.16199v1 Announce Type: new Abstract: Multi-agent LLM systems increasingly rely on a Planner to decompose goals into sub-task sequences that downstream Executor and Critic agents execute and audit. We identify the planning phase as a critical attack surface: a single injection into the Planner's context achieves cascade amplification, corrupting all downstream sub-tasks simultaneously. We introduce PlanFlip, a framework comprising four planning-phase prompt injection attacks -- GoalSubstitution (PF-1), PriorityInversion (PF-2), ContextPollution (PF-3), and RoleConfusion (PF-4) -- each disguised as plausible tool outputs to evade keyword filters. Evaluating nine frontier LLMs across 3,479 episodes, we uncover three findings: (1) capability amplifies vulnerability -- GPT-5 achieves the highest attack success rate (ASR = 0.68), contradicting the assumption that stronger models are inherently more secure; (2) homogeneous pipelines exhibit a correlated-agent blind spot -- GPT-4o and Llama-3.3-70B show ASR near 0 yet Stealth = 1.00 and StepShift > 0, with attacks restructuring plans while the same-backbone Critic reports alignment (two independent judges confirm -0.20 to -0.32 semantic deviation, r = 0.943); (3) reasoning-augmented models resist injections -- DeepSeek-R1 achieves StepShift = 0.00 across all attacks. We propose GoalAnchorCheck (D1) and CrossAgentConsensus (D2), achieving detection rates up to 1.00 and outperforming same-backbone baselines in 15 of 16 cells. Our key insight: heterogeneous model diversity is a security prerequisite for multi-agent systems; redundancy within a homogeneous backbone provides no protection against planning-phase attacks.",
+      "bodyTruncated": false,
+      "eventAggregation": {
+        "total": 1,
+        "groups": [
+          {
+            "key": "官方来源",
+            "tone": "#16130f",
+            "items": [
+              {
+                "source": "arXiv cs.AI",
+                "title": "PlanFlip：针对多智能体大模型规划阶段的提示注入攻击",
+                "url": "https://arxiv.org/abs/2607.16199",
+                "note": "原始发布 / 公告。",
+                "text": "PlanFlip：针对多智能体大模型规划阶段的提示注入攻击 —— 原始发布 / 公告。"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "recordId": "recvpEQu4WlSoQ",
+      "title": "How Apple’s big lawsuit could disrupt OpenAI’s IPO plans",
+      "titleCn": "苹果商业秘密诉讼或冲击 OpenAI IPO 计划",
+      "source": "TechCrunch AI",
+      "url": "https://techcrunch.com/video/how-apples-big-lawsuit-could-disrupt-openais-ipo-plans",
+      "category": "创业融资并购",
+      "contentType": "",
+      "publishedDate": "2026-07-18",
+      "summary": "苹果起诉 OpenAI 涉嫌侵犯商业秘密，指控其不当行为涉及 OpenAI 首席硬件官，并称已有超过 400 名前苹果员工加入该公司。OpenAI 回应谨慎，而诉讼正值其据报道考虑 IPO 之际，可能增加上市不确定性。",
+      "why": "这起诉讼可能给 OpenAI 带来法律、治理与声誉风险，进而干扰其潜在 IPO 进程。",
+      "impact": 86,
+      "novelty": 82,
+      "actionability": 67,
+      "urgency": "高",
+      "tags": [
+        "AI",
+        "硬件",
+        "监管",
+        "融资"
+      ],
+      "imageUrl": "https://techcrunch.com/wp-content/uploads/2026/02/GettyImages-2236544077.jpg?resize=1200,800",
+      "mediaAssets": {
+        "images": [],
+        "videos": []
+      },
+      "body": "Apple filed a trade secrets lawsuit against OpenAI last Friday, and it’s not messing around. The complaint alleges a pattern of misconduct reaching all the way up to OpenAI’s chief hardware officer and claims more than 400 former Apple employees now work at the company. OpenAI’s response so far has been carefully hedged, and the timing couldn’t be worse with the company reportedly eyeing an IPO […]",
+      "bodyTruncated": false,
+      "eventAggregation": {
+        "total": 1,
+        "groups": [
+          {
+            "key": "官方来源",
+            "tone": "#16130f",
+            "items": [
+              {
+                "source": "TechCrunch AI",
+                "title": "苹果商业秘密诉讼或冲击 OpenAI IPO 计划",
+                "url": "https://techcrunch.com/video/how-apples-big-lawsuit-could-disrupt-openais-ipo-plans",
+                "note": "原始发布 / 公告。",
+                "text": "苹果商业秘密诉讼或冲击 OpenAI IPO 计划 —— 原始发布 / 公告。"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "recordId": "recvpEQu4W7uKA",
+      "title": "Apple’s lawsuit couldn’t come at a worse time for OpenAI",
+      "titleCn": "苹果起诉OpenAI窃取商业秘密，正值其筹备IPO之际",
+      "source": "TechCrunch AI",
+      "url": "https://techcrunch.com/podcast/apples-lawsuit-couldnt-come-at-a-worse-time-for-openai",
+      "category": "创业融资并购",
+      "contentType": "",
+      "publishedDate": "2026-07-17",
+      "summary": "苹果已对OpenAI提起商业秘密诉讼，指控其存在涉及首席硬件官的系统性不当行为，并称OpenAI已雇用逾400名前苹果员工。OpenAI目前回应谨慎，而诉讼恰逢其据报考虑IPO。",
+      "why": "这场诉讼可能在OpenAI寻求上市的关键阶段加剧法律、声誉与人才管理风险。",
+      "impact": 86,
+      "novelty": 78,
+      "actionability": 65,
+      "urgency": "高",
+      "tags": [
+        "AI",
+        "硬件",
+        "监管",
+        "融资"
+      ],
+      "imageUrl": "https://techcrunch.com/wp-content/uploads/2026/07/OpenAI-logo-in-Seoul.jpg?w=1024",
+      "mediaAssets": {
+        "images": [],
+        "videos": []
+      },
+      "body": "Apple filed a trade secrets lawsuit against OpenAI last Friday, and it’s not messing around. The complaint alleges a pattern of misconduct reaching all the way up to OpenAI’s chief hardware officer and claims more than 400 former Apple employees now work at the company. OpenAI’s response so far has been carefully hedged, and the timing couldn’t be worse with the company reportedly eyeing an IPO […]",
+      "bodyTruncated": false,
+      "eventAggregation": {
+        "total": 1,
+        "groups": [
+          {
+            "key": "官方来源",
+            "tone": "#16130f",
+            "items": [
+              {
+                "source": "TechCrunch AI",
+                "title": "苹果起诉OpenAI窃取商业秘密，正值其筹备IPO之际",
+                "url": "https://techcrunch.com/podcast/apples-lawsuit-couldnt-come-at-a-worse-time-for-openai",
+                "note": "原始发布 / 公告。",
+                "text": "苹果起诉OpenAI窃取商业秘密，正值其筹备IPO之际 —— 原始发布 / 公告。"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "recordId": "recvpEQu4WGf2x",
+      "title": "NVIDIA Vera Rubin Maximizes Intelligence per Dollar for Post-Training Workloads — a Key Metric for Agentic AI",
+      "titleCn": "英伟达以 Vera Rubin 提升智能体 AI 后训练的单位成本智能",
+      "source": "NVIDIA Blog",
+      "url": "https://blogs.nvidia.com/blog/nvidia-vera-rubin-post-training-intelligence-per-dollar",
+      "category": "算力芯片云",
+      "contentType": "",
+      "publishedDate": "2026-07-17",
+      "summary": "英伟达认为，智能体 AI 需要持续通过强化学习进行后训练，使“单位成本智能”成为继每 Token 成本之上的关键指标。其 NeMo Gym、NeMo RL 和开放权重的 Nemotron 3 Ultra，旨在将大规模分布式后训练转化为可复用基础设施。",
+      "why": "持续后训练正成为智能体系统的核心算力负载，并直接影响模型能力提升与推理服务的经济性。",
+      "impact": 85,
+      "novelty": 72,
+      "actionability": 76,
+      "urgency": "中",
+      "tags": [
+        "Agent",
+        "推理",
+        "硬件",
+        "开源"
+      ],
+      "imageUrl": "https://blogs.nvidia.com/wp-content/uploads/2026/07/inline-1784235912807.png",
+      "mediaAssets": {
+        "images": [
+          {
+            "url": "https://blogs.nvidia.com/wp-content/uploads/2026/07/ai-infra-diagram-vr-post-traininig-agentic-workflow-1920x1080-5448060-1680x945.jpg",
+            "alt": ""
+          },
+          {
+            "url": "https://blogs.nvidia.com/wp-content/uploads/2026/07/ai-infra-diagram-vr-post-traininig-maximizing-intelligence-1920x1080-5448060-1680x945.jpg",
+            "alt": ""
+          },
+          {
+            "url": "https://blogs.nvidia.com/wp-content/uploads/2026/07/ai-infra-diagram-vr-post-traininig-table-1920x1080-5448060-1680x945.jpg",
+            "alt": ""
+          }
+        ],
+        "videos": []
+      },
+      "body": "Think of a professional athlete. What separates elite performers is what happens between games: continuous refinement, adjusting to new opponents and sharpening skills based on what the last game exposed.\n\nAgentic AI works the same way. A model is no longer asked for an answer. It’s given a goal and has to keep adapting as environments shift, edge cases emerge and tools change. Unlike a generative model responding to a prompt, an agentic model must plan, use different tools and recover from problems it encounters mid-run.\n\nThat’s why post-training, the phase that refines a model after initial training on raw data, is no longer a one-time finishing step. It’s continuous, because the environment that agentic models operate in shifts fast. The tools an agent uses can change week to week. Edge cases surface in production that no test set anticipated. Each deployment brings its own codebase, policies and environment.\n\nPost-training runs loop back from production as new problems surface. The compute footprint grows not because any single run is larger, but because the runs never stop. Agentic AI introduces a new compute pattern for post-training, making it the central workload of the agentic era and the primary driver of intelligence per dollar.\n\nThe goal of post-training is to maximize intelligence per dollar by maximizing the yield of every forward and backward pass in the continuous learning cycle. The forward pass — inference — is measured in cost per token . That means that every improvement to cost per token flows directly into intelligence per dollar.\n\nAgentic Post-Training Demystified\n\nPost-training is where intelligence is built. In pretraining, the model learns to predict the next token, which gives it fluency but not intelligence. Post-training is where it learns to write code, plan a multistep task, use a search tool and recover when something goes wrong. Inference is what comes after: the model working on the job, priced in cost per token.\n\nBecause there’s no answer key to memorize, only a reward, the model learns by reinforcement learning (RL) techniques. When given a task, it writes out an attempt — the forward pass — the same work it does on the job. The attempt is scored, and the lesson updates the model’s weights — the backward pass. Across millions of attempts, intelligence grows.\n\nEach step is compute intensive, and running this loop at scale is an orchestration problem: thousands of environments generating rollouts in parallel, rewards being verified and updated weights flowing back into training with accelerators fully utilized. NVIDIA NeMo open libraries, such as NeMo Gym for training environments and NeMo RL for distributed post-training, turn post-training from bespoke research code into repeatable infrastructure.\n\nWhy Intelligence per Dollar Extends Cost per Token\n\nIf inference is the revenue engine, post-training is the multiplier: the more capable the model, the higher the value of every token served.\n\nCost per token is the key metric for the inference factory: the all-in cost of delivering 1 million tokens. Intelligence per dollar sits one layer up, answering a different question: what does it cost to build a model worth serving, and keep it worth serving as its environment changes?\n\nThe two are nested, not competing. AI infrastructure that lowers cost per token also lowers the cost of every point of intelligence built into the model. And every point of intelligence built in raises the value of every token the inference factory serves.\n\nIn other words, cost per token measures operating yield; intelligence per dollar measures whether the investment in model intelligence is paying off.\n\nMaximizing Intelligence per Dollar: Post-Training Nemotron 3 Ultra\n\nNVIDIA Nemotron 3 Ultra — an open weight, 550-billion-parameter mixture-of-experts (MoE) model, offers verifiable benchmarks and a fully disclosed post-training recipe run on NeMo RL. It scored 71.7% on a standard real-world coding benchmark, SWE-bench verified, where it produced a working fix for roughly seven in 10 real software bugs from open source projects, each one checked against the project’s own tests.\n\nIllustrative 20 billion rollout tokens, based on prior-generation Nemotron 3 Super’s ~1.2 million rollouts at ~10,000 tokens each, scaled up for the larger Ultra model. Intelligence per dollar between platforms is independent of this assumption; the absolute values scale with the token count.\n\nThe NVIDIA Blackwell platform lowers cost per run and makes the frequent post-training the agentic era demands economically viable. That intelligence is reaped across every token served.\n\nThe NVIDIA Vera Rubin platform extends the trajectory further, training the largest models with one-fourth the GPUs of the Blackwell generation. It was codesigned from end to end to maximize intelligence per dollar for the agentic post-training load: more rollouts per run, more environments in play and post-training cycles that never stop.\n\nPost-Training Workflows in Action\n\nPrime Intellect’s Lab continuously post-trains frontier open models on NVIDIA Blackwell and uses NVIDIA Dynamo for inference orchestration. With Vera Rubin, Prime Intellect plans to scale reinforcement learning environments, generate more rollouts per run and accelerate training-to-inference iteration loops to maximize intelligence per dollar for businesses.\n\nPrime Intellect has optimized its sandbox infrastructure to integrate with NVIDIA Vera CPUs , enabling low-latency, energy-efficient reinforcement learning . Open source tools and models such as NVIDIA Nemotron and NVIDIA NeMo Gym are also integrated into its software stack. When comparing realistic RL sandbox workloads against alternative x86 architectures, Prime Intellect found that Vera delivers, on average, 30% greater throughput per CPU.\n\nPerplexity’s RL post-training stack runs asynchronously across hundreds of NVIDIA GPUs, with an RDMA-based weight transfer engine that syncs trillion-parameter models in under two seconds between training and inference compute nodes. The resulting post-trained Qwen3 235B models are then served on NVIDIA GB200 NVL72 systems.\n\nTogether AI provides post-training as a service, including supervised fine-tuning, RL and direct preference optimization. The service is delivered via a feature-rich application programming interface and software development kit that supports the full range of post-training on its AI Native Cloud platform. It has been running on NVIDIA’s platform and optimized kernel libraries, and is looking to harness the Vera Rubin platform next.\n\nLearn more about NVIDIA Vera Rubin , the platform for AI factories to maximize intelligence per dollar across workloads. And explore NVIDIA’s full-stack platform for training frontier models .",
+      "bodyTruncated": false,
+      "eventAggregation": {
+        "total": 1,
+        "groups": [
+          {
+            "key": "官方来源",
+            "tone": "#16130f",
+            "items": [
+              {
+                "source": "NVIDIA Blog",
+                "title": "英伟达以 Vera Rubin 提升智能体 AI 后训练的单位成本智能",
+                "url": "https://blogs.nvidia.com/blog/nvidia-vera-rubin-post-training-intelligence-per-dollar",
+                "note": "原始发布 / 公告。",
+                "text": "英伟达以 Vera Rubin 提升智能体 AI 后训练的单位成本智能 —— 原始发布 / 公告。"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "recordId": "recvpYFWSkV2tF",
+      "title": "It Takes 8 Tokens: Weak-to-Strong Off-Policy RL via Auxiliary Branches",
+      "titleCn": "只需8个Token：通过辅助分支实现弱到强的离策略强化学习",
+      "source": "arXiv cs.AI",
+      "url": "https://arxiv.org/abs/2607.16205",
+      "category": "技术研究开源",
+      "contentType": "论文",
+      "publishedDate": "2026-07-21",
+      "summary": "论文提出离策略强化学习方法W2SPO，通过在目标模型的中间轨迹中插入通常仅8个Token的弱辅助模型片段，扩展局部探索并依据最终可验证奖励更新这些片段。在相同采样预算下，其将4B规模模型的数学推理Pass@1从62.3%提升至64.2%，训练速度达到标准GRPO的3.55倍。",
+      "why": "该方法以极短辅助分支缓解强化学习中样本语义冗余和错误推理路径收敛问题，同时提升推理性能与训练效率。",
+      "impact": 82,
+      "novelty": 87,
+      "actionability": 76,
+      "urgency": "中",
+      "tags": [
+        "LLM",
+        "推理",
+        "开源",
+        "AI"
+      ],
+      "imageUrl": "",
+      "mediaAssets": {
+        "images": [
+          {
+            "url": "https://arxiv.org/html/2607.16205v1/x1.png",
+            "alt": "Figure 1: Overview of W2SPO. Standard GRPO relies on self-rollouts from the target model, which can be semantically redundant and yield all-wrong rollout groups on difficult reasoning problems. W2SPO locally expands the rollout support by inserting short auxiliary branches into an intermediate target-model prefix, then lets the target model complete the solution. Verifier rewards are assigned to the completed trajectories, while policy updates are applied only to the short branch segment."
+          },
+          {
+            "url": "https://arxiv.org/html/2607.16205v1/x2.png",
+            "alt": "Figure 2: Self-rollout is diminishing-return. As the sampling budget K K increases (temperature=0.7, top-p=0.95), the total number of correct samples increases, but the number of semantically distinct correct solutions grows much more slowly. Sensitivity analysis is at A.2 ."
+          },
+          {
+            "url": "https://arxiv.org/html/2607.16205v1/x3.png",
+            "alt": "Figure 3: Auxiliary branches expand effective reasoning support. Left: average number of semantically distinct correct trajectories under direct self-rollout and A-B-A inference. Right: Pass@8 performance under different insertion positions and lengths. All samples are generated with temperature=0.7, top-p=0.95, and the same system prompt."
+          }
+        ],
+        "videos": []
+      },
+      "body": "arXiv:2607.16205v1 Announce Type: new Abstract: Reinforcement learning with verifiable rewards has emerged as a standard approach for enhancing reasoning in large language models, which typically optimizes the policy by contrasting multiple self generated rollouts. However, we identify a critical support limited bottleneck in this paradigm: on challenging reasoning tasks, the target model's samples often exhibit semantic redundancy, converging into the same erroneous \"reasoning basins\" that offer negligible reward contrast for policy updates. In this paper, we propose to overcome this limitation through a weak to strong learning paradigm, where a policy's exploration is informed by a weaker but computationally efficient auxiliary model. We introduce W2SPO, an off policy RL method that injects short auxiliary segments often as brief as 8 tokens into intermediate target model trajectories and the target model then completes the reasoning path from these diverted states. Policy updates are restricted to these short inserted segments based on final verifiable rewards. Empirically, W2SPO achieves superior performance among evaluated 4B scale models on mathematical reasoning benchmarks, outperforming evaluated post trained baselines. Compared with vanilla GRPO under the same sampling budget, W2SPO improves Pass@1 from 62.3% to 64.2% while achieving a 3.55 times training speedup. These results suggest that weak auxiliary branches can induce stronger target reasoning policies by expanding local exploration support.",
+      "bodyTruncated": false,
+      "eventAggregation": {
+        "total": 1,
+        "groups": [
+          {
+            "key": "官方来源",
+            "tone": "#16130f",
+            "items": [
+              {
+                "source": "arXiv cs.AI",
+                "title": "只需8个Token：通过辅助分支实现弱到强的离策略强化学习",
+                "url": "https://arxiv.org/abs/2607.16205",
+                "note": "原始发布 / 公告。",
+                "text": "只需8个Token：通过辅助分支实现弱到强的离策略强化学习 —— 原始发布 / 公告。"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "recordId": "recvpYFWSkFSZe",
+      "title": "Generative Ontology Induction: Domain-Agnostic Schema Discovery from Document Corpora Using Large Language Models",
+      "titleCn": "GOI：利用大语言模型从文档语料中自动发现领域无关本体模式",
+      "source": "arXiv cs.AI",
+      "url": "https://arxiv.org/abs/2607.16201",
+      "category": "技术研究开源",
+      "contentType": "论文",
+      "publishedDate": "2026-07-21",
+      "summary": "研究提出生成式本体归纳框架 GOI，可从示例文档语料中归纳实体、维度、属性、关系与约束，并导出为 YAML/JSON 类型图。四类本体的受控验证显示，其生成结果对结构骨架的覆盖率均达到 95%-100%，并引入节点覆盖分数用于评估结构本体节点的生成覆盖情况。",
+      "why": "该方法有望降低知识密集型 AI 系统中本体工程对预定义模式和领域人工设计的依赖。",
+      "impact": 82,
+      "novelty": 86,
+      "actionability": 68,
+      "urgency": "中",
+      "tags": [
+        "AI",
+        "LLM",
+        "开源",
+        "其他"
+      ],
+      "imageUrl": "",
+      "mediaAssets": {
+        "images": [
+          {
+            "url": "https://arxiv.org/html/2607.16201v1/ontology_graph.png",
+            "alt": "Figure 2: The Software Services Invoice Ontology rendered in the ontology.live editor (48 nodes, 54 edges). The left palette enumerates GOI’s typed vocabulary - class, property, value, dimension, relation, constraint - and the typed edge set used to connect them ( is_a , has_property , has_value , relates_to , part_of , constrains , instance_of ). The central Invoice class anchors the graph, with seller, buyer, line-item, and bank sub-classes radiating outward; dimension nodes (Invoice Direction, Service Type) and constraints surface the cross-cutting axes that govern the document type."
+          }
+        ],
+        "videos": []
+      },
+      "body": "arXiv:2607.16201v1 Announce Type: new Abstract: Ontology engineering remains a critical bottleneck in knowledge-intensive AI systems. Existing automated approaches either depend on predefined schemas, operate within narrow domains, or produce unstructured outputs unsuitable for downstream pipelines. We introduce Generative Ontology Induction (GOI), a domain-agnostic framework that induces a generative blueprint - entities, dimensions, properties, relationships, and constraints - from a corpus of examples and exports it as a typed graph (six node types, seven edge types) in YAML/JSON. We introduce the Node Coverage Score, a novel evaluation metric that measures the fraction of structural ontology nodes (classes, properties, and dimensions) appearing in generated outputs. A controlled generative validation on four contrasting ontologies - a familiar Software Services Invoice schema, a custom Job Description Ontology, a confidential Pain-Management Clinical Visit Record Ontology, and a Professional Services Contract & Statement of Work Ontology - shows that GOI-prompted generation covers 95-100% of the structural backbone in every case; a generic three-field template holds at 97.8% on the invoice schema but drops to 52.2% on the Job Description Ontology, 62.2% on the Pain-Management ontology, and 78.3% on the Professional Services Contract ontology. The structural coverage holds regardless of how familiar the document type is to the model.",
+      "bodyTruncated": false,
+      "eventAggregation": {
+        "total": 1,
+        "groups": [
+          {
+            "key": "官方来源",
+            "tone": "#16130f",
+            "items": [
+              {
+                "source": "arXiv cs.AI",
+                "title": "GOI：利用大语言模型从文档语料中自动发现领域无关本体模式",
+                "url": "https://arxiv.org/abs/2607.16201",
+                "note": "原始发布 / 公告。",
+                "text": "GOI：利用大语言模型从文档语料中自动发现领域无关本体模式 —— 原始发布 / 公告。"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "recordId": "recvpYFWSkkt7N",
+      "title": "Deterministic Replay for AI Agent Systems",
+      "titleCn": "AI Agent 系统的确定性重放框架",
+      "source": "arXiv cs.AI",
+      "url": "https://arxiv.org/abs/2607.16200",
+      "category": "技术研究开源",
+      "contentType": "论文",
+      "publishedDate": "2026-07-21",
+      "summary": "论文提出开发者优先的命令行框架 agrepl，通过 MITM 代理在传输层记录外部交互，并在完全断网的隔离环境中确定性重放 Agent 执行。其在五类工作负载、250 次重放中实现 1.0 的重放保真度，并将单步延迟中位数降低 98.3%，代码以 MIT 许可证开源。",
+      "why": "该框架将 Agent 运行从“仅可观测”推进到可隔离复现，有助于调试 LLM、工具和 API 共同引发的非确定性问题。",
+      "impact": 82,
+      "novelty": 84,
+      "actionability": 90,
+      "urgency": "中",
+      "tags": [
+        "AI",
+        "Agent",
+        "开源",
+        "产品"
+      ],
+      "imageUrl": "",
+      "mediaAssets": {
+        "images": [],
+        "videos": []
+      },
+      "body": "arXiv:2607.16200v1 Announce Type: new Abstract: AI agent systems that couple large language models (LLMs) with external tools and APIs are inherently non-deterministic: LLM sampling variance, external API state, CDN infrastructure headers, and execution-environment noise collectively prevent any prior agent run from being faithfully re-executed. Existing observability platforms capture execution logs but cannot reproduce a run in isolation. We present agrepl, a developer-first CLI framework for deterministic replay of agent executions. agrepl intercepts all external interactions at the transport layer via a man-in-the-middle (MITM) proxy, serialises them as structured execution traces, and replays them in a strictly isolated environment with zero outbound network access. We formalise the agent execution model, define the request-key matching function K(s), and prove the determinism invariant. We introduce a noise-aware diff algorithm classifying HTTP header divergence into signal and noise tiers. Empirical evaluation across five workloads (n = 250 replay instances) demonstrates replay fidelity F = 1.0 and a median per-step latency reduction of 98.3%. agrepl is implemented in Go, ships as a single static binary, and is released under the MIT licence. Keywords: AI agents, deterministic replay, LLM debugging, reproducibility, MITM proxy, execution tracing, record/replay systems.",
+      "bodyTruncated": false,
+      "eventAggregation": {
+        "total": 1,
+        "groups": [
+          {
+            "key": "官方来源",
+            "tone": "#16130f",
+            "items": [
+              {
+                "source": "arXiv cs.AI",
+                "title": "AI Agent 系统的确定性重放框架",
+                "url": "https://arxiv.org/abs/2607.16200",
+                "note": "原始发布 / 公告。",
+                "text": "AI Agent 系统的确定性重放框架 —— 原始发布 / 公告。"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "recordId": "recvpWw2KGZ49e",
+      "title": "At SIGGRAPH, NVIDIA Advances Graphics and Simulation With Agentic and Physical AI",
+      "titleCn": "英伟达在 SIGGRAPH 推进智能体与物理 AI 图形仿真技术",
+      "source": "NVIDIA Blog",
+      "url": "https://blogs.nvidia.com/blog/siggraph-news-2026",
+      "category": "算力芯片云",
+      "contentType": "",
+      "publishedDate": "2026-07-20",
+      "summary": "英伟达在 SIGGRAPH 展示面向内容创作、虚拟世界和物理 AI 的多项进展，包括通过 MCP 将 AI 智能体接入创意工具、Synthetic Video Detector NIM 微服务、Cosmos 3 Edge 开放世界模型，以及本地智能体运行方案。相关能力可支持场景检查、批量编辑、导出与流程验证，同时提升响应速度并加强敏感数据控制。",
+      "why": "这表明英伟达正将 GPU、工作站和开发工具扩展为连接创意软件、智能体与物理 AI 仿真的一体化平台。",
+      "impact": 82,
+      "novelty": 76,
+      "actionability": 79,
+      "urgency": "中",
+      "tags": [
+        "Agent",
+        "多模态",
+        "硬件",
+        "产品"
+      ],
+      "imageUrl": "https://blogs.nvidia.com/wp-content/uploads/2026/07/siggraph-featured-still-1920x1080-1.jpg",
+      "mediaAssets": {
+        "images": [
+          {
+            "url": "https://blogs.nvidia.com/wp-content/uploads/2026/07/SIGGRAPH-2026-Keynote-21-1680x945.jpg",
+            "alt": ""
+          },
+          {
+            "url": "https://blogs.nvidia.com/wp-content/uploads/2026/07/SIGGRAPH-2026-Keynote-14-1680x945.jpg",
+            "alt": ""
+          },
+          {
+            "url": "https://blogs.nvidia.com/wp-content/uploads/2026/07/mcp-main-feature-1680x948.jpg",
+            "alt": ""
+          },
+          {
+            "url": "https://blogs.nvidia.com/wp-content/uploads/2026/07/boris-fx-silhouette.png",
+            "alt": ""
+          }
+        ],
+        "videos": []
+      },
+      "body": "At this year’s SIGGRAPH conference, running through Thursday, July 23, in Los Angeles, attendees can discover how leading graphics research, neural rendering, simulation and AI are transforming how worlds are created and understood by people and machines.\n\nThe NVIDIA keynote , taking place today, July 20, at 3:45 p.m. PT, will feature NVIDIA AI research and engineering leaders Neil Ashton, Edward Liu and Ming-Yu Liu discussing neural rendering techniques, world models and simulation methods for AI, built by AI.\n\nRead on for the latest from the SIGGRAPH conference, with NVIDIA and partners showcasing:\n\nNVIDIA keynote recap\n\nModel Context Protocol connections bring agentic AI to content creation\n\nNew Synthetic Video Detector NIM microservice\n\nCosmos 3 Edge open world model for local physical AI\n\nNVIDIA NemoClaw on DGX Station with NVIDIA Agent Toolkit\n\nResearch breakthroughs for virtual worlds and physical AI\n\nIn SIGGRAPH Keynote, NVIDIA Leaders Outline Next Era of Graphics and Physical AI\n\nMing-Yu Liu, vice president of Cosmos Lab at NVIDIA, presents at SIGGRAPH 2026.\n\nNVIDIA AI research and engineering leaders took the stage at SIGGRAPH today to share the latest advances in neural rendering, world models and simulation. These technologies — which are changing the way digital worlds are created and used across every domain — can be applied to creative tools, industrial design, robotics and autonomous systems.\n\n“Creators and designers need tools powerful enough to expand their imagination, malleable enough to give them the freedom to shape ideas and precise enough to realize their vision exactly as intended,” said NVIDIA founder and CEO Jensen Huang in an introductory video. “Whether for games, cinema, robotics or factory digital twins, the goal is the same: to create virtual worlds that behave with the fidelity and realism of the physical world.”\n\nEdward Liu, director of applied deep learning research at NVIDIA, kicked off the presentation by showcasing 3D-guided neural rendering.\n\nHe shared how NVIDIA’s latest advancements in neural rendering address three key research challenges: preserving artistic intent, ensuring output is temporally stable across frames and rendering 4K content in real time.\n\n“Control in artistic direction is a really exciting research direction for us,” said Edward Liu. “Simulation defines the world, generation enriches its appearance and artists direct the outcome…AI extending graphics the same way programmable shaders and ray tracing have extended graphics before.”\n\nNeil Ashton, distinguished engineer at NVIDIA, covered innovation in AI physics with applications in weather forecasting, automotive aerodynamics, thermal design and more.\n\nIn climate and weather research, the NVIDIA Earth-2 family of open models is enabling scientists to boost their simulation resolutions to new levels with AI models trained on simulation data — while achieving accuracy equal or greater to traditional approaches.\n\nNeil Ashton, distinguished engineer at NVIDIA, presents about NVIDIA Earth-2 at SIGGRAPH 2026.\n\n“The challenge that we have is to translate the success of using these AI models in weather and climate into the world that we live in, to be able to design the planes and cars and data centers of the future,” Ashton said. “One of the things that NVIDIA is really focused on is helping to achieve that vision.”\n\nAshton shared how the latest model architectures developed by NVIDIA Research and its partners compress model checkpoints down to a couple hundred megabytes, a million-times compression that enables physically accurate visualizations within a second.\n\nMing-Yu Liu, vice president of Cosmos Lab at NVIDIA, shared the latest advancements in world models available through NVIDIA Cosmos , a world foundation model platform for accelerating the development of physical AI systems.\n\n“What makes a foundation model a foundation model is its capability to consume enormous amounts of diverse data,” he said. “We trained Cosmos with data for diverse physical tasks, including world understanding, prediction, simulation and action. We use one backbone to solve all the different tasks.”\n\nMing-Yu Liu walked through the mixture-of-transformers model architecture used to give NVIDIA Cosmos 3 global understanding. This capability enables physically accurate results that work across different embodiments — humanoid robots, grippers or self-driving cars.\n\n“Every embodiment speaks a different language,” he said. “Our solution is to build a common vocabulary.”\n\nNVIDIA Cosmos includes a family of open models in various sizes, supporting developers across a range of deployment use cases. Its newest addition, released today, is Cosmos 3 Edge , a 4-billion-parameter model built to run in real time, on device.\n\nMing-Yu Liu also announced Cosmos-Dreams, a collection of closed-loop simulators, with a colleague demonstrating a simulator built for autonomous vehicles that generates an entire world from a single frame, running on a single NVIDIA RTX PRO 6000 GPU .\n\nDevelopers can use Cosmos-Dreams to verify the accuracy of their models before deploying them in a real fleet — or use it to train models on AI-generated scenarios that are difficult to create in the real world, accelerating development while saving on operational costs.\n\nWatch the full keynote and read more about Cosmos 3 Edge .\n\nAI Agents Expand Creative Tools to Millions\n\nImage courtesy of Epic Games.\n\nLeading creative applications are opening Model Context Protocol (MCP) connections that let AI agents work inside the tools where scenes, shots, timelines, assets and edits come to life — while creators stay in control.\n\nFor more than two decades, NVIDIA technologies — from GPU-accelerated viewports and CUDA-powered effects to NVIDIA RTX PRO ray tracing, AI denoising, neural rendering and real-time simulation — have helped accelerate the DCC tools that artists, studios and developers use to build the world’s games, films, television shows and advertising content.\n\nMCP is opening the next chapter of accelerated creativity: applications aren’t just getting faster. They’re becoming agent-ready.\n\nFrom Acceleration to Action\n\nWith MCP-connected tools, an artist or technical director can ask an agent to inspect a scene for missing textures, flag inconsistent color management, prepare export variants, generate playblasts for dailies or validate a shot against pipeline rules, all while keeping creative decisions in human hands.\n\nThe same NVIDIA platform that accelerated viewports, rendering, simulation and AI effects can now power local agents, model inference and multi-application workflows on systems designed for professional creators.\n\nNVIDIA RTX PRO workstations, DGX Spark and DGX Station systems are designed to bring accelerated AI performance closer to artists, developers and studio pipelines. Running models and agents locally can help improve responsiveness, reduce reliance on external services and keep sensitive creative data in controlled environments.\n\nNVIDIA Agent Toolkit also supports MCP integration, including an MCP client for connecting to remote MCP servers and an MCP server for publishing tools to any MCP client.\n\nThe Creative Ecosystem Goes Agent-Ready\n\nAcross the creative ecosystem, creative applications and platforms are exposing MCP connections or MCP-ready workflows, giving AI agents more grounded access to real production context.\n\nAdobe is expanding its creative agent across Firefly, Express and Creative Cloud, powering AI Assistant experiences that enable creators to describe the outcome they want while the assistant orchestrates multistep workflows. Adobe is also bringing its pro-grade creative tools to third-party AI platforms through the Adobe connector, extending its creative capabilities wherever people create and work. For developers, Adobe provides the Adobe Express Developer MCP Server, enabling AI coding assistants to build Adobe Express add-ons using official documentation and application programming interfaces (APIs).\n\nhttps://blogs.nvidia.com/wp-content/uploads/2026/07/Firefly-Creative-Agentic-June-News-2.mp4\n\nAffinity by Canva has introduced an AI Connector for Claude that uses MCP to bring natural-language automation directly into Affinity. Designers can ask Claude to handle repetitive production tasks such as renaming layers and artboards, resizing and reformatting assets for multiple channels, applying bulk edits, optimizing vector paths and preparing files for delivery. Beyond individual tasks, Claude can also help users build reusable scripts and custom features tailored to their workflows, reducing production overhead and giving creative professionals more time to focus on design.\n\nhttps://blogs.nvidia.com/wp-content/uploads/2026/07/Affinity-by-Canva-MCP.mp4\n\nBlender offers a lightweight MCP server through Blender Lab, providing a natural-language interface to Blender ’s Python API, documentation and complex setups. For independent artists and studios, Blender offers a strong example of how open creative tools can become agent-accessible without changing the creative center of gravity.\n\nBoris FX Silhouette now includes an MCP server that lets AI assistants work directly inside your projects. Using Silhouette’s FX Scripting API as first-class MCP tools, assistants can inspect projects, build node trees, edit shapes and keyframes, and render frames. A new preferences panel simplifies setup by installing the MCP package, generating a ready-to-paste client configuration, and testing the connection. Interactive online mode connects to your active session, while offline mode runs headless instances for automation, batch processing, and large-scale workflows.\n\nFoundry Griptape natively supports MCP, providing AI orchestration specifically designed for professional VFX pipelines. This integration enables studios to securely manage multiple AI models and agents while maintaining the necessary traceability and creative control. By integrating with tools like Blender and Foundry Nuke, Griptape automates repetitive production tasks — such as cleanup, matte painting and quality control — all while ensuring artists remain in final command of the creative process.\n\nSideFX is bringing MCP support to Houdini 22 through its new APEX Script workflow. AI assistants can access a curated collection of APEX Script syntax, functions, documentation and examples, helping artists generate and refine code for procedural character rigs. SideFX’s initial implementation focuses on APEX Script and character rigging, while community-developed MCP servers offer broader ways for agents to interact with Houdini.\n\nhttps://blogs.nvidia.com/wp-content/uploads/2026/07/Houdini-22-MCP.mp4\n\nUnreal Engine recently announced the ability to connect AI clients to Unreal Editor through MCP, enabling AI workflows that can interact with editor capabilities through a standardized protocol. For game developers, virtual production teams and real-time artists, this opens the door to assistants that can reason over scenes, assets and project state.\n\nhttps://blogs.nvidia.com/wp-content/uploads/2026/07/Unreal-MCP.mp4\n\nSee how NVIDIA RTX PRO and DGX systems bring local AI agents closer to creative work at SIGGRAPH .\n\nNVIDIA AI for Media Helps Newsrooms Detect Synthetic Video\n\nEvery day, video brings the world’s biggest stories into view — from breaking news across continents, to events reshaping communities, to moments that unite people across the globe. In a news cycle that moves around the clock, trustworthy video is the medium through which people see what’s happening, understand why it matters and stay connected and up to date.\n\nFor that reason, public trust in video is more essential than ever. At SIGGRAPH, NVIDIA announced the Synthetic Video Detector NVIDIA NIM microservice , part of the NVIDIA AI for Media platform, to bring an AI-assisted detection signal into editorial and media workflows.\n\nThe NIM microservice analyzes video frame by frame to produce a classifier score of whether it contains synthetic content. Editorial teams can use that score to prioritize clips for review, flag or quarantine questionable footage, or escalate it for deeper analysis.\n\nRather than replacing established verification practices, the microservice provides another signal for time-sensitive decisions — helping teams move quickly while protecting editorial standards and ensuring public trust.\n\nSynthetic Video Detector remains effective after the compression, resizing, cropping and re-encoding steps common in newsroom and social-video workflows. In NVIDIA testing, the model’s accuracy reached up to 92% on uncompressed video, 87% at 15% compression and 82% at 50% compression.\n\nThe NIM microservice can process 1080p video in as little as 22 milliseconds on NVIDIA RTX systems and approximately 30 milliseconds on NVIDIA L40 GPUs.\n\nDeploy Detection Where Video Lives\n\nOrganizations can deploy the NIM microservice closer to where sensitive video is captured, stored or distributed, including in on-premises, edge, hybrid and approved air-gapped environments. This flexibility helps teams maintain control over video data, access and operations.\n\nPartner adoption is already helping move Synthetic Video Detector from model capability to deployable media infrastructure. Wowza is embedding the microservice through the Wowza Video Intelligence Framework , bringing real-time synthetic video detection into livestreaming workflows used across more than 35,000 deployments in over 170 countries.\n\nhttps://blogs.nvidia.com/wp-content/uploads/2026/07/synthetic-video-nim-demo.mp4\n\nThat scale matters because many of the organizations most exposed to synthetic media risk, including broadcasters, government agencies, financial institutions and critical infrastructure operators, also face strict requirements around data residency, security and operational control.\n\nBy pairing Synthetic Video Detector with a video infrastructure layer customers already use, Wowza can help make AI-assisted verification available closer to ingest and streaming operations, allowing teams to flag questionable video in real time while keeping sensitive footage inside their own environments.\n\nTry the NVIDIA Synthetic Video Detector NIM microservice .\n\nSee notice regarding software product information.\n\nNow Openly Available, NVIDIA Cosmos 3 Edge Brings Frontier World Models to Edge GPUs for Local Physical AI\n\nhttps://blogs.nvidia.com/wp-content/uploads/2026/07/cosmos-3-video.mp4\n\nPhysical AI systems rely on world models to perceive, reason over and predict the physical environment. But the real world is vast, unpredictable and always changing.\n\nWhether a robot navigating a warehouse or a camera network monitoring a factory floor, physical AI systems need to understand what’s happening now, reason about what may happen next and act quickly enough to have an impact. Until now, delivering such frontier AI at the edge has often meant trading model capability for deployment efficiency.\n\nNow available, NVIDIA Cosmos 3 Edge helps eliminate that tradeoff. The 4-billion-parameter omnimodel is optimized for memory-efficient deployment and high throughput on NVIDIA Jetson , NVIDIA RTX PRO and NVIDIA DGX systems, as well as GeForce RTX GPUs.\n\nExtending NVIDIA Cosmos 3, the compact world foundation model can understand and generate text, image, video, ambient sound and action. Its mixture-of-transformers architecture enables physically grounded, real-time vision analytics and robot action on device.\n\nCosmos 3 Edge delivers frontier physical AI at the edge — ranking No. 1 on VANTAGE-Bench for vision analytics success in its parameter class and enabling state-of-the-art robot learning through post-training.\n\nOn-Device Physical AI Across Robotics, Autonomous Vehicles and Smart Infrastructure\n\nDevelopers can post-train Cosmos 3 Edge on proprietary robot and sensor data using the NVIDIA DGX Station deskside AI supercomputer to build specialized world action models, then deploy them on NVIDIA Jetson Thor for real-time robot control policies including for manipulation or locomotion. Agile Robots , Doosan Robotics , Siemens and Skild AI are among the partners that are evaluating Cosmos 3 Edge for robotics workflows.\n\nFor autonomous vehicles, Cosmos 3 Edge supports road-scene understanding, traffic reasoning, object-intent prediction and policy-model distillation on resource-constrained hardware. The model could be used as a student backbone for automotive policy model distillation, including with NVIDIA Alpamayo vision language action models.\n\nFor smart infrastructure, Cosmos 3 Edge enables best-in-class throughput and accuracy with real-time inference on Jetson Thor for vision agents that reason across live video streams for traffic monitoring, public safety, logistics and industrial inspection. Developers can also run the 2-billion-parameter NVIDIA Nemotron -powered reasoning module independently on NVIDIA Jetson Orin 8GB. Centific , Vaidio and YUAN are evaluating Cosmos 3 Edge to accelerate vision agents running at the edge.\n\nCosmos Platform Now Openly Available\n\nCosmos 3 Edge is part of the broader NVIDIA Cosmos platform for developing physical AI world models . With Cosmos 3 available in Edge (4B), Nano (16B) and Super (64B) sizes, developers can choose the right model for each stage of development, from edge deployment to high-fidelity generation.\n\nCosmos 3 Edge, Cosmos 3 Nano and Cosmos 3 Super are available now on Hugging Face , with inference and post-training frameworks and recipes on GitHub .\n\nAI Agents Made Easy: Build and Run Personal AI Agents Locally on DGX Station With NVIDIA Agent Toolkit\n\nSuper agents have arrived on the desktop. NVIDIA DGX Station is the ultimate deskside supercomputer for the AI era, and with NVIDIA Agent Toolkit, setup takes just three steps, and the system can be running in roughly 30 minutes.\n\nOn DGX Station, NVIDIA Agent Toolkit brings together NVIDIA NemoClaw , the NVIDIA Nemotron 3 Ultra open model, NVIDIA Omniverse libraries as agent-accessible tools and skills, and a secure runtime in a single local system — no internet required. As workloads scale, developers can connect multiple systems together to serve concurrent users, more agents and bigger models.\n\nThis gives creatives and engineers the ability to own their own intelligence, with a system that comes ready to run locally. The full stack stack — model, agent, tools — provides a platform for creating and running domain-specific “super agents” that are customized with users’ own data and knowledge.\n\nThe open NVIDIA Agent Toolkit stack on DGX Station includes:\n\nNVIDIA NemoClaw , open blueprints for building custom autonomous agents, packaging the model, harness and runtime together as a starting point for teams building specialized, domain-specific agents.\n\nNVIDIA Nemotron 3 Ultra , a frontier 550-billion-parameter open model , is optimized to run on DGX Station GB300 systems and serves as the model layer that teams can customize for their own domains.\n\nNVIDIA Omniverse libraries extend agent skills into physics simulation and 3D asset workflows, giving creative and engineering professionals tools that go well beyond general-purpose agent capabilities.\n\nNVIDIA OpenShell , the open source secure runtime, keeps agents sandboxed and governed according to defined policies for how agents interact with tools, systems and data.\n\nNVIDIA GB300 Grace Blackwell Ultra Desktop Superchip delivers data-center-level performance from the desk on DGX Station, with up to 20 petaflops of FP4 AI compute and 748GB of coherent memory to run large models such as Nemotron Ultra.\n\nNVIDIA ConnectX-8 SuperNIC delivers up to 800GB/s of bandwidth in DGX Station, delivering extremely fast, efficient network connectivity, and supports linking up to two DGX Stations to further scale model capacity and performance.\n\nHarness Efficiency at Scale\n\nFor teams running agents at scale the economics shift fundamentally on DGX Station. Nemotron 3 Ultra, tuned for an open harness, delivers leading-edge performance without the per-token cost after the hardware purchase, so users build once and can run as much as they need.\n\nNVIDIA has announced a blueprint for integrating NVIDIA Omniverse libraries in Blender — giving NemoClaw agents callable RTX sensor simulation and physics tools to prepare 3D scenes for physical AI workflows.\n\nOn DGX Station, designers and engineers can run the core pieces of that workflow — frontier model, open harness, secure runtime, 3D tools — in one box, all connected and deployable through an open blueprint.\n\nFrontier models can orchestrate NemoClaw as a specialized sub-agent, delegating domain-specific work to an agent running locally on DGX Station, with direct access to Omniverse tools and Blender.\n\nLangChain tuned its Deep Agents harness for Nemotron 3 Ultra, giving designers and engineers a production-ready path to benchmark-leading agentic performance at a fraction of the cost.\n\nNous Research f ine-tuned Nemotron 3 Ultra for its Hermes Agent harness and adopted it for production workloads — a direct demonstration of the value of owning intelligence. Tuning the model for a developer’s stack enables agents that are both faster and more capable for specific domains. Hermes Agent has also added Blender to its Model Context Protocol catalog, letting teams activate Blender directly from their agent — a live example of a tool-using NemoClaw agent that can run on DGX Station.\n\nFor teams running OpenClaw , this stack extends what’s possible — bringing Nemotron 3 Ultra, Omniverse tools and local inference on DGX Station into an environment where OpenClaw’s persistent, long-running agents can act on them continuously.\n\nDevelop and Deploy Quickly With New Playbooks\n\nTwo new playbooks are available now to help developers build and run agents out of the box with NemoClaw and dual-node deployments.\n\n“ Connect Two DGX Stations for Distributed Workloads ” guides users on how to run powerful models with scalable performance connecting up to two DGX Station systems.\n\n“ Run NemoClaw With a Local LLM / On Dual DGX Station ” provides a walkthrough on how to set up NemoClaw on DGX Station, enabling out-of-the-box agents with frontier intelligence with Nemotron Ultra.\n\nNVIDIA DGX Station is built and available to order from ASUS , Dell Technologies , Exxact , GIGABYTE , HP , MSI and Supermicro .\n\nGet started with NVIDIA NemoClaw and Nemotron Ultra on DGX Station .\n\nNVIDIA Brings Graphics Research Breakthroughs to Simulation and Physical AI\n\nhttps://blogs.nvidia.com/wp-content/uploads/2026/07/MotionBricks.mp4\n\nAt SIGGRAPH this year, NVIDIA’s research isn’t just focused on creating worlds that look real — but that behave realistically and respond in real time.\n\nThat shift is the throughline across NVIDIA’s 21 accepted technical papers — becoming the foundation of real-time systems that generate virtual worlds and drive machine training in the real world.\n\nWhether the output is a game, film, robot or factory digital twin, the goal is the same: expand the canvas of creativity with AI-generated worlds that are grounded in 3D, governed by physics and directed by creators.\n\nhttps://blogs.nvidia.com/wp-content/uploads/2026/07/MotionBricks-Robot.mp4\n\nThe clearest proof is in MotionBricks : a real-time motion model — trained on more than 350,000 motion clips, running at game-engine speeds — that lets creators direct and connect character movements. The same model that drives the animated character on screen drives a Unitree G1 humanoid robot in the room, using computer graphics and simulation to accelerate physical AI development.\n\nGPC , a framework for training generative controllers on large-scale motion datasets, extends that idea. NVIDIA pretrains a single controller on large-scale human motion, giving it transferable motor skills that carry over to new tasks. Think of it as the start of a foundation model for motor control.\n\nhttps://blogs.nvidia.com/wp-content/uploads/2026/07/GPC-Demo.mp4\n\nTo build virtual worlds in which to test these movements, ArtiFixer turns messy real-world 3D captures into clean, complete virtual scenes. It also includes a new method for predicting photoreal global illumination straight from a scene’s geometry — without tracing a single ray.\n\nTo make those virtual worlds behave as they would in the real one, a new solver brings hard-to-simulate materials — such as snow, sand and elastic solids — to life inside the NVIDIA Newton physics engine.\n\nAnd to keep creators in control, the VideoNeuMat pipeline gives them reusable, relightable materials to pull out of generative video models, while the ARDY autoregressive diffusion model lets them steer 3D character motion in real time from a text prompt.\n\nThe papers linked above are openly available, with the code and models free to download. Learn more by joining NVIDIA at SIGGRAPH .",
+      "bodyTruncated": false,
+      "eventAggregation": {
+        "total": 1,
+        "groups": [
+          {
+            "key": "官方来源",
+            "tone": "#16130f",
+            "items": [
+              {
+                "source": "NVIDIA Blog",
+                "title": "英伟达在 SIGGRAPH 推进智能体与物理 AI 图形仿真技术",
+                "url": "https://blogs.nvidia.com/blog/siggraph-news-2026",
+                "note": "原始发布 / 公告。",
+                "text": "英伟达在 SIGGRAPH 推进智能体与物理 AI 图形仿真技术 —— 原始发布 / 公告。"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "recordId": "recvpEQu4WCeyg",
+      "title": "13 hands-on demos to build on Gemini Enterprise Agent Platform",
+      "titleCn": "Gemini Enterprise Agent Platform 推出 13 个实操演示",
+      "source": "Google Cloud AI Blog",
+      "url": "https://cloud.google.com/blog/products/ai-machine-learning/13-demos-on-gemini-enterprise-agent-platform",
+      "category": "算力芯片云",
+      "contentType": "",
+      "publishedDate": "2026-07-18",
+      "summary": "Google Cloud 发布 13 个基于代码优先 ADK 的演示，覆盖智能体构建、MCP 数据连接、动态 UI、人工审批、持久化运行及生产部署。Agents CLI 还可为主流编程智能体提供相关技能，通过自然语言完成脚手架生成、评估、部署和监控。",
+      "why": "这些演示提供了从原型开发到企业级部署的可复用架构与实践路径，可直接用于智能体项目落地。",
+      "impact": 82,
+      "novelty": 68,
+      "actionability": 95,
+      "urgency": "中",
+      "tags": [
+        "AI",
+        "Agent",
+        "LLM",
+        "产品"
+      ],
+      "imageUrl": "https://storage.googleapis.com/gweb-cloudblog-publish/images/13_demos.max-600x600.jpg",
+      "mediaAssets": {
+        "images": [],
+        "videos": []
+      },
+      "body": "Earlier this year, we introduced Gemini Enterprise Agent Platform , where you can build, scale, govern, and optimize agents. Today, we’re sharing 13 demos that walk you through what Agent Platform can do. Each one teaches a concept, a pattern, or an architecture you can put to work immediately.\n\nThe best part? You don't have to follow them step-by-step. Install Agents CLI into your favorite coding agent (Antigravity, Claude Code, Codex, whatever you use) and it instantly gets seven skills that make it an expert in ADK and Agent Platform. Describe what you want to build in plain English, and your coding agent scaffolds, evaluates, deploys, and monitors the agent for you. You’ll never have to leave your editor.\n\nLet’s dive in!\n\nBuild AI agents\n\nThese demos are all built on the code-first ADK. They start at the foundation and work up.\n\n1. Start here: build your first agent with ADK. The ADK Foundation codelab is your perfect on-ramp. You set up your environment, define a basic conversational agent powered by Gemini, configure its settings, and test it through both a command-line interface and a web UI. If you've never touched ADK before, do this one first.\n\n2. Build an event-driven approval agent with human-in-the-loop. The ambient expense agent codelab is the most complete \"Agent Platform in action\" demo in the set. You build a corporate expense agent using ADK 2.0's graph-based workflow API. Expenses under a threshold get auto-approved in plain Python. Anything above goes through a pre-LLM security screen (PII redaction, prompt-injection defense), passes a Gemini compliance analysis, and pauses for a human-in-the-loop review before anything is finalized. You mount it behind FastAPI, trigger it from Pub/Sub events, and grade it with an LLM-as-judge eval. Keep this agent in mind – it comes back in the Scale and Govern sections.\n\n3. Connect agents to your data with the Model Context Protocol. The MCP codelab shows you how to build reusable MCP tools that let Gemini query BigQuery, search files, and call APIs. MCP is an open protocol, so the tools you build work across different vendors and frameworks.\n\n4. Build a dynamic frontend with Agent-to-UI (A2UI). The best user experiences are highly visual. The A2UI codelab shows you how to build an agent that renders real interface components (layouts, charts, interactive menus) that update dynamically in real time as the conversation flows. The agent literally assembles the UI the user needs, on the fly.\n\nScale AI agents\n\nA prototype on your laptop is one thing. Handling production traffic, memory, and orchestration is what comes next.\n\n5. Deploy a stateful data science agent to Agent Runtime (formerly known as Agent Engine). The Stateful Data Science Agent codelab walks you through building a BigQuery agent that remembers user preferences across sessions via Memory Bank, then deploying it directly to Agent Runtime. All of the underlying infrastructure, scaling, and session management are handled for you automatically.\n\n6. Build long-running agents that pause, resume, and never lose context. Building an agent that responds to a single prompt is easy, but real enterprise workflows often take days or weeks to complete. This tutorial walks through building agents that run reliably for weeks. You'll learn three architectural patterns: durable state machines, event-driven idle time handling, and checkpoint-and-resume with persistent sessions. The example is an onboarding coordinator agent that survives container restarts and picks up exactly where it left off.\n\n7. Deploy an ambient expense agent to Agent Runtime with the Agents CLI. Remember the expense agent from the Build section? The Deploy to Agent Runtime codelab picks up that agent and takes it to production. You scaffold your deployment config with the Agents CLI, preview it with a dry run, then deploy it live. Cloud Trace, Cloud Logging, and BigQuery Agent Analytics wire in automatically, and the agent auto-registers in Agent Registry, so it’s discoverable across your org the moment it goes live.\n\n8. Give your production agent a real front end. The frontend codelab is where everything comes together. You build a manager dashboard on Cloud Run, connect it to Agent Runtime through an OIDC-authenticated Pub/Sub pipeline, and give managers the ability to resume paused human-in-the-loop sessions from the browser. It ties the expense agent and the deployment together into a complete end-to-end enterprise architecture.\n\nGovern AI agents\n\nScaling agents across an organization requires a system of built-in guardrails to manage access, track endpoints, and filter traffic.\n\n9. Secure your agent's lifecycle from the first commit. The Secure Agentic Coding codelab shows you how to build a shopping assistant test-first with test-driven development (TDD), wire in a custom STRIDE threat model, set up a Semgrep pre-commit hook, and configure a PreToolUse gate that blocks risky actions before execution. You deliberately plant a hardcoded API key, and the agent catches and fixes it the moment the hook fires.\n\n10. Control agent access with Agent Gateway. The Agent Gateway codelab covers runtime governance. You deploy a multi-tool ADK agent on Agent Runtime that calls MCP servers on Cloud Run through Agent Gateway. Each agent gets a unique identity with end-to-end mTLS. Every outbound call goes through IAP authentication and IAM authorization. On top of that, Model Armor inspects all content for prompt injection and data leakage. It’s a complete, production-grade governance stack in one demo.\n\nOptimize AI agents\n\nShipping an agent is the start. The hard part is knowing whether your next prompt tweak actually makes it better or quietly breaks ten other things. Agent Platform gives you the tools to close that loop.\n\n11. Drive the agent quality flywheel from your coding agent. You tweaked a prompt. It looks better on three examples, but did you just break ten others? This tutorial introduces a five-stage evaluation flywheel you run directly from your coding agent: prepare data (from OTel traces, hand-crafted cases, or synthesized scenarios), run inference, grade with Google's adaptive AutoRaters, analyze failure clusters, and execute targeted optimizations. The AutoRaters are built on the same principles Google uses to evaluate its own models and first-party agents, developed in partnership with DeepMind. Describe what you want measured in plain language. Your coding agent picks up the rest.\n\n12. Build a cross-language multi-agent pipeline with A2A. In a large enterprise, different teams will inevitably build agents in different languages. This tutorial walks through a contract compliance pipeline where a Python-based agent extracts terms using Gemini and a Go-based agent validates them against corporate policy. The two services connect via the Agent-to-Agent (A2A) protocol and are orchestrated by ADK. You'll learn how RemoteA2aAgent turns any A2A-compliant service into a local sub-agent with a few lines of code.\n\n13. Scale agents across frameworks with CrewAI, LangGraph, A2A, and ADK. Most production teams don't standardize on one agent framework. The codelab shows you how to orchestrate across all of them: an ADK control room delegates planning to a LangGraph state machine, which dispatches tasks to a CrewAI execution crew, all connected via the A2A protocol. If one step fails, the control room re-plans automatically.\n\nGet started\n\nIf you want to see the full agent development lifecycle in under 10 minutes, watch this walkthrough . Otherwise, install Agents CLI , open up your coding agent, and start building today.",
+      "bodyTruncated": false,
+      "eventAggregation": {
+        "total": 1,
+        "groups": [
+          {
+            "key": "官方来源",
+            "tone": "#16130f",
+            "items": [
+              {
+                "source": "Google Cloud AI Blog",
+                "title": "Gemini Enterprise Agent Platform 推出 13 个实操演示",
+                "url": "https://cloud.google.com/blog/products/ai-machine-learning/13-demos-on-gemini-enterprise-agent-platform",
+                "note": "原始发布 / 公告。",
+                "text": "Gemini Enterprise Agent Platform 推出 13 个实操演示 —— 原始发布 / 公告。"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "recordId": "recvpCjm0sgwyR",
+      "title": "Knowledge Cascade: Reverse Knowledge Distillation on Nonparametric Multivariate Functional Estimation",
+      "titleCn": "Knowledge Cascade：面向非参数多元函数估计的反向知识蒸馏",
+      "source": "JMLR",
+      "url": "http://jmlr.org/papers/v27/23-0359.html",
+      "category": "技术研究开源",
+      "contentType": "论文",
+      "publishedDate": "2026-07-17",
+      "summary": "论文提出反向知识蒸馏框架 Knowledge Cascade，利用小型、低成本学生模型的信息，通过统计缩放规律指导更复杂教师模型的构建。该方法在平滑样条、核密度估计和深度学习超参数迁移中显著降低计算成本，同时保持理论保证和较强统计性能。",
+      "why": "该研究将知识蒸馏从教师到学生的传统方向反转，为教师模型构建本身成为计算瓶颈的场景提供了有理论依据的降本路径。",
+      "impact": 78,
+      "novelty": 88,
+      "actionability": 68,
+      "urgency": "中",
+      "tags": [
+        "AI",
+        "开源",
+        "其他"
+      ],
+      "imageUrl": "",
+      "mediaAssets": {
+        "images": [],
+        "videos": []
+      },
+      "body": "As machine learning models and datasets continue to grow, developing complex models has become increasingly computationally demanding. Knowledge distillation reduces deployment cost by compressing a large, well-trained teacher model into a compact student model, but it does not address settings where constructing the teacher itself is the bottleneck. Motivated by this challenge, we introduce Knowledge Cascade, a reverse knowledge distillation framework that uses information from a small, inexpensive student model to guide the development of a more complex teacher model. Although this direction is counterintuitive because the teacher typically has greater representational capacity, we show that student-to-teacher transfer can be principled when supported by statistical scaling relationships. We first develop Knowledge Cascade for nonparametric multivariate functional estimation in reproducing kernel Hilbert spaces via smoothing splines, where selecting multiple smoothing parameters is a major computational bottleneck. Knowledge Cascade transfers student-selected smoothing parameters to the full-sample regime through asymptotic scaling laws, substantially reducing computational cost for high-dimensional and large-scale datasets while retaining theoretical guarantees. Beyond smoothing splines, we illustrate the same principle through kernel density estimation and deep learning hyperparameter transfer. Simulations and real-data experiments show that Knowledge Cascade achieves substantial computational savings while maintaining strong statistical performance, and can sometimes outperform the corresponding full-sample procedure.",
+      "bodyTruncated": false,
+      "eventAggregation": {
+        "total": 1,
+        "groups": [
+          {
+            "key": "官方来源",
+            "tone": "#16130f",
+            "items": [
+              {
+                "source": "JMLR",
+                "title": "Knowledge Cascade：面向非参数多元函数估计的反向知识蒸馏",
+                "url": "http://jmlr.org/papers/v27/23-0359.html",
+                "note": "原始发布 / 公告。",
+                "text": "Knowledge Cascade：面向非参数多元函数估计的反向知识蒸馏 —— 原始发布 / 公告。"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "recordId": "recvpCjm0sPEfo",
+      "title": "Boosted Control Functions: Distribution Generalization and Invariance in Confounded Models",
+      "titleCn": "增强控制函数：混杂模型中的分布泛化与不变性",
+      "source": "JMLR",
+      "url": "http://jmlr.org/papers/v27/24-2207.html",
+      "category": "技术研究开源",
+      "contentType": "论文",
+      "publishedDate": "2026-07-17",
+      "summary": "研究提出增强控制函数（BCF）及更强的不变性定义，使存在隐藏混杂、非线性和不可识别结构函数时仍可实现分布泛化，并证明其在分布偏移下具有最坏情形最优性。作者还提出非参数估计算法 ControlTwicing，并在合成及真实数据集上与稳健方法和经验风险最小化方法进行比较。",
+      "why": "该工作将计量经济学的联立方程模型引入机器学习分布泛化，为隐藏混杂下的稳健预测提供了可识别目标、理论保证和实现算法。",
+      "impact": 78,
+      "novelty": 88,
+      "actionability": 66,
+      "urgency": "低",
+      "tags": [
+        "AI",
+        "其他"
+      ],
+      "imageUrl": "",
+      "mediaAssets": {
+        "images": [],
+        "videos": []
+      },
+      "body": "Modern machine learning methods and the availability of large-scale data have significantly advanced our ability to predict target quantities from large sets of covariates. However, these methods often struggle under distributional shifts, particularly in the presence of hidden confounding. While the impact of hidden confounding is well-studied in causal effect estimation, e.g., instrumental variables, its implications for prediction tasks under shifting distributions remain underexplored. This work addresses this gap by introducing a strong notion of invariance that, unlike existing weaker notions, allows for distribution generalization even in the presence of nonlinear, non-identifiable structural functions. Central to this framework is the Boosted Control Function (BCF), a novel, identifiable target of inference that satisfies the proposed strong invariance notion and is provably worst-case optimal under distributional shifts. The theoretical foundation of our work lies in Simultaneous Equation Models for Distribution Generalization (SIMDGs), which bridge machine learning with econometrics by describing data-generating processes under distributional shifts. To put these insights into practice, we propose the ControlTwicing algorithm to estimate the BCF using nonparametric machine-learning techniques and study its generalization performance on synthetic and real-world datasets compared to robust and empirical risk minimization approaches.",
+      "bodyTruncated": false,
+      "eventAggregation": {
+        "total": 1,
+        "groups": [
+          {
+            "key": "官方来源",
+            "tone": "#16130f",
+            "items": [
+              {
+                "source": "JMLR",
+                "title": "增强控制函数：混杂模型中的分布泛化与不变性",
+                "url": "http://jmlr.org/papers/v27/24-2207.html",
+                "note": "原始发布 / 公告。",
+                "text": "增强控制函数：混杂模型中的分布泛化与不变性 —— 原始发布 / 公告。"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "recordId": "recvpCjm0spLEU",
+      "title": "Transformers Can Overcome the Curse of Dimensionality: A Theoretical Study from an Approximation Perspective",
+      "titleCn": "Transformer可克服维数灾难：一项逼近理论研究",
+      "source": "JMLR",
+      "url": "http://jmlr.org/papers/v27/25-1214.html",
+      "category": "技术研究开源",
+      "contentType": "论文",
+      "publishedDate": "2026-07-17",
+      "summary": "论文从函数逼近视角证明，由单头单层自注意力与若干前馈层构成的Transformer能够逼近Hölder连续函数类并克服维数灾难。在特定激活函数下，实现误差ε仅需对数级前馈层数，允许其他激活函数时还可将层宽降至常数。",
+      "why": "该研究基于Kolmogorov-Arnold叠加定理给出了更直观的Transformer表达能力证明，并提供了将前馈网络逼近结果迁移至Transformer研究的方法。",
+      "impact": 78,
+      "novelty": 84,
+      "actionability": 48,
+      "urgency": "低",
+      "tags": [
+        "AI",
+        "开源",
+        "其他"
+      ],
+      "imageUrl": "",
+      "mediaAssets": {
+        "images": [],
+        "videos": []
+      },
+      "body": "The Transformer model is widely used in various application areas of machine learning, such as natural language processing. This paper investigates the approximation of the Hölder continuous function class $\\mathcal{H}_{Q}^{\\beta}\\left([0,1]^{d\\times n},\\mathbb{R}^{d\\times n}\\right)$ by Transformers and constructs several Transformers that can overcome the curse of dimensionality. These Transformers consist of one self-attention layer with one head and the softmax function as the activation function, along with several feedforward layers. For example, to achieve an approximation accuracy of $\\epsilon$, if the activation functions of the feedforward layers in the Transformer are ReLU and floor, only $\\mathcal{O}\\left(\\log\\frac{1}{\\epsilon}\\right)$ layers of feedforward layers are needed, with widths of these layers not exceeding $\\mathcal{O}\\left(\\frac{1}{\\epsilon^{2/\\beta}}\\log\\frac{1}{\\epsilon}\\right)$. If other activation functions are allowed in the feedforward layers, the width of the feedforward layers can be further reduced to a constant. These results demonstrate that Transformers have a strong expressive capability. The construction in this paper is based on the Kolmogorov-Arnold Superposition Theorem and does not require the concept of contextual mapping, hence our proof is more intuitively clear compared to previous Transformer approximation works. Additionally, the translation technique proposed in this paper helps to apply the previous approximation results of feedforward neural networks to Transformer research.",
+      "bodyTruncated": false,
+      "eventAggregation": {
+        "total": 1,
+        "groups": [
+          {
+            "key": "官方来源",
+            "tone": "#16130f",
+            "items": [
+              {
+                "source": "JMLR",
+                "title": "Transformer可克服维数灾难：一项逼近理论研究",
+                "url": "http://jmlr.org/papers/v27/25-1214.html",
+                "note": "原始发布 / 公告。",
+                "text": "Transformer可克服维数灾难：一项逼近理论研究 —— 原始发布 / 公告。"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "recordId": "recvpYFWSkcezQ",
+      "title": "Rater State Bias in RLHF Preference Data: An Audit Framework",
+      "titleCn": "RLHF 偏好数据中的标注者状态偏差：审计框架",
+      "source": "arXiv cs.AI",
+      "url": "https://arxiv.org/abs/2607.16195",
+      "category": "技术研究开源",
+      "contentType": "论文",
+      "publishedDate": "2026-07-21",
+      "summary": "论文提出，压力或痛苦等标注者状态可能使偏好判断随时间发生系统性偏移，并通过聚合、奖励建模和策略优化进入 RLHF 模型。作者给出相关概念、五项可证伪预测、效应量阈值及可用于公开指令微调模型的审计与试点方案。",
+      "why": "该研究将标注者状态识别为区别于普通分歧和随机噪声的结构化偏差来源，为审计 RLHF 数据与奖励信号提供了可检验方法。",
+      "impact": 78,
+      "novelty": 82,
+      "actionability": 74,
+      "urgency": "中",
+      "tags": [
+        "AI",
+        "LLM",
+        "监管",
+        "其他"
+      ],
+      "imageUrl": "https://arxiv.org/static/browse/0.3.4/images/arxiv-logo-fb.png",
+      "mediaAssets": {
+        "images": [],
+        "videos": []
+      },
+      "body": "arXiv:2607.16195v1 Announce Type: new Abstract: We identify a structured confound in Reinforcement Learning from Human Feedback (RLHF). Pairwise preference labels are intended to reflect the compared outputs, but they may also reflect the rater's state during annotation. Under sustained stressful or distressing conditions, raters' preferences may shift over time. As a result, preference data can encode rater state alongside judgments about response quality. These shifts differ from ordinary disagreement or random label noise. They are state dependent, can be shared across annotators working under similar conditions, and can propagate through reward modeling and policy optimization. We therefore propose rater state shift as a plausible and testable source of structured bias in RLHF preference data. This paper develops a hypothesis and an audit framework for studying this source of bias. We define rater state shift, rater state confound, and correlated rater state bias. We also define survival level emotional authenticity as a measurable response pattern using lexical, pragmatic, discourse, and safety related features. We analyze how correlated rater state bias can survive aggregation and enter learned reward signals. We derive five falsifiable predictions and effect size thresholds for an initial audit. Finally, we present an audit protocol and pilot study plan that can be applied to publicly available instruction tuned models. We do not infer the training history of any specific deployed model. Our goal is to isolate a plausible and testable source of structured bias in RLHF preference data.",
+      "bodyTruncated": false,
+      "eventAggregation": {
+        "total": 1,
+        "groups": [
+          {
+            "key": "官方来源",
+            "tone": "#16130f",
+            "items": [
+              {
+                "source": "arXiv cs.AI",
+                "title": "RLHF 偏好数据中的标注者状态偏差：审计框架",
+                "url": "https://arxiv.org/abs/2607.16195",
+                "note": "原始发布 / 公告。",
+                "text": "RLHF 偏好数据中的标注者状态偏差：审计框架 —— 原始发布 / 公告。"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "recordId": "recvpYFWSk2gP0",
+      "title": "Some Large Language Models Exhibit Consistent Risk Attitudes",
+      "titleCn": "部分大语言模型表现出一致的风险态度",
+      "source": "arXiv cs.AI",
+      "url": "https://arxiv.org/abs/2607.16197",
+      "category": "技术研究开源",
+      "contentType": "论文",
+      "publishedDate": "2026-07-21",
+      "summary": "研究通过空间导航、临床分诊和金融配置任务，对6个代表性大语言模型及100名人类参与者进行测试，并量化其风险敏感性与风险态度偏差。结果显示，多数受测模型在单一任务内具有稳定性，在不同领域间保持风险倾向排序，且风险态度分布比人类更集中。",
+      "why": "该研究将风险态度识别为大语言模型稳定但此前未被刻画的行为维度，为高风险开放式决策中的评估与对齐提供了基础。",
+      "impact": 78,
+      "novelty": 82,
+      "actionability": 62,
+      "urgency": "中",
+      "tags": [
+        "AI",
+        "LLM",
+        "推理",
+        "开源"
+      ],
+      "imageUrl": "",
+      "mediaAssets": {
+        "images": [
+          {
+            "url": "https://arxiv.org/html/2607.16197v1/ResultsFigures_Main/OverallFramework.png",
+            "alt": "Figure 1: Framework for isolating and measuring risk attitude. Agent behavior under uncertainty is decomposed into a sequence of transformations from observations ( O t O_{t} ) to factual belief ( B F B_{F} ), contextual belief ( B C B_{C} ), and categorical risk decision ( R D R_{D} ). By isolating the mapping from contextual belief to decision ( B C → R D B_{C}\\rightarrow R_{D} ), the framework separates risk perception from action, enabling direct measurement of risk attitude independent of factual accuracy or belief calibration."
+          },
+          {
+            "url": "https://arxiv.org/html/2607.16197v1/ResultsFigures_Main/ExperimentProcedure.png",
+            "alt": "Figure 2: Cross-domain experimental design for measuring risk attitude. Three structurally distinct decision-making tasks are constructed to share a common analytical structure while differing in domain semantics: drone navigation control (DNC), clinical triage decision (CTD), and financial investment portfolio (FIP). In each task, agents receive sequential observations under uncertainty, report a contextual risk belief ( B C B_{C} ), and make a categorical risk decision ( R D R_{D} ). This design enables consistent measurement of the belief-to-decision mapping across domains, allowing comparison of intra-task consistency and cross-domain stability of risk attitudes."
+          },
+          {
+            "url": "https://arxiv.org/html/2607.16197v1/x1.png",
+            "alt": "Figure 3: Intra-task convergence of contextual belief and risk decision across models and tasks. Each panel shows repeated responses ( N = 30 N=30 per model) under an identical task condition, with the horizontal axis denoting contextual risk belief ( B C B_{C} ) and the vertical axis denoting risk decision ( R D R_{D} ). Columns correspond to three representative conditions with increasing task risk (low, moderate, and high), and rows correspond to the three task domains: drone navigation control (DNC), clinical triage decision (CTD), and financial investment portfolio (FIP). All trials are conducted in a zero-shot setting with model memory reset between trials. Across most models and conditions, repeated trials form compact clusters, indicating convergence. Notable exceptions include Grok 4 (decision divergence) and Qwen3-Max (belief variability in DNC)."
+          }
+        ],
+        "videos": []
+      },
+      "body": "arXiv:2607.16197v1 Announce Type: new Abstract: As artificial intelligence systems are deployed in open-ended, high-stakes settings, a critical dimension remains unmeasured: how perceived risk is translated into action. We test whether large language models (LLMs) exhibit systematic and consistent risk attitudes under uncertainty. We introduce a cross-domain framework that decouples contextual risk belief from categorical decision, and apply it to six representative LLMs and 100 human participants across spatial navigation, clinical triage, and financial allocation tasks. Using regression models, we extract each agents belief-to-decision mapping and quantify risk sensitivity and risk attitude bias. We find that most tested LLMs exhibit (i) robust intra-task consistency, indicating stable mappings from contextual belief to risk decision within a fixed task domain; (ii) cross-domain rank-order stability, preserving relative risk posture across tasks; and (iii) a convergence toward a restricted risk-attitude distribution relative to the broader human baseline. These results reveal risk attitude as a stable and previously uncharacterized dimension of LLM behavior, establishing a foundation for evaluating and aligning AI systems in open-ended decision-making and motivating further investigation into the origins of these intrinsic behavioral dispositions.",
+      "bodyTruncated": false,
+      "eventAggregation": {
+        "total": 1,
+        "groups": [
+          {
+            "key": "官方来源",
+            "tone": "#16130f",
+            "items": [
+              {
+                "source": "arXiv cs.AI",
+                "title": "部分大语言模型表现出一致的风险态度",
+                "url": "https://arxiv.org/abs/2607.16197",
+                "note": "原始发布 / 公告。",
+                "text": "部分大语言模型表现出一致的风险态度 —— 原始发布 / 公告。"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "recordId": "recvpGpzwpQRH2",
+      "title": "Databricks hits $188B valuation, extending its run as AI’s favorite second act",
+      "titleCn": "Databricks估值达1880亿美元，加速向AI公司转型",
+      "source": "TechCrunch AI",
+      "url": "https://techcrunch.com/2026/07/17/databricks-hits-188b-valuation-extending-its-run-as-ais-favorite-second-act",
+      "category": "创业融资并购",
+      "contentType": "",
+      "publishedDate": "2026-07-18",
+      "summary": "Databricks通过重塑品牌定位成为一家AI公司，估值已达到1880亿美元。该公司还发布了关于开放权重AI模型在编程场景中节省成本的研究。",
+      "why": "高估值与开放权重模型的成本研究体现了资本市场对Databricks AI转型及其商业潜力的认可。",
+      "impact": 78,
+      "novelty": 55,
+      "actionability": 48,
+      "urgency": "中",
+      "tags": [
+        "AI",
+        "开源",
+        "融资"
+      ],
+      "imageUrl": "https://techcrunch.com/wp-content/uploads/2026/04/dollar-signs-data-center.png?w=1024",
+      "mediaAssets": {
+        "images": [],
+        "videos": []
+      },
+      "body": "Databricks has remade its image into an AI company and has published research on the cost savings of open weight AI models for coding.",
+      "bodyTruncated": false,
+      "eventAggregation": {
+        "total": 1,
+        "groups": [
+          {
+            "key": "官方来源",
+            "tone": "#16130f",
+            "items": [
+              {
+                "source": "TechCrunch AI",
+                "title": "Databricks估值达1880亿美元，加速向AI公司转型",
+                "url": "https://techcrunch.com/2026/07/17/databricks-hits-188b-valuation-extending-its-run-as-ais-favorite-second-act",
+                "note": "原始发布 / 公告。",
+                "text": "Databricks估值达1880亿美元，加速向AI公司转型 —— 原始发布 / 公告。"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "recordId": "recvpCjm0sslYv",
+      "title": "DCatalyst: A Unified Accelerated Framework for Decentralized Optimization",
+      "titleCn": "DCatalyst：去中心化优化的统一加速框架",
+      "source": "JMLR",
+      "url": "http://jmlr.org/papers/v27/25-0185.html",
+      "category": "技术研究开源",
+      "contentType": "论文",
+      "publishedDate": "2026-07-17",
+      "summary": "DCatalyst以不精确、动量加速的近端外循环封装现有去中心化算法，在多类算法和问题上实现近乎最优的通信与计算复杂度。其提出的不精确估计序列可同时处理共识误差和局部子问题的非精确解。",
+      "why": "该框架以黑盒即插即用方式为此前缺少加速方法的去中心化复合优化问题提供了统一加速路径。",
+      "impact": 76,
+      "novelty": 82,
+      "actionability": 65,
+      "urgency": "低",
+      "tags": [
+        "AI",
+        "开源",
+        "其他"
+      ],
+      "imageUrl": "",
+      "mediaAssets": {
+        "images": [],
+        "videos": []
+      },
+      "body": "We study decentralized optimization over a network of agents, modeled as an undirected graph and operating without a central server. The objective is to minimize a composite function $f+r$, where $f$ is a (strongly) convex function representing the average of the agents' losses, and $r$ is a convex, extended-value function (regularizer).\n\nWe introduce DCatalyst, a unified black-box framework that injects Nesterov-type acceleration into decentralized optimization algorithms. At its core, DCatalyst is an inexact, momentum-accelerated proximal scheme (outer loop) that seamlessly wraps around a given decentralized method (inner loop). We show that DCatalyst attains optimal (up to logarithmic factors) communication and computational complexity across a broad family of decentralized algorithms and problem instances. In particular, it delivers accelerated rates for problem classes that previously lacked accelerated decentralized methods, thereby broadening the effectiveness of decentralized methods.\n\nOn the technical side, our framework introduces inexact estimating sequences--an extension of Nesterov's classical estimating sequences, tailored to decentralized, composite optimization. This construction systematically accommodates consensus errors and inexact solutions of local subproblems, addressing challenges that existing estimating-sequence-based analyses cannot handle while retaining a black-box, plug-and-play character.",
+      "bodyTruncated": false,
+      "eventAggregation": {
+        "total": 1,
+        "groups": [
+          {
+            "key": "官方来源",
+            "tone": "#16130f",
+            "items": [
+              {
+                "source": "JMLR",
+                "title": "DCatalyst：去中心化优化的统一加速框架",
+                "url": "http://jmlr.org/papers/v27/25-0185.html",
+                "note": "原始发布 / 公告。",
+                "text": "DCatalyst：去中心化优化的统一加速框架 —— 原始发布 / 公告。"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "recordId": "recvpYFWSkGnuv",
+      "title": "Democratizing AI with Small Language Models: Structured Benchmarking and Parameter-Efficient Fine-Tuning for Local Deployment",
+      "titleCn": "小语言模型本地部署：结构化基准测试与参数高效微调",
+      "source": "arXiv cs.AI",
+      "url": "https://arxiv.org/abs/2607.16202",
+      "category": "技术研究开源",
+      "contentType": "论文",
+      "publishedDate": "2026-07-21",
+      "summary": "研究在一个含1085个样本、覆盖16个主题的基准上评测了9个135M至3B参数的开放权重模型，并使用4比特量化和DoRA/LoRA适配器进行低成本微调。Qwen Coder 3B基础准确率最高，达75.67%，微调后在留出集上提升26.85个百分点，表明部分3B以下模型可胜任结构化垂直任务的本地专家。",
+      "why": "该研究提供了在普通机构可承受的硬件与治理约束下筛选、审计和专门化小模型的可复用路径。",
+      "impact": 76,
+      "novelty": 68,
+      "actionability": 88,
+      "urgency": "中",
+      "tags": [
+        "LLM",
+        "开源",
+        "硬件",
+        "推理"
+      ],
+      "imageUrl": "",
+      "mediaAssets": {
+        "images": [
+          {
+            "url": "https://arxiv.org/html/2607.16202v1/figures/F01_accuracy_leaderboard.png",
+            "alt": "Figure 1: Overall accuracy ranking. The separation between the leading Qwen-family models and the lower-capacity tier is explicit even under a strict output-validity scoring rule."
+          },
+          {
+            "url": "https://arxiv.org/html/2607.16202v1/figures/F02_topic_accuracy_heatmap.png",
+            "alt": "Figure 2: Model-by-topic accuracy heatmap. The row-wise and column-wise structure makes capability anisotropy explicit: strong global models still have concentrated weaknesses, and lower-ranked models occasionally remain competitive on selected domains."
+          },
+          {
+            "url": "https://arxiv.org/html/2607.16202v1/figures/F05_question_difficulty.png",
+            "alt": "Figure 3: Question difficulty distribution and topic-conditioned hardness. Difficulty is defined from the fraction of models that answer an item correctly, making the histogram and topic boxplots direct summaries of collective failure structure."
+          }
+        ],
+        "videos": []
+      },
+      "body": "arXiv:2607.16202v1 Announce Type: new Abstract: AI democratization is not primarily a question of matching frontier-scale generality; it is a question of whether capable models can be selected, audited, and specialized under hardware and governance constraints that ordinary institutions can actually satisfy. This paper studies that problem through a controlled evaluation of nine open-weight language models between 135M and 3B parameters on a 1,085-example, 16-topic multiple-choice benchmark designed for structured local deployment. The benchmark emphasizes symbolic precision, constrained formatting, extraction, and short-horizon semantic decision making under a strict one-letter output protocol. A shared parameter-efficient fine-tuning pipeline then adapts a subset of models using 4-bit NF4 quantization with DoRA/LoRA-style adapters on an NVIDIA L4-class budget. In base evaluation, Qwen Coder 3B leads at 75.67% strict accuracy, followed by Qwen2.5 1.5B at 67.10%, Qwen3.5 2B at 64.98%, and Granite 3.3 2B at 64.61%. On the shared 108-example held-out fine-tuning split, adaptation improves Qwen Coder 3B by +26.85 points, SmolLM2 1.7B by +25.92, Qwen2.5 1.5B by +19.44, SmolLM2 360M by +10.18, and SmolLM2 135M by +5.55. Across ranking, topic-level heterogeneity, difficulty strata, failure composition, efficiency frontiers, and topic-conditioned transfer, the same conclusion recurs: a disciplined workflow of benchmark construction, cross-model evaluation, and low-cost specialization already makes a subset of sub-3B models viable as local experts for structured niche workloads.",
+      "bodyTruncated": false,
+      "eventAggregation": {
+        "total": 1,
+        "groups": [
+          {
+            "key": "官方来源",
+            "tone": "#16130f",
+            "items": [
+              {
+                "source": "arXiv cs.AI",
+                "title": "小语言模型本地部署：结构化基准测试与参数高效微调",
+                "url": "https://arxiv.org/abs/2607.16202",
+                "note": "原始发布 / 公告。",
+                "text": "小语言模型本地部署：结构化基准测试与参数高效微调 —— 原始发布 / 公告。"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "recordId": "recvpCjm0saYDu",
+      "title": "Do We Need to Penalize Variance of Losses for Learning with Label Noise?",
+      "titleCn": "标签噪声学习需要惩罚损失方差吗？",
+      "source": "JMLR",
+      "url": "http://jmlr.org/papers/v27/23-1102.html",
+      "category": "技术研究开源",
+      "contentType": "论文",
+      "publishedDate": "2026-07-17",
+      "summary": "研究发现，与常规思路相反，标签噪声学习应鼓励较大的损失方差，以增强记忆效应并降低错误标签的危害。相应正则化项可接入多种现有算法，并在合成及真实数据集上提升基线模型的泛化能力。",
+      "why": "该研究提出一种反直觉且易于集成的正则化方法，为提升噪声标签下的模型泛化提供了新路径。",
+      "impact": 72,
+      "novelty": 84,
+      "actionability": 78,
+      "urgency": "低",
+      "tags": [
+        "AI",
+        "开源"
+      ],
+      "imageUrl": "",
+      "mediaAssets": {
+        "images": [],
+        "videos": []
+      },
+      "body": "Statistically consistent algorithms have been widely employed for dealing with noisy labels. Their objective functions are designed so that minimizing the expected risk on noisy data leads to the same minimizer as minimizing the expected risk on clean data. From the weak law of large numbers, penalizing the variance of losses would reduce the discrepancy between the average loss and the expected risk on the clean data when there is a finite training sample, and the estimation error in the model's parameters can be reduced. Interestingly, we found that the variance of losses needs to be encouraged for label-noise learning. Specifically, encouraging a large variance of losses would boost the memorization effect and reduce the harmfulness of incorrect labels. Regularizers can be easily designed to encourage a large variance of losses and be plugged into many existing algorithms. Empirically, the proposed method by encouraging a large variance of losses could improve the generalization ability of baselines on both synthetic and real-world datasets.",
+      "bodyTruncated": false,
+      "eventAggregation": {
+        "total": 1,
+        "groups": [
+          {
+            "key": "官方来源",
+            "tone": "#16130f",
+            "items": [
+              {
+                "source": "JMLR",
+                "title": "标签噪声学习需要惩罚损失方差吗？",
+                "url": "http://jmlr.org/papers/v27/23-1102.html",
+                "note": "原始发布 / 公告。",
+                "text": "标签噪声学习需要惩罚损失方差吗？ —— 原始发布 / 公告。"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "recordId": "recvpV8MZSK5to",
+      "title": "A neural network model of free recall learns multiple memory strategies",
+      "titleCn": "自由回忆神经网络学会多种类人记忆策略",
+      "source": "Nature Machine Intelligence",
+      "url": "https://www.nature.com/articles/s42256-026-01274-0",
+      "category": "技术研究开源",
+      "contentType": "",
+      "publishedDate": "2026-07-20",
+      "summary": "Li 等人发现，针对自由回忆任务优化的循环神经网络能够形成多种超越经典时间上下文模型的类人记忆策略。表现最佳的模型采用了类似“记忆宫殿”的索引式机制。",
+      "why": "该研究揭示了神经网络可自主习得多样化记忆机制，为理解和设计机器记忆系统提供了新思路。",
+      "impact": 72,
+      "novelty": 82,
+      "actionability": 48,
+      "urgency": "低",
+      "tags": [
+        "AI",
+        "开源",
+        "其他"
+      ],
+      "imageUrl": "https://media.springernature.com/full/springer-static/image/art%3A10.1038%2Fs42256-026-01274-0/MediaObjects/42256_2026_1274_Fig1_HTML.png",
+      "mediaAssets": {
+        "images": [],
+        "videos": []
+      },
+      "body": "Humans exhibit structured patterns of memory recall, including a tendency to recall more recent information and to recall events in the same order they were experienced. Classic computational models explain these patterns by positing that memories incorporate the ongoing ‘temporal context’, formed by smoothly integrating the stimulus history. However, it is unclear whether a single mechanism can account for the full repertoire of human memory strategies, and if this posited mechanism is optimal for recall performance. For example, human memory experts widely apply the ‘memory palace’ strategy, which is empirically better but not captured by temporal context models. Here we show that neural networks optimized for free recall develop diverse retrieval strategies, with only some of them resembling temporal context models. The best-performing models discovered a stimulus-invariant index code that emphasizes the studied position of each list item, instead of its temporal context. This creates a stable scaffold for forward recall akin to the memory palace technique. This index code was more likely to emerge when networks were (1) encouraged to recall all studied items rather than prioritizing only the next few items, and (2) prevented from relying on recency. Our findings demonstrate that human-like recall patterns can arise from multiple distinct computational mechanisms, and that sequential retrieval using item index is an optimal strategy that explains expert-level recall performance.\n\nAccess through your institution\n\nBuy or subscribe\n\nThis is a preview of subscription content, access via your institution\n\nAccess options\n\nAccess through your institution\n\nAccess Nature and 54 other Nature Portfolio journals\n\nGet Nature+, our best-value online-access subscription\n\n27,99 € / 30 days\n\ncancel any time\n\nLearn more\n\nSubscribe to this journal\n\nReceive 12 digital issues and online access to articles\n\n111,21 € per year\n\nonly 9,27 € per issue\n\nLearn more\n\nBuy this article\n\nPurchase on SpringerLink\n\nInstant access to the full article PDF.\n\n39,95 €\n\nPrices may be subject to local taxes which are calculated during checkout\n\nFig. 1: Task and model schematic.\n\nFig. 2: Different strategies of free recall.\n\nFig. 3: Model representations and factors influencing strategy.\n\nFig. 4: Performance and noise robustness of different strategies.\n\nFig. 5: External temporal context shifts models towards TCM-like strategies.\n\nFig. 6: Content-based memory search discourages the memory palace strategy.\n\nSimilar content being viewed by others\n\nStochastic consolidation of lifelong memory\n\nArticle\nOpen access\n30 July 2022\n\nNeurons as will and representation\n\nArticle\n\n20 December 2021\n\nStudy-phase reinstatement predicts subsequent recall\n\nArticle\n\n11 March 2025\n\nData availability\n\nThe Penn Electrophysiology of Encoding and Retrieval Study (PEERS) dataset 40 used for comparison with human data is publicly available at https://memory.psych.upenn.edu/files/PEERS.data.tgz .\n\nCode availability\n\nCode for this Article is available via GitHub at https://github.com/Veritaria/rnn-free-recall (ref. 51 ). All model simulations and analyses were conducted using Python 3.10.\n\nReferences\n\nTulving, E. & Thomson, D. M. Encoding specificity and retrieval processes in episodic memory. Psychol. Rev. 80 , 352 (1973).\n\nArticle\n\nGoogle Scholar\n\nJohnson, J. D. & Rugg, M. D. Recollection and the reinstatement of encoding-related cortical activity. Cereb. Cortex 17 , 2507–2515 (2007).\n\nArticle\n\nGoogle Scholar\n\nPolyn, S. M. & Kahana, M. J. Memory search and the neural representation of context. Trends Cogn. Sci. 12 , 24–30 (2008).\n\nArticle\n\nGoogle Scholar\n\nMurdock Jr, B. B. The serial position effect of free recall. J. Exp. Psychol. 64 , 482 (1962).\n\nArticle\n\nGoogle Scholar\n\nKahana, M. J. Associative retrieval processes in free recall. Mem. Cogn. 24 , 103–109 (1996).\n\nArticle\n\nGoogle Scholar\n\nHoward, M. W. & Kahana, M. J. Contextual variability and serial position effects in free recall. J. Exp. Psychol. Learn. Mem. Cogn. 25 , 923 (1999).\n\nArticle\n\nGoogle Scholar\n\nGlenberg, A. M. et al. A two-process account of long-term serial position effects. J. Exp. Psychol. Hum. Learn. Mem. 6 , 355 (1980).\n\nArticle\n\nGoogle Scholar\n\nKoppenaal, L. & Glanzer, M. An examination of the continuous distractor task and the ‘long-term recency effect’. Mem. Cogn. 18 , 183–195 (1990).\n\nArticle\n\nGoogle Scholar\n\nZaromb, F. M. et al. Temporal associations and prior-list intrusions in free recall. J. Exp. Psychol. Learn. Mem. Cogn. 32 , 792 (2006).\n\nArticle\n\nGoogle Scholar\n\nPolyn, S. M., Norman, K. A. & Kahana, M. J. Task context and organization in free recall. Neuropsychologia 47 , 2158–2163 (2009).\n\nArticle\n\nGoogle Scholar\n\nHealey, M. K., Long, N. M. & Kahana, M. J. Contiguity in episodic memory. Psychonom. Bull. Rev. 26 , 699–720 (2019).\n\nArticle\n\nGoogle Scholar\n\nHealey, M. K., Crutchley, P. & Kahana, M. J. Individual differences in memory search and their relation to intelligence. J. Exp. Psychol. Gen. 143 , 1553 (2014).\n\nArticle\n\nGoogle Scholar\n\nUnsworth, N. Individual differences in long-term memory. Psychol. Bull. 145 , 79 (2019).\n\nArticle\n\nGoogle Scholar\n\nHoward, M. W. & Kahana, M. J. A distributed representation of temporal context. J. Math. Psychol. 46 , 269–299 (2002).\n\nArticle\nMathSciNet\n\nGoogle Scholar\n\nSederberg, P. B., Howard, M. W. & Kahana, M. J. A context-based theory of recency and contiguity in free recall. Psychol. Rev. 115 , 893 (2008).\n\nArticle\n\nGoogle Scholar\n\nPolyn, S. M., Norman, K. A. & Kahana, M. J. A context maintenance and retrieval model of organizational processes in free recall. Psychol. Rev. 116 , 129 (2009).\n\nArticle\n\nGoogle Scholar\n\nRoediger, H. L. The effectiveness of four mnemonics in ordering recall. J. Exp. Psychol. Hum. Learn. Mem. 6 , 558 (1980).\n\nArticle\n\nGoogle Scholar\n\nWilding, J. M. & Valentine, E. R. Superior Memory (Psychology Press, 1997).\n\nMaguire, E. A., Valentine, E. R., Wilding, J. M. & Kapur, N. Routes to remembering: the brains behind superior memory. Nat. Neurosci. 6 , 90–95 (2003).\n\nArticle\n\nGoogle Scholar\n\nDresler, M. et al. Mnemonic training reshapes brain networks to support superior memory. Neuron 93 , 1227–1235 (2017).\n\nArticle\n\nGoogle Scholar\n\nWagner, I. C. et al. Durable memories and efficient neural coding through mnemonic training using the method of loci. Sci. Adv. 7 , eabc7606 (2021).\n\nArticle\n\nGoogle Scholar\n\nNeath, I. & Crowder, R. G. Schedules of presentation and temporal distinctiveness in human memory. J. Exp. Psychol. Learn. Mem. Cogn. 16 , 316 (1990).\n\nArticle\n\nGoogle Scholar\n\nBrown, G. D., Preece, T. & Hulme, C. Oscillator-based memory for serial order. Psychol. Rev. 107 , 127 (2000).\n\nArticle\n\nGoogle Scholar\n\nLogan, G. D. & Cox, G. E. Serial memory: putting chains and position codes in context. Psychol. Rev. 128 , 1197 (2021).\n\nArticle\n\nGoogle Scholar\n\nAnderson, J. R. & Milson, R. Human memory: an adaptive perspective. Psychol. Rev. 96 , 703–719 (1989).\n\nArticle\n\nGoogle Scholar\n\nLieder, F. & Griffiths, T. L. Resource-rational analysis: understanding human cognition as the optimal use of limited computational resources. Behav. Brain Sci. 43 , e1 (2020).\n\nArticle\n\nGoogle Scholar\n\nZhang, Q., Griffiths, T. L. & Norman, K. A. Optimal policies for free recall. Psychol. Rev. 130 , 1104 (2023).\n\nArticle\n\nGoogle Scholar\n\nRichards, B. A. et al. A deep learning framework for neuroscience. Nat. Neurosci. 22 , 1761–1770 (2019).\n\nArticle\n\nGoogle Scholar\n\nLu, Q., Hasson, U. & Norman, K. A. A neural network model of when to retrieve and encode episodic memories. Elife 11 , e74445 (2022).\n\nArticle\n\nGoogle Scholar\n\nWhittington, J. C. et al. The tolman-eichenbaum machine: unifying space and relational memory through generalization in the hippocampal formation. Cell 183 , 1249–1263 (2020).\n\nArticle\n\nGoogle Scholar\n\nCho, K. et al. Learning phrase representations using RNN encoder–decoder for statistical machine translation. In Proc. 2014 Conference on Empirical Methods in Natural Language Processing (EMNLP) (eds Moschitti, A. et al.) 1724–1734 (Association for Computational Linguistics, 2014).\n\nRitter, S. et al. Been there, done that: meta-learning with episodic recall. In International Conference on Machine Learning (eds Dy, J. & Krause, A.) 4354–4363 (PMLR, 2018).\n\nGlanzer, M. & Cunitz, A. R. Two storage mechanisms in free recall. J. Verbal Learn. Verbal Behav. 5 , 351–360 (1966).\n\nArticle\n\nGoogle Scholar\n\nMnih, V. et al. Asynchronous methods for deep reinforcement learning. In International Conference on Machine Learning (eds Balcan, M. & Weinberger, K.) 1928–1937 (PMLR, 2016).\n\nJensen, K. T. An introduction to reinforcement learning for neuroscience. Neurons Behav. Data Anal. Theory https://doi.org/10.51628/001c.127771 (2024).\n\nZhang, J., Shi, X., King, I. & Yeung, D.-Y. Dynamic key–value memory networks for knowledge tracing. In Proc. 26th International Conference on World Wide Web 765–774 (International World Wide Web Conferences Steering Committee, 2017).\n\nGershman, S. J., Fiete, I. & Irie, K. Key–value memory in the brain. Neuron 113 , 1694–1707 (2025).\n\nArticle\n\nGoogle Scholar\n\nSong, H. et al. A neural network with episodic memory learns causal relationships between narrative events. Preprint at bioRxiv https://doi.org/10.1101/2025.09.01.673596 (2025).\n\nBernardi, S. et al. The geometry of abstraction in the hippocampus and prefrontal cortex. Cell 183 , 954–967 (2020).\n\nArticle\n\nGoogle Scholar\n\nKahana, M. J. et al. The Penn Electrophysiology of Encoding and Retrieval Study. J. Exp. Psychol. Learn. Mem. Cogn. https://doi.org/10.1037/xlm0001319 (2024).\n\nRomani, S., Katkov, M. & Tsodyks, M. Practice makes perfect in memory recall. Learn. Mem. 23 , 169–173 (2016).\n\nArticle\n\nGoogle Scholar\n\nTan, L., Ward, G., Paulauskaite, L. & Markou, M. Beginning at the beginning: recall order and the number of words to be recalled. J. Exp. Psychol. Learn. Mem. Cogn. 42 , 1282 (2016).\n\nArticle\n\nGoogle Scholar\n\nSederberg, P. B., Miller, J. F., Howard, M. W. & Kahana, M. J. The temporal contiguity effect predicts episodic memory performance. Mem. Cogn. 38 , 689–699 (2010).\n\nArticle\n\nGoogle Scholar\n\nSmith, S. M. & Vela, E. Environmental context-dependent memory: a review and meta-analysis. Psychonom. Bull. Rev. 8 , 203–220 (2001).\n\nArticle\n\nGoogle Scholar\n\nBasile, A. G. & Toplak, M. E. Four converging measures of temporal discounting and their relationships with intelligence, executive functions, thinking dispositions, and behavioral outcomes. Front. Psychol. 6 , 728 (2015).\n\nArticle\n\nGoogle Scholar\n\nSadeghiyeh, H. et al. Temporal discounting correlates with directed exploration but not with random exploration. Sci. Rep. 10 , 4020 (2020).\n\nArticle\n\nGoogle Scholar\n\nBennion, K. A. et al. Classic free recall memory effects using video stimuli. Memory 33 , 1031–1040 (2025).\n\nArticle\n\nGoogle Scholar\n\nChandra, S., Sharma, S., Chaudhuri, R. & Fiete, I. Episodic and associative memory from spatial scaffolds in the hippocampus. Nature 638 , 739–751 (2025).\n\nArticle\n\nGoogle Scholar\n\nWang, J. X. et al. Prefrontal cortex as a meta-reinforcement learning system. Nat. Neurosci. 21 , 860–868 (2018).\n\nArticle\n\nGoogle Scholar\n\nHong, M. K., Gunn, J. B., Fazio, L. K. & Polyn, S. M. The modulation and elimination of temporal organization in free recall. J. Exp. Psychol. Learn. Mem. Cogn. 50 , 1035 (2024).\n\nArticle\n\nGoogle Scholar\n\nLi, M. Code for ’A neural network model of free recall learns multiple memory strategies’. Zenodo https://doi.org/10.5281/zenodo.20422489 (2026).\n\nDownload references\n\nAcknowledgements\n\nWe thank current and former members of the Mattar lab. We thank C. Baldassano, J. Nicholas, F. Callaway, C. Correa, Y. Sagiv, Z. Zhou, Z. Ying, S. Chen, M. Yu and Y. Deng for providing comments on the manuscript.\n\nFunding\n\nThe authors declare no relevant funding.\n\nAuthor information\n\nAuthors and Affiliations\n\nDepartment of Psychology, New York University, New York, NY, USA\n\nMoufan Li & Marcelo G. Mattar\n\nSainsbury Wellcome Centre, University College London, London, UK\n\nKristopher T. Jensen\n\nDepartment of Psychology, Rutgers University–New Brunswick, Piscataway, NJ, USA\n\nQiong Zhang\n\nDepartment of Computer Science, Rutgers University–New Brunswick, Piscataway, NJ, USA\n\nQiong Zhang\n\nDepartment of Neuroscience, City University of Hong Kong, Hong Kong, China\n\nQihong Lu\n\nCenter for Neural Science, New York University, New York, NY, USA\n\nMarcelo G. Mattar\n\nTandon School of Engineering, New York University, New York, NY, USA\n\nMarcelo G. Mattar\n\nAuthors Moufan Li View author publications\n\nSearch author on: PubMed Google Scholar\n\nKristopher T. Jensen View author publications\n\nSearch author on: PubMed Google Scholar\n\nQiong Zhang View author publications\n\nSearch author on: PubMed Google Scholar\n\nQihong Lu View author publications\n\nSearch author on: PubMed Google Scholar\n\nMarcelo G. Mattar View author publications\n\nSearch author on: PubMed Google Scholar\n\nContributions\n\nM.L.: conceptualization, methodology, software, validation, formal analysis, investigation, data curation, writing – original draft, writing – review and editing, and visualization. K.T.J.: conceptualization, methodology, investigation, writing – original draft, writing – review and editing, and supervision. Q.Z.: methodology, writing – review and editing, and supervision. Q.L.: conceptualization, methodology, investigation, writing – original draft, writing – review and editing, and supervision. M.G.M.: conceptualization, methodology, investigation, resources, writing – original draft, writing – review and editing, supervision, project administration, and funding acquisition.\n\nCorresponding author\n\nCorrespondence to\nMarcelo G. Mattar .\n\nEthics declarations\n\nCompeting interests\n\nThe authors declare no competing interests.\n\nPeer review\n\nPeer review information\n\nNature Machine Intelligence thanks Sean Polyn and the other, anonymous, reviewer(s) for their contribution to the peer review of this work. Peer reviewer reports are available.\n\nAdditional information\n\nPublisher’s note Springer Nature remains neutral with regard to jurisdictional claims in published maps and institutional affiliations.\n\nExtended data\n\nExtended Data Fig. 1 A key-value memory network showed the memory palace strategy.\n\n( a ) An illustration of the key-value memory model structure. During the study phase, the GRU hidden state was converted to a key and a value through two different feedforward layers. During the response phase, the GRU passed its hidden state to the same feedforward layer as generating the keys to form a query vector, computed the cosine similarity between the query and all keys, and retrieved the value with the maximum similarity. ( b ) The conditional recall probability of the key-value memory model with default training settings the same as the previous RNN-memory model. ( c ) Explained variance of index and identity in keys and values. The keys contained more index information than the values, while the values contained more ide",
+      "bodyTruncated": false,
+      "eventAggregation": {
+        "total": 1,
+        "groups": [
+          {
+            "key": "官方来源",
+            "tone": "#16130f",
+            "items": [
+              {
+                "source": "Nature Machine Intelligence",
+                "title": "自由回忆神经网络学会多种类人记忆策略",
+                "url": "https://www.nature.com/articles/s42256-026-01274-0",
+                "note": "原始发布 / 公告。",
+                "text": "自由回忆神经网络学会多种类人记忆策略 —— 原始发布 / 公告。"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "recordId": "recvpCjm0somkM",
+      "title": "Neural Exploitation and Exploration of Contextual Bandits",
+      "titleCn": "EE-Net：用于上下文老虎机探索与利用的双神经网络框架",
+      "source": "JMLR",
+      "url": "http://jmlr.org/papers/v27/23-0582.html",
+      "category": "技术研究开源",
+      "contentType": "论文",
+      "publishedDate": "2026-07-17",
+      "summary": "论文提出 EE-Net，通过额外的神经网络学习利用网络的潜在收益以指导探索，不依赖 UCB 或 Thompson Sampling 的统计置信界。该方法具有实例级约 O(√T) 的遗憾上界，并在真实世界数据集上优于相关线性及神经上下文老虎机基线。",
+      "why": "该研究为非线性奖励场景中的探索—利用权衡提供了区别于 UCB 和 TS 的神经网络方法，并兼具理论保证与实证优势。",
+      "impact": 72,
+      "novelty": 78,
+      "actionability": 57,
+      "urgency": "低",
+      "tags": [
+        "AI",
+        "推理",
+        "开源",
+        "其他"
+      ],
+      "imageUrl": "",
+      "mediaAssets": {
+        "images": [],
+        "videos": []
+      },
+      "body": "In this paper, we study the neural exploration strategy for contextual bandits.\nThe dilemma of exploitation and exploration widely exists in real-world applications such as recommender systems, online advertising, and clinical trials.\nContextual bandits provide principled methods to solve this dilemma, including two prevalent techniques: Thompson Sampling (TS), and Upper Confidence Bound (UCB).\nNeural contextual bandits have been studied to adapt to the non-linear reward function, combined with TS or UCB strategies for exploration.\nIn this paper, we introduce, EE-Net, which is a novel framework to utilize another neural network to learn the potential gain of exploitation neural network for exploration, different from UCB-based and TS-based approaches that rely on the large-deviation-based statistical confidence bound. In addition, we provide an instance-based $\\widetilde{\\mathcal{O}}(\\sqrt{T})$ regret upper bound for EE-Net with a new proof workflow. Empirically, we show that EE-Net outperforms related linear and neural contextual bandit baselines on real-world datasets.",
+      "bodyTruncated": false,
+      "eventAggregation": {
+        "total": 1,
+        "groups": [
+          {
+            "key": "官方来源",
+            "tone": "#16130f",
+            "items": [
+              {
+                "source": "JMLR",
+                "title": "EE-Net：用于上下文老虎机探索与利用的双神经网络框架",
+                "url": "http://jmlr.org/papers/v27/23-0582.html",
+                "note": "原始发布 / 公告。",
+                "text": "EE-Net：用于上下文老虎机探索与利用的双神经网络框架 —— 原始发布 / 公告。"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "recordId": "recvpCjm0swWYa",
+      "title": "Inference with non-differentiable surrogate loss in a general high-dimensional classification framework",
+      "titleCn": "高维分类中非可微替代损失的统计推断方法",
+      "source": "JMLR",
+      "url": "http://jmlr.org/papers/v27/23-0126.html",
+      "category": "技术研究开源",
+      "contentType": "论文",
+      "publishedDate": "2026-07-17",
+      "summary": "研究提出核平滑去相关得分，为采用分段线性、非可微替代损失估计的高维线性决策规则构造假设检验和区间估计。该方法还通过交叉拟合处理额外干扰参数，并在高维设定下建立极限分布，模拟与真实数据分析显示其有效性和优越性。",
+      "why": "该研究弥补了非可微替代损失下高维分类决策规则驱动因素缺乏统计推断工具的空白。",
+      "impact": 72,
+      "novelty": 78,
+      "actionability": 55,
+      "urgency": "低",
+      "tags": [
+        "AI",
+        "推理",
+        "开源"
+      ],
+      "imageUrl": "",
+      "mediaAssets": {
+        "images": [],
+        "videos": []
+      },
+      "body": "Penalized empirical risk minimization with a surrogate loss function is often used to learn a high-dimensional linear decision rule in classification problems. Although much of the literature focus on the generalization error, there is a lack of inference procedures for identifying the driving factors of the estimated decision rule, especially when the surrogate loss is non-differentiable. We propose a kernel-smoothed decorrelated score to construct hypothesis tests and interval estimators for a linear decision rule estimated using a piece-wise linear surrogate loss, which has a discontinuous gradient and non-regular Hessian. Specifically, we adopt kernel approximations to smooth the discontinuous gradient near discontinuity points and approximate the non-regular Hessian of the surrogate loss. In applications where additional nuisance parameters are involved, we propose a novel cross-fitted version to accommodate flexible nuisance estimates and kernel approximations. We establish the limiting distribution of the kernel-smoothed decorrelated score and its cross-fitted version in a high-dimensional setup. Simulation and real data analysis are conducted to demonstrate the validity and the superiority of the proposed method.",
+      "bodyTruncated": false,
+      "eventAggregation": {
+        "total": 1,
+        "groups": [
+          {
+            "key": "官方来源",
+            "tone": "#16130f",
+            "items": [
+              {
+                "source": "JMLR",
+                "title": "高维分类中非可微替代损失的统计推断方法",
+                "url": "http://jmlr.org/papers/v27/23-0126.html",
+                "note": "原始发布 / 公告。",
+                "text": "高维分类中非可微替代损失的统计推断方法 —— 原始发布 / 公告。"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "recordId": "recvpCjm0sprrV",
+      "title": "Online Bernstein-von Mises theorem",
+      "titleCn": "在线伯恩斯坦–冯·米塞斯定理",
+      "source": "JMLR",
+      "url": "http://jmlr.org/papers/v27/25-0989.html",
+      "category": "技术研究开源",
+      "contentType": "论文",
+      "publishedDate": "2026-07-17",
+      "summary": "论文研究利用变分近似逐批进行贝叶斯后验更新的频率学性质。结果表明，在温和假设下，当小批量规模超过由参数维度决定的阈值时，累积近似误差可忽略，最终序贯后验与全数据后验渐近不可区分。",
+      "why": "该研究为计算上更可行的在线贝叶斯推断提供了序贯变分近似不损失渐近统计准确性的理论保证。",
+      "impact": 72,
+      "novelty": 78,
+      "actionability": 48,
+      "urgency": "低",
+      "tags": [
+        "AI",
+        "推理",
+        "其他"
+      ],
+      "imageUrl": "",
+      "mediaAssets": {
+        "images": [],
+        "videos": []
+      },
+      "body": "Online learning is an inferential paradigm in which parameters are updated incrementally from sequentially available data, in contrast to batch learning, where the entire dataset is processed at once. In this paper, we assume that mini-batches from the full dataset become available sequentially. The Bayesian framework, which updates beliefs about unknown parameters after observing each mini-batch, is naturally suited for online learning. At each step, we update the posterior distribution using the current prior and new observations, with the updated posterior serving as the prior for the next step. However, this recursive Bayesian updating is rarely computationally tractable unless the model and prior are conjugate. When the model is regular, the updated posterior can be approximated by a normal distribution, as justified by the Bernstein-von Mises theorem. We adopt a variational approximation at each step and investigate the frequentist properties of the final posterior obtained through this sequential procedure. Under mild assumptions, we show that the accumulated approximation error becomes negligible once the mini-batch size exceeds a threshold depending on the parameter dimension. As a result, the sequentially updated posterior is asymptotically indistinguishable from the full posterior.",
+      "bodyTruncated": false,
+      "eventAggregation": {
+        "total": 1,
+        "groups": [
+          {
+            "key": "官方来源",
+            "tone": "#16130f",
+            "items": [
+              {
+                "source": "JMLR",
+                "title": "在线伯恩斯坦–冯·米塞斯定理",
+                "url": "http://jmlr.org/papers/v27/25-0989.html",
+                "note": "原始发布 / 公告。",
+                "text": "在线伯恩斯坦–冯·米塞斯定理 —— 原始发布 / 公告。"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "recordId": "recvpCjm0sHr2M",
+      "title": "Causal Influences over Social Learning Networks",
+      "titleCn": "社会学习网络中的因果影响力",
+      "source": "JMLR",
+      "url": "http://jmlr.org/papers/v27/23-0910.html",
+      "category": "技术研究开源",
+      "contentType": "论文",
+      "publishedDate": "2026-07-17",
+      "summary": "论文推导了社会图中智能体两两因果关系与影响传播的表达式，揭示其对图拓扑和智能体信息水平的依赖。作者还提出影响力排序及从原始观测数据学习模型参数的方法，并在合成数据和真实社交媒体数据上进行了验证。",
+      "why": "该研究为识别社会学习与分布式决策网络中的关键影响者提供了可解释且可由观测数据驱动的方法。",
+      "impact": 72,
+      "novelty": 76,
+      "actionability": 65,
+      "urgency": "低",
+      "tags": [
+        "Agent",
+        "推理",
+        "其他"
+      ],
+      "imageUrl": "",
+      "mediaAssets": {
+        "images": [],
+        "videos": []
+      },
+      "body": "This paper investigates causal influences between agents linked by a social graph and interacting over time. In particular, the work examines the dynamics of social learning models and distributed decision-making protocols, and derives expressions that reveal the causal relations between pairs of agents and explain the flow of influence over the network. The results turn out to be dependent on the graph topology and the level of information that each agent has about the inference problem they are trying to solve. Using these conclusions, the paper proposes an algorithm to rank the overall influence between agents to discover highly influential agents. It also provides a method to learn the necessary model parameters from raw observational data. The results and the proposed algorithm are illustrated by considering both synthetic data and real social media data.",
+      "bodyTruncated": false,
+      "eventAggregation": {
+        "total": 1,
+        "groups": [
+          {
+            "key": "官方来源",
+            "tone": "#16130f",
+            "items": [
+              {
+                "source": "JMLR",
+                "title": "社会学习网络中的因果影响力",
+                "url": "http://jmlr.org/papers/v27/23-0910.html",
+                "note": "原始发布 / 公告。",
+                "text": "社会学习网络中的因果影响力 —— 原始发布 / 公告。"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "recordId": "recvpCjm0sFEQQ",
+      "title": "Covariate-dependent Hierarchical Dirichlet Processes",
+      "titleCn": "协变量依赖的层次狄利克雷过程",
+      "source": "JMLR",
+      "url": "http://jmlr.org/papers/v27/25-0668.html",
+      "category": "技术研究开源",
+      "contentType": "论文",
+      "publishedDate": "2026-07-17",
+      "summary": "论文提出一种结合层次狄利克雷过程与依赖狄利克雷过程的层次贝叶斯非参数模型，用于跨相关群组的密度估计和聚类，并支持多种及混合协变量与不同输出类型。该方法通过数据增强构建用于后验推断的马尔可夫链蒙特卡洛算法，在单细胞RNA测序和钙成像数据中发现了额外细胞亚群及具有可解释性的神经活动时间帧聚类。",
+      "why": "该研究使模型能够在跨群组共享信息的同时刻画协变量与聚类的关系，并量化群组差异。",
+      "impact": 72,
+      "novelty": 76,
+      "actionability": 58,
+      "urgency": "低",
+      "tags": [
+        "AI",
+        "推理",
+        "开源",
+        "其他"
+      ],
+      "imageUrl": "",
+      "mediaAssets": {
+        "images": [],
+        "videos": []
+      },
+      "body": "Bayesian hierarchical modeling is a natural framework to effectively integrate data and borrow information across groups. In this paper, we address problems related to density estimation and identifying clusters across related groups, by proposing a hierarchical Bayesian approach that incorporates additional covariate information. To achieve flexibility, our approach builds on ideas from Bayesian nonparametrics, combining the hierarchical Dirichlet process with dependent Dirichlet processes. The proposed model is widely applicable, accommodating multiple and mixed covariate types through appropriate kernel functions as well as different output types through suitable component-specific likelihoods. This extends our ability to discern the relationship between covariates and clusters, while also effectively borrowing information and quantifying differences across groups. By employing a data augmentation trick, we are able to tackle the intractable normalized weights and construct a Markov chain Monte Carlo algorithm for posterior inference. The proposed method is illustrated on simulated data and two real data sets on single-cell RNA sequencing (scRNA-seq) and calcium imaging. For scRNA-seq data, we show that the incorporation of cell dynamics facilitates the discovery of additional cell subgroups. On calcium imaging data, our method identifies interpretable clusters of time frames with similar neural activity, aligning with the observed behavior of the animal.",
+      "bodyTruncated": false,
+      "eventAggregation": {
+        "total": 1,
+        "groups": [
+          {
+            "key": "官方来源",
+            "tone": "#16130f",
+            "items": [
+              {
+                "source": "JMLR",
+                "title": "协变量依赖的层次狄利克雷过程",
+                "url": "http://jmlr.org/papers/v27/25-0668.html",
+                "note": "原始发布 / 公告。",
+                "text": "协变量依赖的层次狄利克雷过程 —— 原始发布 / 公告。"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "recordId": "recvpYFWSkd7l8",
+      "title": "Design and Validation of a Lightweight 1D CNN for Affective Touch Classification in Soft Plush Companions",
+      "titleCn": "面向柔性毛绒陪伴机器人的轻量级情感触摸分类1D CNN",
+      "source": "arXiv cs.AI",
+      "url": "https://arxiv.org/abs/2607.16196",
+      "category": "技术研究开源",
+      "contentType": "论文",
+      "publishedDate": "2026-07-21",
+      "summary": "研究开源了包含25名参与者、1326条标注手势序列的数据集及MATLAB框架，并从468个CNN模型中筛选出紧凑型扩张一维卷积网络。其1.32万参数模型取得75%测试准确率和85%跨受试者平均准确率，量化后每窗口仅需3.2 MMAC，可支持目标微控制器上的20 Hz实时运行。",
+      "why": "该研究证明了隐私友好的情感触摸识别可在资源受限的柔性陪伴设备中本地部署，并提供了可复用的开源数据与开发框架。",
+      "impact": 68,
+      "novelty": 72,
+      "actionability": 76,
+      "urgency": "低",
+      "tags": [
+        "AI",
+        "开源",
+        "硬件",
+        "多模态"
+      ],
+      "imageUrl": "",
+      "mediaAssets": {
+        "images": [],
+        "videos": []
+      },
+      "body": "arXiv:2607.16196v1 Announce Type: new Abstract: Soft, sensorized companions offer a physically safe and emotionally intuitive interface for socially assistive technologies, yet their deformability and multichannel tactile sensing complicate the robust interpretation of human affect. This study presents a complete open-source MATLAB-based framework for the development and validation of compact deep learning models for affective touch recognition in soft interactive companions. As a primary contribution, a diverse FAIR-compliant dataset of 1326 labelled gesture sequences collected from 25 participants spanning children, teenagers, and adults is made publicly available, providing a reusable resource for future research in affective touch recognition. Through systematic architecture and hyperparameter exploration across 468 CNN models, the study identifies compact dilated one-dimensional convolutional neural networks (1D CNNs) as the most effective solution, with a 13.2k-parameter model achieving 75% test accuracy and 85% mean leave-one-subject-out cross-validation accuracy. Theoretical inference-time analysis shows that quantized deployment requires 3.2 MMAC per window, compatible with 20 Hz real-time operation on the target microcontroller. PC-based real-time simulation with the physical toy streaming sensor data demonstrates that the CNN resolves subtle social touches that the previous heuristic system failed to detect, whereas high-force negative interactions are captured more reliably by trivial threshold-based logic. The resulting hybrid inference pipeline - instantaneous heuristic filtering followed by CNN-based nuanced gesture classification - is proposed as the embedded deployment strategy. The study demonstrates that emotionally meaningful, privacy-preserving touch interpretation is computationally feasible for direct embedding within soft therapeutic companions, with hardware integration addressed in a forthcoming study.",
+      "bodyTruncated": false,
+      "eventAggregation": {
+        "total": 1,
+        "groups": [
+          {
+            "key": "官方来源",
+            "tone": "#16130f",
+            "items": [
+              {
+                "source": "arXiv cs.AI",
+                "title": "面向柔性毛绒陪伴机器人的轻量级情感触摸分类1D CNN",
+                "url": "https://arxiv.org/abs/2607.16196",
+                "note": "原始发布 / 公告。",
+                "text": "面向柔性毛绒陪伴机器人的轻量级情感触摸分类1D CNN —— 原始发布 / 公告。"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "recordId": "recvpYFWSkVRti",
+      "title": "A Survey on GNN-based Link Prediction: Techniques, Applications, and Challenges",
+      "titleCn": "基于图神经网络的链路预测综述：技术、应用与挑战",
+      "source": "arXiv cs.AI",
+      "url": "https://arxiv.org/abs/2607.16198",
+      "category": "技术研究开源",
+      "contentType": "论文",
+      "publishedDate": "2026-07-21",
+      "summary": "该论文从图神经网络架构与图结构视角系统梳理链路预测研究，并提出按技术和应用划分的分类体系。技术层面涵盖基于 GCN、GAE、GAT 和 GFormer 的方法，应用层面聚焦知识图谱与推荐系统，同时讨论现有挑战及未来方向。",
+      "why": "该综述弥补了现有文献对底层 GNN 架构和多样化图结构缺乏系统分析的不足。",
+      "impact": 67,
+      "novelty": 58,
+      "actionability": 64,
+      "urgency": "低",
+      "tags": [
+        "AI",
+        "开源",
+        "其他"
+      ],
+      "imageUrl": "",
+      "mediaAssets": {
+        "images": [
+          {
+            "url": "https://arxiv.org/html/2607.16198v1/x1.png",
+            "alt": "Figure 1: Motivation and Contributions: From Fragmented Perspectives to a Unified GNN-based Link Prediction Framework. The left panel identifies a critical research gap at the intersection of classic link prediction, graph representation learning, and graph-specific link prediction, where existing reviews lack a systematic exploration specifically targeting underlying GNN architectures and diverse graph structures. To address this critical gap, this survey provides a comprehensive review from a novel and dedicated GNN perspective. We provide a systematic synthesis of state-of-the-art research across three fundamental dimensions: Techniques, focusing on the evolution of GNN-based methods; Applications, evaluating their deployment in diverse scenarios; and Challenges, identifying critical frontiers for future investigation."
+          },
+          {
+            "url": "https://arxiv.org/html/2607.16198v1/x2.png",
+            "alt": "Figure 2: Taxonomy of Graph Structures in Link Prediction. This figure illustrates the diverse architectural paradigms of graphs encountered in modern link prediction, ranging from foundational to complex topologies. Simple graphs represent the basic connectivity between homogeneous nodes, while heterogeneous graphs and knowledge graphs introduce multi-type entities and relations, necessitating advanced semantic modeling. Dynamic graphs capture the temporal evolution of networks through time-stamped snapshots, whereas hypergraphs and multi-layer graphs account for high-order interactions and multi-dimensional relational strata, respectively. Together, these structures represent the multifaceted data landscape that current GNN-based methods aim to address, highlighting the transition from low-dimensional topology to high-order, non-Euclidean complexity."
+          },
+          {
+            "url": "https://arxiv.org/html/2607.16198v1/x3.png",
+            "alt": "Figure 3: GNN-based link prediction framework. This figure illustrates a typical GNN-based link prediction pipeline. A GNN encoder (e.g., GCN, GAT, GAE, or GFormer) takes the adjacency matrix and node features as input to generate node representations, which are then fed into an MLP decoder to predict missing links. In the predicted graph, solid lines indicate node pairs predicted as positive (i.e., existing links), while dashed lines indicate node pairs predicted as negative (i.e., missing links)."
+          }
+        ],
+        "videos": []
+      },
+      "body": "arXiv:2607.16198v1 Announce Type: new Abstract: Graph Neural Networks (GNNs) have emerged as the leading paradigm for link prediction, enabling the inference of missing connections and the anticipation of potential future links. However, existing reviews lack systematic exploration specifically targeting underlying GNN architectures and diverse graph structures. To address this critical gap, this paper provides a comprehensive review of GNN-based link prediction from a novel and dedicated GNN perspective. We propose an innovative taxonomy that categorizes recent advancements based on techniques and applications. From a technique perspective, we focus on key GNN encoder architectures, including GCN-based, GAE-based, GAT-based, and GFormer-based methods, discussing their strengths and limitations. From an application perspective, we highlight prominent use cases of link prediction in knowledge graphs and recommendation systems, demonstrating their real-world impact. In addition, we examine the current challenges and discuss promising future directions.",
+      "bodyTruncated": false,
+      "eventAggregation": {
+        "total": 1,
+        "groups": [
+          {
+            "key": "官方来源",
+            "tone": "#16130f",
+            "items": [
+              {
+                "source": "arXiv cs.AI",
+                "title": "基于图神经网络的链路预测综述：技术、应用与挑战",
+                "url": "https://arxiv.org/abs/2607.16198",
+                "note": "原始发布 / 公告。",
+                "text": "基于图神经网络的链路预测综述：技术、应用与挑战 —— 原始发布 / 公告。"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "recordId": "recvpGpzwpJVye",
+      "title": "The 2026 Summer of Football: A Record-Breaking Moment Across Meta",
+      "titleCn": "2026足球之夏创下Meta多平台互动纪录",
+      "source": "Meta Newsroom AI",
+      "url": "https://about.fb.com/news/2026/07/the-2026-summer-of-football-a-record-breaking-moment-across-meta",
+      "category": "前沿模型公司",
+      "contentType": "",
+      "publishedDate": "2026-07-18",
+      "summary": "赛事期间，WhatsApp峰值超过每秒2900万条消息，创平台历史纪录；Instagram参赛球员合计新增2.136亿粉丝。Threads赛事标签内容获得15亿次展示，Facebook相关帖子达到8000万条。",
+      "why": "这些数据体现了全球大型直播赛事对Meta跨平台用户互动和创作者增长的显著带动作用，但与AI技术进展关联有限。",
+      "impact": 65,
+      "novelty": 42,
+      "actionability": 48,
+      "urgency": "低",
+      "tags": [
+        "产品",
+        "其他"
+      ],
+      "imageUrl": "https://about.fb.com/wp-content/uploads/2026/07/The-2026-Summer-of-Football_A-Record-Breaking-Moment-Across-Meta_Header-1.jpg?fit=1920%2C1080",
+      "mediaAssets": {
+        "images": [
+          {
+            "url": "https://about.fb.com/wp-content/uploads/2026/07/The-2026-Summer-of-Football_A-Record-Breaking-Moment-Across-Meta_Thumbnail-1.jpg?fit=890%2C501",
+            "alt": ""
+          },
+          {
+            "url": "https://about.fb.com/wp-content/uploads/2026/07/01_biggestGrowersIG.jpg?resize=960%2C826",
+            "alt": "Chart reflecting highest growth on Instagram by player"
+          },
+          {
+            "url": "https://about.fb.com/wp-content/uploads/2026/07/02_TeamLevelGrowthIG.jpg?resize=960%2C1184",
+            "alt": "Chart reflecting highest growth on Instagram by player"
+          }
+        ],
+        "videos": []
+      },
+      "body": "This year’s tournament wasn’t just the biggest sporting event on the planet — it’s become one of the biggest moments in Meta’s history. From record-shattering message volumes on WhatsApp to historic reach on Instagram, the tournament is lighting up every corner of our family of apps in ways we’ve never seen before.\n\nHere’s how conversation, engagement and connection around football has shown up across Meta over the course of the tournament.\n\nWhatsApp: A New All-Time Record\n\nDuring the Round of 16 match between Argentina and Egypt, WhatsApp hit over 29 million messages per second — a new all-time record for the platform. That beats the previous record that was set during the 2022 Final. It broke that record again during the final, hitting over 30 million messages per second. ( Updated on July 21, 2026 at 5:25PM PT to reflect latest numbers. )\n\nInstagram: +213.6 Million New Followers for Players\n\nBeyond reach, the tournament drove massive audience growth for participating players. Over the first month of the tournament window (June 11 – July 11), final-squad players collectively added +213.6 million activated followers — a 6.6% increase — with combined followings surging from 3.26 billion to 3.47 billion .\n\nThe Breakout Story: Vozinha\n\nEvery four years, the tournament produces an unexpected hero. On Instagram, that was Vozinha , the Cape Verde goalkeeper, who went from 37,000 followers to 28.8 million — an almost incomprehensible +77,000% increase . His electrifying performances captivated audiences far beyond his small island nation and turned him into one of the most-followed athletes on the platform virtually overnight.\n\nVozinha’s rise helped propel Cape Verde to the top of the country leaderboard with +32.1 million net followers across its squad — a +2,000% team-level increase .\n\nErling Haaland led established players with +23 million new followers , nearly doubling his pre-tournament base as Norway captured global attention. Meanwhile, Cristiano Ronaldo — already the most-followed person on Instagram — still added another 10 million to reach a record 676 million .\n\nTop 5 Most Popular Players, According to Instagram’s Your Algorithm Feature\n\nIn the U.S., a handful of notable names drove the most popularity according to Instagram’s Your Algorithm feature , which lets you control the interests you see in content on your home feed, Reels and Explore. The top 5 players that have appeared in the algorithms of U.S. users throughout the World Cup include * :\n\nLionel Messi\n\nCristiano Ronaldo\n\nErling Haaland\n\nKylian Mbappé\n\nJude Bellingham\n\nMexico stood out with a +78% surge driven by breakout stars like Gilberto Mora (+5.6M) and Julian Quiñones (+2.6M). Japan saw a +42% increase fueled by rising talents like Keito Nakamura (+1.3M).\n\nRising Stars to Watch\n\nSeveral young players used the global stage to build significant Instagram audiences:\n\nEndrick — 18.7M → 23.8M (+5.2M, +27%)\n\nJude Bellingham — 41.3M → 45.5M (+4.2M, +10%)\n\nMichael Olise — +4.0M followers\n\nLamine Yamal — +3.0M followers\n\nVinicius Jr — 59.9M → 62.7M (+2.8M, +4%)\n\nSpotlight on the Americas\n\nMexico : +20.8M (+78%) — the biggest percentage gainer among major football nations\n\nBrazil : +26.0M — led by Neymar (+6.5M), Endrick (+5.2M), and Vinicius Jr (+2.8M)\n\nArgentina : +18.4M — Messi (+5.6M) still drives massive interest\n\nUnited States : +1.7M (+10%) — co-hosts saw solid growth led by Folarin Balogun (+609K)\n\nCanada : +277K (+3%) — steady gains for the co-hosts\n\nThreads:\n\nOn Threads, there were 1.5B impressions on tournament tagged posts. Content from the tournament community reached about 15 million people a day, peaking at 25 million on July 6.\n\nFacebook: 80 Million Posts and Counting\n\nThe conversation on Facebook has been enormous.Since the beginning of the tournament, people published 80 million posts mentioning the World Cup.\n\nThe Big Picture: A Meta-Wide Moment\n\nThe 2026 summer of football is proof that the world’s biggest live events bring people together beyond the minutes of each match. Fans are sharing 80 million posts about the tournament on Facebook, final-squad players collectively added 213.6 million new followers on Instagram in a single month, and joining the Threads football community where content reached about 15.5 million people a day.\n\n“This summer we set out to make Meta the cultural epicenter of the beautiful game – and thanks to our features and content the real winners were the fans. Our apps were the home of everything outside the live game. The highlights, the behind-the-scenes, the dressing room celebrations, the coaching analysis, the Vozinha phenomenon. While fans watch the 90 minutes on TV, they come to our apps for everything around it — the community, the conversation, the clips and memes they love to share and debate. None of this happens without our valued partners, the rights holders, teams, players, creators and even the fans themselves who leaned in, experimented, and documented their journey through the host nations. They all trusted the platform and the results speak for themselves.”\n\n— Rob Pilgrim, Global Football Lead, Meta\n\n*Data is based on interests U.S. users have added to their algorithms using Instagram’s Your Algorithm feature, between June 11–July 13, 2026.",
+      "bodyTruncated": false,
+      "eventAggregation": {
+        "total": 1,
+        "groups": [
+          {
+            "key": "官方来源",
+            "tone": "#16130f",
+            "items": [
+              {
+                "source": "Meta Newsroom AI",
+                "title": "2026足球之夏创下Meta多平台互动纪录",
+                "url": "https://about.fb.com/news/2026/07/the-2026-summer-of-football-a-record-breaking-moment-across-meta",
+                "note": "原始发布 / 公告。",
+                "text": "2026足球之夏创下Meta多平台互动纪录 —— 原始发布 / 公告。"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "recordId": "recvpCjm0sIrO2",
+      "title": "A Functional-Space Mean-Field Theory of Partially-Trained Three-Layer Neural Networks",
+      "titleCn": "部分训练三层神经网络的函数空间平均场理论",
+      "source": "JMLR",
+      "url": "http://jmlr.org/papers/v27/22-1232.html",
+      "category": "技术研究开源",
+      "contentType": "论文",
+      "publishedDate": "2026-07-17",
+      "summary": "研究将神经元表示从欧氏空间提升至函数空间，刻画了第一层权重固定的三层神经网络在无限宽极限下的平均场训练动力学。论文证明了适当假设下训练损失的线性收敛，并给出相关函数空间的 Rademacher 复杂度界，同时揭示两种均具有特征学习能力的平均场极限机制。",
+      "why": "该研究把平均场理论从两层网络扩展到部分训练的三层网络，为理解深层网络的收敛、泛化与特征学习提供了新的严格理论框架。",
+      "impact": 62,
+      "novelty": 82,
+      "actionability": 35,
+      "urgency": "低",
+      "tags": [
+        "AI",
+        "开源",
+        "其他"
+      ],
+      "imageUrl": "",
+      "mediaAssets": {
+        "images": [],
+        "videos": []
+      },
+      "body": "To understand the training dynamics of neural networks, prior studies have considered the mean-field (MF) limit of two-layer NNs as the width tends to infinity, establishing theoretical guarantees for its convergence under gradient flow training as well as approximation and generalization capabilities. In this work, we study the infinite-width limit of a type of three-layer neural network where the first-layer weights are untrained. To rigorously define the limiting model, we extend the MF theory by lifting the representation of neurons from Euclidean to functional spaces. This allows us to establish the MF training dynamics as a functional gradient flow with a time-varying kernel that remains positive-definite under suitable assumptions, thus proving a linear-rate convergence of its training loss. Furthermore, we define novel function spaces that contain the solutions obtained through the MF training dynamics and prove Rademacher complexity bounds for these spaces. Notably, our analysis applies to a range of scaling choices of the model, resulting in two distinct regimes of the MF limit that both exhibit feature learning through training.",
+      "bodyTruncated": false,
+      "eventAggregation": {
+        "total": 1,
+        "groups": [
+          {
+            "key": "官方来源",
+            "tone": "#16130f",
+            "items": [
+              {
+                "source": "JMLR",
+                "title": "部分训练三层神经网络的函数空间平均场理论",
+                "url": "http://jmlr.org/papers/v27/22-1232.html",
+                "note": "原始发布 / 公告。",
+                "text": "部分训练三层神经网络的函数空间平均场理论 —— 原始发布 / 公告。"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ],
+  "briefRecordId": "recvpYGJhtpwJe",
+  "briefTableId": "tblOZoliKFSTSVNG"
+}

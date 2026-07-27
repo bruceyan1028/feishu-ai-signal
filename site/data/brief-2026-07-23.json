@@ -1,60 +1,178 @@
 {
-  "date": "2026-07-24",
-  "title": "AI Signal 每日情报 · 2026-07-24",
-  "intro": "本轮信号显示，AI竞争正同时向高能效基础设施、可部署智能体和脑科学交叉应用纵深推进。资本仍在追逐高增长平台与芯片新贵，但安全、数据质量和商业秘密诉讼正成为不可忽视的风险变量。",
+  "date": "2026-07-23",
+  "title": "AI Signal 每日情报 · 2026-07-23",
+  "intro": "本轮信号显示，AI竞争正从单一模型能力扩展到智能体可靠性、算力基础设施、脑科学交互与行业落地。开源工具和生产级平台持续涌现，但成本、评测与法律风险正成为商业化进程中的关键变量。",
   "bullets": [
     {
-      "title": "Vera Rubin生态加速进入规模部署",
-      "text": "英伟达称新一代NVL72在DeepSeek-R1初步基准中实现较Grace Blackwell每兆瓦10倍的吞吐提升，并以Spectrum-6的102.4 Tbps网络支撑跨站点扩展。百时美施贵宝已宣布建设包含八套该系统的DGX SuperPOD，纬创也在美国扩建产能，显示算力、网络、客户部署和制造环节正在同步落地。",
+      "title": "轨迹一致性可量化智能体不确定性",
+      "text": "同一LLM智能体面对相同输入仍可能采取显著不同的行动路径，而多次运行的一致程度与任务准确率高度相关。研究通过选择性预测在54%-62%的覆盖率下将准确率提高到87%-88%，并发现单次评测错误排序模型的概率达29.3%。",
       "refs": [
-        3,
-        6,
-        8,
-        9
+        4
       ]
     },
     {
-      "title": "智能体平台转向生产级工具链",
-      "text": "Google Cloud以13个演示覆盖构建、MCP连接、人工审批、持久运行、评估和部署，英伟达则把创意软件接入、流程验证、本地运行及强化学习后训练纳入统一能力栈。Voicify的实践表明，垂直语音助手采用相关平台后可降低延迟、提高可靠性，并节省约25%至30%的模型成本。",
+      "title": "Vera Rubin生态加速进入部署阶段",
+      "text": "英伟达称NVL72已在多家云服务商运行，DeepSeek-R1初步测试中的每兆瓦吞吐量较Grace Blackwell NVL72提升10倍；Spectrum-6则以102.4 Tbps吞吐量支撑跨站点扩展。百时美施贵宝已规划八套相关系统，纬创也将扩大配套硬件制造能力。",
       "refs": [
-        13,
-        15,
-        16,
+        5,
+        9,
+        11,
+        12
+      ]
+    },
+    {
+      "title": "非侵入式脑信号解码逼近实用门槛",
+      "text": "Brain2Qwerty v2利用MEG信号和经神经数据微调的大语言模型实时生成句子，平均词准确率达到61%，最佳参与者达到78%。与此同时，TRIBE v2可对图像、声音和语言诱发的脑活动进行预测，并支持新受试者、新语言及新任务的零样本泛化，两项工作均开放了关键资源。",
+      "refs": [
+        6,
+        7
+      ]
+    },
+    {
+      "title": "开源视觉与医疗仿真显著提速",
+      "text": "SAM 3.1借助对象多路复用和全局推理，将单张H100处理含中等数量对象的视频吞吐量从每秒16帧提升至32帧。英伟达的GPU原生医疗物理仿真框架可并行运行8192个机器人环境，把基准训练时间从五个多小时压缩到两分钟以内。",
+      "refs": [
+        8,
         17
       ]
     },
     {
-      "title": "非侵入式脑信号解码逼近实时交流",
-      "text": "Brain2Qwerty v2可将MEG信号实时转换为句子，平均词准确率为61%，最佳参与者达到78%，且训练代码与部分数据已开放。与此同时，颅内记录已能跨任务实时识别个体情绪状态，认知地图生成模型和自由回忆网络也分别展现出目标规划与类“记忆宫殿”策略。",
+      "title": "智能体开发平台补齐生产化链路",
+      "text": "Google Cloud发布13个代码优先演示，覆盖MCP数据连接、动态界面、人工审批、持久化执行、评估、部署与监控。英伟达则把NeMo Gym、NeMo RL和Nemotron 3 Ultra组合为分布式后训练基础设施，强调以“单位成本智能”衡量强化学习投入。",
+      "refs": [
+        16,
+        19
+      ]
+    },
+    {
+      "title": "AI科学发现转向多智能体协作",
+      "text": "DoLQ通过采样、参数优化和科学家智能体协同，从观测数据恢复常微分方程，在多维基准上取得更高成功率并更准确识别真实符号项。另有受大脑启发的生成模型结合认知地图、随机计算和组合编码，仅依赖局部突触可塑性即可支持目标导向规划与问题求解。",
       "refs": [
         1,
-        2,
-        4,
-        21
-      ]
-    },
-    {
-      "title": "GPU仿真推动医疗机器人训练提速",
-      "text": "Isaac for Healthcare新增开源医疗物理仿真框架，可统一模拟解剖结构、器械交互和传感器输入，并并行运行8192个训练环境。其基准训练时长由五个多小时压缩至两分钟以内，有望降低医疗机器人策略开发和评估的迭代成本。",
-      "refs": [
-        5
-      ]
-    },
-    {
-      "title": "高估值热潮伴随治理与诉讼压力",
-      "text": "Databricks估值升至1880亿美元，Etched和Glow分别达到103亿美元与12亿美元，Anthropic截至5月的收入运行率据称已从90亿美元跃升至470亿美元。另一方面，苹果针对OpenAI提起商业秘密诉讼，可能干扰其潜在上市安排；RLHF研究还警示标注者压力等状态会系统性污染偏好数据并传导至模型。",
-      "refs": [
-        10,
-        11,
-        12,
-        14,
-        18,
-        20,
-        22
+        3
       ]
     }
   ],
   "signals": [
+    {
+      "recordId": "recvpCjm0sfIqj",
+      "title": "Discovering Ordinary Differential Equations with LLM-Based Qualitative and Quantitative Evaluation",
+      "titleCn": "DoLQ：基于大模型定性与定量评估的常微分方程发现方法",
+      "source": "arXiv cs.AI",
+      "url": "https://arxiv.org/abs/2605.07323",
+      "category": "技术研究开源",
+      "contentType": "论文",
+      "publishedDate": "2026-07-17",
+      "summary": "研究提出 DoLQ，通过采样智能体、参数优化器和科学家智能体协同，从观测数据中发现常微分方程。实验显示，该方法在多维常微分方程基准上比现有方法具有更高成功率，并能更准确地恢复真实方程的符号项，代码已开源。",
+      "why": "DoLQ 将大模型的领域知识与数值评估结合，为兼顾方程拟合精度和物理合理性的科学发现提供了新路径。",
+      "impact": 76,
+      "novelty": 82,
+      "actionability": 74,
+      "urgency": "中",
+      "tags": [
+        "LLM",
+        "Agent",
+        "推理",
+        "开源"
+      ],
+      "imageUrl": "https://arxiv.org/static/browse/0.3.4/images/arxiv-logo-fb.png",
+      "mediaAssets": {
+        "images": [
+          {
+            "url": "https://arxiv.org/html/2605.07323v2/x1.png",
+            "alt": "Figure 1 : Similar MSE does not imply correct discovery: even with a low MSE, the identified equation may differ from the true one, suggesting that quantitative metrics alone are insufficient and that qualitative evaluation is therefore necessary."
+          },
+          {
+            "url": "https://arxiv.org/html/2605.07323v2/x2.png",
+            "alt": "Figure 2 : Overview of the DoLQ framework for LLM-based ODE discovery. The framework operates through an iterative loop among three components: (1) the Sampler Agent proposes candidate terms with physical justifications based on the system description and Scientist Agent’s feedback; (2) the Parameter Optimizer makes functions and fits their parameters; and (3) the Scientist Agent evaluates each term through qualitative semantic assessment and quantitative iterative comparison, determining actions that guide subsequent iterations."
+          },
+          {
+            "url": "https://arxiv.org/html/2605.07323v2/x3.png",
+            "alt": "Figure 3 : Equation comparison on the 2D dimensionless Glider system. Ground truth terms are highlighted in green. Group (b) shows models with reasonable NMSE: DoLQ achieves integral NMSE < 10 − 3 <10^{-3} across all dimensions, and LLM-SR exhibits the lowest NMSE among the remaining methods. Group (c) shows models with higher NMSE. Each model’s discovered equation terms and their corresponding optimized coefficients are displayed."
+          }
+        ],
+        "videos": []
+      },
+      "body": "arXiv:2605.07323v2 Announce Type: replace Abstract: Discovering governing differential equations from observational data is a fundamental challenge in scientific machine learning. Existing symbolic regression approaches rely primarily on quantitative metrics; however, real-world differential equation modeling also requires incorporating domain knowledge to ensure physical plausibility. To address this gap, we propose DoLQ, a method for discovering ordinary differential equations with LLM-based qualitative and quantitative evaluation. DoLQ employs a multi-agent architecture: a Sampler Agent proposes dynamic system candidates, a Parameter Optimizer refines equations for accuracy, and a Scientist Agent leverages an LLM to conduct both qualitative and quantitative evaluations and synthesize their results to iteratively guide the search. Experiments on multi-dimensional ordinary differential equation benchmarks demonstrate that DoLQ achieves superior performance compared to existing methods, not only attaining higher success rates but also more accurately recovering the correct symbolic terms of ground truth equations. Our code is available at https://github.com/Bon99yun/DoLQ.",
+      "bodyTruncated": false,
+      "eventAggregation": {
+        "total": 1,
+        "groups": [
+          {
+            "key": "官方来源",
+            "tone": "#16130f",
+            "items": [
+              {
+                "source": "arXiv cs.AI",
+                "title": "DoLQ：基于大模型定性与定量评估的常微分方程发现方法",
+                "url": "https://arxiv.org/abs/2605.07323",
+                "note": "原始发布 / 公告。",
+                "text": "DoLQ：基于大模型定性与定量评估的常微分方程发现方法 —— 原始发布 / 公告。"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "recordId": "recvpCjm0s9Niw",
+      "title": "ScanFocus: A Coarse-to-Fine Framework for Spatio-Temporal Video Grounding",
+      "titleCn": "ScanFocus：用于时空视频定位的由粗到细框架",
+      "source": "arXiv cs.AI",
+      "url": "https://arxiv.org/abs/2607.13421",
+      "category": "技术研究开源",
+      "contentType": "论文",
+      "publishedDate": "2026-07-17",
+      "summary": "ScanFocus 将时空视频定位拆分为全局时空扫描与局部边界聚焦，通过轻量级可变形语义-运动融合模块生成粗粒度候选，再利用语义引导时间聚合器密集采样边界附近帧并精确回归时间戳。该方法在三个常用基准上优于既有方法，代码计划开源。",
+      "why": "该研究通过显式建模局部帧间交互，缓解长视频降采样造成的高频边界信息丢失与定位不准问题。",
+      "impact": 72,
+      "novelty": 76,
+      "actionability": 65,
+      "urgency": "低",
+      "tags": [
+        "多模态",
+        "推理",
+        "开源"
+      ],
+      "imageUrl": "",
+      "mediaAssets": {
+        "images": [
+          {
+            "url": "https://arxiv.org/html/2607.13421v1/x1.png",
+            "alt": "Figure 1 : Comparison of temporal boundary localization paradigms. (a) Existing Transformer-based methods often produce ambiguous boundaries due to the suppression of high-frequency temporal cues caused by global downsampling. (b) Our proposed method adopts a coarse-to-fine framework that first generates a coarse interval at a low frame rate, followed by boundary dense sampling to recover fine-grained details for precise localization."
+          },
+          {
+            "url": "https://arxiv.org/html/2607.13421v1/x2.png",
+            "alt": "Figure 2 : Oracle Experiment on HCSTVG-v1. Using GT timestamps instead of predicted intervals substantially improves performance, identifying temporal localization as the main bottleneck."
+          },
+          {
+            "url": "https://arxiv.org/html/2607.13421v1/x3.png",
+            "alt": "Figure 3 : Overview architecture of our proposed ScanFocus. The framework follows a coarse-to-fine paradigm, decoupling the task into two stages: 1) Global Spatio-Temporal Scan: We first utilize a unified vision-language fusion encoder combined with a lightweight Semantic-Motion Fusion Encoder to efficiently align multimodal features. Dual DETR-style decoders are then employed to generate coarse spatial tubes and temporal intervals. 2) Local Boundary Focus: To recover high-frequency cues suppressed in the coarse stage, we perform dense sampling around the predicted coarse boundaries. The Semantic-Guided Temporal Aggregator explicitly models short-term dependencies within these local windows, which are finally fed into dual refine decoders to predict precise start and end timestamps."
+          }
+        ],
+        "videos": []
+      },
+      "body": "arXiv:2607.13421v1 Announce Type: cross Abstract: Spatio-Temporal Video Grounding (STVG) aims to retrieve the visual trajectory of a specific object from a video stream as described by a natural language expression. However, most advanced methods struggle to balance global context modeling with precise boundary localization. Due to the prohibitive computational costs of processing long videos, these approaches typically resort to low-rate temporal downsampling and implicit motion modeling. This inevitably suppresses high-frequency boundary cues and neglects the explicit inter-frame dependencies required for precise boundary delineation. To address these limitations, we present \\textbf{ScanFocus}, a novel coarse-to-fine framework that decouples the STVG task into a global spatio-temporal scan and a local boundary focus. Specifically, we utilize a unified vision-language fusion encoder combined with a lightweight Deformable Semantic-Motion Fusion module to efficiently align multimodal features and generate coarse proposals. To recover the suppressed fine-grained details, we introduce the Semantic-Guided Temporal Aggregator (SGTA) in the refinement stage. By densely sampling around coarse boundaries, SGTA explicitly models short-term temporal interactions under semantic guidance, capturing rapid motion changes for precise timestamp regression. Extensive experiments on three widely used benchmarks demonstrate the performance superiority of our proposed method over previous approaches. Code will be released at https://github.com/TenMinutes209/ScanFocus.",
+      "bodyTruncated": false,
+      "eventAggregation": {
+        "total": 1,
+        "groups": [
+          {
+            "key": "官方来源",
+            "tone": "#16130f",
+            "items": [
+              {
+                "source": "arXiv cs.AI",
+                "title": "ScanFocus：用于时空视频定位的由粗到细框架",
+                "url": "https://arxiv.org/abs/2607.13421",
+                "note": "原始发布 / 公告。",
+                "text": "ScanFocus：用于时空视频定位的由粗到细框架 —— 原始发布 / 公告。"
+              }
+            ]
+          }
+        ]
+      }
+    },
     {
       "recordId": "recvq4wVKcqs7K",
       "title": "Neural sampling from cognitive maps enables goal-directed imagination and planning",
@@ -102,32 +220,46 @@
       }
     },
     {
-      "recordId": "recvqgdbV5eZnk",
-      "title": "Cross-task, explainable and real-time decoding of human emotion states by integrating gray and white matter intracranial neural activity",
-      "titleCn": "融合灰质与白质颅内神经活动，跨任务实时解码人类情绪状态",
-      "source": "Nature Computational Science",
-      "url": "https://www.nature.com/articles/s43588-026-01021-w",
+      "recordId": "recvpCjm0sAn0P",
+      "title": "When Agents Disagree With Themselves: Behavioral Consistency as an Uncertainty Signal for LLM Agents",
+      "titleCn": "LLM 智能体的行为一致性可作为免训练不确定性信号",
+      "source": "arXiv cs.AI",
+      "url": "https://arxiv.org/abs/2602.11619",
       "category": "技术研究开源",
       "contentType": "论文",
-      "publishedDate": "2026-07-22",
-      "summary": "该研究利用颅内脑活动记录构建个性化模型，可跨不同任务实时解码人类情绪状态，并识别与情绪相关的关键脑网络。研究结果可能为未来精神健康疾病治疗提供参考。",
-      "why": "这项工作将跨任务泛化、实时解码与可解释脑网络识别相结合，具有潜在的临床转化价值。",
+      "publishedDate": "2026-07-17",
+      "summary": "研究发现，同一 LLM 智能体在相同输入下会产生显著不同的行动轨迹，而轨迹一致性与任务准确率高度相关，可作为黑盒、免训练的不确定性信号。基于多次运行一致性的选择性预测可在 54%-62% 覆盖率下将准确率提升至 87%-88%，并揭示单次评测有 29.3% 的概率错误排序模型。",
+      "why": "该方法无需访问模型内部或使用校准集，即可识别智能体失败风险并提升高置信回答的可靠性。",
       "impact": 82,
-      "novelty": 86,
-      "actionability": 63,
+      "novelty": 80,
+      "actionability": 78,
       "urgency": "中",
       "tags": [
-        "AI",
+        "Agent",
+        "LLM",
         "推理",
-        "其他"
+        "开源"
       ],
-      "imageUrl": "https://media.springernature.com/full/springer-static/image/art%3A10.1038%2Fs43588-026-01021-w/MediaObjects/43588_2026_1021_Fig1_HTML.png",
+      "imageUrl": "",
       "mediaAssets": {
-        "images": [],
+        "images": [
+          {
+            "url": "https://arxiv.org/html/2602.11619v2/unique_sequences_histogram.png",
+            "alt": "(a) Share of tasks by behavioral consistency level (unique action sequences)."
+          },
+          {
+            "url": "https://arxiv.org/html/2602.11619v2/correctness_comparison.png",
+            "alt": "(b) Correctness for consistent ( ≤ \\leq 2 seqs) vs. inconsistent ( ≥ \\geq 4 seqs) tasks."
+          },
+          {
+            "url": "https://arxiv.org/html/2602.11619v2/behavioral_vs_verbalized.png",
+            "alt": "Figure 2 : Behavioral consistency outperforms verbalized self-confidence as a failure detector for all three models, with verbalized confidence near or below the random baseline."
+          }
+        ],
         "videos": []
       },
-      "body": "从颅内神经活动中解码人类情绪状态，是开发情感脑机接口和情感障碍新疗法的关键。然而，解码的现实应用需要具备高性能，能够整合来自灰质和白质的神经活动，在不同情境下实现稳定的泛化，具有充分的神经编码可解释性，并能稳健地实时实施，而所有这些目标仍未实现。在此，我们对18名个体在两项情绪诱发任务中的颅内脑电图（iEEG）以及大量自评效价和唤醒度评分进行了同步记录。随后，我们在深度学习框架内开发了个性化解码模型，实现了对连续效价和唤醒状态的高性能解码，并超越了先前EEG和iEEG解码的性能。关键的是，这些模型通过整合灰质和白质信号显著提升了性能，并展现出跨任务泛化能力。这些模型还揭示了对效价和唤醒度进行编码的共享及偏好性中脑边缘–丘脑–皮层子网络，体现出神经生理学可解释性。最后，这些模型在另外四名个体中实现了稳健的实时解码。我们的研究结果对于推动情绪解码神经技术向可部署的情感脑机接口和用于情感障碍的闭环治疗系统发展具有重要意义。\n\n通过您的机构访问\n\n购买或订阅\n\n这是订阅内容的预览，请通过您的机构访问\n\n访问选项\n\n通过您的机构访问\n\n访问Nature及另外54种Nature Portfolio期刊\n\n获取Nature+，我们最具性价比的在线访问订阅服务\n\n27,99欧元／30天\n\n可随时取消\n\n了解更多\n\n订阅本期刊\n\n获取12期数字版刊物及文章在线访问权限\n\n每年111,21欧元\n\n每期仅9,27欧元\n\n了解更多\n\n购买本文\n\n在SpringerLink上购买\n\n即时获取完整文章PDF。\n\n39,95欧元\n\n价格可能需要缴纳当地税费，税费将在结账时计算\n\n图1：实验设计、神经记录和解码分析概览。\n\n图2：对效价和唤醒状态进行高性能单任务解码。\n\n图3：在不同情绪诱发任务之间进行可互换、可迁移的解码。\n\n图4：对效价和唤醒度进行差异化编码的灰质区域和白质束。\n\n图5：神经解码模型的在线实施及稳健的实时情绪解码。\n\n其他人正在查看的类似内容\n\n基于多目标进化算法所选EEG通道，利用二维CNN区分人类情绪\n\n文章\n开放获取\n2022年3月3日\n\n利用时间自编码器进行半监督颅内EEG聚类和分类\n\n文章\n开放获取\n2023年1月13日\n\n一种基于情绪维度耦合约束的多任务EEG情绪识别方法\n\n文章\n开放获取\n2026年1月2日\n\n数据和",
-      "bodyTruncated": true,
+      "body": "arXiv:2602.11619v2 Announce Type: replace Abstract: Running the same LLM agent on identical inputs yields 2.3-4.2 distinct action sequences per 10 runs; this behavioral variance constitutes a training-free, black-box uncertainty signal that instantiates selective classification and distribution-free calibration for agentic systems. Across 8,000 runs of four models on 200 HotpotQA questions, consistent tasks (at most 2 unique paths) achieve 82-87% accuracy while inconsistent tasks (4 or more paths) achieve 41-65%, a gap that survives controls for task difficulty. Divergence concentrates at step 2 (50.5% of Llama tasks), and consistency metrics detect failures with AUROC 0.62-0.78. Exploiting this signal, selective prediction (answering only when k=3 runs agree) achieves 87-88% accuracy at 54-62% coverage, a 6-14pp gain over single-run baselines, and matches a split-conformal baseline without a held-out calibration set. A cross-benchmark validation on SWE-bench (50 tasks, 1,000 runs) preserves the consistency hierarchy while revealing an ~8x spread in mean trajectory length across models, and bootstrap analysis shows single-run evaluations misrank models 29.3% of the time.",
+      "bodyTruncated": false,
       "eventAggregation": {
         "total": 1,
         "groups": [
@@ -136,11 +268,11 @@
             "tone": "#16130f",
             "items": [
               {
-                "source": "Nature Computational Science",
-                "title": "融合灰质与白质颅内神经活动，跨任务实时解码人类情绪状态",
-                "url": "https://www.nature.com/articles/s43588-026-01021-w",
+                "source": "arXiv cs.AI",
+                "title": "LLM 智能体的行为一致性可作为免训练不确定性信号",
+                "url": "https://arxiv.org/abs/2602.11619",
                 "note": "原始发布 / 公告。",
-                "text": "融合灰质与白质颅内神经活动，跨任务实时解码人类情绪状态 —— 原始发布 / 公告。"
+                "text": "LLM 智能体的行为一致性可作为免训练不确定性信号 —— 原始发布 / 公告。"
               }
             ]
           }
@@ -205,6 +337,53 @@
                 "url": "https://blogs.nvidia.com/blog/vera-rubin",
                 "note": "原始发布 / 公告。",
                 "text": "英伟达 Vera Rubin NVL72 加速量产，主打更高能效与更低 Token 成本 —— 原始发布 / 公告。"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "recordId": "recvpCkKewC9o4",
+      "title": "Introducing TRIBE v2: A Predictive Foundation Model Trained to Understand How the Human Brain Processes Complex Stimuli",
+      "titleCn": "Meta 发布脑活动预测基础模型 TRIBE v2",
+      "source": "Meta AI Blog",
+      "url": "https://ai.meta.com/blog/tribe-v2-brain-predictive-foundation-model",
+      "category": "前沿模型公司",
+      "contentType": "",
+      "publishedDate": "2026-07-17",
+      "summary": "TRIBE v2 基于700多名健康志愿者的多模态刺激与高分辨率 fMRI 数据训练，可预测人脑对图像、声音和语言的反应，并对新受试者、语言及任务进行零样本预测。Meta 已以 CC BY-NC 许可发布模型权重、代码和论文，同时提供交互式演示。",
+      "why": "该模型可减少神经科学研究对真人实验的依赖，并有望加速神经疾病研究及神经科学启发的 AI 开发。",
+      "impact": 88,
+      "novelty": 92,
+      "actionability": 86,
+      "urgency": "中",
+      "tags": [
+        "AI",
+        "多模态",
+        "开源",
+        "其他"
+      ],
+      "imageUrl": "https://scontent-iad3-1.xx.fbcdn.net/v/t39.2365-6/659112495_952140057346056_1728296311373871062_n.gif?_nc_cat=104&ccb=1-7&_nc_sid=e280be&_nc_ohc=cdFLeVlCBpoQ7kNvwHVTvoT&_nc_oc=AdoKC3A61R7W3E0EEvvywo8id7Q0LNOEe2WQFUzD4Ysh49W9qC9B7gVtEtHhPG1cWSc&_nc_zt=14&_nc_ht=scontent-iad3-1.xx&_nc_gid=fk2XvDj_LIR6RTI6j-IUig&_nc_ss=7820f&oh=00_AQC6YaVff8ZMX25miNZrHZ5v3HXeyTYRe3MhgKaSKOcdbA&oe=6A7C0AAB",
+      "mediaAssets": {
+        "images": [],
+        "videos": []
+      },
+      "body": "Products AI Research Resources About Try Meta AI BACK Meta AI Media Generation Vibes AI Studio Overview Projects Research Areas People Blog Learning Hub Demos Overview Open Source Careers Clear Clear Products > AI Research > Resources > About > Try Meta AI Research Introducing TRIBE v2: A Predictive Foundation Model Trained to Understand How the Human Brain Processes Complex Stimuli March 26, 2026• 2 minute read Video 3 Takeaways We're introducing TRIBE v2, our next-gen model that acts as a digital twin of human neural activity. This offers unprecedented speed, accuracy, and a 70x resolution increase as compared to similar models to predict how the brain responds to almost any sight or sound — enabling neuroscientists and clinical researchers to test theories without requiring human subjects. We're releasing the model, codebase, paper, and an interactive demo to help researchers push the boundaries of neuroscience, apply brain insights to build better AI systems, and use computational simulation to accelerate breakthroughs in the treatment of neurological disorders. Understanding how the human brain processes the world around us is one of the greatest open challenges in neuroscience. Breakthroughs here could transform how we understand and treat neurological conditions affecting hundreds of millions of people — and improve AI systems by directly guiding their development from neuroscientific principles. Video 4 Today, we're announcing TRIBE v2: our first AI model of human brain responses to sights, sounds, and language. Building on our Algonauts 2025 award-winning model, which was trained on the low-resolution fMRI recordings of four individuals, we leverage a massive dataset of more than 700 healthy volunteers who were presented with a wide variety of media, including images, podcasts, videos, and text. TRIBE v2 reliably predicts high-resolution fMRI brain activity — enabling zero-shot predictions for new subjects, languages, and tasks — and consistently outperforms standard modeling approaches. By creating a digital model of the human brain, researchers can rapidly test hypotheses about its underlying functions without the need for human subjects in every experiment. To accelerate the pace of neuroscience discovery and open up new avenues for clinical practice, we’re sharing a research paper, along with model weights and code, under a CC BY-NC license. We also invite everyone to explore TRIBE v2 on our demo website. By sharing this work, we hope to help accelerate neuroscience research that will unlock scientific and clinical breakthroughs for the greater good. Explore the DemoRead the PaperDownload the CodeDownload the Model Our approach About AI at Meta People Careers Research Infrastructure Resources Demos Meta AI Assistant Media Generation Vibes AI Studio Latest news Blog Newsletter Foundational models Llama Our approach Our approachAbout AI at MetaPeopleCareers Research ResearchInfrastructureResourcesDemos Meta AI Meta AIAssistantMedia GenerationVibesAI Studio Latest news Latest newsBlogNewsletter Foundational models Llama Privacy Policy Terms Cookies Meta © 2026",
+      "bodyTruncated": false,
+      "eventAggregation": {
+        "total": 1,
+        "groups": [
+          {
+            "key": "官方来源",
+            "tone": "#16130f",
+            "items": [
+              {
+                "source": "Meta AI Blog",
+                "title": "Meta 发布脑活动预测基础模型 TRIBE v2",
+                "url": "https://ai.meta.com/blog/tribe-v2-brain-predictive-foundation-model",
+                "note": "原始发布 / 公告。",
+                "text": "Meta 发布脑活动预测基础模型 TRIBE v2 —— 原始发布 / 公告。"
               }
             ]
           }
@@ -705,32 +884,32 @@
       }
     },
     {
-      "recordId": "recvqgdbV5W0GD",
-      "title": "AI chip startup Etched defies skeptics, hits $10.3B valuation from big-name investors",
-      "titleCn": "AI芯片初创公司Etched估值达103亿美元",
-      "source": "TechCrunch AI",
-      "url": "https://techcrunch.com/2026/07/23/ai-chip-startup-etched-defies-skeptics-hits-10-3b-valuation-from-big-name-investors",
-      "category": "创业融资并购",
+      "recordId": "recvpCkKewUtUf",
+      "title": "SAM 3.1: Faster and More Accessible Real-Time Video Detection and Tracking With Multiplexing and Global Reasoning",
+      "titleCn": "Meta 发布 SAM 3.1：单次前向传播可追踪最多 16 个对象",
+      "source": "Meta AI Blog",
+      "url": "https://ai.meta.com/blog/segment-anything-model-3",
+      "category": "前沿模型公司",
       "contentType": "",
-      "publishedDate": "2026-07-23",
-      "summary": "由三名哈佛大学辍学生创立的Etched获得知名投资者支持，估值达到103亿美元。该公司称其新型芯片和内存组件无需GPU即可加速任意AI模型的推理。",
-      "why": "若其技术主张得到验证，Etched可能为AI推理提供绕开GPU的替代硬件方案。",
-      "impact": 82,
-      "novelty": 86,
-      "actionability": 61,
+      "publishedDate": "2026-07-17",
+      "summary": "SAM 3.1 通过对象多路复用与全局推理，将单张 H100 GPU 上的中等对象数量视频处理吞吐量从每秒 16 帧提升至 32 帧，并降低 GPU 资源需求。该模型可直接替换 SAM 3，相关模型检查点、代码和研究论文已开放。",
+      "why": "SAM 3.1 在提升拥挤场景追踪准确性的同时实现实时处理，使高性能视频检测与追踪更易部署在较小型硬件上。",
+      "impact": 84,
+      "novelty": 78,
+      "actionability": 90,
       "urgency": "中",
       "tags": [
         "AI",
-        "推理",
-        "硬件",
-        "融资"
+        "多模态",
+        "开源",
+        "产品"
       ],
-      "imageUrl": "https://techcrunch.com/wp-content/uploads/2026/07/Etched-co-founder-COO-Robert-Wachen.jpg?resize=1200,1200",
+      "imageUrl": "https://scontent-iad6-1.xx.fbcdn.net/v/t39.2365-6/583339165_852765810541557_5592130597432767690_n.png?_nc_cat=107&ccb=1-7&_nc_sid=e280be&_nc_ohc=UiXR8R9nnTAQ7kNvwEPDIJM&_nc_oc=AdoCUOpGbK8zTQO--25ncoB8bueJfwxKOjCssKxNcIi3UnN34GEsL5Iq6JtXzYpOyhc&_nc_zt=14&_nc_ht=scontent-iad6-1.xx&_nc_gid=dceuWpbE3LQHv8enFMmwbw&_nc_ss=7820f&oh=00_AQBeIhF_dc--qvhtQVvqOL-bjNlozW9Rrm49GUghgl7HCQ&oe=6A7BF361",
       "mediaAssets": {
         "images": [],
         "videos": []
       },
-      "body": "Etched 由三名从 Harvard 退学的学生创立，该公司表示，它已研发出新的芯片和内存组件，可加速任何 AI 模型的推理，无需 GPU。",
+      "body": "Update March 27, 2026: We’ve seen incredible adoption of SAM 3 over the last few months, and during that time, we’ve been working behind the scenes on updates to improve video processing efficiency. Today, we’re pleased to introduce SAM 3.1. As a drop-in replacement for SAM 3, our updated model delivers a significant boost in video processing efficiency by introducing object multiplexing, which allows the model to track up to 16 objects in a single forward pass. This innovation doubles the processing speed for videos with a medium number of objects, increasing throughput from 16 to 32 frames per second on a single H100 GPU. As a result, SAM 3.1 enables real-time object tracking in complex videos while reducing overall GPU resource requirements, making high-performance applications feasible on smaller, more accessible hardware. This improvement comes from a shift in how the model handles multiple objects. Previously, each object required its own dedicated pass, but with multiplexing, SAM 3.1 processes all tracked objects together, eliminating redundant computation and memory bottlenecks. This global reasoning approach streamlines performance and enhances accuracy in crowded scenes. We encourage the community to download the SAM 3.1 model checkpoint, explore the updates to the SAM 3 codebase and research paper, and test drive the updated model on the Segment Anything Playground. SAM 3.1 Model CheckpointSAM 3 CodebaseSAM 3 Research PaperExplore the Playground Introducing Meta Segment Anything Model 3 and Segment Anything Playground Takeaways: We’re announcing Meta Segment Anything Model 3 (SAM 3), a unified model for detection, segmentation, and tracking of objects in images and video using text, exemplar, and visual prompts. As part of this release, we’re sharing SAM 3 model checkpoints, evaluation datasets, and fine-tuning code. We’re also introducing Segment Anything Playground, a new platform that makes it easy for anyone to understand the capabilities of SAM and experiment with cutting-edge AI models for creative media modification. In Edits, Instagram’s video creation app, SAM 3 will soon enable new effects that creators can apply to specific people or objects in their videos. New creation experiences enabled by SAM 3 will also be coming to Vibes on the Meta AI app and meta.ai on the web. Separately, we’re sharing SAM 3D, a suite of open source models, code, and data for 3D objects and human reconstruction from a single image, setting a new standard for grounded 3D reconstruction in physical world scenarios. Learn more by reading the SAM 3D blog post. SAM 3 and SAM 3D are powering Facebook Marketplace’s new View in Room feature, helping people visualize the style and fit of home decor items, like a lamp or a table, in their spaces before purchasing. Together with our partners at Conservation X Labs and Osa Conservation, we’re also launching a first-of-its-kind, publicly available video dataset for wildlife monitoring using SAM 3. We’re unveiling the next generation of the Segment Anything collection of models, advancing image, and video understanding. Segment Anything Model 3 (SAM 3) introduces some of our most highly requested features like text and exemplar prompts — enabling detection, segmentation, and tracking of any visual concept across images and video. We also want to make it easier for more people to use our models. As part of this release, we’re debuting the Segment Anything Playground, the simplest way for anyone to experiment with applying our state-of-the-art models to media modification. Today, we’re releasing the SAM 3 model weights, a demo on Segment Anything Playground, and a research paper that details how we built SAM 3. Additionally, we’re sharing the Segment Anything with Concepts (SA-Co) evaluation dataset to serve as a new benchmark for the community. Separately, we’re sharing SAM 3D, which includes a model for object and scene reconstruction and another for human pose and shape estimation. More information about this release can be found in our SAM 3D blog post. At Meta, we’re using these advancements to help build the next generation of creative media tools. SAM 3 and SAM 3D are being used to enable the new View in Room feature on Facebook Marketplace, helping people visualize the style and fit of home decor items, like a lamp or a table, in their spaces before purchasing. New creation experiences enabled by SAM 3 will be coming to Vibes on the Meta AI app and meta.ai on the web, where people can use AI visual creation tools and remix existing AI-generated videos. We’ll also soon be introducing new effects on our Edits app that use SAM 3. Creators can apply dynamic effects to people or objects in their videos — simplifying a complex editing workflow to just one tap. Introducing Meta Segment Anything Model 3 Linking language to specific visual elements in images or videos is a major challenge in computer vision. Traditional models often focus on object segmentation with a fixed set of text labels, restricting their ability to address the full spectrum of user requests, which frequently involve segmenting concepts not present in predefined lists. This means that existing models can segment frequent concepts like “person,” but struggle with more nuanced concepts like “the striped red umbrella”. SAM 3 overcomes these limitations by introducing the promptable concept segmentation capability: finding and segmenting all instances of a concept defined by a text or exemplar prompt. SAM 3 accepts text prompts — open-vocabulary short noun phrases — and image exemplar prompts, eliminating the constraints of fixed label sets. To assess large-vocabulary detection and segmentation performance, we created the Segment Anything with Concepts (SA-Co) benchmark for promptable concept segmentation in images and videos that challenges models to recognize a much larger vocabulary of concepts compared to prior benchmarks. As part of this release, we’re making SA-Co publicly available to support reproducibility and further innovation in open-ended visual segmentation. SAM 3 supports a variety of prompt modalities, including both concept prompts such as simple noun phrases and image exemplars, as well as visual prompts, such as masks, boxes, and points, which were introduced in SAM 1 and SAM 2. This increases the flexibility and usability of segmentation, particularly for concepts that are rare or hard to describe with text alone. SAM 3 excels at segmenting objects described by short noun phrases, reflecting common user intent in interactive and natural settings. Our model can also be used as a perception tool for multimodal large language models to segment objects described by more complex prompts, such as: “people sitting down, but not holding a gift box in their hands.” Overall, SAM 3 delivers a 2x gain over existing systems in both image and video on our promptable concept segmentation benchmark, SA-Co, and improves upon previous SAM capabilities in interactive visual segmentation tasks. Building a Novel Data Engine Using AI and Human Annotators Obtaining high-quality annotated images with segmentation masks and text labels across a broad range of categories and visual domains is a significant challenge. This type of data doesn’t exist at scale on the web. Exhaustively masking every occurrence of an object category — particularly in video — is a time-intensive and complex task for human annotators. Additionally, building comprehensive coverage for a large and diverse vocabulary across multiple visual domains requires considerable time and resources. Overall, the process is both time-consuming and expensive. We address this challenge by creating a scalable data engine that leverages SAM 3, human annotators, and AI models in the loop, which allows dramatic speed-ups in annotation — approximately 5x faster than humans on negative prompts (concepts not present in the image/video) and 36% faster for positive prompts even in challenging fine-grained domains. This hybrid human and AI system enabled us to create a large and diverse training set with over 4 million unique concepts. A pipeline of AI models, including SAM 3 and systems such as a Llama-based captioner, automatically mine images and videos, generate captions, parse the captions into text labels, and create initial segmentation masks, which are shown as “candidates” in the above figure. Human and AI annotators then verify and correct these proposals, yielding a feedback loop that rapidly scales dataset coverage while continuously improving data quality. AI annotators are based on Llama 3.2v models that were specifically trained to match or surpass human accuracy on annotation tasks, such as verifying if a mask is high quality, or if all instances of a concept are exhaustively masked in an image. By delegating some human annotation tasks to AI annotators, we more than double the throughput compared to a human-only annotation pipeline. AI annotators also automatically filter out easy examples, focusing valuable human annotation effort on the most challenging cases where the current version of SAM 3 fails. We also leverage a concept ontology — a dictionary of concepts and their relationships based on Wikipedia — to map text labels into a shared concept space and increase the coverage of less frequent concepts in the data. We validate this approach through ablation studies, demonstrating that integrating AI- and human-annotated labels results in measurable improvements in model performance. We further validate that an entirely automated data engine can be used to generate data to automatically expand coverage to new visual and text domains. Model Architecture Building a model that excels at promptable concept segmentation requires us to maintain strong performance on all tasks compared to individual, task-specific models. This presents significant challenges in model design and in the development of a training recipe, due to potential task conflicts. For example, the task of re-detecting and tracking instances requires visual features that distinguish them from other instances of the same concept. This conflicts with the concept detection task, which requires visual features that are similar for all instances of a concept. Finding the right architecture is an important step in being able to solve all tasks in a unified model. Additionally, designing strong data recipes is essential to prevent issues like catastrophic forgetting as new tasks and data are introduced. The SAM 3 model architecture also builds on many previous AI advancements from Meta. The text and image encoders in SAM 3 are from the Meta Perception Encoder, an open source model we shared in April that enables the building of more advanced computer vision systems that can assist people in everyday tasks, such as image recognition and object detection. Using the Meta Perception Encoder enabled us to achieve a significant leap in performance compared to previous encoder choices. The detector component is based on the DETR model, which was the first to use transformers for object detection. The memory bank and memory encoder used in SAM 2 is the basis for the Tracker component. We also used several open source components, including datasets, benchmarks, and model improvements, to advance our work. Results We achieve a step change in concept segmentation performance in images (measured on SA-Co Gold subset) and videos (on SA-Co Video), with SAM 3 doubling cgF1 scores (a measure of how well the model can recognize and localize concepts) relative to existing models. SAM 3 consistently outperforms both foundational models like Gemini 2.5 Pro and strong specialist baselines such as GLEE, OWLv2, and LLMDet. In studies, users prefer SAM 3 outputs over the strongest baseline, OWLv2, approximately three to one. We also achieve state-of-the-art results on the SAM 2 visual segmentation tasks (mask-to-masklet, point-to-mask), matching or exceeding the state-of-the-art performance of previous models like SAM 2. Furthermore, we see notable gains on challenging benchmarks like zero-shot LVIS (not shown) and object counting (shown on CountBench). This excellent performance comes with fast inference — SAM 3 runs in 30 milliseconds for a single image with more than 100 detected objects on an H200 GPU. In video, the inference latency scales with the number of objects, sustaining near real-time performance for approximately five concurrent objects. We also show that a multimodal large language model (MLLM) that uses SAM 3 as a tool, called SAM 3 Agent, can segment more complex text queries such as, “What object in the picture is used for controlling and guiding a horse?” The MLLM proposes noun phrase queries to prompt SAM 3 and analyzes the returned masks, iterating until the masks are satisfactory. Without training on any referring expression segmentation or reasoning segmentation data, SAM 3 Agent surpasses prior work on challenging free-text segmentation benchmarks that require reasoning, such as ReasonSeg (shown above) and OmniLabel. Applications to Science SAM 3 is already being applied for use cases in scientific fields. For example, Meta collaborated with Conservation X Labs and Osa Conservation to combine on-the-ground wildlife monitoring with SAM 3 to build an open dataset of research-ready, raw video footage. The publicly available SA-FARI dataset includes over 10,000 camera trap videos of more than 100 species, annotated with bounding boxes and segmentation masks for every animal in each frame. FathomNet is a unique research collaboration led by MBARI that is working to advance AI tools for ocean exploration. Segmentation masks and a new instance segmentation benchmark tailored for underwater imagery are now available to the marine research community via the FathomNet Database. SA-FARI and FathomNet can be used by the broader AI community to develop innovative new ways to discover, monitor, and conserve wildlife on land and in the ocean. Future Areas of Exploration for the Open Source Community While SAM 3 demonstrates strong performance for segmenting objects in images and short videos with simple text phrases, the model performance can be further improved, especially in challenging scenarios. SAM 3 struggles to generalize to fine-grained out-of-domain concepts in a zero-shot manner, such as identifying specific terms that require domain knowledge like “platelet,” especially in niche visual domains involving medical or scientific imagery. We experimented with strategies to extend the capability of SAM 3 and found that the model quickly adapts to new concepts and visual domains when fine-tuned on small quantities of annotated data. As part of our code release, we’re sharing fine-tuning approaches that the community can leverage to adapt SAM 3 for their use cases. We’re also partnering with Roboflow to enable people to annotate data, fine-tune, and deploy SAM 3 for their particular needs. Additionally, w",
       "bodyTruncated": false,
       "eventAggregation": {
         "total": 1,
@@ -740,11 +919,11 @@
             "tone": "#16130f",
             "items": [
               {
-                "source": "TechCrunch AI",
-                "title": "AI芯片初创公司Etched估值达103亿美元",
-                "url": "https://techcrunch.com/2026/07/23/ai-chip-startup-etched-defies-skeptics-hits-10-3b-valuation-from-big-name-investors",
+                "source": "Meta AI Blog",
+                "title": "Meta 发布 SAM 3.1：单次前向传播可追踪最多 16 个对象",
+                "url": "https://ai.meta.com/blog/segment-anything-model-3",
                 "note": "原始发布 / 公告。",
-                "text": "AI芯片初创公司Etched估值达103亿美元 —— 原始发布 / 公告。"
+                "text": "Meta 发布 SAM 3.1：单次前向传播可追踪最多 16 个对象 —— 原始发布 / 公告。"
               }
             ]
           }
@@ -856,105 +1035,6 @@
                 "url": "https://cloud.google.com/blog/products/ai-machine-learning/13-demos-on-gemini-enterprise-agent-platform",
                 "note": "原始发布 / 公告。",
                 "text": "Gemini Enterprise Agent Platform 推出 13 个实操演示 —— 原始发布 / 公告。"
-              }
-            ]
-          }
-        ]
-      }
-    },
-    {
-      "recordId": "recvqgdbV5qDxH",
-      "title": "The Blueprint: How Voicify makes AI-enabled ordering a delight for customers",
-      "titleCn": "Voicify如何借助AI让语音点单更顺畅",
-      "source": "Google Cloud AI Blog",
-      "url": "https://cloud.google.com/blog/topics/customers/bringing-delight-to-customer-phone-calls-with-ai",
-      "category": "算力芯片云",
-      "contentType": "",
-      "publishedDate": "2026-07-24",
-      "summary": "Voicify面向餐饮和医疗场景构建专业化语音助手，通过对接POS及医疗管理系统解决交易准确性、流量峰值、延迟和安全合规等挑战。采用Gemini Flash及Gemini Enterprise Agent Platform后，Voicify实现更低延迟和更高可靠性，相比此前使用的其他LLM节省约25%至30%的成本，并借助预留吞吐和高级按需付费应对高峰流量。",
-      "why": "该案例展示了企业级生成式AI平台如何在高并发、低延迟、强合规的真实业务场景中支持语音交互规模化落地。",
-      "impact": 82,
-      "novelty": 65,
-      "actionability": 88,
-      "urgency": "中",
-      "tags": [
-        "AI",
-        "LLM",
-        "Agent",
-        "产品"
-      ],
-      "imageUrl": "https://storage.googleapis.com/gweb-cloudblog-publish/images/voicify-blueprint-header.max-600x600.png",
-      "mediaAssets": {
-        "images": [
-          {
-            "url": "https://storage.googleapis.com/gweb-cloudblog-publish/images/image1_DsM3Zpr.max-1000x1000.png",
-            "alt": "image1"
-          }
-        ],
-        "videos": []
-      },
-      "body": "Welcome to The Blueprint, a new feature where we highlight how Google Cloud customers are tackling unique and common challenges across industries using the latest AI and cloud technologies. We hope to inspire others looking to innovate in their work .\n\nFounded in 2018, Voicify reimagines the traditional phone call with the goal of transforming every call into a seamless and engaging experience.\n\nThe challenge:\n\nWhen we started Voicify in 2018, our vision was to help organizations build confident, pragmatic, and technically grounded voice-driven assistants for any channel, including phones and chat. But the pandemic changed everything.\n\nWe shifted our focus to telephone use cases primarily in the restaurant and healthcare sectors where, at the time, call volume and staffing posed significant challenges. Restaurants could potentially miss up to 20% of their calls and lose orders as a result, and healthcare providers struggled to keep up with call volume with the required 100% accuracy when integrating appointment information into a practice management system. We realized that specialized, purpose-driven AI assistants were the key to businesses maintaining excellent service at scale.\n\nTo succeed, we had to overcome four primary challenges:\n\nTransactional precision: Our voice assistant needed to reason with complex customer requests against point of sale and practice management systems with 100% accuracy.\n\nTraffic spike management: Our LLM usage needs to be provisioned accurately to keep costs down and maintain customer services in spite of the common (and extreme) spikes in traffic seen in restaurants and healthcare organizations.\n\nLatency: Any delay in the assistant’s response can cause customers to hang up. We needed superfast time to first token, with minimal delay from when a user sends a voice or text request to when the AI model generates its first piece of output.\n\nSecurity and compliance: Since our founding in 2018, we’ve ensured that we’re HIPAA, SOC2, ISO27001, and PCI-compliant, and that our security is enterprise-grade. We needed architecture and infrastructure that employs all possible safeguards to safeguard data integrity and security.\n\nThe solution:\n\nOur conversational orchestration platform builds and validates restaurant orders against a point-of-sale system before submission to ensure accuracy. Under the hood, Gemini Flash , served via Gemini Enterprise Agent Platform , vastly improves latency, minimizing user wait times and preventing hang-ups. With it, we also see approximately 25% to 30% savings compared to our previous use of other LLMs, and with greater reliability too.\n\nTo grow the business — and call volume — and to handle traffic spikes, we switched from Google AI Studio to Vertex AI and its current incarnation in Gemini Enterprise. We wanted the enterprise guarantees the latter provided, which we needed for scaling as well as for security and compliance for our healthcare clients. Specific Gemini Enterprise Agent Platform features help us manage high call volumes without experiencing service interruption or dropped responses.\n\nThese enterprise-grade services may have carried an increased cost over AI Studio, but they were well worth it to ensure reliable uptime, and the premium pay-as-you-go feature made scaling much easier for us. For example, we used a combination of provisioned throughput and premium pay-as-you-go with Vertex AI to accommodate all-time high usage the day before Thanksgiving, and we saw no rate limiting issues.\n\nThe architecture:\n\nThe outcome:\n\nGemini has reduced the burden on our in-house programmatic tools for pulling context and building menus. We’ve seen great improvements in performance and reliability, with lower latency and greater reliability with Gemini. And, the increased stability of our Gemini-powered assistants has made client onboarding much more efficient. Now it only takes one to two days to get a restaurant ready to test after gaining access to the POS system, down from what previously took one to two weeks .\n\nWith Google solutions for scale and enterprise-grade service, we’ve optimized our critical time-to-first-token metric, minimizing customer wait times. Using Vertex AI’s provisioned throughput and pay-as-you-go features, we’ve ensured 100% uptime, prevented dropped responses and rate-limiting issues, even during periods of all-time high usage. We’re now able to easily manage the spiky nature of restaurant traffic.\n\nIn terms of technology, we anticipate moving beyond conversational order capture to more proactive assistance, using context from conversations or POS activities. Your typical Friday night order from your favorite Japanese restaurant? Someday soon it might be Voicify’s voice assistant proactively placing it for you.\n\nThe details:\n\nOur industry focus presents a few unique challenges that we had to spend time solving within the backend.\n\nThe core component of our Voicify solutions is our voice orchestration platform, which manages the entire phone AI stack and is designed for enterprise-grade scalability and security. This is also the node where industry solutions are called depending on user needs.Our voice orchestration platform sits close to the customer and coordinates backend services like Gemini and the different components of the voice assistant. We use it to manage functions like automated speech recognition, text-to-speech, and text generation, which is not purely generative but includes programmatic elements.\n\nOne of the unique architectural decisions we made was how to manage large, complex restaurant menus. We decided to avoid putting the entire menu into a single prompt, and we include only certain information in the initial prompt and then gather more details as the conversation progresses. This improves response times and helps manage the complexity of larger orders by focusing on only the relevant parts of each menu in a given interaction.\n\nWe also designed the architecture from the outset of our company to meet the high standards of enterprise clients for security and compliance, particularly in healthcare. We are making sure that our scalability is enterprise-grade. Architecturally we’re also employing all safeguards to ensure data integrity and safety too. Lastly, our platform is designed to support a multicloud environment as part of our strategy for achieving the highest possible level of availability.",
-      "bodyTruncated": false,
-      "eventAggregation": {
-        "total": 1,
-        "groups": [
-          {
-            "key": "官方来源",
-            "tone": "#16130f",
-            "items": [
-              {
-                "source": "Google Cloud AI Blog",
-                "title": "Voicify如何借助AI让语音点单更顺畅",
-                "url": "https://cloud.google.com/blog/topics/customers/bringing-delight-to-customer-phone-calls-with-ai",
-                "note": "原始发布 / 公告。",
-                "text": "Voicify如何借助AI让语音点单更顺畅 —— 原始发布 / 公告。"
-              }
-            ]
-          }
-        ]
-      }
-    },
-    {
-      "recordId": "recvpYFWSkcezQ",
-      "title": "Rater State Bias in RLHF Preference Data: An Audit Framework",
-      "titleCn": "RLHF 偏好数据中的标注者状态偏差：审计框架",
-      "source": "arXiv cs.AI",
-      "url": "https://arxiv.org/abs/2607.16195",
-      "category": "技术研究开源",
-      "contentType": "论文",
-      "publishedDate": "2026-07-21",
-      "summary": "论文提出，压力或痛苦等标注者状态可能使偏好判断随时间发生系统性偏移，并通过聚合、奖励建模和策略优化进入 RLHF 模型。作者给出相关概念、五项可证伪预测、效应量阈值及可用于公开指令微调模型的审计与试点方案。",
-      "why": "该研究将标注者状态识别为区别于普通分歧和随机噪声的结构化偏差来源，为审计 RLHF 数据与奖励信号提供了可检验方法。",
-      "impact": 78,
-      "novelty": 82,
-      "actionability": 74,
-      "urgency": "中",
-      "tags": [
-        "AI",
-        "LLM",
-        "监管",
-        "其他"
-      ],
-      "imageUrl": "https://arxiv.org/static/browse/0.3.4/images/arxiv-logo-fb.png",
-      "mediaAssets": {
-        "images": [],
-        "videos": []
-      },
-      "body": "arXiv:2607.16195v1 Announce Type: new Abstract: We identify a structured confound in Reinforcement Learning from Human Feedback (RLHF). Pairwise preference labels are intended to reflect the compared outputs, but they may also reflect the rater's state during annotation. Under sustained stressful or distressing conditions, raters' preferences may shift over time. As a result, preference data can encode rater state alongside judgments about response quality. These shifts differ from ordinary disagreement or random label noise. They are state dependent, can be shared across annotators working under similar conditions, and can propagate through reward modeling and policy optimization. We therefore propose rater state shift as a plausible and testable source of structured bias in RLHF preference data. This paper develops a hypothesis and an audit framework for studying this source of bias. We define rater state shift, rater state confound, and correlated rater state bias. We also define survival level emotional authenticity as a measurable response pattern using lexical, pragmatic, discourse, and safety related features. We analyze how correlated rater state bias can survive aggregation and enter learned reward signals. We derive five falsifiable predictions and effect size thresholds for an initial audit. Finally, we present an audit protocol and pilot study plan that can be applied to publicly available instruction tuned models. We do not infer the training history of any specific deployed model. Our goal is to isolate a plausible and testable source of structured bias in RLHF preference data.",
-      "bodyTruncated": false,
-      "eventAggregation": {
-        "total": 1,
-        "groups": [
-          {
-            "key": "官方来源",
-            "tone": "#16130f",
-            "items": [
-              {
-                "source": "arXiv cs.AI",
-                "title": "RLHF 偏好数据中的标注者状态偏差：审计框架",
-                "url": "https://arxiv.org/abs/2607.16195",
-                "note": "原始发布 / 公告。",
-                "text": "RLHF 偏好数据中的标注者状态偏差：审计框架 —— 原始发布 / 公告。"
               }
             ]
           }
@@ -1200,53 +1280,6 @@
                 "url": "https://ai.meta.com/blog/alta-daily-fashion-app-segment-anything",
                 "note": "原始发布 / 公告。",
                 "text": "Alta Daily借助Meta SAM重塑数字衣橱 —— 原始发布 / 公告。"
-              }
-            ]
-          }
-        ]
-      }
-    },
-    {
-      "recordId": "recvpYFWSkd7l8",
-      "title": "Design and Validation of a Lightweight 1D CNN for Affective Touch Classification in Soft Plush Companions",
-      "titleCn": "面向柔性毛绒陪伴机器人的轻量级情感触摸分类1D CNN",
-      "source": "arXiv cs.AI",
-      "url": "https://arxiv.org/abs/2607.16196",
-      "category": "技术研究开源",
-      "contentType": "论文",
-      "publishedDate": "2026-07-21",
-      "summary": "研究开源了包含25名参与者、1326条标注手势序列的数据集及MATLAB框架，并从468个CNN模型中筛选出紧凑型扩张一维卷积网络。其1.32万参数模型取得75%测试准确率和85%跨受试者平均准确率，量化后每窗口仅需3.2 MMAC，可支持目标微控制器上的20 Hz实时运行。",
-      "why": "该研究证明了隐私友好的情感触摸识别可在资源受限的柔性陪伴设备中本地部署，并提供了可复用的开源数据与开发框架。",
-      "impact": 68,
-      "novelty": 72,
-      "actionability": 76,
-      "urgency": "低",
-      "tags": [
-        "AI",
-        "开源",
-        "硬件",
-        "多模态"
-      ],
-      "imageUrl": "",
-      "mediaAssets": {
-        "images": [],
-        "videos": []
-      },
-      "body": "arXiv:2607.16196v1 Announce Type: new Abstract: Soft, sensorized companions offer a physically safe and emotionally intuitive interface for socially assistive technologies, yet their deformability and multichannel tactile sensing complicate the robust interpretation of human affect. This study presents a complete open-source MATLAB-based framework for the development and validation of compact deep learning models for affective touch recognition in soft interactive companions. As a primary contribution, a diverse FAIR-compliant dataset of 1326 labelled gesture sequences collected from 25 participants spanning children, teenagers, and adults is made publicly available, providing a reusable resource for future research in affective touch recognition. Through systematic architecture and hyperparameter exploration across 468 CNN models, the study identifies compact dilated one-dimensional convolutional neural networks (1D CNNs) as the most effective solution, with a 13.2k-parameter model achieving 75% test accuracy and 85% mean leave-one-subject-out cross-validation accuracy. Theoretical inference-time analysis shows that quantized deployment requires 3.2 MMAC per window, compatible with 20 Hz real-time operation on the target microcontroller. PC-based real-time simulation with the physical toy streaming sensor data demonstrates that the CNN resolves subtle social touches that the previous heuristic system failed to detect, whereas high-force negative interactions are captured more reliably by trivial threshold-based logic. The resulting hybrid inference pipeline - instantaneous heuristic filtering followed by CNN-based nuanced gesture classification - is proposed as the embedded deployment strategy. The study demonstrates that emotionally meaningful, privacy-preserving touch interpretation is computationally feasible for direct embedding within soft therapeutic companions, with hardware integration addressed in a forthcoming study.",
-      "bodyTruncated": false,
-      "eventAggregation": {
-        "total": 1,
-        "groups": [
-          {
-            "key": "官方来源",
-            "tone": "#16130f",
-            "items": [
-              {
-                "source": "arXiv cs.AI",
-                "title": "面向柔性毛绒陪伴机器人的轻量级情感触摸分类1D CNN",
-                "url": "https://arxiv.org/abs/2607.16196",
-                "note": "原始发布 / 公告。",
-                "text": "面向柔性毛绒陪伴机器人的轻量级情感触摸分类1D CNN —— 原始发布 / 公告。"
               }
             ]
           }
@@ -1551,6 +1584,6 @@
       }
     }
   ],
-  "briefRecordId": "recvqgduX0mhse",
+  "briefRecordId": "recvqbfXQXH4j0",
   "briefTableId": "tblOZoliKFSTSVNG"
 }

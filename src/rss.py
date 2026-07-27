@@ -18,16 +18,39 @@ import requests
 log = logging.getLogger(__name__)
 
 
+# 厂商博客常在正文末尾挂推广卡 / 订阅区 / WordPress 的「The post ... appeared first on」。
+# 这些块里的装饰插画会被当成正文配图，正文也会多出一段广告词。
+_PROMO_MARKER_RE = re.compile(
+    r"(?is)<div[^>]+class=[\"'][^\"']*"
+    r"(?:promotional|promo[-_]|newsletter|subscribe|related-posts|read-next)"
+    r"|<p>\s*The post\s+<a\b"
+)
+_PROMO_TAIL_FROM = 0.6
+
+
+def strip_trailing_promo(body: str) -> str:
+    """截掉正文尾部的推广/订阅区块。
+
+    只认落在尾部的标记：正文中段也可能出现同类容器（内嵌按钮、引用卡），
+    从那里截断会砍掉真正文。
+    """
+    body = str(body or "")
+    for match in _PROMO_MARKER_RE.finditer(body):
+        if match.start() >= len(body) * _PROMO_TAIL_FROM:
+            return body[: match.start()]
+    return body
+
+
 def _best_body(entry: Any) -> str:
     content = entry.get("content")
     if content and isinstance(content, list):
         value = content[0].get("value")
         if value:
-            return value
-    return entry.get("summary") or entry.get("description") or ""
+            return strip_trailing_promo(value)
+    return strip_trailing_promo(entry.get("summary") or entry.get("description") or "")
 
 
-def _best_image(entry: Any, body: str) -> str:
+def _best_image(entry: Any, body: str, page_url: str = "") -> str:
     for key in ("media_content", "media_thumbnail"):
         values = entry.get(key) or []
         if values and isinstance(values[0], dict) and values[0].get("url"):
@@ -38,23 +61,18 @@ def _best_image(entry: Any, body: str) -> str:
         media_type = str(enclosure.get("type") or "")
         if media_type.startswith("image/") and enclosure.get("href"):
             return str(enclosure["href"])
-    match = re.search(r"<img[^>]+src=[\"']([^\"']+)", body or "", re.I)
-    return unescape(match.group(1)) if match else ""
+    images = extract_article_images(body or "", page_url, limit=1)
+    return images[0]["url"] if images else ""
 
 
 def _media_assets(entry: Any, body: str, page_url: str) -> dict[str, Any]:
-    images = []
-    for raw in re.findall(r"<img[^>]+src=[\"']([^\"']+)", body or "", re.I):
-        url = urljoin(page_url, unescape(raw))
-        if url.startswith(("http://", "https://")) and url not in images:
-            images.append(url)
     videos = []
     for raw in re.findall(r"<iframe[^>]+src=[\"']([^\"']+)", body or "", re.I):
         url = urljoin(page_url, unescape(raw))
         match = re.search(r"(?:youtube\.com/embed/|youtu\.be/)([\w-]+)", url)
         if match:
             videos.append({"url": url, "embedUrl": f"https://www.youtube-nocookie.com/embed/{match.group(1)}"})
-    return {"images": [{"url": url, "alt": ""} for url in images[:4]], "videos": videos[:1]}
+    return {"images": extract_article_images(body or "", page_url), "videos": videos[:1]}
 
 
 def _meta_image_from_html(html: str, page_url: str) -> str:
@@ -93,7 +111,29 @@ def fetch_article_image(page_url: str) -> str:
 FULLTEXT_MIN_CHARS = 600
 FULLTEXT_MAX_FETCH = 40
 _ARTICLE_RE = re.compile(r"(?is)<article[^>]*>(.*?)</article>")
-_PAGE_NOISE_RE = re.compile(r"(?is)<(nav|header|footer|aside|form|figure|noscript)[^>]*>.*?</\1>")
+_MAIN_RE = re.compile(r"(?is)<main\b[^>]*>(.*?)</main>")
+# 不要整块删 <figure>：正文表格与配图说明常包在里面
+_PAGE_NOISE_RE = re.compile(r"(?is)<(nav|header|footer|aside|form|noscript)[^>]*>.*?</\1>")
+_P_TEXT_RE = re.compile(r"(?is)<p\b[^>]*>(.*?)</p>")
+
+
+def _paragraph_score(html_chunk: str) -> int:
+    """用 <p> 里的文字量衡量一个容器像不像正文。"""
+    return sum(len(re.sub(r"<[^>]+>", "", para).strip()) for para in _P_TEXT_RE.findall(html_chunk))
+
+
+def _pick_content_chunk(html: str) -> str:
+    """挑出正文容器。
+
+    有的站点（如 Azure 博客）把「相关文章」做成 <article> 卡片，正文却在外面，
+    只取最长的 <article> 会抓到一堆推荐位。所以按段落文字量打分，
+    候选都明显少于整页时退回整页，再交给噪音过滤和开头样板裁剪。
+    """
+    candidates = _ARTICLE_RE.findall(html) + _MAIN_RE.findall(html)
+    if not candidates:
+        return html
+    best = max(candidates, key=_paragraph_score)
+    return best if _paragraph_score(best) >= _paragraph_score(html) * 0.4 else html
 
 
 def _drop_leading_boilerplate(text: str, title: str = "") -> str:
@@ -122,10 +162,66 @@ def _drop_leading_boilerplate(text: str, title: str = "") -> str:
     return "\n\n".join(paragraphs[start:]).strip() or text.strip()
 
 
-def fetch_article_text(page_url: str, limit: int = 15000, title: str = "") -> str:
-    """读取原文页正文（保留段落）。失败返回空串，不阻断采集。"""
+_IMG_TAG_RE = re.compile(r"(?is)<img\b[^>]*>")
+_SRC_ATTRS = ("src", "data-src", "data-original", "data-lazy-src")
+# logo/图标/表情/追踪像素等非内容图
+_IMG_SKIP_RE = re.compile(
+    r"(?i)(logo|icon|avatar|sprite|pixel|spacer|badge|button|tracking|1x1|blank"
+    r"|/emoji/|s\.w\.org|gravatar|wp-includes)"
+)
+# WordPress 缩略图会把尺寸写进文件名，如 foo-150x150.png
+_IMG_SIZE_SUFFIX_RE = re.compile(r"-(\d{2,4})x(\d{2,4})\.(?:jpe?g|png|webp|gif)$", re.I)
+_MIN_IMG_SIDE = 200
+
+
+def _attr(tag: str, name: str) -> str:
+    match = re.search(rf"(?is)\b{name}\s*=\s*[\"']([^\"']*)[\"']", tag)
+    return match.group(1).strip() if match else ""
+
+
+def _img_too_small(tag: str, url: str) -> bool:
+    """明显偏小的基本是图标而不是插图：先看标签尺寸，再看文件名里的尺寸后缀。"""
+    for dim in ("width", "height"):
+        raw = re.sub(r"\D", "", _attr(tag, dim))
+        if raw and int(raw) < _MIN_IMG_SIDE:
+            return True
+    suffix = _IMG_SIZE_SUFFIX_RE.search(url.split("?")[0])
+    return bool(suffix) and min(int(suffix.group(1)), int(suffix.group(2))) < _MIN_IMG_SIDE
+
+
+def extract_article_images(html_chunk: str, page_url: str, limit: int = 4) -> list[dict[str, str]]:
+    """按文档顺序取正文插图，过滤掉 logo/图标/追踪像素。"""
+    images: list[dict[str, str]] = []
+    seen: set[str] = set()
+    for tag in _IMG_TAG_RE.findall(html_chunk):
+        url = next((_attr(tag, attr) for attr in _SRC_ATTRS if _attr(tag, attr)), "")
+        if not url:
+            srcset = _attr(tag, "srcset")
+            url = srcset.split(",")[0].strip().split(" ")[0] if srcset else ""
+        if not url or url.startswith("data:"):
+            continue
+        url = urljoin(page_url, unescape(url))
+        if not url.startswith(("http://", "https://")):
+            continue
+        if url.lower().split("?")[0].endswith(".svg") or _IMG_SKIP_RE.search(url):
+            continue
+        if _img_too_small(tag, url):
+            continue
+        key = url.split("?")[0]
+        if key in seen:
+            continue
+        seen.add(key)
+        images.append({"url": url, "alt": unescape(_attr(tag, "alt"))[:120]})
+        if len(images) >= limit:
+            break
+    return images
+
+
+def fetch_article_content(page_url: str, title: str = "", limit: int = 15000) -> dict[str, Any]:
+    """一次请求同时取回原文正文与正文插图。失败返回空结果，不阻断采集。"""
+    empty: dict[str, Any] = {"text": "", "images": []}
     if not str(page_url or "").startswith(("http://", "https://")):
-        return ""
+        return empty
     try:
         response = requests.get(
             page_url,
@@ -135,15 +231,20 @@ def fetch_article_text(page_url: str, limit: int = 15000, title: str = "") -> st
         response.raise_for_status()
         html = response.content[:1_500_000].decode(response.encoding or "utf-8", errors="replace")
     except requests.RequestException as exc:
-        log.info("原文正文读取失败 %s: %s", page_url, exc)
-        return ""
+        log.info("原文读取失败 %s: %s", page_url, exc)
+        return empty
     from . import scrape  # 延迟导入，避免采集模块之间的加载顺序耦合
 
-    matches = _ARTICLE_RE.findall(html)
-    # 页面可能有多个 <article>（如相关推荐），取最长的那个当正文
-    chunk = max(matches, key=len) if matches else html
+    chunk = _pick_content_chunk(html)
+    # 推广卡在正文尾部，先截掉，否则它的装饰插画会被当成正文配图
+    chunk = strip_trailing_promo(chunk)
+    images = extract_article_images(chunk, response.url or page_url)
     text = scrape.html_to_text(_PAGE_NOISE_RE.sub(" ", chunk))
-    return _drop_leading_boilerplate(text, title)[:limit]
+    return {"text": _drop_leading_boilerplate(text, title)[:limit], "images": images}
+
+
+def fetch_article_text(page_url: str, limit: int = 15000, title: str = "") -> str:
+    return str(fetch_article_content(page_url, title=title, limit=limit)["text"])
 
 
 def backfill_full_text(items: list[dict[str, Any]]) -> int:
@@ -238,7 +339,7 @@ def fetch_feed_sources(feeds: list[dict[str, Any]]) -> list[dict[str, Any]]:
                     "title": entry.get("title", ""),
                     "url": page_url,
                     "body": body,
-                    "image_url": _best_image(entry, body),
+                    "image_url": _best_image(entry, body, page_url),
                     "media_assets": _media_assets(entry, body, page_url),
                     "published_raw": (
                         entry.get("published")

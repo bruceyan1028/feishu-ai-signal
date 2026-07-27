@@ -137,9 +137,33 @@ def _one_line(text: str) -> str:
     return re.sub(r"\s+", " ", str(text or "")).strip()
 
 
+_TABLE_RE = re.compile(r"(?is)<table\b[^>]*>(.*?)</table>")
+_ROW_RE = re.compile(r"(?is)<tr\b[^>]*>(.*?)</tr>")
+_CELL_RE = re.compile(r"(?is)<t[hd]\b[^>]*>(.*?)</t[hd]>")
+
+
+def _table_to_text(match: re.Match[str]) -> str:
+    """表格按「单元格 | 单元格」逐行铺开。
+
+    直接去标签会把整张表压成一串没有行列边界的词，读者根本对不上数值。
+    """
+    rows = []
+    for row_html in _ROW_RE.findall(match.group(1)):
+        cells = [
+            _one_line(_TAG_RE.sub(" ", re.sub(r"(?is)<br\s*/?>", " ", cell)))
+            for cell in _CELL_RE.findall(row_html)
+        ]
+        cells = [cell for cell in cells if cell]
+        if cells:
+            rows.append(" | ".join(cells))
+    return "\n\n" + "\n".join(rows) + "\n\n" if rows else " "
+
+
 def html_to_text(html: str) -> str:
     text = re.sub(r"(?is)<script[^>]*>.*?</script>", " ", html)
     text = re.sub(r"(?is)<style[^>]*>.*?</style>", " ", text)
+    # 表格要在通用去标签之前单独处理，保住行列结构
+    text = _TABLE_RE.sub(_table_to_text, text)
     # 先把块级边界落成换行，再去标签：否则段落结构会被整体压成一行，前端只能渲染出字墙。
     text = _BLOCK_BOUNDARY_RE.sub("\n\n", text)
     text = _TAG_RE.sub(" ", text)

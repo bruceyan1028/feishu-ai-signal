@@ -36,6 +36,9 @@ def is_chinese_text(text: str) -> bool:
     return cjk_ratio(text) >= 0.15
 
 
+_WP_TAIL_RE = re.compile(r"(?is)\n*The post\b.*?\bappeared first on\b[^\n]*$")
+
+
 def clean_body(text: str, source: str = "") -> str:
     """去掉栏目抬头噪音并规整段落，供前端直接分段渲染。"""
     # 存量条目里残留着 &nbsp;/&#8217; 之类实体，展示前统一解码
@@ -55,7 +58,9 @@ def clean_body(text: str, source: str = "") -> str:
     body = f"{head.lstrip()}{tail}"
     body = re.sub(r"[ \t\u00a0\u3000]+", " ", body)
     body = re.sub(r" *\n *", "\n", body)
-    return re.sub(r"\n{3,}", "\n\n", body).strip()
+    body = re.sub(r"\n{3,}", "\n\n", body).strip()
+    # 存量条目的结尾还留着 WordPress 的版权尾巴，采集端已不再写入，展示前兜底去掉
+    return _WP_TAIL_RE.sub("", body).strip()
 
 
 def translate_body(text: str) -> str:
@@ -68,7 +73,8 @@ def translate_body(text: str) -> str:
 1. 逐段翻译，保留原文段落划分，段落之间用空行分隔；
 2. 只翻译，不要概括、不要删减、不要添加任何评论或总结；
 3. 公司名、产品名、模型名、论文名等专有名词保留英文原名；
-4. 只输出严格 JSON：{{"body_cn": "翻译后的正文"}}
+4. 形如「单元格 | 单元格」的行是原文表格，逐行翻译并原样保留「|」分隔与换行，不要合并成段落；
+5. 只输出严格 JSON：{{"body_cn": "翻译后的正文"}}
 
 正文：
 {snippet}"""
