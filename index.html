@@ -1667,9 +1667,9 @@ function detailHtml(A){
           <span style="width: 22px; height: 22px; border-radius: 6px; display: inline-flex; align-items: center; justify-content: center; background: ${A.accentSoft}; border: 1px solid ${A.accentBorder}; color: ${A.accentBright}; font-size: 12px;">✦</span>
           <span style="font-size: 13px; font-weight: 700; color: ${UI.text};">AI 提炼内容</span>
         </div>
-        ${articleBody(A, s)}
         ${sourceVideoHtml(s)}
         ${sourceCommentsHtml(A, s)}
+        ${articleBody(A, s)}
         <div style="display: flex; flex-wrap: wrap; gap: 7px; margin: 20px 0 4px;">${points}</div>
         ${analysisHtml(A, s)}
       </div>`;
