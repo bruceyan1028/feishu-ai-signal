@@ -71,6 +71,10 @@ def _can_backfill_fulltext(url: str) -> bool:
 
 def build_dedup_key(url: str, title: str, feed: dict[str, Any]) -> str:
     strategy = feed.get("dedup_key") or "normalize(url)"
+    if feed.get("fetch_method") == "Media" or "youtube_video_id" in strategy:
+        match = re.search(r"(?:youtu\.be/|youtube\.com/(?:watch\?v=|shorts/|embed/))([\w-]{11})", url, re.I)
+        if match:
+            return f"youtube:{match.group(1)}"
     if "arxiv_id" in strategy:
         m = re.search(r"arxiv\.org/abs/([^/?#]+)", url, re.I)
         if m:
@@ -194,7 +198,7 @@ def process_and_clean(
             continue
         # 摘要型 RSS（OpenAI / DeepMind 等官方源）只给一两百字，用它判长度会把整源判死。
         # 这类条目先放行并标记，等去重后回源抓到全文，再由调用方按最终正文复判。
-        needs_fulltext = len(combined) < min_chars
+        needs_fulltext = len(combined) < min_chars and feed.get("fetch_method") != "Media"
         if needs_fulltext and not _can_backfill_fulltext(url):
             funnel["min_content_chars"] += 1
             continue

@@ -40,6 +40,7 @@ jobs:
           FEISHU_VIDEO_CONFIG_TABLE_ID: ${{ secrets.FEISHU_VIDEO_CONFIG_TABLE_ID }}
           FEISHU_SOCIAL_CONFIG_TABLE_ID: ${{ secrets.FEISHU_SOCIAL_CONFIG_TABLE_ID }}
           FEISHU_GITHUB_CONFIG_TABLE_ID: ${{ secrets.FEISHU_GITHUB_CONFIG_TABLE_ID }}
+          YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
           JINA_API_KEY: ${{ secrets.JINA_API_KEY }}
           DIFY_WEBHOOK_URL: ${{ secrets.DIFY_WEBHOOK_URL }}
         run: python -m src.main

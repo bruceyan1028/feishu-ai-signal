@@ -322,6 +322,31 @@ def map_feed_sources(records: list[dict[str, Any]]) -> list[dict[str, Any]]:
     return out
 
 
+def map_media_sources(records: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    """筛出正式启用的 Media 视频源。"""
+    out: list[dict[str, Any]] = []
+    for rec in records:
+        f = rec.get("fields") or {}
+        if cell(f.get("fetch_method")) != "Media" or not _is_active(f):
+            continue
+        extra = _parse_extra(f)
+        feed = _base_feed(f, extra, "Media")
+        # Media 主要依赖 channel_id，endpoint 可仅用于后台展示，不强制为 URL。
+        if not (extra or {}).get("channel_id") and not feed["url"]:
+            continue
+        explicit = cell(f.get("来源类型")) or cell(f.get("source_type"))
+        feed["source_type"] = infer_signal_format(
+            feed["_source_id"],
+            endpoint=feed["url"],
+            extra=extra,
+            fetch_method="Media",
+            explicit_type=str(explicit) if explicit else SIGNAL_FORMAT_VIDEO,
+        )
+        feed["min_content_chars"] = int(cell(f.get("min_content_chars")) or 0) or 20
+        out.append(feed)
+    return out
+
+
 def _is_b_class(f: dict[str, Any]) -> bool:
     ex = str(cell(f.get("extra_config")) or "").replace(" ", "").replace("\n", "").replace("\t", "")
     if '"snapshot_mode":true' in ex or '"diff_mode":true' in ex:

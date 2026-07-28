@@ -1,0 +1,74 @@
+{
+  "verified_at": "2026-07-28",
+  "sources": {
+    "youtube-openai": [
+      {
+        "id": "oXu6JGxW_YM",
+        "title": "Navigating AI Transformation in the Legal Industry | Jonathan Williams, Head of France, Legora",
+        "title_cn": "法律行业的 AI 转型：Legora 法国负责人 Jonathan Williams 访谈"
+      }
+    ],
+    "youtube-anthropic": [
+      {
+        "id": "rKV5JcALQoQ",
+        "title": "The different levels of how Claude thinks",
+        "title_cn": "Claude 的不同思考层级",
+        "upload_date": "20260706"
+      }
+    ],
+    "youtube-google-deepmind": [
+      {
+        "id": "R-Yqes8AotY",
+        "title": "Reconstructing Pelé’s lost goal",
+        "title_cn": "利用 AI 重建贝利失传的进球"
+      }
+    ],
+    "youtube-mistral-ai": [
+      {
+        "id": "xr4VUV-7rN0",
+        "title": "Mistral and Microsoft Expand Global Strategic Partnership to Give Enterprises AI They Can Control",
+        "title_cn": "Mistral 与微软扩大全球战略合作，强化企业可控 AI",
+        "upload_date": "20260721"
+      }
+    ],
+    "youtube-nvidia": [
+      {
+        "id": "P3VzeHtat70",
+        "title": "How Autonomous AI Is Transforming Chip and System Design",
+        "title_cn": "自主 AI 正在重塑芯片与系统设计"
+      }
+    ],
+    "youtube-two-minute-papers": [
+      {
+        "id": "axOcn--n_lM",
+        "title": "Claude Just Revealed AI's Biggest Problem",
+        "title_cn": "Claude 揭示了 AI 最大的问题",
+        "upload_date": "20260716",
+        "duration": 234,
+        "view_count": 70600
+      }
+    ],
+    "youtube-mit-csail": [
+      {
+        "id": "PTIICPx42Rk",
+        "title": "32(ish) Questions with an MIT Robotics Researcher (and Actor!)",
+        "title_cn": "与 MIT 机器人研究员（兼演员）的 32 个快问快答",
+        "upload_date": "20260715"
+      }
+    ],
+    "youtube-stanford-online": [
+      {
+        "id": "BBl8bNJP6ds",
+        "title": "Stanford MS&E435 Economics of the AI Supercycle | Spring 2026 | The GPU Economy",
+        "title_cn": "斯坦福 AI 超级周期经济学：GPU 经济"
+      }
+    ],
+    "youtube-deeplearning-ai": [
+      {
+        "id": "a9V1XgFOa5I",
+        "title": "Fast inference changes what you can build",
+        "title_cn": "高速推理正在改变可构建的 AI 应用"
+      }
+    ]
+  }
+}

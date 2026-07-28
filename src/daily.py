@@ -261,13 +261,13 @@ def _priority_map(param_records: list[dict[str, Any]]) -> dict[str, str]:
 
 
 def _active_source_ids(param_records: list[dict[str, Any]]) -> set[str]:
-    # 简报候选来源白名单：active 的 RSS 与 Scrape 源（含公众号、hf/pwc 论文），
+    # 简报候选来源白名单：active 的 RSS、Scrape 与 Media 源，
     # 让抓取型来源也能进入每日简报，而不只是 RSS。
     return {
         str(sources.cell((record.get("fields") or {}).get("source_id")) or "")
         for record in param_records
         if sources.cell((record.get("fields") or {}).get("status")) == "active"
-        and sources.cell((record.get("fields") or {}).get("fetch_method")) in {"RSS", "Scrape"}
+        and sources.cell((record.get("fields") or {}).get("fetch_method")) in {"RSS", "Scrape", "Media"}
     } - {""}
 
 
@@ -278,7 +278,7 @@ def select_candidates(
     now: datetime | None = None,
     limit: int | None = None,
 ) -> list[dict[str, Any]]:
-    """取近七日 RSS 信号；官方优先，arXiv 总数不超过配置上限。"""
+    """取近七日信号；官方优先，并限制论文和视频占比。"""
     now = now or datetime.now(timezone.utc)
     cutoff_ms = int((now - timedelta(days=7)).timestamp() * 1000)
     candidates = []
@@ -318,17 +318,23 @@ def select_candidates(
     selected: list[dict[str, Any]] = []
     arxiv_count = 0
     paper_count = 0
+    video_count = 0
     for item in candidates:
         is_arxiv = _is_arxiv(item)
-        is_paper = content_type(item["fields"]) == "论文"
+        item_type = content_type(item["fields"])
+        is_paper = item_type == "论文"
+        is_video = item_type == "视频"
         # 论文总数硬上限：避免论文挤占「快速读新闻」的名额
         if is_paper and paper_count >= config.DAILY_MAX_PAPERS:
+            continue
+        if is_video and video_count >= config.DAILY_MAX_VIDEOS:
             continue
         if is_arxiv and arxiv_count >= config.MAX_ARXIV_ITEMS:
             continue
         selected.append(item)
         arxiv_count += int(is_arxiv)
         paper_count += int(is_paper)
+        video_count += int(is_video)
         if len(selected) >= (limit or config.DAILY_CANDIDATE_LIMIT):
             break
     return selected
@@ -391,6 +397,7 @@ deep_analysis_cn 必须使用以下结构，每个标题独占一行，标题与
 
 def _signal_from_fields(record_id: str, fields: dict[str, Any], analysis: dict[str, Any], *, priority: str = "P2", tier: str = "") -> dict[str, Any]:
     published = int(float(scalar(fields.get("发布时间")) or 0))
+    media = media_assets(fields.get("媒体资源"))
     return {
         "recordId": record_id,
         "title": str(scalar(fields.get("标题"))),
@@ -410,7 +417,8 @@ def _signal_from_fields(record_id: str, fields: dict[str, Any], analysis: dict[s
         "urgency": analysis["urgency"],
         "tags": analysis["topics"],
         "imageUrl": link(fields.get("图片链接")),
-        "mediaAssets": media_assets(fields.get("媒体资源")),
+        "mediaAssets": media,
+        "topComments": media.get("topComments") or [],
         "deepAnalysis": str(analysis.get("deep_analysis_cn") or "").strip(),
     }
 
@@ -521,6 +529,33 @@ def _upsert_brief(token: str, table_id: str, payload: dict[str, Any]) -> str:
         return str(match["record_id"])
     fields["发送状态"] = "待发送"
     return str(feishu.create_record(token, table_id, fields).get("record_id") or "")
+
+
+def balance_output_signals(ranked: list[dict[str, Any]], limit: int) -> list[dict[str, Any]]:
+    """保留综合排序，同时保证合格视频有最低曝光且不突破候选上限。"""
+    selected = list(ranked[:limit])
+    video_pool = [item for item in ranked if item.get("contentType") == "视频"]
+    target = min(config.DAILY_MIN_VIDEOS, len(video_pool), limit)
+    present = sum(item.get("contentType") == "视频" for item in selected)
+    for video_item in video_pool:
+        if present >= target:
+            break
+        if video_item in selected:
+            continue
+        replace_at = next(
+            (
+                index
+                for index in range(len(selected) - 1, -1, -1)
+                if selected[index].get("contentType") != "视频"
+            ),
+            None,
+        )
+        if replace_at is None:
+            break
+        selected[replace_at] = video_item
+        present += 1
+    chosen = {str(item.get("recordId") or id(item)) for item in selected}
+    return [item for item in ranked if str(item.get("recordId") or id(item)) in chosen][:limit]
 
 
 def generate(day: str | None = None) -> dict[str, Any]:
@@ -644,13 +679,15 @@ def generate(day: str | None = None) -> dict[str, Any]:
     analyzed.sort(
         key=lambda s: (
             _display_quality(s),
-            s["impact"],
-            s["novelty"],
-            s["actionability"],
+            s["impact"] * (config.DAILY_VIDEO_WEIGHT if s.get("contentType") == "视频" else 1),
+            s["novelty"] * (config.DAILY_VIDEO_WEIGHT if s.get("contentType") == "视频" else 1),
+            s["actionability"] * (config.DAILY_VIDEO_WEIGHT if s.get("contentType") == "视频" else 1),
         ),
         reverse=True,
     )
-    signals = cluster.attach_aggregations(analyzed[: config.DAILY_SIGNAL_LIMIT])
+    signals = cluster.attach_aggregations(
+        balance_output_signals(analyzed, config.DAILY_SIGNAL_LIMIT)
+    )
     image_updates = []
     seen_images: set[str] = set()
     for signal in signals:

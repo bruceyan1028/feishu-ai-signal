@@ -1,11 +1,12 @@
-"""真实情报采集：读配置、抓取（RSS + Scrape）、清洗去重并写入飞书。"""
+"""真实情报采集：读配置、抓取（RSS + Scrape + Media）、清洗去重并写入飞书。"""
 from __future__ import annotations
 
+import argparse
 import logging
 
 import requests
 
-from . import config, feishu, process, rss, scrape, sources, typed_config
+from . import config, feishu, process, rss, scrape, sources, typed_config, video
 
 logging.basicConfig(
     level=logging.INFO,
@@ -97,7 +98,8 @@ def _prepare_scrape_sources(
     return feeds
 
 
-def run() -> int:
+def run(methods: set[str] | None = None) -> int:
+    enabled = methods or {"RSS", "Scrape", "Media"}
     config.validate()
 
     token = feishu.get_tenant_access_token()
@@ -119,7 +121,7 @@ def run() -> int:
     type_configs = typed_config.load_typed_configs(token)
     log.info("加载类型筛选配置：命中 %d 个源", len(type_configs))
 
-    feed_sources = sources.map_feed_sources(records)
+    feed_sources = sources.map_feed_sources(records) if "RSS" in enabled else []
     for feed in feed_sources:
         cfg = type_configs.get(feed.get("id") or "") or {}
         feed["source_type"] = sources.infer_signal_format(
@@ -133,8 +135,15 @@ def run() -> int:
     paper_n = sum(1 for f in feed_sources if f.get("source_type") == sources.SIGNAL_FORMAT_PAPER)
     log.info("启用的 RSS 源 %d 个（其中论文 %d）", len(feed_sources), paper_n)
 
-    scrape_sources = _prepare_scrape_sources(feishu_records=records, type_configs=type_configs)
+    scrape_sources = (
+        _prepare_scrape_sources(feishu_records=records, type_configs=type_configs)
+        if "Scrape" in enabled
+        else []
+    )
     log.info("启用的 Scrape 源 %d 个", len(scrape_sources))
+
+    media_sources = sources.map_media_sources(records) if "Media" in enabled else []
+    log.info("启用的 Media 视频源 %d 个", len(media_sources))
 
     raw_items: list[dict] = []
     if feed_sources:
@@ -146,6 +155,11 @@ def run() -> int:
             raw_items += scrape.fetch_scrape_sources(scrape_sources, engine="auto")
         except Exception as exc:  # noqa: BLE001 - 与 RSS 一致：单条链路失败不拖垮整轮
             log.warning("Scrape 采集失败，本轮跳过：%s", exc)
+    if media_sources:
+        try:
+            raw_items += video.fetch_video_sources(media_sources)
+        except Exception as exc:  # noqa: BLE001 - 不让视频接口故障拖垮其它来源
+            log.warning("Media 视频采集失败，本轮跳过：%s", exc)
     log.info("抓取到原始条目 %d 条", len(raw_items))
 
     drop_stats: dict[str, int] = {}
@@ -176,7 +190,11 @@ def run() -> int:
         log.info("其中 arXiv %d 条（上限 %d）", arxiv_in, config.MAX_ARXIV_ITEMS)
 
     # 回写本轮采集统计（最近采集时间 / 条目数 / 查重过滤；即使 0 条入库也要写）
-    attempted_ids = {f["id"] for f in feed_sources} | {f["id"] for f in scrape_sources}
+    attempted_ids = (
+        {f["id"] for f in feed_sources}
+        | {f["id"] for f in scrape_sources}
+        | {f["id"] for f in media_sources}
+    )
     try:
         feishu.sync_param_collect_stats(
             token,
@@ -202,4 +220,12 @@ def run() -> int:
 
 
 if __name__ == "__main__":
-    raise SystemExit(run())
+    parser = argparse.ArgumentParser(description="执行正式信号采集")
+    parser.add_argument(
+        "--method",
+        action="append",
+        choices=["RSS", "Scrape", "Media"],
+        help="只运行指定采集方式，可重复传入；默认运行全部",
+    )
+    args = parser.parse_args()
+    raise SystemExit(run(set(args.method or [])))

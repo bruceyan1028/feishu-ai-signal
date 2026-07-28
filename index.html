@@ -589,6 +589,8 @@ async function loadBrief(){
       tags: Array.isArray(s.tags) ? s.tags : [],
       image: s.imageUrl || '',
       mediaAssets: s.mediaAssets || {images:[], videos:[]},
+      topComments: Array.isArray(s.topComments) ? s.topComments : [],
+      commentFetchError: s.commentFetchError || '',
       eventAggregation: s.eventAggregation || null,
       tier: s.tier || '',
       priority: s.priority || '',
@@ -1267,20 +1269,67 @@ function detailMediaHtml(A, s){
     </div>`;
   }
   if(kind==='视频'){
-    return `
-    <div style="position: relative; height: 300px; border-radius: 12px; overflow: hidden; margin-bottom: 14px; border: 1px solid ${UI.border}; background: linear-gradient(135deg, #241f18, #0d0b08);">
-      <div style="position: absolute; inset: 0; background-image: radial-gradient(rgba(255,255,255,.06) 1px, transparent 1px); background-size: 14px 14px;"></div>
-      <div style="position: absolute; top: -60px; right: -40px; width: 300px; height: 220px; border-radius: 50%; background: radial-gradient(closest-side, ${A.accentSoft}, transparent);"></div>
-      <span style="position: absolute; top: 12px; left: 14px; font-family: 'Geist Mono', monospace; font-size: 10px; letter-spacing: .1em; color: rgba(255,255,255,.6);">VIDEO // ${esc(s.source)}</span>
-      <button title="播放(演示)" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); width: 66px; height: 66px; border-radius: 50%; border: none; background: ${A.accent}; color: #fff; font-size: 24px; cursor: pointer; box-shadow: 0 12px 40px -8px rgba(0,0,0,.7); display: inline-flex; align-items: center; justify-content: center; padding-left: 5px;">▶</button>
-      <div style="position: absolute; bottom: 12px; left: 14px; right: 14px; display: flex; align-items: center; gap: 10px;">
-        ${avatarHtml(s.source)}
-        <span style="font-size: 12.5px; font-weight: 600; color: #f3efe6;">${esc(s.source)}</span>
-      </div>
-    </div>`;
+    return '';
   }
   // 文章原图在正文语境中展示，避免与信号卡封面重复占位。
   return '';
+}
+
+function sourceVideoHtml(s){
+  if(s.kind!=='视频') return '';
+  const video = (s.mediaAssets?.videos || []).find(item=>item?.embedUrl);
+  if(!video) return '';
+  const src = String(video.embedUrl).replace('youtube-nocookie.com','youtube.com');
+  return `<div style="margin:0 0 18px;border:1.5px solid var(--ds-ink-line);background:#000;box-shadow:5px 5px 0 rgba(22,19,15,.1);">
+    <div style="position:relative;padding-top:56.25%;">
+      <iframe src="${esc(src)}" title="${esc(s.zhTitle)}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen style="position:absolute;inset:0;width:100%;height:100%;border:0;"></iframe>
+    </div>
+    <div style="display:flex;align-items:center;gap:9px;padding:10px 12px;color:#f3efe6;">
+      ${avatarHtml(s.source)}
+      <span style="font-size:12.5px;font-weight:700;">${esc(s.source)}</span>
+      <a href="${esc(video.url||s.url)}" target="_blank" rel="noopener" style="margin-left:auto;font-size:11px;font-weight:700;color:#fff;border:1px solid rgba(255,255,255,.3);padding:4px 9px;">在 YouTube 打开 ↗</a>
+    </div>
+  </div>`;
+}
+
+function sourceCommentsHtml(A, s){
+  if(s.kind!=='视频') return '';
+  const comments = Array.isArray(s.topComments) ? s.topComments.slice().sort((a,b)=>(Number(b.likes)||0)-(Number(a.likes)||0)) : [];
+  const commentTime = value => {
+    if(!value) return '';
+    const numeric = Number(value);
+    const date = Number.isFinite(numeric) && numeric > 0 ? new Date(numeric*1000) : new Date(value);
+    return Number.isNaN(date.getTime()) ? '' : date.toLocaleDateString('zh-CN', {year:'numeric', month:'short', day:'numeric'});
+  };
+  const rows = comments.map(c=>{
+    const author = c.author || 'YouTube 用户';
+    const avatar = c.authorAvatarUrl
+      ? `<img src="${esc(c.authorAvatarUrl)}" alt="" referrerpolicy="no-referrer" onerror="this.remove()" style="width:32px;height:32px;border-radius:50%;object-fit:cover;">`
+      : `<span style="width:32px;height:32px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;background:${A.accent};color:#fff;font-weight:700;">${esc(author[0]||'Y')}</span>`;
+    return `<div style="padding:13px 14px; border-top:1px solid var(--ds-hair); background:#fff;">
+      <div style="display:flex; align-items:center; gap:9px; margin-bottom:8px;">
+        ${avatar}
+        <span style="font-size:12.5px;font-weight:700;color:${UI.text};">${esc(author)}</span>
+        <span style="margin-left:auto;font-size:10.5px;color:${UI.text3};">${esc(commentTime(c.publishedAt))}</span>
+      </div>
+      <div style="font-size:13px;line-height:1.7;color:${UI.text2};white-space:pre-wrap;">${esc(c.text||'')}</div>
+      <div style="display:flex;gap:16px;margin-top:8px;font-size:11px;color:${UI.text3};">
+        <span>👍 ${Number(c.likes)||0}</span>
+        ${Number(c.replies)?`<span>💬 ${Number(c.replies)}</span>`:''}
+      </div>
+    </div>`;
+  }).join('');
+  const empty = s.commentFetchError
+    ? 'YouTube 暂未返回评论。可配置 YOUTUBE_API_KEY，或运行脚本时传入 --cookies-from-browser。'
+    : '该视频暂无可显示的公开评论。';
+  return `<div style="margin:0 0 22px;border:1.5px solid var(--ds-ink-line);background:#fff;box-shadow:4px 4px 0 rgba(22,19,15,.06);">
+    <div style="display:flex;align-items:center;gap:9px;padding:11px 14px;background:rgba(22,19,15,.035);">
+      <span style="font-size:13px;font-weight:800;color:${UI.text};">原视频评论区热榜</span>
+      <span style="font-size:10.5px;color:${UI.text3};">YouTube · 按点赞数排序</span>
+      <span style="margin-left:auto;font-family:'Geist Mono',monospace;font-size:10.5px;color:${UI.text3};">${comments.length}</span>
+    </div>
+    ${rows || `<div style="padding:18px 14px;font-size:12.5px;color:${UI.text3};">${empty}</div>`}
+  </div>`;
 }
 
 // 团队评论区(飞书同公司可见,按点赞排序)
@@ -1464,7 +1513,7 @@ function articleBody(A, s){
     : '';
 
   const images = (s.mediaAssets?.images || []).filter(item=>item?.url).slice(0,4);
-  const videos = (s.mediaAssets?.videos || []).filter(item=>item?.embedUrl).slice(0,1);
+  const videos = s.kind==='视频' ? [] : (s.mediaAssets?.videos || []).filter(item=>item?.embedUrl).slice(0,1);
   const deepParas = splitParagraphs(s.deepAnalysis);
   const blocks = [];
   const imageStep = images.length && deepParas.length
@@ -1619,6 +1668,8 @@ function detailHtml(A){
           <span style="font-size: 13px; font-weight: 700; color: ${UI.text};">AI 提炼内容</span>
         </div>
         ${articleBody(A, s)}
+        ${sourceVideoHtml(s)}
+        ${sourceCommentsHtml(A, s)}
         <div style="display: flex; flex-wrap: wrap; gap: 7px; margin: 20px 0 4px;">${points}</div>
         ${analysisHtml(A, s)}
       </div>`;

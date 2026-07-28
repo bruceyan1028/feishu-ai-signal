@@ -59,6 +59,10 @@ DAILY_CANDIDATE_LIMIT = int(os.environ.get("DAILY_CANDIDATE_LIMIT", "30"))
 DAILY_SIGNAL_LIMIT = int(os.environ.get("DAILY_SIGNAL_LIMIT", "30"))
 # 每份简报里「论文」类条目的硬上限，避免论文稀释「快速读新闻」体验
 DAILY_MAX_PAPERS = int(os.environ.get("DAILY_MAX_PAPERS", "4"))
+# 视频更适合作为补充材料：候选最多 4 条，排序分轻微降权，避免同日频道更新挤占新闻。
+DAILY_MAX_VIDEOS = int(os.environ.get("DAILY_MAX_VIDEOS", "4"))
+DAILY_MIN_VIDEOS = int(os.environ.get("DAILY_MIN_VIDEOS", "1"))
+DAILY_VIDEO_WEIGHT = float(os.environ.get("DAILY_VIDEO_WEIGHT", "0.9"))
 # 英文正文翻译的字数上限：超长部分截断并提示读原文。
 # 3000 字符只够译出一千余字中文，正文普遍断在句子中间，故普通条目抬到 6000。
 BODY_TRANSLATE_LIMIT = int(os.environ.get("BODY_TRANSLATE_LIMIT", "6000"))

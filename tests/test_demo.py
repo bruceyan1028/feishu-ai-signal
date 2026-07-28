@@ -314,6 +314,18 @@ class DailyTests(unittest.TestCase):
         self.assertLessEqual(len(arxiv_selected), config.MAX_ARXIV_ITEMS)
         self.assertNotIn("scrape", [item["record_id"] for item in selected])
 
+    def test_output_keeps_minimum_video_slot(self) -> None:
+        ranked = [
+            {"recordId": f"article-{index}", "contentType": ""}
+            for index in range(5)
+        ]
+        ranked.append({"recordId": "video-1", "contentType": "视频"})
+
+        selected = daily.balance_output_signals(ranked, 3)
+
+        self.assertEqual(len(selected), 3)
+        self.assertIn("video-1", [item["recordId"] for item in selected])
+
 
 class DeliveryTests(unittest.TestCase):
     def sample_brief(self) -> dict:
