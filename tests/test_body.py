@@ -4,7 +4,7 @@ from __future__ import annotations
 import unittest
 from unittest import mock
 
-from src import config, daily, rss, scrape
+from src import config, daily, process, rss, scrape
 
 
 class CleanBodyTest(unittest.TestCase):
@@ -29,6 +29,51 @@ class CleanBodyTest(unittest.TestCase):
 
     def test_preserves_paragraph_breaks(self):
         self.assertEqual(daily.clean_body("段落一。\n\n\n\n段落二。"), "段落一。\n\n段落二。")
+
+
+class PublishedDateTest(unittest.TestCase):
+    def test_missing_or_invalid_date_stays_unknown(self):
+        self.assertIsNone(process.parse_date_ms(""))
+        self.assertIsNone(process.parse_date_ms("not a date"))
+
+    def test_extracts_published_meta_without_using_modified_time(self):
+        html = """
+        <meta property="article:published_time" content="2026-06-30T01:26:47Z">
+        <meta property="article:modified_time" content="2026-07-27T08:00:00Z">
+        """
+        self.assertEqual(
+            scrape.extract_published_date_html(html),
+            "2026-06-30T01:26:47Z",
+        )
+
+    def test_extracts_escaped_nextjs_created_at(self):
+        html = r'self.__next_f.push([1,"post\":{\"_createdAt\":\"2026-06-30T01:26:47Z\"}"])'
+        self.assertEqual(
+            scrape.extract_published_date_html(html),
+            "2026-06-30T01:26:47Z",
+        )
+
+    def test_does_not_treat_modified_time_as_published(self):
+        html = '<meta property="article:modified_time" content="2026-07-27T08:00:00Z">'
+        self.assertEqual(scrape.extract_published_date_html(html), "")
+
+    def test_rss_updated_requires_explicit_source_policy(self):
+        entry = {"updated": "2026-07-28T00:00:00Z"}
+        self.assertEqual(rss._published_raw(entry, {"id": "generic"}), "")
+        self.assertEqual(
+            rss._published_raw(entry, {"id": "opencompass"}),
+            "2026-07-28T00:00:00Z",
+        )
+
+    def test_rss_published_wins_over_updated(self):
+        entry = {
+            "published": "2026-06-30T00:00:00Z",
+            "updated": "2026-07-28T00:00:00Z",
+        }
+        self.assertEqual(
+            rss._published_raw(entry, {"id": "generic"}),
+            "2026-06-30T00:00:00Z",
+        )
 
 
 class DisplayBodyTest(unittest.TestCase):

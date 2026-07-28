@@ -277,6 +277,80 @@ def _parse_iso_ms(raw: Any) -> int | None:
         return None
 
 
+_PUBLISHED_KEYS = (
+    "article:published_time",
+    "datePublished",
+    "date_published",
+    "publishedAt",
+    "publishDate",
+    "pubdate",
+    "_createdAt",
+)
+
+
+def extract_published_date_html(html: str) -> str:
+    """从原始页面提取首发日期；明确不使用 dateModified/_updatedAt。"""
+    body = unescape(str(html or ""))
+    if not body:
+        return ""
+    keys = "|".join(re.escape(key) for key in _PUBLISHED_KEYS)
+    meta_patterns = [
+        rf"""<meta\b[^>]*(?:property|name)=["'](?:{keys})["'][^>]*content=["']([^"']+)["']""",
+        rf"""<meta\b[^>]*content=["']([^"']+)["'][^>]*(?:property|name)=["'](?:{keys})["']""",
+    ]
+    for pattern in meta_patterns:
+        match = re.search(pattern, body, re.I)
+        if match:
+            return match.group(1).strip()
+
+    # Next.js/Sanity 等常把文章对象放在转义后的脚本字符串中。
+    json_match = re.search(
+        rf"""(?:{keys})\\?["']?\s*:\\?["']([^"'\\<]{{8,80}})""",
+        body,
+        re.I,
+    )
+    if json_match:
+        return json_match.group(1).strip()
+
+    time_match = re.search(
+        r"""<time\b[^>]*datetime=["']([^"']+)["'][^>]*>""",
+        body,
+        re.I,
+    )
+    if time_match:
+        return time_match.group(1).strip()
+
+    # 只接受带“发布”语义的可见日期，避免误取版权年份或正文中的其它日期。
+    visible = re.search(
+        r"""(?:published|posted|发布日期|发布时间)\s*(?:on|[:：])?\s*"""
+        r"""([A-Z][a-z]{2,8}\s+\d{1,2},\s+20\d{2}|"""
+        r"""\d{1,2}\s+[A-Z][a-z]{2,8}\s+20\d{2}|"""
+        r"""20\d{2}[-/.年]\d{1,2}[-/.月]\d{1,2}日?)""",
+        _html_to_text(body[:20000]),
+        re.I,
+    )
+    return visible.group(1).strip() if visible else ""
+
+
+def _published_date_from_jina(markdown: str) -> str:
+    match = re.search(r"^Published Time:\s*(.+)$", str(markdown or ""), re.M)
+    return match.group(1).strip() if match else ""
+
+
+def _fetch_direct_published_date(url: str) -> str:
+    """Jina 未返回日期时单次直连页面补元数据；失败即保持未知。"""
+    try:
+        response = requests.get(
+            url,
+            headers={"User-Agent": _UA},
+            timeout=min(config.JINA_TIMEOUT, 20),
+        )
+        response.raise_for_status()
+    except requests.RequestException:
+        return ""
+    return extract_published_date_html(response.text)
+
+
 def _age_days(published_ms: int | None, *, now_ms: int | None = None) -> float | None:
     if published_ms is None:
         return None
@@ -593,9 +667,10 @@ def _fetch_modelscope_items(feed: dict[str, Any]) -> list[dict[str, Any]]:
         mid = str(row.get("id") or "").strip()
         if not mid:
             continue
-        published_raw = str(row.get("last_modified") or row.get("created_at") or "").strip()
+        # last_modified 仅代表模型近期活跃；条目“发布时间”必须使用首次创建时间。
+        published_raw = str(row.get("created_at") or "").strip()
         age = _age_days(_parse_iso_ms(published_raw))
-        if age is not None and age > recent_days:
+        if age is None or age > recent_days:
             continue
 
         detail = _fetch_modelscope_model_detail(mid)
@@ -608,7 +683,7 @@ def _fetch_modelscope_items(feed: dict[str, Any]) -> list[dict[str, Any]]:
         body_parts = [p for p in (desc, readme) if p]
         body = "\n\n".join(body_parts)[:15000]
         if len(body) < 40:
-            body = f"{title}\nModelScope model: {mid}\nUpdated: {published_raw}"[:15000]
+            body = f"{title}\nModelScope model: {mid}\nPublished: {published_raw}"[:15000]
 
         url = _modelscope_model_page_url(mid)
         items.append(
@@ -739,9 +814,10 @@ def _fetch_seed_items(feed: dict[str, Any]) -> list[dict[str, Any]]:
         abstract = str(prefer.get("Abstract") or other.get("Abstract") or meta.get("Abstract") or "").strip()
         title_key = str(prefer.get("TitleKey") or other.get("TitleKey") or meta.get("TitleKey") or "").strip()
         article_id = meta.get("ArticleID") or meta.get("ID") or row.get("ID")
-        published_raw = _ms_to_iso(meta.get("PublishDate") or meta.get("UpdateTime"))
+        # UpdateTime 可能因编辑旧文刷新，不能冒充首次发布时间。
+        published_raw = _ms_to_iso(meta.get("PublishDate"))
         age = _age_days(_parse_iso_ms(published_raw))
-        if age is not None and age > recent_days:
+        if age is None or age > recent_days:
             continue
         if not title_key and not article_id:
             continue
@@ -1357,12 +1433,13 @@ def _build_item_direct(html: str, link: dict[str, Any], feed: dict[str, Any]) ->
         content = f"{content}\n\n{block}"
     if not title or not url or len(content) < 40:
         return None
+    published = str(link.get("published_raw") or "").strip() or extract_published_date_html(html)
     item = {
         "title": title,
         "url": url,
         "body": content,
         "media_assets": {"images": parsed["images"], "videos": []},
-        "published_raw": str(link.get("published_raw") or ""),
+        "published_raw": published,
         "heat_keep": bool(link.get("heat_keep")),
         "is_html": True,
         "feed": feed,
@@ -1461,9 +1538,8 @@ def _build_item(article_md: str, link: dict[str, Any], feed: dict[str, Any]) -> 
         page_title = mt.group(1).strip()
         page_title = re.sub(r"^Paper page\s*[-–—]\s*", "", page_title, flags=re.I).strip()
         title = page_title or title
-    mp = re.search(r"^Published Time:\s*(.+)$", body, re.M)
-    if mp and not published:
-        published = mp.group(1).strip()
+    if not published:
+        published = _published_date_from_jina(body)
     url = link.get("url") or ""
     block = str(link.get("community_block") or "")
     # 与 RSS 的 Jina 兜底走同一套还原：只做 _strip_md 会把正文插图一并删掉，
@@ -1597,6 +1673,10 @@ def fetch_scrape_sources_with_stats(
         at0 = time.perf_counter()
         fj = use_jina and not _feed_force_direct(feed)
         body = _safe_jina_get(link["url"], False) if fj else _safe_direct_get(link["url"])
+        if fj and not link.get("published_raw") and not _published_date_from_jina(body):
+            published = _fetch_direct_published_date(link["url"])
+            if published:
+                link = {**link, "published_raw": published}
         return link, feed, body, (time.perf_counter() - at0) * 1000
 
     articles: list[tuple[dict, dict, str, float]] = []

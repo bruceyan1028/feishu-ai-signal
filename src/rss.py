@@ -110,11 +110,28 @@ def fetch_article_image(page_url: str) -> str:
 # 只有 RSS 摘要、没有全文的条目：回源抓正文，否则前端只能显示一两句话
 FULLTEXT_MIN_CHARS = 600
 FULLTEXT_MAX_FETCH = 40
+_UPDATED_ONLY_DATE_SOURCES = {
+    # 实测这些 Atom feed 没有 published/pubDate，updated 即条目对外发布日期。
+    "opencompass",
+    "nature-machine-intelligence",
+    "nature-computational-science",
+}
 _ARTICLE_RE = re.compile(r"(?is)<article[^>]*>(.*?)</article>")
 _MAIN_RE = re.compile(r"(?is)<main\b[^>]*>(.*?)</main>")
 # 不要整块删 <figure>：正文表格与配图说明常包在里面
 _PAGE_NOISE_RE = re.compile(r"(?is)<(nav|header|footer|aside|form|noscript)[^>]*>.*?</\1>")
 _P_TEXT_RE = re.compile(r"(?is)<p\b[^>]*>(.*?)</p>")
+
+
+def _published_raw(entry: dict[str, Any], feed: dict[str, Any]) -> str:
+    published = entry.get("published") or entry.get("pubDate")
+    if published:
+        return str(published)
+    extra = feed.get("extra_config") or {}
+    allow_updated = bool(extra.get("allow_updated_as_published")) or str(
+        feed.get("id") or ""
+    ) in _UPDATED_ONLY_DATE_SOURCES
+    return str(entry.get("updated") or "") if allow_updated else ""
 
 
 def _paragraph_score(html_chunk: str) -> int:
@@ -603,12 +620,7 @@ def fetch_feed_sources(feeds: list[dict[str, Any]]) -> list[dict[str, Any]]:
                     "body": body,
                     "image_url": _best_image(entry, body, page_url),
                     "media_assets": _media_assets(entry, body, page_url),
-                    "published_raw": (
-                        entry.get("published")
-                        or entry.get("updated")
-                        or entry.get("pubDate")
-                        or ""
-                    ),
+                    "published_raw": _published_raw(entry, feed),
                     "is_html": True,
                     "feed": feed,
                 }

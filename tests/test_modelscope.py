@@ -65,6 +65,35 @@ class ModelScopeTest(unittest.TestCase):
         self.assertEqual(items[0]["title"], "Wan-Dancer-14B")
         self.assertIn("/models/Wan-AI/Wan-Dancer-14B", items[0]["url"])
         self.assertIn("dancing video", items[0]["body"])
+        self.assertEqual(items[0]["published_raw"], "2026-07-10T00:00:00Z")
+
+    @patch("src.scrape.requests.get")
+    def test_recent_edit_does_not_make_old_model_new(self, mock_get: MagicMock):
+        response = MagicMock()
+        response.raise_for_status = MagicMock()
+        response.json.return_value = {
+            "data": {
+                "models": [
+                    {
+                        "id": "owner/old-model",
+                        "created_at": "2024-01-01T00:00:00Z",
+                        "last_modified": "2026-07-28T00:00:00Z",
+                    }
+                ]
+            }
+        }
+        mock_get.return_value = response
+
+        items = scrape._fetch_modelscope_items(
+            {
+                "id": "modelscope-home",
+                "url": "https://modelscope.cn/home",
+                "max_articles": 5,
+                "extra_config": {"recent_days": 30},
+            }
+        )
+
+        self.assertEqual(items, [])
 
 
 if __name__ == "__main__":

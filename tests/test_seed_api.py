@@ -61,6 +61,38 @@ class SeedApiTest(unittest.TestCase):
         self.assertIn("/en/blog/introducing-seedream-5-0-pro", items[0]["url"])
         self.assertIn("Full blog body", items[0]["body"])
 
+    @patch("src.scrape.requests.get")
+    def test_update_time_alone_is_not_publication(self, mock_get: MagicMock):
+        response = MagicMock()
+        response.raise_for_status = MagicMock()
+        response.json.return_value = {
+            "sub_article_list": [
+                {
+                    "ArticleMeta": {
+                        "ID": 1,
+                        "ArticleID": 1,
+                        "UpdateTime": 1783440000000,
+                    },
+                    "ArticleSubContentEn": {
+                        "Title": "Edited old article",
+                        "TitleKey": "edited-old-article",
+                    },
+                }
+            ]
+        }
+        mock_get.return_value = response
+
+        items = scrape._fetch_seed_items(
+            {
+                "id": "bytedance-seed",
+                "url": "https://seed.bytedance.com/en/",
+                "max_articles": 5,
+                "extra_config": {"seed_api": True, "recent_days": 60},
+            }
+        )
+
+        self.assertEqual(items, [])
+
 
 if __name__ == "__main__":
     unittest.main()

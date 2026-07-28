@@ -42,14 +42,18 @@ def normalize_url(url: Any) -> str:
 
 def parse_date_ms(raw: Any) -> int | None:
     if not raw:
-        return now_ms()
+        return None
     try:
         dt = date_parser.parse(str(raw))
         if dt.tzinfo is None:
             dt = dt.replace(tzinfo=timezone.utc)
-        return int(dt.timestamp() * 1000)
+        parsed = int(dt.timestamp() * 1000)
+        # 页面缓存、错误时区或脏元数据可能给出未来日期；不能因此绕过 lookback。
+        if parsed > now_ms() + 2 * 86400000:
+            return None
+        return parsed
     except (ValueError, OverflowError, TypeError):
-        return now_ms()
+        return None
 
 
 def strip_html(text: Any) -> str:
@@ -182,9 +186,13 @@ def process_and_clean(
         if not title or not url:
             funnel["missing_title_url"] += 1
             continue
+        # 精准度优先：缺发布时间不能用采集时间冒充“刚发布”，否则任意旧页面都会进近七日池。
+        if published_ms is None:
+            funnel["missing_or_invalid_date"] += 1
+            continue
         # heat_keep：超高热度旧文例外，跳过 lookback（仍写入真实发布时间）
         if not item.get("heat_keep") and (
-            published_ms is None or now - published_ms >= lookback_ms
+            now - published_ms >= lookback_ms
         ):
             funnel["lookback"] += 1
             if (

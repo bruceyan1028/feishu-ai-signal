@@ -281,11 +281,13 @@ def select_candidates(
     """取近七日信号；官方优先，并限制论文和视频占比。"""
     now = now or datetime.now(timezone.utc)
     cutoff_ms = int((now - timedelta(days=7)).timestamp() * 1000)
+    future_limit_ms = int((now + timedelta(days=2)).timestamp() * 1000)
     candidates = []
     for record in records:
         fields = record.get("fields") or {}
-        stamp = int(float(scalar(fields.get("发布时间")) or scalar(fields.get("采集时间")) or 0))
-        if stamp < cutoff_ms:
+        # 简报时效只能依据真实发布时间，采集时间不能替代，否则旧页面会伪装成新内容。
+        stamp = int(float(scalar(fields.get("发布时间")) or 0))
+        if stamp < cutoff_ms or stamp > future_limit_ms:
             continue
         source_id = str(scalar(fields.get("source_id")) or "")
         if allowed_source_ids is not None and source_id not in allowed_source_ids:

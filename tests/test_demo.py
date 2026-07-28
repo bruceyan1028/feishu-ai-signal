@@ -326,6 +326,25 @@ class DailyTests(unittest.TestCase):
         self.assertEqual(len(selected), 3)
         self.assertIn("video-1", [item["recordId"] for item in selected])
 
+    def test_candidate_does_not_use_collection_time_as_publish_time(self) -> None:
+        now = datetime.now(timezone.utc)
+        stamp = int(now.timestamp() * 1000)
+        selected = daily.select_candidates(
+            [
+                {
+                    "record_id": "missing-published",
+                    "fields": {
+                        "source_id": "official-rss",
+                        "采集时间": stamp,
+                    },
+                }
+            ],
+            {"official-rss": "P0"},
+            {"official-rss"},
+            now=now,
+        )
+        self.assertEqual(selected, [])
+
 
 class DeliveryTests(unittest.TestCase):
     def sample_brief(self) -> dict:
