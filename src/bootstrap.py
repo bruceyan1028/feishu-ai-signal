@@ -58,7 +58,7 @@ CHECKBOX = 7
 URL = 15
 
 # 各字段的固定单选项（自由单选如 dimension/分类 用空列表，写入时飞书自动补选项）
-_FETCH_METHODS = ("RSS", "Scrape", "Bridge", "Podcast", "API", "Manual")
+_FETCH_METHODS = ("RSS", "Scrape", "Bridge", "Social", "Media", "Podcast", "API", "Manual")
 _STATUSES = ("active", "experimental", "paused")
 _PRIORITIES = ("P0", "P1", "P2")
 _TIERS = ("L1", "L2", "L3", "L4")
@@ -112,6 +112,7 @@ _PARAM_FIELDS = [
     _f("min_content_chars", NUMBER),
     _f("dedup_key", TEXT),
     _f("extra_config", TEXT),
+    _f("采集游标", TEXT),
     _f("notes", TEXT),
 ]
 
@@ -149,6 +150,7 @@ _ENTRY_FIELDS = [
     _f("作者影响力", NUMBER),
     _f("社区热度", NUMBER),
     _f("论文指标", TEXT),
+    _f("社媒指标", TEXT),
     _f("播客指标", TEXT),
 ]
 
@@ -177,7 +179,8 @@ _WECHAT_FIELDS = [
     _f("必含关键词", TEXT),
     _f("排除关键词", TEXT),
     _f("最低阅读量", NUMBER),
-    _f("正文最少字数", NUMBER),
+    # 字段名须与 typed_config._SCHEMAS["wechat"] 一致，否则读取端拿不到值
+    _f("正文最小字数", NUMBER),
     _f("过滤软广", CHECKBOX),
     _f("备注", TEXT),
 ]
@@ -197,9 +200,18 @@ _SOCIAL_FIELDS = [
     _f("source_id", TEXT),
     _f("名称", TEXT),
     _f("账号白名单", TEXT),
+    _f("账号分级", TEXT),
     _f("最低粉丝数", NUMBER),
     _f("最低互动数", NUMBER),
     _f("排除转发", CHECKBOX),
+    _f("排除回复", CHECKBOX),
+    _f("正文最少字数", NUMBER),
+    _f("直接入库分", NUMBER),
+    _f("智能精筛起始分", NUMBER),
+    _f("启用智能精筛", CHECKBOX),
+    _f("P0每日上限", NUMBER),
+    _f("P1每日上限", NUMBER),
+    _f("互动基线", TEXT),
     _f("必含关键词", TEXT),
     _f("排除关键词", TEXT),
     _f("备注", TEXT),
@@ -376,6 +388,9 @@ def run(seed: bool = True, dry_run: bool = False) -> dict[str, str]:
         return results
 
     # 已存在的单选字段不会被 _ensure_table 重建，单独补齐新增采集方式选项。
+    feishu.ensure_select_option(token, name_to_id["一级参数"], "fetch_method", "Social")
+    feishu.ensure_select_option(token, name_to_id["信号源表"], "获取方式", "Social")
+    feishu.ensure_select_option(token, name_to_id["条目表"], "路由来源", "Social")
     feishu.ensure_select_option(token, name_to_id["一级参数"], "fetch_method", "Podcast")
     feishu.ensure_select_option(token, name_to_id["信号源表"], "获取方式", "Podcast")
     feishu.ensure_select_option(token, name_to_id["条目表"], "路由来源", "Podcast")
