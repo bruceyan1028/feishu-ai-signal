@@ -1,5 +1,7 @@
 .env
 .cursor/mcp.json
+# 含真实 base / 应用 / open_id，仓库公开，不入库
+.cursor/rules/feishu-base.mdc
 .claude/
 .venv/
 venv/

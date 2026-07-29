@@ -22,18 +22,29 @@ def _require(name: str) -> str:
 # --- 飞书 ---
 FEISHU_APP_ID = _env("FEISHU_APP_ID")
 FEISHU_APP_SECRET = _env("FEISHU_APP_SECRET")
-FEISHU_BASE_ID = _env("FEISHU_BASE_ID", "RuI1b05wHa8bIUsok0ac35S8nAd")
-FEISHU_PARAM_TABLE_ID = _env("FEISHU_PARAM_TABLE_ID", "tblnJ0vumx8ITmlU")
-FEISHU_SOURCE_TABLE_ID = _env("FEISHU_SOURCE_TABLE_ID", "tbl2pNAbuC1omjgp")
-FEISHU_ENTRY_TABLE_ID = _env("FEISHU_ENTRY_TABLE_ID", "tblgeB5ArAD1ugoi")
+# 不设默认值：漏配时必须显式报错，否则会静默跑到别人的 base 上
+FEISHU_BASE_ID = _env("FEISHU_BASE_ID", "")
+FEISHU_PARAM_TABLE_ID = _env("FEISHU_PARAM_TABLE_ID", "")
+FEISHU_SOURCE_TABLE_ID = _env("FEISHU_SOURCE_TABLE_ID", "")
+FEISHU_ENTRY_TABLE_ID = _env("FEISHU_ENTRY_TABLE_ID", "")
 
 # 类型化筛选配置表：某个源出现在哪张表里就按该类型过滤（表内一源一行，主键 source_id）
-FEISHU_PAPER_CONFIG_TABLE_ID = _env("FEISHU_PAPER_CONFIG_TABLE_ID", "tblhTzn8NyjeU779")
-FEISHU_WECHAT_CONFIG_TABLE_ID = _env("FEISHU_WECHAT_CONFIG_TABLE_ID", "tblNLmDgL2HpI29U")
-FEISHU_VIDEO_CONFIG_TABLE_ID = _env("FEISHU_VIDEO_CONFIG_TABLE_ID", "tblh8FXqPevU7pBq")
-FEISHU_SOCIAL_CONFIG_TABLE_ID = _env("FEISHU_SOCIAL_CONFIG_TABLE_ID", "tbl7lTtZRBajtmrQ")
-FEISHU_GITHUB_CONFIG_TABLE_ID = _env("FEISHU_GITHUB_CONFIG_TABLE_ID", "tblpZTJWyTRzkQyF")
+# 留空则该类型的筛选规则不生效（load_typed_configs 会跳过）
+FEISHU_PAPER_CONFIG_TABLE_ID = _env("FEISHU_PAPER_CONFIG_TABLE_ID", "")
+FEISHU_WECHAT_CONFIG_TABLE_ID = _env("FEISHU_WECHAT_CONFIG_TABLE_ID", "")
+FEISHU_VIDEO_CONFIG_TABLE_ID = _env("FEISHU_VIDEO_CONFIG_TABLE_ID", "")
+FEISHU_SOCIAL_CONFIG_TABLE_ID = _env("FEISHU_SOCIAL_CONFIG_TABLE_ID", "")
+FEISHU_GITHUB_CONFIG_TABLE_ID = _env("FEISHU_GITHUB_CONFIG_TABLE_ID", "")
 FEISHU_BRIEF_TABLE_ID = os.environ.get("FEISHU_BRIEF_TABLE_ID", "").strip()
+
+
+def require_tables(*names: str) -> None:
+    """入口处校验必需的表配置，避免带着空 table_id 去调 API 后拿到含糊的报错。"""
+    missing = [name for name in names if not globals().get(name)]
+    if missing:
+        raise ConfigError("缺少环境变量 " + "、".join(missing) + "，请在 .env 或 GitHub Secrets 中配置")
+
+
 FEISHU_RECIPIENT_OPEN_ID = os.environ.get("FEISHU_RECIPIENT_OPEN_ID", "").strip()
 _recipient_open_ids = os.environ.get("FEISHU_RECIPIENT_OPEN_IDS", "").strip() or FEISHU_RECIPIENT_OPEN_ID
 FEISHU_RECIPIENT_OPEN_IDS = [
@@ -133,6 +144,8 @@ TIER_LABEL = {
 
 
 def validate() -> None:
-    """启动时校验必填密钥。"""
+    """启动时校验必填密钥与目标表。"""
     _require("FEISHU_APP_ID")
     _require("FEISHU_APP_SECRET")
+    _require("FEISHU_BASE_ID")
+    require_tables("FEISHU_PARAM_TABLE_ID", "FEISHU_ENTRY_TABLE_ID")
