@@ -429,6 +429,37 @@ class DeliveryTests(unittest.TestCase):
         self.assertIn("真实中文标题", json.dumps(card, ensure_ascii=False))
         self.assertIn(url, json.dumps(card, ensure_ascii=False))
 
+    def test_historical_brief_drops_meta_signal_outside_24h_window(self) -> None:
+        old_meta = {
+            "sourceId": "meta-ai-blog",
+            "publishedAtMs": int(
+                datetime(2026, 4, 8, tzinfo=timezone.utc).timestamp() * 1000
+            ),
+        }
+        fresh_meta = {
+            "sourceId": "meta-ai-blog",
+            "publishedAtMs": int(
+                datetime(2026, 7, 27, 12, tzinfo=timezone.utc).timestamp() * 1000
+            ),
+        }
+        windows = {"meta-ai-blog": 24}
+
+        self.assertFalse(
+            publish._within_source_window(old_meta, "2026-07-27", windows)
+        )
+        self.assertTrue(
+            publish._within_source_window(fresh_meta, "2026-07-27", windows)
+        )
+
+    def test_configured_source_with_unknown_date_is_hidden(self) -> None:
+        self.assertFalse(
+            publish._within_source_window(
+                {"sourceId": "meta-ai-blog", "publishedAtMs": 0},
+                "2026-07-27",
+                {"meta-ai-blog": 24},
+            )
+        )
+
     def test_brief_bullet_title_replaces_placeholder(self) -> None:
         title = daily.brief_bullet_title("模型治理从原则走向工程，企业开始部署审计工具。", "要点1")
         self.assertEqual(title, "模型治理从原则走向工程")

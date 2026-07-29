@@ -37,8 +37,13 @@ def _signal_from_record(record: dict[str, Any]) -> dict[str, Any]:
     fields = record.get("fields") or {}
     urgency = daily.URGENCY_TO_CN.get(str(daily.scalar(fields.get("紧迫度"))), "中")
     published = _date_from_ms(fields.get("发布时间"))
+    try:
+        published_ms = int(float(daily.scalar(fields.get("发布时间")) or 0))
+    except (TypeError, ValueError):
+        published_ms = 0
     return {
         "recordId": str(record.get("record_id") or ""),
+        "sourceId": str(daily.scalar(fields.get("source_id")) or ""),
         "title": str(daily.scalar(fields.get("标题")) or ""),
         "titleCn": str(daily.scalar(fields.get("中文标题")) or daily.scalar(fields.get("标题")) or ""),
         "source": str(daily.scalar(fields.get("来源")) or ""),
@@ -46,6 +51,7 @@ def _signal_from_record(record: dict[str, Any]) -> dict[str, Any]:
         "category": str(daily.scalar(fields.get("分类")) or "其他"),
         "contentType": daily.content_type(fields),
         "publishedDate": published,
+        "publishedAtMs": published_ms,
         "summary": str(daily.scalar(fields.get("中文摘要")) or ""),
         "deepAnalysis": str(daily.scalar(fields.get("AI深度解读")) or ""),
         "why": str(daily.scalar(fields.get("为何重要")) or ""),
@@ -59,6 +65,29 @@ def _signal_from_record(record: dict[str, Any]) -> dict[str, Any]:
     }
 
 
+def _within_source_window(
+    signal: dict[str, Any],
+    brief_date: str,
+    lookback_hours: dict[str, int],
+) -> bool:
+    """历史简报重建时重验来源时效，避免旧的错误信号永久留在详情页。"""
+    source_id = str(signal.get("sourceId") or "")
+    if source_id not in lookback_hours:
+        return True
+    try:
+        published_ms = int(signal.get("publishedAtMs") or 0)
+        brief_end = datetime.strptime(brief_date, "%Y-%m-%d").replace(
+            tzinfo=CN_TZ
+        ) + timedelta(days=1)
+    except (TypeError, ValueError):
+        return False
+    if published_ms <= 0:
+        return False
+    hours = max(1, min(7 * 24, int(lookback_hours[source_id])))
+    published = datetime.fromtimestamp(published_ms / 1000, CN_TZ)
+    return brief_end - timedelta(hours=hours) <= published <= brief_end
+
+
 def load_entry_pool(token: str) -> dict[str, dict[str, Any]]:
     """全量条目池，用于给简报信号补齐同事件的其它源头。"""
     records = feishu.read_all_records_with_ids(token, config.FEISHU_ENTRY_TABLE_ID)
@@ -69,6 +98,7 @@ def load_recent_briefs(
     token: str,
     days: int = 7,
     entries: dict[str, dict[str, Any]] | None = None,
+    lookback_hours: dict[str, int] | None = None,
 ) -> list[dict[str, Any]]:
     table_id = config.FEISHU_BRIEF_TABLE_ID or feishu.ensure_daily_brief_table(token)
     brief_records = feishu.read_all_records_with_ids(token, table_id)
@@ -81,10 +111,23 @@ def load_recent_briefs(
         date = str(daily.scalar(fields.get("简报ID")) or _date_from_ms(fields.get("简报日期")))
         signal_ids = [str(item) for item in _json_cell(fields.get("信号记录ID"), [])]
         signals = [entries[record_id] for record_id in signal_ids if record_id in entries]
+        if lookback_hours:
+            signals = [
+                signal
+                for signal in signals
+                if _within_source_window(signal, date, lookback_hours)
+            ]
         if not date or not signals:
             continue
         # 从全量条目池补齐同事件其它源头，供详情页「事件聚合」展示
-        signals = cluster.enrich_with_pool(signals, list(entries.values()), threshold=0.85)
+        pool = list(entries.values())
+        if lookback_hours:
+            pool = [
+                signal
+                for signal in pool
+                if _within_source_window(signal, date, lookback_hours)
+            ]
+        signals = cluster.enrich_with_pool(signals, pool, threshold=0.85)
         briefs.append(
             {
                 "date": date,
@@ -127,12 +170,23 @@ def run() -> int:
     args = parser.parse_args()
     token = feishu.get_tenant_access_token()
     entries = load_entry_pool(token)
-    briefs = load_recent_briefs(token, entries=entries)
+    params = feishu.read_param_records(token)
+    lookback_hours = daily._lookback_hours_map(params)
+    briefs = load_recent_briefs(
+        token,
+        entries=entries,
+        lookback_hours=lookback_hours,
+    )
     if args.input:
         current = json.loads(Path(args.input).read_text(encoding="utf-8"))
         # 当天简报走的是本地 JSON，同样要补齐同事件其它源头，否则只有历史简报有事件聚合
+        pool = [
+            signal
+            for signal in entries.values()
+            if _within_source_window(signal, current["date"], lookback_hours)
+        ]
         current["signals"] = cluster.enrich_with_pool(
-            current.get("signals") or [], list(entries.values()), threshold=0.85
+            current.get("signals") or [], pool, threshold=0.85
         )
         briefs = [current, *[item for item in briefs if item["date"] != current["date"]]][:7]
     site = build_site(briefs, args.site_dir)
