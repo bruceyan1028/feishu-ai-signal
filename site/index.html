@@ -1281,15 +1281,48 @@ function detailMediaHtml(A, s){
   return '';
 }
 
+// 部分网络直连不到 YouTube，内嵌 iframe 会静默变成一块黑屏且无处可点。
+// 改为封面占位：封面能加载即说明可达，点击就地内嵌播放；封面加载失败则点击跳原站。
+let YT_REACHABLE = null;
+function ytPosterLoaded(img){
+  YT_REACHABLE = true;
+  document.querySelectorAll('[data-yt-hint]').forEach(el => { el.textContent = '点击播放'; });
+}
+function playVideo(el){
+  const src = el.getAttribute('data-embed') || '';
+  const watch = el.getAttribute('data-watch') || '';
+  if(YT_REACHABLE !== true || !src){
+    if(watch) window.open(watch, '_blank', 'noopener');
+    return;
+  }
+  const frame = document.createElement('iframe');
+  frame.src = src + (src.includes('?') ? '&' : '?') + 'autoplay=1';
+  frame.title = el.getAttribute('data-title') || '';
+  frame.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
+  frame.referrerPolicy = 'strict-origin-when-cross-origin';
+  frame.allowFullscreen = true;
+  frame.setAttribute('style', 'position:absolute;inset:0;width:100%;height:100%;border:0;');
+  el.innerHTML = '';
+  el.appendChild(frame);
+}
+function videoFacadeHtml(video, title, fallbackUrl, poster){
+  const src = String(video.embedUrl || '').replace('youtube-nocookie.com', 'youtube.com');
+  const watch = video.url || fallbackUrl || '';
+  const cover = video.thumbnailUrl || poster || '';
+  return `<div data-embed="${esc(src)}" data-watch="${esc(watch)}" data-title="${esc(title)}" onclick="playVideo(this)" role="button" tabindex="0" style="position:relative;padding-top:56.25%;cursor:pointer;background:#0d0b09;overflow:hidden;">
+    ${cover?`<img src="${esc(cover)}" alt="" loading="lazy" onload="ytPosterLoaded(this)" onerror="this.style.display='none'" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;">`:''}
+    <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:9px;background:rgba(13,11,9,.34);color:#fff;">
+      <span style="display:flex;align-items:center;justify-content:center;width:58px;height:58px;border-radius:50%;background:rgba(13,11,9,.72);border:1.5px solid rgba(255,255,255,.85);font-size:19px;padding-left:4px;">▶</span>
+      <span data-yt-hint style="font-size:11.5px;font-weight:700;text-shadow:0 1px 3px rgba(0,0,0,.6);">点击打开原视频 ↗</span>
+    </div>
+  </div>`;
+}
 function sourceVideoHtml(s){
   if(s.kind!=='视频') return '';
   const video = (s.mediaAssets?.videos || []).find(item=>item?.embedUrl);
   if(!video) return '';
-  const src = String(video.embedUrl).replace('youtube-nocookie.com','youtube.com');
   return `<div style="margin:0 0 18px;border:1.5px solid var(--ds-ink-line);background:#000;box-shadow:5px 5px 0 rgba(22,19,15,.1);">
-    <div style="position:relative;padding-top:56.25%;">
-      <iframe src="${esc(src)}" title="${esc(s.zhTitle)}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen style="position:absolute;inset:0;width:100%;height:100%;border:0;"></iframe>
-    </div>
+    ${videoFacadeHtml(video, s.zhTitle, s.url, s.imageUrl)}
     <div style="display:flex;align-items:center;gap:9px;padding:10px 12px;color:#f3efe6;">
       ${avatarHtml(s.source)}
       <span style="font-size:12.5px;font-weight:700;">${esc(s.source)}</span>
@@ -1576,7 +1609,7 @@ function articleBody(A, s){
   });
   const placed = imageStep ? Math.min(images.length, Math.floor(deepParas.length / imageStep)) : 0;
   images.slice(placed).forEach(item=> blocks.push(figure(item)));
-  videos.forEach(item=> blocks.push(`<div style="position:relative; padding-top:56.25%; margin:24px 0; background:#000;"><iframe src="${esc(item.embedUrl)}" title="${esc(s.zhTitle)}" allow="accelerometer; autoplay; encrypted-media; picture-in-picture" allowfullscreen style="position:absolute; inset:0; width:100%; height:100%; border:0;"></iframe></div>`));
+  videos.forEach(item=> blocks.push(`<div style="margin:24px 0;background:#000;">${videoFacadeHtml(item, s.zhTitle, s.url, s.imageUrl)}</div>`));
 
   const evidence = s.kind==='播客' && s.transcriptEvidence
     ? `<details style="margin:26px 0;border:1.5px solid var(--ds-ink-line);background:#fff;">
