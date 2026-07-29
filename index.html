@@ -1284,19 +1284,12 @@ function detailMediaHtml(A, s){
 // 部分网络直连不到 YouTube，内嵌 iframe 会静默变成一块黑屏且无处可点。
 // 改为封面占位：封面能加载即说明可达，点击就地内嵌播放；封面加载失败则点击跳原站。
 let YT_REACHABLE = null;
-function ytPosterLoaded(img){
-  YT_REACHABLE = true;
-  document.querySelectorAll('[data-yt-hint]').forEach(el => { el.textContent = '点击播放'; });
-}
-function playVideo(el){
+function mountVideoFrame(el, autoplay){
   const src = el.getAttribute('data-embed') || '';
-  const watch = el.getAttribute('data-watch') || '';
-  if(YT_REACHABLE !== true || !src){
-    if(watch) window.open(watch, '_blank', 'noopener');
-    return;
-  }
+  if(!src || el.dataset.mounted) return;
+  el.dataset.mounted = '1';
   const frame = document.createElement('iframe');
-  frame.src = src + (src.includes('?') ? '&' : '?') + 'autoplay=1';
+  frame.src = autoplay ? src + (src.includes('?') ? '&' : '?') + 'autoplay=1' : src;
   frame.title = el.getAttribute('data-title') || '';
   frame.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
   frame.referrerPolicy = 'strict-origin-when-cross-origin';
@@ -1304,6 +1297,16 @@ function playVideo(el){
   frame.setAttribute('style', 'position:absolute;inset:0;width:100%;height:100%;border:0;');
   el.innerHTML = '';
   el.appendChild(frame);
+}
+function ytPosterLoaded(img){
+  YT_REACHABLE = true;
+  // 封面能加载即说明可直连，立刻挂上播放器，体验与直接内嵌一致（无需多一次点击）
+  document.querySelectorAll('[data-embed]').forEach(el => mountVideoFrame(el, false));
+}
+function playVideo(el){
+  if(YT_REACHABLE === true){ mountVideoFrame(el, true); return; }
+  const watch = el.getAttribute('data-watch') || '';
+  if(watch) window.open(watch, '_blank', 'noopener');
 }
 function videoFacadeHtml(video, title, fallbackUrl, poster){
   const src = String(video.embedUrl || '').replace('youtube-nocookie.com', 'youtube.com');
