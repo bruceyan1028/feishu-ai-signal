@@ -75,6 +75,10 @@ def _can_backfill_fulltext(url: str) -> bool:
 
 def build_dedup_key(url: str, title: str, feed: dict[str, Any]) -> str:
     strategy = feed.get("dedup_key") or "normalize(url)"
+    if feed.get("fetch_method") == "Podcast" or "podcast_guid" in strategy:
+        guid = str(feed.get("podcast_guid") or "").strip()
+        if guid:
+            return f"podcast:{guid}"[:240]
     if feed.get("fetch_method") == "Media" or "youtube_video_id" in strategy:
         match = re.search(r"(?:youtu\.be/|youtube\.com/(?:watch\?v=|shorts/|embed/))([\w-]{11})", url, re.I)
         if match:
@@ -134,6 +138,14 @@ def _keyword_ok(
     return len(keyword_re.findall(body or "")) >= min_hits
 
 
+def _podcast_keyword_ok(keyword_re: re.Pattern[str], title: str, body: str, min_hits: int) -> bool:
+    """播客只按标题或节目简介开头判断主题，避免尾部时间戳偶提 AI 就放行整期。"""
+    if keyword_re.search(title or ""):
+        return True
+    intro = (body or "")[:1600]
+    return len(keyword_re.findall(intro)) >= max(3, min_hits)
+
+
 def process_and_clean(
     raw_items: list[dict[str, Any]],
     type_configs: dict[str, dict[str, Any]] | None = None,
@@ -173,8 +185,9 @@ def process_and_clean(
         keyword_re = _safe_regex(feed.get("keyword_regex"))
         kw_min_hits = max(1, int(feed.get("keyword_min_hits") or 1))
         min_chars = feed.get("min_content_chars") or 100
-        # Bridge 本身已按账号筛选，跳过关键词；论文源一律走 keyword_regex
-        skip_keyword = feed.get("fetch_method") == "Bridge"
+        # Bridge 已按账号白名单筛选；Podcast 仍需主题过滤，避免白名单节目中的非 AI 单集。
+        fetch_method = feed.get("fetch_method")
+        skip_keyword = fetch_method == "Bridge"
 
         url = normalize_url(item.get("url"))
         title = strip_html(item.get("title"))
@@ -200,19 +213,35 @@ def process_and_clean(
                 and title
                 and url
                 and len(combined) >= min_chars
-                and (skip_keyword or _keyword_ok(keyword_re, title, body_text, kw_min_hits))
+                and (
+                    skip_keyword
+                    or (
+                        _podcast_keyword_ok(keyword_re, title, body_text, kw_min_hits)
+                        if fetch_method == "Podcast"
+                        else _keyword_ok(keyword_re, title, body_text, kw_min_hits)
+                    )
+                )
             ):
                 drop_stats[feed_id] = drop_stats.get(feed_id, 0) + 1
             continue
         # 摘要型 RSS（OpenAI / DeepMind 等官方源）只给一两百字，用它判长度会把整源判死。
         # 这类条目先放行并标记，等去重后回源抓到全文，再由调用方按最终正文复判。
-        needs_fulltext = len(combined) < min_chars and feed.get("fetch_method") != "Media"
+        needs_fulltext = len(combined) < min_chars and feed.get("fetch_method") not in {
+            "Media",
+            "Podcast",
+        }
         if needs_fulltext and not _can_backfill_fulltext(url):
             funnel["min_content_chars"] += 1
             continue
-        if not skip_keyword and not _keyword_ok(keyword_re, title, body_text, kw_min_hits):
-            funnel["keyword_regex"] += 1
-            continue
+        if not skip_keyword:
+            keyword_ok = (
+                _podcast_keyword_ok(keyword_re, title, body_text, kw_min_hits)
+                if fetch_method == "Podcast"
+                else _keyword_ok(keyword_re, title, body_text, kw_min_hits)
+            )
+            if not keyword_ok:
+                funnel["keyword_regex"] += 1
+                continue
 
         metrics = dict(item.get("metrics") or {})
         type_cfg = type_configs.get(feed_id)
@@ -294,6 +323,7 @@ def process_and_clean(
                 log.debug("类型过滤丢弃 %s（%s: %s）", url, type_cfg["entity_type"], reason)
                 continue
 
+
         if duplicate_key in seen:
             funnel["dup_round"] += 1
             continue
@@ -319,6 +349,10 @@ def process_and_clean(
             "quality_score": float(quality_fields.get("quality_score") or 0),
             "needs_fulltext": needs_fulltext,
             "min_content_chars": min_chars,
+            # 采集后处理所需的内部字段；format_for_feishu 不会直接写入。
+            "feed": feed,
+            "podcast": item.get("podcast") or {},
+            "metrics": metrics,
         }
         row.update(quality_fields)
         result.append(row)
@@ -363,8 +397,25 @@ def format_for_feishu(item: dict[str, Any]) -> dict[str, Any]:
         "去重键": item["duplicate_key"],
         "source_id": item.get("source_id") or "",
     }
+    podcast_analysis = item.get("podcast_analysis") or {}
+    if podcast_analysis:
+        urgency = str(podcast_analysis.get("urgency") or "中")
+        fields.update(
+            {
+                "中文标题": str(podcast_analysis.get("title_cn") or item["title"]),
+                "中文摘要": str(podcast_analysis.get("summary_cn") or ""),
+                "AI深度解读": str(podcast_analysis.get("deep_analysis_cn") or ""),
+                "为何重要": str(podcast_analysis.get("why") or ""),
+                "主题": list(podcast_analysis.get("topics") or topics or ["其他"]),
+                "影响分": float(podcast_analysis.get("impact") or 0),
+                "新颖度": float(podcast_analysis.get("novelty") or 0),
+                "可行动性": float(podcast_analysis.get("actionability") or 0),
+                "紧迫度": urgency if urgency in {"高", "中", "低"} else "中",
+                "状态": "已分析",
+            }
+        )
     media_assets = item.get("media_assets") or {}
-    if media_assets.get("images") or media_assets.get("videos"):
+    if media_assets.get("images") or media_assets.get("videos") or media_assets.get("audio"):
         fields["媒体资源"] = json.dumps(media_assets, ensure_ascii=False)
     image = _to_link(item.get("image_url") or "", "原文配图")
     if image:
@@ -384,6 +435,10 @@ def format_for_feishu(item: dict[str, Any]) -> dict[str, Any]:
         metrics_json = item.get("paper_metrics_json")
         if metrics_json:
             fields["论文指标"] = json.dumps(metrics_json, ensure_ascii=False)
+    podcast_metrics = item.get("podcast_metrics_json")
+    if podcast_metrics:
+        fields["播客指标"] = json.dumps(podcast_metrics, ensure_ascii=False)
+        fields["质量分"] = float(item.get("quality_score") or 0)
     return fields
 
 

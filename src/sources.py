@@ -12,6 +12,7 @@ from urllib.parse import quote
 from . import config
 
 FEED_METHODS = {"RSS"}
+PODCAST_METHODS = {"Podcast"}
 _B_SET = {"chatbot-arena", "artificial-analysis", "papers-with-code-sota"}
 
 # 信号载体类型（写入条目表「来源类型」）：按内容形态分类，不再用 Research/Company Blog 这类主题标签
@@ -343,6 +344,39 @@ def map_media_sources(records: list[dict[str, Any]]) -> list[dict[str, Any]]:
             explicit_type=str(explicit) if explicit else SIGNAL_FORMAT_VIDEO,
         )
         feed["min_content_chars"] = int(cell(f.get("min_content_chars")) or 0) or 20
+        out.append(feed)
+    return out
+
+
+def map_podcast_sources(
+    records: list[dict[str, Any]],
+    *,
+    allow_experimental: bool = False,
+) -> list[dict[str, Any]]:
+    """映射独立播客 RSS；正式流水线只收 active，诊断可收 experimental。"""
+    out: list[dict[str, Any]] = []
+    for rec in records:
+        f = rec.get("fields") or {}
+        if str(cell(f.get("fetch_method")) or "") not in PODCAST_METHODS:
+            continue
+        status = str(cell(f.get("status")) or "active")
+        if status == "paused" or status != "active" and not (
+            allow_experimental and status == "experimental"
+        ):
+            continue
+        extra = _parse_extra(f) or {}
+        feed = _base_feed(f, extra, "Podcast")
+        if not feed["url"]:
+            continue
+        feed.update(
+            {
+                "record_id": str(rec.get("record_id") or ""),
+                "status": status,
+                "source_type": SIGNAL_FORMAT_PODCAST,
+                "min_content_chars": 1,
+                "dedup_key": "podcast_guid",
+            }
+        )
         out.append(feed)
     return out
 

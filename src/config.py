@@ -53,6 +53,16 @@ DIFY_WEBHOOK_URL = os.environ.get("DIFY_WEBHOOK_URL", "").strip()
 LLM_API_KEY = os.environ.get("LLM_API_KEY", "").strip()
 LLM_BASE_URL = _env("LLM_BASE_URL", "https://api.deepseek.com/v1").rstrip("/")
 LLM_MODEL = _env("LLM_MODEL", "deepseek-chat")
+# 播客托管语音转写。单独配置，不能假设文本 LLM 服务也实现 audio/transcriptions。
+ASR_API_KEY = os.environ.get("ASR_API_KEY", "").strip()
+ASR_BASE_URL = _env("ASR_BASE_URL", "https://api.openai.com/v1").rstrip("/")
+ASR_MODEL = _env("ASR_MODEL", "gpt-4o-transcribe")
+ASR_CHUNK_SECONDS = int(os.environ.get("ASR_CHUNK_SECONDS", "1200"))
+PODCAST_MAX_DURATION_SECONDS = int(os.environ.get("PODCAST_MAX_DURATION_SECONDS", "14400"))
+PODCAST_MAX_AUDIO_MB = int(os.environ.get("PODCAST_MAX_AUDIO_MB", "500"))
+PODCAST_TRANSCRIPT_CHUNK_CHARS = int(
+    os.environ.get("PODCAST_TRANSCRIPT_CHUNK_CHARS", "10000")
+)
 # report.py 真实模式单次分析的最新条目数上限
 REPORT_MAX_ENTRIES = int(os.environ.get("REPORT_MAX_ENTRIES", "20"))
 DAILY_CANDIDATE_LIMIT = int(os.environ.get("DAILY_CANDIDATE_LIMIT", "30"))
@@ -63,6 +73,9 @@ DAILY_MAX_PAPERS = int(os.environ.get("DAILY_MAX_PAPERS", "4"))
 DAILY_MAX_VIDEOS = int(os.environ.get("DAILY_MAX_VIDEOS", "4"))
 DAILY_MIN_VIDEOS = int(os.environ.get("DAILY_MIN_VIDEOS", "1"))
 DAILY_VIDEO_WEIGHT = float(os.environ.get("DAILY_VIDEO_WEIGHT", "0.9"))
+# 播客是深度补充材料：单独限额并轻度降权，避免长访谈挤占时效新闻。
+DAILY_MAX_PODCASTS = int(os.environ.get("DAILY_MAX_PODCASTS", "2"))
+DAILY_PODCAST_WEIGHT = float(os.environ.get("DAILY_PODCAST_WEIGHT", "0.85"))
 # 英文正文翻译的字数上限：超长部分截断并提示读原文。
 # 3000 字符只够译出一千余字中文，正文普遍断在句子中间，故普通条目抬到 6000。
 BODY_TRANSLATE_LIMIT = int(os.environ.get("BODY_TRANSLATE_LIMIT", "6000"))

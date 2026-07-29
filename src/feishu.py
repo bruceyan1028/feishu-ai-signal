@@ -211,6 +211,7 @@ def ensure_entry_enrichment_fields(token: str) -> None:
         ("录用会议", 1),
         ("社区热度", 2),
         ("论文指标", 1),
+        ("播客指标", 1),
     ):
         if field_name in existing:
             continue
@@ -261,6 +262,8 @@ def ensure_paper_config_fields(token: str) -> None:
             )
 
 
+
+
 SIGNAL_FORMAT_OPTIONS = ("论文", "纯网页", "视频", "社交媒体", "公众号", "播客", "Github热榜", "其他")
 
 
@@ -302,6 +305,49 @@ def ensure_source_type_field(token: str, table_id: str, field_name: str = "来�
         raise FeishuError(
             f"Feishu create field {field_name} on {table_id} failed: "
             f"{created.get('code')} {created.get('msg')}"
+        )
+
+
+def ensure_select_option(
+    token: str,
+    table_id: str,
+    field_name: str,
+    option_name: str,
+) -> None:
+    """幂等给已有单选字段追加选项，保留原选项 ID。"""
+    if not table_id:
+        return
+    fields = _list_fields(token, table_id)
+    target = next((field for field in fields if field.get("field_name") == field_name), None)
+    if not target:
+        return
+    old_options = list((target.get("property") or {}).get("options") or [])
+    if any(str(option.get("name") or "") == option_name for option in old_options):
+        return
+    options = [
+        {
+            "id": option["id"],
+            "name": option["name"],
+            "color": option.get("color", index),
+        }
+        for index, option in enumerate(old_options)
+    ]
+    options.append({"name": option_name, "color": len(options) % 54})
+    field_id = str(target.get("field_id") or "")
+    url = (
+        f"{config.FEISHU_HOST}/open-apis/bitable/v1/apps/{config.FEISHU_BASE_ID}"
+        f"/tables/{table_id}/fields/{field_id}"
+    )
+    data = _SESSION.put(
+        url,
+        headers={"Authorization": f"Bearer {token}", "Content-Type": "application/json; charset=utf-8"},
+        json={"field_name": field_name, "type": 3, "property": {"options": options}},
+        timeout=30,
+    ).json()
+    if data.get("code") != 0:
+        raise FeishuError(
+            f"Feishu append option {option_name} to {field_name} failed: "
+            f"{data.get('code')} {data.get('msg')}"
         )
 
 

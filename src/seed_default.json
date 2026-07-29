@@ -879,14 +879,106 @@
    }
   },
   {
-   "主要看什么": "AI 播客 RSS + Whisper 转录",
+   "主要看什么": "前沿实验室负责人、研究者与长期 AI 战略访谈",
    "优先级": "P2",
    "分类": "其他",
-   "名称": "播客节目",
+   "名称": "Dwarkesh Podcast",
+   "备注": [
+    "白名单节目每期完整摘要；RSS/transcript 优先，托管 ASR 兜底"
+   ],
    "层级": "L4 补充源",
    "来源类型": "播客",
-   "自动化状态": "已暂停",
-   "获取方式": "Media"
+   "自动化状态": "待测",
+   "获取方式": "Podcast",
+   "链接": {
+    "link": "https://apple.dwarkesh-podcast.workers.dev/feed.rss",
+    "text": "https://apple.dwarkesh-podcast.workers.dev/feed.rss"
+   }
+  },
+  {
+   "主要看什么": "AI 工程、Agent、推理基础设施与开发者生态",
+   "优先级": "P2",
+   "分类": "其他",
+   "名称": "Latent Space",
+   "备注": [
+    "白名单节目每期完整摘要；RSS/transcript 优先，托管 ASR 兜底"
+   ],
+   "层级": "L4 补充源",
+   "来源类型": "播客",
+   "自动化状态": "待测",
+   "获取方式": "Podcast",
+   "链接": {
+    "link": "https://api.substack.com/feed/podcast/1084089.rss",
+    "text": "https://api.substack.com/feed/podcast/1084089.rss"
+   }
+  },
+  {
+   "主要看什么": "AI 创业、投资、产品化和公司战略",
+   "优先级": "P2",
+   "分类": "其他",
+   "名称": "No Priors",
+   "备注": [
+    "白名单节目每期完整摘要；RSS/transcript 优先，托管 ASR 兜底"
+   ],
+   "层级": "L4 补充源",
+   "来源类型": "播客",
+   "自动化状态": "待测",
+   "获取方式": "Podcast",
+   "链接": {
+    "link": "https://feeds.megaphone.fm/nopriors",
+    "text": "https://feeds.megaphone.fm/nopriors"
+   }
+  },
+  {
+   "主要看什么": "中国 AI 创业者、投资人与产品实践",
+   "优先级": "P2",
+   "分类": "其他",
+   "名称": "十字路口 Crossing",
+   "备注": [
+    "白名单节目每期完整摘要；RSS/transcript 优先，托管 ASR 兜底"
+   ],
+   "层级": "L4 补充源",
+   "来源类型": "播客",
+   "自动化状态": "待测",
+   "获取方式": "Podcast",
+   "链接": {
+    "link": "https://feed.xyzfm.space/68fyjknth9hj",
+    "text": "https://feed.xyzfm.space/68fyjknth9hj"
+   }
+  },
+  {
+   "主要看什么": "AI 原生产品、创业实战与商业机会",
+   "优先级": "P2",
+   "分类": "其他",
+   "名称": "AI 炼金术",
+   "备注": [
+    "白名单节目每期完整摘要；RSS/transcript 优先，托管 ASR 兜底"
+   ],
+   "层级": "L4 补充源",
+   "来源类型": "播客",
+   "自动化状态": "待测",
+   "获取方式": "Podcast",
+   "链接": {
+    "link": "https://www.ximalaya.com/album/74194808.xml",
+    "text": "https://www.ximalaya.com/album/74194808.xml"
+   }
+  },
+  {
+   "主要看什么": "硅谷 AI 技术、产业与中美科技观察",
+   "优先级": "P2",
+   "分类": "其他",
+   "名称": "硅谷 101",
+   "备注": [
+    "白名单节目每期完整摘要；RSS/transcript 优先，托管 ASR 兜底"
+   ],
+   "层级": "L4 补充源",
+   "来源类型": "播客",
+   "自动化状态": "待测",
+   "获取方式": "Podcast",
+   "链接": {
+    "link": "https://feeds.fireside.fm/sv101/rss",
+    "text": "https://feeds.fireside.fm/sv101/rss"
+   }
   },
   {
    "主要看什么": "YouTube 会议回放，并入视频链路",
@@ -2201,14 +2293,116 @@
    "来源类型": "论文"
   },
   {
-   "dedup_key": "normalize(url)",
+   "dedup_key": "podcast_guid",
    "dimension": "其他",
-   "fetch_method": "Manual",
-   "lookback_window": "48h",
-   "name": "播客节目",
+   "endpoint": {
+    "link": "https://apple.dwarkesh-podcast.workers.dev/feed.rss",
+    "text": "https://apple.dwarkesh-podcast.workers.dev/feed.rss"
+   },
+   "extra_config": "{\"max_items\":6,\"max_duration_sec\":14400,\"fallback_urls\":[\"https://api.substack.com/feed/podcast/69345.rss\"]}",
+   "fetch_method": "Podcast",
+   "lookback_window": "7d",
+   "min_content_chars": 1,
+   "name": "Dwarkesh Podcast",
+   "notes": "Apple 当前 feed 优先，旧 Substack feed 兜底；新源先诊断验收",
    "priority": "P2",
-   "source_id": "podcast",
-   "status": "paused",
+   "source_id": "podcast-dwarkesh",
+   "status": "experimental",
+   "tier": "L4",
+   "来源类型": "播客"
+  },
+  {
+   "dedup_key": "podcast_guid",
+   "dimension": "其他",
+   "endpoint": {
+    "link": "https://api.substack.com/feed/podcast/1084089.rss",
+    "text": "https://api.substack.com/feed/podcast/1084089.rss"
+   },
+   "extra_config": "{\"max_items\":6,\"max_duration_sec\":14400}",
+   "fetch_method": "Podcast",
+   "lookback_window": "7d",
+   "min_content_chars": 1,
+   "name": "Latent Space",
+   "notes": "白名单节目每期处理；新源先诊断验收",
+   "priority": "P2",
+   "source_id": "podcast-latent-space",
+   "status": "experimental",
+   "tier": "L4",
+   "来源类型": "播客"
+  },
+  {
+   "dedup_key": "podcast_guid",
+   "dimension": "其他",
+   "endpoint": {
+    "link": "https://feeds.megaphone.fm/nopriors",
+    "text": "https://feeds.megaphone.fm/nopriors"
+   },
+   "extra_config": "{\"max_items\":6,\"max_duration_sec\":14400}",
+   "fetch_method": "Podcast",
+   "lookback_window": "7d",
+   "min_content_chars": 1,
+   "name": "No Priors",
+   "notes": "白名单节目每期处理；新源先诊断验收",
+   "priority": "P2",
+   "source_id": "podcast-no-priors",
+   "status": "experimental",
+   "tier": "L4",
+   "来源类型": "播客"
+  },
+  {
+   "dedup_key": "podcast_guid",
+   "dimension": "其他",
+   "endpoint": {
+    "link": "https://feed.xyzfm.space/68fyjknth9hj",
+    "text": "https://feed.xyzfm.space/68fyjknth9hj"
+   },
+   "extra_config": "{\"max_items\":6,\"max_duration_sec\":14400}",
+   "fetch_method": "Podcast",
+   "lookback_window": "7d",
+   "min_content_chars": 1,
+   "name": "十字路口 Crossing",
+   "notes": "白名单节目每期处理；新源先诊断验收",
+   "priority": "P2",
+   "source_id": "podcast-crossing",
+   "status": "experimental",
+   "tier": "L4",
+   "来源类型": "播客"
+  },
+  {
+   "dedup_key": "podcast_guid",
+   "dimension": "其他",
+   "endpoint": {
+    "link": "https://www.ximalaya.com/album/74194808.xml",
+    "text": "https://www.ximalaya.com/album/74194808.xml"
+   },
+   "extra_config": "{\"max_items\":6,\"max_duration_sec\":14400}",
+   "fetch_method": "Podcast",
+   "lookback_window": "7d",
+   "min_content_chars": 1,
+   "name": "AI 炼金术",
+   "notes": "白名单节目每期处理；新源先诊断验收",
+   "priority": "P2",
+   "source_id": "podcast-ai-alchemy",
+   "status": "experimental",
+   "tier": "L4",
+   "来源类型": "播客"
+  },
+  {
+   "dedup_key": "podcast_guid",
+   "dimension": "其他",
+   "endpoint": {
+    "link": "https://feeds.fireside.fm/sv101/rss",
+    "text": "https://feeds.fireside.fm/sv101/rss"
+   },
+   "extra_config": "{\"max_items\":6,\"max_duration_sec\":14400}",
+   "fetch_method": "Podcast",
+   "lookback_window": "7d",
+   "min_content_chars": 1,
+   "name": "硅谷 101",
+   "notes": "白名单节目每期处理；新源先诊断验收",
+   "priority": "P2",
+   "source_id": "podcast-silicon-valley-101",
+   "status": "experimental",
    "tier": "L4",
    "来源类型": "播客"
   },

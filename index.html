@@ -313,12 +313,13 @@ let signals = [
   { rank: 20, impact: 74, urgency: '中', kind: '论文', zhTitle: 'Apple 更新端侧基础模型:3B 参数对标 7B 能力', title: 'Apple Intelligence Foundation Models: On-device 3B with 7B-class quality', source: 'Apple ML Research', cat: '技术研究开源', date: '2026-07-03', summary: 'Apple 发布端侧基础模型技术报告:3B 参数模型通过混合精度量化(平均 3.7 bit)与任务适配器体系,在摘要、改写与工具调用上达到 7B 级开源模型质量,并保持端侧毫秒级首响与低内存占用,适配器可按 App 动态加载。', why: '端侧小模型的能力密度持续提升,「云端大模型 + 端侧小模型」的分层架构正在成为移动端标配。其适配器方案对多任务端侧部署有直接借鉴意义,值得纳入端侧路线评估。', novel: 74, action: 58, tags: ['端侧', 'Apple', '基础模型'] },
   { rank: 21, impact: 64, urgency: '低', kind: '视频', zhTitle: '视频解读:Gemma 4 全档位实测,4B 端侧表现超预期', title: 'Gemma 4 tested: 4B on-device performance is the real story', source: 'YouTube · AI Explained', cat: '技术研究开源', date: '2026-07-06', summary: 'AI Explained 频道对 Gemma 4 全档位独立实测:70B 接近闭源第一梯队,而最大亮点是 4B 端侧档位——在消费级手机上离线运行,多语言与工具调用能力保持完整,视频附全部测试数据与复现脚本。', why: '第三方独立实测是官方基准的重要交叉验证。4B 端侧档位的实测表现支持把端侧路线纳入正式评估,视频中的测试方法可直接复用到内部评测集。', novel: 55, action: 48, tags: ['端侧', 'Gemma', '实测'] },
 ];
-const SPECIAL_CONTENT_TYPES = ['论文','视频','社交媒体帖子','公众号'];
+const SPECIAL_CONTENT_TYPES = ['论文','视频','播客','社交媒体帖子','公众号'];
 function signalContentType(s){
   const explicit = s.contentType || s.kind || '';
   if(explicit === '社交媒体') return '社交媒体帖子';
   if(SPECIAL_CONTENT_TYPES.includes(explicit)) return explicit;
   const text = `${s.source||''} ${s.url||''}`.toLowerCase();
+  if(/podcast|播客|xiaoyuzhoufm\.com|podcasts\.apple\.com/.test(text) || s.mediaAssets?.audio?.url) return '播客';
   if(/mp\.weixin\.qq\.com|weixin\.qq\.com|微信公众号|公众号/.test(text)) return '公众号';
   if(/youtube\.com|youtu\.be|bilibili\.com|vimeo\.com|视频/.test(text) || (s.mediaAssets?.videos||[]).length) return '视频';
   if(/arxiv\.org|openreview\.net|doi\.org|学术论文|\barxiv\b/.test(text)) return '论文';
@@ -333,7 +334,7 @@ let briefMeta = {
 };
 
 const filters = ['全部', '端侧模型', '算力芯片云', '政策监管地缘', '前沿模型公司', '技术研究开源', '创业融资并购'];
-const FORMAT_FILTERS = ['论文', '视频', '社交媒体帖子', '公众号'];
+const FORMAT_FILTERS = ['论文', '视频', '播客', '社交媒体帖子', '公众号'];
 // 「端侧模型」是标签驱动的横切专题,不是领域分类:按 tags 匹配
 const EDGE_FILTER = '端侧模型';
 function matchesFilter(s, f){
@@ -589,6 +590,8 @@ async function loadBrief(){
       tags: Array.isArray(s.tags) ? s.tags : [],
       image: s.imageUrl || '',
       mediaAssets: s.mediaAssets || {images:[], videos:[]},
+      transcriptEvidence: s.transcriptEvidence || '',
+      podcastMetrics: s.podcastMetrics || null,
       topComments: Array.isArray(s.topComments) ? s.topComments : [],
       commentFetchError: s.commentFetchError || '',
       eventAggregation: s.eventAggregation || null,
@@ -1238,7 +1241,7 @@ function briefHtml(A){
 }
 
 // Perplexity 风信号详情覆盖层:文章 / 论文 / 视频 分型展示 + 团队评论 + 悬浮 AI 提问
-const KIND_META = { '文章': { icon: '📄', label: '文章' }, '论文': { icon: '📑', label: '论文' }, '视频': { icon: '▶', label: '视频' }, '公众号': { icon: '📱', label: '公众号' }, '社交媒体帖子': { icon: '💬', label: '社媒' }, 'Github热榜': { icon: '⭐', label: 'GitHub' } };
+const KIND_META = { '文章': { icon: '📄', label: '文章' }, '论文': { icon: '📑', label: '论文' }, '视频': { icon: '▶', label: '视频' }, '播客': { icon: '🎙', label: '播客' }, '公众号': { icon: '📱', label: '公众号' }, '社交媒体帖子': { icon: '💬', label: '社媒' }, 'Github热榜': { icon: '⭐', label: 'GitHub' } };
 
 // 按内容类型生成头部媒体区
 function detailMediaHtml(A, s){
@@ -1290,6 +1293,33 @@ function sourceVideoHtml(s){
       <a href="${esc(video.url||s.url)}" target="_blank" rel="noopener" style="margin-left:auto;font-size:11px;font-weight:700;color:#fff;border:1px solid rgba(255,255,255,.3);padding:4px 9px;">在 YouTube 打开 ↗</a>
     </div>
   </div>`;
+}
+
+function sourcePodcastHtml(A, s){
+  if(s.kind!=='播客') return '';
+  const audio = s.mediaAssets?.audio || {};
+  const duration = Number(audio.durationSec || s.podcastMetrics?.duration_sec || 0);
+  const durationText = duration
+    ? `${Math.floor(duration/3600)}:${String(Math.floor((duration%3600)/60)).padStart(2,'0')}:${String(duration%60).padStart(2,'0')}`
+    : '时长未知';
+  const sourceLabel = s.podcastMetrics?.transcript_source === 'official_page_transcript'
+    ? '官网逐字稿'
+    : s.podcastMetrics?.transcript_source === 'official_description'
+    ? '官方简介预览'
+    : (s.podcastMetrics?.transcript_source || '逐字稿');
+  const player = audio.embedUrl
+    ? `<iframe src="${esc(audio.embedUrl)}" title="${esc(s.zhTitle)}" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy" style="display:block;width:100%;height:152px;border:0;border-radius:10px;"></iframe>`
+    : audio.url
+    ? `<audio controls preload="metadata" src="${esc(audio.url)}" style="display:block;width:100%;height:42px;"></audio>`
+    : `<div style="padding:13px 14px;color:${UI.text3};font-size:12.5px;">当前预览未附音频地址，可从原节目页收听。</div>`;
+  return `<section style="margin:0 0 22px;border:1.5px solid var(--ds-ink-line);background:#fff;box-shadow:5px 5px 0 rgba(22,19,15,.08);">
+    <div style="display:flex;align-items:center;gap:10px;padding:12px 14px;background:${A.accentSoft};border-bottom:1px solid ${UI.border};">
+      <span style="width:34px;height:34px;display:inline-flex;align-items:center;justify-content:center;border-radius:50%;background:${A.accent};color:#fff;font-size:17px;">▶</span>
+      <div><div style="font-size:13px;font-weight:800;color:${UI.text};">收听本期播客</div><div style="margin-top:2px;font-size:10.5px;color:${UI.text3};">${esc(s.source)} · ${durationText} · ${esc(sourceLabel)}</div></div>
+      <a href="${esc(s.url)}" target="_blank" rel="noopener" style="margin-left:auto;font-size:11px;font-weight:700;color:${UI.text};">节目页 ↗</a>
+    </div>
+    <div style="padding:12px 14px;">${player}</div>
+  </section>`;
 }
 
 function sourceCommentsHtml(A, s){
@@ -1505,9 +1535,12 @@ function articleBody(A, s){
 
   // 短摘要负责速览，主体使用独立生成的五节深度解读
   const summary = s.summary || `${s.source} 的这条内容暂未生成摘要，可点击下方「阅读原文」查看。`;
+  const summaryLabel = s.kind==='播客' && s.podcastMetrics?.transcript_source === 'official_description'
+    ? '官方简介速览 · 非完整转录'
+    : '结论速览';
   const lead = s.kind !== '论文' || !s.deepAnalysis
     ? `<div style="margin: 0 0 20px; padding: 12px 14px; background: ${A.accentSoft}; border: 1px solid ${A.accentBorder}; border-left: 3px solid ${A.accent};">
-        <div style="font-size: 11px; font-weight: 700; letter-spacing: .04em; color: ${A.accentDeep}; margin-bottom: 7px;">✦ 结论速览</div>
+        <div style="font-size: 11px; font-weight: 700; letter-spacing: .04em; color: ${A.accentDeep}; margin-bottom: 7px;">✦ ${summaryLabel}</div>
         <div style="font-size: 15px; line-height: 2; color: ${UI.text2}; ${proseStyle}">${zhProseHtml(esc(summary))}</div>
       </div>`
     : '';
@@ -1522,10 +1555,16 @@ function articleBody(A, s){
   deepParas.forEach((para, index)=>{
     const section = para.match(/^【([^】]+)】\s*([\s\S]*)$/);
     if(section){
-      blocks.push(`<h3 style="margin: 26px 0 10px; padding-bottom: 8px; border-bottom: 1px solid ${UI.border}; font-size: 16px; color: ${UI.text};">${esc(section[1])}</h3>`);
-      if(section[2].trim()) blocks.push(P(esc(section[2].trim()).replace(/\n/g, '<br>')));
+      const sectionNo = String(blocks.length + 1).padStart(2, '0');
+      blocks.push(`<section style="position:relative;margin:18px 0 22px;border:1.5px solid var(--ds-ink-line);background:${index%2?'#fff':'rgba(22,19,15,.025)'};box-shadow:5px 5px 0 rgba(22,19,15,.07);">
+        <div style="display:flex;align-items:stretch;border-bottom:1.5px solid var(--ds-ink-line);">
+          <span style="flex:none;width:48px;display:inline-flex;align-items:center;justify-content:center;background:${A.accent};color:#fff;font-family:'Geist Mono',monospace;font-size:11px;font-weight:800;">${sectionNo}</span>
+          <h3 style="margin:0;padding:12px 15px;font-size:15.5px;line-height:1.45;color:${UI.text};">${esc(section[1])}</h3>
+        </div>
+        ${section[2].trim()?`<div style="padding:15px 17px 16px;font-size:14.5px;line-height:2;color:${UI.text2};${proseStyle}">${zhProseHtml(esc(section[2].trim()).replace(/\n/g,'<br>'))}</div>`:''}
+      </section>`);
     } else {
-      blocks.push(P(esc(para).replace(/\n/g, '<br>')));
+      blocks.push(`<div style="margin:14px 0;padding:14px 16px;border-left:4px solid ${A.accent};background:${A.accentFaint};font-size:14.5px;line-height:2;color:${UI.text2};${proseStyle}">${zhProseHtml(esc(para).replace(/\n/g,'<br>'))}</div>`);
     }
     if(imageStep && (index + 1) % imageStep === 0){
       const imageIndex = Math.floor((index + 1) / imageStep) - 1;
@@ -1536,7 +1575,13 @@ function articleBody(A, s){
   images.slice(placed).forEach(item=> blocks.push(figure(item)));
   videos.forEach(item=> blocks.push(`<div style="position:relative; padding-top:56.25%; margin:24px 0; background:#000;"><iframe src="${esc(item.embedUrl)}" title="${esc(s.zhTitle)}" allow="accelerometer; autoplay; encrypted-media; picture-in-picture" allowfullscreen style="position:absolute; inset:0; width:100%; height:100%; border:0;"></iframe></div>`));
 
-  return `${lead}${blocks.join('')}${originalLink(A, s)}`;
+  const evidence = s.kind==='播客' && s.transcriptEvidence
+    ? `<details style="margin:26px 0;border:1.5px solid var(--ds-ink-line);background:#fff;">
+        <summary style="cursor:pointer;padding:13px 15px;font-size:13px;font-weight:800;color:${UI.text};">展开时间戳证据稿</summary>
+        <div style="max-height:520px;overflow:auto;padding:4px 15px 16px;border-top:1px solid ${UI.border};white-space:pre-wrap;font-size:13px;line-height:1.9;color:${UI.text2};">${esc(s.transcriptEvidence)}</div>
+      </details>`
+    : '';
+  return `${lead}${blocks.join('')}${evidence}${originalLink(A, s)}`;
 }
 
 function originalLink(A, s){
@@ -1668,6 +1713,7 @@ function detailHtml(A){
           <span style="font-size: 13px; font-weight: 700; color: ${UI.text};">AI 提炼内容</span>
         </div>
         ${sourceVideoHtml(s)}
+        ${sourcePodcastHtml(A, s)}
         ${sourceCommentsHtml(A, s)}
         ${articleBody(A, s)}
         <div style="display: flex; flex-wrap: wrap; gap: 7px; margin: 20px 0 4px;">${points}</div>

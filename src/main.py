@@ -1,4 +1,4 @@
-"""真实情报采集：读配置、抓取（RSS + Scrape + Media）、清洗去重并写入飞书。"""
+"""真实情报采集：读配置、抓取多类信号、清洗去重并写入飞书。"""
 from __future__ import annotations
 
 import argparse
@@ -6,7 +6,17 @@ import logging
 
 import requests
 
-from . import config, feishu, process, rss, scrape, sources, typed_config, video
+from . import (
+    config,
+    feishu,
+    podcast,
+    process,
+    rss,
+    scrape,
+    sources,
+    typed_config,
+    video,
+)
 
 logging.basicConfig(
     level=logging.INFO,
@@ -112,8 +122,11 @@ def run(methods: set[str] | None = None) -> int:
     try:
         feishu.ensure_source_type_field(token, config.FEISHU_PARAM_TABLE_ID)
         feishu.ensure_source_type_field(token, config.FEISHU_SOURCE_TABLE_ID)
+        feishu.ensure_select_option(token, config.FEISHU_PARAM_TABLE_ID, "fetch_method", "Podcast")
+        feishu.ensure_select_option(token, config.FEISHU_SOURCE_TABLE_ID, "获取方式", "Podcast")
+        feishu.ensure_select_option(token, config.FEISHU_ENTRY_TABLE_ID, "路由来源", "Podcast")
     except feishu.FeishuError as exc:
-        log.warning("补齐来源类型字段失败: %s", exc)
+        log.warning("补齐来源类型/采集方式字段失败: %s", exc)
 
     records = feishu.read_param_records(token)
     log.info("读到源配置 %d 条", len(records))
@@ -145,6 +158,10 @@ def run(methods: set[str] | None = None) -> int:
     media_sources = sources.map_media_sources(records) if "Media" in enabled else []
     log.info("启用的 Media 视频源 %d 个", len(media_sources))
 
+    podcast_sources = sources.map_podcast_sources(records) if "Podcast" in enabled else []
+    log.info("启用的 Podcast 源 %d 个", len(podcast_sources))
+
+
     raw_items: list[dict] = []
     if feed_sources:
         raw_items += rss.fetch_feed_sources(feed_sources)
@@ -160,6 +177,8 @@ def run(methods: set[str] | None = None) -> int:
             raw_items += video.fetch_video_sources(media_sources)
         except Exception as exc:  # noqa: BLE001 - 不让视频接口故障拖垮其它来源
             log.warning("Media 视频采集失败，本轮跳过：%s", exc)
+    if podcast_sources:
+        raw_items += podcast.fetch_podcast_sources(podcast_sources)
     log.info("抓取到原始条目 %d 条", len(raw_items))
 
     drop_stats: dict[str, int] = {}
@@ -176,7 +195,11 @@ def run(methods: set[str] | None = None) -> int:
         len(cleaned),
         len(new_items),
     )
-    # 只对确定入库的条目回源补全正文：RSS 常常只给一段摘要，前端就没内容可展示
+    # 播客只对跨轮去重后的新 episode 做长音频转录和分层摘要，避免重复付费。
+    new_items, podcast_stats = podcast.enrich_podcast_items(new_items)
+    if podcast_stats:
+        log.info("Podcast 处理漏斗 %s", podcast_stats)
+    # 只对确定入库的普通条目回源补全正文：RSS 常常只给一段摘要。
     rss.backfill_full_text(new_items)
     new_items = _drop_still_too_short(new_items)
 
@@ -194,6 +217,7 @@ def run(methods: set[str] | None = None) -> int:
         {f["id"] for f in feed_sources}
         | {f["id"] for f in scrape_sources}
         | {f["id"] for f in media_sources}
+        | {f["id"] for f in podcast_sources}
     )
     try:
         feishu.sync_param_collect_stats(
@@ -224,7 +248,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "--method",
         action="append",
-        choices=["RSS", "Scrape", "Media"],
+        choices=["RSS", "Scrape", "Media", "Podcast"],
         help="只运行指定采集方式，可重复传入；默认运行全部",
     )
     args = parser.parse_args()

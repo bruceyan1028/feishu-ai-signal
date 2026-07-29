@@ -267,7 +267,7 @@ def _active_source_ids(param_records: list[dict[str, Any]]) -> set[str]:
         str(sources.cell((record.get("fields") or {}).get("source_id")) or "")
         for record in param_records
         if sources.cell((record.get("fields") or {}).get("status")) == "active"
-        and sources.cell((record.get("fields") or {}).get("fetch_method")) in {"RSS", "Scrape", "Media"}
+        and sources.cell((record.get("fields") or {}).get("fetch_method")) in {"RSS", "Scrape", "Media", "Podcast"}
     } - {""}
 
 
@@ -278,7 +278,7 @@ def select_candidates(
     now: datetime | None = None,
     limit: int | None = None,
 ) -> list[dict[str, Any]]:
-    """取近七日信号；官方优先，并限制论文和视频占比。"""
+    """取近七日信号；官方优先，并限制论文、视频和播客占比。"""
     now = now or datetime.now(timezone.utc)
     cutoff_ms = int((now - timedelta(days=7)).timestamp() * 1000)
     future_limit_ms = int((now + timedelta(days=2)).timestamp() * 1000)
@@ -321,15 +321,19 @@ def select_candidates(
     arxiv_count = 0
     paper_count = 0
     video_count = 0
+    podcast_count = 0
     for item in candidates:
         is_arxiv = _is_arxiv(item)
         item_type = content_type(item["fields"])
         is_paper = item_type == "论文"
         is_video = item_type == "视频"
+        is_podcast = item_type == "播客"
         # 论文总数硬上限：避免论文挤占「快速读新闻」的名额
         if is_paper and paper_count >= config.DAILY_MAX_PAPERS:
             continue
         if is_video and video_count >= config.DAILY_MAX_VIDEOS:
+            continue
+        if is_podcast and podcast_count >= config.DAILY_MAX_PODCASTS:
             continue
         if is_arxiv and arxiv_count >= config.MAX_ARXIV_ITEMS:
             continue
@@ -337,6 +341,7 @@ def select_candidates(
         arxiv_count += int(is_arxiv)
         paper_count += int(is_paper)
         video_count += int(is_video)
+        podcast_count += int(is_podcast)
         if len(selected) >= (limit or config.DAILY_CANDIDATE_LIMIT):
             break
     return selected
@@ -681,9 +686,9 @@ def generate(day: str | None = None) -> dict[str, Any]:
     analyzed.sort(
         key=lambda s: (
             _display_quality(s),
-            s["impact"] * (config.DAILY_VIDEO_WEIGHT if s.get("contentType") == "视频" else 1),
-            s["novelty"] * (config.DAILY_VIDEO_WEIGHT if s.get("contentType") == "视频" else 1),
-            s["actionability"] * (config.DAILY_VIDEO_WEIGHT if s.get("contentType") == "视频" else 1),
+            s["impact"] * (config.DAILY_VIDEO_WEIGHT if s.get("contentType") == "视频" else config.DAILY_PODCAST_WEIGHT if s.get("contentType") == "播客" else 1),
+            s["novelty"] * (config.DAILY_VIDEO_WEIGHT if s.get("contentType") == "视频" else config.DAILY_PODCAST_WEIGHT if s.get("contentType") == "播客" else 1),
+            s["actionability"] * (config.DAILY_VIDEO_WEIGHT if s.get("contentType") == "视频" else config.DAILY_PODCAST_WEIGHT if s.get("contentType") == "播客" else 1),
         ),
         reverse=True,
     )

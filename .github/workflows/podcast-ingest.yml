@@ -1,0 +1,53 @@
+name: AI Signal Podcast Ingest
+
+on:
+  schedule:
+    # 每天 02:20（北京时间）处理白名单节目，避开每日简报主流水线。
+    - cron: "20 18 * * *"
+  workflow_dispatch: {}
+
+concurrency:
+  group: podcast-ingest
+  cancel-in-progress: false
+
+jobs:
+  podcast:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install ffmpeg
+        run: sudo apt-get update && sudo apt-get install -y ffmpeg
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run tests
+        run: python -m unittest discover -s tests -v
+
+      - name: Ingest podcasts
+        env:
+          FEISHU_APP_ID: ${{ secrets.FEISHU_APP_ID }}
+          FEISHU_APP_SECRET: ${{ secrets.FEISHU_APP_SECRET }}
+          FEISHU_BASE_ID: ${{ secrets.FEISHU_BASE_ID }}
+          FEISHU_SOURCE_TABLE_ID: ${{ secrets.FEISHU_SOURCE_TABLE_ID }}
+          FEISHU_PARAM_TABLE_ID: ${{ secrets.FEISHU_PARAM_TABLE_ID }}
+          FEISHU_ENTRY_TABLE_ID: ${{ secrets.FEISHU_ENTRY_TABLE_ID }}
+          FEISHU_PAPER_CONFIG_TABLE_ID: ${{ secrets.FEISHU_PAPER_CONFIG_TABLE_ID }}
+          FEISHU_WECHAT_CONFIG_TABLE_ID: ${{ secrets.FEISHU_WECHAT_CONFIG_TABLE_ID }}
+          FEISHU_VIDEO_CONFIG_TABLE_ID: ${{ secrets.FEISHU_VIDEO_CONFIG_TABLE_ID }}
+          FEISHU_SOCIAL_CONFIG_TABLE_ID: ${{ secrets.FEISHU_SOCIAL_CONFIG_TABLE_ID }}
+          FEISHU_GITHUB_CONFIG_TABLE_ID: ${{ secrets.FEISHU_GITHUB_CONFIG_TABLE_ID }}
+          LLM_API_KEY: ${{ secrets.LLM_API_KEY }}
+          LLM_BASE_URL: ${{ secrets.LLM_BASE_URL }}
+          LLM_MODEL: ${{ secrets.LLM_MODEL }}
+          ASR_API_KEY: ${{ secrets.ASR_API_KEY }}
+          ASR_BASE_URL: ${{ secrets.ASR_BASE_URL }}
+          ASR_MODEL: ${{ secrets.ASR_MODEL }}
+        run: python -m src.main --method Podcast

@@ -58,7 +58,7 @@ CHECKBOX = 7
 URL = 15
 
 # 各字段的固定单选项（自由单选如 dimension/分类 用空列表，写入时飞书自动补选项）
-_FETCH_METHODS = ("RSS", "Scrape", "Bridge", "API", "Manual")
+_FETCH_METHODS = ("RSS", "Scrape", "Bridge", "Podcast", "API", "Manual")
 _STATUSES = ("active", "experimental", "paused")
 _PRIORITIES = ("P0", "P1", "P2")
 _TIERS = ("L1", "L2", "L3", "L4")
@@ -149,6 +149,7 @@ _ENTRY_FIELDS = [
     _f("作者影响力", NUMBER),
     _f("社区热度", NUMBER),
     _f("论文指标", TEXT),
+    _f("播客指标", TEXT),
 ]
 
 # 二级参数（类型化筛选配置）：字段名与 typed_config 读取的键一一对应
@@ -373,6 +374,11 @@ def run(seed: bool = True, dry_run: bool = False) -> dict[str, str]:
     if dry_run:
         print("\n[dry-run] 预览结束，未做任何写入。去掉 --dry-run 即可真正创建。")
         return results
+
+    # 已存在的单选字段不会被 _ensure_table 重建，单独补齐新增采集方式选项。
+    feishu.ensure_select_option(token, name_to_id["一级参数"], "fetch_method", "Podcast")
+    feishu.ensure_select_option(token, name_to_id["信号源表"], "获取方式", "Podcast")
+    feishu.ensure_select_option(token, name_to_id["条目表"], "路由来源", "Podcast")
 
     # 默认把母版配置写入空表，让新库开箱即与母版一致（--no-seed 可关闭）
     if seed:
