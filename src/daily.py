@@ -5,6 +5,7 @@ import argparse
 import json
 import logging
 import re
+from collections import Counter
 from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timedelta, timezone
 from html import unescape
@@ -239,7 +240,8 @@ def content_type(fields: dict[str, Any]) -> str:
         token in text for token in ("x.com/", "twitter.com/", "weibo.com/", "linkedin.com/", "社交媒体")
     ):
         return "社交媒体帖子"
-    return ""
+    # 普通新闻/博客也要给出显式载体，否则前端拿不到类型标签
+    return "文章"
 
 
 def date_ms(day: str) -> int:
@@ -261,13 +263,19 @@ def _priority_map(param_records: list[dict[str, Any]]) -> dict[str, str]:
 
 
 def _active_source_ids(param_records: list[dict[str, Any]]) -> set[str]:
-    # 简报候选来源白名单：active 的 RSS、Scrape 与 Media 源，
+    # 简报候选来源白名单：active 的正式采集源。
     # 让抓取型来源也能进入每日简报，而不只是 RSS。
     return {
         str(sources.cell((record.get("fields") or {}).get("source_id")) or "")
         for record in param_records
         if sources.cell((record.get("fields") or {}).get("status")) == "active"
-        and sources.cell((record.get("fields") or {}).get("fetch_method")) in {"RSS", "Scrape", "Media", "Podcast"}
+        and sources.cell((record.get("fields") or {}).get("fetch_method")) in {
+            "RSS",
+            "Scrape",
+            "Media",
+            "Social",
+            "Podcast",
+        }
     } - {""}
 
 
@@ -333,17 +341,27 @@ def select_candidates(
             -item["stamp"],
         )
     )
+    total_limit = limit or config.DAILY_CANDIDATE_LIMIT
+    # P0 源足够多时会独占整个候选池，先为非 P0 源留出名额，
+    # 否则中文媒体、实验室等来源永远排不到。
+    non_p0_available = sum(1 for item in candidates if item["priority"] != "P0")
+    p0_limit = max(0, total_limit - min(config.DAILY_MIN_NON_P0, non_p0_available))
     selected: list[dict[str, Any]] = []
     arxiv_count = 0
     paper_count = 0
     video_count = 0
     podcast_count = 0
+    github_count = 0
+    p0_count = 0
+    per_source: Counter[str] = Counter()
     for item in candidates:
         is_arxiv = _is_arxiv(item)
         item_type = content_type(item["fields"])
         is_paper = item_type == "论文"
         is_video = item_type == "视频"
         is_podcast = item_type == "播客"
+        is_github = item_type == "Github热榜"
+        is_p0 = item["priority"] == "P0"
         # 论文总数硬上限：避免论文挤占「快速读新闻」的名额
         if is_paper and paper_count >= config.DAILY_MAX_PAPERS:
             continue
@@ -351,30 +369,48 @@ def select_candidates(
             continue
         if is_podcast and podcast_count >= config.DAILY_MAX_PODCASTS:
             continue
+        if is_github and github_count >= config.DAILY_MAX_GITHUB:
+            continue
         if is_arxiv and arxiv_count >= config.MAX_ARXIV_ITEMS:
+            continue
+        if per_source[item["source_id"]] >= config.DAILY_MAX_PER_SOURCE:
+            continue
+        if is_p0 and p0_count >= p0_limit:
             continue
         selected.append(item)
         arxiv_count += int(is_arxiv)
         paper_count += int(is_paper)
         video_count += int(is_video)
         podcast_count += int(is_podcast)
-        if len(selected) >= (limit or config.DAILY_CANDIDATE_LIMIT):
+        github_count += int(is_github)
+        p0_count += int(is_p0)
+        per_source[item["source_id"]] += 1
+        if len(selected) >= total_limit:
             break
     return selected
 
 
 def analyze_signal(fields: dict[str, Any]) -> dict[str, Any]:
     is_paper = content_type(fields) == "论文"
+    is_social = content_type(fields) == "社交媒体帖子"
     paper_extra = ""
     if is_paper:
         paper_extra = (
             "额外字段：rigor/novelty_paper/relevance（0-100整数，分别表示方法严谨度、学术新颖度、"
             "与产业/工程实践的相关度）。\n"
         )
-    prompt = f"""你是资深 AI 行业分析师。只依据给定原文输出严格 JSON，不得虚构。
-字段：title_cn（准确简洁的中文标题）、summary_cn（中文1-2句）、why（中文1句）、impact/novelty/actionability（0-100整数）、
-urgency（高/中/低）、topics（从 AI、LLM、Agent、RAG、推理、多模态、开源、硬件、监管、融资、产品、其他中选2-4个）、
-deep_analysis_cn（800-1400字中文深度解读；短原文可缩至500字，但不要用空话凑字数）。
+    if is_social:
+        analysis_requirement = """deep_analysis_cn 写 250-500 字，使用以下结构：
+【帖子信号】
+说明账号明确披露了什么，保留数字、产品名和链接线索。
+
+【价值与边界】
+解释其潜在影响，并明确区分已披露事实与尚待验证的信息。
+
+【跟进行动】
+给出1-3条具体核验或跟进建议。"""
+    else:
+        analysis_requirement = """deep_analysis_cn 写 800-1400 字；短原文可缩至500字，但不要用空话凑字数。
 deep_analysis_cn 必须使用以下结构，每个标题独占一行，标题与正文之间换行，各节之间空一行：
 【核心内容】
 交代事件或成果本身，保留关键数字、主体、时间、产品/模型名称。
@@ -389,7 +425,12 @@ deep_analysis_cn 必须使用以下结构，每个标题独占一行，标题与
 指出原文披露不足、适用边界、成本、安全、可复现性或营销偏差；无法确认时明确写“原文未披露”。
 
 【行动建议】
-给出2-4条具体、克制、可执行的验证或跟进建议。
+给出2-4条具体、克制、可执行的验证或跟进建议。"""
+    prompt = f"""你是资深 AI 行业分析师。只依据给定原文输出严格 JSON，不得虚构。
+字段：title_cn（准确简洁的中文标题）、summary_cn（中文1-2句）、why（中文1句）、impact/novelty/actionability（0-100整数）、
+urgency（高/中/低）、topics（从 AI、LLM、Agent、RAG、推理、多模态、开源、硬件、监管、融资、产品、其他中选2-4个）、
+deep_analysis_cn（中文分析）。
+{analysis_requirement}
 {paper_extra}标题：{scalar(fields.get("标题"))}
 来源：{scalar(fields.get("来源"))}
 分类：{scalar(fields.get("分类"))}
@@ -704,12 +745,19 @@ def generate(day: str | None = None) -> dict[str, Any]:
             q *= config.ARXIV_QUALITY_WEIGHT
         return q
 
+    def _content_weight(signal: dict[str, Any]) -> float:
+        if signal.get("contentType") == "视频":
+            return config.DAILY_VIDEO_WEIGHT
+        if signal.get("contentType") == "播客":
+            return config.DAILY_PODCAST_WEIGHT
+        return 1.0
+
     analyzed.sort(
         key=lambda s: (
             _display_quality(s),
-            s["impact"] * (config.DAILY_VIDEO_WEIGHT if s.get("contentType") == "视频" else config.DAILY_PODCAST_WEIGHT if s.get("contentType") == "播客" else 1),
-            s["novelty"] * (config.DAILY_VIDEO_WEIGHT if s.get("contentType") == "视频" else config.DAILY_PODCAST_WEIGHT if s.get("contentType") == "播客" else 1),
-            s["actionability"] * (config.DAILY_VIDEO_WEIGHT if s.get("contentType") == "视频" else config.DAILY_PODCAST_WEIGHT if s.get("contentType") == "播客" else 1),
+            s["impact"] * _content_weight(s),
+            s["novelty"] * _content_weight(s),
+            s["actionability"] * _content_weight(s),
         ),
         reverse=True,
     )

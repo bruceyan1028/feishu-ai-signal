@@ -314,6 +314,72 @@ class DailyTests(unittest.TestCase):
         self.assertLessEqual(len(arxiv_selected), config.MAX_ARXIV_ITEMS)
         self.assertNotIn("scrape", [item["record_id"] for item in selected])
 
+    def test_github_hotlist_is_capped(self) -> None:
+        now = datetime.now(timezone.utc)
+        stamp = int(now.timestamp() * 1000)
+        records = [
+            {
+                "record_id": f"gh{i}",
+                "fields": {
+                    "source_id": f"gh-src-{i}",
+                    "来源类型": "Github热榜",
+                    "发布时间": stamp - i,
+                    "链接": {"link": f"https://github.com/o/r{i}"},
+                },
+            }
+            for i in range(config.DAILY_MAX_GITHUB + 5)
+        ]
+        selected = daily.select_candidates(
+            records,
+            {f"gh-src-{i}": "P0" for i in range(len(records))},
+            {f"gh-src-{i}" for i in range(len(records))},
+            now=now,
+            limit=50,
+        )
+        self.assertEqual(len(selected), config.DAILY_MAX_GITHUB)
+
+    def test_single_source_cannot_flood_candidates(self) -> None:
+        now = datetime.now(timezone.utc)
+        stamp = int(now.timestamp() * 1000)
+        records = [
+            {
+                "record_id": f"n{i}",
+                "fields": {"source_id": "one-source", "发布时间": stamp - i},
+            }
+            for i in range(config.DAILY_MAX_PER_SOURCE + 6)
+        ]
+        selected = daily.select_candidates(
+            records, {"one-source": "P0"}, {"one-source"}, now=now, limit=50
+        )
+        self.assertEqual(len(selected), config.DAILY_MAX_PER_SOURCE)
+
+    def test_non_p0_sources_keep_reserved_slots(self) -> None:
+        """P0 源足够多时也要给 P1/P2 留名额，否则中文媒体永远进不了简报。"""
+        now = datetime.now(timezone.utc)
+        stamp = int(now.timestamp() * 1000)
+        limit = 20
+        p0_ids = [f"p0-{i}" for i in range(12)]
+        p1_ids = [f"p1-{i}" for i in range(12)]
+        records = [
+            {"record_id": f"{sid}-{j}", "fields": {"source_id": sid, "发布时间": stamp - j}}
+            for sid in p0_ids + p1_ids
+            for j in range(3)
+        ]
+        priorities = {sid: "P0" for sid in p0_ids}
+        priorities.update({sid: "P1" for sid in p1_ids})
+        selected = daily.select_candidates(
+            records, priorities, set(p0_ids + p1_ids), now=now, limit=limit
+        )
+        non_p0 = [item for item in selected if item["priority"] != "P0"]
+        self.assertEqual(len(selected), limit)
+        self.assertGreaterEqual(len(non_p0), config.DAILY_MIN_NON_P0)
+
+    def test_plain_news_gets_explicit_article_type(self) -> None:
+        self.assertEqual(
+            daily.content_type({"来源": "TechCrunch AI", "链接": {"link": "https://techcrunch.com/a"}}),
+            "文章",
+        )
+
     def test_output_keeps_minimum_video_slot(self) -> None:
         ranked = [
             {"recordId": f"article-{index}", "contentType": ""}

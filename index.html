@@ -314,17 +314,20 @@ let signals = [
   { rank: 21, impact: 64, urgency: '低', kind: '视频', zhTitle: '视频解读:Gemma 4 全档位实测,4B 端侧表现超预期', title: 'Gemma 4 tested: 4B on-device performance is the real story', source: 'YouTube · AI Explained', cat: '技术研究开源', date: '2026-07-06', summary: 'AI Explained 频道对 Gemma 4 全档位独立实测:70B 接近闭源第一梯队,而最大亮点是 4B 端侧档位——在消费级手机上离线运行,多语言与工具调用能力保持完整,视频附全部测试数据与复现脚本。', why: '第三方独立实测是官方基准的重要交叉验证。4B 端侧档位的实测表现支持把端侧路线纳入正式评估,视频中的测试方法可直接复用到内部评测集。', novel: 55, action: 48, tags: ['端侧', 'Gemma', '实测'] },
 ];
 const SPECIAL_CONTENT_TYPES = ['论文','视频','播客','社交媒体帖子','公众号'];
+// 后端给出的载体类型一律采信，否则 Github热榜/文章 会被下面的正则兜底重新算成空值
+const EXPLICIT_CONTENT_TYPES = [...SPECIAL_CONTENT_TYPES, 'Github热榜', '文章'];
 function signalContentType(s){
   const explicit = s.contentType || s.kind || '';
   if(explicit === '社交媒体') return '社交媒体帖子';
-  if(SPECIAL_CONTENT_TYPES.includes(explicit)) return explicit;
+  if(EXPLICIT_CONTENT_TYPES.includes(explicit)) return explicit;
   const text = `${s.source||''} ${s.url||''}`.toLowerCase();
   if(/podcast|播客|xiaoyuzhoufm\.com|podcasts\.apple\.com/.test(text) || s.mediaAssets?.audio?.url) return '播客';
   if(/mp\.weixin\.qq\.com|weixin\.qq\.com|微信公众号|公众号/.test(text)) return '公众号';
   if(/youtube\.com|youtu\.be|bilibili\.com|vimeo\.com|视频/.test(text) || (s.mediaAssets?.videos||[]).length) return '视频';
   if(/arxiv\.org|openreview\.net|doi\.org|学术论文|\barxiv\b/.test(text)) return '论文';
   if(/x\.com\/|twitter\.com\/|weibo\.com\/|linkedin\.com\/|社交媒体/.test(text)) return '社交媒体帖子';
-  return '';
+  if(/github\.com/.test(text)) return 'Github热榜';
+  return '文章';
 }
 signals.forEach(s => { s.contentType = signalContentType(s); s.kind = s.contentType || '文章'; });
 let briefMeta = {

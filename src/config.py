@@ -87,6 +87,13 @@ DAILY_VIDEO_WEIGHT = float(os.environ.get("DAILY_VIDEO_WEIGHT", "0.9"))
 # 播客是深度补充材料：单独限额并轻度降权，避免长访谈挤占时效新闻。
 DAILY_MAX_PODCASTS = int(os.environ.get("DAILY_MAX_PODCASTS", "2"))
 DAILY_PODCAST_WEIGHT = float(os.environ.get("DAILY_PODCAST_WEIGHT", "0.85"))
+# 榜单类每天变化很小，长期霸榜项目会反复占位，故单独限额。
+DAILY_MAX_GITHUB = int(os.environ.get("DAILY_MAX_GITHUB", "5"))
+# 单个来源在候选池中的上限：防止一个源（尤其是榜单/聚合源）刷屏。
+DAILY_MAX_PER_SOURCE = int(os.environ.get("DAILY_MAX_PER_SOURCE", "4"))
+# 给非 P0 来源保留的名额：P0 源数量多时会填满候选池，
+# 导致中文媒体、实验室等 P1/P2 源永远进不了简报。
+DAILY_MIN_NON_P0 = int(os.environ.get("DAILY_MIN_NON_P0", "8"))
 # 英文正文翻译的字数上限：超长部分截断并提示读原文。
 # 3000 字符只够译出一千余字中文，正文普遍断在句子中间，故普通条目抬到 6000。
 BODY_TRANSLATE_LIMIT = int(os.environ.get("BODY_TRANSLATE_LIMIT", "6000"))
