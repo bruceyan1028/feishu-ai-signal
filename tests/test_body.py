@@ -57,6 +57,26 @@ class PublishedDateTest(unittest.TestCase):
         html = '<meta property="article:modified_time" content="2026-07-27T08:00:00Z">'
         self.assertEqual(scrape.extract_published_date_html(html), "")
 
+    def test_extracts_meta_header_date_next_to_read_time(self):
+        html = """
+        <nav>Archive updated July 28, 2026</nav>
+        <h1>Introducing Muse Spark</h1>
+        <div class="article-meta">April 8, 2026 • 8 minute read</div>
+        <article>Benchmarks measured on March 1, 2026.</article>
+        <aside>Related post — July 20, 2026</aside>
+        """
+        self.assertEqual(
+            scrape.extract_published_date_html(html),
+            "April 8, 2026",
+        )
+
+    def test_does_not_accept_arbitrary_body_date(self):
+        html = """
+        <h1>Model evaluation report</h1>
+        <article>The benchmark dataset was released on April 8, 2026.</article>
+        """
+        self.assertEqual(scrape.extract_published_date_html(html), "")
+
     def test_rss_updated_requires_explicit_source_policy(self):
         entry = {"updated": "2026-07-28T00:00:00Z"}
         self.assertEqual(rss._published_raw(entry, {"id": "generic"}), "")

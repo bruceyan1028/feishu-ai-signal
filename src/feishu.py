@@ -157,6 +157,36 @@ def read_all_records_with_ids(
             return out
 
 
+def batch_delete_records(
+    token: str, table_id: str, record_ids: list[str], chunk: int = 500
+) -> int:
+    """批量删除记录；调用方必须显式决定哪些记录可以不可逆删除。"""
+    ids = [str(record_id) for record_id in record_ids if str(record_id)]
+    if not ids:
+        return 0
+    url = (
+        f"{config.FEISHU_HOST}/open-apis/bitable/v1/apps/{config.FEISHU_BASE_ID}"
+        f"/tables/{table_id}/records/batch_delete"
+    )
+    headers = {
+        "Authorization": f"Bearer {token}",
+        "Content-Type": "application/json; charset=utf-8",
+    }
+    deleted = 0
+    for index in range(0, len(ids), max(1, min(chunk, 500))):
+        batch = ids[index : index + max(1, min(chunk, 500))]
+        response = _SESSION.post(
+            url, headers=headers, json={"records": batch}, timeout=60
+        )
+        payload = response.json()
+        if payload.get("code") != 0:
+            raise FeishuError(
+                f"Feishu batch_delete failed: {payload.get('code')} {payload.get('msg')}"
+            )
+        deleted += len(batch)
+    return deleted
+
+
 def batch_update_records(
     token: str, table_id: str, records: list[dict[str, Any]], chunk: int = 500
 ) -> int:

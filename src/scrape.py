@@ -287,6 +287,12 @@ _PUBLISHED_KEYS = (
     "_createdAt",
 )
 
+_HEADER_DATE_WITH_READ_TIME_RE = re.compile(
+    r"""([A-Z][a-z]{2,8}\s+\d{1,2},\s+20\d{2})"""
+    r"""\s*[•·|]\s*\d+\s*(?:minute|min)\s+read\b""",
+    re.I,
+)
+
 
 def extract_published_date_html(html: str) -> str:
     """从原始页面提取首发日期；明确不使用 dateModified/_updatedAt。"""
@@ -319,6 +325,16 @@ def extract_published_date_html(html: str) -> str:
     )
     if time_match:
         return time_match.group(1).strip()
+
+    # Meta AI Blog 的首发日期没有 Published 标签，而是紧跟文章 h1，以
+    # “April 8, 2026 • 8 minute read” 展示。只在标题后的有限 header 区域
+    # 接受这种强结构，避免把导航、推荐卡或正文提到的任意日期当成首发时间。
+    title_match = re.search(r"(?is)<h1\b[^>]*>.*?</h1\s*>", body)
+    if title_match:
+        header_text = _html_to_text(body[title_match.start() : title_match.end() + 5000])
+        header_date = _HEADER_DATE_WITH_READ_TIME_RE.search(header_text)
+        if header_date:
+            return header_date.group(1).strip()
 
     # 只接受带“发布”语义的可见日期，避免误取版权年份或正文中的其它日期。
     visible = re.search(

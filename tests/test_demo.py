@@ -3,7 +3,7 @@ from __future__ import annotations
 import json
 import tempfile
 import unittest
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from unittest.mock import MagicMock, patch
 
@@ -341,6 +341,46 @@ class DailyTests(unittest.TestCase):
             ],
             {"official-rss": "P0"},
             {"official-rss"},
+            now=now,
+        )
+        self.assertEqual(selected, [])
+
+    def test_candidate_respects_source_specific_24h_window(self) -> None:
+        now = datetime.now(timezone.utc)
+
+        def record(record_id: str, hours_old: int) -> dict:
+            return {
+                "record_id": record_id,
+                "fields": {
+                    "source_id": "meta-ai-blog",
+                    "发布时间": int((now - timedelta(hours=hours_old)).timestamp() * 1000),
+                },
+            }
+
+        selected = daily.select_candidates(
+            [record("fresh", 23), record("stale", 25)],
+            {"meta-ai-blog": "P0"},
+            {"meta-ai-blog"},
+            {"meta-ai-blog": 24},
+            now=now,
+        )
+        self.assertEqual([item["record_id"] for item in selected], ["fresh"])
+
+    def test_candidate_keeps_global_seven_day_hard_maximum(self) -> None:
+        now = datetime.now(timezone.utc)
+        selected = daily.select_candidates(
+            [
+                {
+                    "record_id": "old-trending",
+                    "fields": {
+                        "source_id": "github-trending",
+                        "发布时间": int((now - timedelta(days=8)).timestamp() * 1000),
+                    },
+                }
+            ],
+            {"github-trending": "P0"},
+            {"github-trending"},
+            {"github-trending": 30 * 24},
             now=now,
         )
         self.assertEqual(selected, [])

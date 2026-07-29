@@ -53,12 +53,28 @@ def _inspect(record: dict[str, Any]) -> dict[str, Any]:
     }
 
 
+def _partition_inspected(
+    inspected: list[dict[str, Any]],
+) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
+    """分出可纠正记录和仍无法证明首发时间的历史污染记录。"""
+    changed = [item for item in inspected if item["changed"]]
+    unresolved = [item for item in inspected if item["corrected_ms"] is None]
+    return changed, unresolved
+
+
 def run() -> int:
     parser = argparse.ArgumentParser(description="回填 Scrape 条目的真实首发时间")
     parser.add_argument("--write", action="store_true", help="确认后写回飞书；默认仅审计")
+    parser.add_argument(
+        "--delete-unresolved",
+        action="store_true",
+        help="删除仍无法确认首发日的历史伪日期记录；必须与 --write 同时使用",
+    )
     parser.add_argument("--limit", type=int, help="最多检查多少条")
     parser.add_argument("--workers", type=int, default=6)
     args = parser.parse_args()
+    if args.delete_unresolved and not args.write:
+        parser.error("--delete-unresolved 必须与 --write 同时使用")
 
     token = feishu.get_tenant_access_token()
     records = feishu.read_all_records_with_ids(
@@ -71,7 +87,7 @@ def run() -> int:
         candidates = candidates[: max(0, args.limit)]
     with ThreadPoolExecutor(max_workers=max(1, min(args.workers, 12))) as pool:
         inspected = list(pool.map(_inspect, candidates))
-    changed = [item for item in inspected if item["changed"]]
+    changed, unresolved = _partition_inspected(inspected)
 
     if args.write and changed:
         feishu.batch_update_records(
@@ -85,6 +101,13 @@ def run() -> int:
                 for item in changed
             ],
         )
+    deleted = 0
+    if args.write and args.delete_unresolved and unresolved:
+        deleted = feishu.batch_delete_records(
+            token,
+            config.FEISHU_ENTRY_TABLE_ID,
+            [item["record_id"] for item in unresolved],
+        )
 
     print(
         json.dumps(
@@ -92,7 +115,9 @@ def run() -> int:
                 "candidates": len(candidates),
                 "date_found": sum(item["corrected_ms"] is not None for item in inspected),
                 "changed": len(changed),
+                "unresolved": len(unresolved),
                 "written": len(changed) if args.write else 0,
+                "deleted": deleted,
                 "changes": [
                     {
                         "record_id": item["record_id"],
