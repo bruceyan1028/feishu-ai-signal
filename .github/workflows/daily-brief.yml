@@ -44,10 +44,14 @@ jobs:
       FEISHU_RECIPIENT_OPEN_ID: ${{ secrets.FEISHU_RECIPIENT_OPEN_ID }}
       FEISHU_RECIPIENT_OPEN_IDS: ${{ secrets.FEISHU_RECIPIENT_OPEN_IDS }}
       YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
+      X_BEARER_TOKEN: ${{ secrets.X_BEARER_TOKEN }}
       LLM_API_KEY: ${{ secrets.LLM_API_KEY }}
       LLM_BASE_URL: ${{ secrets.LLM_BASE_URL }}
       LLM_MODEL: ${{ secrets.LLM_MODEL }}
       JINA_API_KEY: ${{ secrets.JINA_API_KEY }}
+      # GitHub 热榜要查搜索/README/issue：未鉴权每小时只有 60 次，一轮就会被限流。
+      # runner 自带的这个 token 只读公开仓库即可，额度 5000/h。
+      GITHUB_TOKEN: ${{ github.token }}
       # 论文社区热度富集在海外 runner 上易超时，默认关闭；如需可在 Secrets/Variables 覆盖。
       PAPER_ENRICH_ENABLED: "0"
     steps:

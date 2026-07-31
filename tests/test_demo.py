@@ -71,13 +71,17 @@ class PipelineTests(unittest.TestCase):
     # 社区热度走 HF 实时接口，点赞数随时会变；固定住才能稳定比对两次抽取结果
     @patch("src.scrape._hf_paper_community", return_value=("", {}))
     def test_hf_pwc_extracts_only_paper_urls(self, _community: MagicMock) -> None:
-        recent = datetime.now(timezone.utc).strftime("%Y-%m-%dT00:00:00.000Z")
+        now = datetime.now(timezone.utc)
+        recent = now.strftime("%Y-%m-%dT00:00:00.000Z")
+        # arXiv ID 的 YYMM 要跟发布日同月，否则会被首发时间修正判成「旧论文重新上榜」
+        pid_recent = now.strftime("%y%m")
+        mid_aged = now - timedelta(days=14)
         props = {
             "dailyPapers": [
                 {
                     "title": "Paper Alpha",
                     "paper": {
-                        "id": "2607.11111",
+                        "id": f"{pid_recent}.11111",
                         "title": "Paper Alpha",
                         "publishedAt": recent,
                         "upvotes": 40,
@@ -86,10 +90,19 @@ class PipelineTests(unittest.TestCase):
                 {
                     "title": "Paper Beta",
                     "paper": {
-                        "id": "2607.11886",
+                        "id": f"{pid_recent}.11886",
                         "title": "Paper Beta",
                         "publishedAt": recent,
                         "upvotes": 50,
+                    },
+                },
+                {
+                    "title": "Mid Hot",
+                    "paper": {
+                        "id": f"{mid_aged.strftime('%y%m')}.30000",
+                        "title": "Mid Hot",
+                        "publishedAt": mid_aged.strftime("%Y-%m-%dT00:00:00.000Z"),
+                        "upvotes": 120,
                     },
                 },
                 {
@@ -125,7 +138,7 @@ class PipelineTests(unittest.TestCase):
         <a href="/join/discord">Discord</a>
         <a href="/inference/models">Models</a>
         <div class="SVELTE_HYDRATER" data-target="DailyPapers" data-props="{encoded}"></div>
-        <a href="https://huggingface.co/papers/2607.11111">dup</a>
+        <a href="https://huggingface.co/papers/{pid_recent}.11111">dup</a>
         """
         feed = {
             "id": "hf-papers-trending",
@@ -139,12 +152,13 @@ class PipelineTests(unittest.TestCase):
         }
         links = scrape._extract_hf_pwc_paper_links(html, feed)
         urls = [x["url"] for x in links]
+        # 2412.20138 再高赞也超出高热年龄上限，不再算「近期发布」
         self.assertEqual(
             urls,
             [
-                "https://huggingface.co/papers/2607.11111",
-                "https://huggingface.co/papers/2607.11886",
-                "https://huggingface.co/papers/2412.20138",
+                f"https://huggingface.co/papers/{pid_recent}.11111",
+                f"https://huggingface.co/papers/{pid_recent}.11886",
+                f"https://huggingface.co/papers/{mid_aged.strftime('%y%m')}.30000",
             ],
         )
         self.assertEqual(links[0]["title"], "Paper Alpha")
@@ -162,21 +176,23 @@ class PipelineTests(unittest.TestCase):
         )
 
     def test_pwc_co_uses_trending_api(self) -> None:
+        now = datetime.now(timezone.utc)
+        mid_aged = now - timedelta(days=14)
         payload = [
             {
                 "paper_id": "1",
-                "arxiv_id": "2607.04439",
+                "arxiv_id": f"{now.strftime('%y%m')}.04439",
                 "title": "ResearchStudio-Idea",
-                "date_published": datetime.now(timezone.utc).strftime("%Y-%m-%d"),
+                "date_published": now.strftime("%Y-%m-%d"),
                 "paper_age_days": 2,
                 "trending": {"stars_gained_24h": 10},
             },
             {
                 "paper_id": "2",
-                "arxiv_id": "2605.23904",
-                "title": "Old Hot SkillOpt",
-                "date_published": "2026-05-22",
-                "paper_age_days": 54,
+                "arxiv_id": f"{mid_aged.strftime('%y%m')}.23904",
+                "title": "Mid Hot SkillOpt",
+                "date_published": mid_aged.strftime("%Y-%m-%d"),
+                "paper_age_days": 14,
                 "trending": {"stars_gained_24h": 131},
             },
             {
@@ -186,6 +202,15 @@ class PipelineTests(unittest.TestCase):
                 "date_published": "2024-03-13",
                 "paper_age_days": 800,
                 "trending": {"stars_gained_24h": 5},
+            },
+            {
+                "paper_id": "4",
+                "arxiv_id": "2403.09999",
+                "title": "Old Hot Resurfaced",
+                # 接口把「重新上榜日」当发布日报上来，年龄也跟着算成 2 天
+                "date_published": now.strftime("%Y-%m-%d"),
+                "paper_age_days": 2,
+                "trending": {"stars_gained_24h": 131},
             },
         ]
 
@@ -205,17 +230,196 @@ class PipelineTests(unittest.TestCase):
         with patch("src.scrape.requests.get", return_value=_Resp()) as mocked:
             links = scrape._extract_hf_pwc_paper_links("<html></html>", feed)
         mocked.assert_called()
+        # 2403.09999 的 arXiv ID 说明它 2024 年就发过，重新上榜不算新发布
         self.assertEqual(
             [x["url"] for x in links],
             [
-                "https://huggingface.co/papers/2607.04439",
-                "https://huggingface.co/papers/2605.23904",
+                f"https://huggingface.co/papers/{now.strftime('%y%m')}.04439",
+                f"https://huggingface.co/papers/{mid_aged.strftime('%y%m')}.23904",
             ],
         )
         self.assertEqual(links[0]["title"], "ResearchStudio-Idea")
         self.assertFalse(links[0]["heat_keep"])
         self.assertTrue(links[1]["heat_keep"])
 
+    def test_resurfaced_paper_falls_back_to_arxiv_first_publication(self) -> None:
+        listed = "2026-07-23T00:00:00.000Z"
+        # ID 月份早于上榜日：以 ID 月末为首发时间上界
+        self.assertEqual(
+            scrape._paper_first_published_raw("2605.09635", listed),
+            "2026-05-31T23:59:59Z",
+        )
+        # 同月发布不改动，保留榜单给的精确日期
+        self.assertEqual(scrape._paper_first_published_raw("2607.23588", listed), listed)
+        # 无日期仍保持无日期，交给上游按「缺发布时间」丢弃
+        self.assertEqual(scrape._paper_first_published_raw("2605.09635", ""), "")
+
+
+    def _github_feed(self, **extra: object) -> dict[str, object]:
+        return {
+            "id": "github-trending",
+            "url": "https://github.com/trending",
+            "max_articles": 5,
+            "github_config": {
+                "min_stars": 2000,
+                "release_recent_days": 30,
+                "min_new_repo_stars": 500,
+                **extra,
+            },
+        }
+
+    @patch("src.scrape._github_issue_feedback", return_value="")
+    @patch("src.scrape._github_readme_images", return_value=[])
+    @patch("src.scrape._github_readme_raw", return_value="# Repo\n\n项目介绍。")
+    def test_github_hotlist_needs_a_real_release_event(
+        self, _readme: MagicMock, _images: MagicMock, _issues: MagicMock
+    ) -> None:
+        now = datetime.now(timezone.utc)
+        iso = lambda d: (now - timedelta(days=d)).strftime("%Y-%m-%dT00:00:00Z")
+        repos = [
+            {
+                # 2018 年的老项目，昨天有人提交代码，但最近一次发版在半年前
+                "full_name": "old/transformers",
+                "name": "transformers",
+                "description": "LLM inference toolkit",
+                "html_url": "https://github.com/old/transformers",
+                "stargazers_count": 160000,
+                "forks_count": 30000,
+                "topics": ["llm"],
+                "language": "Python",
+                "created_at": "2018-10-29T00:00:00Z",
+                "pushed_at": iso(1),
+            },
+            {
+                # 同样是老项目，但三天前发了新版本
+                "full_name": "live/vllm",
+                "name": "vllm",
+                "description": "LLM serving engine",
+                "html_url": "https://github.com/live/vllm",
+                "stargazers_count": 80000,
+                "forks_count": 9000,
+                "topics": ["llm", "inference"],
+                "language": "Python",
+                "created_at": "2023-02-09T00:00:00Z",
+                "pushed_at": iso(1),
+            },
+        ]
+        releases = {
+            "old/transformers": {
+                "tag_name": "v5.0.0",
+                "published_at": iso(180),
+                "html_url": "https://github.com/old/transformers/releases/tag/v5.0.0",
+                "body": "",
+            },
+            "live/vllm": {
+                "tag_name": "v0.26.0",
+                "published_at": iso(3),
+                "html_url": "https://github.com/live/vllm/releases/tag/v0.26.0",
+                "body": "## What's Changed\n新增分布式推理调度。",
+            },
+        }
+        with patch("src.scrape._github_search", return_value=repos), patch(
+            "src.scrape._github_latest_release", side_effect=lambda fn: releases[fn]
+        ):
+            items = scrape._fetch_github_items(self._github_feed())
+
+        self.assertEqual([item["title"] for item in items], ["live/vllm v0.26.0"])
+        item = items[0]
+        # 时间取发版日，不是 pushed_at
+        self.assertEqual(item["published_raw"], iso(3))
+        self.assertEqual(item["url"], "https://github.com/live/vllm/releases/tag/v0.26.0")
+        self.assertIn("新版本 v0.26.0", item["body"])
+        self.assertIn("新增分布式推理调度", item["body"])
+
+    @patch("src.scrape._github_issue_feedback", return_value="")
+    @patch("src.scrape._github_readme_images", return_value=[])
+    @patch("src.scrape._github_readme_raw", return_value="# Repo\n\n项目介绍。")
+    def test_github_new_repo_enters_below_sedimentation_bar(
+        self, _readme: MagicMock, _images: MagicMock, _issues: MagicMock
+    ) -> None:
+        now = datetime.now(timezone.utc)
+        iso = lambda d: (now - timedelta(days=d)).strftime("%Y-%m-%dT00:00:00Z")
+        repos = [
+            {
+                "full_name": "new/agent-kit",
+                "name": "agent-kit",
+                "description": "brand new agent framework",
+                "html_url": "https://github.com/new/agent-kit",
+                "stargazers_count": 900,  # 低于沉淀线 2000，但过了新项目线 500
+                "forks_count": 20,
+                "topics": ["agent"],
+                "language": "Python",
+                "created_at": iso(6),
+                "pushed_at": iso(1),
+            },
+        ]
+        with patch("src.scrape._github_search", return_value=repos), patch(
+            "src.scrape._github_latest_release", return_value={}
+        ) as release:
+            items = scrape._fetch_github_items(self._github_feed())
+
+        self.assertEqual([item["title"] for item in items], ["new/agent-kit"])
+        self.assertEqual(items[0]["published_raw"], iso(6))
+        self.assertIn("新项目", items[0]["body"])
+        # 新建仓库本身就是发布事件，不必再查 release
+        release.assert_not_called()
+
+    @patch("src.scrape._github_issue_feedback", return_value="")
+    @patch("src.scrape._github_readme_images", return_value=[])
+    @patch("src.scrape._github_readme_raw", return_value="# Repo")
+    def test_github_skips_repo_when_release_info_unavailable(
+        self, _readme: MagicMock, _images: MagicMock, _issues: MagicMock
+    ) -> None:
+        repos = [
+            {
+                "full_name": "live/vllm",
+                "name": "vllm",
+                "description": "LLM serving engine",
+                "html_url": "https://github.com/live/vllm",
+                "stargazers_count": 80000,
+                "forks_count": 9000,
+                "topics": ["llm"],
+                "language": "Python",
+                "created_at": "2023-02-09T00:00:00Z",
+                "pushed_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT00:00:00Z"),
+            },
+        ]
+        # None = 查不到发布信息（限流/网络），不能当成「没发过新版」
+        with patch("src.scrape._github_search", return_value=repos), patch(
+            "src.scrape._github_latest_release", return_value=None
+        ):
+            self.assertEqual(scrape._fetch_github_items(self._github_feed()), [])
+
+    def test_github_latest_release_skips_prerelease(self) -> None:
+        atom = """
+        <feed>
+          <entry>
+            <id>tag:github.com,2008:Repository/1/v0.26.1rc0</id>
+            <updated>2026-07-29T00:00:00Z</updated>
+            <link rel="alternate" href="https://github.com/o/r/releases/tag/v0.26.1rc0"/>
+            <title>v0.26.1rc0</title>
+            <content type="html">&lt;p&gt;预发布&lt;/p&gt;</content>
+          </entry>
+          <entry>
+            <id>tag:github.com,2008:Repository/1/v0.26.0</id>
+            <updated>2026-07-27T00:00:00Z</updated>
+            <link rel="alternate" href="https://github.com/o/r/releases/tag/v0.26.0"/>
+            <title>v0.26.0</title>
+            <content type="html">&lt;p&gt;新增分布式推理调度&lt;/p&gt;</content>
+          </entry>
+        </feed>
+        """
+        scrape._GH_RELEASE_CACHE.pop("o/r", None)
+        with patch("src.scrape._github_releases_atom", return_value=atom):
+            release = scrape._github_latest_release("o/r")
+        self.assertEqual(release["tag_name"], "v0.26.0")
+        self.assertEqual(release["published_at"], "2026-07-27T00:00:00Z")
+        self.assertIn("新增分布式推理调度", scrape._github_release_notes(release))
+
+        scrape._GH_RELEASE_CACHE.pop("o/none", None)
+        with patch("src.scrape._github_releases_atom", return_value=""):
+            # 拉不到 feed 与「没有正式发布」要区分开
+            self.assertIsNone(scrape._github_latest_release("o/none"))
 
     def test_rss_endpoint_spaces_are_encoded(self) -> None:
         self.assertEqual(

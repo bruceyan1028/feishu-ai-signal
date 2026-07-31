@@ -41,6 +41,12 @@ jobs:
           FEISHU_SOCIAL_CONFIG_TABLE_ID: ${{ secrets.FEISHU_SOCIAL_CONFIG_TABLE_ID }}
           FEISHU_GITHUB_CONFIG_TABLE_ID: ${{ secrets.FEISHU_GITHUB_CONFIG_TABLE_ID }}
           YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
+          X_BEARER_TOKEN: ${{ secrets.X_BEARER_TOKEN }}
+          LLM_API_KEY: ${{ secrets.LLM_API_KEY }}
+          LLM_BASE_URL: ${{ secrets.LLM_BASE_URL }}
+          LLM_MODEL: ${{ secrets.LLM_MODEL }}
           JINA_API_KEY: ${{ secrets.JINA_API_KEY }}
           DIFY_WEBHOOK_URL: ${{ secrets.DIFY_WEBHOOK_URL }}
+          # GitHub 热榜要查搜索/README/issue：未鉴权每小时只有 60 次，一轮就会被限流。
+          GITHUB_TOKEN: ${{ github.token }}
         run: python -m src.main

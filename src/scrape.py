@@ -86,6 +86,8 @@ _DEFAULT_RECENT_DAYS = 7
 _DEFAULT_HIGH_UPVOTES = 100
 _DEFAULT_HIGH_STARS_24H = 100
 _DEFAULT_MIN_UPVOTES = 0
+# 高热例外的年龄上限：再热的论文过了这个天数也不算「近期发布」
+_DEFAULT_MAX_HEAT_AGE_DAYS = 30
 
 
 def probe_jina(timeout: float = 12.0) -> bool:
@@ -386,7 +388,43 @@ def _trending_recent_policy(feed: dict[str, Any]) -> dict[str, float]:
         "high_stars_gained_24h": float(
             extra.get("high_stars_gained_24h") or _DEFAULT_HIGH_STARS_24H
         ),
+        "max_heat_age_days": float(
+            extra.get("max_heat_age_days") or _DEFAULT_MAX_HEAT_AGE_DAYS
+        ),
     }
+
+
+def _arxiv_id_month_end_ms(pid: str) -> int | None:
+    """arXiv ID 的 YYMM 即首个版本的投稿月份，取该月最后一刻作为首发时间上界。"""
+    m = re.match(r"^(\d{2})(\d{2})\.", str(pid or ""))
+    if not m:
+        return None
+    year, month = 2000 + int(m.group(1)), int(m.group(2))
+    if not 1 <= month <= 12:
+        return None
+    next_month = (
+        datetime(year + 1, 1, 1, tzinfo=timezone.utc)
+        if month == 12
+        else datetime(year, month + 1, 1, tzinfo=timezone.utc)
+    )
+    return int(next_month.timestamp() * 1000) - 1
+
+
+def _paper_first_published_raw(pid: str, listed_raw: str) -> str:
+    """榜单日期与 arXiv ID 月份取早者，作为论文真实首发时间。
+
+    HF/PwC 给的 publishedAt 是「进入榜单的日期」，几个月前的论文被重新顶上榜时
+    会显示成本周，直接采信就会把旧论文当成新发布推出去。ID 月份是首个版本的
+    投稿月，用它兜住上界即可识别这种重新上榜。
+    """
+    listed_ms = _parse_iso_ms(listed_raw)
+    # 无日期仍不放行，交给 _keep_trending_paper 丢弃：ID 月份只用来把时间往早修正
+    if listed_ms is None:
+        return listed_raw
+    id_ms = _arxiv_id_month_end_ms(pid)
+    if id_ms is None or id_ms >= listed_ms:
+        return listed_raw
+    return datetime.fromtimestamp(id_ms / 1000, timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
 
 
 def _keep_trending_paper(
@@ -408,6 +446,9 @@ def _keep_trending_paper(
         return True, False
     # 无日期时不放行（避免空 published 被 process 当成 now）
     if age is None:
+        return False, False
+    # 高热例外也要有年龄上限，否则常年高赞的老论文会一直占着「热榜」名额
+    if age > policy["max_heat_age_days"]:
         return False, False
     if upvotes >= policy["high_upvote_threshold"] or stars_gained_24h >= policy["high_stars_gained_24h"]:
         return True, True
@@ -470,12 +511,16 @@ def _extract_pwc_co_trending_links(feed: dict[str, Any]) -> list[dict[str, Any]]
             continue
         seen.add(pid)
         title = re.sub(r"\s+", " ", str(row.get("title") or "")).strip() or pid
-        published_raw = str(row.get("date_published") or "").strip()
+        published_raw = _paper_first_published_raw(pid, str(row.get("date_published") or "").strip())
         age = row.get("paper_age_days")
         try:
             age_f = float(age) if age is not None else None
         except (TypeError, ValueError):
             age_f = None
+        # 接口给的 paper_age_days 是按上榜日算的，首发时间被修正过就以修正后的为准
+        corrected_age = _age_days(_parse_iso_ms(published_raw))
+        if corrected_age is not None and (age_f is None or corrected_age > age_f):
+            age_f = corrected_age
         trending = row.get("trending") if isinstance(row.get("trending"), dict) else {}
         try:
             stars_24h = float(trending.get("stars_gained_24h") or 0)
@@ -570,8 +615,9 @@ def _extract_hf_pwc_paper_links(page: str, feed: dict[str, Any]) -> list[dict[st
     for pid in order:
         row = meta[pid]
         up = float(row.get("upvotes") or 0)
+        published_raw = _paper_first_published_raw(pid, str(row.get("published_raw") or ""))
         keep, heat_keep = _keep_trending_paper(
-            published_raw=str(row.get("published_raw") or ""),
+            published_raw=published_raw,
             upvotes=up,
             feed=feed,
         )
@@ -585,7 +631,7 @@ def _extract_hf_pwc_paper_links(page: str, feed: dict[str, Any]) -> list[dict[st
             {
                 "url": f"https://huggingface.co/papers/{pid}",
                 "title": (str(row.get("title") or "") or pid)[:200],
-                "published_raw": str(row.get("published_raw") or ""),
+                "published_raw": published_raw,
                 "heat_keep": heat_keep,
                 "metrics": metrics,
                 "community_block": block,
@@ -881,10 +927,11 @@ def _fetch_seed_items(feed: dict[str, Any]) -> list[dict[str, Any]]:
     return items
 
 
-# ---------------- GitHub 热榜专用抽取（纯沉淀型）----------------
-# GitHub 无官方 trending API；用 Search API 只取「已沉淀 + 近期仍活跃」的高价值仓库：
-# 绝对星标达标 + 近 N 天有 push，按 星标 / Fork 采用度 / 主题相关性 / 活跃度 打分，
-# 不再引入增速(星/龄)与「爆发新仓」路线，排除 awesome/教程/wrapper 类。
+# ---------------- GitHub 热榜专用抽取 ----------------
+# GitHub 无官方 trending API；用 Search API 圈出「已沉淀 + 近期仍活跃」的高价值仓库，
+# 按 星标 / Fork 采用度 / 主题相关性 打分，排除 awesome/教程/wrapper 类。
+# 圈定之后还要过一道发布事件判定（见 _fetch_github_items）：窗口内发过 release，
+# 或仓库本身是窗口内新建；否则只是老项目在日常提交，不构成热榜信号。
 _GITHUB_DEFAULT_TOPICS = [
     "llm", "large-language-models", "llmops", "agent", "ai-agent", "ai-agents",
     "rag", "retrieval-augmented-generation", "inference", "llm-inference",
@@ -911,6 +958,14 @@ _GITHUB_EXCLUDE_NAME_RE = re.compile(
     r"free-?code-?camp|500-?lines|教程|面试|资料)",
     re.I,
 )
+# 新建仓库路线额外跑的检索词个数：搜索 API 未鉴权时每分钟只有 10 次，和沉淀路线共用额度
+_GITHUB_NEW_REPO_QUERIES = 3
+# 新项目排序补偿：星标基数差一到两个数量级，不补权重就会被老项目全部压掉
+_GITHUB_NEW_REPO_BONUS = 1.2
+# 新项目在单轮产出里的占比上限
+_GITHUB_NEW_REPO_SHARE = 0.3
+# 新项目的采用度下限：只有星没有 fork 的多半是炒作贴带来的围观
+_GITHUB_NEW_REPO_MIN_FORKS = 20
 _GITHUB_WRAPPER_RE = re.compile(
     r"\b(wrapper|ui for|client for|sdk for|unofficial|mirror of|clone of|"
     r"gui for|telegram bot|discord bot|chrome extension)\b",
@@ -1191,6 +1246,89 @@ def _github_issue_feedback(full_name: str, n: int = 4) -> str:
     return "【社区反响·热门 Issue】\n" + "\n".join(lines)
 
 
+_GH_RELEASE_CACHE: dict[str, dict[str, Any] | None] = {}
+# 整份 feed 可能有几百 KB，只需要最新几条，按字节截断即可
+_GITHUB_ATOM_MAX_BYTES = 262144
+# 预发布标记有两种写法：紧贴版本号（v0.26.1rc0、1.12.0.dev11）和独立词（v2.0-beta）。
+# 只认独立词会漏掉前者，只认紧贴写法会漏掉后者，两条都要有。
+_GITHUB_PRERELEASE_RE = re.compile(
+    r"(?i)(?:\d|[\s\-._])(?:rc|alpha|beta|preview|nightly|canary|snapshot|dev|pre)[\s\-._]?\d"
+    r"|(?i:(?:^|[\s\-._])(?:rc|alpha|beta|preview|nightly|canary|snapshot|unstable)(?:$|[\s\-._]))"
+)
+_ATOM_ENTRY_HEAD_CHARS = 4000
+_ATOM_TITLE_RE = re.compile(r"<title[^>]*>(.*?)</title>", re.S)
+_ATOM_UPDATED_RE = re.compile(r"<updated>([^<]+)</updated>")
+_ATOM_LINK_RE = re.compile(r'<link[^>]*href="([^"]+)"')
+_ATOM_CONTENT_RE = re.compile(r"<content[^>]*>(.*?)</content>", re.S)
+
+
+def _github_releases_atom(full_name: str) -> str:
+    """取 releases.atom 原文，失败返回空串。"""
+    try:
+        with requests.get(
+            f"https://github.com/{full_name}/releases.atom",
+            headers={"User-Agent": _UA, "Accept": "application/atom+xml"},
+            timeout=min(config.JINA_TIMEOUT, 20),
+            stream=True,
+        ) as resp:
+            if resp.status_code != 200:
+                return ""
+            buf = bytearray()
+            for chunk in resp.iter_content(chunk_size=16384):
+                buf.extend(chunk)
+                if len(buf) >= _GITHUB_ATOM_MAX_BYTES:
+                    break
+            return buf.decode("utf-8", "ignore")
+    except Exception:  # noqa: BLE001
+        return ""
+
+
+def _github_latest_release(full_name: str) -> dict[str, Any] | None:
+    """最新正式版本，取 releases.atom 里第一条非预发布条目。
+
+    None = 取不到（网络异常）；{} = 确实没有正式发布。两者必须区分：把「取不到」
+    当成「没发过版」，会把所有老项目一并判成无近期发布。
+
+    不走 api.github.com/releases/latest 是因为它每个仓库要花一次核心额度，未鉴权时
+    每小时只有 60 次，一轮就会被限流，而限流响应和「没有 release」长得一模一样。
+    atom 由 github.com 直出，不受这个额度限制。
+    """
+    if full_name in _GH_RELEASE_CACHE:
+        return _GH_RELEASE_CACHE[full_name]
+    feed = _github_releases_atom(full_name)
+    release: dict[str, Any] | None = None if not feed else {}
+    for chunk in feed.split("<entry>")[1:]:
+        # 元数据都排在 <content> 之前，即使正文被截断也能取到
+        head = chunk[:_ATOM_ENTRY_HEAD_CHARS]
+        title = _ATOM_TITLE_RE.search(head)
+        updated = _ATOM_UPDATED_RE.search(head)
+        if not (title and updated):
+            continue
+        tag = _one_line(unescape(title.group(1)))
+        # atom 不区分正式版与预发布，rc/beta 不算对外发布
+        if _GITHUB_PRERELEASE_RE.search(tag):
+            continue
+        link = _ATOM_LINK_RE.search(head)
+        content = _ATOM_CONTENT_RE.search(chunk)
+        release = {
+            "tag_name": tag,
+            "published_at": updated.group(1).strip(),
+            "html_url": link.group(1) if link else "",
+            "body": unescape(content.group(1)) if content else "",
+        }
+        break
+    _GH_RELEASE_CACHE[full_name] = release
+    return release
+
+
+def _github_release_notes(release: dict[str, Any], limit: int = 1200) -> str:
+    """release notes 摘录：说明这次版本到底改了什么，是热榜条目的核心信息。"""
+    raw = str(release.get("body") or "")
+    # atom 给的是渲染后的 HTML，API 给的是 markdown，两种都要能处理
+    text = html_to_text(raw) if "<" in raw else readme_to_text(raw)
+    return cut_on_boundary(text, limit)
+
+
 _HF_API_FAILS = 0  # 连续失败熔断：HF api 被限流时避免整轮 N×timeout 卡顿
 
 
@@ -1239,7 +1377,11 @@ def _hf_paper_community(pid: str) -> tuple[str, dict[str, Any]]:
 
 
 def _fetch_github_items(feed: dict[str, Any]) -> list[dict[str, Any]]:
-    """GitHub 热榜（纯沉淀型）：Search API 取已沉淀且近期活跃的高星仓库 + 打分，直出 RawItem。
+    """GitHub 热榜：Search API 选出高价值仓库，再按「发布事件」定时间与去留。
+
+    时间只认真实的发布事件——最新 Release，或仓库本身就是近期新建。pushed_at 只说明
+    有人提交过代码，老项目改个 typo 也会刷新成今天，拿它当发布时间就会把 2018 年的
+    项目当成今日新闻推出去。
 
     参数优先取「GitHub筛选配置」表（feed["github_config"]），回落 extra_config。
     """
@@ -1271,11 +1413,14 @@ def _fetch_github_items(feed: dict[str, Any]) -> list[dict[str, Any]]:
         except (TypeError, ValueError):
             return float(default)
 
-    # 纯沉淀型：只有「绝对星标门槛」+「近 active_days 天有 push」两道硬约束，无爆发/增速路线
+    # 沉淀门槛：绝对星标 +「近 active_days 天有 push」，用于圈定值得关注的仓库池
     min_stars = int(_num("min_stars", 2000))
     active_days = int(_num("active_pushed_days", 90))
     min_forks = int(_num("min_forks", 0))
     wrapper_penalty = _num("wrapper_penalty", -0.5)
+    # 发布窗口：仓库必须在窗口内发过新版本，或本身就是窗口内新建，否则不算热榜信号
+    release_days = int(_num("release_recent_days", 30))
+    min_new_stars = int(_num("min_new_repo_stars", 500))
 
     # REST 搜索 API 只支持 AND，不支持 OR/括号：每个关键词单独查询再合并。
     query_terms = _as_str_list(params.get("query_terms")) or [
@@ -1283,6 +1428,7 @@ def _fetch_github_items(feed: dict[str, Any]) -> list[dict[str, Any]]:
     ]
     now = datetime.now(timezone.utc)
     active_date = (now - timedelta(days=active_days)).strftime("%Y-%m-%d")
+    created_date = (now - timedelta(days=release_days)).strftime("%Y-%m-%d")
     per_page = min(max(max_n * 3, 30), 50)
 
     rows: dict[str, dict[str, Any]] = {}
@@ -1293,13 +1439,26 @@ def _fetch_github_items(feed: dict[str, Any]) -> list[dict[str, Any]]:
             fn = str(r.get("full_name") or "")
             if fn and fn not in rows:
                 rows[fn] = r
+    # 新建仓库单独一路：套沉淀星标线的话，刚发布的项目永远够不到，热榜就只剩老面孔
+    for term in query_terms[:_GITHUB_NEW_REPO_QUERIES]:
+        phrase = f'"{term}"' if " " in term else term
+        q = f"{phrase} in:name,description,topics created:>={created_date} stars:>={min_new_stars}"
+        for r in _github_search(q, per_page=per_page):
+            fn = str(r.get("full_name") or "")
+            if fn and fn not in rows:
+                rows[fn] = r
 
-    scored: list[tuple[float, int, dict[str, Any]]] = []
+    scored: list[tuple[float, int, bool, dict[str, Any]]] = []
     for fn, r in rows.items():
         stars = int(r.get("stargazers_count") or 0)
         forks = int(r.get("forks_count") or 0)
-        # 硬门槛：绝对星标 + Fork 采用度（沉淀信号）
-        if stars < min_stars or forks < min_forks:
+        created_age = _age_days(_parse_iso_ms(r.get("created_at")))
+        is_new_repo = created_age is not None and created_age <= release_days
+        # 新仓库还没时间攒星和 fork，套沉淀门槛等于把「刚发布」这一路全部挡掉
+        if stars < (min_new_stars if is_new_repo else min_stars):
+            continue
+        # 炒作型新仓能刷到星，但很少有人真去 fork 使用，用 fork 数挡掉这一类
+        if forks < (_GITHUB_NEW_REPO_MIN_FORKS if is_new_repo else min_forks):
             continue
         name = str(r.get("name") or "")
         desc = str(r.get("description") or "")
@@ -1320,17 +1479,32 @@ def _fetch_github_items(feed: dict[str, Any]) -> list[dict[str, Any]]:
         score = math.log10(stars + 1) + 0.5 * math.log10(forks + 1)
         if topic_hit:
             score += 0.5
+        if is_new_repo:
+            # 与几万星的老项目同池排序，新项目不补权重就永远排不进来
+            score += _GITHUB_NEW_REPO_BONUS
         push_age = _age_days(_parse_iso_ms(r.get("pushed_at")))
         if push_age is not None and push_age <= active_days:
             score += 0.3
         if _GITHUB_WRAPPER_RE.search(haystack):
             score += wrapper_penalty
-        scored.append((score, stars, r))
+        scored.append((score, stars, is_new_repo, r))
 
     scored.sort(key=lambda x: (x[0], x[1]), reverse=True)
 
     items: list[dict[str, Any]] = []
-    for score, stars, r in scored[:max_n]:
+    stale = 0
+    unavailable = 0
+    lookups = 0
+    new_repo_count = 0
+    # 每个仓库一次 atom 请求，候选池几百个时不能挨个查
+    max_lookups = max(3 * max_n, 30)
+    # 新仓上限：新项目普遍带投机噪音，放开配额会把整份热榜挤成「刚建的仓库」
+    max_new_repos = max(1, round(max_n * _GITHUB_NEW_REPO_SHARE))
+    for score, stars, is_new_repo, r in scored:
+        if len(items) >= max_n:
+            break
+        if is_new_repo and new_repo_count >= max_new_repos:
+            continue
         fn = str(r.get("full_name") or "")
         desc = str(r.get("description") or "").strip()
         lang = str(r.get("language") or "")
@@ -1338,6 +1512,36 @@ def _fetch_github_items(feed: dict[str, Any]) -> list[dict[str, Any]]:
         repo_topics = [str(t) for t in (r.get("topics") or [])]
         pushed_raw = str(r.get("pushed_at") or r.get("updated_at") or "").strip()
         created_raw = str(r.get("created_at") or "").strip()
+        repo_url = str(r.get("html_url") or f"https://github.com/{fn}")
+
+        if is_new_repo:
+            title, url = fn, repo_url
+            published_raw = created_raw
+            event_line = f"🌱 新项目｜创建于 {created_raw[:10]}"
+            release_notes = ""
+            new_repo_count += 1
+        else:
+            if lookups >= max_lookups:
+                continue
+            release = _github_latest_release(fn)
+            lookups += 1
+            if release is None:
+                # 取不到就说不清有没有发版，宁可不收，也不要按「没发版」误判
+                unavailable += 1
+                continue
+            published_raw = str(release.get("published_at") or "").strip()
+            release_age = _age_days(_parse_iso_ms(published_raw))
+            # 老项目只有日常提交、窗口内没发过版本：是活跃，不是新闻
+            if release_age is None or release_age > release_days:
+                stale += 1
+                continue
+            tag = str(release.get("tag_name") or "").strip()
+            title = f"{fn} {tag}".strip()
+            # 指向 release 页而非仓库首页：同一仓库的不同版本才会被当成不同条目
+            url = str(release.get("html_url") or repo_url)
+            event_line = f"🚀 新版本 {tag}｜发布于 {published_raw[:10]}"
+            release_notes = _github_release_notes(release)
+
         readme_raw = _github_readme_raw(fn)
         readme = _github_readme_excerpt(readme_raw)
         readme_images = _github_readme_images(readme_raw, fn)
@@ -1345,9 +1549,11 @@ def _fetch_github_items(feed: dict[str, Any]) -> list[dict[str, Any]]:
         body = cut_on_boundary(
             (
                 f"{desc}\n\n"
+                f"{event_line}\n"
                 f"⭐ Stars: {stars} | 🍴 Forks: {forks} | 语言: {lang or 'N/A'} | "
                 f"主题: {', '.join(repo_topics) or 'N/A'}\n"
                 f"创建: {created_raw[:10]} | 最近提交: {pushed_raw[:10]} | 沉淀分: {score:.2f}\n\n"
+                + (f"【本次发布】\n{release_notes}\n\n" if release_notes else "")
                 + (f"{feedback}\n\n" if feedback else "")
                 + f"{readme}"
             ).strip(),
@@ -1355,19 +1561,25 @@ def _fetch_github_items(feed: dict[str, Any]) -> list[dict[str, Any]]:
         )
         items.append(
             {
-                "title": fn[:200],
-                "url": str(r.get("html_url") or f"https://github.com/{fn}"),
+                "title": title[:200],
+                "url": url,
                 "body": body,
                 # 卡片首图留空时由 daily 回落到仓库社交预览图（OG）
                 "image_url": readme_images[0]["url"] if readme_images else "",
                 "media_assets": {"images": readme_images, "videos": []},
-                "published_raw": pushed_raw or created_raw,
-                "heat_keep": True,  # 热榜=沉淀热度信号而非时效，跳过 lookback
+                # 发布事件时间，不是 pushed_at
+                "published_raw": published_raw,
+                # 发布窗口已在本函数内判定，lookback 再卡一次会把窗口压回 7 天
+                "heat_keep": True,
                 "is_html": False,
                 "feed": feed,
             }
         )
-    log.info("GitHub 命中 %d 仓库，选取 %d（min_stars=%d, active<=%dd）", len(scored), len(items), min_stars, active_days)
+    log.info(
+        "GitHub 命中 %d 仓库，选取 %d（其中新项目 %d）；发布窗口<=%dd，"
+        "无近期发布跳过 %d，发布信息取不到跳过 %d",
+        len(scored), len(items), new_repo_count, release_days, stale, unavailable,
+    )
     return items
 
 

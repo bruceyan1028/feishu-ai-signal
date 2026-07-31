@@ -11,6 +11,7 @@
 from __future__ import annotations
 
 import logging
+import json
 import re
 from typing import Any
 
@@ -74,6 +75,17 @@ def _as_bool(value: Any) -> bool:
     return str(raw or "").strip().lower() in {"true", "1", "yes", "是", "on"}
 
 
+def _as_mapping(value: Any) -> dict[str, Any]:
+    raw = feishu._read_cell_key(value) if not isinstance(value, dict) else value
+    if isinstance(raw, dict):
+        return raw
+    try:
+        parsed = json.loads(str(raw or "{}"))
+        return parsed if isinstance(parsed, dict) else {}
+    except (TypeError, ValueError):
+        return {}
+
+
 def infer_paper_metrics(title: str, body: str, url: str = "") -> dict[str, Any]:
     """从标题/摘要推断论文轻量指标（无需外部 API）。"""
     text = f"{title}\n{body}\n{url}"
@@ -132,9 +144,18 @@ _SCHEMAS: dict[str, dict[str, tuple[str, Any]]] = {
     },
     "social": {
         "账号白名单": ("account_whitelist", _as_list),
+        "账号分级": ("account_tiers", _as_mapping),
         "最低粉丝数": ("min_followers", _as_num),
         "最低互动数": ("min_engagement", _as_num),
         "排除转发": ("exclude_retweets", _as_bool),
+        "排除回复": ("exclude_replies", _as_bool),
+        "正文最少字数": ("min_content_chars", _as_num),
+        "直接入库分": ("direct_score", _as_num),
+        "智能精筛起始分": ("borderline_score", _as_num),
+        "启用智能精筛": ("enable_llm_filter", _as_bool),
+        "P0每日上限": ("p0_daily_cap", _as_num),
+        "P1每日上限": ("p1_daily_cap", _as_num),
+        "互动基线": ("engagement_baselines", _as_mapping),
         "必含关键词": ("keyword_include", _as_list),
         "排除关键词": ("keyword_exclude", _as_list),
     },
@@ -150,6 +171,8 @@ _SCHEMAS: dict[str, dict[str, tuple[str, Any]]] = {
         "最低星标": ("min_stars", _as_num),
         "最低Fork数": ("min_forks", _as_num),
         "活跃天数": ("active_pushed_days", _as_num),
+        "发布窗口天数": ("release_recent_days", _as_num),
+        "新项目最低星标": ("min_new_repo_stars", _as_num),
         "最大条目数": ("max_items", _as_num),
     },
 }
@@ -178,6 +201,11 @@ def _parse_row(entity_type: str, fields: dict[str, Any]) -> dict[str, Any]:
     m = re.search(r"min_signal_score\s*=\s*(\d+(?:\.\d+)?)", notes, re.I)
     if m:
         params["min_signal_score"] = float(m.group(1))
+    if entity_type == "social":
+        params["daily_caps"] = {
+            "P0": int(params.pop("p0_daily_cap", 5)),
+            "P1": int(params.pop("p1_daily_cap", 2)),
+        }
     return params
 
 
@@ -293,6 +321,12 @@ def apply_typed_filter(
     for pkey, mkey in _NUMERIC_HOOKS:
         threshold = params.get(pkey)
         val = metrics.get(mkey)
+        # 固定白名单账号不再用粉丝量做硬门；官方强信号也不受互动门槛限制。
+        if entity_type == "social" and (
+            pkey == "min_followers"
+            or pkey == "min_engagement" and metrics.get("strong_signal")
+        ):
+            continue
         if threshold is not None and val is not None:
             try:
                 if float(val) < float(threshold):

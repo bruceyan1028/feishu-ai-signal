@@ -227,6 +227,9 @@ _GITHUB_FIELDS = [
     _f("最低星标", NUMBER),
     _f("最低Fork数", NUMBER),
     _f("活跃天数", NUMBER),
+    # 发布事件窗口：仓库要在窗口内发过 release 或本身是窗口内新建，才算热榜信号
+    _f("发布窗口天数", NUMBER),
+    _f("新项目最低星标", NUMBER),
     _f("最大条目数", NUMBER),
     _f("备注", TEXT),
 ]
