@@ -780,6 +780,42 @@ class DeliveryTests(unittest.TestCase):
         self.assertEqual(send_message.call_count, 2)
         update_record.assert_called_once()
 
+    @patch("src.notify.feishu.update_record")
+    @patch(
+        "src.notify.feishu.send_interactive_message",
+        side_effect=[RuntimeError("open_id cross app"), "msg2", "msg3"],
+    )
+    @patch("src.notify.feishu.get_tenant_access_token", return_value="token")
+    @patch("src.notify.feishu.read_all_records_with_ids")
+    def test_one_bad_recipient_does_not_block_the_others(
+        self, read_records, _token, send_message, update_record
+    ) -> None:
+        read_records.return_value = [
+            {"record_id": "brief1", "fields": {"简报ID": "2026-07-13", "发送状态": "待发送"}}
+        ]
+        result = notify.send_many(
+            self.sample_brief(), "https://example.com", ["ou_bad", "ou_two", "ou_three"]
+        )
+        self.assertEqual(result["messageIds"], {"ou_two": "msg2", "ou_three": "msg3"})
+        self.assertEqual(list(result["failed"]), ["ou_bad"])
+        # 有人收到就算已发送，回写的消息ID只记成功的那些
+        self.assertEqual(update_record.call_args[0][3]["发送状态"], "已发送")
+        self.assertNotIn("ou_bad", update_record.call_args[0][3]["消息ID"])
+
+    @patch("src.notify.feishu.update_record")
+    @patch("src.notify.feishu.send_interactive_message", side_effect=RuntimeError("boom"))
+    @patch("src.notify.feishu.get_tenant_access_token", return_value="token")
+    @patch("src.notify.feishu.read_all_records_with_ids")
+    def test_all_recipients_failing_marks_brief_failed(
+        self, read_records, _token, _send_message, update_record
+    ) -> None:
+        read_records.return_value = [
+            {"record_id": "brief1", "fields": {"简报ID": "2026-07-13", "发送状态": "待发送"}}
+        ]
+        with self.assertRaises(RuntimeError):
+            notify.send_many(self.sample_brief(), "https://example.com", ["ou_a", "ou_b"])
+        self.assertEqual(update_record.call_args[0][3]["发送状态"], "失败")
+
 
 if __name__ == "__main__":
     unittest.main()

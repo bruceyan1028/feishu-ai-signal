@@ -3,12 +3,15 @@ from __future__ import annotations
 
 import argparse
 import json
+import logging
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 from urllib.parse import urlencode
 
 from . import config, daily, feishu, publish
+
+log = logging.getLogger(__name__)
 
 
 def detail_url(base_url: str, day: str) -> str:
@@ -99,24 +102,38 @@ def send_many(
         }
     url = detail_url(base_url, str(brief["date"]))
     message_ids: dict[str, str] = {}
+    failures: dict[str, str] = {}
     try:
         card = build_card(brief, url)
-        for open_id in recipients:
-            message_ids[open_id] = feishu.send_interactive_message(token, open_id, card)
-        feishu.update_record(
-            token,
-            table_id,
-            str(record["record_id"]),
-            {
-                "发送状态": "已发送",
-                "发送时间": int(datetime.now(timezone.utc).timestamp() * 1000),
-                "消息ID": json.dumps(message_ids, ensure_ascii=False),
-            },
-        )
     except Exception:
         feishu.update_record(token, table_id, str(record["record_id"]), {"发送状态": "失败"})
         raise
-    return {"skipped": False, "messageIds": message_ids, "detailUrl": url}
+    # 逐人发送互不牵连：一个 open_id 失效不该让其他收件人也收不到
+    for open_id in recipients:
+        try:
+            message_ids[open_id] = feishu.send_interactive_message(token, open_id, card)
+        except Exception as exc:  # noqa: BLE001
+            failures[open_id] = str(exc)
+            log.warning("发送给 %s 失败: %s", open_id, exc)
+    if not message_ids:
+        feishu.update_record(token, table_id, str(record["record_id"]), {"发送状态": "失败"})
+        raise RuntimeError(f"所有收件人都发送失败: {json.dumps(failures, ensure_ascii=False)}")
+    feishu.update_record(
+        token,
+        table_id,
+        str(record["record_id"]),
+        {
+            "发送状态": "已发送",
+            "发送时间": int(datetime.now(timezone.utc).timestamp() * 1000),
+            "消息ID": json.dumps(message_ids, ensure_ascii=False),
+        },
+    )
+    return {
+        "skipped": False,
+        "messageIds": message_ids,
+        "failed": failures,
+        "detailUrl": url,
+    }
 
 
 def send(brief: dict[str, Any], base_url: str, open_id: str, force: bool = False) -> dict[str, Any]:
