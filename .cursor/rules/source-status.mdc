@@ -47,3 +47,17 @@ alwaysApply: true
 | `查重过滤` | 清洗通过但被跨轮去重掉的条数 |
 
 统一调用 `feishu.sync_param_collect_stats(...)`，不要手写漏字段。
+
+## 改完飞书配置要回写仓库
+
+飞书表的内容存在飞书云端，仓库里只有 `src/bootstrap.py` 的表结构和
+`src/seed_default.json` 的内容快照。只改飞书不回写，别人部署出来的库会缺配置，
+表被改坏时也没有可回滚的版本。
+
+改动信号源表 / 一级参数 / 任一二级参数表之后（改字段、加源、调阈值都算）：
+
+```bash
+python -m tools.export_seed   # 刷新 src/seed_default.json
+```
+
+再连同代码一起提交。条目表与每日简报是采集产物，不导出。

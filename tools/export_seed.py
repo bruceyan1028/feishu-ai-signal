@@ -91,6 +91,27 @@ def _multi(v):
     return [((x.get("text") or x.get("name")) if isinstance(x, dict) else x) for x in v if x]
 
 
+def _number(v):
+    """数字字段可能回成字符串（"30"），直接按 int/float 判类型会把整列判丢。"""
+    if isinstance(v, bool):
+        return None
+    if isinstance(v, (int, float)):
+        num = v
+    else:
+        try:
+            num = float(str(v).strip())
+        except (TypeError, ValueError):
+            return None
+    # 阈值都是整数，写成 30 比 30.0 更贴近人手填的样子
+    return int(num) if float(num).is_integer() else num
+
+
+def _bool(v):
+    if isinstance(v, bool):
+        return v
+    return str(v).strip().lower() in {"true", "1", "yes", "是", "on"}
+
+
 def _url(v):
     if isinstance(v, list) and v:
         v = v[0]
@@ -114,13 +135,13 @@ def _clean(token: str, tid: str, drop: set[str] = frozenset()) -> list[dict]:
             elif t == 1:
                 cv = _flat_text(val)
             elif t == 2:
-                cv = val if isinstance(val, (int, float)) else None
+                cv = _number(val)
             elif t == 3:
                 cv = _one_name(val)
             elif t == 4:
                 cv = _multi(val)
             elif t == 7:
-                cv = bool(val)
+                cv = _bool(val)
             elif t == 15:
                 cv = _url(val)
             else:

@@ -410,20 +410,6 @@
    }
   },
   {
-   "主要看什么": "模型托管、Agent、企业云应用、价格",
-   "优先级": "P0",
-   "分类": "算力芯片云",
-   "名称": "AWS AI / Bedrock Blog",
-   "层级": "L1 一级官方",
-   "来源类型": "纯网页",
-   "自动化状态": "已接入",
-   "获取方式": "RSS",
-   "链接": {
-    "link": "https://aws.amazon.com/blogs/machine-learning/",
-    "text": "https://aws.amazon.com/blogs/machine-learning/"
-   }
-  },
-  {
    "主要看什么": "超算集群、NVIDIA 合作、企业部署",
    "优先级": "P1",
    "分类": "算力芯片云",
@@ -853,16 +839,21 @@
   },
   {
    "主要看什么": "高价值研究者/CEO 账号",
-   "优先级": "P2",
+   "优先级": "P0",
    "分类": "其他",
    "名称": "社交媒体账号发言",
    "备注": [
-    "X/微博 RSSHub"
+    "X 官方 API",
+    "首批 10 个官方 P0 账号"
    ],
-   "层级": "L4 补充源",
+   "层级": "L4",
    "来源类型": "社交媒体",
-   "自动化状态": "已暂停",
-   "获取方式": "Bridge"
+   "自动化状态": "待测",
+   "获取方式": "Social",
+   "链接": {
+    "link": "https://x.com/",
+    "text": "https://x.com/"
+   }
   },
   {
    "主要看什么": "高引用论文下的优质讨论",
@@ -893,91 +884,6 @@
    "链接": {
     "link": "https://apple.dwarkesh-podcast.workers.dev/feed.rss",
     "text": "https://apple.dwarkesh-podcast.workers.dev/feed.rss"
-   }
-  },
-  {
-   "主要看什么": "AI 工程、Agent、推理基础设施与开发者生态",
-   "优先级": "P2",
-   "分类": "其他",
-   "名称": "Latent Space",
-   "备注": [
-    "白名单节目每期完整摘要；RSS/transcript 优先，托管 ASR 兜底"
-   ],
-   "层级": "L4 补充源",
-   "来源类型": "播客",
-   "自动化状态": "待测",
-   "获取方式": "Podcast",
-   "链接": {
-    "link": "https://api.substack.com/feed/podcast/1084089.rss",
-    "text": "https://api.substack.com/feed/podcast/1084089.rss"
-   }
-  },
-  {
-   "主要看什么": "AI 创业、投资、产品化和公司战略",
-   "优先级": "P2",
-   "分类": "其他",
-   "名称": "No Priors",
-   "备注": [
-    "白名单节目每期完整摘要；RSS/transcript 优先，托管 ASR 兜底"
-   ],
-   "层级": "L4 补充源",
-   "来源类型": "播客",
-   "自动化状态": "待测",
-   "获取方式": "Podcast",
-   "链接": {
-    "link": "https://feeds.megaphone.fm/nopriors",
-    "text": "https://feeds.megaphone.fm/nopriors"
-   }
-  },
-  {
-   "主要看什么": "中国 AI 创业者、投资人与产品实践",
-   "优先级": "P2",
-   "分类": "其他",
-   "名称": "十字路口 Crossing",
-   "备注": [
-    "白名单节目每期完整摘要；RSS/transcript 优先，托管 ASR 兜底"
-   ],
-   "层级": "L4 补充源",
-   "来源类型": "播客",
-   "自动化状态": "待测",
-   "获取方式": "Podcast",
-   "链接": {
-    "link": "https://feed.xyzfm.space/68fyjknth9hj",
-    "text": "https://feed.xyzfm.space/68fyjknth9hj"
-   }
-  },
-  {
-   "主要看什么": "AI 原生产品、创业实战与商业机会",
-   "优先级": "P2",
-   "分类": "其他",
-   "名称": "AI 炼金术",
-   "备注": [
-    "白名单节目每期完整摘要；RSS/transcript 优先，托管 ASR 兜底"
-   ],
-   "层级": "L4 补充源",
-   "来源类型": "播客",
-   "自动化状态": "待测",
-   "获取方式": "Podcast",
-   "链接": {
-    "link": "https://www.ximalaya.com/album/74194808.xml",
-    "text": "https://www.ximalaya.com/album/74194808.xml"
-   }
-  },
-  {
-   "主要看什么": "硅谷 AI 技术、产业与中美科技观察",
-   "优先级": "P2",
-   "分类": "其他",
-   "名称": "硅谷 101",
-   "备注": [
-    "白名单节目每期完整摘要；RSS/transcript 优先，托管 ASR 兜底"
-   ],
-   "层级": "L4 补充源",
-   "来源类型": "播客",
-   "自动化状态": "待测",
-   "获取方式": "Podcast",
-   "链接": {
-    "link": "https://feeds.fireside.fm/sv101/rss",
-    "text": "https://feeds.fireside.fm/sv101/rss"
    }
   },
   {
@@ -1123,34 +1029,6 @@
    }
   },
   {
-   "主要看什么": "大模型、机器人、AI 医疗、产业合作",
-   "优先级": "P1",
-   "分类": "技术研究开源",
-   "名称": "上海交大 AI 研究院",
-   "层级": "L1 一级官方",
-   "来源类型": "纯网页",
-   "自动化状态": "未开始",
-   "获取方式": "Manual",
-   "链接": {
-    "link": "https://ai.sjtu.edu.cn/",
-    "text": "https://ai.sjtu.edu.cn/"
-   }
-  },
-  {
-   "主要看什么": "模式识别、CV、智能系统、紫东太初",
-   "优先级": "P1",
-   "分类": "技术研究开源",
-   "名称": "中科院自动化所",
-   "层级": "L1 一级官方",
-   "来源类型": "纯网页",
-   "自动化状态": "未开始",
-   "获取方式": "Manual",
-   "链接": {
-    "link": "http://www.ia.cas.cn/",
-    "text": "http://www.ia.cas.cn/"
-   }
-  },
-  {
    "优先级": "P2",
    "分类": "算力芯片云",
    "名称": "Utility Dive",
@@ -1161,6 +1039,231 @@
    "链接": {
     "link": "https://www.utilitydive.com/feeds/news/",
     "text": "https://www.utilitydive.com/feeds/news/"
+   }
+  },
+  {
+   "主要看什么": "AI 论文、生成模型、机器人和能力变化的快速解读",
+   "优先级": "P1",
+   "分类": "技术研究开源",
+   "名称": "Two Minute Papers YouTube",
+   "层级": "L3 媒体研报",
+   "来源类型": "视频",
+   "自动化状态": "已接入",
+   "获取方式": "Media",
+   "链接": {
+    "link": "https://www.youtube.com/channel/UCbfYPyITQ-7l4upoX8nvctg",
+    "text": "https://www.youtube.com/channel/UCbfYPyITQ-7l4upoX8nvctg"
+   }
+  },
+  {
+   "主要看什么": "最近更新 2026-03-06，超过三个月更新窗口",
+   "优先级": "P2",
+   "分类": "技术研究开源",
+   "名称": "已排除：Yannic Kilcher YouTube",
+   "层级": "L3 媒体研报",
+   "来源类型": "视频",
+   "自动化状态": "已暂停",
+   "获取方式": "Media",
+   "链接": {
+    "link": "https://www.youtube.com/channel/UCZHmQk67mSJgfCCTn7xBfew",
+    "text": "https://www.youtube.com/channel/UCZHmQk67mSJgfCCTn7xBfew"
+   }
+  },
+  {
+   "主要看什么": "Gemini、科学 AI、多模态、机器人和前沿研究成果",
+   "优先级": "P0",
+   "分类": "前沿模型公司",
+   "名称": "Google DeepMind YouTube",
+   "层级": "L1 一级官方",
+   "来源类型": "视频",
+   "自动化状态": "已接入",
+   "获取方式": "Media",
+   "链接": {
+    "link": "https://www.youtube.com/channel/UCP7jMXSY2xbc3KCAE0MHQ-A",
+    "text": "https://www.youtube.com/channel/UCP7jMXSY2xbc3KCAE0MHQ-A"
+   }
+  },
+  {
+   "主要看什么": "AI 课程、研究讲座、产业趋势和基础模型技术",
+   "优先级": "P1",
+   "分类": "技术研究开源",
+   "名称": "Stanford Online AI YouTube",
+   "层级": "L1 一级官方",
+   "来源类型": "视频",
+   "自动化状态": "已接入",
+   "获取方式": "Media",
+   "链接": {
+    "link": "https://www.youtube.com/channel/UCBa5G_ESCn8Yd4vw5U-gIcg",
+    "text": "https://www.youtube.com/channel/UCBa5G_ESCn8Yd4vw5U-gIcg"
+   }
+  },
+  {
+   "主要看什么": "模型与产品发布、API、Codex、企业应用和开发者活动",
+   "优先级": "P0",
+   "分类": "前沿模型公司",
+   "名称": "OpenAI YouTube",
+   "层级": "L1 一级官方",
+   "来源类型": "视频",
+   "自动化状态": "已接入",
+   "获取方式": "Media",
+   "链接": {
+    "link": "https://www.youtube.com/channel/UCXZCJLdBC09xxGZ6gcdrc6A",
+    "text": "https://www.youtube.com/channel/UCXZCJLdBC09xxGZ6gcdrc6A"
+   }
+  },
+  {
+   "主要看什么": "模型发布、开放权重、企业部署和欧洲 AI 生态",
+   "优先级": "P0",
+   "分类": "前沿模型公司",
+   "名称": "Mistral AI YouTube",
+   "层级": "L1 一级官方",
+   "来源类型": "视频",
+   "自动化状态": "已接入",
+   "获取方式": "Media",
+   "链接": {
+    "link": "https://www.youtube.com/channel/UC5-pBdfdA3KUo-vq72l-umA",
+    "text": "https://www.youtube.com/channel/UC5-pBdfdA3KUo-vq72l-umA"
+   }
+  },
+  {
+   "主要看什么": "生成式 AI、Agent、推理与开发者工程实践",
+   "优先级": "P1",
+   "分类": "技术研究开源",
+   "名称": "DeepLearning.AI YouTube",
+   "层级": "L2 结构化平台",
+   "来源类型": "视频",
+   "自动化状态": "已接入",
+   "获取方式": "Media",
+   "链接": {
+    "link": "https://www.youtube.com/channel/UCcIXc5mJsHVYTZR1maL5l9w",
+    "text": "https://www.youtube.com/channel/UCcIXc5mJsHVYTZR1maL5l9w"
+   }
+  },
+  {
+   "主要看什么": "GPU、CUDA、训练推理优化、机器人和数据中心",
+   "优先级": "P0",
+   "分类": "算力芯片云",
+   "名称": "NVIDIA YouTube",
+   "层级": "L1 一级官方",
+   "来源类型": "视频",
+   "自动化状态": "已接入",
+   "获取方式": "Media",
+   "链接": {
+    "link": "https://www.youtube.com/channel/UCHuiy8bXnmK5nisYHUd1J5g",
+    "text": "https://www.youtube.com/channel/UCHuiy8bXnmK5nisYHUd1J5g"
+   }
+  },
+  {
+   "主要看什么": "Claude 模型、可解释性与安全研究、产品和开发者更新",
+   "优先级": "P0",
+   "分类": "前沿模型公司",
+   "名称": "Anthropic YouTube",
+   "层级": "L1 一级官方",
+   "来源类型": "视频",
+   "自动化状态": "已接入",
+   "获取方式": "Media",
+   "链接": {
+    "link": "https://www.youtube.com/channel/UCrDwWp7EBBv4NwvScIpBDOA",
+    "text": "https://www.youtube.com/channel/UCrDwWp7EBBv4NwvScIpBDOA"
+   }
+  },
+  {
+   "主要看什么": "机器人、NLP、CV、系统和实验室研究成果",
+   "优先级": "P1",
+   "分类": "技术研究开源",
+   "名称": "MIT CSAIL YouTube",
+   "层级": "L1 一级官方",
+   "来源类型": "视频",
+   "自动化状态": "已接入",
+   "获取方式": "Media",
+   "链接": {
+    "link": "https://www.youtube.com/channel/UCBpxspUNl1Th33XbugiHJzw",
+    "text": "https://www.youtube.com/channel/UCBpxspUNl1Th33XbugiHJzw"
+   }
+  },
+  {
+   "主要看什么": "AI 工程、Agent、推理基础设施与开发者生态",
+   "优先级": "P2",
+   "分类": "其他",
+   "名称": "Latent Space",
+   "备注": [
+    "白名单节目每期完整摘要；RSS/transcript 优先，托管 ASR 兜底"
+   ],
+   "层级": "L4 补充源",
+   "来源类型": "播客",
+   "自动化状态": "待测",
+   "获取方式": "Podcast",
+   "链接": {
+    "link": "https://api.substack.com/feed/podcast/1084089.rss",
+    "text": "https://api.substack.com/feed/podcast/1084089.rss"
+   }
+  },
+  {
+   "主要看什么": "AI 创业、投资、产品化和公司战略",
+   "优先级": "P2",
+   "分类": "其他",
+   "名称": "No Priors",
+   "备注": [
+    "白名单节目每期完整摘要；RSS/transcript 优先，托管 ASR 兜底"
+   ],
+   "层级": "L4 补充源",
+   "来源类型": "播客",
+   "自动化状态": "待测",
+   "获取方式": "Podcast",
+   "链接": {
+    "link": "https://feeds.megaphone.fm/nopriors",
+    "text": "https://feeds.megaphone.fm/nopriors"
+   }
+  },
+  {
+   "主要看什么": "硅谷 AI 技术、产业与中美科技观察",
+   "优先级": "P2",
+   "分类": "其他",
+   "名称": "硅谷 101",
+   "备注": [
+    "白名单节目每期完整摘要；RSS/transcript 优先，托管 ASR 兜底"
+   ],
+   "层级": "L4 补充源",
+   "来源类型": "播客",
+   "自动化状态": "待测",
+   "获取方式": "Podcast",
+   "链接": {
+    "link": "https://feeds.fireside.fm/sv101/rss",
+    "text": "https://feeds.fireside.fm/sv101/rss"
+   }
+  },
+  {
+   "主要看什么": "AI 原生产品、创业实战与商业机会",
+   "优先级": "P2",
+   "分类": "其他",
+   "名称": "AI 炼金术",
+   "备注": [
+    "白名单节目每期完整摘要；喜马拉雅 RSS 偶发超时"
+   ],
+   "层级": "L4 补充源",
+   "来源类型": "播客",
+   "自动化状态": "待测",
+   "获取方式": "Podcast",
+   "链接": {
+    "link": "https://www.ximalaya.com/album/74194808.xml",
+    "text": "https://www.ximalaya.com/album/74194808.xml"
+   }
+  },
+  {
+   "主要看什么": "中国 AI 创业者、投资人与产品实践",
+   "优先级": "P2",
+   "分类": "其他",
+   "名称": "十字路口 Crossing",
+   "备注": [
+    "白名单节目每期完整摘要；RSS/transcript 优先，托管 ASR 兜底"
+   ],
+   "层级": "L4 补充源",
+   "来源类型": "播客",
+   "自动化状态": "待测",
+   "获取方式": "Podcast",
+   "链接": {
+    "link": "https://feed.xyzfm.space/68fyjknth9hj",
+    "text": "https://feed.xyzfm.space/68fyjknth9hj"
    }
   }
  ],
@@ -1179,7 +1282,7 @@
    "notes": "News与Blog已合并；官方RSS稳定",
    "priority": "P0",
    "source_id": "openai-news",
-   "status": "experimental",
+   "status": "active",
    "tier": "L1",
    "来源类型": "纯网页"
   },
@@ -1215,7 +1318,7 @@
    "notes": "DeepMind无RSS",
    "priority": "P0",
    "source_id": "google-deepmind-blog",
-   "status": "experimental",
+   "status": "active",
    "tier": "L1",
    "来源类型": "纯网页"
   },
@@ -1295,17 +1398,17 @@
    "dedup_key": "hash(model_name+version)",
    "dimension": "前沿模型公司",
    "endpoint": {
-    "link": "https://qwenlm.github.io/blog/atom.xml",
-    "text": "https://qwenlm.github.io/blog/atom.xml"
+    "link": "https://qwenlm.github.io/blog/index.xml",
+    "text": "https://qwenlm.github.io/blog/index.xml"
    },
    "fetch_method": "RSS",
    "keyword_regex": "(model|gpt|claude|gemini|llama|qwen|deepseek|grok|command|mistral|doubao|seed|volc|agent|reasoning|multimodal|context|rlhf|inference|training|fine-tun|moe|rag|release|launch|announce|introducing|now available|update|preview|GA)",
    "lookback_window": "24h",
    "name": "Qwen Blog",
-   "notes": "Jekyll站点，自带atom.xml",
+   "notes": "官方博客 Atom；旧地址 atom.xml 无内容，已改 index.xml",
    "priority": "P0",
    "source_id": "qwen-blog",
-   "status": "paused",
+   "status": "active",
    "tier": "L1",
    "来源类型": "纯网页"
   },
@@ -1625,10 +1728,10 @@
    "keyword_regex": "(transformer|moe|mamba|agent|tool-use|reasoning|planning|long-context|multimodal|rlhf|dpo|grpo|inference|rag|benchmark|sota|alignment|safety|llm|diffusion|world-model|code-generation)",
    "lookback_window": "7d",
    "name": "Caltech CMS AI",
-   "notes": "理论 ML、优化、科学计算 AI",
+   "notes": "抓到的是研究方向导航页而非文章，内容未验收；Jina 常不可达",
    "priority": "P1",
    "source_id": "lab-caltech-cms",
-   "status": "active",
+   "status": "experimental",
    "tier": "L1",
    "来源类型": "纯网页"
   },
@@ -1711,125 +1814,6 @@
    "name": "OpenCompass Releases",
    "priority": "P0",
    "source_id": "opencompass",
-   "status": "active",
-   "tier": "L2",
-   "来源类型": "纯网页"
-  },
-  {
-   "dedup_key": "normalize(url)",
-   "dimension": "算力芯片云",
-   "endpoint": {
-    "link": "https://blogs.nvidia.com/feed/",
-    "text": "https://blogs.nvidia.com/feed/"
-   },
-   "fetch_method": "RSS",
-   "keyword_regex": "(gpu|tpu|blackwell|h100|mi3|inference|training|bedrock|vertex|datacenter|cuda|rocm|pricing|chip|compute)",
-   "lookback_window": "24h",
-   "name": "NVIDIA Blog",
-   "priority": "P0",
-   "source_id": "nvidia-blog",
-   "status": "active",
-   "tier": "L1",
-   "来源类型": "纯网页"
-  },
-  {
-   "dedup_key": "normalize(url)",
-   "dimension": "算力芯片云",
-   "endpoint": {
-    "link": "https://rocm.blogs.amd.com/blog/atom.xml",
-    "text": "https://rocm.blogs.amd.com/blog/atom.xml"
-   },
-   "fetch_method": "RSS",
-   "keyword_regex": "(gpu|tpu|blackwell|h100|mi3|inference|training|bedrock|vertex|datacenter|cuda|rocm|pricing|chip|compute)",
-   "lookback_window": "24h",
-   "name": "AMD Instinct / ROCm",
-   "priority": "P1",
-   "source_id": "amd-instinct",
-   "status": "active",
-   "tier": "L1",
-   "来源类型": "纯网页"
-  },
-  {
-   "dedup_key": "normalize(url)",
-   "dimension": "算力芯片云",
-   "endpoint": {
-    "link": "https://azure.microsoft.com/en-us/blog/feed/",
-    "text": "https://azure.microsoft.com/en-us/blog/feed/"
-   },
-   "fetch_method": "RSS",
-   "keyword_regex": "(gpu|tpu|blackwell|h100|mi3|inference|training|bedrock|vertex|datacenter|cuda|rocm|pricing|chip|compute)",
-   "lookback_window": "24h",
-   "name": "Microsoft Azure AI Infrastructure",
-   "priority": "P1",
-   "source_id": "azure-ai-infra",
-   "status": "active",
-   "tier": "L1",
-   "来源类型": "纯网页"
-  },
-  {
-   "dedup_key": "normalize(url)",
-   "dimension": "算力芯片云",
-   "endpoint": {
-    "link": "https://cloudblog.withgoogle.com/products/ai-machine-learning/rss/",
-    "text": "https://cloudblog.withgoogle.com/products/ai-machine-learning/rss/"
-   },
-   "fetch_method": "RSS",
-   "keyword_regex": "(gpu|tpu|blackwell|h100|mi3|inference|training|bedrock|vertex|datacenter|cuda|rocm|pricing|chip|compute)",
-   "lookback_window": "24h",
-   "name": "Google Cloud AI Blog",
-   "priority": "P0",
-   "source_id": "gcp-ai-infra",
-   "status": "active",
-   "tier": "L1",
-   "来源类型": "纯网页"
-  },
-  {
-   "dedup_key": "normalize(url)",
-   "dimension": "算力芯片云",
-   "endpoint": {
-    "link": "https://www.together.ai/blog/rss.xml",
-    "text": "https://www.together.ai/blog/rss.xml"
-   },
-   "fetch_method": "RSS",
-   "keyword_regex": "(gpu|tpu|blackwell|h100|mi3|inference|training|bedrock|vertex|datacenter|cuda|rocm|pricing|chip|compute)",
-   "lookback_window": "24h",
-   "name": "Together AI Blog",
-   "priority": "P1",
-   "source_id": "together-ai",
-   "status": "active",
-   "tier": "L2",
-   "来源类型": "纯网页"
-  },
-  {
-   "dedup_key": "normalize(url)",
-   "dimension": "算力芯片云",
-   "endpoint": {
-    "link": "https://lambda.ai/blog/rss.xml",
-    "text": "https://lambda.ai/blog/rss.xml"
-   },
-   "fetch_method": "RSS",
-   "keyword_regex": "(gpu|tpu|blackwell|h100|mi3|inference|training|bedrock|vertex|datacenter|cuda|rocm|pricing|chip|compute)",
-   "lookback_window": "24h",
-   "name": "Lambda Labs Blog",
-   "priority": "P1",
-   "source_id": "lambda-labs",
-   "status": "active",
-   "tier": "L2",
-   "来源类型": "纯网页"
-  },
-  {
-   "dedup_key": "normalize(url)",
-   "dimension": "算力芯片云",
-   "endpoint": {
-    "link": "https://epoch.ai/latest",
-    "text": "https://epoch.ai/latest"
-   },
-   "fetch_method": "Scrape",
-   "keyword_regex": "(gpu|tpu|blackwell|h100|mi3|inference|training|bedrock|vertex|datacenter|cuda|rocm|pricing|chip|compute)",
-   "lookback_window": "24h",
-   "name": "Epoch AI Compute Data",
-   "priority": "P1",
-   "source_id": "epoch-compute",
    "status": "active",
    "tier": "L2",
    "来源类型": "纯网页"
@@ -2312,101 +2296,6 @@
    "来源类型": "播客"
   },
   {
-   "dedup_key": "podcast_guid",
-   "dimension": "其他",
-   "endpoint": {
-    "link": "https://api.substack.com/feed/podcast/1084089.rss",
-    "text": "https://api.substack.com/feed/podcast/1084089.rss"
-   },
-   "extra_config": "{\"max_items\":6,\"max_duration_sec\":14400}",
-   "fetch_method": "Podcast",
-   "lookback_window": "7d",
-   "min_content_chars": 1,
-   "name": "Latent Space",
-   "notes": "白名单节目每期处理；新源先诊断验收",
-   "priority": "P2",
-   "source_id": "podcast-latent-space",
-   "status": "experimental",
-   "tier": "L4",
-   "来源类型": "播客"
-  },
-  {
-   "dedup_key": "podcast_guid",
-   "dimension": "其他",
-   "endpoint": {
-    "link": "https://feeds.megaphone.fm/nopriors",
-    "text": "https://feeds.megaphone.fm/nopriors"
-   },
-   "extra_config": "{\"max_items\":6,\"max_duration_sec\":14400}",
-   "fetch_method": "Podcast",
-   "lookback_window": "7d",
-   "min_content_chars": 1,
-   "name": "No Priors",
-   "notes": "白名单节目每期处理；新源先诊断验收",
-   "priority": "P2",
-   "source_id": "podcast-no-priors",
-   "status": "experimental",
-   "tier": "L4",
-   "来源类型": "播客"
-  },
-  {
-   "dedup_key": "podcast_guid",
-   "dimension": "其他",
-   "endpoint": {
-    "link": "https://feed.xyzfm.space/68fyjknth9hj",
-    "text": "https://feed.xyzfm.space/68fyjknth9hj"
-   },
-   "extra_config": "{\"max_items\":6,\"max_duration_sec\":14400}",
-   "fetch_method": "Podcast",
-   "lookback_window": "7d",
-   "min_content_chars": 1,
-   "name": "十字路口 Crossing",
-   "notes": "白名单节目每期处理；新源先诊断验收",
-   "priority": "P2",
-   "source_id": "podcast-crossing",
-   "status": "experimental",
-   "tier": "L4",
-   "来源类型": "播客"
-  },
-  {
-   "dedup_key": "podcast_guid",
-   "dimension": "其他",
-   "endpoint": {
-    "link": "https://www.ximalaya.com/album/74194808.xml",
-    "text": "https://www.ximalaya.com/album/74194808.xml"
-   },
-   "extra_config": "{\"max_items\":6,\"max_duration_sec\":14400}",
-   "fetch_method": "Podcast",
-   "lookback_window": "7d",
-   "min_content_chars": 1,
-   "name": "AI 炼金术",
-   "notes": "白名单节目每期处理；新源先诊断验收",
-   "priority": "P2",
-   "source_id": "podcast-ai-alchemy",
-   "status": "experimental",
-   "tier": "L4",
-   "来源类型": "播客"
-  },
-  {
-   "dedup_key": "podcast_guid",
-   "dimension": "其他",
-   "endpoint": {
-    "link": "https://feeds.fireside.fm/sv101/rss",
-    "text": "https://feeds.fireside.fm/sv101/rss"
-   },
-   "extra_config": "{\"max_items\":6,\"max_duration_sec\":14400}",
-   "fetch_method": "Podcast",
-   "lookback_window": "7d",
-   "min_content_chars": 1,
-   "name": "硅谷 101",
-   "notes": "白名单节目每期处理；新源先诊断验收",
-   "priority": "P2",
-   "source_id": "podcast-silicon-valley-101",
-   "status": "experimental",
-   "tier": "L4",
-   "来源类型": "播客"
-  },
-  {
    "dedup_key": "normalize(url)",
    "dimension": "其他",
    "fetch_method": "Manual",
@@ -2439,8 +2328,7 @@
    "priority": "P2",
    "source_id": "offline-events",
    "status": "paused",
-   "tier": "L4",
-   "来源类型": "纯网页"
+   "tier": "L4"
   },
   {
    "dedup_key": "normalize(url)",
@@ -2517,9 +2405,6 @@
    "来源类型": "纯网页"
   },
   {
-   "fetch_method": "Scrape"
-  },
-  {
    "dimension": "中文科技媒体",
    "endpoint": {
     "link": "https://www.qbitai.com/feed",
@@ -2528,6 +2413,7 @@
    "fetch_method": "RSS",
    "name": "量子位",
    "notes": "A类·官网可抓(拟走Scrape),不必依赖微信。AI产业报道",
+   "priority": "P1",
    "source_id": "qbitai",
    "status": "active",
    "来源类型": "公众号"
@@ -2541,6 +2427,7 @@
    "fetch_method": "RSS",
    "name": "智东西",
    "notes": "A类·官网可抓。AI硬件/芯片/端侧,含车东西/芯东西",
+   "priority": "P1",
    "source_id": "zhidx",
    "status": "active",
    "来源类型": "公众号"
@@ -2569,6 +2456,7 @@
    "fetch_method": "RSS",
    "name": "AI科技评论 / 雷峰网",
    "notes": "A类·雷峰网旗下(含新智驾)。AI前沿研究/落地",
+   "priority": "P1",
    "source_id": "leiphone",
    "status": "active",
    "来源类型": "公众号"
@@ -2584,6 +2472,7 @@
    "keyword_regex": "(人工智能|智能体|大模型|大语言模型|生成式|多模态|具身|算力|算法|芯片|GPU|机器学习|深度学习|神经网络|强化学习|扩散模型|机器人|自动驾驶|开源模型|AIGC|LLM|GPT|Claude|Gemini|DeepSeek|文心|通义|千问|Kimi|豆包|Llama|OpenAI|Anthropic|英伟达|Transformer)",
    "name": "虎嗅",
    "notes": "A类·官网有RSS。科技商业",
+   "priority": "P1",
    "source_id": "huxiu",
    "status": "active",
    "来源类型": "公众号"
@@ -2599,6 +2488,7 @@
    "keyword_regex": "(人工智能|智能体|大模型|大语言模型|生成式|多模态|具身|算力|算法|芯片|GPU|机器学习|深度学习|神经网络|强化学习|扩散模型|机器人|自动驾驶|开源模型|AIGC|LLM|GPT|Claude|Gemini|DeepSeek|文心|通义|千问|Kimi|豆包|Llama|OpenAI|Anthropic|英伟达|Transformer)",
    "name": "极客公园 / Founder Park",
    "notes": "A类·官网可抓。科技/AI创业",
+   "priority": "P1",
    "source_id": "geekpark",
    "status": "active",
    "来源类型": "公众号"
@@ -2614,6 +2504,7 @@
    "keyword_regex": "(人工智能|智能体|大模型|大语言模型|生成式|多模态|具身|算力|算法|芯片|GPU|机器学习|深度学习|神经网络|强化学习|扩散模型|机器人|自动驾驶|开源模型|AIGC|LLM|GPT|Claude|Gemini|DeepSeek|文心|通义|千问|Kimi|豆包|Llama|OpenAI|Anthropic|英伟达|Transformer)",
    "name": "品玩 / 硅星人",
    "notes": "A类·官网可抓,含硅星人。科技/AI",
+   "priority": "P1",
    "source_id": "pingwest",
    "status": "active",
    "来源类型": "公众号"
@@ -2629,6 +2520,7 @@
    "keyword_regex": "(人工智能|智能体|大模型|大语言模型|生成式|多模态|具身|算力|算法|芯片|GPU|机器学习|深度学习|神经网络|强化学习|扩散模型|机器人|自动驾驶|开源模型|AIGC|LLM|GPT|Claude|Gemini|DeepSeek|文心|通义|千问|Kimi|豆包|Llama|OpenAI|Anthropic|英伟达|Transformer)",
    "name": "澎湃新闻·科技",
    "notes": "A类·泛科技/时政·官网可抓",
+   "priority": "P1",
    "source_id": "thepaper",
    "status": "active",
    "来源类型": "公众号"
@@ -2642,6 +2534,7 @@
    "fetch_method": "RSS",
    "name": "界面新闻",
    "notes": "A类·财经商业·官网可抓",
+   "priority": "P1",
    "source_id": "jiemian",
    "status": "active",
    "来源类型": "公众号"
@@ -2657,6 +2550,7 @@
    "keyword_regex": "(人工智能|智能体|大模型|大语言模型|生成式|多模态|具身|算力|算法|芯片|GPU|机器学习|深度学习|神经网络|强化学习|扩散模型|机器人|自动驾驶|开源模型|AIGC|LLM|GPT|Claude|Gemini|DeepSeek|文心|通义|千问|Kimi|豆包|Llama|OpenAI|Anthropic|英伟达|Transformer)",
    "name": "华尔街见闻",
    "notes": "A类·财经/宏观·官网可抓",
+   "priority": "P1",
    "source_id": "wallstreetcn",
    "status": "active",
    "来源类型": "公众号"
@@ -2672,6 +2566,7 @@
    "keyword_regex": "(人工智能|智能体|大模型|大语言模型|生成式|多模态|具身|算力|算法|芯片|GPU|机器学习|深度学习|神经网络|强化学习|扩散模型|机器人|自动驾驶|开源模型|AIGC|LLM|GPT|Claude|Gemini|DeepSeek|文心|通义|千问|Kimi|豆包|Llama|OpenAI|Anthropic|英伟达|Transformer)",
    "name": "财新",
    "notes": "A类·财经深度(部分付费墙)·官网可抓",
+   "priority": "P1",
    "source_id": "caixin",
    "status": "active",
    "来源类型": "公众号"
@@ -2687,9 +2582,515 @@
    "keyword_regex": "(人工智能|智能体|大模型|大语言模型|生成式|多模态|具身|算力|算法|芯片|GPU|机器学习|深度学习|神经网络|强化学习|扩散模型|机器人|自动驾驶|开源模型|AIGC|LLM|GPT|Claude|Gemini|DeepSeek|文心|通义|千问|Kimi|豆包|Llama|OpenAI|Anthropic|英伟达|Transformer)",
    "name": "果壳",
    "notes": "A类·科普/思想·官网可抓",
+   "priority": "P1",
    "source_id": "guokr",
    "status": "active",
    "来源类型": "公众号"
+  },
+  {
+   "dedup_key": "youtube_video_id",
+   "dimension": "前沿模型公司",
+   "endpoint": {
+    "link": "https://www.youtube.com/channel/UC5-pBdfdA3KUo-vq72l-umA",
+    "text": "https://www.youtube.com/channel/UC5-pBdfdA3KUo-vq72l-umA"
+   },
+   "extra_config": "{\"platform\":\"youtube\",\"channel_id\":\"UC5-pBdfdA3KUo-vq72l-umA\",\"max_items\":10,\"include_shorts\":false,\"include_live\":true,\"transcript_strategy\":\"native_then_asr\"}",
+   "fetch_method": "Media",
+   "keyword_regex": "(model|release|launch|introducing|api|agent|reasoning|multimodal|open.weight|enterprise|mistral)",
+   "lookback_window": "72h",
+   "min_content_chars": 200,
+   "name": "Mistral AI YouTube",
+   "notes": "最近更新核验：2026-07-21；新 Media 链路待验收",
+   "priority": "P0",
+   "source_id": "youtube-mistral-ai",
+   "status": "active",
+   "tier": "L1",
+   "来源类型": "视频"
+  },
+  {
+   "dedup_key": "youtube_video_id",
+   "dimension": "前沿模型公司",
+   "endpoint": {
+    "link": "https://www.youtube.com/channel/UCrDwWp7EBBv4NwvScIpBDOA",
+    "text": "https://www.youtube.com/channel/UCrDwWp7EBBv4NwvScIpBDOA"
+   },
+   "extra_config": "{\"platform\":\"youtube\",\"channel_id\":\"UCrDwWp7EBBv4NwvScIpBDOA\",\"max_items\":10,\"include_shorts\":false,\"include_live\":true,\"transcript_strategy\":\"native_then_asr\"}",
+   "fetch_method": "Media",
+   "keyword_regex": "(model|release|launch|introducing|announcement|api|agent|reasoning|interpretability|safety|research|claude|anthropic)",
+   "lookback_window": "72h",
+   "min_content_chars": 200,
+   "name": "Anthropic YouTube",
+   "notes": "最近更新核验：2026-07-06；新 Media 链路待验收",
+   "priority": "P0",
+   "source_id": "youtube-anthropic",
+   "status": "active",
+   "tier": "L1",
+   "来源类型": "视频"
+  },
+  {
+   "dedup_key": "youtube_video_id",
+   "dimension": "技术研究开源",
+   "endpoint": {
+    "link": "https://www.youtube.com/channel/UCZHmQk67mSJgfCCTn7xBfew",
+    "text": "https://www.youtube.com/channel/UCZHmQk67mSJgfCCTn7xBfew"
+   },
+   "extra_config": "{\"platform\":\"youtube\",\"channel_id\":\"UCZHmQk67mSJgfCCTn7xBfew\",\"max_items\":5,\"include_shorts\":false,\"include_live\":false,\"transcript_strategy\":\"native_then_asr\"}",
+   "fetch_method": "Media",
+   "keyword_regex": "(paper|model|architecture|training|inference|reasoning|agent|benchmark|llm|transformer|diffusion|research)",
+   "lookback_window": "7d",
+   "min_content_chars": 300,
+   "name": "Yannic Kilcher YouTube",
+   "notes": "已排除：最近更新 2026-03-06，超过三个月更新窗口",
+   "priority": "P2",
+   "source_id": "youtube-yannic-kilcher",
+   "status": "paused",
+   "tier": "L3",
+   "来源类型": "视频"
+  },
+  {
+   "dedup_key": "youtube_video_id",
+   "dimension": "技术研究开源",
+   "endpoint": {
+    "link": "https://www.youtube.com/channel/UCbfYPyITQ-7l4upoX8nvctg",
+    "text": "https://www.youtube.com/channel/UCbfYPyITQ-7l4upoX8nvctg"
+   },
+   "extra_config": "{\"platform\":\"youtube\",\"channel_id\":\"UCbfYPyITQ-7l4upoX8nvctg\",\"max_items\":5,\"include_shorts\":false,\"include_live\":false,\"transcript_strategy\":\"native_then_asr\"}",
+   "fetch_method": "Media",
+   "keyword_regex": "(paper|model|research|ai|agent|robot|diffusion|multimodal|benchmark|simulation|graphics)",
+   "lookback_window": "7d",
+   "min_content_chars": 200,
+   "name": "Two Minute Papers YouTube",
+   "notes": "最近更新核验：2026-07-16；新 Media 链路待验收",
+   "priority": "P1",
+   "source_id": "youtube-two-minute-papers",
+   "status": "active",
+   "tier": "L3",
+   "来源类型": "视频"
+  },
+  {
+   "dedup_key": "youtube_video_id",
+   "dimension": "算力芯片云",
+   "endpoint": {
+    "link": "https://www.youtube.com/channel/UCHuiy8bXnmK5nisYHUd1J5g",
+    "text": "https://www.youtube.com/channel/UCHuiy8bXnmK5nisYHUd1J5g"
+   },
+   "extra_config": "{\"platform\":\"youtube\",\"channel_id\":\"UCHuiy8bXnmK5nisYHUd1J5g\",\"max_items\":10,\"include_shorts\":false,\"include_live\":true,\"transcript_strategy\":\"native_then_asr\"}",
+   "fetch_method": "Media",
+   "keyword_regex": "(ai|model|agent|training|inference|gpu|cuda|blackwell|rubin|robot|datacenter|nvidia)",
+   "lookback_window": "72h",
+   "min_content_chars": 200,
+   "name": "NVIDIA YouTube",
+   "notes": "近三个月有更新；新 Media 链路待验收",
+   "priority": "P0",
+   "source_id": "youtube-nvidia",
+   "status": "active",
+   "tier": "L1",
+   "来源类型": "视频"
+  },
+  {
+   "dedup_key": "youtube_video_id",
+   "dimension": "前沿模型公司",
+   "endpoint": {
+    "link": "https://www.youtube.com/channel/UCXZCJLdBC09xxGZ6gcdrc6A",
+    "text": "https://www.youtube.com/channel/UCXZCJLdBC09xxGZ6gcdrc6A"
+   },
+   "extra_config": "{\"platform\":\"youtube\",\"channel_id\":\"UCXZCJLdBC09xxGZ6gcdrc6A\",\"max_items\":10,\"include_shorts\":false,\"include_live\":true,\"transcript_strategy\":\"native_then_asr\"}",
+   "fetch_method": "Media",
+   "keyword_regex": "(model|release|launch|introducing|announcement|api|agent|reasoning|multimodal|benchmark|research|gpt|chatgpt|codex|openai)",
+   "lookback_window": "72h",
+   "min_content_chars": 200,
+   "name": "OpenAI YouTube",
+   "notes": "近三个月有更新；新 Media 链路待验收",
+   "priority": "P0",
+   "source_id": "youtube-openai",
+   "status": "active",
+   "tier": "L1",
+   "来源类型": "视频"
+  },
+  {
+   "dedup_key": "youtube_video_id",
+   "dimension": "技术研究开源",
+   "endpoint": {
+    "link": "https://www.youtube.com/channel/UCBpxspUNl1Th33XbugiHJzw",
+    "text": "https://www.youtube.com/channel/UCBpxspUNl1Th33XbugiHJzw"
+   },
+   "extra_config": "{\"platform\":\"youtube\",\"channel_id\":\"UCBpxspUNl1Th33XbugiHJzw\",\"max_items\":5,\"include_shorts\":false,\"include_live\":true,\"transcript_strategy\":\"native_then_asr\"}",
+   "fetch_method": "Media",
+   "keyword_regex": "(ai|artificial intelligence|machine learning|model|agent|robot|vision|language|system|research)",
+   "lookback_window": "7d",
+   "min_content_chars": 300,
+   "name": "MIT CSAIL YouTube",
+   "notes": "最近更新核验：2026-07；新 Media 链路待验收",
+   "priority": "P1",
+   "source_id": "youtube-mit-csail",
+   "status": "active",
+   "tier": "L1",
+   "来源类型": "视频"
+  },
+  {
+   "dedup_key": "youtube_video_id",
+   "dimension": "前沿模型公司",
+   "endpoint": {
+    "link": "https://www.youtube.com/channel/UCP7jMXSY2xbc3KCAE0MHQ-A",
+    "text": "https://www.youtube.com/channel/UCP7jMXSY2xbc3KCAE0MHQ-A"
+   },
+   "extra_config": "{\"platform\":\"youtube\",\"channel_id\":\"UCP7jMXSY2xbc3KCAE0MHQ-A\",\"max_items\":10,\"include_shorts\":false,\"include_live\":true,\"transcript_strategy\":\"native_then_asr\"}",
+   "fetch_method": "Media",
+   "keyword_regex": "(model|release|launch|introducing|agent|reasoning|multimodal|robot|science|research|gemini|deepmind|alphafold)",
+   "lookback_window": "72h",
+   "min_content_chars": 200,
+   "name": "Google DeepMind YouTube",
+   "notes": "近三个月有更新；新 Media 链路待验收",
+   "priority": "P0",
+   "source_id": "youtube-google-deepmind",
+   "status": "active",
+   "tier": "L1",
+   "来源类型": "视频"
+  },
+  {
+   "dedup_key": "youtube_video_id",
+   "dimension": "技术研究开源",
+   "endpoint": {
+    "link": "https://www.youtube.com/channel/UCBa5G_ESCn8Yd4vw5U-gIcg",
+    "text": "https://www.youtube.com/channel/UCBa5G_ESCn8Yd4vw5U-gIcg"
+   },
+   "extra_config": "{\"platform\":\"youtube\",\"channel_id\":\"UCBa5G_ESCn8Yd4vw5U-gIcg\",\"max_items\":5,\"include_shorts\":false,\"include_live\":true,\"transcript_strategy\":\"native_then_asr\"}",
+   "fetch_method": "Media",
+   "keyword_regex": "(ai|artificial intelligence|machine learning|deep learning|language model|agent|robot|inference|training|research)",
+   "lookback_window": "7d",
+   "min_content_chars": 300,
+   "name": "Stanford Online AI YouTube",
+   "notes": "最近更新核验：2026-07；新 Media 链路待验收",
+   "priority": "P1",
+   "source_id": "youtube-stanford-online",
+   "status": "active",
+   "tier": "L1",
+   "来源类型": "视频"
+  },
+  {
+   "dedup_key": "youtube_video_id",
+   "dimension": "技术研究开源",
+   "endpoint": {
+    "link": "https://www.youtube.com/channel/UCcIXc5mJsHVYTZR1maL5l9w",
+    "text": "https://www.youtube.com/channel/UCcIXc5mJsHVYTZR1maL5l9w"
+   },
+   "extra_config": "{\"platform\":\"youtube\",\"channel_id\":\"UCcIXc5mJsHVYTZR1maL5l9w\",\"max_items\":5,\"include_shorts\":false,\"include_live\":true,\"transcript_strategy\":\"native_then_asr\"}",
+   "fetch_method": "Media",
+   "keyword_regex": "(generative ai|llm|agent|rag|reasoning|inference|training|evaluation|multimodal|machine learning|deep learning)",
+   "lookback_window": "7d",
+   "min_content_chars": 300,
+   "name": "DeepLearning.AI YouTube",
+   "notes": "近三个月有更新；新 Media 链路待验收",
+   "priority": "P1",
+   "source_id": "youtube-deeplearning-ai",
+   "status": "active",
+   "tier": "L2",
+   "来源类型": "视频"
+  },
+  {
+   "dedup_key": "x_post_id",
+   "dimension": "其他",
+   "endpoint": {
+    "link": "https://api.x.com/2",
+    "text": "https://api.x.com/2"
+   },
+   "extra_config": "{\"platform\":\"x\",\"max_pages\":20}",
+   "fetch_method": "Social",
+   "lookback_window": "7d",
+   "min_content_chars": 30,
+   "name": "X 白名单账号",
+   "notes": "官方 API 增量采集；先以 10 个 P0 账号 experimental 灰度",
+   "priority": "P0",
+   "source_id": "social-media",
+   "status": "experimental",
+   "tier": "L4",
+   "来源类型": "社交媒体"
+  },
+  {
+   "dedup_key": "podcast_guid",
+   "dimension": "其他",
+   "endpoint": {
+    "link": "https://feeds.fireside.fm/sv101/rss",
+    "text": "https://feeds.fireside.fm/sv101/rss"
+   },
+   "extra_config": "{\"max_items\":6,\"max_duration_sec\":14400}",
+   "fetch_method": "Podcast",
+   "lookback_window": "7d",
+   "min_content_chars": 1,
+   "name": "硅谷 101",
+   "notes": "白名单节目每期处理；新源先诊断验收",
+   "priority": "P2",
+   "source_id": "podcast-silicon-valley-101",
+   "status": "experimental",
+   "tier": "L4",
+   "来源类型": "播客"
+  },
+  {
+   "dedup_key": "podcast_guid",
+   "dimension": "其他",
+   "endpoint": {
+    "link": "https://api.substack.com/feed/podcast/1084089.rss",
+    "text": "https://api.substack.com/feed/podcast/1084089.rss"
+   },
+   "extra_config": "{\"max_items\":6,\"max_duration_sec\":14400}",
+   "fetch_method": "Podcast",
+   "lookback_window": "7d",
+   "min_content_chars": 1,
+   "name": "Latent Space",
+   "notes": "白名单节目每期处理；新源先诊断验收",
+   "priority": "P2",
+   "source_id": "podcast-latent-space",
+   "status": "experimental",
+   "tier": "L4",
+   "来源类型": "播客"
+  },
+  {
+   "dedup_key": "podcast_guid",
+   "dimension": "其他",
+   "endpoint": {
+    "link": "https://feed.xyzfm.space/68fyjknth9hj",
+    "text": "https://feed.xyzfm.space/68fyjknth9hj"
+   },
+   "extra_config": "{\"max_items\":6,\"max_duration_sec\":14400}",
+   "fetch_method": "Podcast",
+   "lookback_window": "7d",
+   "min_content_chars": 1,
+   "name": "十字路口 Crossing",
+   "notes": "白名单节目每期处理；新源先诊断验收",
+   "priority": "P2",
+   "source_id": "podcast-crossing",
+   "status": "experimental",
+   "tier": "L4",
+   "来源类型": "播客"
+  },
+  {
+   "dedup_key": "podcast_guid",
+   "dimension": "其他",
+   "endpoint": {
+    "link": "https://www.ximalaya.com/album/74194808.xml",
+    "text": "https://www.ximalaya.com/album/74194808.xml"
+   },
+   "extra_config": "{\"max_items\":6,\"max_duration_sec\":14400}",
+   "fetch_method": "Podcast",
+   "lookback_window": "7d",
+   "min_content_chars": 1,
+   "name": "AI 炼金术",
+   "notes": "喜马拉雅 RSS 偶发超时；先诊断验收",
+   "priority": "P2",
+   "source_id": "podcast-ai-alchemy",
+   "status": "experimental",
+   "tier": "L4",
+   "来源类型": "播客"
+  },
+  {
+   "dedup_key": "podcast_guid",
+   "dimension": "其他",
+   "endpoint": {
+    "link": "https://feeds.megaphone.fm/nopriors",
+    "text": "https://feeds.megaphone.fm/nopriors"
+   },
+   "extra_config": "{\"max_items\":6,\"max_duration_sec\":14400}",
+   "fetch_method": "Podcast",
+   "lookback_window": "7d",
+   "min_content_chars": 1,
+   "name": "No Priors",
+   "notes": "白名单节目每期处理；新源先诊断验收",
+   "priority": "P2",
+   "source_id": "podcast-no-priors",
+   "status": "experimental",
+   "tier": "L4",
+   "来源类型": "播客"
+  },
+  {
+   "dedup_key": "normalize(url)",
+   "dimension": "前沿模型公司",
+   "endpoint": {
+    "link": "https://www.moonshot.cn/",
+    "text": "https://www.moonshot.cn/"
+   },
+   "fetch_method": "Scrape",
+   "keyword_regex": "(model|gpt|claude|gemini|llama|qwen|deepseek|grok|kimi|glm|minimax|step|hunyuan|agent|reasoning|multimodal|open.?source|发布|开源|模型|智能体|推理)",
+   "lookback_window": "72h",
+   "name": "Moonshot AI 月之暗面",
+   "notes": "国产厂商官方源；直连诊断 no_links_extracted（SPA，需 Jina）。待代理可用后复测",
+   "priority": "P0",
+   "source_id": "moonshot-ai",
+   "status": "experimental",
+   "tier": "L1",
+   "来源类型": "纯网页"
+  },
+  {
+   "dedup_key": "normalize(url)",
+   "dimension": "前沿模型公司",
+   "endpoint": {
+    "link": "https://www.zhipuai.cn/news",
+    "text": "https://www.zhipuai.cn/news"
+   },
+   "fetch_method": "Scrape",
+   "keyword_regex": "(model|gpt|claude|gemini|llama|qwen|deepseek|grok|kimi|glm|minimax|step|hunyuan|agent|reasoning|multimodal|open.?source|发布|开源|模型|智能体|推理)",
+   "lookback_window": "72h",
+   "name": "智谱 AI 新闻",
+   "notes": "国产厂商官方源；直连诊断 no_links_extracted（SPA，需 Jina）。待代理可用后复测",
+   "priority": "P0",
+   "source_id": "zhipu-ai",
+   "status": "experimental",
+   "tier": "L1",
+   "来源类型": "纯网页"
+  },
+  {
+   "dedup_key": "normalize(url)",
+   "dimension": "前沿模型公司",
+   "endpoint": {
+    "link": "https://www.minimax.io/news",
+    "text": "https://www.minimax.io/news"
+   },
+   "fetch_method": "Scrape",
+   "keyword_regex": "(model|gpt|claude|gemini|llama|qwen|deepseek|grok|kimi|glm|minimax|step|hunyuan|agent|reasoning|multimodal|open.?source|发布|开源|模型|智能体|推理)",
+   "lookback_window": "72h",
+   "name": "MiniMax News",
+   "notes": "国产厂商官方源；能抓到文章（2 篇）但页面无发布时间，清洗阶段被 missing_or_invalid_date 丢弃",
+   "priority": "P0",
+   "source_id": "minimax-ai",
+   "status": "experimental",
+   "tier": "L1",
+   "来源类型": "纯网页"
+  },
+  {
+   "dedup_key": "normalize(url)",
+   "dimension": "前沿模型公司",
+   "endpoint": {
+    "link": "https://platform.stepfun.com/",
+    "text": "https://platform.stepfun.com/"
+   },
+   "fetch_method": "Scrape",
+   "keyword_regex": "(model|gpt|claude|gemini|llama|qwen|deepseek|grok|kimi|glm|minimax|step|hunyuan|agent|reasoning|multimodal|open.?source|发布|开源|模型|智能体|推理)",
+   "lookback_window": "72h",
+   "name": "阶跃星辰 StepFun",
+   "notes": "国产厂商官方源；抓到 8 个链接但均无发布时间，清洗后为 0",
+   "priority": "P0",
+   "source_id": "stepfun-ai",
+   "status": "experimental",
+   "tier": "L1",
+   "来源类型": "纯网页"
+  },
+  {
+   "dedup_key": "normalize(url)",
+   "dimension": "算力芯片云",
+   "endpoint": {
+    "link": "https://blogs.nvidia.com/feed/",
+    "text": "https://blogs.nvidia.com/feed/"
+   },
+   "fetch_method": "RSS",
+   "keyword_regex": "(gpu|tpu|blackwell|h100|mi3|inference|training|bedrock|vertex|datacenter|cuda|rocm|pricing|chip|compute)",
+   "lookback_window": "24h",
+   "name": "NVIDIA Blog",
+   "priority": "P0",
+   "source_id": "nvidia-blog",
+   "status": "active",
+   "tier": "L1",
+   "来源类型": "纯网页"
+  },
+  {
+   "dedup_key": "normalize(url)",
+   "dimension": "算力芯片云",
+   "endpoint": {
+    "link": "https://rocm.blogs.amd.com/blog/atom.xml",
+    "text": "https://rocm.blogs.amd.com/blog/atom.xml"
+   },
+   "fetch_method": "RSS",
+   "keyword_regex": "(gpu|tpu|blackwell|h100|mi3|inference|training|bedrock|vertex|datacenter|cuda|rocm|pricing|chip|compute)",
+   "lookback_window": "24h",
+   "name": "AMD Instinct / ROCm",
+   "priority": "P1",
+   "source_id": "amd-instinct",
+   "status": "active",
+   "tier": "L1",
+   "来源类型": "纯网页"
+  },
+  {
+   "dedup_key": "normalize(url)",
+   "dimension": "算力芯片云",
+   "endpoint": {
+    "link": "https://azure.microsoft.com/en-us/blog/feed/",
+    "text": "https://azure.microsoft.com/en-us/blog/feed/"
+   },
+   "fetch_method": "RSS",
+   "keyword_regex": "(gpu|tpu|blackwell|h100|mi3|inference|training|bedrock|vertex|datacenter|cuda|rocm|pricing|chip|compute)",
+   "lookback_window": "24h",
+   "name": "Microsoft Azure AI Infrastructure",
+   "priority": "P1",
+   "source_id": "azure-ai-infra",
+   "status": "active",
+   "tier": "L1",
+   "来源类型": "纯网页"
+  },
+  {
+   "dedup_key": "normalize(url)",
+   "dimension": "算力芯片云",
+   "endpoint": {
+    "link": "https://cloudblog.withgoogle.com/products/ai-machine-learning/rss/",
+    "text": "https://cloudblog.withgoogle.com/products/ai-machine-learning/rss/"
+   },
+   "fetch_method": "RSS",
+   "keyword_regex": "(gpu|tpu|blackwell|h100|mi3|inference|training|bedrock|vertex|datacenter|cuda|rocm|pricing|chip|compute)",
+   "lookback_window": "24h",
+   "name": "Google Cloud AI Blog",
+   "priority": "P0",
+   "source_id": "gcp-ai-infra",
+   "status": "active",
+   "tier": "L1",
+   "来源类型": "纯网页"
+  },
+  {
+   "dedup_key": "normalize(url)",
+   "dimension": "算力芯片云",
+   "endpoint": {
+    "link": "https://www.together.ai/blog/rss.xml",
+    "text": "https://www.together.ai/blog/rss.xml"
+   },
+   "fetch_method": "RSS",
+   "keyword_regex": "(gpu|tpu|blackwell|h100|mi3|inference|training|bedrock|vertex|datacenter|cuda|rocm|pricing|chip|compute)",
+   "lookback_window": "24h",
+   "name": "Together AI Blog",
+   "priority": "P1",
+   "source_id": "together-ai",
+   "status": "active",
+   "tier": "L2",
+   "来源类型": "纯网页"
+  },
+  {
+   "dedup_key": "normalize(url)",
+   "dimension": "算力芯片云",
+   "endpoint": {
+    "link": "https://lambda.ai/blog/rss.xml",
+    "text": "https://lambda.ai/blog/rss.xml"
+   },
+   "fetch_method": "RSS",
+   "keyword_regex": "(gpu|tpu|blackwell|h100|mi3|inference|training|bedrock|vertex|datacenter|cuda|rocm|pricing|chip|compute)",
+   "lookback_window": "24h",
+   "name": "Lambda Labs Blog",
+   "priority": "P1",
+   "source_id": "lambda-labs",
+   "status": "active",
+   "tier": "L2",
+   "来源类型": "纯网页"
+  },
+  {
+   "dedup_key": "normalize(url)",
+   "dimension": "算力芯片云",
+   "endpoint": {
+    "link": "https://epoch.ai/latest",
+    "text": "https://epoch.ai/latest"
+   },
+   "fetch_method": "Scrape",
+   "keyword_regex": "(gpu|tpu|blackwell|h100|mi3|inference|training|bedrock|vertex|datacenter|cuda|rocm|pricing|chip|compute)",
+   "lookback_window": "24h",
+   "name": "Epoch AI Compute Data",
+   "priority": "P1",
+   "source_id": "epoch-compute",
+   "status": "active",
+   "tier": "L2",
+   "来源类型": "纯网页"
   }
  ],
  "二级参数-论文": [
@@ -2799,26 +3200,231 @@
   {
    "source_id": "jiqizhixin",
    "名称": "机器之心"
+  },
+  {
+   "source_id": "huxiu",
+   "名称": "虎嗅",
+   "备注": "中文媒体收敛：须命中 AI 关键词，排除股价/基金行情噪音",
+   "必含关键词": "ai,人工智能,大模型,模型,llm,gpt,claude,gemini,deepseek,kimi,qwen,通义,豆包,智谱,glm,minimax,阶跃,文心,混元,智能体,agent,多模态,推理,算力,芯片,gpu,英伟达,nvidia,开源,机器学习,深度学习,transformer,具身,机器人,自动驾驶,aigc,生成式",
+   "排除关键词": "etf,净流入,净流出,涨停,跌停,主力资金,北向资金,基金份额,申购,赎回,股价腰斩,市值蒸发,收盘,开盘,涨超,跌超,大盘,指数基金,券商,持仓,减持,增持,回购,财报预告,业绩快报",
+   "正文最小字数": 300
+  },
+  {
+   "source_id": "wallstreetcn",
+   "名称": "华尔街见闻",
+   "备注": "中文媒体收敛：须命中 AI 关键词，排除股价/基金行情噪音",
+   "必含关键词": "ai,人工智能,大模型,模型,llm,gpt,claude,gemini,deepseek,kimi,qwen,通义,豆包,智谱,glm,minimax,阶跃,文心,混元,智能体,agent,多模态,推理,算力,芯片,gpu,英伟达,nvidia,开源,机器学习,深度学习,transformer,具身,机器人,自动驾驶,aigc,生成式",
+   "排除关键词": "etf,净流入,净流出,涨停,跌停,主力资金,北向资金,基金份额,申购,赎回,股价腰斩,市值蒸发,收盘,开盘,涨超,跌超,大盘,指数基金,券商,持仓,减持,增持,回购,财报预告,业绩快报",
+   "正文最小字数": 300
+  },
+  {
+   "source_id": "caixin",
+   "名称": "财新",
+   "备注": "中文媒体收敛：须命中 AI 关键词，排除股价/基金行情噪音",
+   "必含关键词": "ai,人工智能,大模型,模型,llm,gpt,claude,gemini,deepseek,kimi,qwen,通义,豆包,智谱,glm,minimax,阶跃,文心,混元,智能体,agent,多模态,推理,算力,芯片,gpu,英伟达,nvidia,开源,机器学习,深度学习,transformer,具身,机器人,自动驾驶,aigc,生成式",
+   "排除关键词": "etf,净流入,净流出,涨停,跌停,主力资金,北向资金,基金份额,申购,赎回,股价腰斩,市值蒸发,收盘,开盘,涨超,跌超,大盘,指数基金,券商,持仓,减持,增持,回购,财报预告,业绩快报",
+   "正文最小字数": 300
+  },
+  {
+   "source_id": "thepaper",
+   "名称": "澎湃新闻",
+   "备注": "中文媒体收敛：须命中 AI 关键词，排除股价/基金行情噪音",
+   "必含关键词": "ai,人工智能,大模型,模型,llm,gpt,claude,gemini,deepseek,kimi,qwen,通义,豆包,智谱,glm,minimax,阶跃,文心,混元,智能体,agent,多模态,推理,算力,芯片,gpu,英伟达,nvidia,开源,机器学习,深度学习,transformer,具身,机器人,自动驾驶,aigc,生成式",
+   "排除关键词": "etf,净流入,净流出,涨停,跌停,主力资金,北向资金,基金份额,申购,赎回,股价腰斩,市值蒸发,收盘,开盘,涨超,跌超,大盘,指数基金,券商,持仓,减持,增持,回购,财报预告,业绩快报",
+   "正文最小字数": 300
+  },
+  {
+   "source_id": "guokr",
+   "名称": "果壳",
+   "备注": "中文媒体收敛：须命中 AI 关键词，排除股价/基金行情噪音",
+   "必含关键词": "ai,人工智能,大模型,模型,llm,gpt,claude,gemini,deepseek,kimi,qwen,通义,豆包,智谱,glm,minimax,阶跃,文心,混元,智能体,agent,多模态,推理,算力,芯片,gpu,英伟达,nvidia,开源,机器学习,深度学习,transformer,具身,机器人,自动驾驶,aigc,生成式",
+   "排除关键词": "etf,净流入,净流出,涨停,跌停,主力资金,北向资金,基金份额,申购,赎回,股价腰斩,市值蒸发,收盘,开盘,涨超,跌超,大盘,指数基金,券商,持仓,减持,增持,回购,财报预告,业绩快报",
+   "正文最小字数": 300
+  },
+  {
+   "source_id": "jiemian",
+   "名称": "界面新闻",
+   "备注": "中文媒体收敛：须命中 AI 关键词，排除股价/基金行情噪音",
+   "必含关键词": "ai,人工智能,大模型,模型,llm,gpt,claude,gemini,deepseek,kimi,qwen,通义,豆包,智谱,glm,minimax,阶跃,文心,混元,智能体,agent,多模态,推理,算力,芯片,gpu,英伟达,nvidia,开源,机器学习,深度学习,transformer,具身,机器人,自动驾驶,aigc,生成式",
+   "排除关键词": "etf,净流入,净流出,涨停,跌停,主力资金,北向资金,基金份额,申购,赎回,股价腰斩,市值蒸发,收盘,开盘,涨超,跌超,大盘,指数基金,券商,持仓,减持,增持,回购,财报预告,业绩快报",
+   "正文最小字数": 300
+  },
+  {
+   "source_id": "pingwest",
+   "名称": "品玩",
+   "备注": "中文媒体收敛：须命中 AI 关键词，排除股价/基金行情噪音",
+   "必含关键词": "ai,人工智能,大模型,模型,llm,gpt,claude,gemini,deepseek,kimi,qwen,通义,豆包,智谱,glm,minimax,阶跃,文心,混元,智能体,agent,多模态,推理,算力,芯片,gpu,英伟达,nvidia,开源,机器学习,深度学习,transformer,具身,机器人,自动驾驶,aigc,生成式",
+   "排除关键词": "etf,净流入,净流出,涨停,跌停,主力资金,北向资金,基金份额,申购,赎回,股价腰斩,市值蒸发,收盘,开盘,涨超,跌超,大盘,指数基金,券商,持仓,减持,增持,回购,财报预告,业绩快报",
+   "正文最小字数": 300
+  },
+  {
+   "source_id": "geekpark",
+   "名称": "极客公园",
+   "备注": "中文媒体收敛：须命中 AI 关键词，排除股价/基金行情噪音",
+   "必含关键词": "ai,人工智能,大模型,模型,llm,gpt,claude,gemini,deepseek,kimi,qwen,通义,豆包,智谱,glm,minimax,阶跃,文心,混元,智能体,agent,多模态,推理,算力,芯片,gpu,英伟达,nvidia,开源,机器学习,深度学习,transformer,具身,机器人,自动驾驶,aigc,生成式",
+   "排除关键词": "etf,净流入,净流出,涨停,跌停,主力资金,北向资金,基金份额,申购,赎回,股价腰斩,市值蒸发,收盘,开盘,涨超,跌超,大盘,指数基金,券商,持仓,减持,增持,回购,财报预告,业绩快报",
+   "正文最小字数": 300
+  },
+  {
+   "source_id": "zhidx",
+   "名称": "智东西",
+   "备注": "中文媒体收敛：须命中 AI 关键词，排除股价/基金行情噪音",
+   "必含关键词": "ai,人工智能,大模型,模型,llm,gpt,claude,gemini,deepseek,kimi,qwen,通义,豆包,智谱,glm,minimax,阶跃,文心,混元,智能体,agent,多模态,推理,算力,芯片,gpu,英伟达,nvidia,开源,机器学习,深度学习,transformer,具身,机器人,自动驾驶,aigc,生成式",
+   "排除关键词": "etf,净流入,净流出,涨停,跌停,主力资金,北向资金,基金份额,申购,赎回,股价腰斩,市值蒸发,收盘,开盘,涨超,跌超,大盘,指数基金,券商,持仓,减持,增持,回购,财报预告,业绩快报",
+   "正文最小字数": 300
+  },
+  {
+   "source_id": "leiphone",
+   "名称": "雷峰网",
+   "备注": "中文媒体收敛：须命中 AI 关键词，排除股价/基金行情噪音",
+   "必含关键词": "ai,人工智能,大模型,模型,llm,gpt,claude,gemini,deepseek,kimi,qwen,通义,豆包,智谱,glm,minimax,阶跃,文心,混元,智能体,agent,多模态,推理,算力,芯片,gpu,英伟达,nvidia,开源,机器学习,深度学习,transformer,具身,机器人,自动驾驶,aigc,生成式",
+   "排除关键词": "etf,净流入,净流出,涨停,跌停,主力资金,北向资金,基金份额,申购,赎回,股价腰斩,市值蒸发,收盘,开盘,涨超,跌超,大盘,指数基金,券商,持仓,减持,增持,回购,财报预告,业绩快报",
+   "正文最小字数": 300
+  },
+  {
+   "source_id": "qbitai",
+   "名称": "量子位",
+   "备注": "中文媒体收敛：须命中 AI 关键词，排除股价/基金行情噪音",
+   "必含关键词": "ai,人工智能,大模型,模型,llm,gpt,claude,gemini,deepseek,kimi,qwen,通义,豆包,智谱,glm,minimax,阶跃,文心,混元,智能体,agent,多模态,推理,算力,芯片,gpu,英伟达,nvidia,开源,机器学习,深度学习,transformer,具身,机器人,自动驾驶,aigc,生成式",
+   "排除关键词": "etf,净流入,净流出,涨停,跌停,主力资金,北向资金,基金份额,申购,赎回,股价腰斩,市值蒸发,收盘,开盘,涨超,跌超,大盘,指数基金,券商,持仓,减持,增持,回购,财报预告,业绩快报",
+   "正文最小字数": 300
   }
  ],
  "二级参数-视频": [
   {
-   "source_id": "video-channels",
-   "名称": "视频频道"
+   "source_id": "youtube-mistral-ai",
+   "名称": "Mistral AI YouTube",
+   "备注": "P0 官方源；不设播放量门槛，优先原生字幕",
+   "必含关键词": "Mistral, model, API, agent, reasoning, multimodal, open weight, enterprise",
+   "最低播放量": 0,
+   "最短时长秒": 60,
+   "最长时长秒": 7200,
+   "语言": "en",
+   "需要转写": true,
+   "频道白名单": "Mistral, Mistral AI, UC5-pBdfdA3KUo-vq72l-umA"
+  },
+  {
+   "source_id": "youtube-openai",
+   "名称": "OpenAI YouTube",
+   "备注": "P0 官方源；不设播放量门槛，优先原生字幕，无字幕再 ASR",
+   "必含关键词": "OpenAI, GPT, ChatGPT, Codex, model, API, agent, reasoning, research",
+   "最低播放量": 0,
+   "最短时长秒": 60,
+   "最长时长秒": 7200,
+   "语言": "en",
+   "需要转写": true,
+   "频道白名单": "OpenAI, UCXZCJLdBC09xxGZ6gcdrc6A"
+  },
+  {
+   "source_id": "youtube-google-deepmind",
+   "名称": "Google DeepMind YouTube",
+   "备注": "P0 官方源；不设播放量门槛，过滤品牌宣传和非 AI 内容",
+   "必含关键词": "DeepMind, Gemini, AI, model, science, multimodal, robot, reasoning, research",
+   "最低播放量": 0,
+   "最短时长秒": 60,
+   "最长时长秒": 7200,
+   "语言": "en",
+   "需要转写": true,
+   "频道白名单": "Google DeepMind, UCP7jMXSY2xbc3KCAE0MHQ-A"
+  },
+  {
+   "source_id": "youtube-deeplearning-ai",
+   "名称": "DeepLearning.AI YouTube",
+   "备注": "P1 工程教育源；过滤课程促销，仅保留技术内容",
+   "必含关键词": "generative AI, LLM, agent, RAG, reasoning, inference, training, evaluation, multimodal, deep learning",
+   "最低播放量": 0,
+   "最短时长秒": 120,
+   "最长时长秒": 7200,
+   "语言": "en",
+   "需要转写": true,
+   "频道白名单": "DeepLearning.AI, DeepLearningAI, UCcIXc5mJsHVYTZR1maL5l9w"
+  },
+  {
+   "source_id": "youtube-stanford-online",
+   "名称": "Stanford Online AI YouTube",
+   "备注": "P1 教学研究源；只保留 AI 相关课程和讲座，排除泛课程",
+   "必含关键词": "AI, artificial intelligence, machine learning, deep learning, language model, agent, robot, inference, training",
+   "最低播放量": 0,
+   "最短时长秒": 300,
+   "最长时长秒": 10800,
+   "语言": "en",
+   "需要转写": true,
+   "频道白名单": "Stanford Online, UCBa5G_ESCn8Yd4vw5U-gIcg"
+  },
+  {
+   "source_id": "youtube-anthropic",
+   "名称": "Anthropic YouTube",
+   "备注": "P0 官方源；不设播放量门槛，优先原生字幕，无字幕再 ASR",
+   "必含关键词": "Anthropic, Claude, model, API, agent, reasoning, interpretability, safety, research",
+   "最低播放量": 0,
+   "最短时长秒": 60,
+   "最长时长秒": 7200,
+   "语言": "en",
+   "需要转写": true,
+   "频道白名单": "Anthropic, UCrDwWp7EBBv4NwvScIpBDOA"
+  },
+  {
+   "source_id": "youtube-nvidia",
+   "名称": "NVIDIA YouTube",
+   "备注": "P0 官方源；允许 3 小时 keynote，过滤游戏与消费显卡营销内容",
+   "必含关键词": "AI, model, agent, GPU, CUDA, Blackwell, Rubin, inference, training, robot, datacenter",
+   "最低播放量": 0,
+   "最短时长秒": 60,
+   "最长时长秒": 10800,
+   "语言": "en",
+   "需要转写": true,
+   "频道白名单": "NVIDIA, UCHuiy8bXnmK5nisYHUd1J5g"
+  },
+  {
+   "source_id": "youtube-two-minute-papers",
+   "名称": "Two Minute Papers YouTube",
+   "备注": "P1 解读源；短视频为主要形态，播放量门槛用于压制低信号内容",
+   "必含关键词": "AI, paper, model, research, robot, diffusion, multimodal, benchmark, simulation",
+   "最低播放量": 1000,
+   "最短时长秒": 120,
+   "最长时长秒": 1800,
+   "语言": "en",
+   "需要转写": true,
+   "频道白名单": "Two Minute Papers, UCbfYPyITQ-7l4upoX8nvctg"
+  },
+  {
+   "source_id": "youtube-mit-csail",
+   "名称": "MIT CSAIL YouTube",
+   "备注": "P1 官方研究机构；允许讲座和研讨会，不设播放量门槛",
+   "必含关键词": "AI, artificial intelligence, machine learning, model, agent, robot, vision, language, system, research",
+   "最低播放量": 0,
+   "最短时长秒": 120,
+   "最长时长秒": 10800,
+   "语言": "en",
+   "需要转写": true,
+   "频道白名单": "MIT CSAIL, UCBpxspUNl1Th33XbugiHJzw"
   }
  ],
  "二级参数-社媒": [
   {
+   "P0每日上限": 5,
+   "P1每日上限": 2,
    "source_id": "social-media",
-   "名称": "社交媒体账号"
+   "名称": "X 白名单账号",
+   "启用智能精筛": true,
+   "备注": "首批 10 个官方账号；稳定运行一周后再扩容",
+   "排除回复": true,
+   "排除转发": true,
+   "智能精筛起始分": 45,
+   "正文最少字数": 30,
+   "直接入库分": 70,
+   "账号分级": "{\"openai\":\"P0\",\"anthropicai\":\"P0\",\"googledeepmind\":\"P0\",\"aiatmeta\":\"P0\",\"xai\":\"P0\",\"mistralai\":\"P0\",\"cohere\":\"P0\",\"huggingface\":\"P0\",\"nvidiaai\":\"P0\",\"stabilityai\":\"P0\"}",
+   "账号白名单": "OpenAI,AnthropicAI,GoogleDeepMind,AIatMeta,xai,MistralAI,cohere,huggingface,NVIDIAAI,StabilityAI"
   }
  ],
  "二级参数-GitHub": [
   {
    "source_id": "github-trending",
    "主题白名单": "llm,large-language-models,llmops,agent,ai-agent,ai-agents,rag,retrieval-augmented-generation,inference,llm-inference,mlops,transformers,diffusion,diffusion-models,fine-tuning,vector-database,embeddings,multimodal,reasoning,generative-ai,deep-learning,machine-learning,nlp,computer-vision,model-serving,quantization",
-   "备注": "纯沉淀型：绝对星标+近期活跃，去掉增速/爆发加权",
+   "发布窗口天数": 30,
+   "备注": "时间判定按发布事件：窗口内发过 release，或仓库本身是窗口内新建；pushed_at 只代表日常提交，不作数。",
    "排除主题": "awesome,awesome-list,book,books,tutorial,tutorials,roadmap,interview,interviews,cheatsheet,cheat-sheet,course,courses,learning-resources",
+   "新项目最低星标": 1000,
    "检索关键词": "llm,agent,rag,inference,diffusion,multimodal,transformer,fine-tuning"
   }
  ]
