@@ -519,7 +519,7 @@ def backfill_full_text(items: list[dict[str, Any]]) -> int:
         for item in items
         if len(str(item.get("raw_content") or "")) < FULLTEXT_MIN_CHARS
         and str(item.get("url") or "").startswith(("http://", "https://"))
-        and item.get("fetch_method") not in {"Media", "Podcast"}
+        and item.get("fetch_method") not in {"Media", "Social", "Podcast"}
         # arXiv 的摘要就是合适的正文，抓 HTML 全文只会引入噪音
         and "arxiv.org/" not in str(item.get("url") or "")
     ]

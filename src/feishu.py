@@ -241,6 +241,7 @@ def ensure_entry_enrichment_fields(token: str) -> None:
         ("录用会议", 1),
         ("社区热度", 2),
         ("论文指标", 1),
+        ("社媒指标", 1),
         ("播客指标", 1),
     ):
         if field_name in existing:
@@ -292,6 +293,66 @@ def ensure_paper_config_fields(token: str) -> None:
             )
 
 
+def ensure_social_config_fields(token: str) -> None:
+    """幂等补齐 Social 运行态与筛选配置字段。"""
+    wanted = {
+        config.FEISHU_PARAM_TABLE_ID: [("采集游标", 1)],
+        config.FEISHU_SOCIAL_CONFIG_TABLE_ID: [
+            ("账号分级", 1),
+            ("排除回复", 7),
+            ("正文最少字数", 2),
+            ("直接入库分", 2),
+            ("智能精筛起始分", 2),
+            ("启用智能精筛", 7),
+            ("P0每日上限", 2),
+            ("P1每日上限", 2),
+            ("互动基线", 1),
+        ],
+    }
+    headers = {"Authorization": f"Bearer {token}", "Content-Type": "application/json; charset=utf-8"}
+    for table_id, fields in wanted.items():
+        if not table_id:
+            continue
+        existing = {field.get("field_name") for field in _list_fields(token, table_id)}
+        base = (
+            f"{config.FEISHU_HOST}/open-apis/bitable/v1/apps/{config.FEISHU_BASE_ID}"
+            f"/tables/{table_id}/fields"
+        )
+        for field_name, field_type in fields:
+            if field_name in existing:
+                continue
+            created = _SESSION.post(
+                base,
+                headers=headers,
+                json={"field_name": field_name, "type": field_type},
+                timeout=30,
+            ).json()
+            if created.get("code") != 0:
+                raise FeishuError(
+                    f"Feishu create social field {field_name} failed: "
+                    f"{created.get('code')} {created.get('msg')}"
+                )
+
+
+def update_social_cursor_states(
+    token: str,
+    feeds: list[dict[str, Any]],
+    cursor_states: dict[str, dict[str, Any]],
+) -> int:
+    """成功完成一轮处理后，按源持久化账号 user_id/since_id/轮询时间。"""
+    updates = []
+    for feed in feeds:
+        source_id = str(feed.get("id") or "")
+        record_id = str(feed.get("record_id") or "")
+        state = cursor_states.get(source_id)
+        if record_id and state is not None:
+            updates.append(
+                {
+                    "record_id": record_id,
+                    "fields": {"采集游标": json.dumps(state, ensure_ascii=False, separators=(",", ":"))},
+                }
+            )
+    return batch_update_records(token, config.FEISHU_PARAM_TABLE_ID, updates)
 
 
 SIGNAL_FORMAT_OPTIONS = ("论文", "纯网页", "视频", "社交媒体", "公众号", "播客", "Github热榜", "其他")

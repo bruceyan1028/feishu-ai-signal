@@ -1,0 +1,42 @@
+name: X Social Signal Ingest
+
+on:
+  schedule:
+    # 每 2 小时触发；采集器用飞书水位将 P0/P1 分别限为 2h/4h。
+    - cron: "17 */2 * * *"
+  workflow_dispatch: {}
+
+concurrency:
+  group: social-ingest
+  cancel-in-progress: false
+
+jobs:
+  ingest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      FEISHU_APP_ID: ${{ secrets.FEISHU_APP_ID }}
+      FEISHU_APP_SECRET: ${{ secrets.FEISHU_APP_SECRET }}
+      FEISHU_BASE_ID: ${{ secrets.FEISHU_BASE_ID }}
+      FEISHU_SOURCE_TABLE_ID: ${{ secrets.FEISHU_SOURCE_TABLE_ID }}
+      FEISHU_PARAM_TABLE_ID: ${{ secrets.FEISHU_PARAM_TABLE_ID }}
+      FEISHU_ENTRY_TABLE_ID: ${{ secrets.FEISHU_ENTRY_TABLE_ID }}
+      FEISHU_PAPER_CONFIG_TABLE_ID: ${{ secrets.FEISHU_PAPER_CONFIG_TABLE_ID }}
+      FEISHU_WECHAT_CONFIG_TABLE_ID: ${{ secrets.FEISHU_WECHAT_CONFIG_TABLE_ID }}
+      FEISHU_VIDEO_CONFIG_TABLE_ID: ${{ secrets.FEISHU_VIDEO_CONFIG_TABLE_ID }}
+      FEISHU_SOCIAL_CONFIG_TABLE_ID: ${{ secrets.FEISHU_SOCIAL_CONFIG_TABLE_ID }}
+      FEISHU_GITHUB_CONFIG_TABLE_ID: ${{ secrets.FEISHU_GITHUB_CONFIG_TABLE_ID }}
+      X_BEARER_TOKEN: ${{ secrets.X_BEARER_TOKEN }}
+      LLM_API_KEY: ${{ secrets.LLM_API_KEY }}
+      LLM_BASE_URL: ${{ secrets.LLM_BASE_URL }}
+      LLM_MODEL: ${{ secrets.LLM_MODEL }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install -r requirements.txt
+      - run: python -m unittest tests.test_social -v
+      - name: Ingest X whitelist accounts
+        run: python -m src.main --method Social

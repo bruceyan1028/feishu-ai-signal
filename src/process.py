@@ -79,6 +79,12 @@ def build_dedup_key(url: str, title: str, feed: dict[str, Any]) -> str:
         guid = str(feed.get("podcast_guid") or "").strip()
         if guid:
             return f"podcast:{guid}"[:240]
+    if feed.get("fetch_method") == "Social" or "x_post_id" in strategy:
+        if feed.get("x_post_id"):
+            return f"x:{feed['x_post_id']}"
+        match = re.search(r"(?:x|twitter)\.com/[^/]+/status/(\d+)", url, re.I)
+        if match:
+            return f"x:{match.group(1)}"
     if feed.get("fetch_method") == "Media" or "youtube_video_id" in strategy:
         match = re.search(r"(?:youtu\.be/|youtube\.com/(?:watch\?v=|shorts/|embed/))([\w-]{11})", url, re.I)
         if match:
@@ -185,9 +191,9 @@ def process_and_clean(
         keyword_re = _safe_regex(feed.get("keyword_regex"))
         kw_min_hits = max(1, int(feed.get("keyword_min_hits") or 1))
         min_chars = feed.get("min_content_chars") or 100
-        # Bridge 已按账号白名单筛选；Podcast 仍需主题过滤，避免白名单节目中的非 AI 单集。
+        # Bridge/Social 已按账号白名单筛选；Podcast 仍需主题过滤，避免白名单节目中的非 AI 单集。
         fetch_method = feed.get("fetch_method")
-        skip_keyword = fetch_method == "Bridge"
+        skip_keyword = fetch_method in {"Bridge", "Social"}
 
         url = normalize_url(item.get("url"))
         title = strip_html(item.get("title"))
@@ -228,7 +234,7 @@ def process_and_clean(
         # 这类条目先放行并标记，等去重后回源抓到全文，再由调用方按最终正文复判。
         needs_fulltext = len(combined) < min_chars and feed.get("fetch_method") not in {
             "Media",
-            "Podcast",
+            "Social",
         }
         if needs_fulltext and not _can_backfill_fulltext(url):
             funnel["min_content_chars"] += 1
@@ -323,6 +329,16 @@ def process_and_clean(
                 log.debug("类型过滤丢弃 %s（%s: %s）", url, type_cfg["entity_type"], reason)
                 continue
 
+        is_social = (
+            (type_cfg or {}).get("entity_type") == "social"
+            or feed.get("source_type") == sources.SIGNAL_FORMAT_SOCIAL
+            or feed.get("fetch_method") == "Social"
+        )
+        if is_social:
+            quality_fields = {
+                "quality_score": float(metrics.get("social_score") or 0),
+                "social_metrics_json": metrics,
+            }
 
         if duplicate_key in seen:
             funnel["dup_round"] += 1
@@ -420,10 +436,11 @@ def format_for_feishu(item: dict[str, Any]) -> dict[str, Any]:
     image = _to_link(item.get("image_url") or "", "原文配图")
     if image:
         fields["图片链接"] = image
-    if item.get("paper_metrics_json") or (
+    if item.get("paper_metrics_json") or item.get("social_metrics_json") or (
         item.get("quality_score") is not None
         and (
             item.get("source_type") == sources.SIGNAL_FORMAT_PAPER
+            or item.get("source_type") == sources.SIGNAL_FORMAT_SOCIAL
             or str(item.get("source_id") or "").startswith("arxiv-")
         )
     ):
@@ -435,6 +452,9 @@ def format_for_feishu(item: dict[str, Any]) -> dict[str, Any]:
         metrics_json = item.get("paper_metrics_json")
         if metrics_json:
             fields["论文指标"] = json.dumps(metrics_json, ensure_ascii=False)
+        social_metrics = item.get("social_metrics_json")
+        if social_metrics:
+            fields["社媒指标"] = json.dumps(social_metrics, ensure_ascii=False)
     podcast_metrics = item.get("podcast_metrics_json")
     if podcast_metrics:
         fields["播客指标"] = json.dumps(podcast_metrics, ensure_ascii=False)

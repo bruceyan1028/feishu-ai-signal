@@ -12,6 +12,7 @@ from urllib.parse import quote
 from . import config
 
 FEED_METHODS = {"RSS"}
+SOCIAL_METHODS = {"Social"}
 PODCAST_METHODS = {"Podcast"}
 _B_SET = {"chatbot-arena", "artificial-analysis", "papers-with-code-sota"}
 
@@ -177,6 +178,10 @@ def infer_signal_format(
     if et in _ENTITY_TO_FORMAT:
         return _ENTITY_TO_FORMAT[et]
 
+    if fetch_method == "Social" or sid_l in _SOCIAL_IDS or any(
+        h in url for h in ("x.com/", "twitter.com/", "weibo.com/", "linkedin.com/", "xiaohongshu.com")
+    ):
+        return SIGNAL_FORMAT_SOCIAL
     if fetch_method == "Bridge" or any(m in sid_l for m in _WECHAT_MARKERS) or "mp.weixin.qq.com" in url:
         return SIGNAL_FORMAT_WECHAT
     if sid_l.startswith("arxiv-") or sid_l in _PAPER_IDS or any(
@@ -187,10 +192,6 @@ def infer_signal_format(
         return SIGNAL_FORMAT_GITHUB
     if sid_l in _VIDEO_IDS or any(h in url for h in ("youtube.com", "youtu.be", "bilibili.com", "vimeo.com")):
         return SIGNAL_FORMAT_VIDEO
-    if sid_l in _SOCIAL_IDS or any(
-        h in url for h in ("x.com/", "twitter.com/", "weibo.com/", "linkedin.com/", "xiaohongshu.com")
-    ):
-        return SIGNAL_FORMAT_SOCIAL
     if any(m in sid_l for m in _PODCAST_MARKERS) or any(h in url for h in ("spotify.com", "xiaoyuzhoufm.com")):
         return SIGNAL_FORMAT_PODCAST
     if sid or url:
@@ -373,8 +374,70 @@ def map_podcast_sources(
                 "record_id": str(rec.get("record_id") or ""),
                 "status": status,
                 "source_type": SIGNAL_FORMAT_PODCAST,
+                # 白名单节目每期都处理；节目准入本身就是筛选器。
                 "min_content_chars": 1,
                 "dedup_key": "podcast_guid",
+            }
+        )
+        out.append(feed)
+    return out
+
+
+def map_social_sources(
+    records: list[dict[str, Any]],
+    social_params: dict[str, Any] | None = None,
+    *,
+    allow_experimental: bool = False,
+) -> list[dict[str, Any]]:
+    """映射 X 白名单账号源；正式流水线只收 active，诊断可收 experimental。"""
+    out: list[dict[str, Any]] = []
+    social_params = social_params or {}
+    for rec in records:
+        f = rec.get("fields") or {}
+        fetch_method = str(cell(f.get("fetch_method")) or "")
+        source_id = str(cell(f.get("source_id")) or "")
+        explicit = cell(f.get("来源类型")) or cell(f.get("source_type"))
+        if fetch_method not in SOCIAL_METHODS:
+            continue
+        if infer_signal_format(
+            source_id,
+            endpoint=str(cell(f.get("endpoint")) or ""),
+            fetch_method=fetch_method,
+            explicit_type=str(explicit) if explicit else None,
+        ) != SIGNAL_FORMAT_SOCIAL:
+            continue
+        status = str(cell(f.get("status")) or "active")
+        if status == "paused" or status != "active" and not (
+            allow_experimental and status == "experimental"
+        ):
+            continue
+        extra = _parse_extra(f) or {}
+        feed = _base_feed(f, extra, "Social")
+        params = social_params.get(source_id) or {}
+        whitelist = params.get("account_whitelist") or extra.get("accounts") or []
+        tiers = dict(params.get("account_tiers") or extra.get("account_tiers") or {})
+        accounts = []
+        for raw in whitelist:
+            username = str(raw.get("username") if isinstance(raw, dict) else raw).strip().lstrip("@").lower()
+            if username and username not in accounts:
+                accounts.append(username)
+        if not accounts:
+            continue
+        try:
+            cursor_state = json.loads(str(cell(f.get("采集游标")) or "{}"))
+        except (TypeError, ValueError):
+            cursor_state = {}
+        feed.update(
+            {
+                "record_id": str(rec.get("record_id") or ""),
+                "status": status,
+                "source_type": SIGNAL_FORMAT_SOCIAL,
+                "accounts": accounts,
+                "account_tiers": {str(k).lstrip("@").lower(): str(v).upper() for k, v in tiers.items()},
+                "cursor_state": cursor_state if isinstance(cursor_state, dict) else {},
+                "social_params": params,
+                "min_content_chars": int(params.get("min_content_chars") or 30),
+                "dedup_key": "x_post_id",
             }
         )
         out.append(feed)

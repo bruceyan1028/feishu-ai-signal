@@ -2,7 +2,7 @@
 
 一个可端到端跑通的 AI 情报闭环：
 
-`飞书参数表 → 真实 RSS / Scrape 抓取 → 条目表 → LLM 分析回写 → 每日简报表 → GitHub Pages → 飞书消息卡片`
+`飞书参数表 → RSS / Scrape / Media / Social / Podcast 抓取 → 条目表 → LLM 分析回写 → 每日简报表 → GitHub Pages → 飞书消息卡片`
 
 网页沿用 `ai-signal-dashboard/demo/index.html` 的视觉与交互；今日简报、信号列表与详情为真实数据，评论/笔记/周报等演示功能仍为本地模拟。
 
@@ -65,6 +65,8 @@ python -m src.bootstrap          # 加 --no-seed 可只建表不写默认数据
 | `FEISHU_*_CONFIG_TABLE_ID` | 5 张类型化配置表，同样粘 bootstrap 输出 |
 | `LLM_API_KEY` / `LLM_BASE_URL` / `LLM_MODEL` | 生成每日简报用（OpenAI 兼容，如 DeepSeek / 通义 / OpenAI） |
 | `JINA_API_KEY` | 可选，Scrape 抓取更稳定 |
+| `X_BEARER_TOKEN` | 可选，启用 X 白名单账号 Social 源时必填 |
+| `ASR_API_KEY` / `ASR_BASE_URL` / `ASR_MODEL` | 可选，播客没有公开 transcript 时调用的托管转录接口 |
 | `FEISHU_RECIPIENT_OPEN_IDS` | 卡片接收人 `open_id`，逗号分隔（发卡片时需要） |
 | `PUBLIC_BASE_URL` | 卡片里跳转的公网站点地址 |
 
@@ -82,13 +84,19 @@ python -m src.main
 # ② 采集 Scrape 源（公众号 / GitHub热榜 / HF·PwC 论文等）写入条目表
 python -m src.diag_scrape --write
 
-# ③ LLM 分析近七日候选，生成每日简报（需要 LLM_API_KEY）
+# ③ 只读诊断 experimental X 白名单源（需要 X_BEARER_TOKEN）
+python -m src.diag_social --source-id social-media
+
+# ④ 诊断播客 RSS、转录和完整摘要；加 --write 才写条目
+python -m src.diag_podcast --source-id podcast-latent-space [--write]
+
+# ⑤ LLM 分析近七日候选，生成每日简报（需要 LLM_API_KEY）
 python -m src.daily --output output/daily-brief.json
 
-# ④ 从飞书拉数据生成静态站点
+# ⑥ 从飞书拉数据生成静态站点
 python -m src.publish --input output/daily-brief.json
 
-# ⑤ 本地预览
+# ⑥ 本地预览
 python -m http.server 4173 --directory site
 ```
 
@@ -131,6 +139,20 @@ python -m src.diag_scrape --write --source-id huxiu --limit 1
 - `extra_config.link_path_include`：列表页抽链时只保留匹配路径的 URL（如 `^/article/`），挡掉个人页/标签页。
 - `extra_config.force_direct`：强制直连抓取（跳过 Jina），适合 Jina 渲染后抽链失败的站点。
 
+### X 白名单账号
+
+- `Social` 使用 X API v2 的账号时间线与 `since_id` 增量水位；水位存于一级参数的「采集游标」，条目成功处理后才推进。
+- 二级参数-社媒维护账号白名单、P0/P1 分级、回复/转发策略、评分阈值与账号日上限。默认种子含 10 个 P0 官方账号，保持 `experimental`。
+- 帖子依次经过硬过滤、0–100 可解释评分和临界区 LLM 精筛；原创 thread 会按 `conversation_id` 合并，去重键为 `x:{post_id}`。
+- 先运行 `python -m src.diag_social` 验收读取数、筛选漏斗和样本；链路通过后再把一级参数改为 `active`，并同步将信号源表状态改为「已接入」。
+
+### 播客完整摘要
+
+- `Podcast` 每档白名单节目对应一条 RSS 源；节目准入本身就是筛选器，白名单内每期处理。
+- 文本按 `podcast:transcript` → 节目页文字稿/YouTube 字幕 → 托管 ASR 的顺序获取。长音频由 ffmpeg 切片，ASR 使用独立的 OpenAI-compatible 配置。
+- 逐字稿先按时间段归纳，再合并成带时间戳的证据稿、300–600 字完整中文摘要和深度解读；逐字稿仅作中间数据。
+- 默认六档中英文节目均为 `experimental/待测`。先用 `python -m src.diag_podcast --source-id ... --write` 验收并回写采集统计，通过后再同步升级两张源表状态。
+
 ### 论文质量（A/D/E）
 
 - **A 录用**：解析 arXiv comment / journal_ref 的 `Accepted to …`（仅常见会议/期刊），对照「期刊会议白/黑名单」。
@@ -145,24 +167,28 @@ python -m src.diag_scrape --write --source-id huxiu --limit 1
 
 ## 数据规则
 
-- **采集**：参数表中 `status=active` 的 `RSS` 源走 `python -m src.main`；`Scrape` 源走 `python -m src.diag_scrape --write`。
-- **简报候选**：近七日、`active` 的 **RSS + Scrape** 源（公众号、GitHub热榜、HF/PwC 论文都能进简报）。官方源优先，arXiv 受 `MAX_ARXIV_ITEMS` 限制。
-- 原文链接、来源、发布时间、摘要、评分、路由来源（RSS/Scrape）均写入条目表；去重键沿用条目表；每日简报表首次运行自动创建。
+- **采集**：参数表中 `status=active` 的 `RSS / Scrape / Media / Social` 源走默认 `python -m src.main`；Podcast 由独立工作流调用 `python -m src.main --method Podcast`。experimental 源先用对应诊断命令验收。
+- **简报候选**：近七日、`active` 的 **RSS + Scrape + Media + Social + Podcast** 源。官方源优先，arXiv 与视频/播客分别受数量限制。
+- 原文链接、来源、发布时间、摘要、评分、路由来源均写入条目表；去重键沿用条目表；每日简报表首次运行自动创建。
 
 ---
 
 ## GitHub Pages 自动化
 
-两个工作流：
+四个工作流：
 
 - `daily-brief.yml`：北京时间每天 09:00 采集 RSS、LLM 分析、部署 Pages、发送飞书卡片；支持手动运行（`workflow_dispatch`）与强制重发。
 - `ingest.yml`：仅手动触发（`workflow_dispatch`）的 RSS 采集，日常采集已并入 `daily-brief.yml`（每日一次）。
+- `social-ingest.yml`：每 2 小时触发 X 白名单采集；采集器内部将 P0/P1 分别限制为 2 小时/4 小时间隔。
+- `podcast-ingest.yml`：每天独立处理白名单播客，安装 ffmpeg，并为长音频转录保留更长超时。
 
 在 GitHub Actions Secrets 配置：
 
 - 必填：`FEISHU_APP_ID`、`FEISHU_APP_SECRET`、`LLM_API_KEY`、`FEISHU_RECIPIENT_OPEN_IDS`
 - 可选：`FEISHU_BASE_ID`、`FEISHU_PARAM_TABLE_ID`、`FEISHU_ENTRY_TABLE_ID`、`FEISHU_BRIEF_TABLE_ID`
 - 可选论文/LLM：`PAPER_QUALITY_MIN_SCORE`、`MAX_ARXIV_ITEMS`、`PAPER_ENRICH_ENABLED`、`LLM_BASE_URL`、`LLM_MODEL`
+- 可选社媒：`X_BEARER_TOKEN`（启用 Social 源时必填）
+- 可选播客：`ASR_API_KEY`、`ASR_BASE_URL`、`ASR_MODEL`（无公开 transcript 时必填）
 
 仓库 Settings → Pages 的 Source 选择 **GitHub Actions**，首次可在 Actions 手动运行 `Daily AI Signal Brief`。
 
@@ -178,6 +204,12 @@ python -m src.diag_scrape [--engine auto|jina|direct] [--limit N] [--source-id x
 
 # 论文富集诊断
 python -m src.diag_paper
+
+# X 白名单源只读诊断
+python -m src.diag_social --source-id social-media
+
+# 播客 RSS / transcript / ASR / 摘要诊断（采集统计始终回写；加 --write 写条目）
+python -m src.diag_podcast --source-id podcast-latent-space [--write]
 
 # 单元测试
 python -m unittest discover -s tests -v

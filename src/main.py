@@ -13,6 +13,7 @@ from . import (
     process,
     rss,
     scrape,
+    social,
     sources,
     typed_config,
     video,
@@ -109,7 +110,7 @@ def _prepare_scrape_sources(
 
 
 def run(methods: set[str] | None = None) -> int:
-    enabled = methods or {"RSS", "Scrape", "Media"}
+    enabled = methods or {"RSS", "Scrape", "Media", "Social"}
     config.validate()
 
     token = feishu.get_tenant_access_token()
@@ -120,8 +121,15 @@ def run(methods: set[str] | None = None) -> int:
     except feishu.FeishuError as exc:
         log.warning("补齐论文配置字段失败: %s", exc)
     try:
+        feishu.ensure_social_config_fields(token)
+    except feishu.FeishuError as exc:
+        log.warning("补齐社媒配置字段失败: %s", exc)
+    try:
         feishu.ensure_source_type_field(token, config.FEISHU_PARAM_TABLE_ID)
         feishu.ensure_source_type_field(token, config.FEISHU_SOURCE_TABLE_ID)
+        feishu.ensure_select_option(token, config.FEISHU_PARAM_TABLE_ID, "fetch_method", "Social")
+        feishu.ensure_select_option(token, config.FEISHU_SOURCE_TABLE_ID, "获取方式", "Social")
+        feishu.ensure_select_option(token, config.FEISHU_ENTRY_TABLE_ID, "路由来源", "Social")
         feishu.ensure_select_option(token, config.FEISHU_PARAM_TABLE_ID, "fetch_method", "Podcast")
         feishu.ensure_select_option(token, config.FEISHU_SOURCE_TABLE_ID, "获取方式", "Podcast")
         feishu.ensure_select_option(token, config.FEISHU_ENTRY_TABLE_ID, "路由来源", "Podcast")
@@ -161,8 +169,22 @@ def run(methods: set[str] | None = None) -> int:
     podcast_sources = sources.map_podcast_sources(records) if "Podcast" in enabled else []
     log.info("启用的 Podcast 源 %d 个", len(podcast_sources))
 
+    social_params = {
+        source_id: cfg.get("params") or {}
+        for source_id, cfg in type_configs.items()
+        if cfg.get("entity_type") == "social"
+    }
+    social_sources = (
+        sources.map_social_sources(records, social_params)
+        if "Social" in enabled
+        else []
+    )
+    log.info("启用的 Social 源 %d 个（账号 %d 个）", len(social_sources), sum(
+        len(feed.get("accounts") or []) for feed in social_sources
+    ))
 
     raw_items: list[dict] = []
+    social_batch = social.SocialFetchBatch()
     if feed_sources:
         raw_items += rss.fetch_feed_sources(feed_sources)
     if scrape_sources:
@@ -179,6 +201,28 @@ def run(methods: set[str] | None = None) -> int:
             log.warning("Media 视频采集失败，本轮跳过：%s", exc)
     if podcast_sources:
         raw_items += podcast.fetch_podcast_sources(podcast_sources)
+    if social_sources:
+        try:
+            social_batch = social.fetch_social_sources(social_sources)
+            recent_records = feishu.read_all_records(
+                token,
+                config.FEISHU_ENTRY_TABLE_ID,
+                ["标题", "原文", "来源", "发布时间"],
+            )
+            recent_texts, account_counts = social.recent_context(recent_records)
+            social_items, social_stats = social.filter_social_items(
+                social_batch.items,
+                recent_texts=recent_texts,
+                existing_account_counts=account_counts,
+            )
+            raw_items += social_items
+            log.info(
+                "Social 筛选漏斗 %s；API 读取 %d 条",
+                social_stats,
+                sum(social_batch.read_counts.values()),
+            )
+        except Exception as exc:  # noqa: BLE001 - 不让社媒接口故障拖垮其它来源
+            log.warning("Social 采集失败，本轮跳过：%s", exc)
     log.info("抓取到原始条目 %d 条", len(raw_items))
 
     drop_stats: dict[str, int] = {}
@@ -218,6 +262,7 @@ def run(methods: set[str] | None = None) -> int:
         | {f["id"] for f in scrape_sources}
         | {f["id"] for f in media_sources}
         | {f["id"] for f in podcast_sources}
+        | {f["id"] for f in social_sources}
     )
     try:
         feishu.sync_param_collect_stats(
@@ -232,12 +277,16 @@ def run(methods: set[str] | None = None) -> int:
         log.warning("回写源采集统计失败: %s", exc)
 
     if not new_items:
+        if social_batch.cursor_states:
+            feishu.update_social_cursor_states(token, social_sources, social_batch.cursor_states)
         log.info("全部已入库，结束")
         return 0
 
     fields_list = [process.format_for_feishu(item) for item in new_items]
     created = feishu.batch_create_records(token, fields_list)
     log.info("写入飞书完成，共 %d 条", created)
+    if social_batch.cursor_states:
+        feishu.update_social_cursor_states(token, social_sources, social_batch.cursor_states)
 
     _trigger_dify(new_items)
     return 0
@@ -248,7 +297,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "--method",
         action="append",
-        choices=["RSS", "Scrape", "Media", "Podcast"],
+        choices=["RSS", "Scrape", "Media", "Social", "Podcast"],
         help="只运行指定采集方式，可重复传入；默认运行全部",
     )
     args = parser.parse_args()
