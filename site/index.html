@@ -712,7 +712,20 @@ async function loadBrief(){
     seedDemoComments(signals);
     render();
   } catch(error) {
-    console.warn('真实简报加载失败，保留内置演示数据：', error);
+    console.warn('真实简报加载失败：', error);
+    // 这里若保留内置演示数据，用户会把一份日期完全不同的假简报当成当天内容，
+    // 且没有任何提示可以察觉。宁可显示空状态，也不能显示看起来像真的假数据。
+    briefMeta = {
+      date: date || '',
+      title: date ? `${date} 暂无简报` : '简报暂时无法加载',
+      intro: date
+        ? '没有找到该日期的简报数据：这天可能没有运行采集，或者链接里的日期有误。去掉网址里的 ?date= 参数即可查看最新一期。'
+        : `简报数据加载失败（${error.message}），请稍后重试。`,
+    };
+    bullets = [];
+    signals = [];
+    personal = [];
+    render();
   }
 }
 const App = {

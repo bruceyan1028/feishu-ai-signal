@@ -12,7 +12,8 @@ on:
         default: false
 
 permissions:
-  contents: read
+  # 生成的简报数据要回写仓库，否则只存在于本次 run 的 Pages 产物里
+  contents: write
   pages: write
   id-token: write
 
@@ -76,6 +77,22 @@ jobs:
 
       - name: Build static site from Feishu
         run: python -m src.publish --input output/daily-brief.json
+
+      # Pages 的内容是每次 run 的产物、不落库；而 pages-preview.yml 会在任何一次
+      # 改前端的 push 上、用仓库里的 site/ 重新部署。不回写就会出现「改一次前端，
+      # 线上简报被打回上次提交时的日期」。回写后两条部署路径的内容才一致。
+      - name: Commit generated brief data
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A site
+          if git diff --cached --quiet; then
+            echo "站点数据无变化，跳过提交"
+          else
+            git commit -m "chore(site): 发布 $(TZ=Asia/Shanghai date +%Y-%m-%d) 简报数据 [skip ci]"
+            git pull --rebase --autostash origin main
+            git push origin HEAD:main
+          fi
 
       - uses: actions/configure-pages@v5
         with:
