@@ -691,6 +691,22 @@ async function loadBrief(){
       priority: s.priority || '',
     }));
     signals.forEach(s => { s.contentType = signalContentType(s); s.kind = s.contentType || '文章'; });
+    // 编号即阅读顺序：按影响分从高到低重排后再编号，默认视图才会是连续的 1、2、3…
+    // 同分时用新颖度、发布时间兜底，保证每次加载的顺序稳定。
+    // 简报要点里的引用编号是按后端给出的信号顺序算的，重排后必须一并改写，
+    // 否则「跳转到 #N」会跳到另一条信号上。
+    const refRemap = new Map();
+    signals.sort((a, b) =>
+      b.impact - a.impact ||
+      b.novel - a.novel ||
+      String(b.date).localeCompare(String(a.date)) ||
+      a.rank - b.rank
+    );
+    signals.forEach((s, index) => { refRemap.set(s.rank, index + 1); s.rank = index + 1; });
+    bullets = bullets.map(b => ({
+      ...b,
+      refs: (b.refs || []).map(r => refRemap.get(r)).filter(Boolean),
+    }));
     const seenImages = new Set();
     signals.forEach(s=>{
       const imageKey = s.image.split(/[?#]/)[0].toLowerCase();
