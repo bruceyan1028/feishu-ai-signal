@@ -145,6 +145,95 @@
   /* --- 索引跳转:卡片高亮闪动 --- */
   @keyframes flashred { 0%, 30%, 60%, 100% { box-shadow: 0 0 0 0 rgba(255,90,90,0); } 15%, 45%, 75% { box-shadow: 0 0 0 3px rgba(255,90,90,.5); } }
   .flash-red { animation: flashred 1.5s ease-in-out; }
+
+  /* ============================================================
+     移动端布局。桌面尺寸全部写在内联 style 上,行内样式优先级高于
+     选择器,所以这一段必须用 !important 才能覆盖。
+     断点 760px 与 .brief-grid 保持一致。
+     ============================================================ */
+  @media (max-width: 760px) {
+    /* 硬阴影(box-shadow: 5px 5px 0)会撑出横向滚动条 */
+    body { overflow-x: hidden; }
+    /* iOS 在 font-size < 16px 的输入框获得焦点时会强制放大页面,
+       放大后整页错位,这是手机上「排版乱掉」最常见的诱因 */
+    input, select, textarea { font-size: 16px !important; }
+
+    /* --- 顶栏:品牌 + 操作一行,导航独占第二行可横向滑动 --- */
+    .top-bar { flex-wrap: wrap; height: auto !important; padding: 8px 12px !important; gap: 8px !important; }
+    .top-brand { height: 32px !important; padding: 0 10px !important; }
+    .top-nav { order: 3; flex: 1 0 100%; gap: 6px !important; overflow-x: auto; scrollbar-width: none; }
+    .top-nav::-webkit-scrollbar { display: none; }
+    .top-item { flex: none; height: 32px !important; padding: 0 11px !important; font-size: 12.5px !important; }
+    .top-actions { margin-left: auto; gap: 6px !important; }
+    .top-stats { display: none !important; }
+
+    /* --- 版心:去掉左右虚线轨道,收紧留白 --- */
+    .page-rail { border-left: none !important; border-right: none !important; }
+    .personal-rail { padding: 16px 12px !important; }
+    .sec-pad { padding: 22px 16px 30px !important; }
+    .page-shell { padding: 22px 16px 48px !important; }
+    .page-title { font-size: 21px !important; }
+    .divider-row { gap: 10px !important; padding: 12px 14px !important; }
+    .divider-tail { display: none !important; }
+
+    /* --- 简报头 --- */
+    .masthead { flex-wrap: wrap; gap: 8px !important; margin-bottom: 18px !important; }
+    .masthead > span:last-child { display: none; }
+    .hero-title { font-size: 29px !important; line-height: 1.15 !important; }
+    .hero-intro { font-size: 15px !important; line-height: 1.65 !important; margin-bottom: 20px !important; }
+
+    /* --- 简报卡片:头条编号改为顶部色带,标题一律折行 --- */
+    .brief-grid { gap: 12px; }
+    .brief-featured { flex-direction: column !important; }
+    .bf-num { width: 100% !important; height: 42px !important; justify-content: flex-start !important; padding-left: 15px !important; border-right: none !important; border-bottom: 1.5px solid var(--ds-ink-line) !important; }
+    .bf-num span { font-size: 24px !important; }
+    .bf-body { padding: 15px 14px !important; gap: 9px !important; }
+    .bf-head { flex-wrap: wrap; gap: 8px !important; }
+    .bc-title { font-size: 16px !important; white-space: normal !important; padding: 6px 10px !important; }
+    .bc-title br { display: none; }
+    .bc-text { font-size: 14.5px !important; line-height: 1.7 !important; }
+
+    /* --- 信号卡片:配图与正文改为上下堆叠 --- */
+    .signal-card { flex-direction: column !important; min-height: 0 !important; }
+    .sc-media { width: 100% !important; height: 166px !important; border-right: none !important; border-bottom: 1.5px solid var(--ds-ink-line) !important; }
+    .sc-meta { padding: 9px 42px 9px 12px !important; gap: 6px !important; }
+    .sc-tags { display: none !important; }
+    .sc-scores { margin-left: 0 !important; }
+    .sc-main { padding: 13px 12px !important; }
+    .sc-title { font-size: 17px !important; }
+    .sc-subtitle { font-size: 11px !important; }
+    .sc-why { padding: 11px 12px !important; }
+    /* 触屏没有 hover,位移效果会让卡片看着像错位 */
+    .signal-card:hover, .brief-card:hover, .personal-card:hover { transform: none !important; }
+
+    /* --- 多列区块一律单列 --- */
+    .personal-grid, .task-split, .form-grid { grid-template-columns: 1fr !important; }
+    .pc-basis { flex-direction: column !important; gap: 6px !important; }
+    /* 数据源表是真表格,窄屏改为容器内横向滚动而不是压扁 */
+    .src-table { overflow-x: auto !important; -webkit-overflow-scrolling: touch; }
+    .src-table > div { min-width: 860px; }
+
+    /* --- 详情浮层:占满全屏 --- */
+    .detail-overlay { padding: 0 !important; }
+    .detail-panel { max-width: none !important; min-height: 100vh; border: none !important; border-radius: 0 !important; }
+    .detail-head { padding: 22px 16px 0 !important; }
+    /* 首行标签要给右上角关闭按钮让位 */
+    .detail-head > div:first-child { padding-right: 40px; }
+    .detail-title { font-size: 20px !important; }
+    .detail-body { padding: 4px 16px 12px !important; }
+    .detail-ask { padding: 10px 12px 14px !important; }
+    .detail-close { top: 10px !important; right: 10px !important; }
+    .dtab { height: 34px !important; padding: 0 12px !important; font-size: 12.5px !important; }
+
+    /* --- 侧栏:改为近全宽抽屉,收起把手交给顶栏按钮 --- */
+    .edge-tab { display: none !important; }
+    .side-panel { left: 8px !important; right: 8px !important; width: auto !important; top: 64px !important; bottom: 84px !important; }
+
+    /* --- 底部对话条 --- */
+    .bottom-bar { padding: 8px 10px calc(8px + env(safe-area-inset-bottom)) !important; }
+    .bot-avatar { display: none !important; }
+    .send-btn { padding: 0 16px !important; }
+  }
 </style>
 </head>
 <body>
@@ -846,14 +935,14 @@ function headerHtml(A){
     </button>`;
   }).join('');
   return `
-  <header style="position: sticky; top: 0; z-index: 60; display: flex; align-items: center; gap: 16px; padding: 0 24px; height: 60px; background: #f4f1ea; border-bottom: 1.5px solid var(--ds-ink-line);">
-    <div style="display: flex; align-items: center; gap: 9px; height: 38px; padding: 0 13px; background: var(--ds-ink-line);">
+  <header class="top-bar" style="position: sticky; top: 0; z-index: 60; display: flex; align-items: center; gap: 16px; padding: 0 24px; height: 60px; background: #f4f1ea; border-bottom: 1.5px solid var(--ds-ink-line);">
+    <div class="top-brand" style="display: flex; align-items: center; gap: 9px; height: 38px; padding: 0 13px; background: var(--ds-ink-line);">
       <span style="width: 9px; height: 9px; background: ${A.accent};"></span>
       <span style="font-size: 15px; font-weight: 700; letter-spacing: -.01em; color: #fff;">AI Signal</span>
     </div>
-    <nav style="display: flex; align-items: center; gap: 6px;">${navBtns}</nav>
-    <div style="margin-left: auto; display: flex; align-items: center; gap: 10px; font-size: 12px; font-family: 'Geist Mono', ui-monospace, Menlo, monospace;">
-      <span style="display: inline-flex; align-items: center; height: 32px; padding: 0 11px; background: #fff; border: 1.5px solid var(--ds-ink-line); color: var(--ds-text); font-weight: 700;">${signals.length} 条 · ${state.sources.filter(s=>s.on).length} 源</span>
+    <nav class="top-nav" style="display: flex; align-items: center; gap: 6px;">${navBtns}</nav>
+    <div class="top-actions" style="margin-left: auto; display: flex; align-items: center; gap: 10px; font-size: 12px; font-family: 'Geist Mono', ui-monospace, Menlo, monospace;">
+      <span class="top-stats" style="display: inline-flex; align-items: center; height: 32px; padding: 0 11px; background: #fff; border: 1.5px solid var(--ds-ink-line); color: var(--ds-text); font-weight: 700;">${signals.length} 条 · ${state.sources.filter(s=>s.on).length} 源</span>
       <button onclick="App.toggleHistory()" title="AI 对话历史" style="display: inline-flex; align-items: center; gap: 5px; height: 32px; padding: 0 12px; border: 1.5px solid var(--ds-ink-line); background: ${state.historyOpen?A.accent:'#fff'}; color: ${state.historyOpen?'#fff':'var(--ds-text)'}; font-size: 12px; font-weight: 700; cursor: pointer; font-family: inherit;">✦ 历史</button>
       <button onclick="App.toggleFavPanel()" title="收藏栏" style="display: inline-flex; align-items: center; gap: 5px; height: 32px; padding: 0 12px; border: 1.5px solid var(--ds-ink-line); background: ${state.favOpen?A.accent:'#fff'}; color: ${state.favOpen?'#fff':'var(--ds-text)'}; font-size: 12px; font-weight: 700; cursor: pointer; font-family: inherit;">★ ${state.favorites.length}</button>
     </div>
@@ -863,9 +952,9 @@ function headerHtml(A){
 // 底部 AI 对话条:浅色底,输入区附方角卡片层(历史见左侧栏)
 function bottomBarHtml(A){
   return `
-  <nav style="position: fixed; left: 0; right: 0; bottom: 0; z-index: 60; padding: 12px 16px calc(12px + env(safe-area-inset-bottom)); background: #f4f1ea; border-top: 1.5px solid var(--ds-ink-line);">
+  <nav class="bottom-bar" style="position: fixed; left: 0; right: 0; bottom: 0; z-index: 60; padding: 12px 16px calc(12px + env(safe-area-inset-bottom)); background: #f4f1ea; border-top: 1.5px solid var(--ds-ink-line);">
     <div style="display: flex; gap: 8px; width: min(760px, 100%); margin: 0 auto; align-items: center;">
-      <span style="flex: none; width: 40px; height: 40px; display: inline-flex; align-items: center; justify-content: center; background: var(--ds-ink-line); color: #fff; font-size: 15px;">✦</span>
+      <span class="bot-avatar" style="flex: none; width: 40px; height: 40px; display: inline-flex; align-items: center; justify-content: center; background: var(--ds-ink-line); color: #fff; font-size: 15px;">✦</span>
       <input id="botInput" class="bot-input" placeholder="问 AI 助手:调整偏好、解读信号、推荐来源…" onkeydown="if(event.key==='Enter'){event.preventDefault();App.sendBottomChat();}" />
       <button class="send-btn" onclick="App.sendBottomChat()" style="height: 40px; padding: 0 22px; border: 1.5px solid var(--ds-ink-line); background: ${A.accent}; color: #ffffff; font-size: 13px; font-weight: 700; cursor: pointer;">发送</button>
     </div>
@@ -993,14 +1082,14 @@ function techDivider(A, num, label, onDark){
   const bg = onDark ? 'transparent' : '#ffffff';
   return `
   <div style="position: relative; background: ${bg};">
-    <div style="max-width: 1180px; margin: 0 auto; border-left: 1px dashed ${rail}; border-right: 1px dashed ${rail};">
-      <div style="position: relative; display: flex; align-items: center; gap: 14px; padding: 16px 24px;">
+    <div class="page-rail" style="max-width: 1180px; margin: 0 auto; border-left: 1px dashed ${rail}; border-right: 1px dashed ${rail};">
+      <div class="divider-row" style="position: relative; display: flex; align-items: center; gap: 14px; padding: 16px 24px;">
         <span style="width: 7px; height: 7px; border: 1px solid ${A.accent}; background: ${A.accentSoft}; transform: rotate(45deg); flex: none;"></span>
         <span style="font-family: 'Geist Mono', ui-monospace, Menlo, monospace; font-size: 11px; font-weight: 600; letter-spacing: .12em; color: ${A.accentBright}; background: ${A.accentSoft}; border: 1px solid ${A.accentBorder}; padding: 4px 10px; border-radius: 6px; white-space: nowrap;">${num}</span>
         <span style="font-size: 13px; font-weight: 700; letter-spacing: .02em; color: ${titleColor}; white-space: nowrap;">${label}</span>
         <span style="flex: 1; height: 9px; background: repeating-linear-gradient(90deg, ${line} 0 2px, transparent 2px 10px); -webkit-mask-image: linear-gradient(90deg, #000 0, #000 55%, transparent 100%); mask-image: linear-gradient(90deg, #000 0, #000 55%, transparent 100%);"></span>
-        <span style="font-family: 'Geist Mono', ui-monospace, Menlo, monospace; font-size: 10.5px; color: var(--ds-text-3); letter-spacing: .1em; white-space: nowrap;">SIGNAL // ${num}</span>
-        <span style="width: 7px; height: 7px; border: 1px solid ${rail}; transform: rotate(45deg); flex: none;"></span>
+        <span class="divider-tail" style="font-family: 'Geist Mono', ui-monospace, Menlo, monospace; font-size: 10.5px; color: var(--ds-text-3); letter-spacing: .1em; white-space: nowrap;">SIGNAL // ${num}</span>
+        <span class="divider-tail" style="width: 7px; height: 7px; border: 1px solid ${rail}; transform: rotate(45deg); flex: none;"></span>
       </div>
       <div style="height: 5px; background: linear-gradient(90deg, ${A.accent}, ${A.accent} 18%, ${A.accentBorder} 42%, transparent 72%); background-size: 200% 100%; animation: hairline 7s linear infinite;"></div>
     </div>
@@ -1031,16 +1120,16 @@ function briefHtml(A){
       : esc(title);
     if(featured){
       return `
-      <div class="brief-card" style="position: relative; display: flex; align-items: stretch; background: ${tint}; border: 1.5px solid var(--ds-ink-line); box-shadow: 5px 5px 0 rgba(22,19,15,.08); overflow: hidden;">
-        <div style="flex: none; display: flex; align-items: center; justify-content: center; width: 130px; border-right: 1.5px solid var(--ds-ink-line); background: ${c};">
+      <div class="brief-card brief-featured" style="position: relative; display: flex; align-items: stretch; background: ${tint}; border: 1.5px solid var(--ds-ink-line); box-shadow: 5px 5px 0 rgba(22,19,15,.08); overflow: hidden;">
+        <div class="bf-num" style="flex: none; display: flex; align-items: center; justify-content: center; width: 130px; border-right: 1.5px solid var(--ds-ink-line); background: ${c};">
           <span style="font-family: ${mono}; font-size: 52px; font-weight: 700; color: #fff; letter-spacing: -.03em;">${num}</span>
         </div>
-        <div style="flex: 1; min-width: 0; display: flex; flex-direction: column; justify-content: center; gap: 12px; padding: 22px 26px;">
-          <div style="display:flex; align-items:center; gap:12px;">
-            <div style="font-size: 20px; font-weight: 700; letter-spacing: -.01em; color: var(--ds-text); background: ${chip}; border-left: 4px solid ${c}; padding: 7px 14px;">${esc(title)}</div>
+        <div class="bf-body" style="flex: 1; min-width: 0; display: flex; flex-direction: column; justify-content: center; gap: 12px; padding: 22px 26px;">
+          <div class="bf-head" style="display:flex; align-items:center; gap:12px;">
+            <div class="bc-title" style="font-size: 20px; font-weight: 700; letter-spacing: -.01em; color: var(--ds-text); background: ${chip}; border-left: 4px solid ${c}; padding: 7px 14px;">${esc(title)}</div>
             <div style="margin-left:auto; display:flex; align-items:center; gap:6px; flex:none;">${refsHtml}</div>
           </div>
-          <div style="font-size: 16px; line-height: 1.75; color: ${UI.text2};">${esc(rest)}</div>
+          <div class="bc-text" style="font-size: 16px; line-height: 1.75; color: ${UI.text2};">${esc(rest)}</div>
         </div>
       </div>`;
     }
@@ -1048,10 +1137,10 @@ function briefHtml(A){
       <div class="brief-card" style="position: relative; display: flex; flex-direction: column; gap: 10px; height: 100%; box-sizing: border-box; padding: 16px 16px 14px; background: ${tint}; border: 1.5px solid var(--ds-ink-line); box-shadow: 4px 4px 0 rgba(22,19,15,.06);">
         <div style="display: flex; align-items: flex-start; gap: 12px;">
           <span style="font-family: ${mono}; font-size: 34px; font-weight: 700; line-height: .9; color: ${c}; letter-spacing: -.03em; flex: none;">${num}</span>
-          <div style="flex:1; min-width:0; font-size:20px; font-weight:700; line-height:1.35; letter-spacing:-.01em; color:var(--ds-text); background:${chip}; border-left:3px solid ${c}; padding:6px 10px; white-space:${title.length<=22?'nowrap':'normal'};">${balancedTitle}</div>
+          <div class="bc-title" style="flex:1; min-width:0; font-size:20px; font-weight:700; line-height:1.35; letter-spacing:-.01em; color:var(--ds-text); background:${chip}; border-left:3px solid ${c}; padding:6px 10px; white-space:${title.length<=22?'nowrap':'normal'};">${balancedTitle}</div>
           <div style="margin-left:auto; display:grid; grid-template-columns:repeat(2,minmax(0,auto)); gap:${compactRefs?3:5}px; flex:none;">${refsGridHtml}</div>
         </div>
-        <div style="font-size: 16px; line-height: 1.75; color: ${UI.text2}; border-top: 1px solid ${cbd}; padding-top: 10px;">${esc(rest)}</div>
+        <div class="bc-text" style="font-size: 16px; line-height: 1.75; color: ${UI.text2}; border-top: 1px solid ${cbd}; padding-top: 10px;">${esc(rest)}</div>
       </div>`;
   };
   const featuredHtml = bullets.length ? briefCard(bullets[0], 0, true) : '';
@@ -1085,7 +1174,7 @@ function briefHtml(A){
           <div style="font-size: 18px; font-weight: 700; line-height: 1.45; color: var(--ds-text);">${esc(p.title)}</div>
           <div style="font-size: 14.5px; line-height: 1.7; color: ${UI.text2}; border-left: 3px solid ${A.accent}; padding-left: 11px;">${esc(p.reason)}</div>
         </div>
-        <div style="display:flex; gap:7px; padding:10px 0 14px; border-top:1px dashed ${UI.border};">${basisHtml}</div>
+        <div class="pc-basis" style="display:flex; gap:7px; padding:10px 0 14px; border-top:1px dashed ${UI.border};">${basisHtml}</div>
       </div>
     </div>`;
   }).join('');
@@ -1131,7 +1220,7 @@ function briefHtml(A){
     return `
     <article id="signal-${s.rank}" class="signal-card" onclick="App.openDetail(${s.rank})" style="position: relative; display: flex; background: ${UI.card}; border: 1.5px solid var(--ds-ink-line); box-shadow: 5px 5px 0 rgba(22,19,15,.07); overflow: hidden; min-height: 214px;">
       <!-- 左:配图,编号角标(=信号号)覆盖左上角 -->
-      <div style="flex: none; width: 288px; position: relative; border-right: 1.5px solid var(--ds-ink-line); background: linear-gradient(135deg, ${tp.bg}, #0b0b0e); overflow: hidden;">
+      <div class="sc-media" style="flex: none; width: 288px; position: relative; border-right: 1.5px solid var(--ds-ink-line); background: linear-gradient(135deg, ${tp.bg}, #0b0b0e); overflow: hidden;">
         <span style="position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); font-family: ${mono}; font-size: 40px; font-weight: 700; color: ${tp.color}; opacity: .5;">${tp.t}</span>
         <img src="${esc(imgUrl)}" alt="${esc(s.zhTitle)}" loading="lazy" onerror="this.remove()" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;">
         <span style="position: absolute; top: 0; left: 0; z-index: 2; min-width: 46px; height: 46px; padding: 0 8px; background: ${A.accent}; border-right: 1.5px solid var(--ds-ink-line); border-bottom: 1.5px solid var(--ds-ink-line); display: inline-flex; align-items: center; justify-content: center; font-family: ${mono}; font-size: 18px; font-weight: 700; color: #fff;">${num}</span>
@@ -1140,23 +1229,23 @@ function briefHtml(A){
         </span>
       </div>
       <!-- 右:内容,底部格子放为何重要 -->
-      <div style="flex: 1; min-width: 0; display: flex; flex-direction: column;">
-        <div style="display: flex; align-items: center; gap: 8px; padding: 10px 46px 10px 18px; border-bottom: 1px solid var(--ds-ink-line); font-family: ${mono}; font-size: 10.5px; letter-spacing: .04em; color: ${UI.text3}; flex-wrap: wrap;">
+      <div class="sc-body" style="flex: 1; min-width: 0; display: flex; flex-direction: column;">
+        <div class="sc-meta" style="display: flex; align-items: center; gap: 8px; padding: 10px 46px 10px 18px; border-bottom: 1px solid var(--ds-ink-line); font-family: ${mono}; font-size: 10.5px; letter-spacing: .04em; color: ${UI.text3}; flex-wrap: wrap;">
           ${catsHtml}
-          <span style="display: inline-flex; align-items: center; gap: 6px; overflow: hidden;">${tagsHtml}</span>
-          <span style="margin-left: auto; display: inline-flex; gap: 6px; align-items: center;">
+          <span class="sc-tags" style="display: inline-flex; align-items: center; gap: 6px; overflow: hidden;">${tagsHtml}</span>
+          <span class="sc-scores" style="margin-left: auto; display: inline-flex; gap: 6px; align-items: center;">
             <span>${s.date}</span>
             <span style="font-weight: 700; padding: 3px 8px; background: ${ib.bg}; color: ${ib.color}; border: 1px solid ${ib.border};">影响 ${s.impact}</span>
             <span style="font-weight: 700; padding: 3px 8px; background: ${u.bg}; color: ${u.color}; border: 1px solid ${u.border};">紧迫 ${s.urgency}</span>
           </span>
         </div>
         <button onclick="event.stopPropagation(); App.toggleFav(${s.rank})" title="${fav?'取消收藏':'收藏'}" style="position: absolute; top: 0; right: 0; z-index: 2; width: 36px; height: 36px; border: none; border-left: 1px solid var(--ds-ink-line); border-bottom: 1px solid var(--ds-ink-line); background: ${fav?A.accent:'#fff'}; color: ${fav?'#fff':UI.text3}; font-size: 14px; cursor: pointer; display: inline-flex; align-items: center; justify-content: center;">${fav?'★':'☆'}</button>
-        <div style="flex: 1; padding: 15px 18px;">
-          <h3 style="margin: 0 0 3px; font-size: 19px; line-height: 1.4; font-weight: 700; letter-spacing: -.01em; color: var(--ds-text);">${esc(s.zhTitle)}</h3>
-          <div style="font-family: ${mono}; font-size: 11.5px; line-height: 1.5; color: ${UI.text3}; margin-bottom: 10px;">${esc(s.title)}</div>
+        <div class="sc-main" style="flex: 1; padding: 15px 18px;">
+          <h3 class="sc-title" style="margin: 0 0 3px; font-size: 19px; line-height: 1.4; font-weight: 700; letter-spacing: -.01em; color: var(--ds-text);">${esc(s.zhTitle)}</h3>
+          <div class="sc-subtitle" style="font-family: ${mono}; font-size: 11.5px; line-height: 1.5; color: ${UI.text3}; margin-bottom: 10px;">${esc(s.title)}</div>
           <p style="margin: 0; font-size: 13.5px; line-height: 1.75; color: ${UI.text2}; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;">${esc(s.summary)}</p>
         </div>
-        <div style="padding: 12px 18px; border-top: 1px solid var(--ds-ink-line); background: ${A.accentSoft}; border-left: 3px solid ${A.accent};">
+        <div class="sc-why" style="padding: 12px 18px; border-top: 1px solid var(--ds-ink-line); background: ${A.accentSoft}; border-left: 3px solid ${A.accent};">
           <p style="margin: 0; font-size: 12.5px; line-height: 1.65; color: ${UI.text2}; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;"><strong style="color: ${A.accentDeep};">为何重要</strong> · ${esc(s.why)}</p>
         </div>
       </div>
@@ -1166,18 +1255,18 @@ function briefHtml(A){
   return `
   <main>
     <section style="position: relative;">
-      <div style="position: relative; max-width: 1180px; margin: 0 auto; background-color: ${UI.section}; border-left: 1px dashed ${UI.border}; border-right: 1px dashed ${UI.border}; overflow: hidden;">
-        <div style="position: relative; padding: 34px 36px 52px;">
+      <div class="page-rail" style="position: relative; max-width: 1180px; margin: 0 auto; background-color: ${UI.section}; border-left: 1px dashed ${UI.border}; border-right: 1px dashed ${UI.border}; overflow: hidden;">
+        <div class="sec-pad" style="position: relative; padding: 34px 36px 52px;">
           <!-- 报头 -->
-          <div style="display: flex; align-items: center; gap: 14px; padding-bottom: 14px; margin-bottom: 26px; border-bottom: 2px solid var(--ds-ink-line);">
+          <div class="masthead" style="display: flex; align-items: center; gap: 14px; padding-bottom: 14px; margin-bottom: 26px; border-bottom: 2px solid var(--ds-ink-line);">
             <span style="font-size: 15px; font-weight: 700; color: ${A.accent};">今日情报简报</span>
             <span style="width: 1px; height: 15px; background: ${UI.border2};"></span>
             <span style="font-family: ${mono}; font-size: 13px; color: ${UI.text2};">${esc(briefMeta.date)}</span>
             <span style="margin-left: auto; font-family: ${mono}; font-size: 13px; font-weight: 700; letter-spacing: .08em; color: var(--ds-ink-line);">${signals.length} SIGNALS</span>
           </div>
           <!-- 大标题 -->
-          <h1 style="margin: 0 0 12px; font-size: 58px; line-height: 1.02; font-weight: 800; letter-spacing: -.03em; color: var(--ds-text);">${esc(briefMeta.title)}</h1>
-          <p style="margin: 0 0 30px; font-size: 20px; line-height: 1.45; font-weight: 500; color: ${UI.text2}; max-width: 880px;">${esc(briefMeta.intro)}</p>
+          <h1 class="hero-title" style="margin: 0 0 12px; font-size: 58px; line-height: 1.02; font-weight: 800; letter-spacing: -.03em; color: var(--ds-text);">${esc(briefMeta.title)}</h1>
+          <p class="hero-intro" style="margin: 0 0 30px; font-size: 20px; line-height: 1.45; font-weight: 500; color: ${UI.text2}; max-width: 880px;">${esc(briefMeta.intro)}</p>
           <!-- 头条卡片 -->
           <div style="margin-bottom: 16px;">${featuredHtml}</div>
           <!-- 要点 2-5 自适应为两列两行,与头条同宽 -->
@@ -1189,16 +1278,16 @@ function briefHtml(A){
 
     ${techDivider(A, '02', '与我相关', false)}
     <section style="position: relative;">
-      <div style="max-width: 1180px; margin: 0 auto; padding: 22px 0;">
+      <div class="page-rail personal-rail" style="max-width: 1180px; margin: 0 auto; padding: 22px 0;">
         <div style="position: relative; background: #0a0a0a; background-image: linear-gradient(rgba(255,255,255,.045) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.045) 1px, transparent 1px); background-size: 44px 44px; overflow: hidden; border: 1.5px solid var(--ds-ink-line); box-shadow: 8px 8px 0 rgba(22,19,15,.10);">
           <div style="position: absolute; top: 0; left: 0; right: 0; height: 4px; background: ${A.accent};"></div>
           <span style="position: absolute; bottom: 12px; right: 18px; color: rgba(255,255,255,.2); font-family: 'Geist Mono', monospace; font-size: 13px;">+</span>
-          <div style="position: relative; padding: 38px 36px 42px;">
+          <div class="sec-pad" style="position: relative; padding: 38px 36px 42px;">
             <div style="display: flex; align-items: baseline; gap: 12px; margin-bottom: 8px; flex-wrap: wrap;">
               <h2 style="margin: 0; font-size: 21px; font-weight: 700; letter-spacing: -.01em; color: #faf7f0;">与我相关</h2>
               <span style="font-size: 12px; color: #8f887a;">基于你的关注方向匹配 · RAG 后端选型 / Agent 基础设施 / 推理成本</span>
             </div>
-            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 24px;">${personalHtml}</div>
+            <div class="personal-grid" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 24px;">${personalHtml}</div>
           </div>
         </div>
       </div>
@@ -1206,14 +1295,14 @@ function briefHtml(A){
 
     ${techDivider(A, '03', '全部信号', false)}
     <section style="position: relative;">
-      <div style="position: relative; max-width: 1180px; margin: 0 auto; background-color: ${UI.section}; background-image: radial-gradient(rgba(22,19,15,.055) 1px, transparent 1px), linear-gradient(rgba(22,19,15,.028) 1px, transparent 1px), linear-gradient(90deg, rgba(22,19,15,.028) 1px, transparent 1px); background-size: 22px 22px, 88px 88px, 88px 88px; border-left: 1px dashed ${UI.border}; border-right: 1px dashed ${UI.border}; overflow: hidden;">
+      <div class="page-rail" style="position: relative; max-width: 1180px; margin: 0 auto; background-color: ${UI.section}; background-image: radial-gradient(rgba(22,19,15,.055) 1px, transparent 1px), linear-gradient(rgba(22,19,15,.028) 1px, transparent 1px), linear-gradient(90deg, rgba(22,19,15,.028) 1px, transparent 1px); background-size: 22px 22px, 88px 88px, 88px 88px; border-left: 1px dashed ${UI.border}; border-right: 1px dashed ${UI.border}; overflow: hidden;">
         <div style="position: absolute; top: 120px; left: 3%; width: 300px; height: 300px; border-radius: 50%; background: radial-gradient(closest-side, ${A.accentFaint}, transparent); pointer-events: none;"></div>
-        <div style="position: relative; padding: 44px 36px 72px;">
+        <div class="sec-pad" style="position: relative; padding: 44px 36px 72px;">
           <div style="display: flex; align-items: baseline; gap: 12px; margin-bottom: 18px;">
             <h2 style="margin: 0; font-size: 21px; font-weight: 700; letter-spacing: -.01em; color: var(--ds-text);">全部信号</h2>
             <span style="font-size: 12px; color: ${UI.text3};">${sortLabels[state.sortKey]}</span>
           </div>
-          <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 24px; flex-wrap: wrap;">
+          <div class="filter-row" style="display: flex; align-items: center; gap: 8px; margin-bottom: 24px; flex-wrap: wrap;">
             ${filterChipsHtml}
             <div style="margin-left: auto; display: flex; align-items: center; gap: 8px;">
               <span style="font-size: 12px; color: ${UI.text3};">排序</span>
@@ -1769,7 +1858,7 @@ function detailHtml(A){
     <div class="detail-panel" onclick="event.stopPropagation()">
       <button class="detail-close" onclick="App.closeDetail()" title="关闭 (Esc)">×</button>
       <div style="position: absolute; top: 0; left: 0; right: 0; height: 4px; background: linear-gradient(90deg, transparent, ${A.accent}, transparent);"></div>
-      <div style="position: relative; padding: 30px 32px 0;">
+      <div class="detail-head" style="position: relative; padding: 30px 32px 0;">
         <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 14px;">
           <span style="font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 6px; background: rgba(22,19,15,.06); color: ${UI.text2}; border: 1px solid ${UI.border2};">${km.icon} ${km.label}</span>
           <span style="font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 6px; background: ${A.accentSoft}; color: ${A.accentBright}; border: 1px solid ${A.accentBorder};">${esc(s.cat)}</span>
@@ -1778,7 +1867,7 @@ function detailHtml(A){
           <span style="font-size: 11px; font-weight: 700; padding: 4px 9px; border-radius: 6px; background: ${u.bg}; color: ${u.color}; border: 1px solid ${u.border};">紧迫 ${s.urgency}</span>
           <span style="font-size: 11px; color: ${UI.text3}; font-family: 'Geist Mono', monospace;">#${s.rank}</span>
         </div>
-        <h1 style="margin: 0 0 6px; font-size: 26px; line-height: 1.35; font-weight: 700; letter-spacing: -.015em; color: var(--ds-text);">${esc(s.zhTitle)}</h1>
+        <h1 class="detail-title" style="margin: 0 0 6px; font-size: 26px; line-height: 1.35; font-weight: 700; letter-spacing: -.015em; color: var(--ds-text);">${esc(s.zhTitle)}</h1>
         <div style="font-size: 13px; color: ${UI.text3}; margin-bottom: 16px;">${esc(s.title)}</div>
         <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap; padding-bottom: 16px; border-bottom: 1px solid ${UI.border};">
           ${avatarHtml(s.source)}
@@ -1792,10 +1881,10 @@ function detailHtml(A){
           <button onclick="event.stopPropagation(); App.toggleNotes()" title="我的笔记" style="${tab==='正文'?'':'margin-left: auto;'} display: inline-flex; align-items: center; gap: 6px; height: 38px; padding: 0 15px; border: 1.5px solid var(--ds-ink-line); background: ${state.notesOpen?A.accent:'#fff'}; color: ${state.notesOpen?'#fff':UI.text}; font-size: 13px; font-weight: 700; cursor: pointer;">✎ 我的笔记 <span style="font-family:'Geist Mono',monospace; font-size:11px; opacity:.8;">4</span></button>
         </div>
       </div>
-      <div style="position: relative; padding: 4px 32px 12px;">
+      <div class="detail-body" style="position: relative; padding: 4px 32px 12px;">
         ${bodyHtml}
       </div>
-      <div style="position: sticky; bottom: 0; z-index: 5; padding: 12px 24px 16px; background: linear-gradient(180deg, transparent, var(--ds-panel) 36%);">
+      <div class="detail-ask" style="position: sticky; bottom: 0; z-index: 5; padding: 12px 24px 16px; background: linear-gradient(180deg, transparent, var(--ds-panel) 36%);">
         <div style="display: flex; gap: 8px; align-items: center; padding: 8px; background: #fff; border: 1.5px solid var(--ds-ink-line); box-shadow: 4px 4px 0 rgba(22,19,15,.09);">
           <span style="flex: none; width: 30px; height: 30px; display: inline-flex; align-items: center; justify-content: center; background: var(--ds-ink-line); color: #fff; font-size: 13px;">✦</span>
           <input id="detailAsk" style="flex: 1; height: 36px; padding: 0 12px; border: 1.5px solid var(--ds-ink-line); background: #fff; color: var(--ds-text); font-size: 13px; outline: none;" placeholder="就这篇${km.label}向 AI 提问(回答记入左侧「对话记录」)…" onkeydown="if(event.key==='Enter'){event.preventDefault();App.askDetail(${s.rank});}" />
@@ -1955,10 +2044,10 @@ function sourcesHtml(A){
 
   return `
   <main style="position: relative;">
-    <div style="position: relative; max-width: 1180px; margin: 0 auto; padding: 40px 36px 72px;">
+    <div class="page-shell" style="position: relative; max-width: 1180px; margin: 0 auto; padding: 40px 36px 72px;">
       <section style="margin-bottom: 28px;">
-        <div style="display: flex; align-items: baseline; gap: 12px; margin-bottom: 10px;">
-          <h1 style="margin: 0; font-size: 27px; font-weight: 700; letter-spacing: -.015em; color: var(--ds-text);">数据源定制</h1>
+        <div style="display: flex; align-items: baseline; gap: 12px; margin-bottom: 10px; flex-wrap: wrap;">
+          <h1 class="page-title" style="margin: 0; font-size: 27px; font-weight: 700; letter-spacing: -.015em; color: var(--ds-text);">数据源定制</h1>
           <span style="font-size: 12.5px; color: ${UI.text3};">${state.sources.length} 个来源 · ${onCount} 个启用</span>
           <button onclick="App.reloadSources()" title="${esc(sync.message)}" style="margin-left: auto; display: inline-flex; align-items: center; gap: 7px; height: 30px; padding: 0 10px; border: 1px solid ${UI.border}; background: #fff; color: ${syncColor}; font-size: 11px; font-weight: 700; cursor: pointer;">
             <span style="width: 7px; height: 7px; border-radius: 50%; background: ${syncColor};"></span>${sync.status==='connected'?'飞书已连接':sync.status==='loading'?'连接中':'本地模式'} · 刷新
@@ -1982,7 +2071,7 @@ function sourcesHtml(A){
 
       <section style="margin-bottom: 30px; padding: 22px; border-radius: 12px; background: ${UI.panel}; border: 1px dashed ${UI.border2};">
         <div style="font-size: 13px; font-weight: 700; color: var(--ds-text); margin-bottom: 16px;">添加数据源</div>
-        <div style="display: grid; grid-template-columns: 1.1fr 1fr 1fr 1.5fr .7fr auto auto; gap: 12px; align-items: end;">
+        <div class="form-grid" style="display: grid; grid-template-columns: 1.1fr 1fr 1fr 1.5fr .7fr auto auto; gap: 12px; align-items: end;">
           <div style="display: flex; flex-direction: column; gap: 6px;">
             <label style="font-size: 11px; color: ${UI.text3};">名称</label>
             <input value="${esc(state.formName)}" oninput="App.setForm('formName', this.value)" placeholder="如:阶跃星辰 / 机器之心" style="${inputStyle}" />
@@ -2010,7 +2099,7 @@ function sourcesHtml(A){
 
       <div style="display: flex; align-items: flex-end; gap: 4px; padding: 0 4px; flex-wrap: wrap;">${srcTabsHtml}</div>
 
-      <section style="border: 1px solid ${UI.border}; border-radius: 12px; overflow: hidden; background: ${UI.panel}; position: relative;">
+      <section class="src-table" style="border: 1px solid ${UI.border}; border-radius: 12px; overflow: hidden; background: ${UI.panel}; position: relative;">
         <div style="display: grid; grid-template-columns: ${grid}; padding: 0 20px; height: 44px; align-items: center; background: rgba(22,19,15,.03); border-bottom: 1px solid ${UI.border}; font-size: 11px; font-weight: 700; letter-spacing: .06em; color: ${UI.text3};">
           <span>状态</span><span>来源名称</span><span>信息源类型</span><span>端侧</span><span>优先级</span><span>上次检索</span><span style="text-align: right;">条目/日</span><span></span>
         </div>
@@ -2104,7 +2193,7 @@ function tasksHtml(A){
           ${focusHtml}
         </div>
       </div>`;
-    body = `<div style="display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 16px; align-items: start;">${reportCard}${pendingPanel()}</div>`;
+    body = `<div class="task-split" style="display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 16px; align-items: start;">${reportCard}${pendingPanel()}</div>`;
   }
 
   else if(state.taskTab==='debate'){
@@ -2248,10 +2337,10 @@ function tasksHtml(A){
 
   return `
   <main style="position: relative;">
-    <div style="max-width: 1180px; margin: 0 auto; padding: 40px 36px 72px;">
+    <div class="page-shell" style="max-width: 1180px; margin: 0 auto; padding: 40px 36px 72px;">
       <section style="margin-bottom: 20px;">
-        <div style="display: flex; align-items: baseline; gap: 12px; margin-bottom: 8px;">
-          <h1 style="margin: 0; font-size: 27px; font-weight: 700; letter-spacing: -.015em; color: var(--ds-text);">任务视图</h1>
+        <div style="display: flex; align-items: baseline; gap: 12px; margin-bottom: 8px; flex-wrap: wrap;">
+          <h1 class="page-title" style="margin: 0; font-size: 27px; font-weight: 700; letter-spacing: -.015em; color: var(--ds-text);">任务视图</h1>
           <span style="font-size: 12.5px; color: ${UI.text3};">周报 · 多模型辩论 · 动向追踪 · 会议助手</span>
         </div>
         <p style="margin: 0; font-size: 13.5px; line-height: 1.7; color: ${UI.text2}; max-width: 720px;">由 AI 基于信号库自动生成的周报、可发起的多模型交叉辩论、机构 / 人物 / 技术的动向追踪,以及自动参会记纪要的会议助手。</p>
@@ -2267,7 +2356,7 @@ function favPanelHtml(A){
   const n = state.favorites.length;
   const FT = '#f7f3eb', FT2 = '#d3ccbf', FT3 = '#968f83', FB = 'rgba(255,255,255,.18)', FFill = '#fff', FC = '#16130f', FC2 = '#6f685e';
   if(!state.favOpen){
-    return `<button onclick="App.toggleFavPanel()" title="展开收藏栏" style="position: fixed; right: 0; top: 50%; transform: translateY(-50%); z-index: 70; display: flex; flex-direction: column; align-items: center; gap: 5px; padding: 12px 8px; border: 1px solid ${FB}; border-right: none; background: #1b1814; color: ${A.accentBright}; cursor: pointer; font-size: 15px;">★<span style="font-size: 11px; color: ${FT2}; font-family: 'Geist Mono', monospace;">${n}</span></button>`;
+    return `<button class="edge-tab" onclick="App.toggleFavPanel()" title="展开收藏栏" style="position: fixed; right: 0; top: 50%; transform: translateY(-50%); z-index: 70; display: flex; flex-direction: column; align-items: center; gap: 5px; padding: 12px 8px; border: 1px solid ${FB}; border-right: none; background: #1b1814; color: ${A.accentBright}; cursor: pointer; font-size: 15px;">★<span style="font-size: 11px; color: ${FT2}; font-family: 'Geist Mono', monospace;">${n}</span></button>`;
   }
   const favSignals = state.favorites.map(r=>signals.find(x=>x.rank===r)).filter(Boolean);
   const groups = {};
@@ -2290,7 +2379,7 @@ function favPanelHtml(A){
     </div>`;
   }).join('');
   return `
-  <aside style="position: fixed; right: 12px; top: 70px; bottom: 104px; z-index: 70; width: 288px; display: flex; flex-direction: column; background: #1b1814; border: 1px solid ${FB}; box-shadow: 5px 5px 0 rgba(0,0,0,.22); overflow: hidden;">
+  <aside class="side-panel" style="position: fixed; right: 12px; top: 70px; bottom: 104px; z-index: 70; width: 288px; display: flex; flex-direction: column; background: #1b1814; border: 1px solid ${FB}; box-shadow: 5px 5px 0 rgba(0,0,0,.22); overflow: hidden;">
     <div style="display: flex; align-items: center; gap: 8px; padding: 14px 16px; border-bottom: 1px solid ${FB};">
       <span style="color: ${A.accentBright}; font-size: 15px;">★</span>
       <span style="font-size: 13.5px; font-weight: 700; color: ${FT};">收藏栏</span>
@@ -2311,7 +2400,7 @@ function historyPanelHtml(A){
   for(let i=0;i<msgs.length;i++){ if(msgs[i].role==='user'){ pairs.push({ q: msgs[i].text, a: (msgs[i+1] && msgs[i+1].role==='ai') ? msgs[i+1].text : '' }); } }
   const HT='#f7f3eb', HT2='#d3ccbf', HT3='#968f83', HB='rgba(255,255,255,.18)', HC='#16130f', HC2='#4a453d';
   if(!state.historyOpen){
-    return `<button onclick="App.toggleHistory()" title="展开 AI 对话历史" style="position: fixed; left: 0; top: 50%; transform: translateY(-50%); z-index: 70; display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 13px 8px; border: 1px solid ${HB}; border-left: none; background: #1b1814; color: ${A.accentBright}; cursor: pointer; font-size: 14px; box-shadow: 3px 3px 0 rgba(0,0,0,.2);">✦<span style="font-size: 11px; color: ${HT2}; font-family: 'Geist Mono', monospace; writing-mode: vertical-rl;">历史 ${pairs.length}</span></button>`;
+    return `<button class="edge-tab" onclick="App.toggleHistory()" title="展开 AI 对话历史" style="position: fixed; left: 0; top: 50%; transform: translateY(-50%); z-index: 70; display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 13px 8px; border: 1px solid ${HB}; border-left: none; background: #1b1814; color: ${A.accentBright}; cursor: pointer; font-size: 14px; box-shadow: 3px 3px 0 rgba(0,0,0,.2);">✦<span style="font-size: 11px; color: ${HT2}; font-family: 'Geist Mono', monospace; writing-mode: vertical-rl;">历史 ${pairs.length}</span></button>`;
   }
   const rows = pairs.slice().reverse().map((p,i)=>`
     <div style="border: 1px solid ${HB}; background: #fff;">
@@ -2325,7 +2414,7 @@ function historyPanelHtml(A){
       </div>`:''}
     </div>`).join('');
   return `
-  <aside style="position: fixed; left: 12px; top: 70px; bottom: 158px; z-index: 70; width: 292px; display: flex; flex-direction: column; background: #1b1814; border: 1px solid ${HB}; box-shadow: 5px 5px 0 rgba(0,0,0,.22);">
+  <aside class="side-panel" style="position: fixed; left: 12px; top: 70px; bottom: 158px; z-index: 70; width: 292px; display: flex; flex-direction: column; background: #1b1814; border: 1px solid ${HB}; box-shadow: 5px 5px 0 rgba(0,0,0,.22);">
     <div style="display: flex; align-items: center; gap: 8px; padding: 13px 14px; border-bottom: 1px solid ${HB}; background: #1b1814;">
       <span style="color: ${A.accentBright}; font-size: 14px;">✦</span>
       <span style="font-size: 13.5px; font-weight: 700; color: ${HT};">AI 对话历史</span>
