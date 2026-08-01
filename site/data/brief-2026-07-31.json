@@ -341,7 +341,7 @@
         "videos": []
       },
       "eventAggregation": {
-        "total": 4,
+        "total": 6,
         "groups": [
           {
             "key": "官方来源",
@@ -373,6 +373,20 @@
                 "url": "https://www.guokr.com/article/469780",
                 "note": "同事件的其它源头报道。",
                 "text": "黄仁勋、Kimi K3，与一场即将到来的开源战争。| 果壳 科技有意思 —— 同事件的其它源头报道。"
+              },
+              {
+                "source": "AI科技评论 / 雷峰网",
+                "title": "谁在训练 Kimi K3 ? 深挖贡献者名单，这有一份最全档案",
+                "url": "https://www.leiphone.com/category/ai/3ube8gjtw8tftqvj.html",
+                "note": "同事件的其它源头报道。",
+                "text": "谁在训练 Kimi K3 ? 深挖贡献者名单，这有一份最全档案 —— 同事件的其它源头报道。"
+              },
+              {
+                "source": "AI科技评论 / 雷峰网",
+                "title": "谁在训练 Kimi K3 ? 深挖贡献者名单，这有一份最全档案",
+                "url": "https://www.leiphone.com/category/yanxishe/ttnvyvytzknbaivr.html",
+                "note": "同事件的其它源头报道。",
+                "text": "谁在训练 Kimi K3 ? 深挖贡献者名单，这有一份最全档案 —— 同事件的其它源头报道。"
               }
             ]
           },
@@ -482,7 +496,7 @@
         "videos": []
       },
       "eventAggregation": {
-        "total": 1,
+        "total": 2,
         "groups": [
           {
             "key": "官方来源",
@@ -494,6 +508,19 @@
                 "url": "https://seed.bytedance.com/en/blog/one-take-creation-flexible-referencing-introducing-seedance-2-5",
                 "note": "原始发布 / 公告。",
                 "text": "字节跳动发布 Seedance 2.5：单次生成30秒并强化多模态参考与编辑 —— 原始发布 / 公告。"
+              }
+            ]
+          },
+          {
+            "key": "相关报道",
+            "tone": "#2b6cb0",
+            "items": [
+              {
+                "source": "AI科技评论 / 雷峰网",
+                "title": "字节跳动发布 Seedance 2.5，徐工、小鹏等企业官宣合作",
+                "url": "https://www.leiphone.com/category/industrynews/fmw8xvv6xvkpqzgt.html",
+                "note": "同事件的其它源头报道。",
+                "text": "字节跳动发布 Seedance 2.5，徐工、小鹏等企业官宣合作 —— 同事件的其它源头报道。"
               }
             ]
           }
