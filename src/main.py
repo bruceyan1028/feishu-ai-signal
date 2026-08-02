@@ -110,7 +110,8 @@ def _prepare_scrape_sources(
 
 
 def run(methods: set[str] | None = None) -> int:
-    enabled = methods or {"RSS", "Scrape", "Media", "Social"}
+    # X / Social 暂停自动采集；仍保留显式 `--method Social` 供后续手动验收。
+    enabled = methods or {"RSS", "Scrape", "Media"}
     config.validate()
 
     token = feishu.get_tenant_access_token()

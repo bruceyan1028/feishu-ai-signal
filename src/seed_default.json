@@ -848,7 +848,7 @@
    ],
    "层级": "L4",
    "来源类型": "社交媒体",
-   "自动化状态": "待测",
+   "自动化状态": "已暂停",
    "获取方式": "Social",
    "链接": {
     "link": "https://x.com/",
@@ -2802,7 +2802,7 @@
    "notes": "官方 API 增量采集；先以 10 个 P0 账号 experimental 灰度",
    "priority": "P0",
    "source_id": "social-media",
-   "status": "experimental",
+   "status": "paused",
    "tier": "L4",
    "来源类型": "社交媒体"
   },
