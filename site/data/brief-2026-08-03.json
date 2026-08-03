@@ -1,29 +1,28 @@
 {
   "date": "2026-08-03",
   "title": "AI Signal 每日情报 · 2026-08-03",
-  "intro": "AI模型竞赛正从单纯追求规模转向长程智能体、多模态交互、工具调用与可验证推理，开源和商业发布同步加速。与此同时，视频生成、AI基础设施、组织变革及资本需求共同升温，产业竞争开始更多体现为系统工程能力与资源整合能力。",
+  "intro": "本轮信号显示，前沿模型竞争正同时向超大规模、长上下文、原生多模态和长时程智能体能力推进。与此同时，视频生成、程序化自改进与算力基础设施成为技术落地和资本投入的关键主线。",
   "bullets": [
     {
-      "title": "超大模型竞逐长程智能体与开放权重",
-      "text": "阿里发布千问3.8-MAX，总参数量2.4万亿、激活参数95B，称其在智能体、编程和多模态基准上达到或超过Anthropic Fable 5，权重计划开源。Kimi K3采用原生多模态和约100万Token上下文，规模达2.8万亿参数；华为openPangu-2.0-Pro约505B参数、支持512k上下文；DeepSeek-V4-Flash-0731则以更少激活参数提升智能体、代码和工具调用表现。",
+      "title": "超大MoE模型竞逐百万级上下文",
+      "text": "千问3.8-Max、Kimi K3与openPangu-2.0-Pro分别公布2.4万亿、2.8万亿和约5050亿参数规模，并重点强化智能体、代码、多模态及长上下文能力；其中部分性能结论来自厂商自报基准，仍需独立评测验证。",
       "refs": [
         5,
-        7,
         9,
         28
       ]
     },
     {
-      "title": "OpenAI将Astra推向可验证复杂推理",
-      "text": "OpenAI披露Astra内部版本在高维几何、编码理论、群论、复杂性理论、量子复杂性、格密码学和极值组合学等领域取得十项新成果，并整理为249页论文和62页解题说明。相关论证据称已转化为Lean形式化证明，全部求解的Token算力成本约为2000美元，但成果仍需数学界进一步检验，发布时间和最终模型归属也尚未确定。",
+      "title": "Astra宣称攻克十项数学难题",
+      "text": "相关材料称，OpenAI内部模型通过多智能体长期协作，在高维几何、编码理论、群论等领域生成新论证，Token成本约2000美元，并已转换为Lean形式化证明；模型归属、发布时间及成果有效性仍待官方细节和数学界复核。",
       "refs": [
         6,
         29
       ]
     },
     {
-      "title": "视频生成进入长时长多参考创作阶段",
-      "text": "Seedance 2.5将单次音视频生成时长从15秒提升至30秒，并支持多轮续写、时间戳级编辑，以及最多30张图片、10段视频和10段音频作为参考。MiniMax-H3统一处理文本、图像、视频和音频，能够生成最长15秒、24 FPS、原生32 kHz立体声视频，完整流程最高支持2K分辨率；DistillAlign则从训练机制上兼顾视频蒸馏的模式覆盖、VBench表现与多样性。",
+      "title": "视频模型转向长片段与多参考编辑",
+      "text": "Seedance 2.5把单次音视频生成延长至30秒，可接收大量图片、视频和音频参考并进行时间戳级编辑；MiniMax H3则覆盖文本、图像、视频和音频理解及原生立体声视频生成，但部分关键模块尚未开放。研究侧的DistillAlign表明，联合模式覆盖与模式寻求约束可改善蒸馏模型的质量、覆盖率和多样性。",
       "refs": [
         1,
         11,
@@ -31,17 +30,24 @@
       ]
     },
     {
-      "title": "AI工程化从模型调用扩展到组织与全栈闭环",
-      "text": "Frontis-MA1通过OpenMLE全栈系统和35B参数元进化智能体执行Draft、Improve、Debug、Crossover等程序进化操作，在MLE-Bench Lite上的Medal Average由39.39%提升至60.61%，结合OpenMLE-Evo-Max达到71.21%。浪潮信息则提出以Humagent、流程重构和自建Token工厂推进AI原生组织转型；网易有道已将DeepSeek-V4-Flash正式版接入多条产品线，重点优化工具调用和多步骤任务执行。",
+      "title": "机器学习智能体开始执行递归程序进化",
+      "text": "Frontis-MA1-35B通过Draft、Improve、Debug和Crossover四类操作，利用执行反馈持续修改机器学习方案，在MLE-Bench Lite上显著提高获奖平均水平，并展现一定跨任务迁移能力。DeepSeek-V4-Flash及其产品接入案例也显示，工具调用和多步骤任务执行正成为模型升级重点。",
       "refs": [
         3,
-        14,
+        7,
         15
       ]
     },
     {
-      "title": "算力与封装成为AI扩张的关键约束",
-      "text": "高盛认为，AI基础设施、再工业化、国防、电力系统重建、供应链重组和主权债务融资需求叠加，可能形成历史上资本需求最强的中期投资周期，长期收益率上行更多由结构性资本需求驱动。摩根士丹利判断近期AI板块回调主要来自仓位拥挤、保证金融资去杠杆和动量反转，而非基本面逻辑破坏；供应链方面，台积电与景硕据称正研发对标英特尔EMIB的嵌入式硅桥封装，以缓解CoWoS产能与成本压力。",
+      "title": "设计图重建迈向可编辑结构输出",
+      "text": "ReDesign不再只复刻栅格视觉效果，而是把文本、矢量形状、颜色、布局和层级关系恢复为JSON，并通过树状分解与逐节点验证提高后续编辑能力；其训练和评测资源来自909个Figma文件及14796条编辑指令。",
+      "refs": [
+        4
+      ]
+    },
+    {
+      "title": "AI资本周期受电力与封装能力约束",
+      "text": "高盛认为AI基础设施与再工业化等需求可能共同推高长期资本需求和收益率；摩根士丹利则判断板块回调更多源于仓位与去杠杆，而非基本面逆转。供给侧上，数据中心电力、人才、政策和先进封装仍是瓶颈，台积电据报正开发类EMIB硅桥方案以缓解CoWoS成本与产能压力。",
       "refs": [
         8,
         13,
@@ -76,23 +82,23 @@
       "mediaAssets": {
         "images": [
           {
-            "url": "media/papers/recvqVbnuE71mV-p5.png",
-            "alt": "PDF 第 5 页图表：Table 3: Controlled teacher-source swap. For each setting in Table 1, we recompute the coverage of both the initialization and DMD-refined results against the corresponding teacher distribution. In each of the three numeric columns, darker shading indicates a higher-ranked value. Figure 4: Visual diversity comparison across different distillation pipelines. For each pipeline, we sample 16 fixed seeds and visualize the middle frame of each generated 81-frame video as a grid. 3.2.2 RETHINKING DISTILLATION PIPES FROM A DISTRIBUTIONAL PERSPECTIVE Figure 3: Comparison across different distillation ",
+            "url": "media/papers/recvqVbnuE71mV-p5-f1.png",
+            "alt": "PDF 第 5 页图表：Table 3: Controlled teacher-source swap. For each setting in Table 1, we recompute the coverage of both the initialization and DMD-refined results against the corresponding teacher distribution. In each of the three numeric columns, darker shading indicates a higher-ranked value.",
             "kind": "pdf-page"
           },
           {
-            "url": "media/papers/recvqVbnuE71mV-p8.png",
-            "alt": "PDF 第 8 页图表：Table 4: Main comparison on text-to-video generation. VBench is reported with total, quality, and semantic scores. Precision and coverage are teacher-normalized against the listed DMD teacher when applicable; diversity is the raw Vendi score. “DMD Teacher” is only applicable to methods Fig. 6 provides qualitative examples consistent with the quantitative trend. Compared with prior distilled autoregressive baselines, our model better preserves object identity and motion details across frames, while avoiding the overly smoothed appearance typical of mode-covering initialization alone. Figure 6: ",
+            "url": "media/papers/recvqVbnuE71mV-p5-f2.png",
+            "alt": "PDF 第 5 页图表：Figure 4: Visual diversity comparison across different distillation pipelines. For each pipeline, we sample 16 fixed seeds and visualize the middle frame of each generated 81-frame video as a grid.",
             "kind": "pdf-page"
           },
           {
-            "url": "media/papers/recvqVbnuE71mV-p9.png",
-            "alt": "PDF 第 9 页图表：Table 5: Ablation on the joint loss weight λ. A larger λ strengthens the CD-based mode-covering constraint, while a smaller λ gives more weight to DMD refinement, and λ = 0 recovers pure DMD. For each λ, we report the best checkpoint within a 2500-step training trajectory. Diversity is reported as the raw Vendi score under Figure 7: Qualitative comparison of sample diversity. Under fixed prompts and different seeds, our method preserves richer appearance and motion variations while maintaining high visual fidelity. Fig. 7 further visualizes the diversity difference across seeds. Methods with l",
+            "url": "media/papers/recvqVbnuE71mV-p5-f3.png",
+            "alt": "PDF 第 5 页图表：Figure 3: Comparison across different distillation pipelines. All pipelines use Wan-14B as the DMD teacher and use its sampled distillation data as the initialization target.",
             "kind": "pdf-page"
           },
           {
-            "url": "media/papers/recvqVbnuE71mV-p10.png",
-            "alt": "PDF 第 10 页图表：Table 6: Ablation of joint distillation across training steps. Compared with pure DMD, joint distillation better preserves coverage and diversity while achieving comparable or better VBench scores. Diversity is reported as the raw Vendi score under the same V-JEPA2 protocol as Tab. 4. In each column, darker shading indicates a Table 7 reports the full per-pipeline metrics for the five distillation pipelines in Fig. 3, both at the student-initialization stage and after DMD refinement. All pipelines use Wan2.1-14B as the DMD teacher and its sampled distillation data as the initialization target;",
+            "url": "media/papers/recvqVbnuE71mV-p8-f4.png",
+            "alt": "PDF 第 8 页图表：Table 4: Main comparison on text-to-video generation. VBench is reported with total, quality, and semantic scores. Precision and coverage are teacher-normalized against the listed DMD teacher when applicable; diversity is the raw Vendi score. “DMD Teacher” is only applicable to methods with a DMD refinement stage.",
             "kind": "pdf-page"
           },
           {
@@ -246,23 +252,23 @@
       "mediaAssets": {
         "images": [
           {
-            "url": "media/papers/recvqJBUmVb9tm-p22.png",
-            "alt": "PDF 第 22 页图表：Figure 2 compares the VIF, FITC, and Vecchia approximations and an exact GP model without an approximation for varying input dimensions d for a 3/2-Mat´ern kernel. We observe that the VIF approximation consistently outperforms both the Vecchia and FITC Figure 10 in Appendix 7, we additionally show results obtained by increasing the number of Vecchia neighbors to mv = 60 for the Vecchia approximation to ensure that the computational time for estimation is approximately equal for all three methods. Although the Vecchia approximation slightly benefits from the increased approximation complexity, ",
+            "url": "media/papers/recvqJBUmVb9tm-p23-f1.png",
+            "alt": "PDF 第 23 页图表：Figure 2: Comparison of the VIF, FITC, and Vecchia approximations and an exact GP model (without an approximation) for varying dimensions d using an ARD 3/2- Mat´ern kernel. The plots show the RMSE (log-scale), log-score (LS), and CRPS (log-scale) (mean ± 2 standard errors).",
             "kind": "pdf-page"
           },
           {
-            "url": "media/papers/recvqJBUmVb9tm-p23.png",
-            "alt": "PDF 第 23 页图表：Figure 2: Comparison of the VIF, FITC, and Vecchia approximations and an exact GP model (without an approximation) for varying dimensions d using an ARD 3/2- Mat´ern kernel. The plots show the RMSE (log-scale), log-score (LS), and CRPS",
+            "url": "media/papers/recvqJBUmVb9tm-p24-f2.png",
+            "alt": "PDF 第 24 页图表：Figure 3: Comparison of the VIF, FITC, and Vecchia approximations and an exact GP model (without an approximation) for varying smoothness parameters of an ARD Mat´ern kernel for d = 10 (1/2-Mat´ern, 3/2-Mat´ern, 5/2-Mat´ern, and ∞-Mat´ern = Gaussian kernel). The plots show the RMSE (log-scale), log-score (LS), and CRPS (log-scale) (mean ± 2 standard errors).",
             "kind": "pdf-page"
           },
           {
-            "url": "media/papers/recvqJBUmVb9tm-p24.png",
-            "alt": "PDF 第 24 页图表：Figure 3: Comparison of the VIF, FITC, and Vecchia approximations and an exact GP model (without an approximation) for varying smoothness parameters of an ARD Mat´ern kernel for d = 10 (1/2-Mat´ern, 3/2-Mat´ern, 5/2-Mat´ern, and ∞-Mat´ern",
+            "url": "media/papers/recvqJBUmVb9tm-p51-f3.png",
+            "alt": "PDF 第 51 页图表：Figure 15: Log-marginal likelihood differences relative to Cholesky-based computations and runtime of the FITC preconditioner for varying numbers of inducing points k for three different VIF approximations using ℓ= 50 sample vectors.",
             "kind": "pdf-page"
           },
           {
-            "url": "media/papers/recvqJBUmVb9tm-p51.png",
-            "alt": "PDF 第 51 页图表：Figure 15: Log-marginal likelihood differences relative to Cholesky-based computations and runtime of the FITC preconditioner for varying numbers of inducing points k for three different VIF approximations using ℓ= 50 sample vectors. Table 6: Accuracy-runtime comparison of preconditioners: RMSE between log-marginal likelihoods computed using iterative methods and those computed using a Cholesky decomposition and runtime for the VIFDU and FITC preconditioners",
+            "url": "media/papers/recvqJBUmVb9tm-p51-f4.png",
+            "alt": "PDF 第 51 页图表：Table 6: Accuracy-runtime comparison of preconditioners: RMSE between log-marginal likelihoods computed using iterative methods and those computed using a Cholesky decomposition and runtime for the VIFDU and FITC preconditioners and varying numbers of sample vectors ℓ∈{10, 50, 100} and CG convergence tol- erances δ ∈{0.0001, 0.001, 0.01, 0.1, 1}. We used a binary likelihood, n = 100,000 samples, and a VIF approximation with m = 200 & mv = 30.",
             "kind": "pdf-page"
           }
         ],
@@ -424,23 +430,23 @@
       "mediaAssets": {
         "images": [
           {
-            "url": "media/papers/recvr10RSDk49n-p1.png",
-            "alt": "PDF 第 1 页图表：Figure 1 | Results on MLE-Bench Lite. Bars show all completed harness results; the Pareto panel retains each model’s best harness. Colors and hatching follow the shared model–harness legend. © 2026 FRONTIS. All rights reserved",
+            "url": "media/papers/recvr10RSDk49n-p1-f1.png",
+            "alt": "PDF 第 1 页图表：Figure 1 | Results on MLE-Bench Lite. Bars show all completed harness results; the Pareto panel retains each model’s best harness. Colors and hatching follow the shared model–harness legend.",
             "kind": "pdf-page"
           },
           {
-            "url": "media/papers/recvr10RSDk49n-p4.png",
-            "alt": "PDF 第 4 页图表：Figure 2 | Positioning of this work. Left: within AI4AI, machine learning engineering (MLE) is our task domain; the OpenMLE stack trains and deploys Frontis-MA1, which is both the product of the stack and its engine, evaluated only on third-party benchmarks. Right: the mechanism",
+            "url": "media/papers/recvr10RSDk49n-p4-f2.png",
+            "alt": "PDF 第 4 页图表：Figure 2 | Positioning of this work. Left: within AI4AI, machine learning engineering (MLE) is our task domain; the OpenMLE stack trains and deploys Frontis-MA1, which is both the product of the stack and its engine, evaluated only on third-party benchmarks. Right: the mechanism ladder from evolution to recursive self-improvement; the meta-evolutionary loop (orange) places this work at the level where the improver itself is trained—the level after which Frontis-MA1 (Meta-evolution Agent) is named.",
             "kind": "pdf-page"
           },
           {
-            "url": "media/papers/recvr10RSDk49n-p18.png",
+            "url": "media/papers/recvr10RSDk49n-p18-f3.png",
             "alt": "PDF 第 18 页图表：Table 1 | MLE-Bench Lite results. Panel A presents the primary Frontis-MA1-35B comparison first, followed by the companion Frontis-MA1-30B replication and matched search comparisons; Panels B–C provide broader system context.",
             "kind": "pdf-page"
           },
           {
-            "url": "media/papers/recvr10RSDk49n-p28.png",
-            "alt": "PDF 第 28 页图表：Figure 19 | Modality-stratified results on the MLE-Bench Lite subset. Base denotes Qwen3.635B-A3B and Frontis denotes Frontis-MA1-35B, both evaluated with OpenMLE-Evo. Wide outlined bars show Medal Rate, and narrow filled bars show mean Human Rank; both use all three task–epoch outcomes per task, with invalid final submissions assigned zero Human Rank. Table 2 | Results on NatureBench (NB) Lite. S and M denote Surpass-SOTA (𝑔> 0.1) and Match-SOTA (𝑔≥0), respectively. Public reference agents use Codex for GPT models, Gemini CLI for Gemini 3.5 Flash, and Claude Code for all other models. Bold in",
+            "url": "media/papers/recvr10RSDk49n-p28-f4.png",
+            "alt": "PDF 第 28 页图表：Figure 19 | Modality-stratified results on the MLE-Bench Lite subset. Base denotes Qwen3.6- 35B-A3B and Frontis denotes Frontis-MA1-35B, both evaluated with OpenMLE-Evo. Wide outlined bars show Medal Rate, and narrow filled bars show mean Human Rank; both use all three task–epoch outcomes per task, with invalid final submissions assigned zero Human Rank.",
             "kind": "pdf-page"
           }
         ],
@@ -602,23 +608,23 @@
       "mediaAssets": {
         "images": [
           {
-            "url": "media/papers/recvqPdD88sPa0-p7.png",
-            "alt": "PDF 第 7 页图表：Fig. 3: (a) Figma examples and statistics compared to the Crello dataset. (b) Edit Replay Benchmark and detailed edit types. controller receives structured feedback tied to a single parent to children decision,",
+            "url": "media/papers/recvqPdD88sPa0-p7-f1.png",
+            "alt": "PDF 第 7 页图表：Fig. 3: (a) Figma examples and statistics compared to the Crello dataset. (b) Edit Replay Benchmark and detailed edit types.",
             "kind": "pdf-page"
           },
           {
-            "url": "media/papers/recvqPdD88sPa0-p11.png",
-            "alt": "PDF 第 11 页图表：Table 1: Reconstruction accuracy measured on the Figma dataset. Object-level Global-level Layout Method Table 2: Reconstruction accuracy measured on the Crello dataset [43] Object-level Global-level Layout Method Fig. 6: Decomposition accuracy comparison against baseline approaches. Previous approaches often fail to decompose multiple objects with high accuracy.",
+            "url": "media/papers/recvqPdD88sPa0-p11-f2.png",
+            "alt": "PDF 第 11 页图表：Table 1: Reconstruction accuracy measured on the Figma dataset.",
             "kind": "pdf-page"
           },
           {
-            "url": "media/papers/recvqPdD88sPa0-p23.png",
-            "alt": "PDF 第 23 页图表：Table 3: Ablation on the VLM used for the controller and verifier. Gemini corresponds to our default configuration reported in Table 1. Recolor0.839 0.792 Opacity NoVTracerEdit Fig. 14: Robustness to VLM backbones. Using a different VLM (GPT-5-mini) show similar results to our default setting, both achieving state-of-the-art performance in creating editable design decompositions.",
+            "url": "media/papers/recvqPdD88sPa0-p11-f3.png",
+            "alt": "PDF 第 11 页图表：Table 2: Reconstruction accuracy measured on the Crello dataset [43]",
             "kind": "pdf-page"
           },
           {
-            "url": "media/papers/recvqPdD88sPa0-p24.png",
-            "alt": "PDF 第 24 页图表：Table 4: Additional ablations on a subset of Figma. Object-level Global-level Layout Cost Method",
+            "url": "media/papers/recvqPdD88sPa0-p11-f4.png",
+            "alt": "PDF 第 11 页图表：Fig. 6: Decomposition accuracy comparison against baseline approaches. Previous ap- proaches often fail to decompose multiple objects with high accuracy.",
             "kind": "pdf-page"
           },
           {

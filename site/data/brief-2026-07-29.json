@@ -124,23 +124,23 @@
       "mediaAssets": {
         "images": [
           {
-            "url": "media/papers/recvqJBUmVb9tm-p22.png",
-            "alt": "PDF 第 22 页图表：Figure 2 compares the VIF, FITC, and Vecchia approximations and an exact GP model without an approximation for varying input dimensions d for a 3/2-Mat´ern kernel. We observe that the VIF approximation consistently outperforms both the Vecchia and FITC Figure 10 in Appendix 7, we additionally show results obtained by increasing the number of Vecchia neighbors to mv = 60 for the Vecchia approximation to ensure that the computational time for estimation is approximately equal for all three methods. Although the Vecchia approximation slightly benefits from the increased approximation complexity, ",
+            "url": "media/papers/recvqJBUmVb9tm-p23-f1.png",
+            "alt": "PDF 第 23 页图表：Figure 2: Comparison of the VIF, FITC, and Vecchia approximations and an exact GP model (without an approximation) for varying dimensions d using an ARD 3/2- Mat´ern kernel. The plots show the RMSE (log-scale), log-score (LS), and CRPS (log-scale) (mean ± 2 standard errors).",
             "kind": "pdf-page"
           },
           {
-            "url": "media/papers/recvqJBUmVb9tm-p23.png",
-            "alt": "PDF 第 23 页图表：Figure 2: Comparison of the VIF, FITC, and Vecchia approximations and an exact GP model (without an approximation) for varying dimensions d using an ARD 3/2- Mat´ern kernel. The plots show the RMSE (log-scale), log-score (LS), and CRPS",
+            "url": "media/papers/recvqJBUmVb9tm-p24-f2.png",
+            "alt": "PDF 第 24 页图表：Figure 3: Comparison of the VIF, FITC, and Vecchia approximations and an exact GP model (without an approximation) for varying smoothness parameters of an ARD Mat´ern kernel for d = 10 (1/2-Mat´ern, 3/2-Mat´ern, 5/2-Mat´ern, and ∞-Mat´ern = Gaussian kernel). The plots show the RMSE (log-scale), log-score (LS), and CRPS (log-scale) (mean ± 2 standard errors).",
             "kind": "pdf-page"
           },
           {
-            "url": "media/papers/recvqJBUmVb9tm-p24.png",
-            "alt": "PDF 第 24 页图表：Figure 3: Comparison of the VIF, FITC, and Vecchia approximations and an exact GP model (without an approximation) for varying smoothness parameters of an ARD Mat´ern kernel for d = 10 (1/2-Mat´ern, 3/2-Mat´ern, 5/2-Mat´ern, and ∞-Mat´ern",
+            "url": "media/papers/recvqJBUmVb9tm-p51-f3.png",
+            "alt": "PDF 第 51 页图表：Figure 15: Log-marginal likelihood differences relative to Cholesky-based computations and runtime of the FITC preconditioner for varying numbers of inducing points k for three different VIF approximations using ℓ= 50 sample vectors.",
             "kind": "pdf-page"
           },
           {
-            "url": "media/papers/recvqJBUmVb9tm-p51.png",
-            "alt": "PDF 第 51 页图表：Figure 15: Log-marginal likelihood differences relative to Cholesky-based computations and runtime of the FITC preconditioner for varying numbers of inducing points k for three different VIF approximations using ℓ= 50 sample vectors. Table 6: Accuracy-runtime comparison of preconditioners: RMSE between log-marginal likelihoods computed using iterative methods and those computed using a Cholesky decomposition and runtime for the VIFDU and FITC preconditioners",
+            "url": "media/papers/recvqJBUmVb9tm-p51-f4.png",
+            "alt": "PDF 第 51 页图表：Table 6: Accuracy-runtime comparison of preconditioners: RMSE between log-marginal likelihoods computed using iterative methods and those computed using a Cholesky decomposition and runtime for the VIFDU and FITC preconditioners and varying numbers of sample vectors ℓ∈{10, 50, 100} and CG convergence tol- erances δ ∈{0.0001, 0.001, 0.01, 0.1, 1}. We used a binary likelihood, n = 100,000 samples, and a VIF approximation with m = 200 & mv = 30.",
             "kind": "pdf-page"
           }
         ],

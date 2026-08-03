@@ -246,33 +246,199 @@ def evidence_text(full_text: dict[str, Any]) -> str:
     return "\n\n".join(parts)[:MAX_EVIDENCE_CHARS]
 
 
-def render_visual_pages(
-    pdf_url: str, page_numbers: list[Any], *, limit: int = MAX_VISUAL_PAGES
-) -> list[str]:
-    """把图表所在 PDF 页面渲染为 data URL，供全模态模型直接阅读。"""
-    pdf_bytes = fetch_pdf(pdf_url)
-    if not pdf_bytes:
+def _page_caption_blocks(page: fitz.Page) -> list[tuple[fitz.Rect, str]]:
+    captions: list[tuple[fitz.Rect, str]] = []
+    for block in page.get_text("blocks", sort=True):
+        text = " ".join(str(block[4]).split())
+        match = _CAPTION_RE.match(text)
+        if not match:
+            continue
+        remainder = text[match.end() :].strip(" .|:—-")
+        if len(remainder) >= 8:
+            captions.append((fitz.Rect(block[:4]), text))
+    return captions
+
+
+def _page_images(page: fitz.Page) -> list[fitz.Rect]:
+    images: list[fitz.Rect] = []
+    for image in page.get_image_info(xrefs=True):
+        rect = fitz.Rect(image.get("bbox") or ())
+        if (
+            rect.width * rect.height >= 500
+            and max(int(image.get("width") or 0), int(image.get("height") or 0)) >= 500
+        ):
+            images.append(rect)
+    return images
+
+
+def _page_graphics(page: fitz.Page) -> list[fitz.Rect]:
+    graphics = _page_images(page)
+    for drawing in page.get_drawings():
+        rect = fitz.Rect(drawing.get("rect") or ())
+        if (
+            (rect.width >= 10 or rect.height >= 10)
+            and rect.height <= page.rect.height * 0.3
+            and rect.width * rect.height <= page.rect.width * page.rect.height * 0.2
+        ):
+            graphics.append(rect)
+    try:
+        graphics.extend(fitz.Rect(table.bbox) for table in page.find_tables().tables)
+    except (AttributeError, RuntimeError, ValueError):
+        pass
+    return graphics
+
+
+def _nearest_graphic_cluster(
+    graphics: list[fitz.Rect],
+    caption: fitz.Rect,
+    *,
+    below: bool,
+    max_gap: float = 18,
+    min_y: float = 0,
+    max_y: float = float("inf"),
+) -> list[fitz.Rect]:
+    if below:
+        candidates = [
+            rect
+            for rect in graphics
+            if rect.y0 >= max(caption.y1 - 4, min_y)
+            and rect.y1 <= max_y
+            and rect.y0 - caption.y1 <= 420
+        ]
+        candidates.sort(key=lambda rect: (rect.y0, rect.y1))
+        if not candidates:
+            return []
+        cluster = [candidates[0]]
+        edge = candidates[0].y1
+        for rect in candidates[1:]:
+            if rect.y0 - edge > max_gap:
+                break
+            cluster.append(rect)
+            edge = max(edge, rect.y1)
+        return cluster
+
+    candidates = [
+        rect
+        for rect in graphics
+        if rect.y0 >= min_y
+        and rect.y1 <= min(caption.y0 + 4, max_y)
+        and caption.y0 - rect.y1 <= 420
+    ]
+    candidates.sort(key=lambda rect: (rect.y1, rect.y0), reverse=True)
+    if not candidates:
         return []
+    cluster = [candidates[0]]
+    edge = candidates[0].y0
+    for rect in candidates[1:]:
+        if edge - rect.y1 > max_gap:
+            break
+        cluster.append(rect)
+        edge = min(edge, rect.y0)
+    return cluster
+
+
+def _visual_regions(page: fitz.Page) -> list[tuple[fitz.Rect, str]]:
+    """定位单个 Figure/Table，而不是把整页当成一张正文配图。"""
+    regions: list[tuple[fitz.Rect, str]] = []
+    captions = _page_caption_blocks(page)
+    graphics = _page_graphics(page)
+    for index, (caption_rect, caption) in enumerate(captions):
+        is_table = bool(re.match(r"^\s*(?:table|表)\b", caption, re.I))
+        previous = captions[index - 1] if index else None
+        following = captions[index + 1] if index + 1 < len(captions) else None
+        min_y = page.rect.y0
+        max_y = page.rect.y1
+        if not is_table and previous:
+            previous_is_table = bool(
+                re.match(r"^\s*(?:table|表)\b", previous[1], re.I)
+            )
+            min_y = (
+                (previous[0].y1 + caption_rect.y0) / 2
+                if previous_is_table
+                else previous[0].y1
+            )
+        if is_table and following:
+            max_y = (caption_rect.y1 + following[0].y0) / 2
+        cluster = _nearest_graphic_cluster(
+            graphics,
+            caption_rect,
+            below=is_table,
+            max_gap=40 if not is_table else 18,
+            min_y=min_y,
+            max_y=max_y,
+        )
+        if cluster:
+            visual = fitz.Rect(cluster[0])
+            for rect in cluster[1:]:
+                visual |= rect
+            x0 = min(caption_rect.x0, visual.x0) - 8
+            x1 = max(caption_rect.x1, visual.x1) + 8
+            y0 = min(caption_rect.y0, visual.y0) - 8
+            y1 = min(
+                max_y,
+                max(caption_rect.y1, visual.y1) + (24 if is_table else 8),
+            )
+        else:
+            # 少数纯文本表格没有边框/绘图对象；按图注相邻区域做受限回退，
+            # 仍只截半页以内，不再输出整页。
+            x0, x1 = caption_rect.x0 - 8, caption_rect.x1 + 8
+            if is_table:
+                y0, y1 = caption_rect.y0 - 8, min(page.rect.y1, caption_rect.y1 + 260)
+            else:
+                y0, y1 = max(0, caption_rect.y0 - 260), caption_rect.y1 + 8
+        clip = fitz.Rect(
+            max(page.rect.x0, x0),
+            max(page.rect.y0, y0),
+            min(page.rect.x1, x1),
+            min(page.rect.y1, y1),
+        )
+        if clip.width >= 80 and clip.height >= 45:
+            regions.append((clip, caption))
+    return regions
+
+
+def _render_visual_crops(
+    pdf_bytes: bytes, page_numbers: list[Any], *, limit: int
+) -> list[tuple[int, str, bytes]]:
     try:
         document = fitz.open(stream=pdf_bytes, filetype="pdf")
     except (RuntimeError, ValueError):
         return []
-    images: list[str] = []
+    crops: list[tuple[int, str, bytes]] = []
     seen: set[int] = set()
     for value in page_numbers:
         try:
-            index = int(value) - 1
+            page_number = int(value)
+            index = page_number - 1
         except (TypeError, ValueError):
             continue
         if index in seen or index < 0 or index >= len(document):
             continue
         seen.add(index)
-        pixmap = document[index].get_pixmap(matrix=fitz.Matrix(1.35, 1.35), alpha=False)
-        encoded = base64.b64encode(pixmap.tobytes("png")).decode("ascii")
-        images.append(f"data:image/png;base64,{encoded}")
-        if len(images) >= limit:
-            break
-    return images
+        page = document[index]
+        for clip, caption in _visual_regions(page):
+            pixmap = page.get_pixmap(
+                matrix=fitz.Matrix(1.8, 1.8),
+                clip=clip,
+                alpha=False,
+            )
+            crops.append((page_number, caption, pixmap.tobytes("png")))
+            if len(crops) >= limit:
+                return crops
+    return crops
+
+
+def render_visual_pages(
+    pdf_url: str, page_numbers: list[Any], *, limit: int = MAX_VISUAL_PAGES
+) -> list[str]:
+    """把单个 Figure/Table 裁切为 data URL，供全模态模型直接阅读。"""
+    pdf_bytes = fetch_pdf(pdf_url)
+    if not pdf_bytes:
+        return []
+    return [
+        f"data:image/png;base64,{base64.b64encode(content).decode('ascii')}"
+        for _, _, content in _render_visual_crops(pdf_bytes, page_numbers, limit=limit)
+    ]
 
 
 def write_visual_page_images(
@@ -284,49 +450,25 @@ def write_visual_page_images(
     *,
     limit: int = MAX_VISUAL_PAGES,
 ) -> list[dict[str, str]]:
-    """把 PDF 图表页写成静态站图片，返回可直接放入 mediaAssets 的相对文件信息。"""
+    """把单个 PDF Figure/Table 写成静态站图片。"""
     pdf_bytes = fetch_pdf(pdf_url)
     if not pdf_bytes:
         return []
-    try:
-        document = fitz.open(stream=pdf_bytes, filetype="pdf")
-    except (RuntimeError, ValueError):
-        return []
     target_dir.mkdir(parents=True, exist_ok=True)
     safe_prefix = re.sub(r"[^a-zA-Z0-9_.-]+", "-", file_prefix).strip("-") or "paper"
-    caption_by_page: dict[int, list[str]] = {}
-    for item in captions or []:
-        try:
-            page = int(item.get("page") or 0)
-        except (TypeError, ValueError):
-            continue
-        text = str(item.get("text") or "").strip()
-        if page > 0 and text:
-            caption_by_page.setdefault(page, []).append(text)
-
     images: list[dict[str, str]] = []
-    seen: set[int] = set()
-    for value in page_numbers:
-        try:
-            page_number = int(value)
-            index = page_number - 1
-        except (TypeError, ValueError):
-            continue
-        if index in seen or index < 0 or index >= len(document):
-            continue
-        seen.add(index)
-        pixmap = document[index].get_pixmap(matrix=fitz.Matrix(1.55, 1.55), alpha=False)
-        filename = f"{safe_prefix}-p{page_number}.png"
-        (target_dir / filename).write_bytes(pixmap.tobytes("png"))
-        caption = " ".join(caption_by_page.get(page_number) or [])[:600]
+    for index, (page_number, caption, content) in enumerate(
+        _render_visual_crops(pdf_bytes, page_numbers, limit=limit),
+        1,
+    ):
+        filename = f"{safe_prefix}-p{page_number}-f{index}.png"
+        (target_dir / filename).write_bytes(content)
         images.append(
             {
                 "filename": filename,
-                "alt": f"PDF 第 {page_number} 页图表" + (f"：{caption}" if caption else ""),
+                "alt": f"PDF 第 {page_number} 页图表：{caption[:600]}",
             }
         )
-        if len(images) >= limit:
-            break
     return images
 
 

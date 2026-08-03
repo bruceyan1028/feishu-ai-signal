@@ -61,7 +61,11 @@ class PaperFullTextTest(unittest.TestCase):
                 [{"page": 2, "text": "Table 1: Accuracy improves to 84.5."}],
             )
             self.assertEqual(len(images), 1)
-            self.assertTrue((Path(tmp) / images[0]["filename"]).exists())
+            image_path = Path(tmp) / images[0]["filename"]
+            self.assertTrue(image_path.exists())
+            rendered = fitz.Pixmap(str(image_path))
+            self.assertLess(rendered.height, 700)
+            self.assertIn("-f1.png", images[0]["filename"])
             self.assertIn("84.5", images[0]["alt"])
 
     def test_canonical_hf_pdf_url(self) -> None:
