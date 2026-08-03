@@ -1524,7 +1524,7 @@
         ]
       },
       "eventAggregation": {
-        "total": 5,
+        "total": 4,
         "groups": [
           {
             "key": "官方来源",
@@ -1563,13 +1563,6 @@
                 "url": "https://www.youtube.com/watch?v=9mnleaza59o",
                 "note": "同事件的其它源头报道。",
                 "text": "Gemini Robotics 2将人形机器人控制扩展至全身动作 —— 同事件的其它源头报道。"
-              },
-              {
-                "source": "Google DeepMind YouTube",
-                "title": "This is Gemini Robotics 2 🤖",
-                "url": "https://www.youtube.com/watch?v=oemefobzode",
-                "note": "同事件的其它源头报道。",
-                "text": "This is Gemini Robotics 2 🤖 —— 同事件的其它源头报道。"
               }
             ]
           }
