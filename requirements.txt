@@ -3,3 +3,4 @@ feedparser==6.0.11
 python-dateutil==2.9.0.post0
 tenacity==9.0.0
 yt-dlp
+PyMuPDF==1.26.5

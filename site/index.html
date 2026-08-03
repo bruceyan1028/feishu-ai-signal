@@ -649,7 +649,9 @@ async function loadSources(){
   render();
 }
 async function loadBrief(){
-  const date = new URLSearchParams(location.search).get('date');
+  const params = new URLSearchParams(location.search);
+  const date = params.get('date');
+  const requestedSignal = params.get('signal');
   const path = date ? `data/brief-${encodeURIComponent(date)}.json` : 'data/brief-latest.json';
   try {
     const response = await fetch(path, { cache:'no-store' });
@@ -689,6 +691,10 @@ async function loadBrief(){
       eventAggregation: s.eventAggregation || null,
       tier: s.tier || '',
       priority: s.priority || '',
+      pdfUrl: s.pdfUrl || '',
+      paperFullTextSource: s.paperFullTextSource || '',
+      paperPages: Number(s.paperPages) || 0,
+      paperCaptions: Array.isArray(s.paperCaptions) ? s.paperCaptions : [],
     }));
     signals.forEach(s => { s.contentType = signalContentType(s); s.kind = s.contentType || '文章'; });
     // 编号即阅读顺序：按影响分从高到低重排后再编号，默认视图才会是连续的 1、2、3…
@@ -727,6 +733,10 @@ async function loadBrief(){
     }));
     seedDemoComments(signals);
     render();
+    if(requestedSignal){
+      const target = signals.find(s=>s.recordId===requestedSignal || String(s.rank)===requestedSignal);
+      if(target) App.openDetail(target.rank);
+    }
   } catch(error) {
     console.warn('真实简报加载失败：', error);
     // 这里若保留内置演示数据，用户会把一份日期完全不同的假简报当成当天内容，
@@ -1840,6 +1850,11 @@ function detailHtml(A){
   if(!s) return '';
   const ib = scoreBadgeD(s.impact); const u = urgD[s.urgency];
   const sourceUrl = s.url || sourceUrls[s.source] || '#';
+  const paperBasis = s.kind==='论文'
+    ? (s.paperFullTextSource==='pdf'
+      ? `<span style="font-size:11px;font-weight:700;padding:4px 10px;border-radius:6px;background:rgba(35,137,82,.1);color:var(--ds-good);border:1px solid rgba(35,137,82,.3);">已读取 PDF 全文${s.paperPages?` · ${s.paperPages}页`:''}</span>`
+      : `<span style="font-size:11px;font-weight:700;padding:4px 10px;border-radius:6px;background:rgba(177,115,0,.1);color:var(--ds-warn);border:1px solid rgba(177,115,0,.3);">仅摘要</span>`)
+    : '';
   const km = KIND_META[s.kind || '文章'] || KIND_META['文章'];
   const points = s.tags.map(t=>`<span style="font-size: 12px; color: ${A.accentBright}; background: ${A.accentSoft}; border: 1px solid ${A.accentBorder}; padding: 4px 11px; border-radius: 999px;">#${esc(t)}</span>`).join('');
   const related = signals.filter(x=>x.cat===s.cat && x.rank!==s.rank).slice(0,3);
@@ -1892,6 +1907,7 @@ function detailHtml(A){
           <span style="font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 6px; background: rgba(22,19,15,.06); color: ${UI.text2}; border: 1px solid ${UI.border2};">${km.icon} ${km.label}</span>
           <span style="font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 6px; background: ${A.accentSoft}; color: ${A.accentBright}; border: 1px solid ${A.accentBorder};">${esc(s.cat)}</span>
           ${s.tags.includes('端侧')?`<span style="font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 6px; background: ${A.accentSoft}; color: ${A.accentBright}; border: 1px solid ${A.accentBorder};">端侧模型</span>`:''}
+          ${paperBasis}
           <span style="font-size: 11px; font-weight: 700; padding: 4px 9px; border-radius: 6px; background: ${ib.bg}; color: ${ib.color}; border: 1px solid ${ib.border};">影响 ${s.impact}</span>
           <span style="font-size: 11px; font-weight: 700; padding: 4px 9px; border-radius: 6px; background: ${u.bg}; color: ${u.color}; border: 1px solid ${u.border};">紧迫 ${s.urgency}</span>
           <span style="font-size: 11px; color: ${UI.text3}; font-family: 'Geist Mono', monospace;">#${s.rank}</span>
@@ -1901,6 +1917,7 @@ function detailHtml(A){
         <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap; padding-bottom: 16px; border-bottom: 1px solid ${UI.border};">
           ${avatarHtml(s.source)}
           <a class="src-link" href="${esc(sourceUrl)}" target="_blank" rel="noopener" style="font-size: 13px; font-weight: 600; color: ${UI.text}; border-bottom: 1px dashed rgba(22,19,15,.28);">${esc(s.source)} ↗</a>
+          ${s.pdfUrl?`<a class="src-link" href="${esc(s.pdfUrl)}" target="_blank" rel="noopener" style="font-size:13px;font-weight:700;color:${A.accentBright};border:1px solid ${A.accentBorder};background:${A.accentSoft};padding:5px 10px;">查看 PDF ↗</a>`:''}
           <span style="color: ${UI.text3};">·</span>
           <span style="font-size: 12px; color: ${UI.text3}; font-family: 'Geist Mono', monospace;">${s.date}</span>
         </div>

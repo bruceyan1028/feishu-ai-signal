@@ -41,7 +41,13 @@ def _signal_from_record(record: dict[str, Any]) -> dict[str, Any]:
         published_ms = int(float(daily.scalar(fields.get("发布时间")) or 0))
     except (TypeError, ValueError):
         published_ms = 0
-    return {
+    paper_metrics = _json_cell(fields.get("论文指标"), {})
+    if not isinstance(paper_metrics, dict):
+        paper_metrics = {}
+    full_text = paper_metrics.get("full_text") or {}
+    if not isinstance(full_text, dict):
+        full_text = {}
+    signal = {
         "recordId": str(record.get("record_id") or ""),
         "sourceId": str(daily.scalar(fields.get("source_id")) or ""),
         "title": str(daily.scalar(fields.get("标题")) or ""),
@@ -63,6 +69,16 @@ def _signal_from_record(record: dict[str, Any]) -> dict[str, Any]:
         "imageUrl": daily.link(fields.get("图片链接")),
         "mediaAssets": daily.media_assets(fields.get("媒体资源")),
     }
+    if full_text:
+        signal.update(
+            {
+                "pdfUrl": str(full_text.get("pdf_url") or ""),
+                "paperFullTextSource": str(full_text.get("source") or ""),
+                "paperPages": int(full_text.get("pages") or 0),
+                "paperCaptions": list(full_text.get("captions") or [])[:8],
+            }
+        )
+    return signal
 
 
 def _within_source_window(

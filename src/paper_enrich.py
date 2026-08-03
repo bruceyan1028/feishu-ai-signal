@@ -16,7 +16,11 @@ from . import config
 
 log = logging.getLogger(__name__)
 
-_ARXIV_ID_RE = re.compile(r"arxiv\.org/(?:abs|pdf|html)/([0-9]+\.[0-9]+)(?:v\d+)?", re.I)
+_ARXIV_ID_RE = re.compile(
+    r"(?:arxiv\.org/(?:abs|pdf|html)/|huggingface\.co/papers/)"
+    r"([0-9]{4}\.[0-9]{4,5})(?:v\d+)?",
+    re.I,
+)
 _ACCEPT_RE = re.compile(
     r"(?:accepted|to\s+appear)\s*(?:to|at|in|:)?\s*([^\n.;]{3,80})",
     re.I,

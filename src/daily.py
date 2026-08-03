@@ -12,7 +12,7 @@ from html import unescape
 from pathlib import Path
 from typing import Any
 
-from . import cluster, config, feishu, report, rss, scrape, sources
+from . import cluster, config, feishu, paper_fulltext, report, rss, scrape, sources
 
 log = logging.getLogger("daily")
 CN_TZ = timezone(timedelta(hours=8))
@@ -434,10 +434,36 @@ def analyze_signal(fields: dict[str, Any]) -> dict[str, Any]:
     is_paper = content_type(fields) == "论文"
     is_social = content_type(fields) == "社交媒体帖子"
     paper_extra = ""
+    image_urls: list[str] = []
+    analysis_text = clean_body(
+        str(scalar(fields.get("原文")) or ""),
+        str(scalar(fields.get("来源")) or ""),
+    )[:12000]
+    paper_metrics: dict[str, Any] = {}
+    paper_full_text: dict[str, Any] = {}
     if is_paper:
+        try:
+            paper_metrics = json.loads(str(scalar(fields.get("论文指标")) or "{}"))
+        except (TypeError, ValueError):
+            paper_metrics = {}
+        if not isinstance(paper_metrics, dict):
+            paper_metrics = {}
+        full_text = paper_metrics.get("full_text") or {}
+        paper_full_text = full_text if isinstance(full_text, dict) else {}
+        evidence = paper_fulltext.evidence_text(paper_full_text)
+        if evidence:
+            analysis_text = evidence
+        if paper_full_text.get("source") == "pdf":
+            image_urls = paper_fulltext.render_visual_pages(
+                str(paper_full_text.get("pdf_url") or ""),
+                list(paper_full_text.get("visual_pages") or []),
+            )
         paper_extra = (
             "额外字段：rigor/novelty_paper/relevance（0-100整数，分别表示方法严谨度、学术新颖度、"
             "与产业/工程实践的相关度）。\n"
+            "论文分析必须以 PDF 分章节证据为主；若附带图表页图像，必须读取坐标轴、图例、"
+            "表格数值和图注，并在【关键细节】中明确写出可核验的图表结论及 PDF 页码。"
+            "不得把 HF/PwC 的介绍文案当作论文实验结果。\n"
         )
     if is_social:
         analysis_requirement = """deep_analysis_cn 写 250-500 字，使用以下结构：
@@ -475,8 +501,9 @@ deep_analysis_cn（中文分析）。
 {paper_extra}标题：{scalar(fields.get("标题"))}
 来源：{scalar(fields.get("来源"))}
 分类：{scalar(fields.get("分类"))}
-原文：{clean_body(str(scalar(fields.get("原文")) or ""), str(scalar(fields.get("来源")) or ""))[:12000]}"""
-    raw = report._llm_json(prompt)
+分析依据：{"论文 PDF 全文及图表页" if is_paper and paper_full_text.get("source") == "pdf" else "网页正文或摘要"}
+原文/论文证据：{analysis_text}"""
+    raw = report._llm_json(prompt, image_urls=image_urls)
     topics = normalize_topics(fields, list(raw.get("topics") or []))
     result = {
         "title_cn": str(raw.get("title_cn") or scalar(fields.get("标题"))).strip(),
@@ -497,13 +524,25 @@ deep_analysis_cn（中文分析）。
         result["novelty_paper"] = novelty_paper
         result["relevance"] = relevance
         result["llm_quality"] = round((rigor + novelty_paper + relevance) / 3, 1)
+        result["evidence_version"] = int(
+            paper_full_text.get("version") or 0
+        )
     return result
 
 
 def _signal_from_fields(record_id: str, fields: dict[str, Any], analysis: dict[str, Any], *, priority: str = "P2", tier: str = "") -> dict[str, Any]:
     published = int(float(scalar(fields.get("发布时间")) or 0))
     media = media_assets(fields.get("媒体资源"))
-    return {
+    try:
+        paper_metrics = json.loads(str(scalar(fields.get("论文指标")) or "{}"))
+    except (TypeError, ValueError):
+        paper_metrics = {}
+    if not isinstance(paper_metrics, dict):
+        paper_metrics = {}
+    full_text = paper_metrics.get("full_text") or {}
+    if not isinstance(full_text, dict):
+        full_text = {}
+    signal = {
         "recordId": record_id,
         "title": str(scalar(fields.get("标题"))),
         "titleCn": analysis["title_cn"],
@@ -526,6 +565,16 @@ def _signal_from_fields(record_id: str, fields: dict[str, Any], analysis: dict[s
         "topComments": media.get("topComments") or [],
         "deepAnalysis": str(analysis.get("deep_analysis_cn") or "").strip(),
     }
+    if full_text:
+        signal.update(
+            {
+                "pdfUrl": str(full_text.get("pdf_url") or ""),
+                "paperFullTextSource": str(full_text.get("source") or ""),
+                "paperPages": int(full_text.get("pages") or 0),
+                "paperCaptions": list(full_text.get("captions") or [])[:8],
+            }
+        )
+    return signal
 
 
 def _ensure_body_cn(
@@ -600,6 +649,20 @@ def _ensure_deep_analysis(
 def _existing_analysis(fields: dict[str, Any]) -> dict[str, Any] | None:
     if scalar(fields.get("状态")) != "已分析" or not scalar(fields.get("中文摘要")):
         return None
+    try:
+        metrics = json.loads(str(scalar(fields.get("论文指标")) or "{}"))
+    except (TypeError, ValueError):
+        metrics = {}
+    if isinstance(metrics, dict):
+        full_text = metrics.get("full_text") or {}
+        llm = metrics.get("llm") or {}
+        if (
+            isinstance(full_text, dict)
+            and full_text.get("source") == "pdf"
+            and int((llm if isinstance(llm, dict) else {}).get("evidence_version") or 0)
+            < int(full_text.get("version") or 0)
+        ):
+            return None
     table_urgency = str(scalar(fields.get("紧迫度")) or "Medium")
     topics = fields.get("主题") if isinstance(fields.get("主题"), list) else []
     return {
@@ -726,6 +789,7 @@ def generate(day: str | None = None) -> dict[str, Any]:
                     "novelty_paper": analysis.get("novelty_paper"),
                     "relevance": analysis.get("relevance"),
                     "llm_quality": analysis.get("llm_quality"),
+                    "evidence_version": analysis.get("evidence_version") or 0,
                 }
                 metrics["quality_score_final"] = final_q
                 update_fields["论文指标"] = json.dumps(metrics, ensure_ascii=False)

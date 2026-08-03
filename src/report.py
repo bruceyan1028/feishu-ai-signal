@@ -115,7 +115,8 @@ ANALYSIS_PROMPT = """你是资深 AI 行业分析师。请阅读下面这条 AI 
 """
 
 
-def _llm_json(prompt: str) -> dict[str, Any]:
+def _llm_json(prompt: str, image_urls: list[str] | None = None) -> dict[str, Any]:
+    """调用统一 LLM；传图时使用 OpenAI 兼容的多模态消息格式。"""
     import time
 
     import requests
@@ -142,11 +143,37 @@ def _llm_json(prompt: str) -> dict[str, Any]:
     for mode, url in endpoints:
         body: dict[str, Any] = {"model": config.LLM_MODEL}
         if mode == "responses":
-            body["input"] = prompt
+            if image_urls:
+                body["input"] = [
+                    {
+                        "role": "user",
+                        "content": [
+                            {"type": "input_text", "text": prompt},
+                            *[
+                                {"type": "input_image", "image_url": image_url}
+                                for image_url in image_urls
+                            ],
+                        ],
+                    }
+                ]
+            else:
+                body["input"] = prompt
         else:
+            content: Any = prompt
+            if image_urls:
+                content = [
+                    {"type": "text", "text": prompt},
+                    *[
+                        {
+                            "type": "image_url",
+                            "image_url": {"url": image_url, "detail": "high"},
+                        }
+                        for image_url in image_urls
+                    ],
+                ]
             body.update(
                 {
-                    "messages": [{"role": "user", "content": prompt}],
+                    "messages": [{"role": "user", "content": content}],
                     "temperature": 0.3,
                     "response_format": {"type": "json_object"},
                 }

@@ -9,6 +9,7 @@ import requests
 from . import (
     config,
     feishu,
+    paper_fulltext,
     podcast,
     process,
     rss,
@@ -244,6 +245,11 @@ def run(methods: set[str] | None = None) -> int:
     new_items, podcast_stats = podcast.enrich_podcast_items(new_items)
     if podcast_stats:
         log.info("Podcast 处理漏斗 %s", podcast_stats)
+    # 论文只在跨轮去重后读取 PDF，避免为最终不会入库的候选下载和解析大文件。
+    paper_items = [item for item in new_items if item.get("paper_metrics_json")]
+    pdf_ok = sum(paper_fulltext.enrich_item(item) for item in paper_items)
+    if paper_items:
+        log.info("论文 PDF 证据：尝试 %d 条，成功 %d 条", len(paper_items), pdf_ok)
     # 只对确定入库的普通条目回源补全正文：RSS 常常只给一段摘要。
     rss.backfill_full_text(new_items)
     new_items = _drop_still_too_short(new_items)

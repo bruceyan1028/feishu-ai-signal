@@ -3,7 +3,7 @@ from __future__ import annotations
 
 import unittest
 
-from src import paper_enrich
+from src import paper_enrich, process
 
 
 class PaperEnrichTest(unittest.TestCase):
@@ -11,6 +11,23 @@ class PaperEnrichTest(unittest.TestCase):
         self.assertEqual(
             paper_enrich.extract_arxiv_id("https://arxiv.org/abs/2607.11889v1"),
             "2607.11889",
+        )
+        self.assertEqual(
+            paper_enrich.extract_arxiv_id(
+                "https://huggingface.co/papers/2607.11889"
+            ),
+            "2607.11889",
+        )
+
+    def test_hf_and_arxiv_share_dedup_key(self):
+        feed = {"dedup_key": "arxiv_id(strip_version)"}
+        self.assertEqual(
+            process.build_dedup_key(
+                "https://huggingface.co/papers/2607.11889", "Paper", feed
+            ),
+            process.build_dedup_key(
+                "https://arxiv.org/abs/2607.11889v2", "Paper", feed
+            ),
         )
 
     def test_parse_acceptance(self):

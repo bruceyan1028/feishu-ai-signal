@@ -90,9 +90,8 @@ def build_dedup_key(url: str, title: str, feed: dict[str, Any]) -> str:
         if match:
             return f"youtube:{match.group(1)}"
     if "arxiv_id" in strategy:
-        m = re.search(r"arxiv\.org/abs/([^/?#]+)", url, re.I)
-        if m:
-            arxiv_id = re.sub(r"v\d+$", "", m.group(1), flags=re.I)
+        arxiv_id = paper_enrich.extract_arxiv_id(url)
+        if arxiv_id:
             return f"arxiv:{arxiv_id}"
     if "hash(model" in strategy:
         return f"release:{str(title or url).lower()}"[:240]
