@@ -490,6 +490,37 @@ class PipelineTests(unittest.TestCase):
 
 
 class DailyTests(unittest.TestCase):
+    def test_edge_topic_is_added_deterministically(self) -> None:
+        fields = {
+            "标题": "OPPO 开放首个端侧 Multi-Agent 系统内测",
+            "原文": "模型在手机 NPU 上本地运行，不依赖云端推理。",
+        }
+        self.assertEqual(
+            daily.normalize_topics(fields, ["AI", "Agent"]),
+            ["AI", "Agent", "端侧"],
+        )
+
+    def test_edge_topic_does_not_match_npu_inside_ordinary_words(self) -> None:
+        fields = {
+            "标题": "Optimizing attention with input perturbations",
+            "原文": "This paper studies input representations for server-side training.",
+        }
+        self.assertEqual(daily.normalize_topics(fields, ["AI"]), ["AI"])
+
+    def test_edge_topic_ignores_generic_local_deployment(self) -> None:
+        fields = {
+            "标题": "Open WebUI：面向本地部署的可扩展 AI 交互平台",
+            "中文摘要": "可部署在服务器上并接入多种远程模型 API。",
+        }
+        self.assertEqual(daily.normalize_topics(fields, ["开源", "LLM"]), ["开源", "LLM"])
+
+    def test_edge_topic_survives_four_topic_cap(self) -> None:
+        fields = {"标题": "Jetson 边缘推理平台更新"}
+        self.assertEqual(
+            daily.normalize_topics(fields, ["AI", "硬件", "产品", "多模态"]),
+            ["AI", "硬件", "产品", "端侧"],
+        )
+
     def test_candidate_selection_respects_rss_set_and_arxiv_cap(self) -> None:
         now = datetime.now(timezone.utc)
         stamp = int(now.timestamp() * 1000)

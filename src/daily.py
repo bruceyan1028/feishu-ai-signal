@@ -16,7 +16,7 @@ from . import cluster, config, feishu, report, rss, scrape, sources
 
 log = logging.getLogger("daily")
 CN_TZ = timezone(timedelta(hours=8))
-TOPIC_OPTIONS = {"AI", "LLM", "Agent", "RAG", "推理", "多模态", "开源", "硬件", "监管", "融资", "产品", "其他"}
+TOPIC_OPTIONS = {"AI", "LLM", "Agent", "RAG", "推理", "多模态", "开源", "硬件", "端侧", "监管", "融资", "产品", "其他"}
 URGENCY_TO_TABLE = {"高": "High", "中": "Medium", "低": "Low"}
 URGENCY_TO_CN = {value: key for key, value in URGENCY_TO_TABLE.items()}
 
@@ -25,6 +25,46 @@ _CJK_RE = re.compile(r"[\u4e00-\u9fff]")
 # 正文里常见的栏目抬头噪音，如「智东西 作者 | ZeR0 编辑 | 漠影」
 _BYLINE_RE = re.compile(r"(?:作者|编译|编辑|撰文|责编|来源|文)\s*[|｜/:：]\s*\S{1,20}\s*")
 _BYLINE_HEAD = 120
+_EDGE_TOPIC_RE = re.compile(
+    r"(?:端侧|端上|设备端|端云|"
+    r"(?:手机|移动|车载|设备)端(?:模型|AI|智能|推理|部署|运行)|"
+    r"边缘(?:AI|人工智能|模型|推理|计算|设备|平台)|"
+    r"(?:模型|AI|智能体).{0,10}(?:手机|移动设备)|"
+    r"(?:手机|移动设备).{0,10}(?:模型|AI|智能体|推理)|"
+    r"on[- ]device|device[- ]side|"
+    r"edge[- ](?:ai|inference|computing|device)|"
+    r"(?:手机|移动|车载|端侧).{0,12}\bNPU\b|\bNPU\b.{0,12}(?:手机|移动|车载|端侧))",
+    re.I,
+)
+
+
+def is_edge_signal(fields: dict[str, Any]) -> bool:
+    """确定性识别端侧信号，避免完全依赖 LLM 自由选标签。"""
+    text = "\n".join(
+        str(scalar(fields.get(name)) or "")
+        # 不扫整篇原文：聚合页、相关文章和泛泛提及会制造大量假阳性。
+        # 标题与摘要足以表达这是否是一条以端侧为主题的信号。
+        for name in ("标题", "中文标题", "中文摘要")
+    )[:12000]
+    return bool(_EDGE_TOPIC_RE.search(text))
+
+
+def normalize_topics(fields: dict[str, Any], topics: list[Any]) -> list[str]:
+    """过滤主题并强制补齐确定性专题；最多保留四项。"""
+    result: list[str] = []
+    for topic in topics:
+        value = str(scalar(topic) or "")
+        if value in TOPIC_OPTIONS and value not in result:
+            result.append(value)
+    if is_edge_signal(fields) and "端侧" not in result:
+        result = [topic for topic in result if topic != "其他"]
+        result.append("端侧")
+    if len(result) > 4:
+        if "端侧" in result[4:]:
+            result = result[:3] + ["端侧"]
+        else:
+            result = result[:4]
+    return result or ["其他"]
 
 
 def cjk_ratio(text: str) -> float:
@@ -428,7 +468,8 @@ deep_analysis_cn 必须使用以下结构，每个标题独占一行，标题与
 给出2-4条具体、克制、可执行的验证或跟进建议。"""
     prompt = f"""你是资深 AI 行业分析师。只依据给定原文输出严格 JSON，不得虚构。
 字段：title_cn（准确简洁的中文标题）、summary_cn（中文1-2句）、why（中文1句）、impact/novelty/actionability（0-100整数）、
-urgency（高/中/低）、topics（从 AI、LLM、Agent、RAG、推理、多模态、开源、硬件、监管、融资、产品、其他中选2-4个）、
+urgency（高/中/低）、topics（从 AI、LLM、Agent、RAG、推理、多模态、开源、硬件、端侧、监管、融资、产品、其他中选2-4个；
+手机/设备本地运行、NPU、边缘推理、on-device 模型必须包含“端侧”）、
 deep_analysis_cn（中文分析）。
 {analysis_requirement}
 {paper_extra}标题：{scalar(fields.get("标题"))}
@@ -436,7 +477,7 @@ deep_analysis_cn（中文分析）。
 分类：{scalar(fields.get("分类"))}
 原文：{clean_body(str(scalar(fields.get("原文")) or ""), str(scalar(fields.get("来源")) or ""))[:12000]}"""
     raw = report._llm_json(prompt)
-    topics = [str(topic) for topic in raw.get("topics") or [] if str(topic) in TOPIC_OPTIONS][:4]
+    topics = normalize_topics(fields, list(raw.get("topics") or []))
     result = {
         "title_cn": str(raw.get("title_cn") or scalar(fields.get("标题"))).strip(),
         "summary_cn": str(raw.get("summary_cn") or "").strip(),
@@ -627,6 +668,7 @@ def generate(day: str | None = None) -> dict[str, Any]:
         raise config.ConfigError("生成真实简报需要 LLM_API_KEY")
     token = feishu.get_tenant_access_token()
     feishu.ensure_entry_enrichment_fields(token)
+    feishu.ensure_select_option(token, config.FEISHU_ENTRY_TABLE_ID, "主题", "端侧")
     params = feishu.read_param_records(token)
     entries = feishu.read_all_records_with_ids(token, config.FEISHU_ENTRY_TABLE_ID)
     priorities = _priority_map(params)
@@ -687,6 +729,15 @@ def generate(day: str | None = None) -> dict[str, Any]:
                 }
                 metrics["quality_score_final"] = final_q
                 update_fields["论文指标"] = json.dumps(metrics, ensure_ascii=False)
+        normalized_topics = normalize_topics(fields, list(analysis.get("topics") or []))
+        if normalized_topics != list(analysis.get("topics") or []):
+            analysis["topics"] = normalized_topics
+        stored_topics = [
+            str(scalar(topic))
+            for topic in (fields.get("主题") if isinstance(fields.get("主题"), list) else [])
+        ]
+        if normalized_topics != stored_topics:
+            update_fields["主题"] = normalized_topics
         # 详情页展示深度解读而不是整篇译文；存量条目在首次入选时补齐。
         update_fields.update(_ensure_deep_analysis(fields, analysis))
         if update_fields:

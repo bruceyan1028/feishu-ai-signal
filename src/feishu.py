@@ -405,7 +405,7 @@ def ensure_select_option(
     field_name: str,
     option_name: str,
 ) -> None:
-    """幂等给已有单选字段追加选项，保留原选项 ID。"""
+    """幂等给已有单选/多选字段追加选项，保留原选项 ID 与字段类型。"""
     if not table_id:
         return
     fields = _list_fields(token, table_id)
@@ -425,6 +425,11 @@ def ensure_select_option(
     ]
     options.append({"name": option_name, "color": len(options) % 54})
     field_id = str(target.get("field_id") or "")
+    field_type = int(target.get("type") or 3)
+    if field_type not in {3, 4}:
+        raise FeishuError(
+            f"Feishu field {field_name} on {table_id} is not select/multi-select: {field_type}"
+        )
     url = (
         f"{config.FEISHU_HOST}/open-apis/bitable/v1/apps/{config.FEISHU_BASE_ID}"
         f"/tables/{table_id}/fields/{field_id}"
@@ -432,7 +437,7 @@ def ensure_select_option(
     data = _SESSION.put(
         url,
         headers={"Authorization": f"Bearer {token}", "Content-Type": "application/json; charset=utf-8"},
-        json={"field_name": field_name, "type": 3, "property": {"options": options}},
+        json={"field_name": field_name, "type": field_type, "property": {"options": options}},
         timeout=30,
     ).json()
     if data.get("code") != 0:

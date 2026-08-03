@@ -390,13 +390,14 @@ def run(seed: bool = True, dry_run: bool = False) -> dict[str, str]:
         print("\n[dry-run] 预览结束，未做任何写入。去掉 --dry-run 即可真正创建。")
         return results
 
-    # 已存在的单选字段不会被 _ensure_table 重建，单独补齐新增采集方式选项。
+    # 已存在的选择字段不会被 _ensure_table 重建，单独补齐新增选项。
     feishu.ensure_select_option(token, name_to_id["一级参数"], "fetch_method", "Social")
     feishu.ensure_select_option(token, name_to_id["信号源表"], "获取方式", "Social")
     feishu.ensure_select_option(token, name_to_id["条目表"], "路由来源", "Social")
     feishu.ensure_select_option(token, name_to_id["一级参数"], "fetch_method", "Podcast")
     feishu.ensure_select_option(token, name_to_id["信号源表"], "获取方式", "Podcast")
     feishu.ensure_select_option(token, name_to_id["条目表"], "路由来源", "Podcast")
+    feishu.ensure_select_option(token, name_to_id["条目表"], "主题", "端侧")
 
     # 默认把母版配置写入空表，让新库开箱即与母版一致（--no-seed 可关闭）
     if seed:
