@@ -571,7 +571,8 @@ def _signal_from_fields(record_id: str, fields: dict[str, Any], analysis: dict[s
                 "pdfUrl": str(full_text.get("pdf_url") or ""),
                 "paperFullTextSource": str(full_text.get("source") or ""),
                 "paperPages": int(full_text.get("pages") or 0),
-                "paperCaptions": list(full_text.get("captions") or [])[:8],
+                "paperCaptions": list(full_text.get("captions") or [])[:24],
+                "paperVisualPages": list(full_text.get("visual_pages") or [])[:4],
             }
         )
     return signal

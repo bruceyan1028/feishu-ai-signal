@@ -8,7 +8,7 @@ from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any
 
-from . import cluster, config, daily, feishu
+from . import cluster, config, daily, feishu, paper_fulltext
 
 CN_TZ = timezone(timedelta(hours=8))
 ROOT = Path(__file__).resolve().parent.parent
@@ -75,7 +75,8 @@ def _signal_from_record(record: dict[str, Any]) -> dict[str, Any]:
                 "pdfUrl": str(full_text.get("pdf_url") or ""),
                 "paperFullTextSource": str(full_text.get("source") or ""),
                 "paperPages": int(full_text.get("pages") or 0),
-                "paperCaptions": list(full_text.get("captions") or [])[:8],
+                "paperCaptions": list(full_text.get("captions") or [])[:24],
+                "paperVisualPages": list(full_text.get("visual_pages") or [])[:4],
             }
         )
     return signal
@@ -167,7 +168,40 @@ def build_site(briefs: list[dict[str, Any]], site_dir: Path | str = ROOT / "site
         shutil.rmtree(site)
     data_dir = site / "data"
     data_dir.mkdir(parents=True)
+    paper_media_dir = site / "media" / "papers"
     shutil.copy2(TEMPLATE, site / "index.html")
+    rendered: dict[str, list[dict[str, str]]] = {}
+    for brief in briefs:
+        for signal in brief.get("signals") or []:
+            pdf_url = str(signal.get("pdfUrl") or "")
+            pages = list(signal.get("paperVisualPages") or [])
+            if signal.get("paperFullTextSource") != "pdf" or not pdf_url or not pages:
+                continue
+            key = str(signal.get("recordId") or pdf_url)
+            if key not in rendered:
+                files = paper_fulltext.write_visual_page_images(
+                    pdf_url,
+                    pages,
+                    paper_media_dir,
+                    key,
+                    list(signal.get("paperCaptions") or []),
+                )
+                rendered[key] = [
+                    {
+                        "url": f"media/papers/{item['filename']}",
+                        "alt": item["alt"],
+                        "kind": "pdf-page",
+                    }
+                    for item in files
+                ]
+            if rendered[key]:
+                media = dict(signal.get("mediaAssets") or {})
+                existing = list(media.get("images") or [])
+                known = {str(item.get("url") or "") for item in rendered[key]}
+                media["images"] = rendered[key] + [
+                    item for item in existing if str(item.get("url") or "") not in known
+                ]
+                signal["mediaAssets"] = media
     for brief in briefs:
         content = json.dumps(brief, ensure_ascii=False, indent=2)
         (data_dir / f'brief-{brief["date"]}.json').write_text(content, encoding="utf-8")

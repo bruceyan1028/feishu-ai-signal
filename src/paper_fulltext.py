@@ -9,6 +9,7 @@ import base64
 import logging
 import re
 from html import unescape
+from pathlib import Path
 from typing import Any
 from urllib.parse import urljoin
 
@@ -19,7 +20,7 @@ from . import config, paper_enrich
 
 log = logging.getLogger(__name__)
 
-EVIDENCE_VERSION = 1
+EVIDENCE_VERSION = 2
 MAX_SECTION_CHARS = 4500
 MAX_EVIDENCE_CHARS = 26000
 MAX_VISUAL_PAGES = 4
@@ -165,22 +166,45 @@ def _extract_sections(page_texts: list[str]) -> list[dict[str, str]]:
 
 def _extract_captions(page_texts: list[str]) -> tuple[list[dict[str, Any]], list[int]]:
     captions: list[dict[str, Any]] = []
-    visual_pages: list[int] = []
     for page_index, page_text in enumerate(page_texts):
         lines = [line.strip() for line in page_text.splitlines() if line.strip()]
         for index, line in enumerate(lines):
             if not _CAPTION_RE.match(line):
                 continue
+            # 只有孤立的 “Figure 9.” 往往是正文交叉引用在 PDF 文本层里的断行，
+            # 并不代表该页真的放着图；至少要在同一行出现说明文字。
+            remainder = _CAPTION_RE.sub("", line, count=1).strip(" .|:—-")
+            if len(remainder) < 8:
+                continue
             caption = " ".join(lines[index : index + 3])[:1200]
             captions.append({"page": page_index + 1, "text": caption})
-            if page_index + 1 not in visual_pages:
-                visual_pages.append(page_index + 1)
-            if len(captions) >= 12:
+            if len(captions) >= 24:
                 break
-        if len(captions) >= 12:
+        if len(captions) >= 24:
             break
-    # 优先中后部图表页，通常比论文首页的概览图包含更多实验信息。
-    return captions, visual_pages[-MAX_VISUAL_PAGES:]
+
+    def score(item: dict[str, Any]) -> tuple[int, int]:
+        text = str(item.get("text") or "")
+        value = 1
+        if re.search(
+            r"result|accuracy|benchmark|performance|ablation|comparison|"
+            r"training curve|reward|evaluation|结果|准确率|基准|性能|消融",
+            text,
+            re.I,
+        ):
+            value += 4
+        if re.match(r"\s*(?:table|表)\b", text, re.I):
+            value += 2
+        return value, -int(item.get("page") or 0)
+
+    selected: list[int] = []
+    for item in sorted(captions, key=score, reverse=True):
+        page = int(item.get("page") or 0)
+        if page > 0 and page not in selected:
+            selected.append(page)
+        if len(selected) >= MAX_VISUAL_PAGES:
+            break
+    return captions, sorted(selected)
 
 
 def extract_pdf_evidence(pdf_bytes: bytes) -> dict[str, Any]:
@@ -246,6 +270,61 @@ def render_visual_pages(
         pixmap = document[index].get_pixmap(matrix=fitz.Matrix(1.35, 1.35), alpha=False)
         encoded = base64.b64encode(pixmap.tobytes("png")).decode("ascii")
         images.append(f"data:image/png;base64,{encoded}")
+        if len(images) >= limit:
+            break
+    return images
+
+
+def write_visual_page_images(
+    pdf_url: str,
+    page_numbers: list[Any],
+    target_dir: Path,
+    file_prefix: str,
+    captions: list[dict[str, Any]] | None = None,
+    *,
+    limit: int = MAX_VISUAL_PAGES,
+) -> list[dict[str, str]]:
+    """把 PDF 图表页写成静态站图片，返回可直接放入 mediaAssets 的相对文件信息。"""
+    pdf_bytes = fetch_pdf(pdf_url)
+    if not pdf_bytes:
+        return []
+    try:
+        document = fitz.open(stream=pdf_bytes, filetype="pdf")
+    except (RuntimeError, ValueError):
+        return []
+    target_dir.mkdir(parents=True, exist_ok=True)
+    safe_prefix = re.sub(r"[^a-zA-Z0-9_.-]+", "-", file_prefix).strip("-") or "paper"
+    caption_by_page: dict[int, list[str]] = {}
+    for item in captions or []:
+        try:
+            page = int(item.get("page") or 0)
+        except (TypeError, ValueError):
+            continue
+        text = str(item.get("text") or "").strip()
+        if page > 0 and text:
+            caption_by_page.setdefault(page, []).append(text)
+
+    images: list[dict[str, str]] = []
+    seen: set[int] = set()
+    for value in page_numbers:
+        try:
+            page_number = int(value)
+            index = page_number - 1
+        except (TypeError, ValueError):
+            continue
+        if index in seen or index < 0 or index >= len(document):
+            continue
+        seen.add(index)
+        pixmap = document[index].get_pixmap(matrix=fitz.Matrix(1.55, 1.55), alpha=False)
+        filename = f"{safe_prefix}-p{page_number}.png"
+        (target_dir / filename).write_bytes(pixmap.tobytes("png"))
+        caption = " ".join(caption_by_page.get(page_number) or [])[:600]
+        images.append(
+            {
+                "filename": filename,
+                "alt": f"PDF 第 {page_number} 页图表" + (f"：{caption}" if caption else ""),
+            }
+        )
         if len(images) >= limit:
             break
     return images

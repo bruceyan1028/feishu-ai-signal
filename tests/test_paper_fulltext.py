@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 import unittest
+from pathlib import Path
+from tempfile import TemporaryDirectory
 from unittest.mock import MagicMock, patch
 
 import fitz
@@ -47,6 +49,20 @@ class PaperFullTextTest(unittest.TestCase):
         images = paper_fulltext.render_visual_pages("https://example.com/paper.pdf", [2])
         self.assertEqual(len(images), 1)
         self.assertTrue(images[0].startswith("data:image/png;base64,"))
+
+    @patch("src.paper_fulltext.fetch_pdf", return_value=_sample_pdf())
+    def test_writes_visual_page_into_static_site(self, _fetch: MagicMock) -> None:
+        with TemporaryDirectory() as tmp:
+            images = paper_fulltext.write_visual_page_images(
+                "https://example.com/paper.pdf",
+                [2],
+                Path(tmp),
+                "record/unsafe",
+                [{"page": 2, "text": "Table 1: Accuracy improves to 84.5."}],
+            )
+            self.assertEqual(len(images), 1)
+            self.assertTrue((Path(tmp) / images[0]["filename"]).exists())
+            self.assertIn("84.5", images[0]["alt"])
 
     def test_canonical_hf_pdf_url(self) -> None:
         self.assertEqual(
