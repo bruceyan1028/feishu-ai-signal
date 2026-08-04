@@ -247,7 +247,6 @@ const state = {
   filter: '全部',
   srcTab: '全部',
   sortKey: 'impact',
-  signalLimit: 10,
   showScoreBars: true,
   detailRank: null,
   detailTab: '正文',
@@ -841,9 +840,8 @@ const App = {
     };
     requestAnimationFrame(()=>requestAnimationFrame(go));
   },
-  setFilter(f){ state.filter=f; state.signalLimit=10; render(); },
+  setFilter(f){ state.filter=f; render(); },
   setSort(v){ state.sortKey=v; render(); },
-  showMoreSignals(){ state.signalLimit += 10; render(); },
   setSrcTab(t){ state.srcTab=t; render(); },
   toggleBars(){ state.showScoreBars=!state.showScoreBars; render(); },
   async reloadSources(){ await loadSources(); },
@@ -1227,8 +1225,7 @@ function briefHtml(A){
   const sortLabels = { impact:'按影响分排序', novel:'按新颖度排序', action:'按可行动排序', date:'按时间排序' };
 
   const filteredSignals = signals.filter(s => matchesFilter(s, state.filter)).slice().sort(sortFns[state.sortKey]);
-  const visible = filteredSignals.slice(0, state.signalLimit);
-  const hasMoreSignals = visible.length < filteredSignals.length;
+  const visible = filteredSignals;
 
   const filterChipsHtml = filters.map(f => {
     const active = state.filter===f;
@@ -1349,9 +1346,6 @@ function briefHtml(A){
             </div>
           </div>
           <div style="display: flex; flex-direction: column; gap: 20px;">${cardsHtml}</div>
-          ${hasMoreSignals?`<div style="display:flex; justify-content:center; margin-top:28px;">
-            <button onclick="App.showMoreSignals()" style="min-width:150px; height:42px; padding:0 24px; border:1.5px solid var(--ds-ink-line); background:var(--ds-card); color:var(--ds-text); box-shadow:3px 3px 0 rgba(22,19,15,.10); font-size:13px; font-weight:700; cursor:pointer;">查看更多 · ${filteredSignals.length-visible.length} 条</button>
-          </div>`:''}
           <div style="margin-top: 40px; padding: 16px 18px; border: 1.5px solid var(--ds-ink-line); background: #fff; box-shadow: 4px 4px 0 rgba(22,19,15,.06);">
             <div style="display: flex; align-items: baseline; gap: 10px; margin-bottom: 4px;">
               <span style="font-size: 14px; font-weight: 700; color: var(--ds-text);">报告遗漏的重要信号</span>
@@ -1700,7 +1694,7 @@ function articleBody(A, s){
   // 仅当原图自带说明文字时才显示图注，不再加「原文配图 N」这类编号标签
   const figure = item => `<figure style="margin:24px 0; border:1px solid ${UI.border}; background:#fff;"><img src="${esc(item.url)}" alt="${esc(item.alt||s.zhTitle)}" loading="lazy" onerror="this.closest('figure').remove()" style="display:block; width:100%; max-height:560px; object-fit:contain;">${item.alt?`<figcaption style="padding:9px 12px; font-size:11.5px; color:${UI.text3};">${esc(item.alt)}</figcaption>`:''}</figure>`;
 
-  // 短摘要负责速览，主体使用独立生成的五节深度解读
+  // 短摘要负责速览，主体使用按内容类型生成的深度解读
   const summary = s.summary || `${s.source} 的这条内容暂未生成摘要，可点击下方「阅读原文」查看。`;
   const summaryLabel = s.kind==='播客' && s.podcastMetrics?.transcript_source === 'official_description'
     ? '官方简介速览 · 非完整转录'
@@ -1716,30 +1710,55 @@ function articleBody(A, s){
   const videos = s.kind==='视频' ? [] : (s.mediaAssets?.videos || []).filter(item=>item?.embedUrl).slice(0,1);
   const deepParas = splitParagraphs(s.deepAnalysis);
   const blocks = [];
+  const paperFramework = s.kind==='论文' && s.deepAnalysis
+    ? `<div style="margin:0 0 24px;padding:14px 16px;border-top:2px solid ${A.accent};border-bottom:1px solid ${UI.border};background:linear-gradient(90deg,${A.accentFaint},#fff);">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:8px;">
+          <strong style="font-size:13px;color:${UI.text};">论文解读框架</strong>
+          <span style="font-family:'Geist Mono',monospace;font-size:10.5px;color:${UI.text3};">${s.paperFullTextSource==='pdf'?'PDF 全文证据':'摘要证据'}${s.paperPages?` · ${s.paperPages} 页`:''}</span>
+        </div>
+        <div style="font-size:11.5px;line-height:1.8;color:${UI.text3};">研究问题 → 方法与创新 → 实验结果 → 证据与局限 → 研究意义</div>
+      </div>`
+    : '';
   const imageStep = images.length && deepParas.length
     ? Math.max(1, Math.ceil(deepParas.length / images.length))
     : 0;
+  let sectionCount = 0;
+  let placedImages = 0;
   deepParas.forEach((para, index)=>{
     const section = para.match(/^【([^】]+)】\s*([\s\S]*)$/);
     if(section){
-      const sectionNo = String(blocks.length + 1).padStart(2, '0');
-      blocks.push(`<section style="position:relative;margin:18px 0 22px;border:1.5px solid var(--ds-ink-line);background:${index%2?'#fff':'rgba(22,19,15,.025)'};box-shadow:5px 5px 0 rgba(22,19,15,.07);">
-        <div style="display:flex;align-items:stretch;border-bottom:1.5px solid var(--ds-ink-line);">
-          <span style="flex:none;width:48px;display:inline-flex;align-items:center;justify-content:center;background:${A.accent};color:#fff;font-family:'Geist Mono',monospace;font-size:11px;font-weight:800;">${sectionNo}</span>
-          <h3 style="margin:0;padding:12px 15px;font-size:15.5px;line-height:1.45;color:${UI.text};">${esc(section[1])}</h3>
-        </div>
-        ${section[2].trim()?`<div style="padding:15px 17px 16px;font-size:14.5px;line-height:2;color:${UI.text2};${proseStyle}">${zhProseHtml(esc(section[2].trim()).replace(/\n/g,'<br>'))}</div>`:''}
-      </section>`);
+      sectionCount += 1;
+      const sectionNo = String(sectionCount).padStart(2, '0');
+      if(s.kind==='论文'){
+        blocks.push(`<section style="position:relative;margin:8px 0 30px;padding-left:22px;border-left:2px solid ${A.accentBorder};">
+          <div style="display:flex;align-items:baseline;gap:10px;margin-bottom:10px;">
+            <span style="font-family:'Geist Mono',monospace;font-size:10.5px;font-weight:800;color:${A.accentDeep};">${sectionNo}</span>
+            <h3 style="margin:0;font-size:17px;line-height:1.45;color:${UI.text};">${esc(section[1])}</h3>
+          </div>
+          ${section[2].trim()?`<div style="font-size:14.5px;line-height:2.08;color:${UI.text2};${proseStyle}">${zhProseHtml(esc(section[2].trim()).replace(/\n/g,'<br>'))}</div>`:''}
+        </section>`);
+      } else {
+        blocks.push(`<section style="position:relative;margin:18px 0 22px;border:1.5px solid var(--ds-ink-line);background:${index%2?'#fff':'rgba(22,19,15,.025)'};box-shadow:5px 5px 0 rgba(22,19,15,.07);">
+          <div style="display:flex;align-items:stretch;border-bottom:1.5px solid var(--ds-ink-line);">
+            <span style="flex:none;width:48px;display:inline-flex;align-items:center;justify-content:center;background:${A.accent};color:#fff;font-family:'Geist Mono',monospace;font-size:11px;font-weight:800;">${sectionNo}</span>
+            <h3 style="margin:0;padding:12px 15px;font-size:15.5px;line-height:1.45;color:${UI.text};">${esc(section[1])}</h3>
+          </div>
+          ${section[2].trim()?`<div style="padding:15px 17px 16px;font-size:14.5px;line-height:2;color:${UI.text2};${proseStyle}">${zhProseHtml(esc(section[2].trim()).replace(/\n/g,'<br>'))}</div>`:''}
+        </section>`);
+      }
     } else {
       blocks.push(`<div style="margin:14px 0;padding:14px 16px;border-left:4px solid ${A.accent};background:${A.accentFaint};font-size:14.5px;line-height:2;color:${UI.text2};${proseStyle}">${zhProseHtml(esc(para).replace(/\n/g,'<br>'))}</div>`);
     }
-    if(imageStep && (index + 1) % imageStep === 0){
-      const imageIndex = Math.floor((index + 1) / imageStep) - 1;
-      if(images[imageIndex]) blocks.push(figure(images[imageIndex]));
+    if(s.kind==='论文' && section && /实验设计|关键结果|关键细节/.test(section[1])){
+      const target = Math.ceil(images.length / 2);
+      while(placedImages < target) blocks.push(figure(images[placedImages++]));
+    } else if(s.kind==='论文' && section && /证据强度|局限/.test(section[1])){
+      while(placedImages < images.length) blocks.push(figure(images[placedImages++]));
+    } else if(s.kind!=='论文' && imageStep && (index + 1) % imageStep === 0 && images[placedImages]){
+      blocks.push(figure(images[placedImages++]));
     }
   });
-  const placed = imageStep ? Math.min(images.length, Math.floor(deepParas.length / imageStep)) : 0;
-  images.slice(placed).forEach(item=> blocks.push(figure(item)));
+  images.slice(placedImages).forEach(item=> blocks.push(figure(item)));
   videos.forEach(item=> blocks.push(`<div style="margin:24px 0;background:#000;">${videoFacadeHtml(item, s.zhTitle, s.url, s.imageUrl)}</div>`));
 
   const evidence = s.kind==='播客' && s.transcriptEvidence
@@ -1748,7 +1767,7 @@ function articleBody(A, s){
         <div style="max-height:520px;overflow:auto;padding:4px 15px 16px;border-top:1px solid ${UI.border};white-space:pre-wrap;font-size:13px;line-height:1.9;color:${UI.text2};">${esc(s.transcriptEvidence)}</div>
       </details>`
     : '';
-  return `${lead}${blocks.join('')}${evidence}${originalLink(A, s)}`;
+  return `${lead}${paperFramework}${blocks.join('')}${evidence}${originalLink(A, s)}`;
 }
 
 function originalLink(A, s){

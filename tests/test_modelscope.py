@@ -95,6 +95,55 @@ class ModelScopeTest(unittest.TestCase):
 
         self.assertEqual(items, [])
 
+    @patch("src.scrape.requests.get")
+    def test_owner_feed_filters_quantized_variants(self, mock_get: MagicMock):
+        list_resp = MagicMock()
+        list_resp.raise_for_status = MagicMock()
+        list_resp.json.return_value = {
+            "data": {
+                "models": [
+                    {
+                        "id": "ZhipuAI/GLM-5.2",
+                        "display_name": "GLM-5.2",
+                        "created_at": "2026-06-16T08:31:21Z",
+                    },
+                    {
+                        "id": "ZhipuAI/GLM-5.2-FP8",
+                        "display_name": "GLM-5.2-FP8",
+                        "created_at": "2026-06-16T08:33:26Z",
+                    },
+                ]
+            }
+        }
+        detail_resp = MagicMock()
+        detail_resp.raise_for_status = MagicMock()
+        detail_resp.json.return_value = {
+            "data": {
+                "display_name": "GLM-5.2",
+                "description": "Official long-horizon model release with complete details.",
+                "readme": "# GLM-5.2\nA one-million-token context model.",
+            }
+        }
+        mock_get.side_effect = [list_resp, detail_resp]
+
+        items = scrape._fetch_modelscope_items(
+            {
+                "id": "zhipu-modelscope",
+                "url": "https://modelscope.cn/organization/ZhipuAI",
+                "max_articles": 5,
+                "extra_config": {
+                    "modelscope_mode": "owner",
+                    "modelscope_owner": "ZhipuAI",
+                    "model_name_exclude_regex": r"(?:FP8|GGUF|NVFP4)$",
+                    "recent_days": 365,
+                },
+            }
+        )
+
+        self.assertEqual([item["title"] for item in items], ["GLM-5.2"])
+        self.assertEqual(mock_get.call_args_list[0].kwargs["params"]["owner"], "ZhipuAI")
+        self.assertEqual(mock_get.call_count, 2)
+
 
 if __name__ == "__main__":
     unittest.main()

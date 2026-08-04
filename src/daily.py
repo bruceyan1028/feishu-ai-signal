@@ -19,6 +19,7 @@ CN_TZ = timezone(timedelta(hours=8))
 TOPIC_OPTIONS = {"AI", "LLM", "Agent", "RAG", "推理", "多模态", "开源", "硬件", "端侧", "监管", "融资", "产品", "其他"}
 URGENCY_TO_TABLE = {"高": "High", "中": "Medium", "低": "Low"}
 URGENCY_TO_CN = {value: key for key, value in URGENCY_TO_TABLE.items()}
+PAPER_ANALYSIS_VERSION = 2
 
 
 _CJK_RE = re.compile(r"[\u4e00-\u9fff]")
@@ -65,6 +66,52 @@ def normalize_topics(fields: dict[str, Any], topics: list[Any]) -> list[str]:
         else:
             result = result[:4]
     return result or ["其他"]
+
+
+def analysis_requirement(*, is_paper: bool, is_social: bool) -> str:
+    if is_paper:
+        return """deep_analysis_cn 写 1000-1800 字；以学术证据密度为优先，不用行业新闻套话凑字数。
+deep_analysis_cn 必须使用以下论文专用结构，每个标题独占一行，标题与正文之间换行，各节之间空一行：
+【研究问题与核心结论】
+说明论文试图解决什么问题、为何现有方法不足，并用可核验的一段话概括作者的核心结论。不要复述榜单介绍。
+
+【方法与创新】
+解释模型、算法、数据或系统设计；明确相对基线真正新增了什么，并区分架构创新、训练技巧和工程优化。
+
+【实验设计与关键结果】
+列出数据集、基线、评价指标、消融或对照设置以及最关键的数值结果。引用图表时写明 Figure/Table 编号或 PDF 页码，不得只写“显著提升”。
+
+【证据强度与局限】
+评价实验是否足以支持结论，检查样本范围、统计显著性、公平比较、数据泄漏、计算成本、失败案例和复现信息；未披露的内容明确写“论文未披露”。
+
+【研究意义与后续问题】
+说明这项工作改变了什么认识、对后续研究或工程验证有什么启示，并提出仍未解决的研究问题。不要输出“行动建议”、采购建议或泛化的业务待办。"""
+    if is_social:
+        return """deep_analysis_cn 写 250-500 字，使用以下结构：
+【帖子信号】
+说明账号明确披露了什么，保留数字、产品名和链接线索。
+
+【价值与边界】
+解释其潜在影响，并明确区分已披露事实与尚待验证的信息。
+
+【跟进行动】
+给出1-3条具体核验或跟进建议。"""
+    return """deep_analysis_cn 写 800-1400 字；短原文可缩至500字，但不要用空话凑字数。
+deep_analysis_cn 必须使用以下结构，每个标题独占一行，标题与正文之间换行，各节之间空一行：
+【核心内容】
+交代事件或成果本身，保留关键数字、主体、时间、产品/模型名称。
+
+【关键细节】
+展开原理、功能、方法、实验结果、商业条款或落地方式；只写原文有依据的内容。
+
+【价值与影响】
+评价它相对现状带来的变化，对开发者、企业或行业意味着什么。
+
+【局限与风险】
+指出原文披露不足、适用边界、成本、安全、可复现性或营销偏差；无法确认时明确写“原文未披露”。
+
+【行动建议】
+给出2-4条具体、克制、可执行的验证或跟进建议。"""
 
 
 def cjk_ratio(text: str) -> float:
@@ -462,42 +509,17 @@ def analyze_signal(fields: dict[str, Any]) -> dict[str, Any]:
             "额外字段：rigor/novelty_paper/relevance（0-100整数，分别表示方法严谨度、学术新颖度、"
             "与产业/工程实践的相关度）。\n"
             "论文分析必须以 PDF 分章节证据为主；若附带图表页图像，必须读取坐标轴、图例、"
-            "表格数值和图注，并在【关键细节】中明确写出可核验的图表结论及 PDF 页码。"
+            "表格数值和图注，并在【实验设计与关键结果】中明确写出可核验的图表结论及 PDF 页码。"
             "不得把 HF/PwC 的介绍文案当作论文实验结果。\n"
         )
-    if is_social:
-        analysis_requirement = """deep_analysis_cn 写 250-500 字，使用以下结构：
-【帖子信号】
-说明账号明确披露了什么，保留数字、产品名和链接线索。
-
-【价值与边界】
-解释其潜在影响，并明确区分已披露事实与尚待验证的信息。
-
-【跟进行动】
-给出1-3条具体核验或跟进建议。"""
-    else:
-        analysis_requirement = """deep_analysis_cn 写 800-1400 字；短原文可缩至500字，但不要用空话凑字数。
-deep_analysis_cn 必须使用以下结构，每个标题独占一行，标题与正文之间换行，各节之间空一行：
-【核心内容】
-交代事件或成果本身，保留关键数字、主体、时间、产品/模型名称。
-
-【关键细节】
-展开原理、功能、方法、实验结果、商业条款或落地方式；只写原文有依据的内容。
-
-【价值与影响】
-评价它相对现状带来的变化，对开发者、企业或行业意味着什么。
-
-【局限与风险】
-指出原文披露不足、适用边界、成本、安全、可复现性或营销偏差；无法确认时明确写“原文未披露”。
-
-【行动建议】
-给出2-4条具体、克制、可执行的验证或跟进建议。"""
+    analysis_format = analysis_requirement(is_paper=is_paper, is_social=is_social)
     prompt = f"""你是资深 AI 行业分析师。只依据给定原文输出严格 JSON，不得虚构。
 字段：title_cn（准确简洁的中文标题）、summary_cn（中文1-2句）、why（中文1句）、impact/novelty/actionability（0-100整数）、
 urgency（高/中/低）、topics（从 AI、LLM、Agent、RAG、推理、多模态、开源、硬件、端侧、监管、融资、产品、其他中选2-4个；
 手机/设备本地运行、NPU、边缘推理、on-device 模型必须包含“端侧”）、
 deep_analysis_cn（中文分析）。
-{analysis_requirement}
+论文的 actionability 表示可复现、可验证和可转化价值，不要求正文给出行动清单。
+{analysis_format}
 {paper_extra}标题：{scalar(fields.get("标题"))}
 来源：{scalar(fields.get("来源"))}
 分类：{scalar(fields.get("分类"))}
@@ -527,6 +549,7 @@ deep_analysis_cn（中文分析）。
         result["evidence_version"] = int(
             paper_full_text.get("version") or 0
         )
+        result["analysis_version"] = PAPER_ANALYSIS_VERSION
     return result
 
 
@@ -615,18 +638,34 @@ def _ensure_deep_analysis(
         return {}
     source = str(scalar(fields.get("来源")) or "")
     raw_text = clean_body(str(scalar(fields.get("原文")) or ""), source)
+    is_paper = content_type(fields) == "论文"
+    image_urls: list[str] = []
+    if is_paper:
+        try:
+            metrics = json.loads(str(scalar(fields.get("论文指标")) or "{}"))
+        except (TypeError, ValueError):
+            metrics = {}
+        full_text = metrics.get("full_text") if isinstance(metrics, dict) else {}
+        full_text = full_text if isinstance(full_text, dict) else {}
+        evidence = paper_fulltext.evidence_text(full_text)
+        if evidence:
+            raw_text = evidence
+        if full_text.get("source") == "pdf":
+            image_urls = paper_fulltext.render_visual_pages(
+                str(full_text.get("pdf_url") or ""),
+                list(full_text.get("visual_pages") or []),
+            )
     if len(raw_text) < 80:
         return {}
+    format_requirement = analysis_requirement(is_paper=is_paper, is_social=False)
     prompt = f"""你是资深 AI 行业分析师。只依据给定原文撰写中文深度解读，输出严格 JSON：
 {{"deep_analysis_cn":"..."}}。
 
 要求：
-1. 总长800-1400字；短原文可缩至500字，不得用套话凑长度；
-2. 保留原文中的关键数字、技术机制、功能、实验结果、商业条款和适用条件；
-3. 区分原文事实与分析判断，不得虚构；资料不足时明确写“原文未披露”；
-4. 必须按以下五节组织，每个标题独占一行，各节之间空一行：
-【核心内容】、【关键细节】、【价值与影响】、【局限与风险】、【行动建议】；
-5. 行动建议给出2-4条具体、可验证的建议，不写泛泛口号。
+1. 保留原文中的关键数字、技术机制、实验结果和适用条件；
+2. 区分原文事实与分析判断，不得虚构；资料不足时明确写“原文未披露”或“论文未披露”；
+3. 严格执行以下内容结构：
+{format_requirement}
 
 标题：{scalar(fields.get("标题"))}
 来源：{source}
@@ -635,7 +674,7 @@ def _ensure_deep_analysis(
 原文：
 {raw_text[:12000]}"""
     try:
-        result = report._llm_json(prompt)
+        result = report._llm_json(prompt, image_urls=image_urls)
     except Exception as exc:  # noqa: BLE001
         log.warning("深度解读生成失败：%s", exc)
         return {}
@@ -657,6 +696,12 @@ def _existing_analysis(fields: dict[str, Any]) -> dict[str, Any] | None:
     if isinstance(metrics, dict):
         full_text = metrics.get("full_text") or {}
         llm = metrics.get("llm") or {}
+        if (
+            content_type(fields) == "论文"
+            and int((llm if isinstance(llm, dict) else {}).get("analysis_version") or 0)
+            < PAPER_ANALYSIS_VERSION
+        ):
+            return None
         if (
             isinstance(full_text, dict)
             and full_text.get("source") == "pdf"
@@ -791,6 +836,7 @@ def generate(day: str | None = None) -> dict[str, Any]:
                     "relevance": analysis.get("relevance"),
                     "llm_quality": analysis.get("llm_quality"),
                     "evidence_version": analysis.get("evidence_version") or 0,
+                    "analysis_version": analysis.get("analysis_version") or 0,
                 }
                 metrics["quality_score_final"] = final_q
                 update_fields["论文指标"] = json.dumps(metrics, ensure_ascii=False)

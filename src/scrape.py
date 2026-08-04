@@ -690,6 +690,12 @@ def _fetch_modelscope_items(feed: dict[str, Any]) -> list[dict[str, Any]]:
     extra = _feed_extra(feed)
     mode = str(extra.get("modelscope_mode") or "home").strip().lower()
     owner = str(extra.get("modelscope_owner") or extra.get("owner") or "").strip()
+    exclude_pattern = str(extra.get("model_name_exclude_regex") or "").strip()
+    try:
+        exclude_model = re.compile(exclude_pattern, re.I) if exclude_pattern else None
+    except re.error:
+        log.warning("ModelScope 模型排除正则无效，忽略: %s", exclude_pattern)
+        exclude_model = None
     max_n = int(feed.get("max_articles") or config.DEFAULT_MAX_ARTICLES)
     try:
         recent_days = float(extra.get("recent_days") or 14)
@@ -728,6 +734,11 @@ def _fetch_modelscope_items(feed: dict[str, Any]) -> list[dict[str, Any]]:
             continue
         mid = str(row.get("id") or "").strip()
         if not mid:
+            continue
+        candidate_name = (
+            str(row.get("display_name") or "").strip() or mid.split("/")[-1]
+        )
+        if exclude_model and exclude_model.search(candidate_name):
             continue
         # last_modified 仅代表模型近期活跃；条目“发布时间”必须使用首次创建时间。
         published_raw = str(row.get("created_at") or "").strip()
@@ -1600,7 +1611,48 @@ def _fetch_json_api_items(feed: dict[str, Any]) -> list[dict[str, Any]]:
 def _extract_links_for_feed(page: str, feed: dict[str, Any], *, use_jina: bool) -> list[dict[str, Any]]:
     if _is_hf_pwc_paper_feed(feed):
         return _extract_hf_pwc_paper_links(page, feed)
+    if str(_feed_extra(feed).get("list_parser") or "").strip() == "zhipu_news":
+        return _extract_zhipu_news_links(page, feed)
     return _extract_links(page, feed) if use_jina else _extract_links_html(page, feed)
+
+
+def _extract_zhipu_news_links(html: str, feed: dict[str, Any]) -> list[dict[str, str]]:
+    """从智谱 SSR 新闻卡片保留真实标题和日期，避免按数字 URL 错排。"""
+    from urllib.parse import urljoin
+
+    src_url = str(feed.get("url") or "")
+    max_n = int(feed.get("max_articles") or config.DEFAULT_MAX_ARTICLES)
+    anchors = list(
+        re.finditer(
+            r"""<a\b[^>]*\bhref=["']([^"']*/(?:zh|en)/news/\d+)["'][^>]*>""",
+            html or "",
+            re.I,
+        )
+    )
+    links: list[dict[str, str]] = []
+    seen: set[str] = set()
+    for index, anchor in enumerate(anchors):
+        url = urljoin(src_url, anchor.group(1)).split("#")[0]
+        if url in seen:
+            continue
+        end = anchors[index + 1].start() if index + 1 < len(anchors) else len(html)
+        card = html[anchor.end() : end]
+        title_match = re.search(r"(?is)<h[1-4]\b[^>]*>(.*?)</h[1-4]>", card)
+        if not title_match:
+            title_match = re.search(r"""(?is)<img\b[^>]*\balt=["']([^"']+)["']""", card)
+        date_match = re.search(
+            r"(?is)<p\b[^>]*>\s*(20\d{2}[/-]\d{1,2}[/-]\d{1,2})\s*</p>",
+            card,
+        )
+        title = _one_line(_html_to_text(title_match.group(1))) if title_match else ""
+        published = _one_line(date_match.group(1)) if date_match else ""
+        if not title:
+            continue
+        seen.add(url)
+        links.append({"url": url, "title": title, "published_raw": published})
+        if len(links) >= max_n:
+            break
+    return links
 
 
 def _extract_links_html(html: str, feed: dict[str, Any]) -> list[dict[str, str]]:
@@ -1648,6 +1700,10 @@ def _build_item_direct(html: str, link: dict[str, Any], feed: dict[str, Any]) ->
         page_title = _one_line(_html_to_text(mt.group(1)))
         page_title = re.sub(r"^Paper page\s*[-–—]\s*", "", page_title, flags=re.I).strip()
         title = page_title or title
+    if _feed_extra(feed).get("article_title_from_h1"):
+        heading = re.search(r"(?is)<h1\b[^>]*>(.*?)</h1>", html)
+        if heading:
+            title = _one_line(_html_to_text(heading.group(1))) or title
     block = str(link.get("community_block") or "")
     url = link.get("url") or ""
     # 与 RSS 回源同一套抽取：整页去标签会把导航栏、栏目名、页脚当成正文

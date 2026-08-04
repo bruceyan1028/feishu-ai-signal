@@ -1265,6 +1265,62 @@
     "link": "https://feed.xyzfm.space/68fyjknth9hj",
     "text": "https://feed.xyzfm.space/68fyjknth9hj"
    }
+  },
+  {
+   "主要看什么": "企业合作、经营动态、产品与模型公告",
+   "优先级": "P0",
+   "分类": "前沿模型公司",
+   "名称": "智谱 AI 新闻",
+   "层级": "L1 一级官方",
+   "来源类型": "纯网页",
+   "自动化状态": "已接入",
+   "获取方式": "Scrape",
+   "链接": {
+    "link": "https://www.zhipuai.cn/zh/news",
+    "text": "https://www.zhipuai.cn/zh/news"
+   }
+  },
+  {
+   "主要看什么": "GLM 新模型、开源权重、技术说明与部署方式",
+   "优先级": "P0",
+   "分类": "前沿模型公司",
+   "名称": "智谱 ModelScope 官方模型",
+   "层级": "L1 一级官方",
+   "来源类型": "纯网页",
+   "自动化状态": "已接入",
+   "获取方式": "Scrape",
+   "链接": {
+    "link": "https://modelscope.cn/organization/ZhipuAI",
+    "text": "https://modelscope.cn/organization/ZhipuAI"
+   }
+  },
+  {
+   "主要看什么": "Step 新模型、开源权重、技术说明与部署方式",
+   "优先级": "P0",
+   "分类": "前沿模型公司",
+   "名称": "阶跃星辰 ModelScope 官方模型",
+   "层级": "L1 一级官方",
+   "来源类型": "纯网页",
+   "自动化状态": "已接入",
+   "获取方式": "Scrape",
+   "链接": {
+    "link": "https://modelscope.cn/organization/stepfun-ai",
+    "text": "https://modelscope.cn/organization/stepfun-ai"
+   }
+  },
+  {
+   "主要看什么": "开放平台产品导航；不作为带发布时间的新闻源",
+   "优先级": "P0",
+   "分类": "前沿模型公司",
+   "名称": "阶跃星辰 StepFun",
+   "层级": "L1 一级官方",
+   "来源类型": "纯网页",
+   "自动化状态": "已暂停",
+   "获取方式": "Scrape",
+   "链接": {
+    "link": "https://platform.stepfun.com/",
+    "text": "https://platform.stepfun.com/"
+   }
   }
  ],
  "一级参数": [
@@ -2923,17 +2979,18 @@
    "dedup_key": "normalize(url)",
    "dimension": "前沿模型公司",
    "endpoint": {
-    "link": "https://www.zhipuai.cn/news",
-    "text": "https://www.zhipuai.cn/news"
+    "link": "https://www.zhipuai.cn/zh/news",
+    "text": "https://www.zhipuai.cn/zh/news"
    },
+   "extra_config": "{\"force_direct\":true,\"list_parser\":\"zhipu_news\",\"article_title_from_h1\":true,\"max_articles\":8}",
    "fetch_method": "Scrape",
-   "keyword_regex": "(model|gpt|claude|gemini|llama|qwen|deepseek|grok|kimi|glm|minimax|step|hunyuan|agent|reasoning|multimodal|open.?source|发布|开源|模型|智能体|推理)",
+   "keyword_regex": "(zhipu|glm|chatglm|bigmodel|agent|reasoning|multimodal|open.?source|智谱|清言|发布|开源|模型|智能体|推理)",
    "lookback_window": "72h",
    "name": "智谱 AI 新闻",
-   "notes": "国产厂商官方源；直连诊断 no_links_extracted（SPA，需 Jina）。待代理可用后复测",
+   "notes": "智谱企业新闻 SSR 卡片；直连提取真实链接、标题和发布日期",
    "priority": "P0",
    "source_id": "zhipu-ai",
-   "status": "experimental",
+   "status": "active",
    "tier": "L1",
    "来源类型": "纯网页"
   },
@@ -2966,10 +3023,10 @@
    "keyword_regex": "(model|gpt|claude|gemini|llama|qwen|deepseek|grok|kimi|glm|minimax|step|hunyuan|agent|reasoning|multimodal|open.?source|发布|开源|模型|智能体|推理)",
    "lookback_window": "72h",
    "name": "阶跃星辰 StepFun",
-   "notes": "国产厂商官方源；抓到 8 个链接但均无发布时间，清洗后为 0",
+   "notes": "开放平台首页是产品导航，链接均无发布时间；由 stepfun-modelscope 替代",
    "priority": "P0",
    "source_id": "stepfun-ai",
-   "status": "experimental",
+   "status": "paused",
    "tier": "L1",
    "来源类型": "纯网页"
   },
@@ -3090,6 +3147,44 @@
    "source_id": "epoch-compute",
    "status": "active",
    "tier": "L2",
+   "来源类型": "纯网页"
+  },
+  {
+   "dedup_key": "normalize(url)",
+   "dimension": "前沿模型公司",
+   "endpoint": {
+    "link": "https://modelscope.cn/organization/ZhipuAI",
+    "text": "https://modelscope.cn/organization/ZhipuAI"
+   },
+   "extra_config": "{\"modelscope_api\":true,\"modelscope_mode\":\"owner\",\"modelscope_owner\":\"ZhipuAI\",\"model_name_exclude_regex\":\"(?:FP8|GGUF|NVFP4)$\",\"recent_days\":30,\"max_articles\":8}",
+   "fetch_method": "Scrape",
+   "keyword_regex": "(glm|zhipu|model|agent|reasoning|multimodal|vision|audio|ocr|open.?source|release)",
+   "lookback_window": "7d",
+   "name": "智谱 ModelScope 官方模型",
+   "notes": "ModelScope 官方组织 OpenAPI；仅按模型真实创建时间入库，过滤量化副本",
+   "priority": "P0",
+   "source_id": "zhipu-modelscope",
+   "status": "active",
+   "tier": "L1",
+   "来源类型": "纯网页"
+  },
+  {
+   "dedup_key": "normalize(url)",
+   "dimension": "前沿模型公司",
+   "endpoint": {
+    "link": "https://modelscope.cn/organization/stepfun-ai",
+    "text": "https://modelscope.cn/organization/stepfun-ai"
+   },
+   "extra_config": "{\"modelscope_api\":true,\"modelscope_mode\":\"owner\",\"modelscope_owner\":\"stepfun-ai\",\"model_name_exclude_regex\":\"(?:FP8|GGUF|NVFP4)$\",\"recent_days\":30,\"max_articles\":8}",
+   "fetch_method": "Scrape",
+   "keyword_regex": "(stepfun|step[- .]?[0-9]|model|agent|reasoning|multimodal|vision|audio|open.?source|release)",
+   "lookback_window": "7d",
+   "name": "阶跃星辰 ModelScope 官方模型",
+   "notes": "ModelScope 官方组织 OpenAPI；仅按模型真实创建时间入库，过滤量化副本",
+   "priority": "P0",
+   "source_id": "stepfun-modelscope",
+   "status": "active",
+   "tier": "L1",
    "来源类型": "纯网页"
   }
  ],

@@ -1,6 +1,7 @@
 """正文清洗、段落保留与译文回退的单元测试（不打外网）。"""
 from __future__ import annotations
 
+import json
 import unittest
 from unittest import mock
 
@@ -126,6 +127,50 @@ class ScrapeParagraphTest(unittest.TestCase):
 
     def test_titles_stay_single_line(self):
         self.assertEqual(scrape._one_line("A  b\nc"), "A b c")
+
+    def test_zhipu_news_cards_keep_title_date_and_page_order(self):
+        html = """
+        <a class="group" href="/zh/news/152">
+          <img alt="错误的图片标题">
+          <h3>智谱首份业绩报告发布，探索 AGI 智能上界</h3>
+          <p>2026/03/31</p>
+        </a>
+        <a class="group" href="/zh/news/151">
+          <h3>智谱公布年度业绩发布会安排</h3>
+          <p>2026/03/30</p>
+        </a>
+        """
+        links = scrape._extract_zhipu_news_links(
+            html,
+            {"url": "https://www.zhipuai.cn/zh/news", "max_articles": 8},
+        )
+        self.assertEqual([item["url"].rsplit("/", 1)[-1] for item in links], ["152", "151"])
+        self.assertEqual(links[0]["published_raw"], "2026/03/31")
+        self.assertEqual(links[0]["title"], "智谱首份业绩报告发布，探索 AGI 智能上界")
+
+    def test_zhipu_article_h1_overrides_generic_page_title(self):
+        html = """
+        <html><head><title>Z.ai - Inspiring AGI to Benefit Humanity</title></head>
+        <body><main><h1>GLM 新模型正式发布</h1>
+        <article><p>智谱发布新的 GLM 模型，面向智能体、软件工程和长程任务，
+        同时公布模型能力、部署方法、开放平台入口以及后续生态计划。</p></article>
+        </main></body></html>
+        """
+        item = scrape._build_item_direct(
+            html,
+            {
+                "url": "https://www.zhipuai.cn/zh/news/200",
+                "title": "列表标题",
+                "published_raw": "2026/08/04",
+            },
+            {
+                "id": "zhipu-ai",
+                "extra_config": {"article_title_from_h1": True},
+            },
+        )
+        self.assertIsNotNone(item)
+        self.assertEqual(item["title"], "GLM 新模型正式发布")
+        self.assertEqual(item["published_raw"], "2026/08/04")
 
     def test_table_keeps_rows_and_columns(self):
         html = (
@@ -513,6 +558,29 @@ class TranslateBodyTest(unittest.TestCase):
 
 
 class DeepAnalysisTest(unittest.TestCase):
+    def test_paper_uses_research_specific_structure(self):
+        requirement = daily.analysis_requirement(is_paper=True, is_social=False)
+        self.assertIn("【研究问题与核心结论】", requirement)
+        self.assertIn("【实验设计与关键结果】", requirement)
+        self.assertIn("【证据强度与局限】", requirement)
+        self.assertIn("不要输出“行动建议”", requirement)
+        self.assertNotIn("【行动建议】", requirement)
+
+    def test_old_paper_analysis_version_is_rebuilt(self):
+        fields = {
+            "状态": "已分析",
+            "来源类型": "论文",
+            "中文摘要": "已有摘要",
+            "论文指标": json.dumps(
+                {"llm": {"analysis_version": daily.PAPER_ANALYSIS_VERSION - 1}}
+            ),
+        }
+        self.assertIsNone(daily._existing_analysis(fields))
+        fields["论文指标"] = json.dumps(
+            {"llm": {"analysis_version": daily.PAPER_ANALYSIS_VERSION}}
+        )
+        self.assertIsNotNone(daily._existing_analysis(fields))
+
     def test_backfills_structured_deep_analysis(self):
         fields = {
             "标题": "A new model",
