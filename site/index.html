@@ -1725,11 +1725,17 @@ function articleBody(A, s){
   let sectionCount = 0;
   let placedImages = 0;
   deepParas.forEach((para, index)=>{
-    const section = para.match(/^【([^】]+)】\s*([\s\S]*)$/);
+    const section = para.match(/^【([^】]+)】[：:]?\s*([\s\S]*)$/);
     if(section){
-      sectionCount += 1;
-      const sectionNo = String(sectionCount).padStart(2, '0');
-      if(s.kind==='论文'){
+      const isPodcastBoundary = s.kind==='播客' && /信息边界|资料边界/.test(section[1]);
+      if(isPodcastBoundary){
+        blocks.push(`<aside style="margin:22px 0 8px;padding:11px 13px;border-left:3px solid ${UI.border};background:${UI.chip};font-size:12px;line-height:1.8;color:${UI.text3};${proseStyle}">
+          <strong style="color:${UI.text2};">资料边界：</strong>${zhProseHtml(esc(section[2].trim()).replace(/\n/g,'<br>'))}
+        </aside>`);
+      } else {
+        sectionCount += 1;
+        const sectionNo = String(sectionCount).padStart(2, '0');
+        if(s.kind==='论文'){
         blocks.push(`<section style="position:relative;margin:8px 0 30px;padding-left:22px;border-left:2px solid ${A.accentBorder};">
           <div style="display:flex;align-items:baseline;gap:10px;margin-bottom:10px;">
             <span style="font-family:'Geist Mono',monospace;font-size:10.5px;font-weight:800;color:${A.accentDeep};">${sectionNo}</span>
@@ -1737,14 +1743,23 @@ function articleBody(A, s){
           </div>
           ${section[2].trim()?`<div style="font-size:14.5px;line-height:2.08;color:${UI.text2};${proseStyle}">${zhProseHtml(esc(section[2].trim()).replace(/\n/g,'<br>'))}</div>`:''}
         </section>`);
-      } else {
-        blocks.push(`<section style="position:relative;margin:18px 0 22px;border:1.5px solid var(--ds-ink-line);background:${index%2?'#fff':'rgba(22,19,15,.025)'};box-shadow:5px 5px 0 rgba(22,19,15,.07);">
-          <div style="display:flex;align-items:stretch;border-bottom:1.5px solid var(--ds-ink-line);">
-            <span style="flex:none;width:48px;display:inline-flex;align-items:center;justify-content:center;background:${A.accent};color:#fff;font-family:'Geist Mono',monospace;font-size:11px;font-weight:800;">${sectionNo}</span>
-            <h3 style="margin:0;padding:12px 15px;font-size:15.5px;line-height:1.45;color:${UI.text};">${esc(section[1])}</h3>
-          </div>
-          ${section[2].trim()?`<div style="padding:15px 17px 16px;font-size:14.5px;line-height:2;color:${UI.text2};${proseStyle}">${zhProseHtml(esc(section[2].trim()).replace(/\n/g,'<br>'))}</div>`:''}
-        </section>`);
+        } else if(s.kind==='播客'){
+          blocks.push(`<section style="margin:20px 0 26px;padding:0 0 22px;border-bottom:1px solid ${UI.border};">
+            <div style="display:flex;align-items:baseline;gap:9px;margin-bottom:9px;">
+              <span style="font-family:'Geist Mono',monospace;font-size:10px;font-weight:800;color:${A.accentDeep};">${sectionNo}</span>
+              <h3 style="margin:0;font-size:16px;line-height:1.5;color:${UI.text};">${esc(section[1])}</h3>
+            </div>
+            ${section[2].trim()?`<div style="font-size:14.5px;line-height:2;color:${UI.text2};${proseStyle}">${zhProseHtml(esc(section[2].trim()).replace(/\n/g,'<br>'))}</div>`:''}
+          </section>`);
+        } else {
+          blocks.push(`<section style="position:relative;margin:18px 0 22px;border:1.5px solid var(--ds-ink-line);background:${index%2?'#fff':'rgba(22,19,15,.025)'};box-shadow:5px 5px 0 rgba(22,19,15,.07);">
+            <div style="display:flex;align-items:stretch;border-bottom:1.5px solid var(--ds-ink-line);">
+              <span style="flex:none;width:48px;display:inline-flex;align-items:center;justify-content:center;background:${A.accent};color:#fff;font-family:'Geist Mono',monospace;font-size:11px;font-weight:800;">${sectionNo}</span>
+              <h3 style="margin:0;padding:12px 15px;font-size:15.5px;line-height:1.45;color:${UI.text};">${esc(section[1])}</h3>
+            </div>
+            ${section[2].trim()?`<div style="padding:15px 17px 16px;font-size:14.5px;line-height:2;color:${UI.text2};${proseStyle}">${zhProseHtml(esc(section[2].trim()).replace(/\n/g,'<br>'))}</div>`:''}
+          </section>`);
+        }
       }
     } else {
       blocks.push(`<div style="margin:14px 0;padding:14px 16px;border-left:4px solid ${A.accent};background:${A.accentFaint};font-size:14.5px;line-height:2;color:${UI.text2};${proseStyle}">${zhProseHtml(esc(para).replace(/\n/g,'<br>'))}</div>`);

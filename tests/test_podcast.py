@@ -8,7 +8,7 @@ from unittest.mock import Mock, patch
 
 import requests
 
-from src import podcast, process, sources
+from src import podcast, podcast_preview, process, sources
 
 RSS = b"""<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0"
@@ -31,6 +31,29 @@ RSS = b"""<?xml version="1.0" encoding="UTF-8"?>
 
 
 class PodcastTest(unittest.TestCase):
+    @patch("src.podcast.report._llm_json")
+    def test_official_description_is_structured_without_raw_promo(self, llm):
+        llm.return_value = {
+            "title_cn": "投资人谈AI泡沫与长期价值",
+            "summary_cn": "本期讨论AI投资热度、应用机会和硬件产品边界。",
+            "guest_intro_cn": "Will是BAI Capital高级合伙人。",
+            "core_points": [
+                {"title": "应用机会", "text": "简介预告将讨论Context和交互。"},
+                {"title": "硬件边界", "text": "简介提出产品定义仍是稀缺能力。"},
+            ],
+            "why": "提供投资人与产品视角。",
+        }
+        result = podcast_preview.analyze_official_description(
+            "十字路口 Crossing",
+            "公路播客",
+            "关注公众号并收听本期节目。",
+        )
+        self.assertEqual(result["guest_intro_cn"], "Will是BAI Capital高级合伙人。")
+        self.assertEqual(len(result["core_points"]), 2)
+        prompt = llm.call_args.args[0]
+        self.assertIn("删除关注公众号", prompt)
+        self.assertIn("不把“将讨论、尝试回答”", prompt)
+
     def test_duration_and_timestamp(self):
         self.assertEqual(podcast.parse_duration("1:02:03"), 3723)
         self.assertEqual(podcast.parse_duration("12:05"), 725)
@@ -186,8 +209,45 @@ class PodcastTest(unittest.TestCase):
             "feed": {"name": "Show", "fetch_method": "Podcast", "extra_config": {}},
             "podcast": {"duration_sec": 0, "audio_url": "https://example.com/a.mp3"},
         }
-        self.assertEqual(podcast.enrich_podcast_item(item), "hosted_asr")
+        with patch("src.podcast.config.ASR_API_KEY", "test"):
+            self.assertEqual(podcast.enrich_podcast_item(item), "hosted_asr")
         transcribe.assert_called_once()
+
+    @patch("src.podcast.summarize_official_description")
+    @patch("src.podcast.transcribe_audio")
+    @patch("src.podcast.fetch_page_transcript", return_value=("", ""))
+    @patch("src.podcast.fetch_public_transcript", return_value=("", ""))
+    def test_enrich_uses_structured_description_without_asr(
+        self, _public, _page, transcribe, summarize
+    ):
+        summarize.return_value = {
+            "title_cn": "整理后标题",
+            "summary_cn": "整理后的简介摘要",
+            "deep_analysis_cn": "【简介要点1】\n具体内容",
+            "why": "选题有价值",
+            "impact": 60,
+            "novelty": 50,
+            "actionability": 40,
+            "urgency": "中",
+            "topics": ["AI", "产品"],
+        }
+        item = {
+            "title": "Title",
+            "body": "This official description contains enough concrete episode context. " * 3,
+            "feed": {"name": "Show", "fetch_method": "Podcast", "extra_config": {}},
+            "podcast": {"duration_sec": 1800, "audio_url": "https://example.com/a.mp3"},
+            "metrics": {},
+        }
+        with patch("src.podcast.config.ASR_API_KEY", ""):
+            self.assertEqual(
+                podcast.enrich_podcast_item(item), "official_description"
+            )
+        transcribe.assert_not_called()
+        self.assertEqual(
+            item["podcast_metrics_json"]["transcript_source"],
+            "official_description",
+        )
+        self.assertEqual(item["podcast_analysis"]["title_cn"], "整理后标题")
 
     @patch("src.podcast.enrich_podcast_item")
     def test_enrichment_failure_isolated(self, enrich):

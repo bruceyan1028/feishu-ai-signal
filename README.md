@@ -149,9 +149,9 @@ python -m src.diag_scrape --write --source-id huxiu --limit 1
 ### 播客完整摘要
 
 - `Podcast` 每档白名单节目对应一条 RSS 源；节目准入本身就是筛选器，白名单内每期处理。
-- 文本按 `podcast:transcript` → 节目页文字稿/YouTube 字幕 → 托管 ASR 的顺序获取。长音频由 ffmpeg 切片，ASR 使用独立的 OpenAI-compatible 配置。
+- 文本按 `podcast:transcript` → 节目页文字稿/YouTube 字幕 → 托管 ASR 的顺序获取。长音频由 ffmpeg 切片，ASR 使用独立的 OpenAI-compatible 配置；未配置 ASR 时允许降级为“结构化官方简介”，必须清理宣传尾巴并明确标记为非完整转录。
 - 逐字稿先按时间段归纳，再合并成带时间戳的证据稿、300–600 字完整中文摘要和深度解读；逐字稿仅作中间数据。
-- 默认六档中英文节目均为 `experimental/待测`。先用 `python -m src.diag_podcast --source-id ... --write` 验收并回写采集统计，通过后再同步升级两张源表状态。
+- 先用 `python -m src.diag_podcast --source-id ... --write` 验收并回写采集统计，通过后再同步升级两张源表状态。当前已验收 `硅谷 101`、`十字路口 Crossing`、`No Priors`；其余源保持 `experimental/待测`。
 
 ### 论文质量（A/D/E）
 

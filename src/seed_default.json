@@ -1208,7 +1208,7 @@
    ],
    "层级": "L4 补充源",
    "来源类型": "播客",
-   "自动化状态": "待测",
+   "自动化状态": "已接入",
    "获取方式": "Podcast",
    "链接": {
     "link": "https://feeds.megaphone.fm/nopriors",
@@ -1225,7 +1225,7 @@
    ],
    "层级": "L4 补充源",
    "来源类型": "播客",
-   "自动化状态": "待测",
+   "自动化状态": "已接入",
    "获取方式": "Podcast",
    "链接": {
     "link": "https://feeds.fireside.fm/sv101/rss",
@@ -1259,7 +1259,7 @@
    ],
    "层级": "L4 补充源",
    "来源类型": "播客",
-   "自动化状态": "待测",
+   "自动化状态": "已接入",
    "获取方式": "Podcast",
    "链接": {
     "link": "https://feed.xyzfm.space/68fyjknth9hj",
@@ -2877,7 +2877,7 @@
    "notes": "白名单节目每期处理；新源先诊断验收",
    "priority": "P2",
    "source_id": "podcast-silicon-valley-101",
-   "status": "experimental",
+   "status": "active",
    "tier": "L4",
    "来源类型": "播客"
   },
@@ -2915,7 +2915,7 @@
    "notes": "白名单节目每期处理；新源先诊断验收",
    "priority": "P2",
    "source_id": "podcast-crossing",
-   "status": "experimental",
+   "status": "active",
    "tier": "L4",
    "来源类型": "播客"
   },
@@ -2953,7 +2953,7 @@
    "notes": "白名单节目每期处理；新源先诊断验收",
    "priority": "P2",
    "source_id": "podcast-no-priors",
-   "status": "experimental",
+   "status": "active",
    "tier": "L4",
    "来源类型": "播客"
   },

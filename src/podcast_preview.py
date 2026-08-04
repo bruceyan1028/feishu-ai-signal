@@ -12,6 +12,8 @@ from typing import Any
 
 import requests
 
+from . import podcast
+
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_INPUT = ROOT / "output" / "podcast-preview.json"
 DEFAULT_OUT = ROOT / "output" / "podcast-web-preview"
@@ -174,11 +176,27 @@ def _plain_text(value: Any, limit: int = 500) -> str:
     return re.sub(r"\s+", " ", text).strip()[:limit]
 
 
+def analyze_official_description(show: str, title: str, description: str) -> dict[str, Any]:
+    """把节目简介整理成可审核的结构，不冒充完整逐字稿分析。"""
+    raw = podcast.summarize_official_description(title, show, description)
+    return {
+        "title_cn": str(raw.get("title_cn") or title).strip(),
+        "summary_cn": str(raw.get("summary_cn") or "").strip(),
+        "guest_intro_cn": str(
+            raw.get("guest_intro_cn") or "官方简介未提供足够的嘉宾身份信息。"
+        ).strip(),
+        "core_points": list(raw.get("core_points") or []),
+        "why": str(raw.get("why") or "").strip(),
+    }
+
+
 def _apple_episodes(
     show: str,
     collection_id: int,
     limit: int,
     metadata_analysis: dict[str, dict[str, Any]],
+    *,
+    analyze_missing: bool = False,
 ) -> list[dict[str, Any]]:
     response = requests.get(
         "https://itunes.apple.com/lookup",
@@ -198,20 +216,42 @@ def _apple_episodes(
         embed_url = page_url.replace("https://podcasts.apple.com/", "https://embed.podcasts.apple.com/")
         duration_sec = int((episode.get("trackTimeMillis") or 0) / 1000)
         cache_key = f"{show}|{title}"
+        description = _plain_text(
+            episode.get("description") or episode.get("shortDescription"),
+            5000,
+        )
         cached = metadata_analysis.get(cache_key) or METADATA_FALLBACKS.get(cache_key) or {}
+        if analyze_missing and not cached and description:
+            cached = analyze_official_description(show, title, description)
+            metadata_analysis[cache_key] = cached
         core_points = [
-            f"【核心观点{index + 1}：{str(point.get('title') or '节目简介要点')}】\n"
+            f"【简介要点{index + 1}：{str(point.get('title') or '节目简介要点')}】\n"
             f"{str(point.get('text') or '').strip()}"
             for index, point in enumerate(cached.get("core_points") or [])
             if isinstance(point, dict) and str(point.get("text") or "").strip()
         ]
+        guest_intro = str(cached.get("guest_intro_cn") or "").strip()
+        has_guest = bool(
+            guest_intro
+            and not any(
+                token in guest_intro
+                for token in ("未提供足够", "未披露嘉宾", "未说明嘉宾")
+            )
+        )
+        detail_sections = []
+        if has_guest:
+            detail_sections.append("【嘉宾与背景】\n" + guest_intro)
+        detail_sections.extend(core_points)
+        boundary = (
+            "本卡片只依据节目官方简介提炼，尚未取得完整逐字稿；"
+            "因此不对简介之外的论证过程、分歧和结论作推断。"
+        )
+        if not has_guest:
+            boundary += " 官方简介未披露可核验的嘉宾身份。"
         deep_analysis = "\n\n".join(
             [
-                "【嘉宾介绍】\n"
-                + str(cached.get("guest_intro_cn") or "官方简介未提供足够的嘉宾身份信息。"),
-                *core_points,
-                "【信息边界】\n本卡片只依据节目官方简介提炼，尚未取得完整逐字稿；"
-                "因此不对简介之外的论证过程、分歧和结论作推断。",
+                *detail_sections,
+                "【信息边界】\n" + boundary,
             ]
         )
         result.append(
@@ -227,10 +267,11 @@ def _apple_episodes(
                 "priority": "P2",
                 "publishedDate": str(episode.get("releaseDate") or "")[:10],
                 "summary": str(cached.get("summary_cn") or "")
-                or _plain_text(episode.get("description") or episode.get("shortDescription"), 600)
+                or description[:600]
                 or "测试预览已取得节目元数据；完整摘要将在转录后生成。",
                 "deepAnalysis": deep_analysis,
-                "why": "测试阶段用于审核该播客源的选题质量与节目可播放性。",
+                "why": str(cached.get("why") or "")
+                or "测试阶段用于审核该播客源的选题质量与节目可播放性。",
                 "impact": 0,
                 "novelty": 0,
                 "actionability": 0,
@@ -263,13 +304,21 @@ def build_catalog_brief(
     preview: dict[str, Any],
     items_per_source: int,
     metadata_analysis: dict[str, dict[str, Any]],
+    *,
+    analyze_missing: bool = False,
 ) -> dict[str, Any]:
     enriched = build_brief(preview)["signals"][0]
     signals: list[dict[str, Any]] = []
     reports: list[str] = []
     for show, collection_id in APPLE_COLLECTIONS.items():
         try:
-            episodes = _apple_episodes(show, collection_id, items_per_source, metadata_analysis)
+            episodes = _apple_episodes(
+                show,
+                collection_id,
+                items_per_source,
+                metadata_analysis,
+                analyze_missing=analyze_missing,
+            )
         except requests.RequestException as exc:
             reports.append(f"{show} 抓取失败：{exc}")
             continue
@@ -326,6 +375,11 @@ def run() -> int:
     )
     parser.add_argument("--out-dir", default=str(DEFAULT_OUT), help="静态站输出目录")
     parser.add_argument("--items-per-source", type=int, default=3, help="每个源展示节目数")
+    parser.add_argument(
+        "--analyze-metadata",
+        action="store_true",
+        help="用 LLM 清理并结构化尚未缓存的官方简介",
+    )
     parser.add_argument("--serve", action="store_true", help="生成后启动本地 HTTP 服务")
     parser.add_argument("--port", type=int, default=4178, help="HTTP 服务端口")
     args = parser.parse_args()
@@ -340,7 +394,14 @@ def run() -> int:
         preview,
         max(2, min(3, args.items_per_source)),
         metadata_analysis,
+        analyze_missing=args.analyze_metadata,
     )
+    if args.analyze_metadata:
+        analysis_path.parent.mkdir(parents=True, exist_ok=True)
+        analysis_path.write_text(
+            json.dumps(metadata_analysis, ensure_ascii=False, indent=2),
+            encoding="utf-8",
+        )
     page = write_preview(brief, Path(args.out_dir))
     print(f"播客前端预览已生成：{page}")
     if args.serve:

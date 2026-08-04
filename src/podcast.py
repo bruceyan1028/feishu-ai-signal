@@ -5,6 +5,7 @@ import html
 import json
 import logging
 import re
+import shutil
 import subprocess
 import tempfile
 from collections import Counter
@@ -406,8 +407,16 @@ def _download_audio(url: str, target: Path) -> None:
 
 def _segment_audio(source: Path, directory: Path) -> list[Path]:
     pattern = directory / "chunk-%04d.mp3"
+    executable = shutil.which("ffmpeg")
+    if not executable:
+        try:
+            import imageio_ffmpeg  # type: ignore[import-not-found]
+
+            executable = imageio_ffmpeg.get_ffmpeg_exe()
+        except (ImportError, RuntimeError):
+            executable = "ffmpeg"
     command = [
-        "ffmpeg",
+        executable,
         "-hide_banner",
         "-loglevel",
         "error",
@@ -572,6 +581,97 @@ notes_cn 用中文按时间顺序列出有信息量的观点、事实、数字�
     return evidence, analysis
 
 
+def summarize_official_description(
+    title: str, show: str, description: str
+) -> dict[str, Any]:
+    """在无法取得逐字稿时整理官方简介，并明确限制证据等级。"""
+    raw = report._llm_json(
+        f"""你是播客内容编辑。只依据节目标题和官方简介输出严格 JSON，不得补充外部知识：
+{{
+  "title_cn": "准确、克制的中文标题",
+  "summary_cn": "120-240字的本期主题概览",
+  "guest_intro_cn": "嘉宾姓名、简介明确披露的身份及其与主题的关系；未披露则返回空字符串",
+  "core_points": [{{"title": "12字以内的具体小标题", "text": "1-3句，说明简介明确预告的议题、判断或案例"}}],
+  "why": "一句话说明本期对AI行业观察的价值",
+  "impact": 0到100整数,
+  "novelty": 0到100整数,
+  "actionability": 0到100整数,
+  "urgency": "高/中/低",
+  "topics": ["从AI、LLM、Agent、RAG、推理、多模态、开源、硬件、端侧、监管、融资、产品、其他中选2-4项"]
+}}
+
+整理规则：
+1. core_points 给出2-4项，按简介叙述顺序排列，标题必须具体；
+2. 删除关注公众号、视频号、平台分发、时间戳、emoji和营销口号；
+3. 不把“将讨论、尝试回答”改写成嘉宾已经证明的结论；
+4. 不生成逐字稿中才可能确认的分歧、论证过程或最终结论；
+5. 评分只衡量简介明确披露的内容，证据不足时从严；
+6. 中文自然简洁，不整段照抄官方简介。
+
+节目：{show}
+标题：{title}
+官方简介：
+{description[:5000]}"""
+    )
+    points = [
+        {
+            "title": str(point.get("title") or "简介要点").strip(),
+            "text": str(point.get("text") or "").strip(),
+        }
+        for point in (raw.get("core_points") or [])
+        if isinstance(point, dict) and str(point.get("text") or "").strip()
+    ][:4]
+    guest = str(raw.get("guest_intro_cn") or "").strip()
+    sections = []
+    if guest:
+        sections.append("【嘉宾与背景】\n" + guest)
+    sections.extend(
+        f"【简介要点{index}：{point['title']}】\n{point['text']}"
+        for index, point in enumerate(points, 1)
+    )
+    boundary = (
+        "【信息边界】\n本卡片只依据节目官方简介提炼，尚未取得完整逐字稿；"
+        "因此不对简介之外的论证过程、分歧和结论作推断。"
+    )
+    if not guest:
+        boundary += " 官方简介未披露可核验的嘉宾身份。"
+    sections.append(boundary)
+    urgency = str(raw.get("urgency") or "中")
+    topics = [
+        str(topic)
+        for topic in (raw.get("topics") or [])
+        if str(topic)
+        in {
+            "AI",
+            "LLM",
+            "Agent",
+            "RAG",
+            "推理",
+            "多模态",
+            "开源",
+            "硬件",
+            "端侧",
+            "监管",
+            "融资",
+            "产品",
+            "其他",
+        }
+    ][:4]
+    return {
+        "title_cn": str(raw.get("title_cn") or title).strip(),
+        "summary_cn": str(raw.get("summary_cn") or "").strip(),
+        "deep_analysis_cn": "\n\n".join(sections),
+        "why": str(raw.get("why") or "").strip(),
+        "impact": max(0, min(100, int(raw.get("impact") or 0))),
+        "novelty": max(0, min(100, int(raw.get("novelty") or 0))),
+        "actionability": max(0, min(100, int(raw.get("actionability") or 0))),
+        "urgency": urgency if urgency in {"高", "中", "低"} else "中",
+        "topics": topics or ["AI", "其他"],
+        "guest_intro_cn": guest,
+        "core_points": points,
+    }
+
+
 def enrich_podcast_item(item: dict[str, Any]) -> str:
     metadata = item.get("podcast") or {}
     duration = int(metadata.get("duration_sec") or 0)
@@ -585,8 +685,43 @@ def enrich_podcast_item(item: dict[str, Any]) -> str:
     if not transcript:
         transcript, transcript_source = fetch_page_transcript(str(item.get("url") or ""))
     if not transcript:
-        transcript = transcribe_audio(str(metadata.get("audio_url") or ""))
-        transcript_source = "hosted_asr"
+        if config.ASR_API_KEY:
+            transcript = transcribe_audio(str(metadata.get("audio_url") or ""))
+            transcript_source = "hosted_asr"
+        else:
+            description = _clean_text(
+                item.get("raw_content") or item.get("body") or ""
+            )
+            if len(description) < 80:
+                raise RuntimeError("没有公开 transcript，且官方简介过短")
+            analysis = summarize_official_description(
+                str(item.get("title") or ""),
+                str((item.get("feed") or {}).get("name") or ""),
+                description,
+            )
+            item["raw_content"] = description
+            item["podcast_analysis"] = analysis
+            metrics = dict(item.get("metrics") or {})
+            metrics.update(
+                {
+                    "transcript_source": "official_description",
+                    "transcript_chars": 0,
+                    "duration_sec": duration,
+                }
+            )
+            item["metrics"] = metrics
+            item["podcast_metrics_json"] = metrics
+            item["quality_score"] = round(
+                (
+                    float(analysis["impact"])
+                    + float(analysis["novelty"])
+                    + float(analysis["actionability"])
+                )
+                / 3,
+                1,
+            )
+            item["needs_fulltext"] = False
+            return "official_description"
     if len(transcript) < 200:
         raise RuntimeError("逐字稿过短")
     evidence, analysis = summarize_transcript(
