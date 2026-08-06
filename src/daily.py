@@ -84,7 +84,13 @@ def normalize_topics(fields: dict[str, Any], topics: list[Any]) -> list[str]:
     return result or ["其他"]
 
 
-def analysis_requirement(*, is_paper: bool, is_social: bool, is_policy: bool = False) -> str:
+def analysis_requirement(
+    *,
+    is_paper: bool,
+    is_social: bool,
+    is_policy: bool = False,
+    preserve_structure: bool = False,
+) -> str:
     if is_paper:
         return """deep_analysis_cn 写 1000-1800 字；以学术证据密度为优先，不用行业新闻套话凑字数。
 deep_analysis_cn 必须使用以下论文专用结构，每个标题独占一行，标题与正文之间换行，各节之间空一行：
@@ -129,6 +135,13 @@ deep_analysis_cn 必须使用以下政策专用结构，每个标题独占一行
 
 【不确定性与跟踪点】
 指出仍待预算、机构规则、招标、拨款或实施方案确认的部分，给出可核验的后续观察节点，不输出泛化行动清单。"""
+    if preserve_structure:
+        return """deep_analysis_cn 是对高质量原文的结构化精编，目标 700-1200 个中文字符，硬上限 1400 字。
+必须沿用原文已有的小标题、论证顺序和核心观点，不得套用“核心内容 / 关键细节 / 价值与影响 / 行动建议”等统一模板。
+只保留3-6个最有信息量的原文小节；允许整节删除重复、宣传、旁枝和低信息内容，但不得改变保留章节的先后顺序或原意。
+每节压缩为1-2个短段，约120-220字；不要逐段复述，不要保留仅用于行文过渡的句子。
+每个保留的小标题使用“## 原文小标题”单独一行，下一行直接写精编正文；各节之间空一行。
+原文中的事实与作者判断要保持可区分；有明显事实疑点时可在对应小节末尾用一句话克制标注，不另建固定的风险或行动章节。"""
     return """deep_analysis_cn 写 800-1400 字；短原文可缩至500字，但不要用空话凑字数。
 deep_analysis_cn 必须使用以下结构，每个标题独占一行，标题与正文之间换行，各节之间空一行：
 【核心内容】
@@ -191,7 +204,8 @@ _TRANSLATE_PROMPT = """把下面的文章正文忠实翻译成简体中文。
 2. 只翻译，不要概括、不要删减、不要添加任何评论或总结；
 3. 公司名、产品名、模型名、论文名等专有名词保留英文原名；
 4. 形如「单元格 | 单元格」的行是原文表格，逐行翻译并原样保留「|」分隔与换行，不要合并成段落；
-5. 只输出严格 JSON：{{"body_cn": "翻译后的正文"}}
+5. 形如「## 小标题」的行必须保留“## ”标记和原有层级位置；
+6. 只输出严格 JSON：{{"body_cn": "翻译后的正文"}}
 
 正文：
 {snippet}"""
@@ -364,6 +378,54 @@ def content_type(fields: dict[str, Any]) -> str:
     return "文章"
 
 
+_EDITORIAL_HEADING_RE = re.compile(r"(?m)^##\s+([^\n]{2,80})\s*$")
+_EDITORIAL_NOISE_HEADING_RE = re.compile(
+    r"^(?:相关文章|推荐阅读|热门|标签|关于作者|联系我们|相关阅读|更多内容)$"
+)
+
+
+def editorial_structure_mode(fields: dict[str, Any], text: str = "") -> bool:
+    """判断原文是否已具备值得沿用的长文结构，而不是按来源类型一刀切。"""
+    if content_type(fields) not in {"文章", "公众号"} or is_policy_signal(fields):
+        return False
+    body = clean_body(
+        text or str(scalar(fields.get("原文")) or ""),
+        str(scalar(fields.get("来源")) or ""),
+    )
+    if len(body) < 1800:
+        return False
+    headings = [
+        title.strip()
+        for title in _EDITORIAL_HEADING_RE.findall(body)
+        if not _EDITORIAL_NOISE_HEADING_RE.match(title.strip())
+    ]
+    if len(set(headings)) < 3:
+        return False
+    # 至少三个章节应有实质正文，避免把相关推荐/导航列表误认成高质量结构。
+    sections = re.split(r"(?m)^##\s+[^\n]+\s*$", body)[1:]
+    substantive = sum(len(section.strip()) >= 180 for section in sections)
+    return substantive >= 3
+
+
+def compact_editorial_analysis(text: str, max_chars: int = 1400) -> str:
+    """为原结构精编增加硬长度收口，避免“精编”退化为搬运全文。"""
+    raw = clean_body(text)
+    all_matches = list(_EDITORIAL_HEADING_RE.finditer(raw))
+    if len(all_matches) < 3 or len(raw) <= max_chars:
+        return raw
+    matches = all_matches[:6]
+    heading_chars = sum(len(match.group(1)) + 5 for match in matches)
+    section_budget = max(120, (max_chars - heading_chars) // len(matches))
+    compacted: list[str] = []
+    for index, match in enumerate(matches):
+        end = all_matches[index + 1].start() if index + 1 < len(all_matches) else len(raw)
+        body = raw[match.end() : end].strip()
+        body = scrape.cut_on_boundary(body, section_budget)
+        if body:
+            compacted.append(f"## {match.group(1).strip()}\n{body}")
+    return "\n\n".join(compacted)[:max_chars].rstrip()
+
+
 def date_ms(day: str) -> int:
     return int(datetime.strptime(day, "%Y-%m-%d").replace(tzinfo=CN_TZ).timestamp() * 1000)
 
@@ -514,6 +576,7 @@ def analyze_signal(fields: dict[str, Any]) -> dict[str, Any]:
     is_paper = content_type(fields) == "论文"
     is_social = content_type(fields) == "社交媒体帖子"
     is_policy = is_policy_signal(fields)
+    preserve_structure = editorial_structure_mode(fields)
     paper_extra = ""
     policy_extra = ""
     image_urls: list[str] = []
@@ -577,6 +640,7 @@ def analyze_signal(fields: dict[str, Any]) -> dict[str, Any]:
         is_paper=is_paper,
         is_social=is_social,
         is_policy=is_policy,
+        preserve_structure=preserve_structure,
     )
     pdf_document_count = sum(
         document.get("fullTextSource") == "pdf" for document in policy_documents
@@ -602,10 +666,13 @@ deep_analysis_cn（中文分析）。
 原文/论文证据：{analysis_text}"""
     raw = report._llm_json(prompt, image_urls=image_urls)
     topics = normalize_topics(fields, list(raw.get("topics") or []))
+    deep_analysis = str(raw.get("deep_analysis_cn") or "").strip()
+    if preserve_structure:
+        deep_analysis = compact_editorial_analysis(deep_analysis)
     result = {
         "title_cn": str(raw.get("title_cn") or scalar(fields.get("标题"))).strip(),
         "summary_cn": str(raw.get("summary_cn") or "").strip(),
-        "deep_analysis_cn": str(raw.get("deep_analysis_cn") or "").strip(),
+        "deep_analysis_cn": deep_analysis,
         "why": str(raw.get("why") or "").strip(),
         "impact": max(0, min(100, int(raw.get("impact") or 0))),
         "novelty": max(0, min(100, int(raw.get("novelty") or 0))),
@@ -613,6 +680,8 @@ deep_analysis_cn（中文分析）。
         "urgency": str(raw.get("urgency")) if raw.get("urgency") in URGENCY_TO_TABLE else "中",
         "topics": topics or ["其他"],
     }
+    if preserve_structure:
+        result["editorial_structure"] = "source"
     if is_paper:
         rigor = max(0, min(100, int(raw.get("rigor") or raw.get("novelty") or 0)))
         novelty_paper = max(0, min(100, int(raw.get("novelty_paper") or raw.get("novelty") or 0)))
@@ -663,6 +732,12 @@ def _signal_from_fields(record_id: str, fields: dict[str, Any], analysis: dict[s
         "mediaAssets": media,
         "topComments": media.get("topComments") or [],
         "deepAnalysis": str(analysis.get("deep_analysis_cn") or "").strip(),
+        "editorialStructure": (
+            "source"
+            if analysis.get("editorial_structure") == "source"
+            or editorial_structure_mode(fields)
+            else ""
+        ),
     }
     if full_text:
         signal.update(
@@ -704,13 +779,16 @@ def _ensure_deep_analysis(
     fields: dict[str, Any], analysis: dict[str, Any]
 ) -> dict[str, Any]:
     """为已分析的存量条目补齐详情页深度解读，新条目由 analyze_signal 一次生成。"""
+    preserve_structure = editorial_structure_mode(fields)
     cached = str(
         analysis.get("deep_analysis_cn")
         or scalar(fields.get("AI深度解读"))
         or ""
     ).strip()
-    if cached:
+    if cached and (not preserve_structure or _EDITORIAL_HEADING_RE.search(cached)):
         analysis["deep_analysis_cn"] = cached
+        if preserve_structure:
+            analysis["editorial_structure"] = "source"
         return {}
     source = str(scalar(fields.get("来源")) or "")
     raw_text = clean_body(str(scalar(fields.get("原文")) or ""), source)
@@ -756,6 +834,7 @@ def _ensure_deep_analysis(
         is_paper=is_paper,
         is_social=False,
         is_policy=is_policy_signal(fields),
+        preserve_structure=preserve_structure,
     )
     prompt = f"""你是资深 AI 行业分析师。只依据给定原文撰写中文深度解读，输出严格 JSON：
 {{"deep_analysis_cn":"..."}}。
@@ -780,7 +859,11 @@ def _ensure_deep_analysis(
     deep = str(result.get("deep_analysis_cn") or "").strip()
     if not deep:
         return {}
+    if preserve_structure:
+        deep = compact_editorial_analysis(deep)
     analysis["deep_analysis_cn"] = deep
+    if preserve_structure:
+        analysis["editorial_structure"] = "source"
     fields["AI深度解读"] = deep
     return {"AI深度解读": deep}
 

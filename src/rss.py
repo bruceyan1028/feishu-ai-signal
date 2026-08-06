@@ -574,7 +574,9 @@ def parse_jina_markdown(markdown: str, page_url: str, title: str, limit: int) ->
             break
     body = _MD_IMAGE_RE.sub(" ", body)
     body = _MD_LINK_RE.sub(r"\1", body)
-    body = re.sub(r"(?m)^#{1,6}\s*", "", body)
+    # h2-h6 是作者组织论证的结构；h1 通常只是文章标题回声。
+    body = re.sub(r"(?m)^#{2,6}\s*", "## ", body)
+    body = re.sub(r"(?m)^#\s*", "", body)
     body = re.sub(r"(?m)^\s*[-*=_]{3,}\s*$", "", body)
     body = re.sub(r"[ \t]+", " ", body)
     body = _drop_label_paragraphs(re.sub(r"\n{3,}", "\n\n", body).strip())

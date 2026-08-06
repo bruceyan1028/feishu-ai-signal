@@ -100,5 +100,89 @@ class PreferOfficialTest(unittest.TestCase):
         self.assertEqual(len(primaries[0]["eventPeers"]), 1)
 
 
+class EventAggregationTest(unittest.TestCase):
+    def test_summary_entities_bridge_different_editorial_angles(self):
+        techcrunch = {
+            "title": "Jeff Dean and other top AI researchers are leaving Google",
+            "summary": "Jeff Dean and Sanjay Ghemawat founded Discovery Loop to automate science.",
+            "publishedDate": "2026-08-06",
+        }
+        huxiu = {
+            "title": "谷歌AI领导体系大调整：哈萨比斯转任董事长",
+            "summary": "Jeff Dean与Sanjay Ghemawat离职创办Discovery Loop，谷歌同步调整DeepMind管理架构。",
+            "publishedDate": "2026-08-06",
+        }
+        self.assertTrue(cluster.contextual_same_event(techcrunch, huxiu))
+
+    def test_one_shared_company_does_not_merge_unrelated_news(self):
+        leadership = {
+            "title": "Google adjusts DeepMind leadership",
+            "summary": "Koray Kavukcuoglu takes over Gemini product delivery.",
+            "publishedDate": "2026-08-06",
+        }
+        storage = {
+            "title": "Google Cloud launches a new storage tier",
+            "summary": "Google Cloud cuts archive storage prices for enterprise customers.",
+            "publishedDate": "2026-08-06",
+        }
+        self.assertFalse(cluster.contextual_same_event(leadership, storage))
+
+    def test_same_url_from_different_sources_is_kept(self):
+        primary = {
+            "source": "官方 RSS",
+            "url": "https://example.com/release",
+            "title": "Model release",
+            "tier": "L1",
+        }
+        sibling = {
+            "source": "媒体监测",
+            "url": "https://example.com/release",
+            "title": "模型发布解读",
+            "tier": "L3",
+        }
+        aggregation = cluster.build_event_aggregation(primary, [sibling])
+        self.assertEqual(aggregation["total"], 2)
+        self.assertEqual(
+            {item["source"] for group in aggregation["groups"] for item in group["items"]},
+            {"官方 RSS", "媒体监测"},
+        )
+
+    def test_rebuild_preserves_members_already_collapsed_out_of_pool(self):
+        signal = {
+            "recordId": "primary",
+            "source": "GitHub Releases",
+            "url": "https://example.com/v2",
+            "title": "Tool v2 released",
+            "eventAggregation": {
+                "total": 2,
+                "groups": [
+                    {
+                        "key": "相关报道",
+                        "items": [
+                            {
+                                "source": "GitHub Trending",
+                                "url": "https://example.com/v1",
+                                "title": "Tool v1 released",
+                            }
+                        ],
+                    }
+                ],
+            },
+        }
+        rebuilt = cluster.enrich_with_pool([signal], [signal])
+        members = [
+            item
+            for group in rebuilt[0]["eventAggregation"]["groups"]
+            for item in group["items"]
+        ]
+        self.assertEqual(
+            {(item["source"], item["url"]) for item in members},
+            {
+                ("GitHub Releases", "https://example.com/v2"),
+                ("GitHub Trending", "https://example.com/v1"),
+            },
+        )
+
+
 if __name__ == "__main__":
     unittest.main()

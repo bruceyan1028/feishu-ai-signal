@@ -678,6 +678,7 @@ async function loadBrief(){
       date: s.publishedDate || data.date || '',
       summary: s.summary || '',
       deepAnalysis: s.deepAnalysis || '',
+      editorialStructure: s.editorialStructure || '',
       why: s.why || '',
       novel: Number(s.novelty) || 0,
       action: Number(s.actionability) || 0,
@@ -1722,6 +1723,7 @@ function articleBody(A, s){
   const policy = s.mediaAssets?.policy || {};
   const documents = (s.mediaAssets?.documents || []).filter(item=>item?.url).slice(0,4);
   const deepParas = splitParagraphs(s.deepAnalysis);
+  const sourceStructured = s.editorialStructure === 'source';
   const blocks = [];
   const paperFramework = s.kind==='论文' && s.deepAnalysis
     ? `<div style="margin:0 0 24px;padding:14px 16px;border-top:2px solid ${A.accent};border-bottom:1px solid ${UI.border};background:linear-gradient(90deg,${A.accentFaint},#fff);">
@@ -1741,14 +1743,27 @@ function articleBody(A, s){
         <div style="font-size:11.5px;line-height:1.8;color:${UI.text3};">政策效力 → 核心措施 → 时间表与执行 → AI/产业影响 → 待确认事项</div>
       </div>`
     : '';
+  const editorialFramework = sourceStructured && s.deepAnalysis
+    ? `<div style="margin:0 0 26px;padding:11px 14px;border-left:3px solid ${A.accent};background:${A.accentFaint};font-size:12px;line-height:1.75;color:${UI.text3};">
+        <strong style="color:${UI.text2};">原文结构精编</strong> · 沿用作者的小标题与论证顺序，仅压缩重复和低信息内容
+      </div>`
+    : '';
+  const editorialCover = sourceStructured && images[0] ? figure(images[0]) : '';
   const imageStep = images.length && deepParas.length
     ? Math.max(1, Math.ceil(deepParas.length / images.length))
     : 0;
   let sectionCount = 0;
-  let placedImages = 0;
+  let placedImages = sourceStructured && images.length ? 1 : 0;
   deepParas.forEach((para, index)=>{
+    const sourceSection = sourceStructured ? para.match(/^##\s+([^\n]+)\n?([\s\S]*)$/) : null;
     const section = para.match(/^【([^】]+)】[：:]?\s*([\s\S]*)$/);
-    if(section){
+    if(sourceSection){
+      sectionCount += 1;
+      blocks.push(`<section style="margin:30px 0 32px;">
+        <h2 style="margin:0 0 14px;padding:10px 13px;border-left:4px solid ${A.accent};background:${A.accentFaint};font-size:19px;line-height:1.5;letter-spacing:-.01em;color:${UI.text};">${esc(sourceSection[1].trim())}</h2>
+        ${sourceSection[2].trim()?`<div style="font-size:15px;line-height:2.08;color:${UI.text2};${proseStyle}">${zhProseHtml(esc(sourceSection[2].trim()).replace(/\n/g,'<br>'))}</div>`:''}
+      </section>`);
+    } else if(section){
       const isPodcastBoundary = s.kind==='播客' && /信息边界|资料边界/.test(section[1]);
       if(isPodcastBoundary){
         blocks.push(`<aside style="margin:22px 0 8px;padding:11px 13px;border-left:3px solid ${UI.border};background:${UI.chip};font-size:12px;line-height:1.8;color:${UI.text3};${proseStyle}">
@@ -1783,6 +1798,8 @@ function articleBody(A, s){
           </section>`);
         }
       }
+    } else if(sourceStructured) {
+      blocks.push(`<p style="margin:0 0 20px;font-size:15px;line-height:2.08;color:${UI.text2};${proseStyle}">${zhProseHtml(esc(para).replace(/\n/g,'<br>'))}</p>`);
     } else {
       blocks.push(`<div style="margin:14px 0;padding:14px 16px;border-left:4px solid ${A.accent};background:${A.accentFaint};font-size:14.5px;line-height:2;color:${UI.text2};${proseStyle}">${zhProseHtml(esc(para).replace(/\n/g,'<br>'))}</div>`);
     }
@@ -1814,7 +1831,7 @@ function articleBody(A, s){
         </a>`).join('')}
       </section>`
     : '';
-  return `${lead}${paperFramework}${policyFramework}${blocks.join('')}${evidence}${documentLinks}${originalLink(A, s)}`;
+  return `${lead}${paperFramework}${policyFramework}${editorialFramework}${editorialCover}${blocks.join('')}${evidence}${documentLinks}${originalLink(A, s)}`;
 }
 
 function originalLink(A, s){

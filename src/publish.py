@@ -69,6 +69,7 @@ def _signal_from_record(record: dict[str, Any]) -> dict[str, Any]:
         "tags": [str(daily.scalar(item)) for item in fields.get("主题") or []],
         "imageUrl": daily.link(fields.get("图片链接")),
         "mediaAssets": daily.media_assets(fields.get("媒体资源")),
+        "editorialStructure": "source" if daily.editorial_structure_mode(fields) else "",
     }
     if full_text:
         signal.update(

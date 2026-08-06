@@ -186,6 +186,16 @@ class ScrapeParagraphTest(unittest.TestCase):
             "Gemma 4 | OTel2.0 workflows",
         )
 
+    def test_html_headings_survive_as_editorial_structure(self):
+        html = (
+            "<article><p>导语。</p><h2>深层原因：组织链条过长</h2>"
+            "<p>模型训练、产品开发和市场反馈需要形成连续循环。</p>"
+            "<h3>对行业的影响</h3><p>竞争已经转向系统化生产。</p></article>"
+        )
+        text = scrape.html_to_text(html)
+        self.assertIn("## 深层原因：组织链条过长", text)
+        self.assertIn("## 对行业的影响", text)
+
 
 class ArticleMediaTest(unittest.TestCase):
     PAGE = "https://example.com/blog/post/"
@@ -627,6 +637,72 @@ class DeepAnalysisTest(unittest.TestCase):
         self.assertIn("【证据强度与局限】", requirement)
         self.assertIn("不要输出“行动建议”", requirement)
         self.assertNotIn("【行动建议】", requirement)
+
+    def test_structured_editorial_keeps_original_headings(self):
+        section = "这是具有事实、机制与判断的长段落。" * 40
+        fields = {
+            "来源类型": "公众号",
+            "source_id": "huxiu",
+            "来源": "虎嗅",
+            "原文": (
+                f"导语。\n\n## 直接原因：模型危机\n\n{section}\n\n"
+                f"## 深层原因：组织链条过长\n\n{section}\n\n"
+                f"## 对行业的影响\n\n{section}"
+            ),
+        }
+        self.assertTrue(daily.editorial_structure_mode(fields))
+        requirement = daily.analysis_requirement(
+            is_paper=False,
+            is_social=False,
+            preserve_structure=True,
+        )
+        self.assertIn("沿用原文已有的小标题", requirement)
+        self.assertIn("## 原文小标题", requirement)
+        self.assertIn("硬上限 1400 字", requirement)
+        self.assertNotIn("【核心内容】", requirement)
+
+    def test_structured_editorial_is_compacted_without_reordering_headings(self):
+        sections = "\n\n".join(
+            f"## 小节{index}\n" + ("这是包含事实与判断的详细段落。" * 45)
+            for index in range(1, 8)
+        )
+        compacted = daily.compact_editorial_analysis(sections)
+        self.assertLessEqual(len(compacted), 1400)
+        self.assertEqual(compacted.count("## "), 6)
+        self.assertLess(compacted.index("## 小节1"), compacted.index("## 小节6"))
+        self.assertNotIn("## 小节7", compacted)
+
+    def test_short_or_unstructured_news_keeps_standard_framework(self):
+        fields = {
+            "来源类型": "公众号",
+            "原文": "一条没有小标题的短消息。" * 80,
+        }
+        self.assertFalse(daily.editorial_structure_mode(fields))
+        requirement = daily.analysis_requirement(is_paper=False, is_social=False)
+        self.assertIn("【核心内容】", requirement)
+
+    def test_old_fixed_analysis_is_rebuilt_for_structured_editorial(self):
+        section = "该章节包含足够多的事实和分析。" * 40
+        fields = {
+            "来源类型": "公众号",
+            "source_id": "huxiu",
+            "来源": "虎嗅",
+            "原文": (
+                f"## 直接原因\n\n{section}\n\n"
+                f"## 深层原因\n\n{section}\n\n"
+                f"## 行业影响\n\n{section}"
+            ),
+            "AI深度解读": "【核心内容】\n旧版固定结构。",
+        }
+        analysis = {"summary_cn": "摘要", "why": "重要"}
+        deep = "## 直接原因\n精编。\n\n## 深层原因\n精编。\n\n## 行业影响\n精编。"
+        with mock.patch.object(
+            daily.report, "_llm_json", return_value={"deep_analysis_cn": deep}
+        ) as llm:
+            updates = daily._ensure_deep_analysis(fields, analysis)
+        self.assertEqual(updates, {"AI深度解读": deep})
+        self.assertIn("不得套用", llm.call_args.args[0])
+        self.assertEqual(analysis["editorial_structure"], "source")
 
     def test_old_paper_analysis_version_is_rebuilt(self):
         fields = {

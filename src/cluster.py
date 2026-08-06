@@ -120,6 +120,35 @@ def same_event(a: str, b: str, threshold: float = 0.85) -> bool:
     return title_similarity(a, b) >= threshold or entity_match(a, b)
 
 
+def contextual_same_event(
+    a: dict[str, Any],
+    b: dict[str, Any],
+    threshold: float = 0.85,
+) -> bool:
+    """事件聚合使用标题 + 摘要实体匹配，不受主列表标题查重的窄规则限制。"""
+    title_a = str(a.get("titleCn") or a.get("title") or "")
+    title_b = str(b.get("titleCn") or b.get("title") or "")
+    if same_event(title_a, title_b, threshold):
+        return True
+    stamp_a = _date_stamp(a.get("publishedDate") or a.get("date") or "")
+    stamp_b = _date_stamp(b.get("publishedDate") or b.get("date") or "")
+    if stamp_a and stamp_b and abs(stamp_a - stamp_b) > 3 * 86400:
+        return False
+    text_a = f"{title_a} {a.get('summary') or ''}"
+    text_b = f"{title_b} {b.get('summary') or ''}"
+    seq_a, seq_b = _title_token_seq(text_a), _title_token_seq(text_b)
+    shared = set(seq_a) & set(seq_b)
+    # 跨媒体标题切角差异很大；摘要中共享的专名词组（Jeff Dean / Discovery Loop）
+    # 才是同一事件的稳定锚点。至少两个实词且包含相邻词组，避免只因共享 Google/AI 误聚合。
+    shared_names = {token for token in shared if len(token) >= 4 and not _has_digit(token)}
+    shared_bigrams = _bigrams(seq_a) & _bigrams(seq_b)
+    return (
+        len(shared_bigrams) >= 2 and len(shared_names) >= 2
+    ) or (
+        len(shared_bigrams) >= 1 and len(shared_names) >= 4
+    )
+
+
 def _tier_code(raw: Any) -> str:
     text = str(raw or "").strip().upper()
     for code in ("L1", "L2", "L3", "L4"):
@@ -228,12 +257,23 @@ def build_event_aggregation(
     buckets[primary_group].append(
         _member_payload(primary, _role_note(primary_group, is_primary=True))
     )
+    seen_members = {
+        (
+            str(primary.get("source") or "").strip().casefold(),
+            str(primary.get("url") or "").rstrip("/").casefold(),
+        )
+    }
     for sib in siblings:
         if not str(sib.get("url") or "").strip():
             continue
-        # 跳过与主条目同 URL
-        if str(sib.get("url") or "").rstrip("/") == str(primary.get("url") or "").rstrip("/"):
+        member_key = (
+            str(sib.get("source") or "").strip().casefold(),
+            str(sib.get("url") or "").rstrip("/").casefold(),
+        )
+        # 聚合只排除完全相同的来源记录；不同信号源即使指向同一原文，也保留其视角。
+        if member_key in seen_members:
             continue
+        seen_members.add(member_key)
         group = classify_group(sib, is_primary=False)
         buckets[group].append(_member_payload(sib, _role_note(group, is_primary=False)))
 
@@ -327,11 +367,7 @@ def attach_aggregations(signals: list[dict[str, Any]], *, threshold: float = 0.8
                 oid = str(other.get("recordId") or other.get("url") or id(other))
                 if oid == rid or oid in used:
                     continue
-                if same_event(
-                    str(signal.get("titleCn") or signal.get("title")),
-                    str(other.get("titleCn") or other.get("title")),
-                    threshold,
-                ):
+                if contextual_same_event(signal, other, threshold):
                     peers.append(other)
                     used.add(oid)
         used.add(rid)
@@ -356,14 +392,33 @@ def enrich_with_pool(
         return []
     for signal in signals:
         peers: list[dict[str, Any]] = list(signal.get("eventPeers") or [])
+        # 静态简报可能只保留了聚合结果、没有把被折叠条目继续放在 signals 池里。
+        # 重建时先恢复这些成员，避免下一次发布把已有的跨源报道覆盖掉。
+        for group in (signal.get("eventAggregation") or {}).get("groups") or []:
+            for member in group.get("items") or []:
+                source_url = (
+                    str(member.get("source") or "").strip().casefold(),
+                    str(member.get("url") or "").rstrip("/").casefold(),
+                )
+                primary_source_url = (
+                    str(signal.get("source") or "").strip().casefold(),
+                    str(signal.get("url") or "").rstrip("/").casefold(),
+                )
+                existing_source_urls = {
+                    (
+                        str(peer.get("source") or "").strip().casefold(),
+                        str(peer.get("url") or "").rstrip("/").casefold(),
+                    )
+                    for peer in peers
+                }
+                if source_url != primary_source_url and source_url not in existing_source_urls:
+                    peers.append(dict(member))
         seen = {str(signal.get("recordId") or ""), *(str(p.get("recordId") or "") for p in peers)}
-        title = str(signal.get("titleCn") or signal.get("title") or "")
         for other in pool:
             oid = str(other.get("recordId") or "")
             if not oid or oid in seen:
                 continue
-            other_title = str(other.get("titleCn") or other.get("title") or "")
-            if not same_event(title, other_title, threshold):
+            if not contextual_same_event(signal, other, threshold):
                 continue
             peers.append(other)
             seen.add(oid)
