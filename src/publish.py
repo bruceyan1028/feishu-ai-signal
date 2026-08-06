@@ -4,11 +4,12 @@ from __future__ import annotations
 import argparse
 import json
 import shutil
+from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any
 
-from . import cluster, config, daily, feishu, paper_fulltext, policy_document
+from . import cluster, config, daily, feishu, paper_fulltext, policy_document, rss
 
 CN_TZ = timezone(timedelta(hours=8))
 ROOT = Path(__file__).resolve().parent.parent
@@ -160,6 +161,39 @@ def load_recent_briefs(
     return briefs[:days]
 
 
+def curate_web_media(briefs: list[dict[str, Any]]) -> None:
+    """发布前按载体重整封面，避免旧记录中的作者头像和广告继续出现在网页。"""
+    signals = [
+        signal
+        for brief in briefs
+        for signal in brief.get("signals") or []
+        if signal.get("contentType") in {"文章", "公众号", "视频", "播客"}
+    ]
+    article_urls = sorted(
+        {
+            str(signal.get("url") or "")
+            for signal in signals
+            if signal.get("contentType") in {"文章", "公众号"}
+            and str(signal.get("url") or "").startswith(("http://", "https://"))
+        }
+    )
+    covers: dict[str, str] = {}
+    if article_urls:
+        with ThreadPoolExecutor(max_workers=min(8, len(article_urls))) as executor:
+            covers = {
+                url: cover
+                for url, cover in zip(article_urls, executor.map(rss.fetch_article_image, article_urls))
+                if cover
+            }
+    for signal in signals:
+        media, cover = rss.curate_display_media(
+            signal,
+            covers.get(str(signal.get("url") or ""), ""),
+        )
+        signal["mediaAssets"] = media
+        signal["imageUrl"] = cover
+
+
 def build_site(briefs: list[dict[str, Any]], site_dir: Path | str = ROOT / "site") -> Path:
     if not briefs:
         raise RuntimeError("没有可发布的已发布简报")
@@ -279,6 +313,7 @@ def run() -> int:
             current.get("signals") or [], pool, threshold=0.85
         )
         briefs = [current, *[item for item in briefs if item["date"] != current["date"]]][:7]
+    curate_web_media(briefs)
     site = build_site(briefs, args.site_dir)
     print(site)
     return 0

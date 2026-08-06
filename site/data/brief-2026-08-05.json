@@ -632,19 +632,8 @@
         "images": [
           {
             "url": "https://oss.zhidx.com/uploads/2026/08/6a7071e701942_6a7071e6f2b1d_6a7071e6f2ae2_1.jpg/_zdx",
-            "alt": ""
-          },
-          {
-            "url": "https://oss.zhidx.com/uploads/2026/08/6a70704854ba9_6a70704851ac3_6a70704851a82_Frame-8.png/_zdx",
-            "alt": "8位工程师花一年、耗资近千万的工作，这个开源AI系统7天搞定了"
-          },
-          {
-            "url": "https://oss.zhidx.com/uploads/2026/08/6a71d6b17887d_6a71d6b17597e_6a71d6b175925_ScreenShot_2026-08-04_123008_052.png/_zdx",
-            "alt": "8位工程师花一年、耗资近千万的工作，这个开源AI系统7天搞定了"
-          },
-          {
-            "url": "https://oss.zhidx.com/uploads/2026/08/6a7070ac18dcd_6a7070ac15d6b_6a7070ac15d32_Frame-19.png/_zdx",
-            "alt": "8位工程师花一年、耗资近千万的工作，这个开源AI系统7天搞定了"
+            "alt": "面壁智能与OpenBMB开源Stencil自动优化系统ForgeStencil",
+            "kind": "article-cover"
           }
         ],
         "videos": []
@@ -697,11 +686,8 @@
         "images": [
           {
             "url": "https://images.ctfassets.net/kftzwdyauwt9/2PwBCyZF0Z5WLRtsbOpDdQ/338e19fbc39e5b9a63b1db664c006e74/Art_Card__5_.png?w=3840&q=90&fm=webp",
-            "alt": "Patch the Planet Art Card 1x1"
-          },
-          {
-            "url": "https://images.ctfassets.net/kftzwdyauwt9/735NOZviyogUBIFxd2EmWX/fa8baf9fc26e64f442ffa86d5fd9a41e/Art_Card__6_.png?w=3840&q=90&fm=webp",
-            "alt": "Expanding Daybreak Art Card"
+            "alt": "OpenAI披露第三方网络安全评测中的模型越界事件",
+            "kind": "article-cover"
           }
         ],
         "videos": []
@@ -751,7 +737,13 @@
       ],
       "imageUrl": "https://wpimg-wscn.awtmt.com/3fedca1b-c2b2-42d7-b3ba-72cd8f91dce6.jpeg",
       "mediaAssets": {
-        "images": [],
+        "images": [
+          {
+            "url": "https://wpimg-wscn.awtmt.com/3fedca1b-c2b2-42d7-b3ba-72cd8f91dce6.jpeg",
+            "alt": "报道称DeepSeek重启第二轮融资，拟募资500亿元",
+            "kind": "article-cover"
+          }
+        ],
         "videos": []
       },
       "eventAggregation": {
@@ -845,24 +837,13 @@
         "监管",
         "产品"
       ],
-      "imageUrl": "",
+      "imageUrl": "https://3-im.guokr.com/RnQ0Y0xXQzZ1RnREOTBWV3NmX1VpTGxKbUtJQWRvY3hhAQAAPgEAAEdJ.gif",
       "mediaAssets": {
         "images": [
           {
             "url": "https://3-im.guokr.com/RnQ0Y0xXQzZ1RnREOTBWV3NmX1VpTGxKbUtJQWRvY3hhAQAAPgEAAEdJ.gif",
-            "alt": "Image 1"
-          },
-          {
-            "url": "https://1-im.guokr.com/RmxHNEFZLVZIQU1nVVdKTVg0a1Fpd3VxV1ZXRGRvY3h1AgAAiQEAAEpQ.jpg?imageView2/1/w/555/h/346",
-            "alt": "Image 2"
-          },
-          {
-            "url": "https://2-im.guokr.com/Rm43N3BMdzFzbHhmTldqUjFkWFpWZW80MzhwY2RvY3hqAgAAQgEAAEpQ.jpg?imageView2/1/w/555/h/289",
-            "alt": "Image 3"
-          },
-          {
-            "url": "https://2-im.guokr.com/RnI1S3JCVUVuRXVNVl90RldPa2ZPaklnelM1V2RvY3g4BAAAawQAAEpQ.jpg?imageView2/1/w/555/h/581",
-            "alt": "Image 4"
+            "alt": "欧盟AI透明度义务生效，Agent记忆评测AML发布，荣耀智能体手机配置曝光",
+            "kind": "article-cover"
           }
         ],
         "videos": []
@@ -912,7 +893,13 @@
       ],
       "imageUrl": "https://storage.googleapis.com/gweb-cloudblog-publish/images/29_-_Retail_HmMLc8R.max-2600x2600.jpg",
       "mediaAssets": {
-        "images": [],
+        "images": [
+          {
+            "url": "https://storage.googleapis.com/gweb-cloudblog-publish/images/29_-_Retail_HmMLc8R.max-2600x2600.jpg",
+            "alt": "Target采用Spanner Graph增强零售商品发现并将数据库维护时间减少50%",
+            "kind": "article-cover"
+          }
+        ],
         "videos": []
       },
       "eventAggregation": {
@@ -960,7 +947,13 @@
       ],
       "imageUrl": "https://blogs.nvidia.com/wp-content/uploads/2026/08/regionalhubnsf.webp",
       "mediaAssets": {
-        "images": [],
+        "images": [
+          {
+            "url": "https://blogs.nvidia.com/wp-content/uploads/2026/08/regionalhubnsf.webp",
+            "alt": "英伟达加入 NSF 州级与区域 AI 基础设施枢纽计划",
+            "kind": "article-cover"
+          }
+        ],
         "videos": []
       },
       "eventAggregation": {
@@ -1011,19 +1004,8 @@
         "images": [
           {
             "url": "https://techcrunch.com/wp-content/uploads/2026/06/Claude-photo.jpg?w=1024",
-            "alt": "The Claude app icon is displayed on a smartphone screen"
-          },
-          {
-            "url": "https://techcrunch.com/wp-content/uploads/2025/12/495cdfd5deaad915a1ad58ab35edcbaa84b90c4ce9b7ded356c5ad1b61884800.png?w=668",
-            "alt": "Lucas Ropek"
-          },
-          {
-            "url": "https://techcrunch.com/wp-content/uploads/2026/06/gwynne-shotwell-spacex.jpg?w=562",
-            "alt": "Gwynne Shotwell, president of Space Exploration Technologies Corp. (SpaceX), during the company's initial public offerin"
-          },
-          {
-            "url": "https://techcrunch.com/wp-content/uploads/2026/01/jensen-ces-2026-getty.jpg?w=563",
-            "alt": ""
+            "alt": "Anthropic据报与AI云初创公司Volta达成100亿美元算力协议",
+            "kind": "article-cover"
           }
         ],
         "videos": []
@@ -1126,7 +1108,13 @@
       ],
       "imageUrl": "https://wpimg-wscn.awtmt.com/1022467a-1433-4f47-913f-785f2ba39165.png",
       "mediaAssets": {
-        "images": [],
+        "images": [
+          {
+            "url": "https://wpimg-wscn.awtmt.com/1022467a-1433-4f47-913f-785f2ba39165.png",
+            "alt": "Gavin Baker：AI与半导体抛售背离强劲算力基本面",
+            "kind": "article-cover"
+          }
+        ],
         "videos": []
       },
       "eventAggregation": {
@@ -1176,12 +1164,9 @@
       "mediaAssets": {
         "images": [
           {
-            "url": "https://wpimg-wscn.awtmt.com/796fc257-8a26-4a16-bf00-33a081b84c14.png",
-            "alt": "Image 1"
-          },
-          {
-            "url": "https://wpimg-wscn.awtmt.com/3c4a713c-7a38-4582-9850-d0eabaf0e7ad.png",
-            "alt": "Image 2"
+            "url": "https://wpimg-wscn.awtmt.com/1df7b775-65c2-4d16-a953-91c3afbe0df7.png",
+            "alt": "摩根大通：亚洲科技股回调未改AI资本开支与盈利上行趋势",
+            "kind": "article-cover"
           }
         ],
         "videos": []
@@ -1283,7 +1268,13 @@
       ],
       "imageUrl": "https://www.whitehouse.gov/wp-content/uploads/2025/03/WH47-Social-Share-Card.jpg",
       "mediaAssets": {
-        "images": [],
+        "images": [
+          {
+            "url": "https://www.whitehouse.gov/wp-content/uploads/2025/03/WH47-Social-Share-Card.jpg",
+            "alt": "美国白宫称“美国优先”议程推动制造业就业回流",
+            "kind": "article-cover"
+          }
+        ],
         "videos": []
       },
       "eventAggregation": {
@@ -1334,7 +1325,8 @@
         "images": [
           {
             "url": "https://static.leiphone.com/uploads/new/images/20260804/6a71d91371570.png?imageMogr2/quality/90",
-            "alt": ""
+            "alt": "灵光App“闪应用”创作者突破400万",
+            "kind": "article-cover"
           }
         ],
         "videos": []
@@ -1387,19 +1379,8 @@
         "images": [
           {
             "url": "https://oss.zhidx.com/uploads/2026/08/6a71cc701bbad_6a71cc70166c2_6a71cc7016685_apple-openai-lawsuit-hero-900x383.png/_zdx",
-            "alt": ""
-          },
-          {
-            "url": "https://oss.zhidx.com/uploads/2026/08/6a71cd74e9206_6a71cd74e5b98_6a71cd74e5b63_微信图片_20260804192953_893_49.png/_zdx",
-            "alt": "晒完整聊天记录硬刚苹果，OpenAI：这场诉讼草率、咄咄逼人，与苹果声誉不符"
-          },
-          {
-            "url": "https://oss.zhidx.com/uploads/2026/08/6a71cf7fc34c8_6a71cf7fba917_6a71cf7fba8e8_62B984A7F189B8DBD1E3F799EA6629DDF5C10A58_size31_w660_h460.jpg/_zdx",
-            "alt": "晒完整聊天记录硬刚苹果，OpenAI：这场诉讼草率、咄咄逼人，与苹果声誉不符"
-          },
-          {
-            "url": "https://oss.zhidx.com/uploads/2026/08/6a71c5eed45ba_6a71c5eed1078_6a71c5eed1050_邮件1.jpg/_zdx",
-            "alt": "晒完整聊天记录硬刚苹果，OpenAI：这场诉讼草率、咄咄逼人，与苹果声誉不符"
+            "alt": "OpenAI公开邮件与聊天记录反击苹果商业秘密诉讼",
+            "kind": "article-cover"
           }
         ],
         "videos": []
@@ -1449,7 +1430,13 @@
       ],
       "imageUrl": "https://i.ytimg.com/vi/SJJBPwlPpww/maxresdefault.jpg",
       "mediaAssets": {
-        "images": [],
+        "images": [
+          {
+            "url": "https://i.ytimg.com/vi/SJJBPwlPpww/maxresdefault.jpg",
+            "alt": "波士顿儿童医院利用 OpenAI o3 Deep Research 重析罕见病疑难病例",
+            "kind": "video-cover"
+          }
+        ],
         "videos": [
           {
             "id": "SJJBPwlPpww",
@@ -1599,7 +1586,13 @@
       ],
       "imageUrl": "https://i.ytimg.com/vi/gdL8cZsrZE4/maxresdefault.jpg",
       "mediaAssets": {
-        "images": [],
+        "images": [
+          {
+            "url": "https://i.ytimg.com/vi/gdL8cZsrZE4/maxresdefault.jpg",
+            "alt": "智能体 AI 如何驱动电信自主网络",
+            "kind": "video-cover"
+          }
+        ],
         "videos": [
           {
             "id": "gdL8cZsrZE4",
@@ -1678,7 +1671,13 @@
       ],
       "imageUrl": "https://i.ytimg.com/vi/Np0afRWtdp8/maxresdefault.jpg",
       "mediaAssets": {
-        "images": [],
+        "images": [
+          {
+            "url": "https://i.ytimg.com/vi/Np0afRWtdp8/maxresdefault.jpg",
+            "alt": "为什么 AI 智能体需要多模型协作",
+            "kind": "video-cover"
+          }
+        ],
         "videos": [
           {
             "id": "Np0afRWtdp8",

@@ -301,6 +301,68 @@ class ArticleMediaTest(unittest.TestCase):
             ["https://example.com/rss.jpg"],
         )
 
+    def test_meta_cover_wins_over_author_and_related_images(self):
+        signal = {
+            "contentType": "文章",
+            "titleCn": "Jeff Dean 创办新公司",
+            "imageUrl": "https://example.com/lucas.png",
+            "mediaAssets": {
+                "images": [
+                    {"url": "https://example.com/lucas.png", "alt": "Lucas Ropek"},
+                    {"url": "https://example.com/related.jpg", "alt": "另一篇文章"},
+                ],
+                "videos": [],
+            },
+        }
+        media, cover = rss.curate_display_media(signal, "https://example.com/jeff-dean.jpg")
+        self.assertEqual(cover, "https://example.com/jeff-dean.jpg")
+        self.assertEqual(
+            media["images"],
+            [
+                {
+                    "url": "https://example.com/jeff-dean.jpg",
+                    "alt": "Jeff Dean 创办新公司",
+                    "kind": "article-cover",
+                }
+            ],
+        )
+
+    def test_wechat_promo_images_are_not_used_as_fallback(self):
+        signal = {
+            "contentType": "公众号",
+            "imageUrl": "",
+            "mediaAssets": {
+                "images": [
+                    {"url": "https://example.com/wechat-qrcode.jpg", "alt": "扫码关注公众号"},
+                ],
+                "videos": [],
+            },
+        }
+        media, cover = rss.curate_display_media(signal)
+        self.assertEqual(cover, "")
+        self.assertEqual(media["images"], [])
+
+    def test_video_keeps_platform_thumbnail(self):
+        signal = {
+            "contentType": "视频",
+            "titleCn": "模型发布直播",
+            "imageUrl": "https://example.com/fallback.jpg",
+            "mediaAssets": {
+                "images": [],
+                "videos": [{"thumbnailUrl": "https://i.ytimg.com/vi/demo/maxresdefault.jpg"}],
+            },
+        }
+        media, cover = rss.curate_display_media(signal)
+        self.assertEqual(cover, "https://i.ytimg.com/vi/demo/maxresdefault.jpg")
+        self.assertEqual(media["images"][0]["kind"], "video-cover")
+
+    def test_reads_wechat_script_cover(self):
+        html = r"""<script>var msg_cdn_url = "https:\/\/mmbiz.qpic.cn\/cover.jpg";</script>"""
+        self.assertEqual(
+            rss._meta_image_from_html(html, "https://mp.weixin.qq.com/s/demo"),
+            "https://mmbiz.qpic.cn/cover.jpg",
+        )
+
 
 class LeadingBoilerplateTest(unittest.TestCase):
     def test_keeps_short_lede(self):

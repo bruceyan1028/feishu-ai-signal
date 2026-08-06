@@ -1025,10 +1025,45 @@ def generate(day: str | None = None) -> dict[str, Any]:
     signals = cluster.attach_aggregations(
         balance_output_signals(analyzed, config.DAILY_SIGNAL_LIMIT)
     )
+    article_targets = [
+        signal
+        for signal in signals
+        if signal.get("contentType") in {"文章", "公众号"}
+        and str(signal.get("url") or "").startswith(("http://", "https://"))
+        and "arxiv.org/" not in str(signal.get("url") or "")
+    ]
+    article_covers: dict[str, str] = {}
+    if article_targets:
+        with ThreadPoolExecutor(max_workers=min(8, len(article_targets))) as executor:
+            covers = executor.map(
+                rss.fetch_article_image,
+                [str(signal.get("url") or "") for signal in article_targets],
+            )
+            article_covers = {
+                str(signal.get("recordId") or ""): cover
+                for signal, cover in zip(article_targets, covers)
+                if cover
+            }
     image_updates = []
     seen_images: set[str] = set()
     for signal in signals:
         media = signal.get("mediaAssets") or {"images": [], "videos": []}
+        original_media = media
+        original_image = str(signal.get("imageUrl") or "").strip()
+        if signal.get("contentType") in {"文章", "公众号", "视频", "播客"}:
+            media, curated_image = rss.curate_display_media(
+                signal,
+                article_covers.get(str(signal.get("recordId") or ""), ""),
+            )
+            signal["mediaAssets"] = media
+            signal["imageUrl"] = curated_image
+            if media != original_media or curated_image != original_image:
+                fields: dict[str, Any] = {
+                    "媒体资源": json.dumps(media, ensure_ascii=False),
+                }
+                if curated_image:
+                    fields["图片链接"] = {"link": curated_image, "text": "原文封面"}
+                image_updates.append({"record_id": signal["recordId"], "fields": fields})
         if "arxiv.org/" in str(signal.get("url") or "") and not media.get("images"):
             figures = rss.fetch_arxiv_figures(str(signal.get("url") or ""))
             if figures:
@@ -1045,7 +1080,7 @@ def generate(day: str | None = None) -> dict[str, Any]:
         if image_key in seen_images:
             image_url = ""
         if not image_url:
-            candidate = rss.fetch_article_image(str(signal.get("url") or ""))
+            candidate = article_covers.get(str(signal.get("recordId") or ""), "")
             candidate_key = candidate.split("?", 1)[0].split("#", 1)[0].lower()
             if candidate_key and candidate_key not in seen_images:
                 image_url = candidate

@@ -835,16 +835,9 @@
       "mediaAssets": {
         "images": [
           {
-            "url": "https://img.huxiucdn.com/article/content/26-08-06/75feb2fa-0a56-4f69-b327-c03db63159ac.png?imageView2/2/w/1000/format/png/interlace/1/q/85",
-            "alt": "Image 1"
-          },
-          {
-            "url": "https://img.huxiucdn.com/article/content/26-08-06/e6c754f5-956f-42e2-b347-f63c6e6b12d6.png?imageView2/2/w/1000/format/png/interlace/1/q/85",
-            "alt": "Image 2"
-          },
-          {
-            "url": "https://img.huxiucdn.com/article/content/26-08-06/f11d0e16-c4e3-459e-b6ed-c1b12d6e0f84.png?imageView2/2/w/1000/format/png/interlace/1/q/85",
-            "alt": "Image 3"
+            "url": "https://img.huxiucdn.com/ai/ai-general-cover/202608/06/31406-prod-nb2ep-general-1-1785981817649.png?imageView2/1/w/788/h/444/|imageMogr2/strip/interlace/1/quality/85",
+            "alt": "美国启动创世纪计划，构建AI驱动的科研基础设施",
+            "kind": "article-cover"
           }
         ],
         "videos": []
@@ -894,12 +887,13 @@
         "融资",
         "产品"
       ],
-      "imageUrl": "https://techcrunch.com/wp-content/uploads/2025/12/495cdfd5deaad915a1ad58ab35edcbaa84b90c4ce9b7ded356c5ad1b61884800.png?w=150",
+      "imageUrl": "https://techcrunch.com/wp-content/uploads/2026/08/GettyImages-1197130647.jpg?resize=1200,800",
       "mediaAssets": {
         "images": [
           {
-            "url": "https://techcrunch.com/wp-content/uploads/2025/12/495cdfd5deaad915a1ad58ab35edcbaa84b90c4ce9b7ded356c5ad1b61884800.png?w=150",
-            "alt": "Lucas Ropek"
+            "url": "https://techcrunch.com/wp-content/uploads/2026/08/GettyImages-1197130647.jpg?resize=1200,800",
+            "alt": "Jeff Dean 携顶尖研究者离开谷歌创办 Discovery Loop",
+            "kind": "article-cover"
           }
         ],
         "videos": []
@@ -951,7 +945,13 @@
       ],
       "imageUrl": "https://cdn.modelscope.cn/social-thumbnails/models/deepseek-ai/deepseek-v4-flash-0731.png",
       "mediaAssets": {
-        "images": [],
+        "images": [
+          {
+            "url": "https://cdn.modelscope.cn/social-thumbnails/models/deepseek-ai/deepseek-v4-flash-0731.png",
+            "alt": "DeepSeek正式发布V4-Flash-0731，强化智能体与代码任务能力",
+            "kind": "article-cover"
+          }
+        ],
         "videos": []
       },
       "topComments": [],
@@ -1003,12 +1003,9 @@
       "mediaAssets": {
         "images": [
           {
-            "url": "https://img.huxiucdn.com/article/content/26-08-06/73112dc2-a014-43a2-80ae-de3400db1454.png?imageView2/2/w/1000/format/png/interlace/1/q/85",
-            "alt": "Image 1"
-          },
-          {
-            "url": "https://img.huxiucdn.com/article/content/26-08-06/841b2aef-8ad0-4c10-9a77-f3c1853dc67d.png?imageView2/2/w/1000/format/png/interlace/1/q/85",
-            "alt": "Image 2"
+            "url": "https://img.huxiucdn.com/ai/ai-general-cover/202608/06/31401-prod-db-general-1-1785978195114.png?imageView2/1/w/788/h/444/|imageMogr2/strip/interlace/1/quality/85",
+            "alt": "谷歌重组AI领导体系：哈萨比斯转任董事长，Koray接管DeepMind运营",
+            "kind": "article-cover"
           }
         ],
         "videos": []
@@ -1059,7 +1056,13 @@
       ],
       "imageUrl": "https://wpimg-wscn.awtmt.com/5d8f1020-649a-43bb-88b1-484e11bce9bc.png",
       "mediaAssets": {
-        "images": [],
+        "images": [
+          {
+            "url": "https://wpimg-wscn.awtmt.com/5d8f1020-649a-43bb-88b1-484e11bce9bc.png",
+            "alt": "AI语音钓鱼攻击集中 targeting 华尔街顶级对冲基金",
+            "kind": "article-cover"
+          }
+        ],
         "videos": []
       },
       "topComments": [],
@@ -1110,8 +1113,9 @@
       "mediaAssets": {
         "images": [
           {
-            "url": "https://wpimg-wscn.awtmt.com/76199e5b-40f0-40e0-b485-370d1adceae5.png",
-            "alt": "Image 1"
+            "url": "https://wpimg-wscn.awtmt.com/102f982f-b22c-4960-8090-efc9a4f50d84.jpeg",
+            "alt": "存储长协重塑定价权：周期底部被抬至历史峰值之上",
+            "kind": "article-cover"
           }
         ],
         "videos": []
@@ -1213,7 +1217,13 @@
       ],
       "imageUrl": "https://cdn.modelscope.cn/social-thumbnails/models/minimax/minimax-h3.png",
       "mediaAssets": {
-        "images": [],
+        "images": [
+          {
+            "url": "https://cdn.modelscope.cn/social-thumbnails/models/minimax/minimax-h3.png",
+            "alt": "MiniMax发布全模态音视频生成系统H3",
+            "kind": "article-cover"
+          }
+        ],
         "videos": []
       },
       "topComments": [],
@@ -1274,12 +1284,13 @@
         "硬件",
         "端侧"
       ],
-      "imageUrl": "https://techcrunch.com/wp-content/uploads/2026/02/TIm.jpg?w=150",
+      "imageUrl": "https://techcrunch.com/wp-content/uploads/2026/08/6a1cc23a5fed8844a94b28ba_weather-params.jpg?resize=1200,722",
       "mediaAssets": {
         "images": [
           {
-            "url": "https://techcrunch.com/wp-content/uploads/2026/02/TIm.jpg?w=150",
-            "alt": "Tim Fernholz"
+            "url": "https://techcrunch.com/wp-content/uploads/2026/08/6a1cc23a5fed8844a94b28ba_weather-params.jpg?resize=1200,722",
+            "alt": "WindBorne获3700万美元融资，押注气象数据与AI预测商业化",
+            "kind": "article-cover"
           }
         ],
         "videos": []
@@ -1480,7 +1491,13 @@
       ],
       "imageUrl": "https://www.whitehouse.gov/wp-content/uploads/2025/03/WH47-Presidential-Actions-Social-Share-Card.jpg",
       "mediaAssets": {
-        "images": [],
+        "images": [
+          {
+            "url": "https://www.whitehouse.gov/wp-content/uploads/2025/03/WH47-Presidential-Actions-Social-Share-Card.jpg",
+            "alt": "美国依据《国防生产法》推动关键矿产与材料回收供应",
+            "kind": "article-cover"
+          }
+        ],
         "videos": [],
         "documents": [],
         "policy": {
@@ -1539,19 +1556,8 @@
         "images": [
           {
             "url": "https://static.leiphone.com/uploads/new/images/20260806/6a73dc7e43c22.png?imageMogr2/quality/90",
-            "alt": ""
-          },
-          {
-            "url": "https://static.leiphone.com/uploads/new/images/20260806/6a73dc7e72d74.png?imageMogr2/quality/90",
-            "alt": ""
-          },
-          {
-            "url": "https://static.leiphone.com/uploads/new/images/20260806/6a73dc7ebc163.png?imageMogr2/quality/90",
-            "alt": ""
-          },
-          {
-            "url": "https://static.leiphone.com/uploads/new/images/20260806/6a73dc7eebe61.jpg?imageMogr2/quality/90",
-            "alt": ""
+            "alt": "3D堆叠芯片并非同一门生意：三类路线与产品化挑战",
+            "kind": "article-cover"
           }
         ],
         "videos": []
@@ -1656,19 +1662,8 @@
         "images": [
           {
             "url": "https://oss.zhidx.com/uploads/2026/08/6a73f52b74b16_6a73f52b71aae_6a73f52b71a69_智东西头条头图模板-带阴影版.png/_zdx",
-            "alt": ""
-          },
-          {
-            "url": "https://oss.zhidx.com/uploads/2026/08/6a73ec6a17c0a_6a73ec6a14eff_6a73ec6a14eb7_ScreenShot_2026-08-06_091601_725.png/_zdx",
-            "alt": "扎克伯格，跟DeepSeek拼了"
-          },
-          {
-            "url": "https://oss.zhidx.com/uploads/2026/08/6a73ec7014d4e_6a73ec7011a50_6a73ec7011a15_微信图片_20260806090723_35554_204.png/_zdx",
-            "alt": "扎克伯格，跟DeepSeek拼了"
-          },
-          {
-            "url": "https://oss.zhidx.com/uploads/2026/08/6a73ec6e1ba0b_6a73ec6e18099_6a73ec6e18062_ScreenShot_2026-08-06_092036_438.png/_zdx",
-            "alt": "扎克伯格，跟DeepSeek拼了"
+            "alt": "Meta推出Muse Code与Muse Spark 1.2，以低价切入编程Agent市场",
+            "kind": "article-cover"
           }
         ],
         "videos": []
@@ -1722,19 +1717,8 @@
         "images": [
           {
             "url": "https://oss.zhidx.com/uploads/2026/08/6a72df72e7e34_6a72df72db8a9_6a72df72db86d_未标题-1.png/_zdx",
-            "alt": ""
-          },
-          {
-            "url": "https://oss.zhidx.com/uploads/2026/08/6a72aaa1aff7c_6a72aaa1ac7ed_6a72aaa1ac7bd_ScreenShot_2026-08-05_111242_740.png/_zdx",
-            "alt": "第一个可能让我“愿意戴一整天”的XR眼镜，终于来了"
-          },
-          {
-            "url": "https://oss.zhidx.com/uploads/2026/08/6a72a6e615988_6a72a6e612b8a_6a72a6e612b25_10.-Pro-2-Thinnest-Lenses.png/_zdx",
-            "alt": "第一个可能让我“愿意戴一整天”的XR眼镜，终于来了"
-          },
-          {
-            "url": "https://oss.zhidx.com/uploads/2026/08/6a72aac450b44_6a72aac44d39f_6a72aac44d35f_ScreenShot_2026-08-05_111235_526.png/_zdx",
-            "alt": "第一个可能让我“愿意戴一整天”的XR眼镜，终于来了"
+            "alt": "VITURE Pro 2发布：千元级轻量XR眼镜主打全天佩戴",
+            "kind": "article-cover"
           }
         ],
         "videos": []
@@ -1840,7 +1824,13 @@
       ],
       "imageUrl": "https://wpimg-wscn.awtmt.com/1aaa8b52-f1e7-4dc4-ac11-4cf4c44df611.png",
       "mediaAssets": {
-        "images": [],
+        "images": [
+          {
+            "url": "https://wpimg-wscn.awtmt.com/1aaa8b52-f1e7-4dc4-ac11-4cf4c44df611.png",
+            "alt": "特朗普与沃什频繁私下通话引发美联储独立性担忧",
+            "kind": "article-cover"
+          }
+        ],
         "videos": []
       },
       "topComments": [],
@@ -1888,12 +1878,13 @@
         "融资",
         "产品"
       ],
-      "imageUrl": "https://techcrunch.com/wp-content/uploads/2025/08/IMG_0758.jpg?w=150",
+      "imageUrl": "https://techcrunch.com/wp-content/uploads/2026/08/Screenshot-2026-08-05-at-8.53.41-PM.png?resize=1200,868",
       "mediaAssets": {
         "images": [
           {
-            "url": "https://techcrunch.com/wp-content/uploads/2025/08/IMG_0758.jpg?w=150",
-            "alt": "Marina Temkin"
+            "url": "https://techcrunch.com/wp-content/uploads/2026/08/Screenshot-2026-08-05-at-8.53.41-PM.png?resize=1200,868",
+            "alt": "Klaviyo收购AI客户成功初创公司Agency，创始人出任首席产品官",
+            "kind": "article-cover"
           }
         ],
         "videos": []
@@ -1945,7 +1936,13 @@
       ],
       "imageUrl": "https://cdn.modelscope.cn/social-thumbnails/models/diffsynth-studio/minimax-h3-nf4.png",
       "mediaAssets": {
-        "images": [],
+        "images": [
+          {
+            "url": "https://cdn.modelscope.cn/social-thumbnails/models/diffsynth-studio/minimax-h3-nf4.png",
+            "alt": "MiniMax-H3 NF4 四比特量化视频生成模型",
+            "kind": "article-cover"
+          }
+        ],
         "videos": []
       },
       "topComments": [],
@@ -1994,7 +1991,13 @@
       ],
       "imageUrl": "https://www.whitehouse.gov/wp-content/uploads/2025/03/WH47-Social-Share-Card.jpg",
       "mediaAssets": {
-        "images": [],
+        "images": [
+          {
+            "url": "https://www.whitehouse.gov/wp-content/uploads/2025/03/WH47-Social-Share-Card.jpg",
+            "alt": "美国白宫称“美国优先”议程推动制造业就业回流",
+            "kind": "article-cover"
+          }
+        ],
         "videos": []
       },
       "topComments": [],
@@ -2042,9 +2045,15 @@
         "硬件",
         "其他"
       ],
-      "imageUrl": "",
+      "imageUrl": "https://www.whitehouse.gov/wp-content/uploads/2025/03/WH47-Social-Share-Card.jpg",
       "mediaAssets": {
-        "images": [],
+        "images": [
+          {
+            "url": "https://www.whitehouse.gov/wp-content/uploads/2025/03/WH47-Social-Share-Card.jpg",
+            "alt": "白宫宣称特朗普政府为内华达州带来减税、投资与基础设施增长",
+            "kind": "article-cover"
+          }
+        ],
         "videos": []
       },
       "topComments": [],
@@ -2093,7 +2102,13 @@
       ],
       "imageUrl": "https://i.ytimg.com/vi/qIAJyb1w7Js/maxresdefault.jpg",
       "mediaAssets": {
-        "images": [],
+        "images": [
+          {
+            "url": "https://i.ytimg.com/vi/qIAJyb1w7Js/maxresdefault.jpg",
+            "alt": "用自定义 DeepWiki Connector 构建数据库顾问 Agent",
+            "kind": "video-cover"
+          }
+        ],
         "videos": [
           {
             "id": "qIAJyb1w7Js",
@@ -2175,7 +2190,13 @@
       ],
       "imageUrl": "https://i.ytimg.com/vi/gdL8cZsrZE4/maxresdefault.jpg",
       "mediaAssets": {
-        "images": [],
+        "images": [
+          {
+            "url": "https://i.ytimg.com/vi/gdL8cZsrZE4/maxresdefault.jpg",
+            "alt": "智能体 AI 如何驱动电信自主网络",
+            "kind": "video-cover"
+          }
+        ],
         "videos": [
           {
             "id": "gdL8cZsrZE4",
@@ -2287,7 +2308,13 @@
       ],
       "imageUrl": "https://i.ytimg.com/vi/zyrWGQ8zl-4/maxresdefault.jpg",
       "mediaAssets": {
-        "images": [],
+        "images": [
+          {
+            "url": "https://i.ytimg.com/vi/zyrWGQ8zl-4/maxresdefault.jpg",
+            "alt": "如何向兄弟解释世界模型？",
+            "kind": "video-cover"
+          }
+        ],
         "videos": [
           {
             "id": "zyrWGQ8zl-4",

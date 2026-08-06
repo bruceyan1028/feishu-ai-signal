@@ -795,20 +795,9 @@
       "mediaAssets": {
         "images": [
           {
-            "url": "https://wpimg-wscn.awtmt.com/8643d431-54ef-4f06-ab32-4c9365778e5d.png",
-            "alt": "Image 1"
-          },
-          {
-            "url": "https://wpimg-wscn.awtmt.com/44da3bdf-bcf3-45f5-89e6-726d4344b6e9.png",
-            "alt": "Image 2"
-          },
-          {
-            "url": "https://wpimg-wscn.awtmt.com/5f2b80b5-d71a-4b79-9bee-684f2be76555.png",
-            "alt": "Image 3"
-          },
-          {
-            "url": "https://wpimg-wscn.awtmt.com/d8a61925-1988-4e81-9aad-f8d8db35e706.png",
-            "alt": "Image 4"
+            "url": "https://wpimg-wscn.awtmt.com/73d457ff-705f-48bf-804b-d45d7c18c185.png",
+            "alt": "阿里发布千问3.8-Max：2.4万亿参数，长程智能体与自动编程能力突出",
+            "kind": "article-cover"
           }
         ],
         "videos": []
@@ -860,8 +849,9 @@
       "mediaAssets": {
         "images": [
           {
-            "url": "https://wpimg-wscn.awtmt.com/a86d114d-01d4-4c35-9691-ea79bc144491.png",
-            "alt": "Image 1"
+            "url": "https://wpimg-wscn.awtmt.com/content_default_7.jpg",
+            "alt": "OpenAI据称确认Astra模型家族，宣称以约2000美元算力攻克十项数学难题",
+            "kind": "article-cover"
           }
         ],
         "videos": []
@@ -911,7 +901,13 @@
       ],
       "imageUrl": "https://cdn.modelscope.cn/social-thumbnails/models/deepseek-ai/deepseek-v4-flash-0731.png",
       "mediaAssets": {
-        "images": [],
+        "images": [
+          {
+            "url": "https://cdn.modelscope.cn/social-thumbnails/models/deepseek-ai/deepseek-v4-flash-0731.png",
+            "alt": "DeepSeek正式发布V4-Flash-0731，强化智能体与代码任务能力",
+            "kind": "article-cover"
+          }
+        ],
         "videos": []
       },
       "eventAggregation": {
@@ -961,16 +957,9 @@
       "mediaAssets": {
         "images": [
           {
-            "url": "https://wpimg-wscn.awtmt.com/715a5405-c4c6-4737-97e5-84f6734c0310.png",
-            "alt": "Image 1"
-          },
-          {
-            "url": "https://wpimg-wscn.awtmt.com/2af4269d-ee70-4051-8a8e-7ca7d0a779a6.png",
-            "alt": "Image 2"
-          },
-          {
-            "url": "https://wpimg-wscn.awtmt.com/eb3beeb8-6ac4-4c9f-9517-6786b861d053.png",
-            "alt": "Image 3"
+            "url": "https://wpimg-wscn.awtmt.com/53f8497d-7023-4916-8704-a5330b4579fe.png",
+            "alt": "高盛：AI等多重资本需求将推高融资成本并重塑投资范式",
+            "kind": "article-cover"
           }
         ],
         "videos": []
@@ -1023,19 +1012,8 @@
         "images": [
           {
             "url": "https://static.leiphone.com/uploads/new/images/20260803/6a6feb2241c15.png?imageMogr2/quality/90",
-            "alt": ""
-          },
-          {
-            "url": "https://static.leiphone.com/uploads/new/images/20260803/6a6feb228c933.png?imageMogr2/quality/90",
-            "alt": ""
-          },
-          {
-            "url": "https://static.leiphone.com/uploads/new/images/20260803/6a6feb22ba5e3.png?imageMogr2/quality/90",
-            "alt": ""
-          },
-          {
-            "url": "https://static.leiphone.com/uploads/new/images/20260803/6a6feb22e25d0.png?imageMogr2/quality/90",
-            "alt": ""
+            "alt": "DoorDash因使用月之暗面模型遭美国议员调查，DeepSeek与Seedance等AI动态集中出现",
+            "kind": "article-cover"
           }
         ],
         "videos": []
@@ -1146,7 +1124,13 @@
       ],
       "imageUrl": "https://cdn.modelscope.cn/social-thumbnails/models/minimax/minimax-h3.png",
       "mediaAssets": {
-        "images": [],
+        "images": [
+          {
+            "url": "https://cdn.modelscope.cn/social-thumbnails/models/minimax/minimax-h3.png",
+            "alt": "MiniMax发布全模态音视频生成系统H3",
+            "kind": "article-cover"
+          }
+        ],
         "videos": []
       },
       "eventAggregation": {
@@ -1209,20 +1193,9 @@
       "mediaAssets": {
         "images": [
           {
-            "url": "https://wpimg-wscn.awtmt.com/00da4096-6824-40d3-820a-31b45fb6fa28.jpeg",
-            "alt": "Image 1"
-          },
-          {
-            "url": "https://wpimg-wscn.awtmt.com/55a61d55-9cdb-4db1-af7b-96200f6529ac.jpeg",
-            "alt": "Image 2"
-          },
-          {
-            "url": "https://wpimg-wscn.awtmt.com/e0201451-4572-42fc-9801-9eea2ed0fbcd.jpeg",
-            "alt": "Image 3"
-          },
-          {
-            "url": "https://wpimg-wscn.awtmt.com/c55e6625-453b-4942-986b-c26431d25263.jpeg",
-            "alt": "Image 4"
+            "url": "https://wpimg-wscn.awtmt.com/87b4d001-413a-4469-b4a7-80e0d2a16c90.png",
+            "alt": "大摩：AI板块回调主要是技术面因素，算力供需与电力瓶颈仍在",
+            "kind": "article-cover"
           }
         ],
         "videos": []
@@ -1272,7 +1245,13 @@
       ],
       "imageUrl": "https://img.huxiucdn.com/ai/ai-general-cover/202608/03/30986-prod-db-general-1-1785715582303.png?imageView2/1/w/788/h/444/|imageMogr2/strip/interlace/1/quality/85",
       "mediaAssets": {
-        "images": [],
+        "images": [
+          {
+            "url": "https://img.huxiucdn.com/ai/ai-general-cover/202608/03/30986-prod-db-general-1-1785715582303.png?imageView2/1/w/788/h/444/|imageMogr2/strip/interlace/1/quality/85",
+            "alt": "浪潮信息彭震：AI原生转型的核心难题是组织与人的变革",
+            "kind": "article-cover"
+          }
+        ],
         "videos": []
       },
       "eventAggregation": {
@@ -1323,7 +1302,8 @@
         "images": [
           {
             "url": "https://static.leiphone.com/uploads/new/images/20260802/6a6ec10c10528.jpg?imageView2/2/w/740",
-            "alt": ""
+            "alt": "网易有道全线产品接入DeepSeek-V4-Flash正式版",
+            "kind": "article-cover"
           }
         ],
         "videos": []
@@ -1374,20 +1354,9 @@
       "mediaAssets": {
         "images": [
           {
-            "url": "https://img.huxiucdn.com/article/content/26-08-03/683eea8b-9669-4290-85d3-931529d1b4c2.png?imageView2/2/w/1000/format/png/interlace/1/q/85",
-            "alt": "Image 1"
-          },
-          {
-            "url": "https://img.huxiucdn.com/article/content/26-08-03/4bf1546a-e63e-4b6a-aa34-346425906412.png?imageView2/2/w/1000/format/png/interlace/1/q/85",
-            "alt": "Image 2"
-          },
-          {
-            "url": "https://img.huxiucdn.com/article/content/26-08-03/e6501c55-fe16-4eea-9be2-0b4aa9f16550.png?imageView2/2/w/1000/format/png/interlace/1/q/85",
-            "alt": "Image 3"
-          },
-          {
-            "url": "https://img.huxiucdn.com/article/content/26-08-03/9e50bf87-3d93-4ae6-aaa4-4aae33ac5b4e.png?imageView2/2/w/1000/format/png/interlace/1/q/85",
-            "alt": "Image 4"
+            "url": "https://img.huxiucdn.com/article/cover/202608/03/084023392734.jpg?imageView2/1/w/788/h/444/|imageMogr2/strip/interlace/1/quality/85",
+            "alt": "中国商务部发布“产能过剩”立场文件，质疑其定义与贸易政策合法性",
+            "kind": "article-cover"
           }
         ],
         "videos": []
@@ -1438,20 +1407,9 @@
       "mediaAssets": {
         "images": [
           {
-            "url": "https://s1-static.huxiucdn.com/image/weixin/huxiu_app.png",
-            "alt": "Image 1: wechat"
-          },
-          {
-            "url": "https://s1-static.huxiucdn.com/image/weixin/AGI.jpg",
-            "alt": "Image 2: AGI接口"
-          },
-          {
-            "url": "https://s1-static.huxiucdn.com/image/weixin/sanyishidai.jpg",
-            "alt": "Image 3: 商业弧光"
-          },
-          {
-            "url": "https://s1-static.huxiucdn.com/image/weixin/ng.jpg",
-            "alt": "Image 4: 那个NG"
+            "url": "https://img.huxiucdn.com/ai/ai-general-cover/202608/03/30989-prod-nb2ep-general-1-1785715863700.png?imageView2/1/w/788/h/444/|imageMogr2/strip/interlace/1/quality/85",
+            "alt": "台积电携手景硕研发类EMIB硅桥封装技术",
+            "kind": "article-cover"
           }
         ],
         "videos": []
@@ -1499,20 +1457,13 @@
         "监管",
         "其他"
       ],
-      "imageUrl": "",
+      "imageUrl": "https://2-im.guokr.com/RnZKcDVxTDNxVGJsLWtVcnFtdDJINmxmUFNJV2RvY3g3AgAAJgEAAFBO.png?imageView2/1/w/555/h/287",
       "mediaAssets": {
         "images": [
           {
             "url": "https://2-im.guokr.com/RnZKcDVxTDNxVGJsLWtVcnFtdDJINmxmUFNJV2RvY3g3AgAAJgEAAFBO.png?imageView2/1/w/555/h/287",
-            "alt": "Image 1"
-          },
-          {
-            "url": "https://3-im.guokr.com/RmtZMUlTSG1JQkJsbmtOZkF0b0pJeDRxdDNtdWRvY3g3AgAA4AAAAFBO.png?imageView2/1/w/555/h/219",
-            "alt": "Image 2"
-          },
-          {
-            "url": "https://3-im.guokr.com/RmgxZ2F3Z09sRGltN2NfZjNyNEpGczN4cUhUMWRvY3jsAQAAIgEAAFBO.png",
-            "alt": "Image 3"
+            "alt": "翰智推出企业级GEO服务，争夺品牌在AI答案中的位置",
+            "kind": "article-cover"
           }
         ],
         "videos": []
@@ -1747,7 +1698,13 @@
       ],
       "imageUrl": "https://img.huxiucdn.com/ai/ai-general-cover/202608/02/30934-prod-db-general-1-1785639198616.png?imageView2/1/w/788/h/444/|imageMogr2/strip/interlace/1/quality/85",
       "mediaAssets": {
-        "images": [],
+        "images": [
+          {
+            "url": "https://img.huxiucdn.com/ai/ai-general-cover/202608/02/30934-prod-db-general-1-1785639198616.png?imageView2/1/w/788/h/444/|imageMogr2/strip/interlace/1/quality/85",
+            "alt": "离职标签带来流量，垂直在职创作者更具持续变现能力",
+            "kind": "article-cover"
+          }
+        ],
         "videos": []
       },
       "eventAggregation": {
@@ -1791,24 +1748,13 @@
         "AI",
         "其他"
       ],
-      "imageUrl": "",
+      "imageUrl": "https://2-im.guokr.com/RnRVNGtRS253RXNvV0h3TlhhdjJvTzlpdGtiUWRvY3gbAwAAQgIAAEpQ.jpg?imageView2/1/w/555/h/403",
       "mediaAssets": {
         "images": [
           {
             "url": "https://2-im.guokr.com/RnRVNGtRS253RXNvV0h3TlhhdjJvTzlpdGtiUWRvY3gbAwAAQgIAAEpQ.jpg?imageView2/1/w/555/h/403",
-            "alt": "Image 1"
-          },
-          {
-            "url": "https://3-im.guokr.com/RmpjS1R5UE5hamZMMjRxN29ndUJPQlB0NWhOamRvY3jQAAAAyQAAAEdJ.gif",
-            "alt": "Image 2"
-          },
-          {
-            "url": "https://1-im.guokr.com/RnNHd0h0czZZSEpRem5ETU1jR25kZU8wdkZPMmRvY3gTAwAARgIAAEdJ.gif?imageView2/1/w/555/h/410",
-            "alt": "Image 3"
-          },
-          {
-            "url": "https://2-im.guokr.com/RmpwQ0dNVi1nR2J3dF9za0kyNFMzSk9Bbkp1WWRvY3jtAwAAnQIAAEpQ.jpg?imageView2/1/w/555/h/369",
-            "alt": "Image 4"
+            "alt": "从挂谷猜想到二维码：抽象数学如何等待未来应用",
+            "kind": "article-cover"
           }
         ],
         "videos": []
@@ -1856,24 +1802,13 @@
         "多模态",
         "硬件"
       ],
-      "imageUrl": "",
+      "imageUrl": "https://1-im.guokr.com/RnZPa1hScmhOSWYzRV8xWHJYbExBazBxV3NPeGRvY3hABgAALQQAAEpQ.jpg?imageView2/1/w/555/h/370",
       "mediaAssets": {
         "images": [
           {
             "url": "https://1-im.guokr.com/RnZPa1hScmhOSWYzRV8xWHJYbExBazBxV3NPeGRvY3hABgAALQQAAEpQ.jpg?imageView2/1/w/555/h/370",
-            "alt": "Image 1"
-          },
-          {
-            "url": "https://2-im.guokr.com/Rmx2QjJpV0NfTkUxcUxXNVpRdzBMTndZbkc4bWRvY3g4BAAAJQkAAFBO.png?imageView2/1/w/555/h/1203",
-            "alt": "Image 2"
-          },
-          {
-            "url": "https://2-im.guokr.com/Rm5ORVdxWGJwVjljdVVYbGhrcS1wY1FUeEVJSWRvY3goBQAAeQkAAEpQ.jpeg",
-            "alt": "Image 3"
-          },
-          {
-            "url": "https://2-im.guokr.com/RnRWdmFKaERIeHJWUWlWX3lKVTl3MVRNLUZ6dGRvY3iABwAAOAQAAEpQ.jpeg",
-            "alt": "Image 4"
+            "alt": "红旗天工08 670 Max上市，限时权益价17.99万元",
+            "kind": "article-cover"
           }
         ],
         "videos": []
@@ -1920,20 +1855,13 @@
         "产品",
         "硬件"
       ],
-      "imageUrl": "",
+      "imageUrl": "https://1-im.guokr.com/RnJUNlpaLTJBMUt3TTl2OHZ2YXRHVE8wQ0VkMWRvY3j4AgAARAUAAEpQ.jpg?imageView2/1/w/555/h/984",
       "mediaAssets": {
         "images": [
           {
             "url": "https://1-im.guokr.com/RnJUNlpaLTJBMUt3TTl2OHZ2YXRHVE8wQ0VkMWRvY3j4AgAARAUAAEpQ.jpg?imageView2/1/w/555/h/984",
-            "alt": "Image 1"
-          },
-          {
-            "url": "https://1-im.guokr.com/RmlSYzh4Y0M4dVMwWl9QaUNIcGlmT0g2SXBqWWRvY3gQBQAA9gIAAEpQ.jpg?imageView2/1/w/555/h/324",
-            "alt": "Image 2"
-          },
-          {
-            "url": "https://2-im.guokr.com/RnVWZXRNUjJZbXplbDZMYTlWLThVY1psNnlzNmRvY3gQBQAA1gIAAEpQ.jpg?imageView2/1/w/555/h/310",
-            "alt": "Image 3"
+            "alt": "华境S 7月交付7203台，连续三个月增长并获CCTV家庭智能出行合作称号",
+            "kind": "article-cover"
           }
         ],
         "videos": []
@@ -1982,7 +1910,13 @@
       ],
       "imageUrl": "https://i.ytimg.com/vi/8B05cy3UuSE/maxresdefault.jpg",
       "mediaAssets": {
-        "images": [],
+        "images": [
+          {
+            "url": "https://i.ytimg.com/vi/8B05cy3UuSE/maxresdefault.jpg",
+            "alt": "NVIDIA 的 AI 研究：仅复制人类行为并不够",
+            "kind": "video-cover"
+          }
+        ],
         "videos": [
           {
             "id": "8B05cy3UuSE",
@@ -2087,7 +2021,13 @@
       ],
       "imageUrl": "https://i.ytimg.com/vi/OEmEfobzodE/maxresdefault.jpg",
       "mediaAssets": {
-        "images": [],
+        "images": [
+          {
+            "url": "https://i.ytimg.com/vi/OEmEfobzodE/maxresdefault.jpg",
+            "alt": "Google DeepMind 发布《This is Gemini Robotics 2》短视频",
+            "kind": "video-cover"
+          }
+        ],
         "videos": [
           {
             "id": "OEmEfobzodE",
@@ -2193,7 +2133,13 @@
       ],
       "imageUrl": "https://cdn.modelscope.cn/social-thumbnails/models/openpangu/openpangu-2.0-pro.png",
       "mediaAssets": {
-        "images": [],
+        "images": [
+          {
+            "url": "https://cdn.modelscope.cn/social-thumbnails/models/openpangu/openpangu-2.0-pro.png",
+            "alt": "华为发布基于昇腾NPU训练的openPangu-2.0-Pro混合专家模型",
+            "kind": "article-cover"
+          }
+        ],
         "videos": []
       },
       "eventAggregation": {
@@ -2244,19 +2190,8 @@
         "images": [
           {
             "url": "https://oss.zhidx.com/uploads/2026/08/6a6ea066b2af7_6a6ea066af95d_6a6ea066af92a_头图.png/_zdx",
-            "alt": ""
-          },
-          {
-            "url": "https://oss.zhidx.com/uploads/2026/08/6a6ea5d64e43b_6a6ea5d64b404_6a6ea5d64b3c4_屏幕截图-2026-08-02-100450.png/_zdx",
-            "alt": "OpenAI官宣下一代模型Astra！取得10大未解难题突破，附249页论文"
-          },
-          {
-            "url": "https://oss.zhidx.com/uploads/2026/08/6a6ea160a83d3_6a6ea160a5735_6a6ea160a56fa_屏幕截图-2026-08-02-094549.png/_zdx",
-            "alt": "OpenAI官宣下一代模型Astra！取得10大未解难题突破，附249页论文"
-          },
-          {
-            "url": "https://oss.zhidx.com/uploads/2018/08/zdx_suffix.jpeg",
-            "alt": ""
+            "alt": "OpenAI披露下一代模型Astra在10项数学与理论计算机科学问题上取得新成果",
+            "kind": "article-cover"
           }
         ],
         "videos": []

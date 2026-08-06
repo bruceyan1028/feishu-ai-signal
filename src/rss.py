@@ -15,6 +15,8 @@ from urllib.parse import urljoin, urlsplit
 import feedparser
 import requests
 
+from . import sources
+
 log = logging.getLogger(__name__)
 
 
@@ -26,6 +28,13 @@ _PROMO_MARKER_RE = re.compile(
     r"|<p>\s*The post\s+<a\b"
 )
 _PROMO_TAIL_FROM = 0.6
+_DISPLAY_IMAGE_NOISE_RE = re.compile(
+    r"(?i)(?:"
+    r"author[-_/ ]?(?:avatar|photo|bio)|byline|contributor|profile[-_/ ]?(?:image|photo)"
+    r"|avatar|headshot|gravatar|newsletter|subscribe|advertis(?:e|ement)|sponsor"
+    r"|qrcode|qr[-_ ]?code|wechat|weixin|公众号|二维码|扫码|赞赏|打赏|联系(?:我们|作者)"
+    r")"
+)
 
 
 def strip_trailing_promo(body: str) -> str:
@@ -134,7 +143,19 @@ def _meta_image_from_html(html: str, page_url: str) -> str:
         image_type = (attributes.get("property") or attributes.get("name") or "").lower()
         image_url = attributes.get("content", "").strip()
         if image_type in {"og:image", "og:image:url", "twitter:image", "twitter:image:src"} and image_url:
-            return urljoin(page_url, image_url)
+            candidate = urljoin(page_url, image_url)
+            if _image_ok(candidate) and not _DISPLAY_IMAGE_NOISE_RE.search(candidate):
+                return candidate
+    # 微信文章常把封面放在脚本变量而不是标准 OG 标签里。
+    for pattern in (
+        r"""(?is)\bmsg_cdn_url\s*[:=]\s*["']([^"']+)""",
+        r"""(?is)\bcdn_url_1_1\s*[:=]\s*["']([^"']+)""",
+    ):
+        match = re.search(pattern, html)
+        if match:
+            candidate = urljoin(page_url, unescape(match.group(1)).replace(r"\/", "/"))
+            if _image_ok(candidate) and not _DISPLAY_IMAGE_NOISE_RE.search(candidate):
+                return candidate
     return ""
 
 
@@ -154,6 +175,72 @@ def fetch_article_image(page_url: str) -> str:
     except requests.RequestException as exc:
         log.info("原文配图读取失败 %s: %s", page_url, exc)
         return ""
+
+
+def image_asset_is_noise(asset: dict[str, Any]) -> bool:
+    """识别作者头像、二维码和推广图等不应进入新闻正文的图片。"""
+    url = str(asset.get("url") or "").strip()
+    alt = str(asset.get("alt") or "").strip()
+    kind = str(asset.get("kind") or "").strip()
+    return not _image_ok(url) or bool(_DISPLAY_IMAGE_NOISE_RE.search(f"{url} {alt} {kind}"))
+
+
+def curate_display_media(
+    signal: dict[str, Any],
+    article_cover: str = "",
+) -> tuple[dict[str, Any], str]:
+    """按载体整理网页展示图片。
+
+    网页与公众号只保留原文声明的封面，避免把作者卡、广告和相关推荐混入正文。
+    视频、播客使用平台自身封面；论文等其它载体保留专用图表链路。
+    """
+    media = dict(signal.get("mediaAssets") or signal.get("media_assets") or {})
+    images = [
+        dict(item)
+        for item in media.get("images") or []
+        if isinstance(item, dict) and not image_asset_is_noise(item)
+    ]
+    content_type = str(signal.get("contentType") or signal.get("source_type") or "")
+    current = str(signal.get("imageUrl") or signal.get("image_url") or "").strip()
+
+    if content_type == "视频":
+        video = next(
+            (item for item in media.get("videos") or [] if isinstance(item, dict)),
+            {},
+        )
+        cover = str(video.get("thumbnailUrl") or current).strip()
+        if cover and _image_ok(cover):
+            media["images"] = [{"url": cover, "alt": str(signal.get("titleCn") or signal.get("title") or ""), "kind": "video-cover"}]
+            return media, cover
+        media["images"] = images[:1]
+        return media, current
+
+    if content_type == "播客":
+        cover = current or (str(images[0].get("url") or "") if images else "")
+        if cover and _image_ok(cover):
+            media["images"] = [{"url": cover, "alt": str(signal.get("titleCn") or signal.get("title") or ""), "kind": "podcast-cover"}]
+            return media, cover
+        media["images"] = images[:1]
+        return media, ""
+
+    if content_type in {"文章", "公众号", sources.SIGNAL_FORMAT_WEB, sources.SIGNAL_FORMAT_WECHAT}:
+        cover = str(article_cover or "").strip()
+        if cover and _image_ok(cover) and not _DISPLAY_IMAGE_NOISE_RE.search(cover):
+            media["images"] = [{"url": cover, "alt": str(signal.get("titleCn") or signal.get("title") or ""), "kind": "article-cover"}]
+            return media, cover
+        # 回源失败时宁缺毋滥：只留一个已经通过基础过滤的候选。
+        fallback = current if current and _image_ok(current) and not _DISPLAY_IMAGE_NOISE_RE.search(current) else ""
+        if not fallback and images:
+            fallback = str(images[0].get("url") or "")
+        media["images"] = (
+            [{"url": fallback, "alt": str(signal.get("titleCn") or signal.get("title") or ""), "kind": "article-cover"}]
+            if fallback
+            else []
+        )
+        return media, fallback
+
+    media["images"] = images
+    return media, current
 
 
 # 只有 RSS 摘要、没有全文的条目：回源抓正文，否则前端只能显示一两句话

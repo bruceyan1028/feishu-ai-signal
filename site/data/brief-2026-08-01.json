@@ -541,24 +541,13 @@
         "Agent",
         "产品"
       ],
-      "imageUrl": "",
+      "imageUrl": "https://1-im.guokr.com/AmRDJDzcF6DRheBSdzQOVIJiZ2NnSlU9VcSZyjORYDHkAAAAbAAAAFBO.png",
       "mediaAssets": {
         "images": [
           {
             "url": "https://1-im.guokr.com/AmRDJDzcF6DRheBSdzQOVIJiZ2NnSlU9VcSZyjORYDHkAAAAbAAAAFBO.png",
-            "alt": "果壳有意思"
-          },
-          {
-            "url": "https://3-im.guokr.com/RnQ0Y0xXQzZ1RnREOTBWV3NmX1VpTGxKbUtJQWRvY3hhAQAAPgEAAEdJ.gif",
-            "alt": ""
-          },
-          {
-            "url": "https://2-im.guokr.com/Rmx3TkFYWDMzYVM4WjhIZC1lYWV5TEM3LTFDZWRvY3iXAgAAdQEAAEpQ.jpg?imageView2/1/w/555/h/312",
-            "alt": ""
-          },
-          {
-            "url": "https://2-im.guokr.com/RmswWThNMm9PUGlwUzZWbkJtUXdNbkFIV0lRYmRvY3iEAwAA-gEAAEpQ.jpg?imageView2/1/w/555/h/312",
-            "alt": ""
+            "alt": "Claude安全测试越界入侵真实系统，OpenAI与字节加速AI科研和编程布局",
+            "kind": "article-cover"
           }
         ],
         "videos": []
@@ -611,19 +600,8 @@
         "images": [
           {
             "url": "https://static.leiphone.com/uploads/new/images/20260731/6a6c8f1dd1097.jpg?imageMogr2/quality/90",
-            "alt": ""
-          },
-          {
-            "url": "https://static.leiphone.com/uploads/new/images/20260731/6a6c8f1e15275.jpg?imageMogr2/quality/90",
-            "alt": "图片"
-          },
-          {
-            "url": "https://static.leiphone.com/uploads/new/images/20260731/6a6c8f1e57ebe.png?imageMogr2/quality/90",
-            "alt": ""
-          },
-          {
-            "url": "https://static.leiphone.com/uploads/new/images/20260731/6a6c8f1e89bdd.jpg?imageMogr2/quality/90",
-            "alt": "图片"
+            "alt": "MiniMax发布H3视频模型：价格为Seedance 2.0三分之一并计划开源",
+            "kind": "article-cover"
           }
         ],
         "videos": []
@@ -676,19 +654,8 @@
         "images": [
           {
             "url": "https://oss.zhidx.com/uploads/2026/07/6a6c491bc287d_6a6c491bbfadc_6a6c491bbfa98_DeepSeek升级图_副本.png/_zdx",
-            "alt": ""
-          },
-          {
-            "url": "https://oss.zhidx.com/uploads/2026/07/6a6c3a5bb2d18_6a6c3a5bafc93_6a6c3a5bafc5f_API.png/_zdx",
-            "alt": "倒反天罡？DeepSeek-V4-Flash正式版上线，干翻自家先发的Pro版"
-          },
-          {
-            "url": "https://oss.zhidx.com/uploads/2026/07/6a6c3a5d9572b_6a6c3a5d92ba1_6a6c3a5d92b6c_pro.png/_zdx",
-            "alt": "倒反天罡？DeepSeek-V4-Flash正式版上线，干翻自家先发的Pro版"
-          },
-          {
-            "url": "https://oss.zhidx.com/uploads/2026/07/6a6c3a5eac18f_6a6c3a5ea91a0_6a6c3a5ea9153_v4.png/_zdx",
-            "alt": "倒反天罡？DeepSeek-V4-Flash正式版上线，干翻自家先发的Pro版"
+            "alt": "DeepSeek-V4-Flash正式版上线，Agent基准超越Pro预览版",
+            "kind": "article-cover"
           }
         ],
         "videos": []
@@ -738,7 +705,13 @@
       ],
       "imageUrl": "https://cdn.modelscope.cn/social-thumbnails/models/deepseek-ai/deepseek-v4-flash-0731.png",
       "mediaAssets": {
-        "images": [],
+        "images": [
+          {
+            "url": "https://cdn.modelscope.cn/social-thumbnails/models/deepseek-ai/deepseek-v4-flash-0731.png",
+            "alt": "DeepSeek正式发布V4-Flash-0731，强化智能体与代码任务能力",
+            "kind": "article-cover"
+          }
+        ],
         "videos": []
       },
       "eventAggregation": {
@@ -784,9 +757,15 @@
         "硬件",
         "开源"
       ],
-      "imageUrl": "https://storage.googleapis.com/gweb-cloudblog-publish/images/Whats_new_in_AI_infrastructure.max-600x600.jpg",
+      "imageUrl": "https://storage.googleapis.com/gweb-cloudblog-publish/images/Whats_new_in_AI_infrastructure.max-2500x2500.jpg",
       "mediaAssets": {
-        "images": [],
+        "images": [
+          {
+            "url": "https://storage.googleapis.com/gweb-cloudblog-publish/images/Whats_new_in_AI_infrastructure.max-2500x2500.jpg",
+            "alt": "Google Cloud发布2026年5至7月AI基础设施与编排更新",
+            "kind": "article-cover"
+          }
+        ],
         "videos": []
       },
       "eventAggregation": {
@@ -834,7 +813,13 @@
       ],
       "imageUrl": "https://cdn.modelscope.cn/social-thumbnails/models/moonshotai/kimi-k3.png",
       "mediaAssets": {
-        "images": [],
+        "images": [
+          {
+            "url": "https://cdn.modelscope.cn/social-thumbnails/models/moonshotai/kimi-k3.png",
+            "alt": "Kimi K3：开放权重的2.8万亿参数原生多模态智能体模型",
+            "kind": "article-cover"
+          }
+        ],
         "videos": []
       },
       "eventAggregation": {
@@ -927,24 +912,13 @@
         "推理",
         "开源"
       ],
-      "imageUrl": "https://oss.zhidx.com/uploads/2026/07/6a6c65f0cedbd_6a6c65f0cbd54_6a6c65f0cbd23_公众号文章信息来源与写作风格分析-22.png/_zdx",
+      "imageUrl": "https://oss.zhidx.com/uploads/2026/07/6a6c564ed53df_6a6c564ed2420_6a6c564ed23e6_微信图片_20260731153944_842_49.png/_zdx",
       "mediaAssets": {
         "images": [
           {
-            "url": "https://oss.zhidx.com/uploads/2026/07/6a6c65f0cedbd_6a6c65f0cbd54_6a6c65f0cbd23_公众号文章信息来源与写作风格分析-22.png/_zdx",
-            "alt": ""
-          },
-          {
             "url": "https://oss.zhidx.com/uploads/2026/07/6a6c564ed53df_6a6c564ed2420_6a6c564ed23e6_微信图片_20260731153944_842_49.png/_zdx",
-            "alt": "腾讯科研智能体攻破50年未解数学难题，姚顺雨喊话正在招人"
-          },
-          {
-            "url": "https://oss.zhidx.com/uploads/2026/07/6a6c561cb7d97_6a6c561cb53c8_6a6c561cb534f_截屏2026-07-31-15.57.02.png/_zdx",
-            "alt": "腾讯科研智能体攻破50年未解数学难题，姚顺雨喊话正在招人"
-          },
-          {
-            "url": "https://oss.zhidx.com/uploads/2026/07/6a6c56412241c_6a6c56411f576_6a6c56411f54e_微信图片_20260731153736_841_49.png/_zdx",
-            "alt": "腾讯科研智能体攻破50年未解数学难题，姚顺雨喊话正在招人"
+            "alt": "腾讯Hyra智能体提出构造，解决加法组合学50余年难题",
+            "kind": "article-cover"
           }
         ],
         "videos": []
@@ -997,19 +971,8 @@
         "images": [
           {
             "url": "https://static.leiphone.com/uploads/new/images/20260731/6a6c84b6d5661.jpg?imageMogr2/quality/90",
-            "alt": ""
-          },
-          {
-            "url": "https://static.leiphone.com/uploads/new/images/20260731/6a6c84b71bad8.jpg?imageMogr2/quality/90",
-            "alt": "图片"
-          },
-          {
-            "url": "https://static.leiphone.com/uploads/new/images/20260731/6a6c84b76baad.png?imageMogr2/quality/90",
-            "alt": ""
-          },
-          {
-            "url": "https://static.leiphone.com/uploads/new/images/20260731/6a6c84b79aba2.jpg?imageMogr2/quality/90",
-            "alt": ""
+            "alt": "LLM Wiki以摄入时编译补充而非淘汰传统RAG",
+            "kind": "article-cover"
           }
         ],
         "videos": []
@@ -1059,7 +1022,13 @@
       ],
       "imageUrl": "https://wpimg-wscn.awtmt.com/7e828a03-6e10-45ce-b318-bbef3c088522.png",
       "mediaAssets": {
-        "images": [],
+        "images": [
+          {
+            "url": "https://wpimg-wscn.awtmt.com/7e828a03-6e10-45ce-b318-bbef3c088522.png",
+            "alt": "亚马逊完成对OpenAI 500亿美元投资并持股约5%",
+            "kind": "article-cover"
+          }
+        ],
         "videos": []
       },
       "eventAggregation": {
@@ -1167,7 +1136,13 @@
       ],
       "imageUrl": "https://wpimg-wscn.awtmt.com/c2054991-1f63-4578-819d-b25efbcee5d6.jpeg",
       "mediaAssets": {
-        "images": [],
+        "images": [
+          {
+            "url": "https://wpimg-wscn.awtmt.com/c2054991-1f63-4578-819d-b25efbcee5d6.jpeg",
+            "alt": "长鑫科技LPDDR6研发验证据称接近尾声",
+            "kind": "article-cover"
+          }
+        ],
         "videos": []
       },
       "eventAggregation": {
@@ -1271,19 +1246,8 @@
         "images": [
           {
             "url": "https://oss.zhidx.com/uploads/2026/07/6a6bdd56cec9d_6a6bdd56cbd2d_6a6bdd56cbd01_未标题-1.png/_zdx",
-            "alt": ""
-          },
-          {
-            "url": "https://oss.zhidx.com/uploads/2026/07/6a6c077b2331d_6a6c077b1fc94_6a6c077b1fc5b_IMG_20260731_101820.jpg/_zdx",
-            "alt": "横扫五大手游电竞赛事，稳坐电竞“神U”后，骁龙下一站：用AI颠覆游戏世界"
-          },
-          {
-            "url": "https://oss.zhidx.com/uploads/2026/07/6a6c07c426b55_6a6c07c41df4a_6a6c07c41df14_IMG_20260731_095101.jpg/_zdx",
-            "alt": "横扫五大手游电竞赛事，稳坐电竞“神U”后，骁龙下一站：用AI颠覆游戏世界"
-          },
-          {
-            "url": "https://oss.zhidx.com/uploads/2026/07/6a6bde524e571_6a6bde524ac75_6a6bde524ac33_IMG_20260730_160038.jpg/_zdx",
-            "alt": "横扫五大手游电竞赛事，稳坐电竞“神U”后，骁龙下一站：用AI颠覆游戏世界"
+            "alt": "高通展示AI驱动的移动游戏开发与端侧体验方案",
+            "kind": "article-cover"
           }
         ],
         "videos": []
@@ -1336,19 +1300,8 @@
         "images": [
           {
             "url": "https://oss.zhidx.com/uploads/2026/07/6a6c2cc31ab3c_6a6c2cc317840_6a6c2cc317818_112.png/_zdx",
-            "alt": ""
-          },
-          {
-            "url": "https://oss.zhidx.com/uploads/2026/07/6a6c2c7d4666e_6a6c2c7d434f0_6a6c2c7d434b9_ScreenShot_2026-07-31_130242_373.png/_zdx",
-            "alt": "5050亿参数！余承东开源盘古新模型，“世界第一”还有些距离"
-          },
-          {
-            "url": "https://oss.zhidx.com/uploads/2026/07/6a6c31eaeb82d_6a6c31eae851d_6a6c31eae84e4_ScreenShot_2026-07-31_132546_024.png/_zdx",
-            "alt": "5050亿参数！余承东开源盘古新模型，“世界第一”还有些距离"
-          },
-          {
-            "url": "https://oss.zhidx.com/uploads/2026/07/6a6c28b67fd3f_6a6c28b671229_6a6c28b6711e6_ScreenShot_2026-07-31_124638_769.png/_zdx",
-            "alt": "5050亿参数！余承东开源盘古新模型，“世界第一”还有些距离"
+            "alt": "华为开源5050亿参数盘古MoE模型，主攻长上下文智能体",
+            "kind": "article-cover"
           }
         ],
         "videos": []
@@ -1401,19 +1354,8 @@
         "images": [
           {
             "url": "https://static.leiphone.com/uploads/new/images/20260731/6a6c86c236915.jpg?imageMogr2/quality/90",
-            "alt": ""
-          },
-          {
-            "url": "https://static.leiphone.com/uploads/new/images/20260731/6a6c86c26d95f.jpg?imageMogr2/quality/90",
-            "alt": "图片"
-          },
-          {
-            "url": "https://static.leiphone.com/uploads/new/images/20260731/6a6c86c2a018f.jpg?imageMogr2/quality/90",
-            "alt": ""
-          },
-          {
-            "url": "https://static.leiphone.com/uploads/new/images/20260731/6a6c86c2ccefd.jpg?imageMogr2/quality/90",
-            "alt": ""
+            "alt": "匿名模型 Kivine 引发 Kimi K3 或将发布的猜测",
+            "kind": "article-cover"
           }
         ],
         "videos": []
@@ -1505,7 +1447,8 @@
         "images": [
           {
             "url": "https://static.leiphone.com/uploads/new/images/20260731/6a6c85073ee9f.jpeg?imageView2/2/w/740",
-            "alt": ""
+            "alt": "美团联合苏州上线“等灯停表”，苏州首批1100个路口试点",
+            "kind": "article-cover"
           }
         ],
         "videos": []
@@ -1734,7 +1677,13 @@
       ],
       "imageUrl": "https://i.ytimg.com/vi/nBftSI5mmHA/maxresdefault.jpg",
       "mediaAssets": {
-        "images": [],
+        "images": [
+          {
+            "url": "https://i.ytimg.com/vi/nBftSI5mmHA/maxresdefault.jpg",
+            "alt": "Gemini Robotics 2扩展 humanoid 机器人全身控制能力",
+            "kind": "video-cover"
+          }
+        ],
         "videos": [
           {
             "id": "nBftSI5mmHA",
@@ -1867,7 +1816,13 @@
       ],
       "imageUrl": "https://cdn.modelscope.cn/social-thumbnails/models/openpangu/openpangu-2.0-pro.png",
       "mediaAssets": {
-        "images": [],
+        "images": [
+          {
+            "url": "https://cdn.modelscope.cn/social-thumbnails/models/openpangu/openpangu-2.0-pro.png",
+            "alt": "华为发布基于昇腾NPU训练的openPangu-2.0-Pro混合专家模型",
+            "kind": "article-cover"
+          }
+        ],
         "videos": []
       },
       "eventAggregation": {

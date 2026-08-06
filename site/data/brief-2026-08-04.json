@@ -650,19 +650,8 @@
         "images": [
           {
             "url": "https://static.leiphone.com/uploads/new/images/20260803/6a70773dd6469.png?imageView2/2/w/740",
-            "alt": ""
-          },
-          {
-            "url": "https://static.leiphone.com/uploads/new/images/20260803/6a7077f12b7be.png?imageView2/2/w/740",
-            "alt": ""
-          },
-          {
-            "url": "https://static.leiphone.com/uploads/new/images/20260803/6a70781eb5241.png?imageView2/2/w/740",
-            "alt": ""
-          },
-          {
-            "url": "https://static.leiphone.com/uploads/new/images/20260803/6a7078390a61f.png?imageView2/2/w/740",
-            "alt": ""
+            "alt": "商汤开源8B-MoT统一多模态模型SenseNova U1.5-Lite-Preview",
+            "kind": "article-cover"
           }
         ],
         "videos": []
@@ -715,19 +704,8 @@
         "images": [
           {
             "url": "https://oss.zhidx.com/uploads/2026/08/6a7082c72894a_6a7082c7257bb_6a7082c725790_屏幕截图-2026-08-03-1958461.png/_zdx",
-            "alt": ""
-          },
-          {
-            "url": "https://oss.zhidx.com/uploads/2026/08/6a70768622707_6a7076861efbe_6a7076861ef90_屏幕截图-2026-08-03-185538.png/_zdx",
-            "alt": "又一国产模型重磅开源！有声视频编辑全球第一，16家芯片及平台首日适配"
-          },
-          {
-            "url": "https://oss.zhidx.com/uploads/2026/08/6a70768a89db4_6a70768a86970_6a70768a86924_屏幕截图-2026-08-03-190707.png/_zdx",
-            "alt": "又一国产模型重磅开源！有声视频编辑全球第一，16家芯片及平台首日适配"
-          },
-          {
-            "url": "https://oss.zhidx.com/uploads/2026/08/6a7079b430ead_6a7079b42c158_6a7079b42bdb7_屏幕截图-2026-08-03-192053.png/_zdx",
-            "alt": "又一国产模型重磅开源！有声视频编辑全球第一，16家芯片及平台首日适配"
+            "alt": "MiniMax开源H3全模态视频模型，16家生态伙伴首日适配",
+            "kind": "article-cover"
           }
         ],
         "videos": []
@@ -790,7 +768,13 @@
       ],
       "imageUrl": "https://cdn.modelscope.cn/social-thumbnails/models/deepseek-ai/deepseek-v4-flash-0731.png",
       "mediaAssets": {
-        "images": [],
+        "images": [
+          {
+            "url": "https://cdn.modelscope.cn/social-thumbnails/models/deepseek-ai/deepseek-v4-flash-0731.png",
+            "alt": "DeepSeek正式发布V4-Flash-0731，强化智能体与代码任务能力",
+            "kind": "article-cover"
+          }
+        ],
         "videos": []
       },
       "eventAggregation": {
@@ -841,19 +825,8 @@
         "images": [
           {
             "url": "https://oss.zhidx.com/uploads/2026/08/6a7075924cea8_6a70759249e8e_6a70759249e60_头图.png/_zdx",
-            "alt": ""
-          },
-          {
-            "url": "https://oss.zhidx.com/uploads/2026/08/6a70815928c4c_6a70815925d92_6a70815925d66_评价2.png/_zdx",
-            "alt": "阿里字节腾讯，为AI办公拼了"
-          },
-          {
-            "url": "https://oss.zhidx.com/uploads/2026/08/6a7070a694a33_6a7070a691468_6a7070a691422_千问办公.jpg/_zdx",
-            "alt": "阿里字节腾讯，为AI办公拼了"
-          },
-          {
-            "url": "https://oss.zhidx.com/uploads/2026/08/6a7070e121111_6a7070e118246_6a7070e118204_6a6b2ef9250b1_6a6b2ef9220b9_6a6b2ef92208d_ba187d6833ad5279f221bfdbc282efb5.png/_zdx",
-            "alt": "阿里字节腾讯，为AI办公拼了"
+            "alt": "BAT加速整合AI办公，争夺下一代智能办公入口",
+            "kind": "article-cover"
           }
         ],
         "videos": []
@@ -905,20 +878,9 @@
       "mediaAssets": {
         "images": [
           {
-            "url": "https://img.huxiucdn.com/article/content/26-08-04/bc23f90b-d7ca-4392-aaa7-319db4ccafd3.png?imageView2/2/w/1000/format/png/interlace/1/q/85",
-            "alt": "Image 1"
-          },
-          {
-            "url": "https://img.huxiucdn.com/article/content/26-08-04/04ccc61c-8ac0-4875-9b0f-a078f8bc00e9.png?imageView2/2/w/1000/format/png/interlace/1/q/85",
-            "alt": "Image 2"
-          },
-          {
-            "url": "https://img.huxiucdn.com/article/content/26-08-04/ea8cdfac-8265-4133-952d-6d8f60b3cc22.png?imageView2/2/w/1000/format/png/interlace/1/q/85",
-            "alt": "Image 3"
-          },
-          {
-            "url": "https://img.huxiucdn.com/article/content/26-08-04/9c2e0d3e-30c9-4860-9de1-33da6ed39ffb.png?imageView2/2/w/1000/format/png/interlace/1/q/85",
-            "alt": "Image 4"
+            "url": "https://img.huxiucdn.com/ai/ai-general-cover/202608/04/31131-prod-nb2ep-general-1-1785808819672.png?imageView2/1/w/788/h/444/|imageMogr2/strip/interlace/1/quality/85",
+            "alt": "推理成本大降后，AI厂商将节省的算力转化为毛利",
+            "kind": "article-cover"
           }
         ],
         "videos": []
@@ -971,7 +933,8 @@
         "images": [
           {
             "url": "https://static.leiphone.com/uploads/new/images/20260803/6a7069cfbb1c9.jpg?imageMogr2/quality/90",
-            "alt": ""
+            "alt": "B300价格半年涨三倍，算力中转站受大厂规避，国产推理芯片与AI Infra迎来分化",
+            "kind": "article-cover"
           }
         ],
         "videos": []
@@ -1024,19 +987,8 @@
         "images": [
           {
             "url": "https://oss.zhidx.com/uploads/2026/08/6a705e0d1df72_6a705e0d1afad_6a705e0d1af3e_微信图片_20260803172221_854_49.png/_zdx",
-            "alt": ""
-          },
-          {
-            "url": "https://oss.zhidx.com/uploads/2026/08/6a704f2bd8631_6a704f2bd533d_6a704f2bd52f0_截屏2026-08-03-16.18.07.png/_zdx",
-            "alt": "10美元、两小时、5500行代码，卡帕西让Claude Opus 5搭出《指环王》3D世界"
-          },
-          {
-            "url": "https://oss.zhidx.com/uploads/2026/08/6a702b1c99578_6a702b1c963c3_6a702b1c96374_converted-47.gif",
-            "alt": "10美元、两小时、5500行代码，卡帕西让Claude Opus 5搭出《指环王》3D世界"
-          },
-          {
-            "url": "https://oss.zhidx.com/uploads/2026/08/6a702bffb5cef_6a702bffaa584_6a702bffaa522_截屏2026-08-03-13.48.32.png/_zdx",
-            "alt": "10美元、两小时、5500行代码，卡帕西让Claude Opus 5搭出《指环王》3D世界"
+            "alt": "卡帕西用Claude Opus 5耗时两小时生成《指环王》3D动画",
+            "kind": "article-cover"
           }
         ],
         "videos": []
@@ -1084,12 +1036,13 @@
         "产品",
         "融资"
       ],
-      "imageUrl": "https://techcrunch.com/wp-content/uploads/2025/08/julie-bort-disrupt.jpg?w=150",
+      "imageUrl": "https://techcrunch.com/wp-content/uploads/2025/06/SuperBlocks-founder-Brad-Menezes.jpg?resize=1200,811",
       "mediaAssets": {
         "images": [
           {
-            "url": "https://techcrunch.com/wp-content/uploads/2025/08/julie-bort-disrupt.jpg?w=150",
-            "alt": "Julie Bort"
+            "url": "https://techcrunch.com/wp-content/uploads/2025/06/SuperBlocks-founder-Brad-Menezes.jpg?resize=1200,811",
+            "alt": "AWS与Superblocks合作，将Vibe Coding引入企业私有云",
+            "kind": "article-cover"
           }
         ],
         "videos": []
@@ -1198,24 +1151,13 @@
         "Agent",
         "产品"
       ],
-      "imageUrl": "https://storage.googleapis.com/gweb-cloudblog-publish/images/1_RjwJHTJ.max-1000x1000.png",
+      "imageUrl": "https://storage.googleapis.com/gweb-cloudblog-publish/images/19_-_Infrastructure_Modernization_o5CKMmf.max-2600x2600.jpg",
       "mediaAssets": {
         "images": [
           {
-            "url": "https://storage.googleapis.com/gweb-cloudblog-publish/images/1_RjwJHTJ.max-1000x1000.png",
-            "alt": "1"
-          },
-          {
-            "url": "https://storage.googleapis.com/gweb-cloudblog-publish/images/2_2jb2Sd1.max-1000x1000.png",
-            "alt": "2"
-          },
-          {
-            "url": "https://storage.googleapis.com/gweb-cloudblog-publish/images/3_5ATKeUA.max-1000x1000.png",
-            "alt": "3"
-          },
-          {
-            "url": "https://storage.googleapis.com/gweb-cloudblog-publish/images/4_5GuaY6m.max-1000x1000.png",
-            "alt": "4"
+            "url": "https://storage.googleapis.com/gweb-cloudblog-publish/images/19_-_Infrastructure_Modernization_o5CKMmf.max-2600x2600.jpg",
+            "alt": "谷歌云以AI推动主机渐进式现代化",
+            "kind": "article-cover"
           }
         ],
         "videos": []
@@ -1262,12 +1204,13 @@
         "融资",
         "产品"
       ],
-      "imageUrl": "https://techcrunch.com/wp-content/uploads/2025/05/russell-e1755718978143.jpg?w=150",
+      "imageUrl": "https://techcrunch.com/wp-content/uploads/2026/08/Screenshot-2026-08-03-at-12.31.35-PM.jpg?resize=1200,739",
       "mediaAssets": {
         "images": [
           {
-            "url": "https://techcrunch.com/wp-content/uploads/2025/05/russell-e1755718978143.jpg?w=150",
-            "alt": "Russell Brandom"
+            "url": "https://techcrunch.com/wp-content/uploads/2026/08/Screenshot-2026-08-03-at-12.31.35-PM.jpg?resize=1200,739",
+            "alt": "Design Arena 创业公司获790万美元种子轮融资，以人类偏好评估改进AI模型",
+            "kind": "article-cover"
           }
         ],
         "videos": []
@@ -1448,24 +1391,13 @@
         "产品",
         "多模态"
       ],
-      "imageUrl": "",
+      "imageUrl": "https://3-im.guokr.com/RnZZYU42UW5vZklkMURQdTFfV1Qzd3o2WDQwbGRvY3hpBQAACwMAAEpQ.jpg?imageView2/1/w/555/h/312",
       "mediaAssets": {
         "images": [
           {
             "url": "https://3-im.guokr.com/RnZZYU42UW5vZklkMURQdTFfV1Qzd3o2WDQwbGRvY3hpBQAACwMAAEpQ.jpg?imageView2/1/w/555/h/312",
-            "alt": "Image 1"
-          },
-          {
-            "url": "https://3-im.guokr.com/RmdKejB6RW1TdGx2YWM1RTMwVTlqLWxiM1NRaWRvY3hpBQAACwMAAEpQ.jpg?imageView2/1/w/555/h/312",
-            "alt": "Image 2"
-          },
-          {
-            "url": "https://1-im.guokr.com/Rmh0ZGN4WmJ6dkJxcGlFclIydTZFSGg1NFgxaGRvY3hqBQAAsQEAAEpQ.jpg?imageView2/1/w/555/h/173",
-            "alt": "Image 3"
-          },
-          {
-            "url": "https://1-im.guokr.com/RnRrV1loU09CUkg0MTVYM01NWnZ2eURndzA5VGRvY3hpBQAAmgMAAEpQ.jpg?imageView2/1/w/555/h/369",
-            "alt": "Image 4"
+            "alt": "腾势Z9S开启预售，搭载车载超级智能体与多项“全球第一”技术",
+            "kind": "article-cover"
           }
         ],
         "videos": []
@@ -1569,16 +1501,9 @@
       "mediaAssets": {
         "images": [
           {
-            "url": "https://img.huxiucdn.com/article/content/26-08-04/32f5fac6-4755-4cae-a030-f91c23713dc9.png?imageView2/2/w/1000/format/png/interlace/1/q/85",
-            "alt": "Image 1"
-          },
-          {
-            "url": "https://img.huxiucdn.com/article/content/26-08-04/31cbe715-6362-4bc4-acda-97c032cd1679.png?imageView2/2/w/1000/format/png/interlace/1/q/85",
-            "alt": "Image 2"
-          },
-          {
-            "url": "https://img.huxiucdn.com/article/content/26-08-04/2d20667a-9ce9-4873-84d9-2d28ff2c7914.png?imageView2/2/w/1000/format/png/interlace/1/q/85",
-            "alt": "Image 3"
+            "url": "https://img.huxiucdn.com/ai/ai-general-cover/202608/04/31132-prod-kl-general-1-1785809245667.png?imageView2/1/w/788/h/444/|imageMogr2/strip/interlace/1/quality/85",
+            "alt": "章鱼能源以合资模式进入中国电力市场，押注Kraken能源数字化平台",
+            "kind": "article-cover"
           }
         ],
         "videos": []
@@ -1627,7 +1552,13 @@
       ],
       "imageUrl": "https://i.ytimg.com/vi/Lxh9RF5S-K0/maxresdefault.jpg",
       "mediaAssets": {
-        "images": [],
+        "images": [
+          {
+            "url": "https://i.ytimg.com/vi/Lxh9RF5S-K0/maxresdefault.jpg",
+            "alt": "斯坦福CS329A：借助工具与代码反馈实现自我改进的AI智能体",
+            "kind": "video-cover"
+          }
+        ],
         "videos": [
           {
             "id": "Lxh9RF5S-K0",
@@ -1687,7 +1618,13 @@
       ],
       "imageUrl": "https://i.ytimg.com/vi/6YnLB0XbTnI/maxresdefault.jpg",
       "mediaAssets": {
-        "images": [],
+        "images": [
+          {
+            "url": "https://i.ytimg.com/vi/6YnLB0XbTnI/maxresdefault.jpg",
+            "alt": "斯坦福 CS329A：自我改进 AI Agent 第一讲课程概览",
+            "kind": "video-cover"
+          }
+        ],
         "videos": [
           {
             "id": "6YnLB0XbTnI",
@@ -1793,7 +1730,13 @@
       ],
       "imageUrl": "https://i.ytimg.com/vi/8TQYkjViaBQ/hqdefault.jpg",
       "mediaAssets": {
-        "images": [],
+        "images": [
+          {
+            "url": "https://i.ytimg.com/vi/8TQYkjViaBQ/hqdefault.jpg",
+            "alt": "NVIDIA探讨在AI工厂中安全部署自主智能体",
+            "kind": "video-cover"
+          }
+        ],
         "videos": [
           {
             "id": "8TQYkjViaBQ",
@@ -1881,7 +1824,13 @@
       ],
       "imageUrl": "https://i.ytimg.com/vi/3sDEcfO2cQU/maxresdefault.jpg",
       "mediaAssets": {
-        "images": [],
+        "images": [
+          {
+            "url": "https://i.ytimg.com/vi/3sDEcfO2cQU/maxresdefault.jpg",
+            "alt": "借助英伟达 Inception 扩展 NeuroDX AI 实时神经健康洞察",
+            "kind": "video-cover"
+          }
+        ],
         "videos": [
           {
             "id": "3sDEcfO2cQU",
@@ -1941,7 +1890,13 @@
       ],
       "imageUrl": "https://cdn.modelscope.cn/social-thumbnails/models/openpangu/openpangu-2.0-pro.png",
       "mediaAssets": {
-        "images": [],
+        "images": [
+          {
+            "url": "https://cdn.modelscope.cn/social-thumbnails/models/openpangu/openpangu-2.0-pro.png",
+            "alt": "华为发布基于昇腾NPU训练的openPangu-2.0-Pro混合专家模型",
+            "kind": "article-cover"
+          }
+        ],
         "videos": []
       },
       "eventAggregation": {

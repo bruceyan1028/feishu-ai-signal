@@ -542,24 +542,13 @@
         "产品",
         "硬件"
       ],
-      "imageUrl": "https://oss.zhidx.com/uploads/2026/07/6a6b256237994_6a6b2562342d2_6a6b25623429d_公众号文章信息来源与写作风格分析-19.png/_zdx",
+      "imageUrl": "https://oss.zhidx.com/uploads/2026/07/6a6b4160aa0e9_6a6b4160a0ea9_6a6b4160a0e5f_IMG_4581.jpg/_zdx",
       "mediaAssets": {
         "images": [
           {
-            "url": "https://oss.zhidx.com/uploads/2026/07/6a6b256237994_6a6b2562342d2_6a6b25623429d_公众号文章信息来源与写作风格分析-19.png/_zdx",
-            "alt": ""
-          },
-          {
             "url": "https://oss.zhidx.com/uploads/2026/07/6a6b4160aa0e9_6a6b4160a0ea9_6a6b4160a0e5f_IMG_4581.jpg/_zdx",
-            "alt": "OpenAI总裁放出狠话：ChatGPT桌面端要消灭标签页，年底前大变天"
-          },
-          {
-            "url": "https://oss.zhidx.com/uploads/2026/07/6a6b406d3c829_6a6b406d39448_6a6b406d393ff_公众号文章信息来源与写作风格分析-20.png/_zdx",
-            "alt": "OpenAI总裁放出狠话：ChatGPT桌面端要消灭标签页，年底前大变天"
-          },
-          {
-            "url": "https://oss.zhidx.com/uploads/2026/07/6a6b2b130d209_6a6b2b1309fe8_6a6b2b1309f8a_截屏2026-07-30-16.19.56.png/_zdx",
-            "alt": "OpenAI总裁放出狠话：ChatGPT桌面端要消灭标签页，年底前大变天"
+            "alt": "OpenAI将把ChatGPT桌面端推向“零标签页”与AI操作系统",
+            "kind": "article-cover"
           }
         ],
         "videos": []
@@ -609,7 +598,13 @@
       ],
       "imageUrl": "https://cdn.modelscope.cn/social-thumbnails/models/moonshotai/kimi-k3.png",
       "mediaAssets": {
-        "images": [],
+        "images": [
+          {
+            "url": "https://cdn.modelscope.cn/social-thumbnails/models/moonshotai/kimi-k3.png",
+            "alt": "Kimi K3：开放权重的2.8万亿参数原生多模态智能体模型",
+            "kind": "article-cover"
+          }
+        ],
         "videos": []
       },
       "eventAggregation": {
@@ -705,16 +700,9 @@
       "mediaAssets": {
         "images": [
           {
-            "url": "https://wpimg-wscn.awtmt.com/8366a0e8-f0d0-4c42-ac18-a922763566e9.png",
-            "alt": "Image 1"
-          },
-          {
-            "url": "https://wpimg-wscn.awtmt.com/ef21593f-b13f-471e-a4b5-78d038af3917.png",
-            "alt": "Image 2"
-          },
-          {
-            "url": "https://wpimg-wscn.awtmt.com/0848c7fa-bfbf-4341-a443-c13499f3116c.png",
-            "alt": "Image 3"
+            "url": "https://wpimg-wscn.awtmt.com/b620a1dd-6315-4981-9b3e-1035049fcd6f.jpeg",
+            "alt": "AI基建挤压芯片与存储供给，苹果毛利率承压",
+            "kind": "article-cover"
           }
         ],
         "videos": []
@@ -828,19 +816,8 @@
         "images": [
           {
             "url": "https://static.leiphone.com/uploads/new/images/20260731//6a6b7cdbd4c6c.jpg?imageMogr2/quality/90",
-            "alt": ""
-          },
-          {
-            "url": "https://static.leiphone.com/uploads/new/images/20260731/6a6b7dc670b2b.png?imageView2/2/w/740",
-            "alt": ""
-          },
-          {
-            "url": "https://static.leiphone.com/uploads/new/images/20260731/6a6b7e80ea6d5.png?imageView2/2/w/740",
-            "alt": ""
-          },
-          {
-            "url": "https://static.leiphone.com/uploads/new/images/20260731//6a6b7cdbd5359.jpg?imageMogr2/quality/90",
-            "alt": ""
+            "alt": "晶泰科技发布XtalPi Science与Genius Agents，打通AI科研和自动化实验闭环",
+            "kind": "article-cover"
           }
         ],
         "videos": []
@@ -892,8 +869,9 @@
       "mediaAssets": {
         "images": [
           {
-            "url": "https://wpimg-wscn.awtmt.com/ee4e5521-4df1-4765-a146-e7c656d30fc5.png",
-            "alt": "Image 1"
+            "url": "https://wpimg-wscn.awtmt.com/427a52ce-0c39-4450-9616-4fa939184315.png",
+            "alt": "韩国拟向KIC注资20万亿韩元，重点布局AI与数据中心",
+            "kind": "article-cover"
           }
         ],
         "videos": []
@@ -940,16 +918,13 @@
         "硬件",
         "产品"
       ],
-      "imageUrl": "https://storage.googleapis.com/gweb-cloudblog-publish/images/agent_density_blog_img_1.max-1000x1000.png",
+      "imageUrl": "https://storage.googleapis.com/gweb-cloudblog-publish/images/07_-_Containers__Kubernetes_iY4YTLa.max-2600x2600.jpg",
       "mediaAssets": {
         "images": [
           {
-            "url": "https://storage.googleapis.com/gweb-cloudblog-publish/images/agent_density_blog_img_1.max-1000x1000.png",
-            "alt": "agent_density_blog_img_1"
-          },
-          {
-            "url": "https://storage.googleapis.com/gweb-cloudblog-publish/images/image1_zwdfQeH.max-1000x1000.png",
-            "alt": "image1"
+            "url": "https://storage.googleapis.com/gweb-cloudblog-publish/images/07_-_Containers__Kubernetes_iY4YTLa.max-2600x2600.jpg",
+            "alt": "GKE通过沙箱与挂起恢复将单智能体成本最高降低75%",
+            "kind": "article-cover"
           }
         ],
         "videos": []
@@ -1002,19 +977,8 @@
         "images": [
           {
             "url": "https://oss.zhidx.com/uploads/2026/07/6a6b4c4fe0bec_6a6b4c4fdddf7_6a6b4c4fdddce_1112.png/_zdx",
-            "alt": ""
-          },
-          {
-            "url": "https://oss.zhidx.com/uploads/2026/07/6a6b4c66754a9_6a6b4c6672419_6a6b4c66723ed_11.png/_zdx",
-            "alt": "讯飞首发实时生成技术！像真人主播一样临场应变，表情动作实时刷新"
-          },
-          {
-            "url": "https://oss.zhidx.com/uploads/2026/07/6a6b4c8a1fd58_6a6b4c8a1661b_6a6b4c8a165e9_01_双时域记忆驱动_标题最终统一版.png/_zdx",
-            "alt": "讯飞首发实时生成技术！像真人主播一样临场应变，表情动作实时刷新"
-          },
-          {
-            "url": "https://oss.zhidx.com/uploads/2026/07/6a6b4c914e12e_6a6b4c914afb6_6a6b4c914af85_02_长窗口滚动蒸馏_标题最终统一版.png/_zdx",
-            "alt": "讯飞首发实时生成技术！像真人主播一样临场应变，表情动作实时刷新"
+            "alt": "科大讯飞发布全链路实时生成超拟人数字人及软硬一体产品矩阵",
+            "kind": "article-cover"
           }
         ],
         "videos": []
@@ -1120,19 +1084,8 @@
         "images": [
           {
             "url": "https://oss.zhidx.com/uploads/2026/07/6a6bee901f4a5_6a6bee901c30a_6a6bee901c2db_db60fce9b17a49a4670c1ea52e77594e_副本.jpg/_zdx",
-            "alt": ""
-          },
-          {
-            "url": "https://oss.zhidx.com/uploads/2026/07/6a6be175d08ca_6a6be175cd705_6a6be175cd6d2_335e35caaf49ad7dc35bf460210aa491.png/_zdx",
-            "alt": "OpenAI突然宣布：GPT-5.6大幅降价，2折起售"
-          },
-          {
-            "url": "https://oss.zhidx.com/uploads/2026/07/6a6be1db26611_6a6be1db238d3_6a6be1db23898_a80d1e03492f35364dafab41c50bd3d3.png/_zdx",
-            "alt": "OpenAI突然宣布：GPT-5.6大幅降价，2折起售"
-          },
-          {
-            "url": "https://oss.zhidx.com/uploads/2026/07/6a6be1e9879e0_6a6be1e984630_6a6be1e9845ec_84524138a5e5d63e62b97cb3533aaa2a.jpg/_zdx",
-            "alt": "OpenAI突然宣布：GPT-5.6大幅降价，2折起售"
+            "alt": "OpenAI下调GPT-5.6系列API价格并推出Sol Fast模式",
+            "kind": "article-cover"
           }
         ],
         "videos": []
@@ -1180,12 +1133,13 @@
         "融资",
         "产品"
       ],
-      "imageUrl": "https://techcrunch.com/wp-content/uploads/2025/05/russell-e1755718978143.jpg?w=150",
+      "imageUrl": "https://techcrunch.com/wp-content/uploads/2024/11/GettyImages-1445867611.jpg?w=1024",
       "mediaAssets": {
         "images": [
           {
-            "url": "https://techcrunch.com/wp-content/uploads/2025/05/russell-e1755718978143.jpg?w=150",
-            "alt": "Russell Brandom"
+            "url": "https://techcrunch.com/wp-content/uploads/2024/11/GettyImages-1445867611.jpg?w=1024",
+            "alt": "AWS高增长支撑亚马逊加码AI基础设施，但需求可持续性仍存疑",
+            "kind": "article-cover"
           }
         ],
         "videos": []
@@ -1286,12 +1240,13 @@
         "融资",
         "产品"
       ],
-      "imageUrl": "https://techcrunch.com/wp-content/uploads/2025/01/7a9bd5727569147c3025b40e3775fc64.png?w=150",
+      "imageUrl": "https://techcrunch.com/wp-content/uploads/2019/10/Okta-lobby.jpg?resize=1200,816",
       "mediaAssets": {
         "images": [
           {
-            "url": "https://techcrunch.com/wp-content/uploads/2025/01/7a9bd5727569147c3025b40e3775fc64.png?w=150",
-            "alt": "Jagmeet Singh"
+            "url": "https://techcrunch.com/wp-content/uploads/2019/10/Okta-lobby.jpg?resize=1200,816",
+            "alt": "Okta拟以近2亿美元收购AI身份安全公司Permiso",
+            "kind": "article-cover"
           }
         ],
         "videos": []
@@ -1344,19 +1299,8 @@
         "images": [
           {
             "url": "https://oss.zhidx.com/uploads/2026/07/6a6b2d8edc575_6a6b2d8ed96bb_6a6b2d8ed9684_92ec00ad25a3dc6b3e88e0db2926d7d6_副本.jpg/_zdx",
-            "alt": ""
-          },
-          {
-            "url": "https://oss.zhidx.com/uploads/2026/07/6a6b2ef9250b1_6a6b2ef9220b9_6a6b2ef92208d_ba187d6833ad5279f221bfdbc282efb5.png/_zdx",
-            "alt": "腾讯WorkBuddy上线人机双写：终于不用复制粘贴了"
-          },
-          {
-            "url": "https://oss.zhidx.com/uploads/2026/07/6a6b2f35de996_6a6b2f35d5282_6a6b2f35d5205_640.gif",
-            "alt": "腾讯WorkBuddy上线人机双写：终于不用复制粘贴了"
-          },
-          {
-            "url": "https://oss.zhidx.com/uploads/2026/07/6a6b2f801ef86_6a6b2f8015cbd_6a6b2f8015c88_6f9fa4cac57cfbe595fd994e150960b4.png/_zdx",
-            "alt": "腾讯WorkBuddy上线人机双写：终于不用复制粘贴了"
+            "alt": "腾讯WorkBuddy上线“人机双写”，将AI助手与文档编辑合并",
+            "kind": "article-cover"
           }
         ],
         "videos": []
@@ -1408,20 +1352,9 @@
       "mediaAssets": {
         "images": [
           {
-            "url": "https://s1-static.huxiucdn.com/image/weixin/huxiu_app.png",
-            "alt": "Image 1: wechat"
-          },
-          {
-            "url": "https://s1-static.huxiucdn.com/image/weixin/ng.jpg",
-            "alt": "Image 2: 那个NG"
-          },
-          {
-            "url": "https://s1-static.huxiucdn.com/image/weixin/sanyishidai.jpg",
-            "alt": "Image 3: 商业弧光"
-          },
-          {
-            "url": "https://s1-static.huxiucdn.com/image/weixin/miaotou_app.jpg",
-            "alt": "Image 4: 妙投APP"
+            "url": "https://img.huxiucdn.com/ai/ai-article-cover/202607/31/4879585-prod-db-1.png?imageView2/1/w/788/h/444/|imageMogr2/strip/interlace/1/quality/85",
+            "alt": "抢额度挤压尽调与风控，中国一级市场风险累积",
+            "kind": "article-cover"
           }
         ],
         "videos": []
@@ -1570,7 +1503,13 @@
       ],
       "imageUrl": "https://wpimg-wscn.awtmt.com/cb6e2cf8-9611-4e28-951f-23ea4edaa780.png",
       "mediaAssets": {
-        "images": [],
+        "images": [
+          {
+            "url": "https://wpimg-wscn.awtmt.com/cb6e2cf8-9611-4e28-951f-23ea4edaa780.png",
+            "alt": "日本央行维持1%利率，内部出现支持加息的异见",
+            "kind": "article-cover"
+          }
+        ],
         "videos": []
       },
       "eventAggregation": {

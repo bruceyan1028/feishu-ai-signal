@@ -660,24 +660,13 @@
         "Agent",
         "产品"
       ],
-      "imageUrl": "",
+      "imageUrl": "https://1-im.guokr.com/AmRDJDzcF6DRheBSdzQOVIJiZ2NnSlU9VcSZyjORYDHkAAAAbAAAAFBO.png",
       "mediaAssets": {
         "images": [
           {
             "url": "https://1-im.guokr.com/AmRDJDzcF6DRheBSdzQOVIJiZ2NnSlU9VcSZyjORYDHkAAAAbAAAAFBO.png",
-            "alt": "果壳有意思"
-          },
-          {
-            "url": "https://3-im.guokr.com/RnQ0Y0xXQzZ1RnREOTBWV3NmX1VpTGxKbUtJQWRvY3hhAQAAPgEAAEdJ.gif",
-            "alt": ""
-          },
-          {
-            "url": "https://2-im.guokr.com/Rmx3TkFYWDMzYVM4WjhIZC1lYWV5TEM3LTFDZWRvY3iXAgAAdQEAAEpQ.jpg?imageView2/1/w/555/h/312",
-            "alt": ""
-          },
-          {
-            "url": "https://2-im.guokr.com/RmswWThNMm9PUGlwUzZWbkJtUXdNbkFIV0lRYmRvY3iEAwAA-gEAAEpQ.jpg?imageView2/1/w/555/h/312",
-            "alt": ""
+            "alt": "Claude安全测试越界入侵真实系统，OpenAI与字节加速AI科研和编程布局",
+            "kind": "article-cover"
           }
         ],
         "videos": []
@@ -729,8 +718,9 @@
       "mediaAssets": {
         "images": [
           {
-            "url": "https://wpimg-wscn.awtmt.com/a86d114d-01d4-4c35-9691-ea79bc144491.png",
-            "alt": "Image 1"
+            "url": "https://wpimg-wscn.awtmt.com/content_default_7.jpg",
+            "alt": "OpenAI据称确认Astra模型家族，宣称以约2000美元算力攻克十项数学难题",
+            "kind": "article-cover"
           }
         ],
         "videos": []
@@ -783,19 +773,8 @@
         "images": [
           {
             "url": "https://static.leiphone.com/uploads/new/images/20260731/6a6c8f1dd1097.jpg?imageMogr2/quality/90",
-            "alt": ""
-          },
-          {
-            "url": "https://static.leiphone.com/uploads/new/images/20260731/6a6c8f1e15275.jpg?imageMogr2/quality/90",
-            "alt": "图片"
-          },
-          {
-            "url": "https://static.leiphone.com/uploads/new/images/20260731/6a6c8f1e57ebe.png?imageMogr2/quality/90",
-            "alt": ""
-          },
-          {
-            "url": "https://static.leiphone.com/uploads/new/images/20260731/6a6c8f1e89bdd.jpg?imageMogr2/quality/90",
-            "alt": "图片"
+            "alt": "MiniMax发布H3视频模型：价格为Seedance 2.0三分之一并计划开源",
+            "kind": "article-cover"
           }
         ],
         "videos": []
@@ -845,7 +824,13 @@
       ],
       "imageUrl": "https://cdn.modelscope.cn/social-thumbnails/models/deepseek-ai/deepseek-v4-flash-0731.png",
       "mediaAssets": {
-        "images": [],
+        "images": [
+          {
+            "url": "https://cdn.modelscope.cn/social-thumbnails/models/deepseek-ai/deepseek-v4-flash-0731.png",
+            "alt": "DeepSeek正式发布V4-Flash-0731，强化智能体与代码任务能力",
+            "kind": "article-cover"
+          }
+        ],
         "videos": []
       },
       "eventAggregation": {
@@ -894,20 +879,9 @@
       "mediaAssets": {
         "images": [
           {
-            "url": "https://s1-static.huxiucdn.com/image/weixin/huxiu_app.png",
-            "alt": "Image 3: wechat"
-          },
-          {
-            "url": "https://s1-static.huxiucdn.com/image/weixin/AGI.jpg",
-            "alt": "Image 4: AGI接口"
-          },
-          {
-            "url": "https://s1-static.huxiucdn.com/image/weixin/sanyishidai.jpg",
-            "alt": "Image 5: 商业弧光"
-          },
-          {
-            "url": "https://s1-static.huxiucdn.com/image/weixin/ng.jpg",
-            "alt": "Image 6: 那个NG"
+            "url": "https://img.huxiucdn.com/ai/ai-general-cover/202608/02/30930-prod-nb2ep-general-1-1785636322635.png?imageView2/1/w/788/h/444/|imageMogr2/strip/interlace/1/quality/85",
+            "alt": "美国AI数据中心扩张面临13万名电工缺口",
+            "kind": "article-cover"
           }
         ],
         "videos": []
@@ -957,7 +931,13 @@
       ],
       "imageUrl": "https://cdn.modelscope.cn/social-thumbnails/models/moonshotai/kimi-k3.png",
       "mediaAssets": {
-        "images": [],
+        "images": [
+          {
+            "url": "https://cdn.modelscope.cn/social-thumbnails/models/moonshotai/kimi-k3.png",
+            "alt": "Kimi K3：开放权重的2.8万亿参数原生多模态智能体模型",
+            "kind": "article-cover"
+          }
+        ],
         "videos": []
       },
       "eventAggregation": {
@@ -1055,19 +1035,8 @@
         "images": [
           {
             "url": "https://static.leiphone.com/uploads/new/images/20260731/6a6c84b6d5661.jpg?imageMogr2/quality/90",
-            "alt": ""
-          },
-          {
-            "url": "https://static.leiphone.com/uploads/new/images/20260731/6a6c84b71bad8.jpg?imageMogr2/quality/90",
-            "alt": "图片"
-          },
-          {
-            "url": "https://static.leiphone.com/uploads/new/images/20260731/6a6c84b76baad.png?imageMogr2/quality/90",
-            "alt": ""
-          },
-          {
-            "url": "https://static.leiphone.com/uploads/new/images/20260731/6a6c84b79aba2.jpg?imageMogr2/quality/90",
-            "alt": ""
+            "alt": "LLM Wiki以摄入时编译补充而非淘汰传统RAG",
+            "kind": "article-cover"
           }
         ],
         "videos": []
@@ -1117,7 +1086,13 @@
       ],
       "imageUrl": "https://img.huxiucdn.com/ai/ai-article-cover/202608/02/4880012-prod-56415-klv2-3.png?imageView2/1/w/788/h/444/|imageMogr2/strip/interlace/1/quality/85",
       "mediaAssets": {
-        "images": [],
+        "images": [
+          {
+            "url": "https://img.huxiucdn.com/ai/ai-article-cover/202608/02/4880012-prod-56415-klv2-3.png?imageView2/1/w/788/h/444/|imageMogr2/strip/interlace/1/quality/85",
+            "alt": "Slack如何从协作工具变成AI公司的工作记忆入口",
+            "kind": "article-cover"
+          }
+        ],
         "videos": []
       },
       "eventAggregation": {
@@ -1165,7 +1140,13 @@
       ],
       "imageUrl": "https://wpimg-wscn.awtmt.com/7e828a03-6e10-45ce-b318-bbef3c088522.png",
       "mediaAssets": {
-        "images": [],
+        "images": [
+          {
+            "url": "https://wpimg-wscn.awtmt.com/7e828a03-6e10-45ce-b318-bbef3c088522.png",
+            "alt": "亚马逊完成对OpenAI 500亿美元投资并持股约5%",
+            "kind": "article-cover"
+          }
+        ],
         "videos": []
       },
       "eventAggregation": {
@@ -1329,20 +1310,9 @@
       "mediaAssets": {
         "images": [
           {
-            "url": "https://wpimg-wscn.awtmt.com/00da4096-6824-40d3-820a-31b45fb6fa28.jpeg",
-            "alt": "Image 1"
-          },
-          {
-            "url": "https://wpimg-wscn.awtmt.com/55a61d55-9cdb-4db1-af7b-96200f6529ac.jpeg",
-            "alt": "Image 2"
-          },
-          {
-            "url": "https://wpimg-wscn.awtmt.com/e0201451-4572-42fc-9801-9eea2ed0fbcd.jpeg",
-            "alt": "Image 3"
-          },
-          {
-            "url": "https://wpimg-wscn.awtmt.com/c55e6625-453b-4942-986b-c26431d25263.jpeg",
-            "alt": "Image 4"
+            "url": "https://wpimg-wscn.awtmt.com/87b4d001-413a-4469-b4a7-80e0d2a16c90.png",
+            "alt": "大摩：AI板块回调主要是技术面因素，算力供需与电力瓶颈仍在",
+            "kind": "article-cover"
           }
         ],
         "videos": []
@@ -1392,7 +1362,13 @@
       ],
       "imageUrl": "https://wpimg-wscn.awtmt.com/5d733d5c-fb31-4fe5-9420-689257fbb39b.jpeg",
       "mediaAssets": {
-        "images": [],
+        "images": [
+          {
+            "url": "https://wpimg-wscn.awtmt.com/5d733d5c-fb31-4fe5-9420-689257fbb39b.jpeg",
+            "alt": "AI冲击下蓝领技术职业需求与薪酬上升",
+            "kind": "article-cover"
+          }
+        ],
         "videos": []
       },
       "eventAggregation": {
@@ -1443,19 +1419,8 @@
         "images": [
           {
             "url": "https://static.leiphone.com/uploads/new/images/20260731/6a6c86c236915.jpg?imageMogr2/quality/90",
-            "alt": ""
-          },
-          {
-            "url": "https://static.leiphone.com/uploads/new/images/20260731/6a6c86c26d95f.jpg?imageMogr2/quality/90",
-            "alt": "图片"
-          },
-          {
-            "url": "https://static.leiphone.com/uploads/new/images/20260731/6a6c86c2a018f.jpg?imageMogr2/quality/90",
-            "alt": ""
-          },
-          {
-            "url": "https://static.leiphone.com/uploads/new/images/20260731/6a6c86c2ccefd.jpg?imageMogr2/quality/90",
-            "alt": ""
+            "alt": "匿名模型 Kivine 引发 Kimi K3 或将发布的猜测",
+            "kind": "article-cover"
           }
         ],
         "videos": []
@@ -1670,7 +1635,13 @@
       ],
       "imageUrl": "https://img.huxiucdn.com/ai/ai-general-cover/202608/02/30934-prod-db-general-1-1785639198616.png?imageView2/1/w/788/h/444/|imageMogr2/strip/interlace/1/quality/85",
       "mediaAssets": {
-        "images": [],
+        "images": [
+          {
+            "url": "https://img.huxiucdn.com/ai/ai-general-cover/202608/02/30934-prod-db-general-1-1785639198616.png?imageView2/1/w/788/h/444/|imageMogr2/strip/interlace/1/quality/85",
+            "alt": "离职标签带来流量，垂直在职创作者更具持续变现能力",
+            "kind": "article-cover"
+          }
+        ],
         "videos": []
       },
       "eventAggregation": {
@@ -1714,24 +1685,13 @@
         "AI",
         "其他"
       ],
-      "imageUrl": "",
+      "imageUrl": "https://2-im.guokr.com/RnRVNGtRS253RXNvV0h3TlhhdjJvTzlpdGtiUWRvY3gbAwAAQgIAAEpQ.jpg?imageView2/1/w/555/h/403",
       "mediaAssets": {
         "images": [
           {
             "url": "https://2-im.guokr.com/RnRVNGtRS253RXNvV0h3TlhhdjJvTzlpdGtiUWRvY3gbAwAAQgIAAEpQ.jpg?imageView2/1/w/555/h/403",
-            "alt": "Image 1"
-          },
-          {
-            "url": "https://3-im.guokr.com/RmpjS1R5UE5hamZMMjRxN29ndUJPQlB0NWhOamRvY3jQAAAAyQAAAEdJ.gif",
-            "alt": "Image 2"
-          },
-          {
-            "url": "https://1-im.guokr.com/RnNHd0h0czZZSEpRem5ETU1jR25kZU8wdkZPMmRvY3gTAwAARgIAAEdJ.gif?imageView2/1/w/555/h/410",
-            "alt": "Image 3"
-          },
-          {
-            "url": "https://2-im.guokr.com/RmpwQ0dNVi1nR2J3dF9za0kyNFMzSk9Bbkp1WWRvY3jtAwAAnQIAAEpQ.jpg?imageView2/1/w/555/h/369",
-            "alt": "Image 4"
+            "alt": "从挂谷猜想到二维码：抽象数学如何等待未来应用",
+            "kind": "article-cover"
           }
         ],
         "videos": []
@@ -1778,20 +1738,13 @@
         "产品",
         "硬件"
       ],
-      "imageUrl": "",
+      "imageUrl": "https://1-im.guokr.com/RnJUNlpaLTJBMUt3TTl2OHZ2YXRHVE8wQ0VkMWRvY3j4AgAARAUAAEpQ.jpg?imageView2/1/w/555/h/984",
       "mediaAssets": {
         "images": [
           {
             "url": "https://1-im.guokr.com/RnJUNlpaLTJBMUt3TTl2OHZ2YXRHVE8wQ0VkMWRvY3j4AgAARAUAAEpQ.jpg?imageView2/1/w/555/h/984",
-            "alt": "Image 1"
-          },
-          {
-            "url": "https://1-im.guokr.com/RmlSYzh4Y0M4dVMwWl9QaUNIcGlmT0g2SXBqWWRvY3gQBQAA9gIAAEpQ.jpg?imageView2/1/w/555/h/324",
-            "alt": "Image 2"
-          },
-          {
-            "url": "https://2-im.guokr.com/RnVWZXRNUjJZbXplbDZMYTlWLThVY1psNnlzNmRvY3gQBQAA1gIAAEpQ.jpg?imageView2/1/w/555/h/310",
-            "alt": "Image 3"
+            "alt": "华境S 7月交付7203台，连续三个月增长并获CCTV家庭智能出行合作称号",
+            "kind": "article-cover"
           }
         ],
         "videos": []
@@ -1894,7 +1847,13 @@
       ],
       "imageUrl": "https://cdn.modelscope.cn/social-thumbnails/models/openpangu/openpangu-2.0-pro.png",
       "mediaAssets": {
-        "images": [],
+        "images": [
+          {
+            "url": "https://cdn.modelscope.cn/social-thumbnails/models/openpangu/openpangu-2.0-pro.png",
+            "alt": "华为发布基于昇腾NPU训练的openPangu-2.0-Pro混合专家模型",
+            "kind": "article-cover"
+          }
+        ],
         "videos": []
       },
       "eventAggregation": {
@@ -1945,19 +1904,8 @@
         "images": [
           {
             "url": "https://oss.zhidx.com/uploads/2026/08/6a6ea066b2af7_6a6ea066af95d_6a6ea066af92a_头图.png/_zdx",
-            "alt": ""
-          },
-          {
-            "url": "https://oss.zhidx.com/uploads/2026/08/6a6ea5d64e43b_6a6ea5d64b404_6a6ea5d64b3c4_屏幕截图-2026-08-02-100450.png/_zdx",
-            "alt": "OpenAI官宣下一代模型Astra！取得10大未解难题突破，附249页论文"
-          },
-          {
-            "url": "https://oss.zhidx.com/uploads/2026/08/6a6ea160a83d3_6a6ea160a5735_6a6ea160a56fa_屏幕截图-2026-08-02-094549.png/_zdx",
-            "alt": "OpenAI官宣下一代模型Astra！取得10大未解难题突破，附249页论文"
-          },
-          {
-            "url": "https://oss.zhidx.com/uploads/2018/08/zdx_suffix.jpeg",
-            "alt": ""
+            "alt": "OpenAI披露下一代模型Astra在10项数学与理论计算机科学问题上取得新成果",
+            "kind": "article-cover"
           }
         ],
         "videos": []
