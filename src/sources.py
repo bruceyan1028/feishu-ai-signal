@@ -284,6 +284,7 @@ def _base_feed(f: dict[str, Any], extra: dict[str, Any] | None, fetch_method: st
         # 正文关键词命中密度阈值：标题命中直接过，否则正文需命中 >= 该值。
         # 默认 1（沿用旧行为）；正文导航/推荐位噪音大的源可在 extra_config 设 2+ 降误报。
         "keyword_min_hits": max(1, int((extra or {}).get("keyword_min_hits") or 1)),
+        "title_exclude_regex": str((extra or {}).get("title_exclude_regex") or ""),
         "dedup_key": cell(f.get("dedup_key")) or "normalize(url)",
         "extra_config": extra,
         "_min_from_extra": min_from_extra,
@@ -292,15 +293,19 @@ def _base_feed(f: dict[str, Any], extra: dict[str, Any] | None, fetch_method: st
     }
 
 
-def map_feed_sources(records: list[dict[str, Any]]) -> list[dict[str, Any]]:
-    """筛出已启用的 RSS 来源。Demo 不采集 Bridge、API 或 Scrape。"""
+def _map_feed_sources(
+    records: list[dict[str, Any]], *, allow_experimental: bool
+) -> list[dict[str, Any]]:
     out: list[dict[str, Any]] = []
     for rec in records:
         f = rec.get("fields") or {}
         fetch_method = cell(f.get("fetch_method"))
         if fetch_method not in FEED_METHODS:
             continue
-        if not _is_active(f):
+        status = str(cell(f.get("status")) or "active")
+        if status == "paused" or status != "active" and not (
+            allow_experimental and status == "experimental"
+        ):
             continue
         extra = _parse_extra(f)
         feed = _base_feed(f, extra, fetch_method)
@@ -320,8 +325,22 @@ def map_feed_sources(records: list[dict[str, Any]]) -> list[dict[str, Any]]:
             or int(feed["_min_from_extra"] or 0)
             or (200 if feed["_source_id"].startswith("arxiv-") else 100)
         )
+        feed["record_id"] = str(rec.get("record_id") or "")
+        feed["status"] = status
         out.append(feed)
     return out
+
+
+def map_feed_sources(records: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    """筛出正式启用的 RSS 来源。"""
+    return _map_feed_sources(records, allow_experimental=False)
+
+
+def map_feed_sources_for_diag(
+    records: list[dict[str, Any]], *, allow_experimental: bool = True
+) -> list[dict[str, Any]]:
+    """诊断用 RSS 映射；默认允许 experimental，但永远排除 paused。"""
+    return _map_feed_sources(records, allow_experimental=allow_experimental)
 
 
 def map_media_sources(records: list[dict[str, Any]]) -> list[dict[str, Any]]:

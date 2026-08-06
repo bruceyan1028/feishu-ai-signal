@@ -8,7 +8,7 @@ from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any
 
-from . import cluster, config, daily, feishu, paper_fulltext
+from . import cluster, config, daily, feishu, paper_fulltext, policy_document
 
 CN_TZ = timezone(timedelta(hours=8))
 ROOT = Path(__file__).resolve().parent.parent
@@ -169,6 +169,7 @@ def build_site(briefs: list[dict[str, Any]], site_dir: Path | str = ROOT / "site
     data_dir = site / "data"
     data_dir.mkdir(parents=True)
     paper_media_dir = site / "media" / "papers"
+    policy_media_dir = site / "media" / "policies"
     shutil.copy2(TEMPLATE, site / "index.html")
     rendered: dict[str, list[dict[str, str]]] = {}
     for brief in briefs:
@@ -200,6 +201,45 @@ def build_site(briefs: list[dict[str, Any]], site_dir: Path | str = ROOT / "site
                 known = {str(item.get("url") or "") for item in rendered[key]}
                 media["images"] = rendered[key] + [
                     item for item in existing if str(item.get("url") or "") not in known
+                ]
+                signal["mediaAssets"] = media
+    rendered_policy_documents: dict[str, list[dict[str, str]]] = {}
+    for brief in briefs:
+        for signal in brief.get("signals") or []:
+            media = dict(signal.get("mediaAssets") or {})
+            documents = [
+                document
+                for document in media.get("documents") or []
+                if isinstance(document, dict)
+                and document.get("fullTextSource") == "pdf"
+                and document.get("visualPages")
+            ]
+            policy_images: list[dict[str, str]] = []
+            for document_index, document in enumerate(documents, 1):
+                pdf_url = str(document.get("url") or "")
+                if pdf_url not in rendered_policy_documents:
+                    files = policy_document.write_visual_images(
+                        pdf_url,
+                        list(document.get("visualPages") or []),
+                        policy_media_dir,
+                        f"{signal.get('recordId') or 'policy'}-d{document_index}",
+                    )
+                    rendered_policy_documents[pdf_url] = [
+                        {
+                            "url": f"media/policies/{item['filename']}",
+                            "alt": item["alt"],
+                        }
+                        for item in files
+                    ]
+                policy_images.extend(rendered_policy_documents[pdf_url])
+            if policy_images:
+                existing = list(media.get("images") or [])
+                known = {str(item.get("url") or "") for item in policy_images}
+                media["images"] = policy_images + [
+                    item
+                    for item in existing
+                    if str(item.get("url") or "") not in known
+                    and not str(item.get("url") or "").startswith("media/policies/")
                 ]
                 signal["mediaAssets"] = media
     for brief in briefs:

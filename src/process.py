@@ -124,6 +124,55 @@ def infer_topics(title: str, summary: str) -> list[str]:
     return seen[:5]
 
 
+def extract_policy_metadata(
+    title: str,
+    url: str,
+    body: str,
+    feed: dict[str, Any],
+    entry_tags: list[str] | None = None,
+) -> dict[str, str]:
+    """确定性标注官方政策载体，避免把建议性报告误判为已生效命令。"""
+    text = f"{title}\n{body[:2500]}"
+    lower = text.lower()
+    path = url.lower()
+    agency = "White House"
+    if "office of science and technology policy" in lower or re.search(r"\bOSTP\b", text):
+        agency = "White House OSTP"
+    elif "office of management and budget" in lower or re.search(r"\bOMB\b", text):
+        agency = "White House / OMB"
+
+    tags = " ".join(entry_tags or []).lower()
+    is_presidential_action = "/presidential-actions/" in path
+    title_lower = title.lower()
+    if is_presidential_action and "presidential determination" in title_lower:
+        stage = "总统决定"
+    elif is_presidential_action and (
+        "presidential memoranda" in tags or "presidential memorandum" in title.lower()
+    ):
+        stage = "总统备忘录"
+    elif is_presidential_action and ("proclamations" in tags or "proclamation" in title.lower()):
+        stage = "总统公告"
+    elif is_presidential_action and (
+        "executive orders" in tags
+        or "executive order" in title_lower
+        or re.search(r"\bExecutive Order\s+(?:No\.?\s*)?\d+", text, re.I)
+    ):
+        stage = "行政命令"
+    elif "fact sheet" in title_lower:
+        stage = "事实清单"
+    elif (feed.get("extra_config") or {}).get("document_pdf_enrich") and (
+        "report" in title_lower
+        or "recommendations" in title_lower
+        or "报告" in title
+    ):
+        stage = "政策报告"
+    elif is_presidential_action:
+        stage = "总统行动"
+    else:
+        stage = "官方发布"
+    return {"agency": agency, "stage": stage, "authority": "whitehouse.gov"}
+
+
 def _safe_regex(pattern: Any) -> re.Pattern[str]:
     try:
         return re.compile(pattern, re.I) if pattern else _DEFAULT_KEYWORD_RE
@@ -188,6 +237,9 @@ def process_and_clean(
         lookback_hours = int(feed.get("lookback_hours") or config.MIN_LOOKBACK_HOURS)
         lookback_ms = lookback_hours * 3600000
         keyword_re = _safe_regex(feed.get("keyword_regex"))
+        title_exclude_re = _safe_regex(feed.get("title_exclude_regex")) if feed.get(
+            "title_exclude_regex"
+        ) else None
         kw_min_hits = max(1, int(feed.get("keyword_min_hits") or 1))
         min_chars = feed.get("min_content_chars") or 100
         # Bridge/Social 已按账号白名单筛选；Podcast 仍需主题过滤，避免白名单节目中的非 AI 单集。
@@ -203,6 +255,9 @@ def process_and_clean(
 
         if not title or not url:
             funnel["missing_title_url"] += 1
+            continue
+        if title_exclude_re and title_exclude_re.search(title):
+            funnel["title_exclude_regex"] += 1
             continue
         # 精准度优先：缺发布时间不能用采集时间冒充“刚发布”，否则任意旧页面都会进近七日池。
         if published_ms is None:
@@ -345,6 +400,18 @@ def process_and_clean(
         seen.add(duplicate_key)
         per_feed[feed_key] = feed_hits + 1
 
+        media_assets = item.get("media_assets")
+        if not isinstance(media_assets, dict):
+            media_assets = {"images": [], "videos": []}
+        if (feed.get("extra_config") or {}).get("policy_stage_extract"):
+            media_assets["policy"] = extract_policy_metadata(
+                title,
+                url,
+                body_text,
+                feed,
+                [str(tag) for tag in item.get("entry_tags") or []],
+            )
+
         row = {
             "title": title,
             "url": url,
@@ -358,7 +425,7 @@ def process_and_clean(
             "collected_ms": collected_ms,
             "raw_content": body_text[:15000],
             "image_url": str(item.get("image_url") or "").strip(),
-            "media_assets": item.get("media_assets") or {"images": [], "videos": []},
+            "media_assets": media_assets,
             "topics": infer_topics(title, body_text),
             "duplicate_key": duplicate_key,
             "quality_score": float(quality_fields.get("quality_score") or 0),
@@ -430,7 +497,13 @@ def format_for_feishu(item: dict[str, Any]) -> dict[str, Any]:
             }
         )
     media_assets = item.get("media_assets") or {}
-    if media_assets.get("images") or media_assets.get("videos") or media_assets.get("audio"):
+    if (
+        media_assets.get("images")
+        or media_assets.get("videos")
+        or media_assets.get("audio")
+        or media_assets.get("documents")
+        or media_assets.get("policy")
+    ):
         fields["媒体资源"] = json.dumps(media_assets, ensure_ascii=False)
     image = _to_link(item.get("image_url") or "", "原文配图")
     if image:

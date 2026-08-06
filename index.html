@@ -665,6 +665,7 @@ async function loadBrief(){
     signals = (data.signals || []).map((s, index)=>({
       rank: index + 1,
       recordId: s.recordId,
+      sourceId: s.sourceId || '',
       impact: Number(s.impact) || 0,
       urgency: s.urgency || '中',
       contentType: s.contentType || s.kind || '',
@@ -958,17 +959,27 @@ function computeAccents(){
   };
 }
 
+function previewBadge(label='仅预览'){
+  return `<span style="display:inline-flex;align-items:center;height:18px;padding:0 6px;border:1px solid #b87812;background:#fff4d8;color:#8a5706;font-family:'Geist Mono',ui-monospace,Menlo,monospace;font-size:9px;font-weight:800;letter-spacing:.04em;line-height:1;">${esc(label)}</span>`;
+}
+function previewNotice(title, description){
+  return `<aside style="display:flex;align-items:flex-start;gap:11px;margin:0 0 24px;padding:13px 15px;border:1.5px solid #b87812;border-left:5px solid #b87812;background:#fff8e8;color:#5f430f;">
+    <span style="flex:none;margin-top:1px;font-size:16px;line-height:1;">◌</span>
+    <div><div style="font-size:12.5px;font-weight:800;margin-bottom:3px;">${esc(title)}</div><div style="font-size:12px;line-height:1.65;color:#765b27;">${esc(description)}</div></div>
+  </aside>`;
+}
+
 // 顶部条:浅色底 + 科技斜纹,深色字,文字/按钮附方角卡片层
 function headerHtml(A){
   const items = [
     { key: 'brief',   label: '今日简报', act: 'App.goBrief()',   icon: '<path d="M4 5h16M4 10h16M4 15h10M4 20h7"/>' },
-    { key: 'sources', label: '数据源',   act: 'App.goSources()', icon: '<path d="M12 3v18M5 8l7-5 7 5M5 8v8l7 5 7-5V8"/>' },
-    { key: 'tasks',   label: '任务视图', act: 'App.goTasks()',   icon: '<rect x="3" y="4" width="7" height="7" rx="1.4"/><rect x="14" y="4" width="7" height="4" rx="1.4"/><rect x="3" y="15" width="7" height="5" rx="1.4"/><rect x="14" y="11" width="7" height="9" rx="1.4"/>' },
+    { key: 'sources', label: '数据源', preview: true, act: 'App.goSources()', icon: '<path d="M12 3v18M5 8l7-5 7 5M5 8v8l7 5 7-5V8"/>' },
+    { key: 'tasks',   label: '任务视图', preview: true, act: 'App.goTasks()', icon: '<rect x="3" y="4" width="7" height="7" rx="1.4"/><rect x="14" y="4" width="7" height="4" rx="1.4"/><rect x="3" y="15" width="7" height="5" rx="1.4"/><rect x="14" y="11" width="7" height="9" rx="1.4"/>' },
   ];
   const navBtns = items.map(it => {
     const on = state.page === it.key;
     return `<button class="top-item${on?' active':''}" onclick="${it.act}" style="${on?`background: ${A.accent}; border-color: var(--ds-ink-line); color: #fff;`:''}">
-      <svg viewBox="0 0 24 24" fill="none" stroke="${on?'#fff':'currentColor'}" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">${it.icon}</svg>${it.label}
+      <svg viewBox="0 0 24 24" fill="none" stroke="${on?'#fff':'currentColor'}" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">${it.icon}</svg>${it.label}${it.preview?previewBadge('预览'):''}
     </button>`;
   }).join('');
   return `
@@ -1708,6 +1719,8 @@ function articleBody(A, s){
 
   const images = (s.mediaAssets?.images || []).filter(item=>item?.url).slice(0,4);
   const videos = s.kind==='视频' ? [] : (s.mediaAssets?.videos || []).filter(item=>item?.embedUrl).slice(0,1);
+  const policy = s.mediaAssets?.policy || {};
+  const documents = (s.mediaAssets?.documents || []).filter(item=>item?.url).slice(0,4);
   const deepParas = splitParagraphs(s.deepAnalysis);
   const blocks = [];
   const paperFramework = s.kind==='论文' && s.deepAnalysis
@@ -1717,6 +1730,15 @@ function articleBody(A, s){
           <span style="font-family:'Geist Mono',monospace;font-size:10.5px;color:${UI.text3};">${s.paperFullTextSource==='pdf'?'PDF 全文证据':'摘要证据'}${s.paperPages?` · ${s.paperPages} 页`:''}</span>
         </div>
         <div style="font-size:11.5px;line-height:1.8;color:${UI.text3};">研究问题 → 方法与创新 → 实验结果 → 证据与局限 → 研究意义</div>
+      </div>`
+    : '';
+  const policyFramework = policy.authority==='whitehouse.gov' && s.deepAnalysis
+    ? `<div style="margin:0 0 24px;padding:14px 16px;border-top:2px solid ${A.accent};border-bottom:1px solid ${UI.border};background:linear-gradient(90deg,${A.accentFaint},#fff);">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:8px;">
+          <strong style="font-size:13px;color:${UI.text};">政策解读框架</strong>
+          <span style="font-family:'Geist Mono',monospace;font-size:10.5px;color:${UI.text3};">${esc(policy.stage||'官方发布')} · ${esc(policy.agency||'White House')}</span>
+        </div>
+        <div style="font-size:11.5px;line-height:1.8;color:${UI.text3};">政策效力 → 核心措施 → 时间表与执行 → AI/产业影响 → 待确认事项</div>
       </div>`
     : '';
   const imageStep = images.length && deepParas.length
@@ -1782,7 +1804,17 @@ function articleBody(A, s){
         <div style="max-height:520px;overflow:auto;padding:4px 15px 16px;border-top:1px solid ${UI.border};white-space:pre-wrap;font-size:13px;line-height:1.9;color:${UI.text2};">${esc(s.transcriptEvidence)}</div>
       </details>`
     : '';
-  return `${lead}${paperFramework}${blocks.join('')}${evidence}${originalLink(A, s)}`;
+  const documentLinks = documents.length
+    ? `<section style="margin:26px 0 12px;border:1.5px solid var(--ds-ink-line);background:#fff;box-shadow:4px 4px 0 rgba(22,19,15,.06);">
+        <div style="padding:11px 14px;border-bottom:1px solid ${UI.border};font-size:12px;font-weight:800;color:${UI.text};">官方报告与备忘录</div>
+        ${documents.map(doc=>`<a href="${esc(doc.url)}" target="_blank" rel="noopener" style="display:flex;align-items:center;gap:10px;padding:11px 14px;border-bottom:1px solid ${UI.border};color:${UI.text2};text-decoration:none;">
+          <span style="flex:none;font-family:'Geist Mono',monospace;font-size:10px;font-weight:800;color:${A.accentDeep};">PDF</span>
+          <span style="flex:1;font-size:12.5px;font-weight:700;line-height:1.5;">${esc(doc.title||'官方文件')}</span>
+          <span style="font-size:10.5px;color:${UI.text3};">${doc.fullTextSource==='pdf'?'已读取 PDF 正文':'仅提供附件链接'}${doc.pages?` · ${Number(doc.pages)} 页`:''} ↗</span>
+        </a>`).join('')}
+      </section>`
+    : '';
+  return `${lead}${paperFramework}${policyFramework}${blocks.join('')}${evidence}${documentLinks}${originalLink(A, s)}`;
 }
 
 function originalLink(A, s){
@@ -2128,6 +2160,7 @@ function sourcesHtml(A){
       <section style="margin-bottom: 28px;">
         <div style="display: flex; align-items: baseline; gap: 12px; margin-bottom: 10px; flex-wrap: wrap;">
           <h1 class="page-title" style="margin: 0; font-size: 27px; font-weight: 700; letter-spacing: -.015em; color: var(--ds-text);">数据源定制</h1>
+          ${previewBadge('仅预览')}
           <span style="font-size: 12.5px; color: ${UI.text3};">${state.sources.length} 个来源 · ${onCount} 个启用</span>
           <button onclick="App.reloadSources()" title="${esc(sync.message)}" style="margin-left: auto; display: inline-flex; align-items: center; gap: 7px; height: 30px; padding: 0 10px; border: 1px solid ${UI.border}; background: #fff; color: ${syncColor}; font-size: 11px; font-weight: 700; cursor: pointer;">
             <span style="width: 7px; height: 7px; border-radius: 50%; background: ${syncColor};"></span>${sync.status==='connected'?'飞书已连接':sync.status==='loading'?'连接中':'本地模式'} · 刷新
@@ -2135,6 +2168,7 @@ function sourcesHtml(A){
         </div>
         <p style="margin: 0; font-size: 13.5px; line-height: 1.7; color: ${UI.text2}; max-width: 720px;">用对话告诉助手你的偏好,或直接管理来源。可开关来源、按主体分类、标记「端侧模型」维度并调整优先级;优先级同时影响「与我相关」的匹配权重。</p>
       </section>
+      ${previewNotice('仅预览 · 尚未实现', '可选信号源、来源开关、优先级调整、添加来源和 AI 偏好助手目前仅为交互原型，尚未接入正式产品流程。')}
 
       <section style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 16px; margin-bottom: 16px;">
         ${chatPanel}
@@ -2200,7 +2234,7 @@ function refChip(A,r){
 // 任务视图:AI 周报 / 多模型辩论 / 动向追踪
 function tasksHtml(A){
   const tabs = [['report','AI 自动周报'],['debate','多模型辩论'],['timeline','动向追踪'],['meetings','会议助手']];
-  const tabNav = tabs.map(([k,l])=>{ const on=state.taskTab===k; return `<button onclick="App.setTaskTab('${k}')" style="height: 38px; padding: 0 18px; border-radius: 10px; border: 1px solid ${on?A.accentBorder:UI.border}; background: ${on?A.accentSoft:'transparent'}; color: ${on?A.accentBright:UI.text2}; font-size: 13px; font-weight: ${on?700:600}; cursor: pointer;">${l}</button>`; }).join('');
+  const tabNav = tabs.map(([k,l])=>{ const on=state.taskTab===k; return `<button onclick="App.setTaskTab('${k}')" style="display:inline-flex;align-items:center;gap:7px;height:38px;padding:0 18px;border-radius:10px;border:1px solid ${on?A.accentBorder:UI.border};background:${on?A.accentSoft:'transparent'};color:${on?A.accentBright:UI.text2};font-size:13px;font-weight:${on?700:600};cursor:pointer;">${l}${previewBadge('预览')}</button>`; }).join('');
 
   let body = '';
 
@@ -2421,10 +2455,12 @@ function tasksHtml(A){
       <section style="margin-bottom: 20px;">
         <div style="display: flex; align-items: baseline; gap: 12px; margin-bottom: 8px; flex-wrap: wrap;">
           <h1 class="page-title" style="margin: 0; font-size: 27px; font-weight: 700; letter-spacing: -.015em; color: var(--ds-text);">任务视图</h1>
+          ${previewBadge('仅预览')}
           <span style="font-size: 12.5px; color: ${UI.text3};">周报 · 多模型辩论 · 动向追踪 · 会议助手</span>
         </div>
         <p style="margin: 0; font-size: 13.5px; line-height: 1.7; color: ${UI.text2}; max-width: 720px;">由 AI 基于信号库自动生成的周报、可发起的多模型交叉辩论、机构 / 人物 / 技术的动向追踪,以及自动参会记纪要的会议助手。</p>
       </section>
+      ${previewNotice('仅预览 · 尚未实现', 'AI 自动周报、多模型辩论、动向追踪和会议助手均为界面与交互效果预览，当前展示内容不会触发真实任务、持续追踪或自动参会。')}
       <div style="display: flex; gap: 8px; margin-bottom: 24px; flex-wrap: wrap;">${tabNav}</div>
       ${body}
     </div>

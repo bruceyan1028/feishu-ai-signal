@@ -1321,6 +1321,34 @@
     "link": "https://platform.stepfun.com/",
     "text": "https://platform.stepfun.com/"
    }
+  },
+  {
+   "主要看什么": "White House 科技报告、事实清单、OSTP 公告与 AI/科研政策",
+   "优先级": "P0",
+   "分类": "政策监管地缘",
+   "名称": "White House 科技政策发布",
+   "层级": "L1 一级官方",
+   "来源类型": "纯网页",
+   "自动化状态": "已接入",
+   "获取方式": "RSS",
+   "链接": {
+    "link": "https://www.whitehouse.gov/releases/feed/",
+    "text": "https://www.whitehouse.gov/releases/feed/"
+   }
+  },
+  {
+   "主要看什么": "White House AI、科技与科研相关行政命令和总统备忘录",
+   "优先级": "P0",
+   "分类": "政策监管地缘",
+   "名称": "White House 科技总统行动",
+   "层级": "L1 一级官方",
+   "来源类型": "纯网页",
+   "自动化状态": "已接入",
+   "获取方式": "RSS",
+   "链接": {
+    "link": "https://www.whitehouse.gov/presidential-actions/feed/",
+    "text": "https://www.whitehouse.gov/presidential-actions/feed/"
+   }
   }
  ],
  "一级参数": [
@@ -3183,6 +3211,42 @@
    "notes": "ModelScope 官方组织 OpenAPI；仅按模型真实创建时间入库，过滤量化副本",
    "priority": "P0",
    "source_id": "stepfun-modelscope",
+   "status": "active",
+   "tier": "L1",
+   "来源类型": "纯网页"
+  },
+  {
+   "dedup_key": "normalize(url)",
+   "dimension": "政策监管地缘",
+   "endpoint": {
+    "link": "https://www.whitehouse.gov/releases/feed/",
+    "text": "https://www.whitehouse.gov/releases/feed/"
+   },
+   "extra_config": "{\"keyword_min_hits\":2,\"policy_stage_extract\":true,\"document_pdf_enrich\":true,\"max_document_pdfs\":2,\"title_exclude_regex\":\"(trade agenda|auto manufacturing|stationary sources|chemical manufacturing|tariffs?|duties on|adjusting imports)\"}",
+   "fetch_method": "RSS",
+   "keyword_regex": "(artificial intelligence|\\bAI\\b|AI for science|science and technology|scientific (?:research|discovery|infrastructure|foundation model)|research and development|\\bR&D\\b|OSTP|Genesis Mission|quantum|semiconductor|microelectronics|robotics|autonomous laborator|cybersecurity|data center|high-performance computing|advanced manufacturing|biotechnology|nuclear (?:fission|fusion)|critical minerals)",
+   "lookback_window": "30d",
+   "name": "White House 科技政策发布",
+   "priority": "P0",
+   "source_id": "whitehouse-tech-releases",
+   "status": "active",
+   "tier": "L1",
+   "来源类型": "纯网页"
+  },
+  {
+   "dedup_key": "normalize(url)",
+   "dimension": "政策监管地缘",
+   "endpoint": {
+    "link": "https://www.whitehouse.gov/presidential-actions/feed/",
+    "text": "https://www.whitehouse.gov/presidential-actions/feed/"
+   },
+   "extra_config": "{\"keyword_min_hits\":2,\"policy_stage_extract\":true,\"document_pdf_enrich\":true,\"max_document_pdfs\":2,\"title_exclude_regex\":\"(trade agenda|auto manufacturing|stationary sources|chemical manufacturing|tariffs?|duties on|adjusting imports)\"}",
+   "fetch_method": "RSS",
+   "keyword_regex": "(artificial intelligence|\\bAI\\b|AI for science|science and technology|scientific (?:research|discovery|infrastructure|foundation model)|research and development|\\bR&D\\b|OSTP|Genesis Mission|quantum|semiconductor|microelectronics|robotics|autonomous laborator|cybersecurity|data center|high-performance computing|advanced manufacturing|biotechnology|nuclear (?:fission|fusion)|critical minerals)",
+   "lookback_window": "30d",
+   "name": "White House 科技总统行动",
+   "priority": "P0",
+   "source_id": "whitehouse-tech-actions",
    "status": "active",
    "tier": "L1",
    "来源类型": "纯网页"

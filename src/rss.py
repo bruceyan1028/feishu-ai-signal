@@ -65,6 +65,39 @@ def _best_image(entry: Any, body: str, page_url: str = "") -> str:
     return images[0]["url"] if images else ""
 
 
+def extract_pdf_documents(body: str, page_url: str, limit: int = 8) -> list[dict[str, str]]:
+    """提取正文内同站 PDF 附件，避免把外部参考文献误当成本条官方文件。"""
+    page_host = (urlsplit(page_url).hostname or "").lower().removeprefix("www.")
+    documents: list[dict[str, str]] = []
+    seen: set[str] = set()
+    for tag, label_html in re.findall(r"(?is)(<a\b[^>]*>)(.*?)</a>", body or ""):
+        href_match = re.search(r"\bhref\s*=\s*([\"'])(.*?)\1", tag, re.I | re.S)
+        if not href_match:
+            continue
+        url = urljoin(page_url, unescape(href_match.group(2)).strip())
+        parsed = urlsplit(url)
+        host = (parsed.hostname or "").lower().removeprefix("www.")
+        if not parsed.path.lower().endswith(".pdf") or host != page_host:
+            continue
+        clean_url = url.split("#", 1)[0]
+        key = clean_url.lower()
+        if key in seen:
+            continue
+        seen.add(key)
+        label = re.sub(r"<[^>]+>", " ", label_html)
+        label = re.sub(r"\s+", " ", unescape(label)).strip()
+        documents.append(
+            {
+                "url": clean_url,
+                "title": label or parsed.path.rsplit("/", 1)[-1],
+                "type": "application/pdf",
+            }
+        )
+        if len(documents) >= limit:
+            break
+    return documents
+
+
 def _media_assets(entry: Any, body: str, page_url: str) -> dict[str, Any]:
     videos = []
     for raw in re.findall(r"<iframe[^>]+src=[\"']([^\"']+)", body or "", re.I):
@@ -72,7 +105,23 @@ def _media_assets(entry: Any, body: str, page_url: str) -> dict[str, Any]:
         match = re.search(r"(?:youtube\.com/embed/|youtu\.be/)([\w-]+)", url)
         if match:
             videos.append({"url": url, "embedUrl": f"https://www.youtube-nocookie.com/embed/{match.group(1)}"})
-    return {"images": extract_article_images(body or "", page_url), "videos": videos[:1]}
+    documents = extract_pdf_documents(body, page_url)
+    for enclosure in entry.get("enclosures") or entry.get("links") or []:
+        if not isinstance(enclosure, dict):
+            continue
+        href = str(enclosure.get("href") or "")
+        media_type = str(enclosure.get("type") or "").lower()
+        if href and (media_type == "application/pdf" or urlsplit(href).path.lower().endswith(".pdf")):
+            documents += extract_pdf_documents(
+                f'<a href="{href}">{enclosure.get("title") or "PDF"}</a>',
+                page_url,
+            )
+    deduped_documents = list({doc["url"].lower(): doc for doc in documents}.values())[:8]
+    return {
+        "images": extract_article_images(body or "", page_url),
+        "videos": videos[:1],
+        "documents": deduped_documents,
+    }
 
 
 def _meta_image_from_html(html: str, page_url: str) -> str:
@@ -620,6 +669,11 @@ def fetch_feed_sources(feeds: list[dict[str, Any]]) -> list[dict[str, Any]]:
                     "body": body,
                     "image_url": _best_image(entry, body, page_url),
                     "media_assets": _media_assets(entry, body, page_url),
+                    "entry_tags": [
+                        str(tag.get("term") or "")
+                        for tag in entry.get("tags") or []
+                        if isinstance(tag, dict) and tag.get("term")
+                    ],
                     "published_raw": _published_raw(entry, feed),
                     "is_html": True,
                     "feed": feed,

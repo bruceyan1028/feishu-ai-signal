@@ -187,6 +187,39 @@ def batch_delete_records(
     return deleted
 
 
+def batch_create_table_records(
+    token: str, table_id: str, fields_list: list[dict[str, Any]], chunk: int = 100
+) -> int:
+    """向指定多维表批量创建记录。"""
+    if not fields_list:
+        return 0
+    url = (
+        f"{config.FEISHU_HOST}/open-apis/bitable/v1/apps/{config.FEISHU_BASE_ID}"
+        f"/tables/{table_id}/records/batch_create"
+    )
+    headers = {
+        "Authorization": f"Bearer {token}",
+        "Content-Type": "application/json; charset=utf-8",
+    }
+    created = 0
+    for index in range(0, len(fields_list), chunk):
+        batch = fields_list[index : index + chunk]
+        response = _SESSION.post(
+            url,
+            headers=headers,
+            json={"records": [{"fields": fields} for fields in batch]},
+            timeout=60,
+        )
+        payload = response.json()
+        if payload.get("code") != 0:
+            raise FeishuError(
+                f"Feishu batch_create failed ({table_id}): "
+                f"{payload.get('code')} {payload.get('msg')}"
+            )
+        created += len(batch)
+    return created
+
+
 def batch_update_records(
     token: str, table_id: str, records: list[dict[str, Any]], chunk: int = 500
 ) -> int:

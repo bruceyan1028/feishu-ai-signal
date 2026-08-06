@@ -12,7 +12,17 @@ from html import unescape
 from pathlib import Path
 from typing import Any
 
-from . import cluster, config, feishu, paper_fulltext, report, rss, scrape, sources
+from . import (
+    cluster,
+    config,
+    feishu,
+    paper_fulltext,
+    policy_document,
+    report,
+    rss,
+    scrape,
+    sources,
+)
 
 log = logging.getLogger("daily")
 CN_TZ = timezone(timedelta(hours=8))
@@ -50,6 +60,11 @@ def is_edge_signal(fields: dict[str, Any]) -> bool:
     return bool(_EDGE_TOPIC_RE.search(text))
 
 
+def is_policy_signal(fields: dict[str, Any]) -> bool:
+    source_id = str(scalar(fields.get("source_id")) or "").lower()
+    return source_id.startswith("whitehouse-tech-")
+
+
 def normalize_topics(fields: dict[str, Any], topics: list[Any]) -> list[str]:
     """过滤主题并强制补齐确定性专题；最多保留四项。"""
     result: list[str] = []
@@ -60,15 +75,16 @@ def normalize_topics(fields: dict[str, Any], topics: list[Any]) -> list[str]:
     if is_edge_signal(fields) and "端侧" not in result:
         result = [topic for topic in result if topic != "其他"]
         result.append("端侧")
+    if is_policy_signal(fields) and "监管" not in result:
+        result = [topic for topic in result if topic != "其他"]
+        result.append("监管")
     if len(result) > 4:
-        if "端侧" in result[4:]:
-            result = result[:3] + ["端侧"]
-        else:
-            result = result[:4]
+        pinned = [topic for topic in ("端侧", "监管") if topic in result]
+        result = [topic for topic in result if topic not in pinned][: 4 - len(pinned)] + pinned
     return result or ["其他"]
 
 
-def analysis_requirement(*, is_paper: bool, is_social: bool) -> str:
+def analysis_requirement(*, is_paper: bool, is_social: bool, is_policy: bool = False) -> str:
     if is_paper:
         return """deep_analysis_cn 写 1000-1800 字；以学术证据密度为优先，不用行业新闻套话凑字数。
 deep_analysis_cn 必须使用以下论文专用结构，每个标题独占一行，标题与正文之间换行，各节之间空一行：
@@ -96,6 +112,23 @@ deep_analysis_cn 必须使用以下论文专用结构，每个标题独占一行
 
 【跟进行动】
 给出1-3条具体核验或跟进建议。"""
+    if is_policy:
+        return """deep_analysis_cn 写 900-1500 字；以政策原文和官方附件为依据，不用政治口号或新闻套话凑字数。
+deep_analysis_cn 必须使用以下政策专用结构，每个标题独占一行，标题与正文之间换行，各节之间空一行：
+【政策性质与效力】
+明确这是报告建议、事实清单、预算指引、行政命令还是总统备忘录；说明哪些内容已经生效，哪些仍需机构后续执行。不得把建议性报告写成法律。
+
+【核心措施与责任主体】
+提取政策工具、资金或资源承诺、负责机构、适用对象和关键数字；同一发布页含多个附件时分别标明依据。
+
+【时间表与执行机制】
+列出明确期限、预算周期、行动计划、监督或验收方式；原文未给时间表时明确写“原文未披露”。
+
+【对 AI 与产业的影响】
+分析对模型、算力、数据、科研基础设施、企业和研究机构的直接与间接影响，并区分原文事实与分析判断。
+
+【不确定性与跟踪点】
+指出仍待预算、机构规则、招标、拨款或实施方案确认的部分，给出可核验的后续观察节点，不输出泛化行动清单。"""
     return """deep_analysis_cn 写 800-1400 字；短原文可缩至500字，但不要用空话凑字数。
 deep_analysis_cn 必须使用以下结构，每个标题独占一行，标题与正文之间换行，各节之间空一行：
 【核心内容】
@@ -480,7 +513,9 @@ def select_candidates(
 def analyze_signal(fields: dict[str, Any]) -> dict[str, Any]:
     is_paper = content_type(fields) == "论文"
     is_social = content_type(fields) == "社交媒体帖子"
+    is_policy = is_policy_signal(fields)
     paper_extra = ""
+    policy_extra = ""
     image_urls: list[str] = []
     analysis_text = clean_body(
         str(scalar(fields.get("原文")) or ""),
@@ -512,7 +547,47 @@ def analyze_signal(fields: dict[str, Any]) -> dict[str, Any]:
             "表格数值和图注，并在【实验设计与关键结果】中明确写出可核验的图表结论及 PDF 页码。"
             "不得把 HF/PwC 的介绍文案当作论文实验结果。\n"
         )
-    analysis_format = analysis_requirement(is_paper=is_paper, is_social=is_social)
+    policy_documents = [
+        document
+        for document in media_assets(fields.get("媒体资源")).get("documents") or []
+        if isinstance(document, dict)
+    ]
+    if is_policy:
+        for document in policy_documents:
+            if document.get("fullTextSource") != "pdf":
+                continue
+            try:
+                image_urls.extend(
+                    policy_document.render_visual_pages(
+                        str(document.get("url") or ""),
+                        list(document.get("visualPages") or []),
+                        limit=max(0, 4 - len(image_urls)),
+                    )
+                )
+            except Exception as exc:  # noqa: BLE001 - 单个附件图表失败不退回网页总结
+                log.warning("政策 PDF 图表读取失败 %s: %s", document.get("url"), exc)
+            if len(image_urls) >= 4:
+                break
+        policy_extra = (
+            "政策分析必须以官方 PDF 正文为主，发布页仅用于确认发布时间和文件性质。"
+            "若附带图表图像，必须读取坐标轴、图例、数值和图注，并在对应章节写明 PDF 页码；"
+            "不得只复述发布页摘要。\n"
+        )
+    analysis_format = analysis_requirement(
+        is_paper=is_paper,
+        is_social=is_social,
+        is_policy=is_policy,
+    )
+    pdf_document_count = sum(
+        document.get("fullTextSource") == "pdf" for document in policy_documents
+    )
+    policy_basis = (
+        f"{pdf_document_count} 个 White House 官方 PDF 的正文及图表"
+        if is_policy and pdf_document_count
+        else "White House 官方发布页正文"
+        if is_policy
+        else "网页正文或摘要"
+    )
     prompt = f"""你是资深 AI 行业分析师。只依据给定原文输出严格 JSON，不得虚构。
 字段：title_cn（准确简洁的中文标题）、summary_cn（中文1-2句）、why（中文1句）、impact/novelty/actionability（0-100整数）、
 urgency（高/中/低）、topics（从 AI、LLM、Agent、RAG、推理、多模态、开源、硬件、端侧、监管、融资、产品、其他中选2-4个；
@@ -520,10 +595,10 @@ urgency（高/中/低）、topics（从 AI、LLM、Agent、RAG、推理、多模
 deep_analysis_cn（中文分析）。
 论文的 actionability 表示可复现、可验证和可转化价值，不要求正文给出行动清单。
 {analysis_format}
-{paper_extra}标题：{scalar(fields.get("标题"))}
+{paper_extra}{policy_extra}标题：{scalar(fields.get("标题"))}
 来源：{scalar(fields.get("来源"))}
 分类：{scalar(fields.get("分类"))}
-分析依据：{"论文 PDF 全文及图表页" if is_paper and paper_full_text.get("source") == "pdf" else "网页正文或摘要"}
+分析依据：{"论文 PDF 全文及图表页" if is_paper and paper_full_text.get("source") == "pdf" else policy_basis}
 原文/论文证据：{analysis_text}"""
     raw = report._llm_json(prompt, image_urls=image_urls)
     topics = normalize_topics(fields, list(raw.get("topics") or []))
@@ -567,6 +642,7 @@ def _signal_from_fields(record_id: str, fields: dict[str, Any], analysis: dict[s
         full_text = {}
     signal = {
         "recordId": record_id,
+        "sourceId": str(scalar(fields.get("source_id")) or ""),
         "title": str(scalar(fields.get("标题"))),
         "titleCn": analysis["title_cn"],
         "source": str(scalar(fields.get("来源"))),
@@ -655,9 +731,32 @@ def _ensure_deep_analysis(
                 str(full_text.get("pdf_url") or ""),
                 list(full_text.get("visual_pages") or []),
             )
+    elif is_policy_signal(fields):
+        documents = [
+            document
+            for document in media_assets(fields.get("媒体资源")).get("documents") or []
+            if isinstance(document, dict) and document.get("fullTextSource") == "pdf"
+        ]
+        for document in documents:
+            try:
+                image_urls.extend(
+                    policy_document.render_visual_pages(
+                        str(document.get("url") or ""),
+                        list(document.get("visualPages") or []),
+                        limit=max(0, 4 - len(image_urls)),
+                    )
+                )
+            except Exception as exc:  # noqa: BLE001
+                log.warning("存量政策 PDF 图表读取失败 %s: %s", document.get("url"), exc)
+            if len(image_urls) >= 4:
+                break
     if len(raw_text) < 80:
         return {}
-    format_requirement = analysis_requirement(is_paper=is_paper, is_social=False)
+    format_requirement = analysis_requirement(
+        is_paper=is_paper,
+        is_social=False,
+        is_policy=is_policy_signal(fields),
+    )
     prompt = f"""你是资深 AI 行业分析师。只依据给定原文撰写中文深度解读，输出严格 JSON：
 {{"deep_analysis_cn":"..."}}。
 

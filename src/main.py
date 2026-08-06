@@ -10,6 +10,7 @@ from . import (
     config,
     feishu,
     paper_fulltext,
+    policy_document,
     podcast,
     process,
     rss,
@@ -250,6 +251,13 @@ def run(methods: set[str] | None = None) -> int:
     pdf_ok = sum(paper_fulltext.enrich_item(item) for item in paper_items)
     if paper_items:
         log.info("论文 PDF 证据：尝试 %d 条，成功 %d 条", len(paper_items), pdf_ok)
+    policy_stats = policy_document.enrich_items(new_items)
+    if policy_stats["items_attempted"]:
+        log.info(
+            "政策 PDF 证据：尝试 %d 条，成功读取 %d 个附件",
+            policy_stats["items_attempted"],
+            policy_stats["documents_read"],
+        )
     # 只对确定入库的普通条目回源补全正文：RSS 常常只给一段摘要。
     rss.backfill_full_text(new_items)
     new_items = _drop_still_too_short(new_items)
