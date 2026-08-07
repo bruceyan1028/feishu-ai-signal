@@ -109,6 +109,7 @@
         ],
         "videos": []
       },
+      "editorialStructure": "",
       "pdfUrl": "https://arxiv.org/pdf/2607.28568.pdf",
       "paperFullTextSource": "pdf",
       "paperPages": 61,
@@ -301,6 +302,7 @@
         ],
         "videos": []
       },
+      "editorialStructure": "",
       "pdfUrl": "https://arxiv.org/pdf/2608.01964.pdf",
       "paperFullTextSource": "pdf",
       "paperPages": 29,
@@ -493,6 +495,7 @@
         ],
         "videos": []
       },
+      "editorialStructure": "",
       "pdfUrl": "https://arxiv.org/pdf/2607.27924.pdf",
       "paperFullTextSource": "pdf",
       "paperPages": 22,
@@ -638,6 +641,7 @@
         ],
         "videos": []
       },
+      "editorialStructure": "",
       "eventAggregation": {
         "total": 1,
         "groups": [
@@ -681,17 +685,18 @@
         "Agent",
         "监管"
       ],
-      "imageUrl": "https://images.ctfassets.net/kftzwdyauwt9/2PwBCyZF0Z5WLRtsbOpDdQ/338e19fbc39e5b9a63b1db664c006e74/Art_Card__5_.png?w=3840&q=90&fm=webp",
+      "imageUrl": "https://images.ctfassets.net/kftzwdyauwt9/6RSPaWdKwEvT9xWx4IjQy2/a334438e4daf9f62c24541c00c212749/third-party-cyber-evaluations_16x9.png?w=1600&h=900&fit=fill",
       "mediaAssets": {
         "images": [
           {
-            "url": "https://images.ctfassets.net/kftzwdyauwt9/2PwBCyZF0Z5WLRtsbOpDdQ/338e19fbc39e5b9a63b1db664c006e74/Art_Card__5_.png?w=3840&q=90&fm=webp",
+            "url": "https://images.ctfassets.net/kftzwdyauwt9/6RSPaWdKwEvT9xWx4IjQy2/a334438e4daf9f62c24541c00c212749/third-party-cyber-evaluations_16x9.png?w=1600&h=900&fit=fill",
             "alt": "OpenAI披露第三方网络安全评测中的模型越界事件",
             "kind": "article-cover"
           }
         ],
         "videos": []
       },
+      "editorialStructure": "",
       "eventAggregation": {
         "total": 1,
         "groups": [
@@ -746,6 +751,7 @@
         ],
         "videos": []
       },
+      "editorialStructure": "",
       "eventAggregation": {
         "total": 1,
         "groups": [
@@ -794,6 +800,7 @@
         "images": [],
         "videos": []
       },
+      "editorialStructure": "",
       "eventAggregation": {
         "total": 1,
         "groups": [
@@ -848,6 +855,7 @@
         ],
         "videos": []
       },
+      "editorialStructure": "",
       "eventAggregation": {
         "total": 1,
         "groups": [
@@ -902,6 +910,7 @@
         ],
         "videos": []
       },
+      "editorialStructure": "",
       "eventAggregation": {
         "total": 1,
         "groups": [
@@ -956,6 +965,7 @@
         ],
         "videos": []
       },
+      "editorialStructure": "",
       "eventAggregation": {
         "total": 1,
         "groups": [
@@ -1010,6 +1020,7 @@
         ],
         "videos": []
       },
+      "editorialStructure": "",
       "eventAggregation": {
         "total": 1,
         "groups": [
@@ -1063,8 +1074,9 @@
         ],
         "videos": []
       },
+      "editorialStructure": "",
       "eventAggregation": {
-        "total": 1,
+        "total": 4,
         "groups": [
           {
             "key": "官方来源",
@@ -1076,6 +1088,33 @@
                 "url": "https://github.com/firecrawl/firecrawl/releases/tag/v2.11.174",
                 "note": "原始发布 / 公告。",
                 "text": "Firecrawl 发布 v2.11.174：面向 Agent 的规模化网页搜索与抓取上下文 API —— 原始发布 / 公告。"
+              }
+            ]
+          },
+          {
+            "key": "相关报道",
+            "tone": "#2b6cb0",
+            "items": [
+              {
+                "source": "GitHub Trending",
+                "title": "Firecrawl v2.11.167：面向 AI Agent 的规模化网页搜索、抓取与交互 API",
+                "url": "https://github.com/firecrawl/firecrawl/releases/tag/v2.11.167",
+                "note": "同事件的其它源头报道。",
+                "text": "Firecrawl v2.11.167：面向 AI Agent 的规模化网页搜索、抓取与交互 API —— 同事件的其它源头报道。"
+              },
+              {
+                "source": "GitHub Trending",
+                "title": "Firecrawl v2.11.170：面向 AI Agent 的规模化网页搜索、抓取与交互 API",
+                "url": "https://github.com/firecrawl/firecrawl/releases/tag/v2.11.170",
+                "note": "同事件的其它源头报道。",
+                "text": "Firecrawl v2.11.170：面向 AI Agent 的规模化网页搜索、抓取与交互 API —— 同事件的其它源头报道。"
+              },
+              {
+                "source": "GitHub Trending",
+                "title": "Firecrawl v2.11.181 发布：更新 API 镜像",
+                "url": "https://github.com/firecrawl/firecrawl/releases/tag/v2.11.181",
+                "note": "同事件的其它源头报道。",
+                "text": "Firecrawl v2.11.181 发布：更新 API 镜像 —— 同事件的其它源头报道。"
               }
             ]
           }
@@ -1117,6 +1156,7 @@
         ],
         "videos": []
       },
+      "editorialStructure": "",
       "eventAggregation": {
         "total": 1,
         "groups": [
@@ -1171,6 +1211,7 @@
         ],
         "videos": []
       },
+      "editorialStructure": "",
       "eventAggregation": {
         "total": 1,
         "groups": [
@@ -1224,6 +1265,7 @@
         ],
         "videos": []
       },
+      "editorialStructure": "",
       "eventAggregation": {
         "total": 1,
         "groups": [
@@ -1277,6 +1319,7 @@
         ],
         "videos": []
       },
+      "editorialStructure": "",
       "eventAggregation": {
         "total": 1,
         "groups": [
@@ -1331,6 +1374,7 @@
         ],
         "videos": []
       },
+      "editorialStructure": "",
       "eventAggregation": {
         "total": 1,
         "groups": [
@@ -1385,6 +1429,7 @@
         ],
         "videos": []
       },
+      "editorialStructure": "",
       "eventAggregation": {
         "total": 1,
         "groups": [
@@ -1488,6 +1533,7 @@
           }
         ]
       },
+      "editorialStructure": "",
       "eventAggregation": {
         "total": 1,
         "groups": [
@@ -1501,59 +1547,6 @@
                 "url": "https://www.youtube.com/watch?v=sjjbpwlppww",
                 "note": "原始发布 / 公告。",
                 "text": "波士顿儿童医院利用 OpenAI o3 Deep Research 重析罕见病疑难病例 —— 原始发布 / 公告。"
-              }
-            ]
-          }
-        ]
-      }
-    },
-    {
-      "recordId": "recvrok1iwIzmX",
-      "sourceId": "github-trending",
-      "title": "firecrawl/firecrawl v2.11.181",
-      "titleCn": "Firecrawl v2.11.181 发布：更新 API 镜像",
-      "source": "GitHub Trending",
-      "url": "https://github.com/firecrawl/firecrawl/releases/tag/v2.11.181",
-      "category": "技术研究开源",
-      "contentType": "Github热榜",
-      "publishedDate": "2026-08-05",
-      "publishedAtMs": 1785898086000,
-      "summary": "开源网页数据工具 Firecrawl 于 2026 年 8 月 5 日发布 v2.11.181，发布说明仅注明更新 API 镜像。该项目提供搜索、抓取、交互、整站爬取和结构化提取能力，并可接入 AI Agent 与 MCP 客户端。",
-      "deepAnalysis": "【核心内容】\nFirecrawl 于 2026 年 8 月 5 日发布 v2.11.181，本次发布记录仅写明“Release API image v2.11.181”，没有列出新增功能、修复项或不兼容变更。Firecrawl 将自身定位为可规模化搜索、抓取并操作网页的上下文 API，能够把网站内容转换为适合 LLM 使用的 Markdown、JSON、截图等形式。项目创建于 2024 年 4 月 15 日，主要语言为 TypeScript，采用 AGPL-3.0 许可证；原文记录其拥有 161141 个 Stars 和 9100 个 Forks，最近提交日期与版本发布日期同为 2026 年 8 月 5 日。\n\n【关键细节】\n产品能力覆盖单页 Scrape、页面抓取后通过 AI 提示词或代码执行交互、整站 Crawl、站内 URL Map、批量抓取，以及无需预先提供 URL 的 Agent。Agent 可根据自然语言需求自行搜索、导航和获取数据，也支持通过 schema 返回结构化结果，或用可选 URL 限定范围。其模型分为默认的 spark-1-mini 和 spark-1-pro：原文称 mini 成本低 60%，适合多数任务；pro 面向跨网站比较、复杂导航或认证、多路径研究以及准确性要求较高的数据收集。Firecrawl 可通过 Skill、CLI 或 MCP 接入 Claude Code、Antigravity、OpenCode 等工具，并提供 Python、Node.js、Go、Java、Elixir、Rust、Ruby、.NET 和 PHP SDK。开源版本可本地运行或自托管，firecrawl.dev 云服务包含额外功能，但原文没有说明具体差异和价格。热门且已关闭的 Issue 反映自托管用户曾关注代理支持、html-transformer 类型不匹配导致的构建失败、全部抓取引擎失败，以及遭遇反机器人机制后持续循环等问题；原文未证明这些问题均由本版本修复。\n\n【价值与影响】\nFirecrawl 的主要价值在于把网页发现、抓取、内容清洗、结构化输出和 Agent 接入整合为统一工具链，减少开发者分别维护爬虫、Markdown 转换、异步轮询和 MCP 连接层的工作。对构建研究助手、网页问答、数据监测或其他需要实时外部信息的 Agent 而言，其多语言 SDK、结构化输出和无需预知 URL 的 Agent 模式具有直接转化价值。高 Star 和 Fork 数表明项目具有较高社区关注度，但不能单独证明生产稳定性。本次版本说明过于简略，因此其影响更多来自项目整体能力，而非已披露的版本创新。\n\n【局限与风险】\n本次发布没有变更日志、提交对应关系、测试结果、性能数据、镜像摘要或迁移指南，无法判断 v2.11.181 相比前版的具体变化，也无法确认是否包含安全修复。自托管相关 Issue 显示，代理配置、构建兼容性、抓取引擎可靠性及反机器人处理可能是实际部署中的风险点。复杂导航、认证页面和反爬机制下的成功率、延迟及资源消耗原文未披露；spark 模型的计费基准、准确率与“低 60%”的计算口径也未披露。AGPL-3.0 对网络服务场景的合规影响需要使用方自行评估，云端附加功能还可能形成开源版与托管版之间的能力差异。\n\n【行动建议】\n1. 升级前核对镜像标签、提交记录和官方变更日志，并在测试环境回归 Scrape、Crawl、Map、Agent 与结构化输出接口。\n2. 自托管团队应重点复测代理、反机器人阻断、失败重试与循环终止机制，同时监控抓取成功率、延迟和资源占用。\n3. 用同一批多站点任务对比 spark-1-mini 与 spark-1-pro 的成本、完整性和结构化字段准确率，再决定默认模型。\n4. 商用部署前审查 AGPL-3.0 义务，并确认开源版与云服务在功能、数据处理和运维责任上的边界。",
-      "why": "Firecrawl 为 AI Agent 获取实时网页上下文提供了较完整的开源基础设施，但本次版本的实际改动和升级收益尚缺乏明确说明。",
-      "impact": 67,
-      "novelty": 35,
-      "actionability": 78,
-      "urgency": "低",
-      "tags": [
-        "AI",
-        "Agent",
-        "开源",
-        "产品"
-      ],
-      "imageUrl": "https://repository-images.githubusercontent.com/github-production-repository-image-32fea6/787076358/f9616c09-3701-41ef-b5a6-fdf912ffb15b?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAVCODYLSA53PQK4ZA%2F20260805%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20260805T041635Z&X-Amz-Expires=300&X-Amz-Signature=166b290b35e09c815cc5a2d8298c067258e4e8937d05f7e57d5e57866523c895&X-Amz-SignedHeaders=host&jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoiaHR0cHM6Ly9yZXBvc2l0b3J5LWltYWdlcy5naXRodWJ1c2VyY29udGVudC5jb20vIiwia2V5Ijoia2V5MSIsImV4cCI6MTc4NTkwMzY5NSwibmJmIjoxNzg1OTAzMzk1LCJwYXRoIjoicmVwb3NpdG9yeS1pbWFnZXMuZ2l0aHVidXNlcmNvbnRlbnQuY29tIn0.bd_uIx3gj_kpDZvpz2sMTUGju0pKT-DWB3tltHmrG84",
-      "mediaAssets": {
-        "images": [
-          {
-            "url": "https://raw.githubusercontent.com/firecrawl/firecrawl/main/img/open-source-cloud.png",
-            "alt": "Open Source vs Cloud"
-          }
-        ],
-        "videos": []
-      },
-      "eventAggregation": {
-        "total": 1,
-        "groups": [
-          {
-            "key": "官方来源",
-            "tone": "#16130f",
-            "items": [
-              {
-                "source": "GitHub Trending",
-                "title": "Firecrawl v2.11.181 发布：更新 API 镜像",
-                "url": "https://github.com/firecrawl/firecrawl/releases/tag/v2.11.181",
-                "note": "原始发布 / 公告。",
-                "text": "Firecrawl v2.11.181 发布：更新 API 镜像 —— 原始发布 / 公告。"
               }
             ]
           }
@@ -1626,6 +1619,7 @@
           }
         ]
       },
+      "editorialStructure": "",
       "eventAggregation": {
         "total": 1,
         "groups": [
@@ -1692,6 +1686,7 @@
         ],
         "topComments": []
       },
+      "editorialStructure": "",
       "eventAggregation": {
         "total": 1,
         "groups": [

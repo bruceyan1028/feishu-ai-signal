@@ -114,6 +114,7 @@
         ],
         "videos": []
       },
+      "editorialStructure": "",
       "pdfUrl": "https://arxiv.org/pdf/2607.26811.pdf",
       "paperFullTextSource": "pdf",
       "paperPages": 18,
@@ -266,6 +267,7 @@
         ],
         "videos": []
       },
+      "editorialStructure": "",
       "pdfUrl": "http://jmlr.org/papers/volume27/25-1549/25-1549.pdf",
       "paperFullTextSource": "pdf",
       "paperPages": 60,
@@ -442,6 +444,7 @@
         ],
         "videos": []
       },
+      "editorialStructure": "",
       "pdfUrl": "https://arxiv.org/pdf/2607.28568.pdf",
       "paperFullTextSource": "pdf",
       "paperPages": 61,
@@ -602,6 +605,7 @@
         ],
         "videos": []
       },
+      "editorialStructure": "",
       "eventAggregation": {
         "total": 1,
         "groups": [
@@ -656,6 +660,7 @@
         ],
         "videos": []
       },
+      "editorialStructure": "",
       "eventAggregation": {
         "total": 1,
         "groups": [
@@ -710,8 +715,9 @@
         ],
         "videos": []
       },
+      "editorialStructure": "",
       "eventAggregation": {
-        "total": 2,
+        "total": 3,
         "groups": [
           {
             "key": "官方来源",
@@ -730,6 +736,13 @@
             "key": "相关报道",
             "tone": "#2b6cb0",
             "items": [
+              {
+                "source": "AI科技评论 / 雷峰网",
+                "title": "MiniMax发布H3视频模型：价格为Seedance 2.0三分之一并计划开源",
+                "url": "https://www.leiphone.com/category/industrynews/ftnu3ge59xsj70io.html",
+                "note": "同事件的其它源头报道。",
+                "text": "MiniMax发布H3视频模型：价格为Seedance 2.0三分之一并计划开源 —— 同事件的其它源头报道。"
+              },
               {
                 "source": "ModelScope 首页新模型",
                 "title": "MiniMax发布全模态音视频生成系统H3",
@@ -777,6 +790,7 @@
         ],
         "videos": []
       },
+      "editorialStructure": "source",
       "eventAggregation": {
         "total": 1,
         "groups": [
@@ -831,6 +845,7 @@
         ],
         "videos": []
       },
+      "editorialStructure": "",
       "eventAggregation": {
         "total": 1,
         "groups": [
@@ -885,6 +900,7 @@
         ],
         "videos": []
       },
+      "editorialStructure": "",
       "eventAggregation": {
         "total": 1,
         "groups": [
@@ -939,6 +955,7 @@
         ],
         "videos": []
       },
+      "editorialStructure": "",
       "eventAggregation": {
         "total": 1,
         "groups": [
@@ -993,6 +1010,7 @@
         ],
         "videos": []
       },
+      "editorialStructure": "",
       "eventAggregation": {
         "total": 1,
         "groups": [
@@ -1047,6 +1065,7 @@
         ],
         "videos": []
       },
+      "editorialStructure": "",
       "eventAggregation": {
         "total": 1,
         "groups": [
@@ -1095,6 +1114,7 @@
         "images": [],
         "videos": []
       },
+      "editorialStructure": "",
       "eventAggregation": {
         "total": 2,
         "groups": [
@@ -1162,6 +1182,7 @@
         ],
         "videos": []
       },
+      "editorialStructure": "",
       "eventAggregation": {
         "total": 1,
         "groups": [
@@ -1215,6 +1236,7 @@
         ],
         "videos": []
       },
+      "editorialStructure": "",
       "eventAggregation": {
         "total": 1,
         "groups": [
@@ -1268,8 +1290,9 @@
         ],
         "videos": []
       },
+      "editorialStructure": "",
       "eventAggregation": {
-        "total": 1,
+        "total": 3,
         "groups": [
           {
             "key": "官方来源",
@@ -1283,59 +1306,6 @@
                 "text": "Firecrawl 发布 v2.11.174：面向 Agent 的规模化网页搜索与抓取上下文 API —— 原始发布 / 公告。"
               }
             ]
-          }
-        ]
-      }
-    },
-    {
-      "recordId": "recvrcKpOTZaCY",
-      "sourceId": "github-trending",
-      "title": "firecrawl/firecrawl v2.11.170",
-      "titleCn": "Firecrawl v2.11.170：面向 AI Agent 的规模化网页搜索、抓取与交互 API",
-      "source": "GitHub Trending",
-      "url": "https://github.com/firecrawl/firecrawl/releases/tag/v2.11.170",
-      "category": "技术研究开源",
-      "contentType": "Github热榜",
-      "publishedDate": "2026-08-03",
-      "publishedAtMs": 1785704821000,
-      "summary": "Firecrawl 发布 v2.11.170，提供网页搜索、抓取、交互、整站爬取、URL 映射和批量抓取能力，并可输出 Markdown、JSON、截图等适合大模型使用的数据。项目支持通过 SDK、CLI、MCP 和 Skill 接入 AI Agent，同时提供开源自托管与云服务形态。",
-      "deepAnalysis": "【核心内容】\nFirecrawl 在 2026 年 8 月 2 日发布 v2.11.170，项目定位是“在规模化场景下搜索、抓取并与网页交互的 API”。仓库使用 TypeScript，创建于 2024 年 4 月 15 日；截至原文记录，拥有 159621 个 Stars 和 9061 个 Forks。此次发布说明为“Release API image v2.11.170”。其主要能力包括 Scrape、Interact、Power Your Agent、Agent、Crawl、Map 和 Batch Scrape，可通过 Node.js、cURL、CLI 及多种语言 SDK 使用。项目以 AGPL-3.0 开源，同时提供包含额外功能的云版本。\n\n【关键细节】\nScrape 可从网站获取适合大模型处理的数据，包括 Markdown、JSON 和截图等格式。Interact 支持先抓取页面，再通过 AI 提示词或代码与页面交互。Crawl 可抓取整个网站并返回任务 ID，SDK 会自动处理异步轮询；Map 用于发现网站 URL，也支持站内搜索；Batch Scrape 用于一次抓取多个 URL。Agent 功能允许用户直接描述需求，由系统搜索、导航并检索数据，不要求事先提供 URL；它被描述为 /extract 端点的演进版本，并支持结构化输出，也可通过可选 URL 限定范围。\n\nAgent 提供 spark-1-mini 和 spark-1-pro 两种模型选择。原文称 spark-1-mini 为默认模型，成本低 60%，适合多数任务；spark-1-pro 面向复杂研究、关键数据收集、跨多个网站比较、复杂导航或需要认证的网站。Firecrawl 还支持通过 Skill 让 Claude Code、Antigravity、OpenCode 等 Agent 使用实时网页数据，通过 MCP 连接兼容 MCP 的客户端，并提供 Agent Onboarding 流程来获取 API Key。原文列出的 SDK 包括 Python、Node.js、Go、Java、Elixir、Rust、Ruby、.NET 和 PHP。\n\n【价值与影响】\n相较于仅提供网页下载或简单 HTML 解析的工具，Firecrawl 将搜索、页面导航、抓取、交互、异步任务和面向 LLM 的格式转换组合在一个接口体系中。对 Agent 开发者而言，这意味着可以把实时网页访问作为基础能力接入，而不必分别实现 URL 发现、页面抽取、浏览器交互和结果结构化。对 RAG 或研究型应用而言，Markdown、JSON、截图以及结构化输出有助于把网页内容转成后续模型可消费的输入。Agent、MCP 和 Skill 接入方式也扩大了其在不同 AI 工具链中的可用性。开源和自托管则为希望控制部署环境的团队提供了选择，但云端与本地能力并不完全相同，因为原文明确表示云版本包含额外功能。\n\n【局限与风险】\n原文没有披露 v2.11.170 相比上一版本的具体代码变化、性能指标、准确率、吞吐量、延迟、资源消耗或兼容性测试，因此不能据此判断本次版本更新的技术增量。社区 Issue 显示，自托管版本曾出现代理支持需求、html-transformer 模块类型不匹配导致的构建失败、所有抓取引擎失败，以及遭遇反爬后永久循环等问题；这些 Issue 虽标记为 closed，但原文未说明关闭原因、修复版本或解决效果。网页抓取还可能受目标站点结构、认证、反爬策略和网络可达性影响，Agent 的模型选择也可能影响成本和结果质量。原文未披露数据合规、robots.txt 处理、访问授权、敏感信息保护、云服务 SLA 或各端点的具体计费规则。AGPL-3.0 对集成、修改和分发方式的影响也需要使用者结合自身部署模式评估。\n\n【行动建议】\n1. 在正式采用前，使用目标网站集合分别测试 Scrape、Crawl、Map、Agent 和 Interact，记录成功率、延迟、结构化结果准确性及反爬场景表现。\n2. 若选择自托管，按官方自托管指南复现安装流程，重点验证代理配置、html-transformer 构建、抓取引擎失败和被拦截后的任务退出机制。\n3. 对比 spark-1-mini 与 spark-1-pro 在本业务任务上的成本、覆盖率和事实准确性，不直接依据“便宜 60%”的描述推断总体性价比。\n4. 在接入生产系统前审查 AGPL-3.0、目标网站授权、敏感数据处理和云端数据流向，并确认云版本与自托管版本的功能差异。",
-      "why": "它将网页数据获取、浏览交互和结构化输出封装为统一 API，降低了 AI Agent 接入实时网络信息的开发门槛。",
-      "impact": 82,
-      "novelty": 70,
-      "actionability": 86,
-      "urgency": "中",
-      "tags": [
-        "Agent",
-        "开源",
-        "RAG",
-        "产品"
-      ],
-      "imageUrl": "https://repository-images.githubusercontent.com/github-production-repository-image-32fea6/787076358/f9616c09-3701-41ef-b5a6-fdf912ffb15b?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAVCODYLSA53PQK4ZA%2F20260804%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20260804T041650Z&X-Amz-Expires=300&X-Amz-Signature=a17c9b20f4c4cc6d7ff4d68385452094732f338040ac2ff8888a7591c9b347ed&X-Amz-SignedHeaders=host&jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoiaHR0cHM6Ly9yZXBvc2l0b3J5LWltYWdlcy5naXRodWJ1c2VyY29udGVudC5jb20vIiwia2V5Ijoia2V5MSIsImV4cCI6MTc4NTgxNzMxMCwibmJmIjoxNzg1ODE3MDEwLCJwYXRoIjoicmVwb3NpdG9yeS1pbWFnZXMuZ2l0aHVidXNlcmNvbnRlbnQuY29tIn0.DEIABgS_luoqVMHQItc1UQ9TsHVpFg8sgnZCTaU-ZVY",
-      "mediaAssets": {
-        "images": [
-          {
-            "url": "https://raw.githubusercontent.com/firecrawl/firecrawl/main/img/open-source-cloud.png",
-            "alt": "Open Source vs Cloud"
-          }
-        ],
-        "videos": []
-      },
-      "eventAggregation": {
-        "total": 4,
-        "groups": [
-          {
-            "key": "官方来源",
-            "tone": "#16130f",
-            "items": [
-              {
-                "source": "GitHub Trending",
-                "title": "Firecrawl v2.11.170：面向 AI Agent 的规模化网页搜索、抓取与交互 API",
-                "url": "https://github.com/firecrawl/firecrawl/releases/tag/v2.11.170",
-                "note": "原始发布 / 公告。",
-                "text": "Firecrawl v2.11.170：面向 AI Agent 的规模化网页搜索、抓取与交互 API —— 原始发布 / 公告。"
-              }
-            ]
           },
           {
             "key": "相关报道",
@@ -1343,24 +1313,17 @@
             "items": [
               {
                 "source": "GitHub Trending",
-                "title": "Firecrawl：面向 AI Agent 的大规模网页搜索、抓取与交互开源 API",
-                "url": "https://github.com/firecrawl/firecrawl",
-                "note": "同事件的其它源头报道。",
-                "text": "Firecrawl：面向 AI Agent 的大规模网页搜索、抓取与交互开源 API —— 同事件的其它源头报道。"
-              },
-              {
-                "source": "GitHub Trending",
-                "title": "Firecrawl v2.11.162：面向 AI Agent 的开源网页搜索、抓取与交互 API",
-                "url": "https://github.com/firecrawl/firecrawl/releases/tag/v2.11.162",
-                "note": "同事件的其它源头报道。",
-                "text": "Firecrawl v2.11.162：面向 AI Agent 的开源网页搜索、抓取与交互 API —— 同事件的其它源头报道。"
-              },
-              {
-                "source": "GitHub Trending",
                 "title": "Firecrawl v2.11.167：面向 AI Agent 的规模化网页搜索、抓取与交互 API",
                 "url": "https://github.com/firecrawl/firecrawl/releases/tag/v2.11.167",
                 "note": "同事件的其它源头报道。",
                 "text": "Firecrawl v2.11.167：面向 AI Agent 的规模化网页搜索、抓取与交互 API —— 同事件的其它源头报道。"
+              },
+              {
+                "source": "GitHub Trending",
+                "title": "Firecrawl v2.11.170：面向 AI Agent 的规模化网页搜索、抓取与交互 API",
+                "url": "https://github.com/firecrawl/firecrawl/releases/tag/v2.11.170",
+                "note": "同事件的其它源头报道。",
+                "text": "Firecrawl v2.11.170：面向 AI Agent 的规模化网页搜索、抓取与交互 API —— 同事件的其它源头报道。"
               }
             ]
           }
@@ -1402,6 +1365,7 @@
         ],
         "videos": []
       },
+      "editorialStructure": "",
       "eventAggregation": {
         "total": 1,
         "groups": [
@@ -1455,6 +1419,7 @@
         ],
         "videos": []
       },
+      "editorialStructure": "",
       "eventAggregation": {
         "total": 1,
         "groups": [
@@ -1508,6 +1473,7 @@
         ],
         "videos": []
       },
+      "editorialStructure": "",
       "eventAggregation": {
         "total": 1,
         "groups": [
@@ -1573,6 +1539,7 @@
         ],
         "topComments": []
       },
+      "editorialStructure": "",
       "eventAggregation": {
         "total": 1,
         "groups": [
@@ -1685,8 +1652,9 @@
           }
         ]
       },
+      "editorialStructure": "",
       "eventAggregation": {
-        "total": 1,
+        "total": 4,
         "groups": [
           {
             "key": "官方来源",
@@ -1698,6 +1666,33 @@
                 "url": "https://www.youtube.com/watch?v=6ynlb0xbtni",
                 "note": "原始发布 / 公告。",
                 "text": "斯坦福 CS329A：自我改进 AI Agent 第一讲课程概览 —— 原始发布 / 公告。"
+              }
+            ]
+          },
+          {
+            "key": "相关报道",
+            "tone": "#2b6cb0",
+            "items": [
+              {
+                "source": "Stanford Online AI YouTube",
+                "title": "Stanford CS329A Self-Improving AI Agents | Part 2 | Test-Time Compute Scaling",
+                "url": "https://www.youtube.com/watch?v=-ggc37xlj_y",
+                "note": "同事件的其它源头报道。",
+                "text": "Stanford CS329A Self-Improving AI Agents | Part 2 | Test-Time Compute Scaling —— 同事件的其它源头报道。"
+              },
+              {
+                "source": "Stanford Online AI YouTube",
+                "title": "Stanford CS329A Self-Improving AI Agents | Part 3 | Robust Verification",
+                "url": "https://www.youtube.com/watch?v=p7tdpucpoik",
+                "note": "同事件的其它源头报道。",
+                "text": "Stanford CS329A Self-Improving AI Agents | Part 3 | Robust Verification —— 同事件的其它源头报道。"
+              },
+              {
+                "source": "Stanford Online AI YouTube",
+                "title": "Stanford CS329A Self-Improving AI Agents | Part 6 | Train Time Scaling/Scaling RL",
+                "url": "https://www.youtube.com/watch?v=yvnmhsay3ck",
+                "note": "同事件的其它源头报道。",
+                "text": "Stanford CS329A Self-Improving AI Agents | Part 6 | Train Time Scaling/Scaling RL —— 同事件的其它源头报道。"
               }
             ]
           }
@@ -1779,6 +1774,7 @@
           }
         ]
       },
+      "editorialStructure": "",
       "eventAggregation": {
         "total": 1,
         "groups": [
@@ -1845,6 +1841,7 @@
         ],
         "topComments": []
       },
+      "editorialStructure": "",
       "eventAggregation": {
         "total": 1,
         "groups": [
@@ -1899,8 +1896,9 @@
         ],
         "videos": []
       },
+      "editorialStructure": "source",
       "eventAggregation": {
-        "total": 1,
+        "total": 2,
         "groups": [
           {
             "key": "官方来源",
@@ -1912,6 +1910,19 @@
                 "url": "https://www.modelscope.cn/models/openpangu/openpangu-2.0-pro",
                 "note": "原始发布 / 公告。",
                 "text": "华为发布基于昇腾NPU训练的openPangu-2.0-Pro混合专家模型 —— 原始发布 / 公告。"
+              }
+            ]
+          },
+          {
+            "key": "相关报道",
+            "tone": "#2b6cb0",
+            "items": [
+              {
+                "source": "智东西",
+                "title": "华为开源5050亿参数盘古MoE模型，主攻长上下文智能体",
+                "url": "https://zhidx.com/p/581400.html",
+                "note": "同事件的其它源头报道。",
+                "text": "华为开源5050亿参数盘古MoE模型，主攻长上下文智能体 —— 同事件的其它源头报道。"
               }
             ]
           }

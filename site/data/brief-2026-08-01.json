@@ -98,6 +98,7 @@
         ],
         "videos": []
       },
+      "editorialStructure": "",
       "pdfUrl": "http://jmlr.org/papers/volume27/25-1549/25-1549.pdf",
       "paperFullTextSource": "pdf",
       "paperPages": 60,
@@ -290,6 +291,7 @@
         ],
         "videos": []
       },
+      "editorialStructure": "",
       "pdfUrl": "https://arxiv.org/pdf/2607.25565.pdf",
       "paperFullTextSource": "pdf",
       "paperPages": 30,
@@ -445,6 +447,7 @@
         "images": [],
         "videos": []
       },
+      "editorialStructure": "",
       "eventAggregation": {
         "total": 1,
         "groups": [
@@ -498,6 +501,7 @@
         ],
         "videos": []
       },
+      "editorialStructure": "",
       "eventAggregation": {
         "total": 1,
         "groups": [
@@ -552,6 +556,7 @@
         ],
         "videos": []
       },
+      "editorialStructure": "",
       "eventAggregation": {
         "total": 1,
         "groups": [
@@ -606,6 +611,7 @@
         ],
         "videos": []
       },
+      "editorialStructure": "",
       "eventAggregation": {
         "total": 1,
         "groups": [
@@ -660,6 +666,7 @@
         ],
         "videos": []
       },
+      "editorialStructure": "",
       "eventAggregation": {
         "total": 1,
         "groups": [
@@ -714,6 +721,7 @@
         ],
         "videos": []
       },
+      "editorialStructure": "source",
       "eventAggregation": {
         "total": 1,
         "groups": [
@@ -768,6 +776,7 @@
         ],
         "videos": []
       },
+      "editorialStructure": "",
       "eventAggregation": {
         "total": 1,
         "groups": [
@@ -822,6 +831,7 @@
         ],
         "videos": []
       },
+      "editorialStructure": "source",
       "eventAggregation": {
         "total": 6,
         "groups": [
@@ -923,6 +933,7 @@
         ],
         "videos": []
       },
+      "editorialStructure": "",
       "eventAggregation": {
         "total": 1,
         "groups": [
@@ -977,6 +988,7 @@
         ],
         "videos": []
       },
+      "editorialStructure": "",
       "eventAggregation": {
         "total": 1,
         "groups": [
@@ -1031,6 +1043,7 @@
         ],
         "videos": []
       },
+      "editorialStructure": "",
       "eventAggregation": {
         "total": 1,
         "groups": [
@@ -1079,6 +1092,7 @@
         "images": [],
         "videos": []
       },
+      "editorialStructure": "",
       "eventAggregation": {
         "total": 2,
         "groups": [
@@ -1145,6 +1159,7 @@
         ],
         "videos": []
       },
+      "editorialStructure": "",
       "eventAggregation": {
         "total": 1,
         "groups": [
@@ -1198,8 +1213,9 @@
         ],
         "videos": []
       },
+      "editorialStructure": "",
       "eventAggregation": {
-        "total": 1,
+        "total": 2,
         "groups": [
           {
             "key": "官方来源",
@@ -1211,6 +1227,19 @@
                 "url": "https://github.com/nousresearch/hermes-agent/releases/tag/v2026.7.30",
                 "note": "原始发布 / 公告。",
                 "text": "Hermes Agent v0.19.1 发布：面向持续学习与多渠道运行的开源智能体 —— 原始发布 / 公告。"
+              }
+            ]
+          },
+          {
+            "key": "相关报道",
+            "tone": "#2b6cb0",
+            "items": [
+              {
+                "source": "GitHub Trending",
+                "title": "Nous Research 开源可自我改进的 Hermes Agent",
+                "url": "https://github.com/nousresearch/hermes-agent",
+                "note": "同事件的其它源头报道。",
+                "text": "Nous Research 开源可自我改进的 Hermes Agent —— 同事件的其它源头报道。"
               }
             ]
           }
@@ -1252,6 +1281,7 @@
         ],
         "videos": []
       },
+      "editorialStructure": "",
       "eventAggregation": {
         "total": 1,
         "groups": [
@@ -1306,8 +1336,9 @@
         ],
         "videos": []
       },
+      "editorialStructure": "",
       "eventAggregation": {
-        "total": 1,
+        "total": 2,
         "groups": [
           {
             "key": "官方来源",
@@ -1319,6 +1350,19 @@
                 "url": "https://zhidx.com/p/581400.html",
                 "note": "原始发布 / 公告。",
                 "text": "华为开源5050亿参数盘古MoE模型，主攻长上下文智能体 —— 原始发布 / 公告。"
+              }
+            ]
+          },
+          {
+            "key": "相关报道",
+            "tone": "#2b6cb0",
+            "items": [
+              {
+                "source": "ModelScope 首页新模型",
+                "title": "华为发布基于昇腾NPU训练的openPangu-2.0-Pro混合专家模型",
+                "url": "https://www.modelscope.cn/models/openpangu/openpangu-2.0-pro",
+                "note": "同事件的其它源头报道。",
+                "text": "华为发布基于昇腾NPU训练的openPangu-2.0-Pro混合专家模型 —— 同事件的其它源头报道。"
               }
             ]
           }
@@ -1360,6 +1404,7 @@
         ],
         "videos": []
       },
+      "editorialStructure": "",
       "eventAggregation": {
         "total": 5,
         "groups": [
@@ -1453,6 +1498,7 @@
         ],
         "videos": []
       },
+      "editorialStructure": "",
       "eventAggregation": {
         "total": 1,
         "groups": [
@@ -1506,6 +1552,7 @@
         ],
         "videos": []
       },
+      "editorialStructure": "",
       "eventAggregation": {
         "total": 3,
         "groups": [
@@ -1579,8 +1626,9 @@
         ],
         "videos": []
       },
+      "editorialStructure": "",
       "eventAggregation": {
-        "total": 1,
+        "total": 2,
         "groups": [
           {
             "key": "官方来源",
@@ -1592,6 +1640,19 @@
                 "url": "https://github.com/google-gemini/gemini-cli/releases/tag/v0.53.1",
                 "note": "原始发布 / 公告。",
                 "text": "Gemini CLI 发布 v0.53.1：开源终端 AI Agent 的补丁版本 —— 原始发布 / 公告。"
+              }
+            ]
+          },
+          {
+            "key": "相关报道",
+            "tone": "#2b6cb0",
+            "items": [
+              {
+                "source": "GitHub Trending",
+                "title": "Gemini CLI：开源的终端 AI Agent",
+                "url": "https://github.com/google-gemini/gemini-cli",
+                "note": "同事件的其它源头报道。",
+                "text": "Gemini CLI：开源的终端 AI Agent —— 同事件的其它源头报道。"
               }
             ]
           }
@@ -1632,6 +1693,7 @@
         ],
         "videos": []
       },
+      "editorialStructure": "",
       "eventAggregation": {
         "total": 1,
         "groups": [
@@ -1744,8 +1806,9 @@
           }
         ]
       },
+      "editorialStructure": "",
       "eventAggregation": {
-        "total": 4,
+        "total": 8,
         "groups": [
           {
             "key": "官方来源",
@@ -1784,60 +1847,34 @@
                 "url": "https://www.youtube.com/watch?v=9mnleaza59o",
                 "note": "同事件的其它源头报道。",
                 "text": "Gemini Robotics 2将人形机器人控制扩展至全身动作 —— 同事件的其它源头报道。"
-              }
-            ]
-          }
-        ]
-      }
-    },
-    {
-      "recordId": "recvr10RSDeBC3",
-      "sourceId": "modelscope-home",
-      "title": "openPangu-2.0-Pro",
-      "titleCn": "华为发布基于昇腾NPU训练的openPangu-2.0-Pro混合专家模型",
-      "source": "ModelScope 首页新模型",
-      "url": "https://www.modelscope.cn/models/openpangu/openpangu-2.0-pro",
-      "category": "前沿模型公司",
-      "contentType": "文章",
-      "publishedDate": "2026-07-30",
-      "publishedAtMs": 1785405361000,
-      "summary": "openPangu-2.0-Pro是华为推出的约505B参数MoE语言模型，每个Token约激活18B参数，支持512k上下文并使用约34T tokens训练。模型引入DSA、SWA、mHC、3头MTP及Muon优化器，在推理、Agent和代码等多项测评中公布了Thinking与Non-Thinking版本结果。",
-      "deepAnalysis": "【核心内容】\nopenPangu-2.0-Pro是基于昇腾NPU训练的大规模混合专家语言模型，参数规模约505B，每个Token激活参数约18B，支持最长512k上下文，训练数据总量约34T tokens。模型后训练包含快慢合一微调、多专项强化学习以及在线蒸馏，用于实现不同能力的合一。官方同时提供Thinking和Non-Thinking两个测评版本，并发布了模型仓库、部署说明和omni-infer推理框架相关源码入口。模型依据OPENPANGU MODEL LICENSE AGREEMENT VERSION 2.0授权，具体条款以仓库中的许可证文件为准。\n\n【关键细节】\n架构方面，模型沿用高效MLA，并采用DSA与SWA独立分层的混合注意力结构，层配比为1:2：SWA负责局部窗口建模，DSA负责稀疏全局聚合，目标是在长序列场景降低计算、显存和访存开销。传统残差连接被升级为4支流mHC架构，用于增强表征多样性和泛化能力。模型还采用3头MTP自投机模块，一次额外预测3个Token，以提升推理速度；训练阶段使用Muon优化器，原文称其可获得更快收敛。\n\n测评显示，Thinking版本在AIME 2026上为95.4，配合Python为97.9；HMMT Feb 2026为86.2，配合Python为93.2；GPQA-Diamond为87.9，HLE为27.1。Agent能力方面，TAU2-Bench为81.1、MCP-Atlas为61.3、GDPVal为74.9，BrowseComp为65.7。代码方面，LiveCodeBench V6为85.7，SWE-bench Verified为68.5。Non-Thinking版本在部分项目更高，例如Chinese-SimpleQA为75.7、PinchBench为88.9，说明不同模式之间存在任务差异。原文未给出与其他模型的统一对照表，也未披露完整推理成本、吞吐或显存数据。\n\n【价值与影响】\n该模型的主要价值在于把超大规模稀疏MoE与面向长上下文的分层注意力结合起来。505B总参数与18B激活参数的组合，理论上有助于在保持较大模型容量的同时控制单Token计算量；DSA、SWA和MTP则分别针对长上下文开销与生成速度提出结构性优化。基于昇腾NPU训练，并配套omni-infer和部署源码，意味着开发者可以围绕国产AI硬件栈进行部署验证，而不只关注模型权重本身。公开的Agent、代码和推理测评也为企业评估其复杂任务能力提供了初步参考。不过，测评结果属于原文自报，不能仅凭这些数字确认其相对行业模型的领先程度。\n\n【局限与风险】\n原文没有说明模型权重的具体开放形式、完整训练配置、数据来源与数据治理方式，也未披露各项测评的提示词、采样设置、硬件环境、成本、延迟和可复现脚本，因此结果的独立复核仍有限。512k上下文是支持上限，但原文未证明模型在该长度下的实际有效能力、稳定性或真实部署吞吐。MoE的总参数规模、激活参数规模与推理资源消耗并不等价，实际成本还取决于并行策略、显存、通信和推理框架适配情况。Thinking与Non-Thinking版本在不同基准上的差异，也表明选型需要结合任务和延迟要求。许可证的完整使用边界、商业限制及责任条款需进一步阅读；模型输出的准确性、安全性、持续稳定性和专业领域适用性，华为在免责声明中均未作保证。\n\n【行动建议】\n1. 在目标昇腾硬件上依据官方omni-infer说明复现实测，记录不同上下文长度、并发量和Thinking模式下的延迟、吞吐、显存及通信开销。\n2. 使用公开测试集和企业自有任务，分别验证中文问答、代码修复、工具调用与长文档任务，并与现有基线采用一致提示词和采样参数对比。\n3. 在正式部署前审阅OPENPANGU MODEL LICENSE AGREEMENT VERSION 2.0，确认权重、衍生模型、商业服务和输出使用的合规边界。\n4. 对高风险场景增加事实核验、人工审批和安全过滤，不将基准分数或模型输出直接作为医疗、法律及其他关键决策依据。",
-      "why": "该模型将超大规模MoE、长上下文稀疏注意力和昇腾NPU训练部署结合，并通过公开推理框架与许可证提供了进一步验证和使用的入口。",
-      "impact": 0,
-      "novelty": 0,
-      "actionability": 0,
-      "urgency": "中",
-      "tags": [
-        "LLM",
-        "推理",
-        "开源",
-        "硬件"
-      ],
-      "imageUrl": "https://cdn.modelscope.cn/social-thumbnails/models/openpangu/openpangu-2.0-pro.png",
-      "mediaAssets": {
-        "images": [
-          {
-            "url": "https://cdn.modelscope.cn/social-thumbnails/models/openpangu/openpangu-2.0-pro.png",
-            "alt": "华为发布基于昇腾NPU训练的openPangu-2.0-Pro混合专家模型",
-            "kind": "article-cover"
-          }
-        ],
-        "videos": []
-      },
-      "eventAggregation": {
-        "total": 1,
-        "groups": [
-          {
-            "key": "官方来源",
-            "tone": "#16130f",
-            "items": [
+              },
               {
-                "source": "ModelScope 首页新模型",
-                "title": "华为发布基于昇腾NPU训练的openPangu-2.0-Pro混合专家模型",
-                "url": "https://www.modelscope.cn/models/openpangu/openpangu-2.0-pro",
-                "note": "原始发布 / 公告。",
-                "text": "华为发布基于昇腾NPU训练的openPangu-2.0-Pro混合专家模型 —— 原始发布 / 公告。"
+                "source": "Google DeepMind YouTube",
+                "title": "Multi-robot collaboration with Gemini Robotics 2",
+                "url": "https://www.youtube.com/watch?v=citpdm7pkw0",
+                "note": "同事件的其它源头报道。",
+                "text": "Multi-robot collaboration with Gemini Robotics 2 —— 同事件的其它源头报道。"
+              },
+              {
+                "source": "Google DeepMind YouTube",
+                "title": "Advanced dexterity with Gemini Robotics 2",
+                "url": "https://www.youtube.com/watch?v=o9-650ihals",
+                "note": "同事件的其它源头报道。",
+                "text": "Advanced dexterity with Gemini Robotics 2 —— 同事件的其它源头报道。"
+              },
+              {
+                "source": "Google DeepMind YouTube",
+                "title": "Gemini Robotics 2 brings whole body intelligence to robots",
+                "url": "https://www.youtube.com/watch?v=4lsqnrmc6ny",
+                "note": "同事件的其它源头报道。",
+                "text": "Gemini Robotics 2 brings whole body intelligence to robots —— 同事件的其它源头报道。"
+              },
+              {
+                "source": "Google DeepMind YouTube",
+                "title": "Google DeepMind 发布《This is Gemini Robotics 2》短视频",
+                "url": "https://www.youtube.com/watch?v=oemefobzode",
+                "note": "同事件的其它源头报道。",
+                "text": "Google DeepMind 发布《This is Gemini Robotics 2》短视频 —— 同事件的其它源头报道。"
               }
             ]
           }

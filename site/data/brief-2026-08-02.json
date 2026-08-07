@@ -113,6 +113,7 @@
         ],
         "videos": []
       },
+      "editorialStructure": "",
       "pdfUrl": "https://arxiv.org/pdf/2607.26811.pdf",
       "paperFullTextSource": "pdf",
       "paperPages": 18,
@@ -265,6 +266,7 @@
         ],
         "videos": []
       },
+      "editorialStructure": "",
       "pdfUrl": "http://jmlr.org/papers/volume27/25-1549/25-1549.pdf",
       "paperFullTextSource": "pdf",
       "paperPages": 60,
@@ -457,6 +459,7 @@
         ],
         "videos": []
       },
+      "editorialStructure": "",
       "pdfUrl": "https://arxiv.org/pdf/2607.25565.pdf",
       "paperFullTextSource": "pdf",
       "paperPages": 30,
@@ -617,6 +620,7 @@
         ],
         "videos": []
       },
+      "editorialStructure": "",
       "eventAggregation": {
         "total": 1,
         "groups": [
@@ -671,6 +675,7 @@
         ],
         "videos": []
       },
+      "editorialStructure": "",
       "eventAggregation": {
         "total": 1,
         "groups": [
@@ -725,6 +730,7 @@
         ],
         "videos": []
       },
+      "editorialStructure": "",
       "eventAggregation": {
         "total": 1,
         "groups": [
@@ -779,6 +785,7 @@
         ],
         "videos": []
       },
+      "editorialStructure": "",
       "eventAggregation": {
         "total": 1,
         "groups": [
@@ -833,6 +840,7 @@
         ],
         "videos": []
       },
+      "editorialStructure": "source",
       "eventAggregation": {
         "total": 1,
         "groups": [
@@ -886,6 +894,7 @@
         ],
         "videos": []
       },
+      "editorialStructure": "",
       "eventAggregation": {
         "total": 1,
         "groups": [
@@ -940,6 +949,7 @@
         ],
         "videos": []
       },
+      "editorialStructure": "source",
       "eventAggregation": {
         "total": 6,
         "groups": [
@@ -1041,6 +1051,7 @@
         ],
         "videos": []
       },
+      "editorialStructure": "",
       "eventAggregation": {
         "total": 1,
         "groups": [
@@ -1095,6 +1106,7 @@
         ],
         "videos": []
       },
+      "editorialStructure": "",
       "eventAggregation": {
         "total": 1,
         "groups": [
@@ -1149,6 +1161,7 @@
         ],
         "videos": []
       },
+      "editorialStructure": "",
       "eventAggregation": {
         "total": 1,
         "groups": [
@@ -1197,6 +1210,7 @@
         "images": [],
         "videos": []
       },
+      "editorialStructure": "",
       "eventAggregation": {
         "total": 2,
         "groups": [
@@ -1263,8 +1277,9 @@
         ],
         "videos": []
       },
+      "editorialStructure": "",
       "eventAggregation": {
-        "total": 1,
+        "total": 2,
         "groups": [
           {
             "key": "官方来源",
@@ -1276,6 +1291,19 @@
                 "url": "https://github.com/nousresearch/hermes-agent/releases/tag/v2026.7.30",
                 "note": "原始发布 / 公告。",
                 "text": "Hermes Agent v0.19.1 发布：面向持续学习与多渠道运行的开源智能体 —— 原始发布 / 公告。"
+              }
+            ]
+          },
+          {
+            "key": "相关报道",
+            "tone": "#2b6cb0",
+            "items": [
+              {
+                "source": "GitHub Trending",
+                "title": "Nous Research 开源可自我改进的 Hermes Agent",
+                "url": "https://github.com/nousresearch/hermes-agent",
+                "note": "同事件的其它源头报道。",
+                "text": "Nous Research 开源可自我改进的 Hermes Agent —— 同事件的其它源头报道。"
               }
             ]
           }
@@ -1317,6 +1345,7 @@
         ],
         "videos": []
       },
+      "editorialStructure": "",
       "eventAggregation": {
         "total": 1,
         "groups": [
@@ -1371,6 +1400,7 @@
         ],
         "videos": []
       },
+      "editorialStructure": "",
       "eventAggregation": {
         "total": 1,
         "groups": [
@@ -1425,6 +1455,7 @@
         ],
         "videos": []
       },
+      "editorialStructure": "",
       "eventAggregation": {
         "total": 5,
         "groups": [
@@ -1518,6 +1549,7 @@
         ],
         "videos": []
       },
+      "editorialStructure": "",
       "eventAggregation": {
         "total": 3,
         "groups": [
@@ -1591,8 +1623,9 @@
         ],
         "videos": []
       },
+      "editorialStructure": "",
       "eventAggregation": {
-        "total": 1,
+        "total": 2,
         "groups": [
           {
             "key": "官方来源",
@@ -1604,6 +1637,19 @@
                 "url": "https://github.com/google-gemini/gemini-cli/releases/tag/v0.53.1",
                 "note": "原始发布 / 公告。",
                 "text": "Gemini CLI 发布 v0.53.1：开源终端 AI Agent 的补丁版本 —— 原始发布 / 公告。"
+              }
+            ]
+          },
+          {
+            "key": "相关报道",
+            "tone": "#2b6cb0",
+            "items": [
+              {
+                "source": "GitHub Trending",
+                "title": "Gemini CLI：开源的终端 AI Agent",
+                "url": "https://github.com/google-gemini/gemini-cli",
+                "note": "同事件的其它源头报道。",
+                "text": "Gemini CLI：开源的终端 AI Agent —— 同事件的其它源头报道。"
               }
             ]
           }
@@ -1644,6 +1690,7 @@
         ],
         "videos": []
       },
+      "editorialStructure": "",
       "eventAggregation": {
         "total": 1,
         "groups": [
@@ -1696,6 +1743,7 @@
         ],
         "videos": []
       },
+      "editorialStructure": "",
       "eventAggregation": {
         "total": 1,
         "groups": [
@@ -1749,6 +1797,7 @@
         ],
         "videos": []
       },
+      "editorialStructure": "",
       "eventAggregation": {
         "total": 1,
         "groups": [
@@ -1802,6 +1851,7 @@
         ],
         "videos": []
       },
+      "editorialStructure": "",
       "eventAggregation": {
         "total": 1,
         "groups": [
@@ -1856,8 +1906,9 @@
         ],
         "videos": []
       },
+      "editorialStructure": "source",
       "eventAggregation": {
-        "total": 1,
+        "total": 2,
         "groups": [
           {
             "key": "官方来源",
@@ -1869,6 +1920,19 @@
                 "url": "https://www.modelscope.cn/models/openpangu/openpangu-2.0-pro",
                 "note": "原始发布 / 公告。",
                 "text": "华为发布基于昇腾NPU训练的openPangu-2.0-Pro混合专家模型 —— 原始发布 / 公告。"
+              }
+            ]
+          },
+          {
+            "key": "相关报道",
+            "tone": "#2b6cb0",
+            "items": [
+              {
+                "source": "智东西",
+                "title": "华为开源5050亿参数盘古MoE模型，主攻长上下文智能体",
+                "url": "https://zhidx.com/p/581400.html",
+                "note": "同事件的其它源头报道。",
+                "text": "华为开源5050亿参数盘古MoE模型，主攻长上下文智能体 —— 同事件的其它源头报道。"
               }
             ]
           }
@@ -1910,6 +1974,7 @@
         ],
         "videos": []
       },
+      "editorialStructure": "",
       "eventAggregation": {
         "total": 1,
         "groups": [
