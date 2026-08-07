@@ -68,8 +68,12 @@ def read_payload(site_dir: Path) -> dict[str, Any]:
 def _patch_fields(body: dict[str, Any]) -> dict[str, Any]:
     fields: dict[str, Any] = {}
     if "status" in body:
-        status = source_view.normalize_status(body.get("status"))
-        fields["status"] = status
+        raw = str(body.get("status") or "").strip()
+        # normalize_status 对认不出的值兜底成 paused，用在写入上会把打错的字段
+        # 静默变成停用，所以这里只认白名单。
+        if raw not in source_view.STATUS_LABELS and raw not in source_view.LABEL_TO_STATUS:
+            raise ApiError(f"未知的状态：{raw}")
+        fields["status"] = source_view.normalize_status(raw)
     if "priority" in body:
         priority = str(body.get("priority") or "")
         code = source_view.CN_TO_PRIORITY.get(priority)
@@ -81,11 +85,44 @@ def _patch_fields(body: dict[str, Any]) -> dict[str, Any]:
     return fields
 
 
+def sync_source_table_status(token: str, name: str, status: str) -> None:
+    """把参数表状态同步到信号源表的「自动化状态」，避免两表漂移。
+
+    信号源表是人工清单，不影响采集，同步失败不该让开关操作整体失败。
+    """
+    table_id = getattr(config, "FEISHU_SOURCE_TABLE_ID", "")
+    if not table_id or not name:
+        return
+    label = source_view.STATUS_LABELS.get(status)
+    if not label:
+        return
+    try:
+        for record in feishu.read_all_records_with_ids(token, table_id):
+            fields = record.get("fields") or {}
+            if str(sources.cell(fields.get("名称")) or "").strip() != name.strip():
+                continue
+            if str(sources.cell(fields.get("自动化状态")) or "").strip() == label:
+                return
+            feishu.update_record(
+                token, table_id, str(record.get("record_id") or ""), {"自动化状态": label}
+            )
+            return
+    except feishu.FeishuError:
+        return
+
+
 def apply_patch(record_id: str, body: dict[str, Any]) -> dict[str, Any]:
     # 先校验再取 token：请求本身不合法时应回 400，而不是被飞书的报错盖住。
     fields = _patch_fields(body)
     token = feishu.get_tenant_access_token()
     feishu.update_record(token, config.FEISHU_PARAM_TABLE_ID, record_id, fields)
+    if "status" in fields:
+        name = ""
+        for record in feishu.read_param_records(token):
+            if str(record.get("record_id") or "") == record_id:
+                name = str(sources.cell((record.get("fields") or {}).get("name")) or "")
+                break
+        sync_source_table_status(token, name, str(fields["status"]))
     return {"ok": True}
 
 

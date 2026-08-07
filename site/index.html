@@ -247,6 +247,7 @@ const state = {
   filter: '全部',
   srcTab: '全部',
   srcFormat: '全部',
+  srcQuery: '',
   sortKey: 'impact',
   showScoreBars: true,
   detailRank: null,
@@ -839,6 +840,18 @@ const App = {
   setSort(v){ state.sortKey=v; render(); },
   setSrcTab(t){ state.srcTab=t; render(); },
   setSrcFormat(f){ state.srcFormat=f; render(); },
+  setSrcQuery(v){
+    state.srcQuery = v;
+    render();
+    // 整页重绘会丢焦点，搜索框必须手动接回来，否则打不了第二个字
+    const el = document.getElementById('srcSearch');
+    if(el){ el.focus(); el.setSelectionRange(el.value.length, el.value.length); }
+  },
+  clearSrcQuery(){ state.srcQuery=''; render(); },
+  toggleSrcEnabled(id){
+    const s = state.sources.find(x=>String(x.id)===String(id));
+    if(s) this.setStatus(id, s.status==='active' ? 'paused' : 'active');
+  },
   toggleBars(){ state.showScoreBars=!state.showScoreBars; render(); },
   async reloadSources(){ await loadSources(); },
   canWrite(action){ return (state.sourceMeta.writable||[]).includes(action); },
@@ -2139,13 +2152,16 @@ function sourcesHtml(A){
     </div>`;
 
   // ---------- 来源表：内容分类与信息类型是两个独立维度，交叉筛选 ----------
+  const query = state.srcQuery.trim().toLowerCase();
+  const matchQuery = x => !query || [x.name, x.id, x.url, x.type, x.format, x.fetchMethod]
+    .some(v => String(v||'').toLowerCase().includes(query));
   const matchType = (x, label)=> label==='全部' || x.type===label;
   const matchFormat = (x, label)=> label==='全部' || x.format===label;
   const filterRow = (label, values, current, action, matcher, otherMatch)=>{
     const chips = ['全部', ...values].map(value=>{
       const active = current===value;
-      // 计数按另一维度的当前选择来算，避免点进去是空的
-      const count = state.sources.filter(x=>matcher(x, value) && otherMatch(x)).length;
+      // 计数按另一维度与搜索词的当前结果来算，避免点进去是空的
+      const count = state.sources.filter(x=>matcher(x, value) && otherMatch(x) && matchQuery(x)).length;
       if(!count && value!=='全部' && !active) return '';
       return `<button onclick="App.${action}('${value}')" style="display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 11px; border-radius: 999px; border: 1px solid ${active?A.accentBorder:UI.border}; background: ${active?A.accentSoft:'transparent'}; color: ${active?A.accentBright:UI.text2}; font-size: 12px; font-weight: ${active?700:600}; cursor: pointer;">${esc(value)}<span style="font-size: 10.5px; font-weight: 700; color: ${active?A.accentBright:UI.text3}; font-family: 'Geist Mono', monospace;">${count}</span></button>`;
     }).join('');
@@ -2154,25 +2170,37 @@ function sourcesHtml(A){
       ${chips}
     </div>`;
   };
+  const searchBox = `<div style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px;">
+      <span style="flex: none; width: 62px; font-size: 11.5px; font-weight: 700; color: ${UI.text3};">搜索</span>
+      <div style="position: relative; flex: 1; max-width: 420px;">
+        <input id="srcSearch" value="${esc(state.srcQuery)}" oninput="App.setSrcQuery(this.value)" placeholder="按名称、source_id 或采集地址搜索…" style="width: 100%; height: 34px; padding: 0 ${state.srcQuery?'34px':'13px'} 0 13px; border-radius: 999px; border: 1px solid ${state.srcQuery?A.accentBorder:UI.border}; background: var(--ds-card); color: ${UI.text}; font-size: 13px; outline: none; box-sizing: border-box;" />
+        ${state.srcQuery?`<button onclick="App.clearSrcQuery()" title="清空" style="position: absolute; right: 6px; top: 5px; width: 24px; height: 24px; border-radius: 50%; border: none; background: transparent; color: ${UI.text3}; font-size: 14px; cursor: pointer;">×</button>`:''}
+      </div>
+    </div>`;
   const srcTabsHtml = `
-    ${filterRow('内容分类', typeOrder, state.srcTab, 'setSrcTab', matchType, x=>matchFormat(x, state.srcFormat))}
-    ${filterRow('信息类型', formatOrder, state.srcFormat, 'setSrcFormat', matchFormat, x=>matchType(x, state.srcTab))}`;
+    ${searchBox}
+    ${filterRow('内容分类', typeOrder, state.srcTab, 'setSrcTab', matchType, x=>matchFormat(x, state.srcFormat) && matchQuery(x))}
+    ${filterRow('信息类型', formatOrder, state.srcFormat, 'setSrcFormat', matchFormat, x=>matchType(x, state.srcTab) && matchQuery(x))}`;
 
-  const filtered = state.sources.filter(x => matchType(x, state.srcTab) && matchFormat(x, state.srcFormat));
+  const filtered = state.sources.filter(x => matchType(x, state.srcTab) && matchFormat(x, state.srcFormat) && matchQuery(x));
   const grid = canStatus
-    ? 'minmax(160px,1.6fr) 150px minmax(96px,1fr) 46px 112px minmax(78px,.9fr) 52px 60px 34px'
+    ? 'minmax(160px,1.6fr) 118px minmax(96px,1fr) 46px 112px minmax(78px,.9fr) 52px 60px 34px'
     : 'minmax(160px,1.8fr) 76px minmax(96px,1fr) 46px 52px minmax(78px,.9fr) 52px 60px 34px';
 
   const rowsHtml = filtered.map(row => {
     const rowId = sourceIdArg(row.id);
     const rowTone = STATUS_TONES[row.status] || STATUS_TONES.paused;
-    // 只读时一个徽章就够；三段控件只在能真正写回参数表时才出现。
+    // 只读时一个徽章就够。可写时用开关：开=active 才进正式采集，关=paused 连旧条目也不再进简报。
+    const enabled = row.status==='active';
     const statusCell = canStatus
-      ? `<div style="display: inline-flex; border: 1px solid ${UI.border}; border-radius: 8px; overflow: hidden; width: fit-content; background: rgba(22,19,15,.02);">${statusDefs.map(d=>{
-          const on = row.status===d.code;
-          const tone = STATUS_TONES[d.code] || STATUS_TONES.paused;
-          return `<button onclick="App.setStatus(${rowId},'${d.code}')" title="标记为${d.label}" style="height: 26px; padding: 0 8px; border: none; background: ${on?tone.bg:'transparent'}; color: ${on?tone.color:UI.text3}; font-size: 11.5px; font-weight: ${on?700:600}; cursor: pointer;">${d.label}</button>`;
-        }).join('')}</div>`
+      ? `<div style="display: inline-flex; align-items: center; gap: 8px;">
+          <button onclick="App.toggleSrcEnabled(${rowId})" role="switch" aria-checked="${enabled}" aria-label="${esc(row.name)} 采集开关" title="${enabled?'点击停用：停止采集，且下一期简报不再收录该源':'点击启用：下一期开始正式采集该源'}" style="position: relative; flex: none; width: 38px; height: 21px; padding: 0; border-radius: 999px; border: 1px solid ${enabled?A.accentBorder:UI.border}; background: ${enabled?A.accentBright:'rgba(22,19,15,.06)'}; cursor: pointer;">
+            <span style="position: absolute; top: 2px; left: ${enabled?'19px':'2px'}; width: 15px; height: 15px; border-radius: 50%; background: #fff; box-shadow: 0 1px 2px rgba(0,0,0,.25);"></span>
+          </button>
+          ${row.status==='experimental'
+            ? `<span title="链路尚未验收，正式流水线不跑；诊断通过后再打开开关" style="font-size: 11.5px; font-weight: 700; color: ${rowTone.color};">${esc(row.statusLabel)}</span>`
+            : `<button onclick="App.setStatus(${rowId},'experimental')" title="改过配置后标记为待测，正式流水线暂不跑" style="padding: 0; border: none; background: transparent; color: ${rowTone.color}; font-size: 11.5px; font-weight: 700; cursor: pointer; border-bottom: 1px dotted ${UI.border2};">${esc(row.statusLabel)}</button>`}
+        </div>`
       : `<span style="justify-self: start; padding: 3px 10px; border-radius: 999px; border: 1px solid ${rowTone.border}; background: ${rowTone.bg}; color: ${rowTone.color}; font-size: 11.5px; font-weight: 700;">${esc(row.statusLabel)}</span>`;
     const priorityCell = canPriority
       ? `<div style="display: inline-flex; border: 1px solid ${UI.border}; border-radius: 8px; overflow: hidden; width: fit-content; background: rgba(22,19,15,.02);">${priorityOrder.map(p=>{ const on=row.priority===p; return `<button onclick="App.setPriority(${rowId},'${p}')" title="设为${p}优先级" style="height: 26px; padding: 0 9px; border: none; background: ${on?A.accentSoft:'transparent'}; color: ${on?A.accentBright:UI.text3}; font-size: 12px; font-weight: ${on?700:600}; cursor: pointer;">${p}</button>`; }).join('')}</div>`
@@ -2194,7 +2222,7 @@ function sourcesHtml(A){
     </div>`;
   }).join('');
 
-  const emptyHtml = filtered.length===0 ? `<div style="padding: 36px 20px; text-align: center; font-size: 13px; color: ${UI.text3};">${state.sources.length?'当前筛选组合下没有信号源':'尚未读取到信号源配置'}</div>` : '';
+  const emptyHtml = filtered.length===0 ? `<div style="padding: 36px 20px; text-align: center; font-size: 13px; color: ${UI.text3};">${!state.sources.length?'尚未读取到信号源配置':query?`没有匹配「${esc(state.srcQuery)}」的信号源`:'当前筛选组合下没有信号源'}</div>` : '';
 
   const inputStyle = `height: 36px; padding: 0 12px; border-radius: 8px; border: 1px solid ${UI.border}; background: var(--ds-card); color: ${UI.text}; font-size: 13px; outline: none;`;
   const selStyle = `height: 36px; padding: 0 10px; border-radius: 8px; border: 1px solid ${UI.border}; background: var(--ds-card); color: ${UI.text}; font-size: 13px;`;
@@ -2262,13 +2290,13 @@ function sourcesHtml(A){
 
       <section class="src-table" style="border: 1px solid ${UI.border}; border-radius: 12px; overflow: hidden; background: ${UI.panel}; position: relative;">
         <div style="display: grid; grid-template-columns: ${grid}; padding: 0 20px; height: 44px; align-items: center; background: rgba(22,19,15,.03); border-bottom: 1px solid ${UI.border}; font-size: 11px; font-weight: 700; letter-spacing: .06em; color: ${UI.text3};">
-          <span>来源名称</span><span>接入状态</span><span>载体 / 方式</span><span>层级</span><span>优先级</span><span>最近采集</span><span style="text-align: right;">入库</span><span style="text-align: right;">入选</span><span></span>
+          <span>来源名称</span><span>${canStatus?'采集开关':'接入状态'}</span><span>载体 / 方式</span><span>层级</span><span>优先级</span><span>最近采集</span><span style="text-align: right;">入库</span><span style="text-align: right;">入选</span><span></span>
         </div>
         ${rowsHtml}
         ${emptyHtml}
       </section>
 
-      <p style="margin: 20px 0 0; font-size: 12px; line-height: 1.75; color: ${UI.text3};">「入库」是该源上一轮采集写入的条数，「入选」是近 ${state.briefWindowDays||7} 期简报里真正选中的条数，两者口径不同。${canStatus?'状态与优先级的修改会直接写回飞书参数表。':'当前为只读快照，修改需在本机运行配置台。'}</p>
+      <p style="margin: 20px 0 0; font-size: 12px; line-height: 1.75; color: ${UI.text3};">「入库」是该源上一轮采集写入的条数，「入选」是近 ${state.briefWindowDays||7} 期简报里真正选中的条数，两者口径不同。${canStatus?'开关与优先级会直接写回飞书参数表：关掉后该源既停止采集，已入库的旧条目也不会再进下一期简报。':'当前为只读快照，修改需在本机运行配置台。'}</p>
     </div>
   </main>`;
 }
