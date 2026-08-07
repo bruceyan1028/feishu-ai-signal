@@ -140,7 +140,8 @@ deep_analysis_cn 必须使用以下政策专用结构，每个标题独占一行
 必须沿用原文已有的小标题、论证顺序和核心观点，不得套用“核心内容 / 关键细节 / 价值与影响 / 行动建议”等统一模板。
 只保留3-6个最有信息量的原文小节；允许整节删除重复、宣传、旁枝和低信息内容，但不得改变保留章节的先后顺序或原意。
 每节压缩为1-2个短段，约120-220字；不要逐段复述，不要保留仅用于行文过渡的句子。
-每个保留的小标题使用“## 原文小标题”单独一行，下一行直接写精编正文；各节之间空一行。
+每个保留的小标题单独一行，写成“## 中文小标题 || 原文小标题”，下一行直接写精编正文；各节之间空一行。
+中文小标题是对原文小标题的准确翻译或等价表达，不要改写成自己的概括；原文小标题本身就是中文时，直接写“## 原文小标题”，不要重复两遍。
 原文中的事实与作者判断要保持可区分；有明显事实疑点时可在对应小节末尾用一句话克制标注，不另建固定的风险或行动章节。"""
     return """deep_analysis_cn 写 800-1400 字；短原文可缩至500字，但不要用空话凑字数。
 deep_analysis_cn 必须使用以下结构，每个标题独占一行，标题与正文之间换行，各节之间空一行：
@@ -382,6 +383,15 @@ _EDITORIAL_HEADING_RE = re.compile(r"(?m)^##\s+([^\n]{2,80})\s*$")
 _EDITORIAL_NOISE_HEADING_RE = re.compile(
     r"^(?:相关文章|推荐阅读|热门|标签|关于作者|联系我们|相关阅读|更多内容)$"
 )
+_CJK_RE = re.compile(r"[\u4e00-\u9fff]")
+
+
+def editorial_headings_need_cn(text: str) -> bool:
+    """沿用原文结构时，英文小标题必须配中文；缺中文的存量解读要重新生成。"""
+    return any(
+        not _CJK_RE.search(match.group(1))
+        for match in _EDITORIAL_HEADING_RE.finditer(text or "")
+    )
 
 
 def editorial_structure_mode(fields: dict[str, Any], text: str = "") -> bool:
@@ -785,7 +795,13 @@ def _ensure_deep_analysis(
         or scalar(fields.get("AI深度解读"))
         or ""
     ).strip()
-    if cached and (not preserve_structure or _EDITORIAL_HEADING_RE.search(cached)):
+    if cached and (
+        not preserve_structure
+        or (
+            _EDITORIAL_HEADING_RE.search(cached)
+            and not editorial_headings_need_cn(cached)
+        )
+    ):
         analysis["deep_analysis_cn"] = cached
         if preserve_structure:
             analysis["editorial_structure"] = "source"

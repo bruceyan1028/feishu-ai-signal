@@ -947,6 +947,16 @@ function computeAccents(){
   };
 }
 
+// 精编小标题格式为「中文 || 原文」。存量解读只有英文标题，此时先照原样显示，
+// 等 daily 重新生成后自然补上中文。
+function splitBilingualHeading(raw){
+  const text = String(raw||'').trim();
+  const parts = text.split(/\s*(?:\|\||｜)\s*/).map(p=>p.trim()).filter(Boolean);
+  if(parts.length < 2) return [text, ''];
+  const [first, ...rest] = parts;
+  const second = rest.join(' ');
+  return first===second ? [first, ''] : [first, second];
+}
 function previewBadge(label='仅预览'){
   return `<span style="display:inline-flex;align-items:center;height:18px;padding:0 6px;border:1px solid #b87812;background:#fff4d8;color:#8a5706;font-family:'Geist Mono',ui-monospace,Menlo,monospace;font-size:9px;font-weight:800;letter-spacing:.04em;line-height:1;">${esc(label)}</span>`;
 }
@@ -1746,8 +1756,13 @@ function articleBody(A, s){
     const section = para.match(/^【([^】]+)】[：:]?\s*([\s\S]*)$/);
     if(sourceSection){
       sectionCount += 1;
+      // 沿用原文小标题时中文在上、原文小标题在下；只有中文时不留空行
+      const [headCn, headOriginal] = splitBilingualHeading(sourceSection[1]);
       blocks.push(`<section style="margin:30px 0 32px;">
-        <h2 style="margin:0 0 14px;padding:10px 13px;border-left:4px solid ${A.accent};background:${A.accentFaint};font-size:19px;line-height:1.5;letter-spacing:-.01em;color:${UI.text};">${esc(sourceSection[1].trim())}</h2>
+        <div style="margin:0 0 14px;padding:10px 13px;border-left:4px solid ${A.accent};background:${A.accentFaint};">
+          <h2 style="margin:0;font-size:19px;line-height:1.5;letter-spacing:-.01em;color:${UI.text};">${esc(headCn)}</h2>
+          ${headOriginal?`<div style="margin-top:4px;font-size:13px;line-height:1.5;color:${UI.text3};">${esc(headOriginal)}</div>`:''}
+        </div>
         ${sourceSection[2].trim()?`<div style="font-size:15px;line-height:2.08;color:${UI.text2};${proseStyle}">${zhProseHtml(esc(sourceSection[2].trim()).replace(/\n/g,'<br>'))}</div>`:''}
       </section>`);
     } else if(section){

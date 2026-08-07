@@ -657,9 +657,57 @@ class DeepAnalysisTest(unittest.TestCase):
             preserve_structure=True,
         )
         self.assertIn("沿用原文已有的小标题", requirement)
-        self.assertIn("## 原文小标题", requirement)
+        self.assertIn("## 中文小标题 || 原文小标题", requirement)
         self.assertIn("硬上限 1400 字", requirement)
         self.assertNotIn("【核心内容】", requirement)
+
+    def test_english_only_headings_trigger_rebuild_for_chinese(self):
+        """英文小标题必须配中文，存量解读缺中文时要重新生成而不是照搬。"""
+        section = "该章节包含足够多的事实和分析。" * 40
+        fields = {
+            "来源类型": "公众号",
+            "source_id": "nvidia-blog",
+            "来源": "NVIDIA Blog",
+            "原文": (
+                f"## World Models Are the Foundation\n\n{section}\n\n"
+                f"## Cosmos 3: The Frontier Model\n\n{section}\n\n"
+                f"## How Developers Put It to Work\n\n{section}"
+            ),
+            "AI深度解读": (
+                "## World Models Are the Foundation\n旧版只有英文小标题。\n\n"
+                "## Cosmos 3: The Frontier Model\n旧版只有英文小标题。"
+            ),
+        }
+        self.assertTrue(daily.editorial_headings_need_cn(fields["AI深度解读"]))
+        rebuilt = (
+            "## 世界模型是物理 AI 的基础 || World Models Are the Foundation\n精编。\n\n"
+            "## Cosmos 3：前沿模型 || Cosmos 3: The Frontier Model\n精编。"
+        )
+        self.assertFalse(daily.editorial_headings_need_cn(rebuilt))
+        analysis = {"summary_cn": "摘要", "why": "重要"}
+        with mock.patch.object(
+            daily.report, "_llm_json", return_value={"deep_analysis_cn": rebuilt}
+        ):
+            updates = daily._ensure_deep_analysis(fields, analysis)
+        self.assertEqual(updates, {"AI深度解读": rebuilt})
+
+    def test_chinese_headings_are_not_rebuilt(self):
+        section = "该章节包含足够多的事实和分析。" * 40
+        fields = {
+            "来源类型": "公众号",
+            "source_id": "huxiu",
+            "来源": "虎嗅",
+            "原文": (
+                f"## 直接原因\n\n{section}\n\n"
+                f"## 深层原因\n\n{section}\n\n"
+                f"## 行业影响\n\n{section}"
+            ),
+            "AI深度解读": "## 直接原因\n精编。\n\n## 深层原因\n精编。\n\n## 行业影响\n精编。",
+        }
+        analysis = {"summary_cn": "摘要", "why": "重要"}
+        with mock.patch.object(daily.report, "_llm_json") as llm:
+            self.assertEqual(daily._ensure_deep_analysis(fields, analysis), {})
+        llm.assert_not_called()
 
     def test_structured_editorial_is_compacted_without_reordering_headings(self):
         sections = "\n\n".join(
