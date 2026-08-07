@@ -9,7 +9,7 @@ from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any
 
-from . import cluster, config, daily, feishu, paper_fulltext, policy_document, rss
+from . import cluster, config, daily, feishu, paper_fulltext, policy_document, rss, source_view
 
 CN_TZ = timezone(timedelta(hours=8))
 ROOT = Path(__file__).resolve().parent.parent
@@ -195,7 +195,11 @@ def curate_web_media(briefs: list[dict[str, Any]]) -> None:
         signal["imageUrl"] = cover
 
 
-def build_site(briefs: list[dict[str, Any]], site_dir: Path | str = ROOT / "site") -> Path:
+def build_site(
+    briefs: list[dict[str, Any]],
+    site_dir: Path | str = ROOT / "site",
+    params: list[dict[str, Any]] | None = None,
+) -> Path:
     if not briefs:
         raise RuntimeError("没有可发布的已发布简报")
     site = Path(site_dir)
@@ -284,6 +288,15 @@ def build_site(briefs: list[dict[str, Any]], site_dir: Path | str = ROOT / "site
         json.dumps(briefs[0], ensure_ascii=False, indent=2),
         encoding="utf-8",
     )
+    # 公开站只读快照：writable 为空，前端据此把开关渲染成不可点。
+    (data_dir / "sources.json").write_text(
+        json.dumps(
+            source_view.build_payload(params or [], briefs=briefs, writable=False),
+            ensure_ascii=False,
+            indent=2,
+        ),
+        encoding="utf-8",
+    )
     (site / ".nojekyll").write_text("", encoding="utf-8")
     return site
 
@@ -315,7 +328,7 @@ def run() -> int:
         )
         briefs = [current, *[item for item in briefs if item["date"] != current["date"]]][:7]
     curate_web_media(briefs)
-    site = build_site(briefs, args.site_dir)
+    site = build_site(briefs, args.site_dir, params=params)
     print(site)
     return 0
 

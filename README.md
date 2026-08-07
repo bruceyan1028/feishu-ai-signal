@@ -102,7 +102,25 @@ python -m http.server 4173 --directory site
 
 打开 <http://localhost:4173> 查看。
 
-### 6.（可选）发送飞书卡片
+### 6. 信号源页面与本地配置台
+
+站点的「信号源」页读的是 `site/data/sources.json`，由 `src.publish` 随简报一起导出，
+内容是参数表里 108 个源的状态、层级、优先级、最近采集时间，以及各源近 7 期真正进入
+简报的条数。筛选规则（`keyword_regex`、`min_content_chars`、`dedup_key`、`extra_config`）
+不会导出——站点是公开的。
+
+公开站上这一页只读。要在网页里直接改配置，在本机启动配置台：
+
+```bash
+python -m src.sources_api            # http://127.0.0.1:8787
+python -m src.source_view --seed     # 无飞书凭据时，用仓库快照生成 sources.json 预览
+```
+
+配置台只监听回环地址（它持有飞书凭据），提供 `/api/sources` 的读写，改动直接写回一级
+参数表。采集本身仍然跑在 GitHub Actions 上，配置台不参与定时任务。新增的源一律先落
+`experimental`，诊断通过后再在页面上改成「已接入」。
+
+### 7.（可选）发送飞书卡片
 
 ```bash
 python -m src.notify --input output/daily-brief.json

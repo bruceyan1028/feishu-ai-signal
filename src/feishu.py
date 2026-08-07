@@ -687,6 +687,21 @@ def create_record(token: str, table_id: str, fields: dict[str, Any]) -> dict[str
     return (data.get("data") or {}).get("record") or {}
 
 
+def delete_record(token: str, table_id: str, record_id: str) -> None:
+    url = (
+        f"{config.FEISHU_HOST}/open-apis/bitable/v1/apps/{config.FEISHU_BASE_ID}"
+        f"/tables/{table_id}/records/{record_id}"
+    )
+    resp = _SESSION.delete(
+        url,
+        headers={"Authorization": f"Bearer {token}"},
+        timeout=30,
+    )
+    data = resp.json()
+    if data.get("code") != 0:
+        raise FeishuError(f"Feishu delete record failed: {data.get('code')} {data.get('msg')}")
+
+
 def update_record(
     token: str, table_id: str, record_id: str, fields: dict[str, Any]
 ) -> dict[str, Any]:
