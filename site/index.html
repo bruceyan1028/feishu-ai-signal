@@ -246,6 +246,7 @@ const state = {
   page: 'brief',
   filter: '全部',
   srcTab: '全部',
+  srcFormat: '全部',
   sortKey: 'impact',
   showScoreBars: true,
   detailRank: null,
@@ -837,6 +838,7 @@ const App = {
   setFilter(f){ state.filter=f; render(); },
   setSort(v){ state.sortKey=v; render(); },
   setSrcTab(t){ state.srcTab=t; render(); },
+  setSrcFormat(f){ state.srcFormat=f; render(); },
   toggleBars(){ state.showScoreBars=!state.showScoreBars; render(); },
   async reloadSources(){ await loadSources(); },
   canWrite(action){ return (state.sourceMeta.writable||[]).includes(action); },
@@ -2018,10 +2020,7 @@ function sourcesHtml(A){
   const silentCount = state.sources.filter(s=>s.status==='active' && !s.briefCount).length;
   const sync = state.sourceSync;
   const syncColor = sync.status==='connected' ? 'var(--ds-good)' : sync.status==='error' ? 'var(--ds-crit)' : sync.status==='loading' ? 'var(--ds-warn)' : UI.text3;
-  const sourceTypes = state.sourceMeta.types.length ? state.sourceMeta.types : TYPE_ORDER;
-  const typeOrder = state.sources.some(source=>source.type==='内部文档') && !sourceTypes.includes('内部文档')
-    ? [...sourceTypes, '内部文档']
-    : sourceTypes;
+  const typeOrder = state.sourceMeta.types.length ? state.sourceMeta.types : TYPE_ORDER;
   const formatOrder = state.sourceMeta.formats.length ? state.sourceMeta.formats : FORMAT_ORDER;
   const priorityOrder = state.sourceMeta.priorities.length ? state.sourceMeta.priorities : ['高','中','低'];
   const statusDefs = state.sourceMeta.statuses?.length
@@ -2032,7 +2031,6 @@ function sourcesHtml(A){
   const canPriority = writable.includes('priority');
   const canDelete = writable.includes('delete');
   const canCreate = writable.includes('create');
-  const sourceTabs = [{label:'全部',match:null}, ...typeOrder.map(type=>({label:type,match:[type]}))];
   const [formIdLabel, formIdPlaceholder] = idLabels[state.formFormat] || idLabels['纯网页'];
 
   const typeOpts = typeOrder.map(v=>`<option value="${v}" ${state.formType===v?'selected':''}>${v}</option>`).join('');
@@ -2125,18 +2123,30 @@ function sourcesHtml(A){
       ${chartCard('接入状态分布','已接入才会进正式采集，待测源默认不跑', `<div style="display: flex; flex-direction: column; gap: 11px;">${barChart(statusItems, '#199e70')}</div>`)}
     </div>`;
 
-  // ---------- 来源表 ----------
-  const srcTabsHtml = sourceTabs.map(d => {
-    const active = state.srcTab===d.label;
-    const count = d.match ? state.sources.filter(x=>d.match.includes(x.type)).length : state.sources.length;
-    return `<button onclick="App.setSrcTab('${d.label}')" style="display: inline-flex; align-items: center; gap: 7px; height: 38px; padding: 0 15px; border-radius: 10px 10px 0 0; border: 1px solid ${active?UI.border:'transparent'}; border-bottom: none; background: ${active?'rgba(22,19,15,.06)':'transparent'}; color: ${active?UI.text:UI.text3}; font-size: 12.5px; font-weight: 600; cursor: pointer; position: relative; top: 1px;">${esc(d.label)}<span style="font-size: 10.5px; font-weight: 700; padding: 1px 7px; border-radius: 999px; background: ${active?A.accentSoft:'rgba(22,19,15,.06)'}; color: ${active?A.accentBright:UI.text3}; font-family: 'Geist Mono', monospace;">${count}</span></button>`;
-  }).join('');
+  // ---------- 来源表：内容分类与信息类型是两个独立维度，交叉筛选 ----------
+  const matchType = (x, label)=> label==='全部' || x.type===label;
+  const matchFormat = (x, label)=> label==='全部' || x.format===label;
+  const filterRow = (label, values, current, action, matcher, otherMatch)=>{
+    const chips = ['全部', ...values].map(value=>{
+      const active = current===value;
+      // 计数按另一维度的当前选择来算，避免点进去是空的
+      const count = state.sources.filter(x=>matcher(x, value) && otherMatch(x)).length;
+      if(!count && value!=='全部' && !active) return '';
+      return `<button onclick="App.${action}('${value}')" style="display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 11px; border-radius: 999px; border: 1px solid ${active?A.accentBorder:UI.border}; background: ${active?A.accentSoft:'transparent'}; color: ${active?A.accentBright:UI.text2}; font-size: 12px; font-weight: ${active?700:600}; cursor: pointer;">${esc(value)}<span style="font-size: 10.5px; font-weight: 700; color: ${active?A.accentBright:UI.text3}; font-family: 'Geist Mono', monospace;">${count}</span></button>`;
+    }).join('');
+    return `<div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 10px;">
+      <span style="flex: none; width: 62px; font-size: 11.5px; font-weight: 700; color: ${UI.text3};">${label}</span>
+      ${chips}
+    </div>`;
+  };
+  const srcTabsHtml = `
+    ${filterRow('内容分类', typeOrder, state.srcTab, 'setSrcTab', matchType, x=>matchFormat(x, state.srcFormat))}
+    ${filterRow('信息类型', formatOrder, state.srcFormat, 'setSrcFormat', matchFormat, x=>matchType(x, state.srcTab))}`;
 
-  const activeDef = sourceTabs.find(d=>d.label===state.srcTab) || sourceTabs[0];
-  const filtered = state.sources.filter(x => !activeDef.match || activeDef.match.includes(x.type));
+  const filtered = state.sources.filter(x => matchType(x, state.srcTab) && matchFormat(x, state.srcFormat));
   const grid = canStatus
-    ? 'minmax(150px,1.5fr) 150px minmax(96px,1fr) 46px 112px minmax(78px,.9fr) 52px 60px 34px'
-    : 'minmax(150px,1.7fr) 76px minmax(96px,1fr) 46px 52px minmax(78px,.9fr) 52px 60px 34px';
+    ? 'minmax(160px,1.6fr) 150px minmax(96px,1fr) 46px 112px minmax(78px,.9fr) 52px 60px 34px'
+    : 'minmax(160px,1.8fr) 76px minmax(96px,1fr) 46px 52px minmax(78px,.9fr) 52px 60px 34px';
 
   const rowsHtml = filtered.map(row => {
     const rowId = sourceIdArg(row.id);
@@ -2155,10 +2165,9 @@ function sourcesHtml(A){
     const briefTone = row.briefCount>0 ? UI.text : UI.text3;
     return `
     <div class="src-row" style="display: grid; grid-template-columns: ${grid}; padding: 0 20px; min-height: 58px; align-items: center; border-bottom: 1px solid ${UI.hair}; opacity: ${row.status==='paused'?'.55':'1'};">
-      <div style="display: flex; flex-direction: column; gap: 2px; padding-right: 12px;">
-        <span style="font-size: 13.5px; font-weight: 600; color: ${UI.text};">${esc(row.name)}</span>
-        <span title="${esc(row.url)}" style="font-size: 11px; color: ${UI.text3}; font-family: 'Geist Mono', ui-monospace, Menlo, monospace; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${esc(row.url||row.id)}</span>
-      </div>
+      ${row.url
+        ? `<a href="${esc(row.url)}" target="_blank" rel="noopener noreferrer" title="${esc(row.url)}" style="padding-right: 12px; font-size: 13.5px; font-weight: 600; color: ${UI.text}; text-decoration: none; border-bottom: 1px solid transparent;" onmouseover="this.style.color='${A.accentBright}';this.style.borderBottomColor='${A.accentBorder}'" onmouseout="this.style.color='${UI.text}';this.style.borderBottomColor='transparent'">${esc(row.name)}</a>`
+        : `<span style="padding-right: 12px; font-size: 13.5px; font-weight: 600; color: ${UI.text};">${esc(row.name)}</span>`}
       ${statusCell}
       <span style="font-size: 12px; color: ${UI.text2}; display: inline-flex; flex-direction: column; gap: 3px; align-items: flex-start;"><span style="padding: 3px 10px; border-radius: 999px; border: 1px solid ${UI.border}; background: rgba(22,19,15,.03);">${esc(row.format)}</span><span style="font-size: 10px; color: ${UI.text3};">${esc(row.fetchMethod)}</span></span>
       <span style="font-size: 11.5px; font-weight: 700; color: ${UI.text3}; font-family: 'Geist Mono', ui-monospace, Menlo, monospace;">${esc(row.tier||'—')}</span>
@@ -2170,7 +2179,7 @@ function sourcesHtml(A){
     </div>`;
   }).join('');
 
-  const emptyHtml = filtered.length===0 ? `<div style="padding: 36px 20px; text-align: center; font-size: 13px; color: ${UI.text3};">${state.sources.length?'该维度下暂无信号源':'尚未读取到信号源配置'}</div>` : '';
+  const emptyHtml = filtered.length===0 ? `<div style="padding: 36px 20px; text-align: center; font-size: 13px; color: ${UI.text3};">${state.sources.length?'当前筛选组合下没有信号源':'尚未读取到信号源配置'}</div>` : '';
 
   const inputStyle = `height: 36px; padding: 0 12px; border-radius: 8px; border: 1px solid ${UI.border}; background: var(--ds-card); color: ${UI.text}; font-size: 13px; outline: none;`;
   const selStyle = `height: 36px; padding: 0 10px; border-radius: 8px; border: 1px solid ${UI.border}; background: var(--ds-card); color: ${UI.text}; font-size: 13px;`;
@@ -2234,7 +2243,7 @@ function sourcesHtml(A){
         </div>
       </section>` : ''}
 
-      <div style="display: flex; align-items: flex-end; gap: 4px; padding: 0 4px; flex-wrap: wrap;">${srcTabsHtml}</div>
+      <div style="padding: 0 4px 6px;">${srcTabsHtml}</div>
 
       <section class="src-table" style="border: 1px solid ${UI.border}; border-radius: 12px; overflow: hidden; background: ${UI.panel}; position: relative;">
         <div style="display: grid; grid-template-columns: ${grid}; padding: 0 20px; height: 44px; align-items: center; background: rgba(22,19,15,.03); border-bottom: 1px solid ${UI.border}; font-size: 11px; font-weight: 700; letter-spacing: .06em; color: ${UI.text3};">
