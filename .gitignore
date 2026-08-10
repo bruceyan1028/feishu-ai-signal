@@ -1,4 +1,7 @@
 .env
+# 改配置时顺手留下的备份同样带着真实凭据，仓库是公开的
+.env.*
+!.env.example
 .cursor/mcp.json
 # 含真实 base / 应用 / open_id，仓库公开，不入库
 .cursor/rules/feishu-base.mdc
