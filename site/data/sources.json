@@ -1,11 +1,11 @@
 {
-  "generatedAt": "2026-08-07 11:54",
-  "origin": "seed",
+  "generatedAt": "2026-08-10 13:23",
+  "origin": "feishu",
   "briefWindowDays": 7,
   "sources": [
     {
       "id": "anthropic-news",
-      "recordId": "",
+      "recordId": "recvqgCxALug6G",
       "name": "Anthropic News",
       "url": "https://www.anthropic.com/news",
       "status": "active",
@@ -17,15 +17,15 @@
       "priority": "高",
       "fetchMethod": "Scrape",
       "lookback": "24h",
-      "last": "",
+      "last": "08-10 11:50",
       "perDay": 0,
-      "briefCount": 0
+      "briefCount": 1
     },
     {
       "id": "youtube-anthropic",
-      "recordId": "",
+      "recordId": "recvqDj7NOOP90",
       "name": "Anthropic YouTube",
-      "url": "https://www.youtube.com/channel/UCrDwWp7EBBv4NwvScIpBDOA",
+      "url": "Anthropic YouTube",
       "status": "active",
       "statusLabel": "已接入",
       "on": true,
@@ -35,13 +35,13 @@
       "priority": "高",
       "fetchMethod": "Media",
       "lookback": "72h",
-      "last": "",
+      "last": "08-10 11:50",
       "perDay": 0,
       "briefCount": 0
     },
     {
       "id": "artificial-analysis",
-      "recordId": "",
+      "recordId": "recvqgCxALcBuW",
       "name": "Artificial Analysis",
       "url": "https://artificialanalysis.ai/articles",
       "status": "active",
@@ -59,7 +59,7 @@
     },
     {
       "id": "bytedance-seed",
-      "recordId": "",
+      "recordId": "recvqgCxALvyeR",
       "name": "ByteDance Seed",
       "url": "https://seed.bytedance.com/en/",
       "status": "active",
@@ -71,13 +71,13 @@
       "priority": "高",
       "fetchMethod": "Scrape",
       "lookback": "7d",
-      "last": "",
+      "last": "08-10 11:50",
       "perDay": 0,
-      "briefCount": 6
+      "briefCount": 7
     },
     {
       "id": "github-trending",
-      "recordId": "",
+      "recordId": "recvqgCxAL2Xty",
       "name": "GitHub Trending",
       "url": "https://github.com/trending",
       "status": "active",
@@ -89,13 +89,13 @@
       "priority": "高",
       "fetchMethod": "Scrape",
       "lookback": "30d",
-      "last": "",
+      "last": "08-10 11:50",
       "perDay": 0,
-      "briefCount": 22
+      "briefCount": 23
     },
     {
       "id": "gcp-ai-infra",
-      "recordId": "",
+      "recordId": "recvqK1gsmWRXe",
       "name": "Google Cloud AI Blog",
       "url": "https://cloudblog.withgoogle.com/products/ai-machine-learning/rss/",
       "status": "active",
@@ -107,13 +107,13 @@
       "priority": "高",
       "fetchMethod": "RSS",
       "lookback": "24h",
-      "last": "",
+      "last": "08-10 11:50",
       "perDay": 0,
-      "briefCount": 4
+      "briefCount": 2
     },
     {
       "id": "google-deepmind-blog",
-      "recordId": "",
+      "recordId": "recvqgCxALl5f6",
       "name": "Google DeepMind Blog",
       "url": "https://deepmind.google/blog/rss.xml",
       "status": "active",
@@ -125,15 +125,15 @@
       "priority": "高",
       "fetchMethod": "RSS",
       "lookback": "24h",
-      "last": "",
+      "last": "08-10 11:50",
       "perDay": 0,
       "briefCount": 0
     },
     {
       "id": "youtube-google-deepmind",
-      "recordId": "",
+      "recordId": "recvqDj8poqwOp",
       "name": "Google DeepMind YouTube",
-      "url": "https://www.youtube.com/channel/UCP7jMXSY2xbc3KCAE0MHQ-A",
+      "url": "Google DeepMind YouTube",
       "status": "active",
       "statusLabel": "已接入",
       "on": true,
@@ -143,13 +143,13 @@
       "priority": "高",
       "fetchMethod": "Media",
       "lookback": "72h",
-      "last": "",
+      "last": "08-10 11:50",
       "perDay": 0,
-      "briefCount": 2
+      "briefCount": 1
     },
     {
       "id": "hf-papers-trending",
-      "recordId": "",
+      "recordId": "recvqgCxALDDbc",
       "name": "HF Papers Trending",
       "url": "https://huggingface.co/papers/trending",
       "status": "active",
@@ -161,13 +161,13 @@
       "priority": "高",
       "fetchMethod": "Scrape",
       "lookback": "7d",
-      "last": "",
+      "last": "08-10 11:50",
       "perDay": 0,
-      "briefCount": 13
+      "briefCount": 12
     },
     {
       "id": "jmlr",
-      "recordId": "",
+      "recordId": "recvqgCxALA93q",
       "name": "JMLR",
       "url": "https://jmlr.org/jmlr.xml",
       "status": "active",
@@ -179,13 +179,13 @@
       "priority": "高",
       "fetchMethod": "RSS",
       "lookback": "每周",
-      "last": "",
+      "last": "08-10 11:50",
       "perDay": 0,
-      "briefCount": 5
+      "briefCount": 3
     },
     {
       "id": "meta-ai-blog",
-      "recordId": "",
+      "recordId": "recvqgCxALWDLa",
       "name": "Meta AI Blog",
       "url": "https://ai.meta.com/blog/",
       "status": "active",
@@ -197,13 +197,13 @@
       "priority": "高",
       "fetchMethod": "Scrape",
       "lookback": "24h",
-      "last": "",
+      "last": "08-10 11:50",
       "perDay": 0,
       "briefCount": 0
     },
     {
       "id": "meta-newsroom-ai",
-      "recordId": "",
+      "recordId": "recvqgCxALaMu1",
       "name": "Meta Newsroom AI",
       "url": "https://about.fb.com/news/feed/",
       "status": "active",
@@ -215,15 +215,15 @@
       "priority": "高",
       "fetchMethod": "RSS",
       "lookback": "24h",
-      "last": "",
+      "last": "08-10 11:50",
       "perDay": 0,
       "briefCount": 0
     },
     {
       "id": "youtube-mistral-ai",
-      "recordId": "",
+      "recordId": "recvqDj7NQS5H7",
       "name": "Mistral AI YouTube",
-      "url": "https://www.youtube.com/channel/UC5-pBdfdA3KUo-vq72l-umA",
+      "url": "Mistral AI YouTube",
       "status": "active",
       "statusLabel": "已接入",
       "on": true,
@@ -233,13 +233,13 @@
       "priority": "高",
       "fetchMethod": "Media",
       "lookback": "72h",
-      "last": "",
+      "last": "08-10 11:50",
       "perDay": 0,
-      "briefCount": 0
+      "briefCount": 1
     },
     {
       "id": "modelscope-home",
-      "recordId": "",
+      "recordId": "recvqgCxALkK8P",
       "name": "ModelScope 首页新模型",
       "url": "https://modelscope.cn/home",
       "status": "active",
@@ -251,13 +251,13 @@
       "priority": "高",
       "fetchMethod": "Scrape",
       "lookback": "7d",
-      "last": "",
+      "last": "08-10 11:50",
       "perDay": 0,
-      "briefCount": 12
+      "briefCount": 11
     },
     {
       "id": "nvidia-blog",
-      "recordId": "",
+      "recordId": "recvqK1gsm8StY",
       "name": "NVIDIA Blog",
       "url": "https://blogs.nvidia.com/feed/",
       "status": "active",
@@ -269,15 +269,15 @@
       "priority": "高",
       "fetchMethod": "RSS",
       "lookback": "24h",
-      "last": "",
+      "last": "08-10 11:50",
       "perDay": 0,
       "briefCount": 1
     },
     {
       "id": "youtube-nvidia",
-      "recordId": "",
+      "recordId": "recvqDj82mq6LO",
       "name": "NVIDIA YouTube",
-      "url": "https://www.youtube.com/channel/UCHuiy8bXnmK5nisYHUd1J5g",
+      "url": "NVIDIA YouTube",
       "status": "active",
       "statusLabel": "已接入",
       "on": true,
@@ -287,13 +287,13 @@
       "priority": "高",
       "fetchMethod": "Media",
       "lookback": "72h",
-      "last": "",
+      "last": "08-10 11:50",
       "perDay": 0,
-      "briefCount": 4
+      "briefCount": 9
     },
     {
       "id": "nature-computational-science",
-      "recordId": "",
+      "recordId": "recvqgCxALBzfb",
       "name": "Nature Computational Science",
       "url": "https://www.nature.com/natcomputsci.rss",
       "status": "active",
@@ -305,13 +305,13 @@
       "priority": "高",
       "fetchMethod": "RSS",
       "lookback": "每周",
-      "last": "",
+      "last": "08-10 11:50",
       "perDay": 0,
       "briefCount": 0
     },
     {
       "id": "nature-machine-intelligence",
-      "recordId": "",
+      "recordId": "recvqgCxALEf8D",
       "name": "Nature Machine Intelligence",
       "url": "https://www.nature.com/natmachintell.rss",
       "status": "active",
@@ -323,13 +323,13 @@
       "priority": "高",
       "fetchMethod": "RSS",
       "lookback": "每周",
-      "last": "",
+      "last": "08-10 11:50",
       "perDay": 0,
-      "briefCount": 0
+      "briefCount": 1
     },
     {
       "id": "openai-news",
-      "recordId": "",
+      "recordId": "recvqgCxALxHRh",
       "name": "OpenAI News",
       "url": "https://openai.com/news/rss.xml",
       "status": "active",
@@ -341,15 +341,15 @@
       "priority": "高",
       "fetchMethod": "RSS",
       "lookback": "24h",
-      "last": "",
+      "last": "08-10 11:50",
       "perDay": 0,
       "briefCount": 1
     },
     {
       "id": "youtube-openai",
-      "recordId": "",
+      "recordId": "recvqDj89eBzEO",
       "name": "OpenAI YouTube",
-      "url": "https://www.youtube.com/channel/UCXZCJLdBC09xxGZ6gcdrc6A",
+      "url": "OpenAI YouTube",
       "status": "active",
       "statusLabel": "已接入",
       "on": true,
@@ -359,13 +359,13 @@
       "priority": "高",
       "fetchMethod": "Media",
       "lookback": "72h",
-      "last": "",
+      "last": "08-10 11:50",
       "perDay": 0,
-      "briefCount": 1
+      "briefCount": 3
     },
     {
       "id": "opencompass",
-      "recordId": "",
+      "recordId": "recvqgCxALnRGz",
       "name": "OpenCompass Releases",
       "url": "https://github.com/open-compass/OpenCompass/releases.atom",
       "status": "active",
@@ -377,13 +377,13 @@
       "priority": "高",
       "fetchMethod": "RSS",
       "lookback": "7d",
-      "last": "",
+      "last": "08-10 11:50",
       "perDay": 0,
       "briefCount": 0
     },
     {
       "id": "papers-with-code-trending",
-      "recordId": "",
+      "recordId": "recvqgCxAL3OK1",
       "name": "PwC Trending",
       "url": "https://paperswithcode.co/",
       "status": "active",
@@ -395,13 +395,13 @@
       "priority": "高",
       "fetchMethod": "Scrape",
       "lookback": "7d",
-      "last": "",
+      "last": "08-10 11:50",
       "perDay": 0,
-      "briefCount": 4
+      "briefCount": 10
     },
     {
       "id": "papers-with-code-sota",
-      "recordId": "",
+      "recordId": "recvqgCxAL1ujO",
       "name": "PwC.co Trending",
       "url": "https://paperswithcode.co/",
       "status": "active",
@@ -419,7 +419,7 @@
     },
     {
       "id": "qwen-blog",
-      "recordId": "",
+      "recordId": "recvqgCxALiODE",
       "name": "Qwen Blog",
       "url": "https://qwenlm.github.io/blog/index.xml",
       "status": "active",
@@ -431,13 +431,13 @@
       "priority": "高",
       "fetchMethod": "RSS",
       "lookback": "24h",
-      "last": "",
+      "last": "08-10 11:50",
       "perDay": 0,
       "briefCount": 0
     },
     {
       "id": "techcrunch-ai",
-      "recordId": "",
+      "recordId": "recvqgCxALUQf2",
       "name": "TechCrunch AI",
       "url": "https://techcrunch.com/category/artificial-intelligence/feed/",
       "status": "active",
@@ -449,13 +449,13 @@
       "priority": "高",
       "fetchMethod": "RSS",
       "lookback": "24h",
-      "last": "",
+      "last": "08-10 11:50",
       "perDay": 0,
-      "briefCount": 5
+      "briefCount": 6
     },
     {
       "id": "whitehouse-tech-actions",
-      "recordId": "",
+      "recordId": "recvrjZLCbUEA2",
       "name": "White House 科技总统行动",
       "url": "https://www.whitehouse.gov/presidential-actions/feed/",
       "status": "active",
@@ -467,13 +467,13 @@
       "priority": "高",
       "fetchMethod": "RSS",
       "lookback": "30d",
-      "last": "",
+      "last": "08-10 11:50",
       "perDay": 0,
-      "briefCount": 0
+      "briefCount": 1
     },
     {
       "id": "whitehouse-tech-releases",
-      "recordId": "",
+      "recordId": "recvrjZLCbCrtS",
       "name": "White House 科技政策发布",
       "url": "https://www.whitehouse.gov/releases/feed/",
       "status": "active",
@@ -485,13 +485,13 @@
       "priority": "高",
       "fetchMethod": "RSS",
       "lookback": "30d",
-      "last": "",
+      "last": "08-10 11:50",
       "perDay": 0,
-      "briefCount": 1
+      "briefCount": 7
     },
     {
       "id": "arxiv-cs-ai",
-      "recordId": "",
+      "recordId": "recvqgCxALy8Uy",
       "name": "arXiv cs.AI",
       "url": "https://rss.arxiv.org/rss/cs.AI",
       "status": "active",
@@ -503,13 +503,13 @@
       "priority": "高",
       "fetchMethod": "RSS",
       "lookback": "24h",
-      "last": "",
+      "last": "08-10 11:50",
       "perDay": 0,
       "briefCount": 0
     },
     {
       "id": "arxiv-cs-cl",
-      "recordId": "",
+      "recordId": "recvqgCxALYweR",
       "name": "arXiv cs.CL",
       "url": "https://rss.arxiv.org/rss/cs.CL",
       "status": "active",
@@ -521,13 +521,13 @@
       "priority": "高",
       "fetchMethod": "RSS",
       "lookback": "24h",
-      "last": "",
+      "last": "08-10 11:50",
       "perDay": 0,
       "briefCount": 0
     },
     {
       "id": "arxiv-cs-lg",
-      "recordId": "",
+      "recordId": "recvqgCxALsZeu",
       "name": "arXiv cs.LG",
       "url": "https://rss.arxiv.org/rss/cs.LG",
       "status": "active",
@@ -539,13 +539,13 @@
       "priority": "高",
       "fetchMethod": "RSS",
       "lookback": "24h",
-      "last": "",
+      "last": "08-10 11:50",
       "perDay": 0,
       "briefCount": 0
     },
     {
       "id": "zhipu-ai",
-      "recordId": "",
+      "recordId": "recvqJQy5HUjir",
       "name": "智谱 AI 新闻",
       "url": "https://www.zhipuai.cn/zh/news",
       "status": "active",
@@ -557,13 +557,13 @@
       "priority": "高",
       "fetchMethod": "Scrape",
       "lookback": "72h",
-      "last": "",
+      "last": "08-10 11:50",
       "perDay": 0,
       "briefCount": 0
     },
     {
       "id": "zhipu-modelscope",
-      "recordId": "",
+      "recordId": "recvrisDPznjZ6",
       "name": "智谱 ModelScope 官方模型",
       "url": "https://modelscope.cn/organization/ZhipuAI",
       "status": "active",
@@ -575,13 +575,13 @@
       "priority": "高",
       "fetchMethod": "Scrape",
       "lookback": "7d",
-      "last": "",
+      "last": "08-10 11:50",
       "perDay": 0,
       "briefCount": 0
     },
     {
       "id": "stepfun-modelscope",
-      "recordId": "",
+      "recordId": "recvrisDPz6snw",
       "name": "阶跃星辰 ModelScope 官方模型",
       "url": "https://modelscope.cn/organization/stepfun-ai",
       "status": "active",
@@ -593,13 +593,13 @@
       "priority": "高",
       "fetchMethod": "Scrape",
       "lookback": "7d",
-      "last": "",
+      "last": "08-10 11:50",
       "perDay": 0,
       "briefCount": 0
     },
     {
       "id": "leiphone",
-      "recordId": "",
+      "recordId": "recvqgCxALf6Jp",
       "name": "AI科技评论 / 雷峰网",
       "url": "https://www.leiphone.com/feed",
       "status": "active",
@@ -611,13 +611,13 @@
       "priority": "中",
       "fetchMethod": "RSS",
       "lookback": "",
-      "last": "",
+      "last": "08-10 11:50",
       "perDay": 0,
       "briefCount": 13
     },
     {
       "id": "amd-instinct",
-      "recordId": "",
+      "recordId": "recvqK1gsmBQaI",
       "name": "AMD Instinct / ROCm",
       "url": "https://rocm.blogs.amd.com/blog/atom.xml",
       "status": "active",
@@ -629,13 +629,13 @@
       "priority": "中",
       "fetchMethod": "RSS",
       "lookback": "24h",
-      "last": "",
+      "last": "08-10 11:50",
       "perDay": 0,
       "briefCount": 0
     },
     {
       "id": "lab-berkeley-rdi",
-      "recordId": "",
+      "recordId": "recvqgCxALMPvX",
       "name": "Berkeley RDI",
       "url": "https://rdi.berkeley.edu/feed",
       "status": "active",
@@ -647,13 +647,13 @@
       "priority": "中",
       "fetchMethod": "RSS",
       "lookback": "14d",
-      "last": "",
+      "last": "08-10 11:50",
       "perDay": 0,
       "briefCount": 0
     },
     {
       "id": "lab-berkeley-sky",
-      "recordId": "",
+      "recordId": "recvqgCxALwHRU",
       "name": "Berkeley Sky Computing Lab",
       "url": "https://sky.cs.berkeley.edu/feed/",
       "status": "active",
@@ -665,13 +665,13 @@
       "priority": "中",
       "fetchMethod": "RSS",
       "lookback": "14d",
-      "last": "",
+      "last": "08-10 11:50",
       "perDay": 0,
       "briefCount": 0
     },
     {
       "id": "cohere-blog",
-      "recordId": "",
+      "recordId": "recvqgCxALk17l",
       "name": "Cohere Blog",
       "url": "https://cohere.com/blog",
       "status": "active",
@@ -683,15 +683,15 @@
       "priority": "中",
       "fetchMethod": "Scrape",
       "lookback": "24h",
-      "last": "",
+      "last": "08-10 11:50",
       "perDay": 0,
       "briefCount": 0
     },
     {
       "id": "youtube-deeplearning-ai",
-      "recordId": "",
+      "recordId": "recvqDj8vJfPqq",
       "name": "DeepLearning.AI YouTube",
-      "url": "https://www.youtube.com/channel/UCcIXc5mJsHVYTZR1maL5l9w",
+      "url": "DeepLearning.AI YouTube",
       "status": "active",
       "statusLabel": "已接入",
       "on": true,
@@ -701,13 +701,13 @@
       "priority": "中",
       "fetchMethod": "Media",
       "lookback": "7d",
-      "last": "",
+      "last": "08-10 11:50",
       "perDay": 0,
       "briefCount": 0
     },
     {
       "id": "epoch-compute",
-      "recordId": "",
+      "recordId": "recvqK1gsmzI9d",
       "name": "Epoch AI Compute Data",
       "url": "https://epoch.ai/latest",
       "status": "active",
@@ -719,13 +719,13 @@
       "priority": "中",
       "fetchMethod": "Scrape",
       "lookback": "24h",
-      "last": "",
+      "last": "08-10 11:50",
       "perDay": 0,
       "briefCount": 0
     },
     {
       "id": "lambda-labs",
-      "recordId": "",
+      "recordId": "recvqK1gsmDTMU",
       "name": "Lambda Labs Blog",
       "url": "https://lambda.ai/blog/rss.xml",
       "status": "active",
@@ -737,13 +737,13 @@
       "priority": "中",
       "fetchMethod": "RSS",
       "lookback": "24h",
-      "last": "",
+      "last": "08-10 11:50",
       "perDay": 0,
       "briefCount": 0
     },
     {
       "id": "mit-ai-risk",
-      "recordId": "",
+      "recordId": "recvqgCxALuQ97",
       "name": "MIT AI Risk Repository",
       "url": "https://airisk.mit.edu/blog",
       "status": "active",
@@ -755,13 +755,13 @@
       "priority": "中",
       "fetchMethod": "Scrape",
       "lookback": "7d",
-      "last": "",
+      "last": "08-10 11:50",
       "perDay": 0,
       "briefCount": 0
     },
     {
       "id": "lab-mit-csail",
-      "recordId": "",
+      "recordId": "recvqgCxALkmri",
       "name": "MIT CSAIL",
       "url": "https://www.csail.mit.edu/rss.xml",
       "status": "active",
@@ -773,15 +773,15 @@
       "priority": "中",
       "fetchMethod": "RSS",
       "lookback": "14d",
-      "last": "",
+      "last": "08-10 11:50",
       "perDay": 0,
       "briefCount": 0
     },
     {
       "id": "youtube-mit-csail",
-      "recordId": "",
+      "recordId": "recvqDj8nyP1k4",
       "name": "MIT CSAIL YouTube",
-      "url": "https://www.youtube.com/channel/UCBpxspUNl1Th33XbugiHJzw",
+      "url": "MIT CSAIL YouTube",
       "status": "active",
       "statusLabel": "已接入",
       "on": true,
@@ -791,13 +791,13 @@
       "priority": "中",
       "fetchMethod": "Media",
       "lookback": "7d",
-      "last": "",
+      "last": "08-10 11:50",
       "perDay": 0,
       "briefCount": 0
     },
     {
       "id": "mlperf",
-      "recordId": "",
+      "recordId": "recvqgCxALLxGa",
       "name": "MLCommons / MLPerf",
       "url": "https://mlcommons.org/category/news/feed/",
       "status": "active",
@@ -809,13 +809,13 @@
       "priority": "中",
       "fetchMethod": "RSS",
       "lookback": "48h",
-      "last": "",
+      "last": "08-10 11:50",
       "perDay": 0,
       "briefCount": 0
     },
     {
       "id": "azure-ai-infra",
-      "recordId": "",
+      "recordId": "recvqK1gsmOfyr",
       "name": "Microsoft Azure AI Infrastructure",
       "url": "https://azure.microsoft.com/en-us/blog/feed/",
       "status": "active",
@@ -827,13 +827,13 @@
       "priority": "中",
       "fetchMethod": "RSS",
       "lookback": "24h",
-      "last": "",
+      "last": "08-10 11:50",
       "perDay": 0,
       "briefCount": 0
     },
     {
       "id": "lab-nyu-cilvr",
-      "recordId": "",
+      "recordId": "recvqgCxALDrm2",
       "name": "NYU CILVR Lab",
       "url": "https://wp.nyu.edu/cilvr/feed/",
       "status": "active",
@@ -845,13 +845,13 @@
       "priority": "中",
       "fetchMethod": "RSS",
       "lookback": "14d",
-      "last": "",
+      "last": "08-10 11:50",
       "perDay": 0,
       "briefCount": 0
     },
     {
       "id": "lab-stanford-crfm",
-      "recordId": "",
+      "recordId": "recvqgCxALFTL5",
       "name": "Stanford CRFM",
       "url": "https://crfm.stanford.edu/feed",
       "status": "active",
@@ -863,13 +863,13 @@
       "priority": "中",
       "fetchMethod": "RSS",
       "lookback": "14d",
-      "last": "",
+      "last": "08-10 11:50",
       "perDay": 0,
       "briefCount": 0
     },
     {
       "id": "stanford-helm",
-      "recordId": "",
+      "recordId": "recvqgCxAL1VzL",
       "name": "Stanford CRFM / HELM",
       "url": "https://crfm.stanford.edu/feed",
       "status": "active",
@@ -881,15 +881,15 @@
       "priority": "中",
       "fetchMethod": "RSS",
       "lookback": "7d",
-      "last": "",
+      "last": "08-10 11:50",
       "perDay": 0,
       "briefCount": 0
     },
     {
       "id": "youtube-stanford-online",
-      "recordId": "",
+      "recordId": "recvqDj8pHTqwZ",
       "name": "Stanford Online AI YouTube",
-      "url": "https://www.youtube.com/channel/UCBa5G_ESCn8Yd4vw5U-gIcg",
+      "url": "Stanford Online YouTube",
       "status": "active",
       "statusLabel": "已接入",
       "on": true,
@@ -899,13 +899,13 @@
       "priority": "中",
       "fetchMethod": "Media",
       "lookback": "7d",
-      "last": "",
+      "last": "08-10 11:50",
       "perDay": 0,
       "briefCount": 2
     },
     {
       "id": "together-ai",
-      "recordId": "",
+      "recordId": "recvqK1gsmuVSn",
       "name": "Together AI Blog",
       "url": "https://www.together.ai/blog/rss.xml",
       "status": "active",
@@ -917,15 +917,15 @@
       "priority": "中",
       "fetchMethod": "RSS",
       "lookback": "24h",
-      "last": "",
+      "last": "08-10 11:50",
       "perDay": 0,
       "briefCount": 0
     },
     {
       "id": "youtube-two-minute-papers",
-      "recordId": "",
+      "recordId": "recvqDj7RE1ZdJ",
       "name": "Two Minute Papers YouTube",
-      "url": "https://www.youtube.com/channel/UCbfYPyITQ-7l4upoX8nvctg",
+      "url": "Two Minute Papers YouTube",
       "status": "active",
       "statusLabel": "已接入",
       "on": true,
@@ -935,13 +935,13 @@
       "priority": "中",
       "fetchMethod": "Media",
       "lookback": "7d",
-      "last": "",
+      "last": "08-10 11:50",
       "perDay": 0,
       "briefCount": 1
     },
     {
       "id": "arxiv-cs-cv",
-      "recordId": "",
+      "recordId": "recvqgCxALdk1G",
       "name": "arXiv cs.CV",
       "url": "https://rss.arxiv.org/rss/cs.CV",
       "status": "active",
@@ -953,13 +953,13 @@
       "priority": "中",
       "fetchMethod": "RSS",
       "lookback": "24h",
-      "last": "",
+      "last": "08-10 11:50",
       "perDay": 0,
       "briefCount": 0
     },
     {
       "id": "wallstreetcn",
-      "recordId": "",
+      "recordId": "recvqgCxALvnxL",
       "name": "华尔街见闻",
       "url": "https://wallstreetcn.com/",
       "status": "active",
@@ -971,13 +971,13 @@
       "priority": "中",
       "fetchMethod": "Scrape",
       "lookback": "",
-      "last": "",
+      "last": "08-10 11:50",
       "perDay": 0,
-      "briefCount": 16
+      "briefCount": 18
     },
     {
       "id": "pingwest",
-      "recordId": "",
+      "recordId": "recvqgCxAL42lP",
       "name": "品玩 / 硅星人",
       "url": "https://www.pingwest.com/",
       "status": "active",
@@ -989,13 +989,13 @@
       "priority": "中",
       "fetchMethod": "Scrape",
       "lookback": "",
-      "last": "",
+      "last": "08-10 11:50",
       "perDay": 0,
       "briefCount": 0
     },
     {
       "id": "zhidx",
-      "recordId": "",
+      "recordId": "recvqgCxALGZLO",
       "name": "智东西",
       "url": "https://zhidx.com/rss",
       "status": "active",
@@ -1007,13 +1007,13 @@
       "priority": "中",
       "fetchMethod": "RSS",
       "lookback": "",
-      "last": "",
+      "last": "08-10 11:50",
       "perDay": 0,
-      "briefCount": 15
+      "briefCount": 13
     },
     {
       "id": "geekpark",
-      "recordId": "",
+      "recordId": "recvqgCxALicBa",
       "name": "极客公园 / Founder Park",
       "url": "https://www.geekpark.net/",
       "status": "active",
@@ -1025,13 +1025,13 @@
       "priority": "中",
       "fetchMethod": "Scrape",
       "lookback": "",
-      "last": "",
+      "last": "08-10 11:50",
       "perDay": 0,
       "briefCount": 0
     },
     {
       "id": "guokr",
-      "recordId": "",
+      "recordId": "recvqgCxALsI6U",
       "name": "果壳",
       "url": "https://www.guokr.com/",
       "status": "active",
@@ -1043,13 +1043,13 @@
       "priority": "中",
       "fetchMethod": "Scrape",
       "lookback": "",
-      "last": "",
+      "last": "08-10 11:50",
       "perDay": 0,
-      "briefCount": 10
+      "briefCount": 15
     },
     {
       "id": "thepaper",
-      "recordId": "",
+      "recordId": "recvqgCxALQJOx",
       "name": "澎湃新闻·科技",
       "url": "https://www.thepaper.cn/",
       "status": "active",
@@ -1061,13 +1061,13 @@
       "priority": "中",
       "fetchMethod": "Scrape",
       "lookback": "",
-      "last": "",
+      "last": "08-10 11:50",
       "perDay": 0,
       "briefCount": 0
     },
     {
       "id": "jiemian",
-      "recordId": "",
+      "recordId": "recvqgCxALt68m",
       "name": "界面新闻",
       "url": "https://a.jiemian.com/index.php?m=article&a=rss",
       "status": "active",
@@ -1079,13 +1079,13 @@
       "priority": "中",
       "fetchMethod": "RSS",
       "lookback": "",
-      "last": "",
+      "last": "08-10 11:50",
       "perDay": 0,
       "briefCount": 0
     },
     {
       "id": "huxiu",
-      "recordId": "",
+      "recordId": "recvqgCxALhQaK",
       "name": "虎嗅",
       "url": "https://www.huxiu.com/",
       "status": "active",
@@ -1097,13 +1097,13 @@
       "priority": "中",
       "fetchMethod": "Scrape",
       "lookback": "",
-      "last": "",
-      "perDay": 0,
-      "briefCount": 10
+      "last": "08-10 11:50",
+      "perDay": 1,
+      "briefCount": 16
     },
     {
       "id": "caixin",
-      "recordId": "",
+      "recordId": "recvqgCxALwr1U",
       "name": "财新",
       "url": "https://www.caixin.com/",
       "status": "active",
@@ -1115,13 +1115,13 @@
       "priority": "中",
       "fetchMethod": "Scrape",
       "lookback": "",
-      "last": "",
+      "last": "08-10 11:50",
       "perDay": 0,
       "briefCount": 0
     },
     {
       "id": "qbitai",
-      "recordId": "",
+      "recordId": "recvqgCxALFA07",
       "name": "量子位",
       "url": "https://www.qbitai.com/feed",
       "status": "active",
@@ -1133,13 +1133,13 @@
       "priority": "中",
       "fetchMethod": "RSS",
       "lookback": "",
-      "last": "",
+      "last": "08-10 11:50",
       "perDay": 0,
       "briefCount": 0
     },
     {
       "id": "podcast-no-priors",
-      "recordId": "",
+      "recordId": "recvqFs6GrfVKE",
       "name": "No Priors",
       "url": "https://feeds.megaphone.fm/nopriors",
       "status": "active",
@@ -1151,13 +1151,13 @@
       "priority": "低",
       "fetchMethod": "Podcast",
       "lookback": "7d",
-      "last": "",
+      "last": "08-09 03:04",
       "perDay": 0,
       "briefCount": 0
     },
     {
       "id": "sifted",
-      "recordId": "",
+      "recordId": "recvqgCxALFoCv",
       "name": "Sifted",
       "url": "https://sifted.eu/feed",
       "status": "active",
@@ -1169,13 +1169,13 @@
       "priority": "低",
       "fetchMethod": "RSS",
       "lookback": "7d",
-      "last": "",
+      "last": "08-10 11:50",
       "perDay": 0,
       "briefCount": 0
     },
     {
       "id": "utility-dive",
-      "recordId": "",
+      "recordId": "recvqgCxALSw3s",
       "name": "Utility Dive",
       "url": "https://www.utilitydive.com/feeds/news/",
       "status": "active",
@@ -1187,13 +1187,13 @@
       "priority": "低",
       "fetchMethod": "RSS",
       "lookback": "7d",
-      "last": "",
+      "last": "08-10 11:50",
       "perDay": 0,
       "briefCount": 0
     },
     {
       "id": "podcast-crossing",
-      "recordId": "",
+      "recordId": "recvqFs2wsbzdl",
       "name": "十字路口 Crossing",
       "url": "https://feed.xyzfm.space/68fyjknth9hj",
       "status": "active",
@@ -1205,13 +1205,13 @@
       "priority": "低",
       "fetchMethod": "Podcast",
       "lookback": "7d",
-      "last": "",
+      "last": "08-09 03:04",
       "perDay": 0,
       "briefCount": 0
     },
     {
       "id": "podcast-silicon-valley-101",
-      "recordId": "",
+      "recordId": "recvqFs24sBk5f",
       "name": "硅谷 101",
       "url": "https://feeds.fireside.fm/sv101/rss",
       "status": "active",
@@ -1223,13 +1223,13 @@
       "priority": "低",
       "fetchMethod": "Podcast",
       "lookback": "7d",
-      "last": "",
+      "last": "08-09 03:04",
       "perDay": 0,
       "briefCount": 0
     },
     {
       "id": "36kr-ai",
-      "recordId": "",
+      "recordId": "recvqgCxALgmzs",
       "name": "36氪 AI",
       "url": "https://36kr.com/feed",
       "status": "experimental",
@@ -1247,7 +1247,7 @@
     },
     {
       "id": "ai-gov-us",
-      "recordId": "",
+      "recordId": "recvqgCxAL1FYC",
       "name": "AI.gov / 美国 AI 政策",
       "url": "https://www.ai.gov/",
       "status": "experimental",
@@ -1265,7 +1265,7 @@
     },
     {
       "id": "deepseek-github",
-      "recordId": "",
+      "recordId": "recvqgCxALwy90",
       "name": "DeepSeek GitHub Releases",
       "url": "https://github.com/deepseek-ai/DeepSeek-V3/releases.atom",
       "status": "experimental",
@@ -1283,7 +1283,7 @@
     },
     {
       "id": "eu-ai-act",
-      "recordId": "",
+      "recordId": "recvqgCxALc3DD",
       "name": "EU AI Act 官方",
       "url": "https://digital-strategy.ec.europa.eu/en/policies/regulatory-framework-ai",
       "status": "experimental",
@@ -1301,7 +1301,7 @@
     },
     {
       "id": "mckinsey-state-of-ai",
-      "recordId": "",
+      "recordId": "recvqgCxALvtfx",
       "name": "McKinsey State of AI",
       "url": "https://www.mckinsey.com/capabilities/quantumblack/our-insights/the-state-of-ai",
       "status": "experimental",
@@ -1319,7 +1319,7 @@
     },
     {
       "id": "ms-copilot",
-      "recordId": "",
+      "recordId": "recvqgCxALYwld",
       "name": "Microsoft Copilot / GitHub Copilot",
       "url": "https://github.blog/feed/",
       "status": "experimental",
@@ -1337,7 +1337,7 @@
     },
     {
       "id": "minimax-ai",
-      "recordId": "",
+      "recordId": "recvqJQy5HNOgV",
       "name": "MiniMax News",
       "url": "https://www.minimax.io/news",
       "status": "experimental",
@@ -1349,13 +1349,13 @@
       "priority": "高",
       "fetchMethod": "Scrape",
       "lookback": "72h",
-      "last": "",
+      "last": "07-29 13:52",
       "perDay": 0,
       "briefCount": 0
     },
     {
       "id": "moonshot-ai",
-      "recordId": "",
+      "recordId": "recvqJQy5HoaCr",
       "name": "Moonshot AI 月之暗面",
       "url": "https://www.moonshot.cn/",
       "status": "experimental",
@@ -1367,13 +1367,13 @@
       "priority": "高",
       "fetchMethod": "Scrape",
       "lookback": "72h",
-      "last": "",
+      "last": "07-29 13:52",
       "perDay": 0,
       "briefCount": 0
     },
     {
       "id": "reuters-ai",
-      "recordId": "",
+      "recordId": "recvqgCxALS4zo",
       "name": "Reuters AI News",
       "url": "https://news.google.com/rss/search?q=reuters.com%20artificial%20intelligence%20when:7d&hl=en-US&gl=US&ceid=US:en",
       "status": "experimental",
@@ -1391,7 +1391,7 @@
     },
     {
       "id": "the-information",
-      "recordId": "",
+      "recordId": "recvqgCxALxcNQ",
       "name": "The Information AI Agenda",
       "url": "https://www.theinformation.com/",
       "status": "experimental",
@@ -1409,7 +1409,7 @@
     },
     {
       "id": "latepost-ai",
-      "recordId": "",
+      "recordId": "recvqgCxALXdWb",
       "name": "晚点 LatePost",
       "url": "https://rsshub.app/latepost/latest",
       "status": "experimental",
@@ -1427,7 +1427,7 @@
     },
     {
       "id": "jiqizhixin",
-      "recordId": "",
+      "recordId": "recvqgCxALuNBh",
       "name": "机器之心",
       "url": "https://www.jiqizhixin.com/rss",
       "status": "experimental",
@@ -1445,7 +1445,7 @@
     },
     {
       "id": "ai-incident-db",
-      "recordId": "",
+      "recordId": "recvqgCxALxb5z",
       "name": "AI Incident Database",
       "url": "https://incidentdatabase.ai/rss.xml",
       "status": "experimental",
@@ -1463,7 +1463,7 @@
     },
     {
       "id": "lab-berkeley-bair",
-      "recordId": "",
+      "recordId": "recvqgCxALAaoS",
       "name": "Berkeley BAIR",
       "url": "https://bair.berkeley.edu/blog/feed.xml",
       "status": "experimental",
@@ -1481,7 +1481,7 @@
     },
     {
       "id": "bloomberg-tech",
-      "recordId": "",
+      "recordId": "recvqgCxALANY2",
       "name": "Bloomberg Tech",
       "url": "https://www.bloomberg.com/technology",
       "status": "experimental",
@@ -1499,7 +1499,7 @@
     },
     {
       "id": "cb-insights",
-      "recordId": "",
+      "recordId": "recvqgCxALYuoY",
       "name": "CB Insights AI 100",
       "url": "https://www.cbinsights.com/research/artificial-intelligence/",
       "status": "experimental",
@@ -1517,7 +1517,7 @@
     },
     {
       "id": "lab-caltech-cms",
-      "recordId": "",
+      "recordId": "recvqgCxALrv2P",
       "name": "Caltech CMS AI",
       "url": "https://www.cms.caltech.edu/",
       "status": "experimental",
@@ -1529,13 +1529,13 @@
       "priority": "中",
       "fetchMethod": "Scrape",
       "lookback": "7d",
-      "last": "",
-      "perDay": 0,
+      "last": "07-29 12:52",
+      "perDay": 4,
       "briefCount": 0
     },
     {
       "id": "gartner-ai",
-      "recordId": "",
+      "recordId": "recvqgCxALOO5K",
       "name": "Gartner AI / Hype Cycle",
       "url": "https://www.gartner.com/en/topics/artificial-intelligence",
       "status": "experimental",
@@ -1553,7 +1553,7 @@
     },
     {
       "id": "nist-ai-rmf",
-      "recordId": "",
+      "recordId": "recvqgCxALDvvZ",
       "name": "NIST AI RMF",
       "url": "https://www.nist.gov/news-events/news/rss.xml",
       "status": "experimental",
@@ -1571,7 +1571,7 @@
     },
     {
       "id": "oecd-ai",
-      "recordId": "",
+      "recordId": "recvqgCxALDcAM",
       "name": "OECD AI Policy Observatory",
       "url": "https://wp.oecd.ai/feed",
       "status": "experimental",
@@ -1589,7 +1589,7 @@
     },
     {
       "id": "pitchbook",
-      "recordId": "",
+      "recordId": "recvqgCxALC3xF",
       "name": "PitchBook",
       "url": "https://pitchbook.com/",
       "status": "experimental",
@@ -1607,7 +1607,7 @@
     },
     {
       "id": "salesforce-ai",
-      "recordId": "",
+      "recordId": "recvqgCxAL3Z3B",
       "name": "Salesforce AI",
       "url": "https://www.salesforce.com/news/feed/",
       "status": "experimental",
@@ -1625,7 +1625,7 @@
     },
     {
       "id": "litigation-tracker",
-      "recordId": "",
+      "recordId": "recvqgCxALSouO",
       "name": "律所 AI Litigation Tracker",
       "url": "https://www.reuters.com/legal/",
       "status": "experimental",
@@ -1643,7 +1643,7 @@
     },
     {
       "id": "jazzyear",
-      "recordId": "",
+      "recordId": "recvqgCxALlDIW",
       "name": "甲子光年",
       "url": "https://www.jazzyear.com/",
       "status": "experimental",
@@ -1661,7 +1661,7 @@
     },
     {
       "id": "podcast-ai-alchemy",
-      "recordId": "",
+      "recordId": "recvqFs2AOOeeO",
       "name": "AI 炼金术",
       "url": "https://www.ximalaya.com/album/74194808.xml",
       "status": "experimental",
@@ -1679,7 +1679,7 @@
     },
     {
       "id": "podcast-dwarkesh",
-      "recordId": "",
+      "recordId": "recvqgCxALTurX",
       "name": "Dwarkesh Podcast",
       "url": "https://apple.dwarkesh-podcast.workers.dev/feed.rss",
       "status": "experimental",
@@ -1697,7 +1697,7 @@
     },
     {
       "id": "podcast-latent-space",
-      "recordId": "",
+      "recordId": "recvqFs2iwJ8Wx",
       "name": "Latent Space",
       "url": "https://api.substack.com/feed/podcast/1084089.rss",
       "status": "experimental",
@@ -1715,7 +1715,7 @@
     },
     {
       "id": "singapore-nais",
-      "recordId": "",
+      "recordId": "recvqgCxALz8rr",
       "name": "Singapore NAIS 2.0",
       "url": "https://www.smartnation.gov.cn/",
       "status": "experimental",
@@ -1733,7 +1733,7 @@
     },
     {
       "id": "corp-signals",
-      "recordId": "",
+      "recordId": "recvqgCxALD7jC",
       "name": "公司注册和招聘变化",
       "url": "",
       "status": "experimental",
@@ -1751,7 +1751,7 @@
     },
     {
       "id": "video-channels",
-      "recordId": "",
+      "recordId": "recvqgCxALMdX4",
       "name": "视频 YouTube/B站",
       "url": "",
       "status": "experimental",
@@ -1769,7 +1769,7 @@
     },
     {
       "id": "social-media",
-      "recordId": "",
+      "recordId": "recvqEuxsAiUpP",
       "name": "X 白名单账号",
       "url": "https://api.x.com/2",
       "status": "paused",
@@ -1787,7 +1787,7 @@
     },
     {
       "id": "stepfun-ai",
-      "recordId": "",
+      "recordId": "recvqJQy5HPzRc",
       "name": "阶跃星辰 StepFun",
       "url": "https://platform.stepfun.com/",
       "status": "paused",
@@ -1799,13 +1799,13 @@
       "priority": "高",
       "fetchMethod": "Scrape",
       "lookback": "72h",
-      "last": "",
+      "last": "07-29 13:52",
       "perDay": 0,
       "briefCount": 0
     },
     {
       "id": "consulting-ai-reports",
-      "recordId": "",
+      "recordId": "recvqgCxALHmcp",
       "name": "Deloitte/PwC/BCG/Bain AI",
       "url": "",
       "status": "paused",
@@ -1823,7 +1823,7 @@
     },
     {
       "id": "academic-benchmarks",
-      "recordId": "",
+      "recordId": "recvqgCxAL1XPY",
       "name": "MMLU-Pro / GPQA / AIME",
       "url": "",
       "status": "paused",
@@ -1841,9 +1841,9 @@
     },
     {
       "id": "youtube-yannic-kilcher",
-      "recordId": "",
+      "recordId": "recvqDj7QTColm",
       "name": "Yannic Kilcher YouTube",
-      "url": "https://www.youtube.com/channel/UCZHmQk67mSJgfCCTn7xBfew",
+      "url": "Yannic Kilcher YouTube",
       "status": "paused",
       "statusLabel": "已暂停",
       "on": false,
@@ -1859,7 +1859,7 @@
     },
     {
       "id": "arxiv-comments",
-      "recordId": "",
+      "recordId": "recvqgCxAL9YZD",
       "name": "arXiv 评论区 / AlphaXiv",
       "url": "https://alphaxiv.org/",
       "status": "paused",
@@ -1877,7 +1877,7 @@
     },
     {
       "id": "online-conf-live",
-      "recordId": "",
+      "recordId": "recvqgCxALIBCD",
       "name": "在线会议（实时）",
       "url": "",
       "status": "paused",
@@ -1895,7 +1895,7 @@
     },
     {
       "id": "online-conf-replay",
-      "recordId": "",
+      "recordId": "recvqgCxALuvGV",
       "name": "在线会议（有回放）",
       "url": "",
       "status": "paused",
@@ -1913,7 +1913,7 @@
     },
     {
       "id": "offline-events",
-      "recordId": "",
+      "recordId": "recvqgCxALw1v7",
       "name": "线下活动",
       "url": "",
       "status": "paused",
@@ -1931,7 +1931,7 @@
     },
     {
       "id": "vertical-ai-cases",
-      "recordId": "",
+      "recordId": "recvqgCxALLjPG",
       "name": "行业垂直 AI 案例",
       "url": "",
       "status": "paused",
