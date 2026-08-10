@@ -37,6 +37,16 @@ CACHE_FILE = OUTPUT_DIR / ".report_cache.json"
 # 418 是网关限流/反滥用时的返回，不重试会让一条信号直接把整轮跑挂掉。
 _RETRY_STATUS = frozenset({408, 409, 418, 425, 429, 500, 502, 503, 504})
 
+
+class LlmHttpError(RuntimeError):
+    """带上网关响应正文的 LLM 调用失败。"""
+
+    def __init__(self, status: int, body: str):
+        self.status = status
+        self.body = (body or "").strip()
+        detail = self.body[:300] or "(响应正文为空)"
+        super().__init__(f"LLM 网关返回 {status}：{detail}")
+
 SCORE_META = [
     ("impact", "影响", "impact"),
     ("novelty", "新颖", "novelty"),
@@ -206,7 +216,10 @@ def _llm_json(prompt: str, image_urls: list[str] | None = None) -> dict[str, Any
             response_mode = mode
             break
     assert resp is not None
-    resp.raise_for_status()
+    if resp.status_code >= 400:
+        # 光一句「418 Client Error」查不出任何东西，而 URL 在 CI 日志里是被
+        # 打码的。网关把真正的原因（限流/封 IP/配额）写在正文里，带上它。
+        raise LlmHttpError(resp.status_code, resp.text)
     payload = resp.json()
     if response_mode == "chat":
         content = payload["choices"][0]["message"]["content"]

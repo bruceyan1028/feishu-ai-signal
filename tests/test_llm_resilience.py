@@ -36,6 +36,17 @@ class LlmRetryTest(unittest.TestCase):
         for status in (400, 401, 403, 422):
             self.assertNotIn(status, report._RETRY_STATUS)
 
+    def test_error_carries_gateway_reason(self):
+        # CI 日志里 URL 是打码的，正文是唯一能看出「为什么被拒」的东西
+        blocked = self._response(418)
+        blocked.text = '{"error":"access denied from this IP"}'
+        with mock.patch("requests.post", return_value=blocked):
+            with mock.patch("time.sleep"):
+                with self.assertRaises(report.LlmHttpError) as caught:
+                    report._llm_json("prompt")
+        self.assertIn("access denied from this IP", str(caught.exception))
+        self.assertEqual(caught.exception.status, 418)
+
 
 class AnalysisFailureToleranceTest(unittest.TestCase):
     def test_isolated_failures_do_not_abort_the_brief(self):
