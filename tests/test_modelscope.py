@@ -2,9 +2,20 @@
 from __future__ import annotations
 
 import unittest
+from datetime import datetime, timedelta, timezone
 from unittest.mock import MagicMock, patch
 
 from src import scrape
+
+
+def days_ago(n: float) -> str:
+    """相对当前时间造时间戳。
+
+    写死日期的夹具会随时间失效：recent_days 是拿 now 算年龄的，某天一过
+    夹具就掉出窗口，测试在没人改代码的情况下自己变红，把流水线整条卡住。
+    """
+    moment = datetime.now(timezone.utc) - timedelta(days=n)
+    return moment.strftime("%Y-%m-%dT%H:%M:%SZ")
 
 
 class ModelScopeTest(unittest.TestCase):
@@ -24,6 +35,8 @@ class ModelScopeTest(unittest.TestCase):
 
     @patch("src.scrape.requests.get")
     def test_fetch_modelscope_items_home(self, mock_get: MagicMock):
+        created = days_ago(10)
+        modified = days_ago(6)
         list_resp = MagicMock()
         list_resp.raise_for_status = MagicMock()
         list_resp.json.return_value = {
@@ -34,8 +47,8 @@ class ModelScopeTest(unittest.TestCase):
                         "id": "Wan-AI/Wan-Dancer-14B",
                         "display_name": "Wan-Dancer-14B",
                         "description": "short",
-                        "last_modified": "2026-07-14T00:00:00Z",
-                        "created_at": "2026-07-10T00:00:00Z",
+                        "last_modified": modified,
+                        "created_at": created,
                     }
                 ]
             },
@@ -49,7 +62,7 @@ class ModelScopeTest(unittest.TestCase):
                 "display_name": "Wan-Dancer-14B",
                 "description": "A dancing video model with enough detail text here.",
                 "readme": "# Wan-Dancer\nMore details for the body.",
-                "last_modified": "2026-07-14T00:00:00Z",
+                "last_modified": modified,
             },
         }
         mock_get.side_effect = [list_resp, detail_resp]
@@ -65,7 +78,8 @@ class ModelScopeTest(unittest.TestCase):
         self.assertEqual(items[0]["title"], "Wan-Dancer-14B")
         self.assertIn("/models/Wan-AI/Wan-Dancer-14B", items[0]["url"])
         self.assertIn("dancing video", items[0]["body"])
-        self.assertEqual(items[0]["published_raw"], "2026-07-10T00:00:00Z")
+        # 发布时间取首次创建，不能被 last_modified 顶掉
+        self.assertEqual(items[0]["published_raw"], created)
 
     @patch("src.scrape.requests.get")
     def test_recent_edit_does_not_make_old_model_new(self, mock_get: MagicMock):
@@ -75,9 +89,10 @@ class ModelScopeTest(unittest.TestCase):
             "data": {
                 "models": [
                     {
+                        # 创建于窗口外，但昨天刚被编辑过
                         "id": "owner/old-model",
-                        "created_at": "2024-01-01T00:00:00Z",
-                        "last_modified": "2026-07-28T00:00:00Z",
+                        "created_at": days_ago(900),
+                        "last_modified": days_ago(1),
                     }
                 ]
             }
@@ -105,12 +120,12 @@ class ModelScopeTest(unittest.TestCase):
                     {
                         "id": "ZhipuAI/GLM-5.2",
                         "display_name": "GLM-5.2",
-                        "created_at": "2026-06-16T08:31:21Z",
+                        "created_at": days_ago(20),
                     },
                     {
                         "id": "ZhipuAI/GLM-5.2-FP8",
                         "display_name": "GLM-5.2-FP8",
-                        "created_at": "2026-06-16T08:33:26Z",
+                        "created_at": days_ago(20),
                     },
                 ]
             }

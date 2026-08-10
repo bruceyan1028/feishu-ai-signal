@@ -33,6 +33,10 @@ OUTPUT_DIR = Path("output")
 DEMO_DATA = ROOT / "demo_report.json"
 CACHE_FILE = OUTPUT_DIR / ".report_cache.json"
 
+# 可重试的 HTTP 状态：都是「过会儿再来」而不是「这个请求本身有问题」。
+# 418 是网关限流/反滥用时的返回，不重试会让一条信号直接把整轮跑挂掉。
+_RETRY_STATUS = frozenset({408, 409, 418, 425, 429, 500, 502, 503, 504})
+
 SCORE_META = [
     ("impact", "影响", "impact"),
     ("novelty", "新颖", "novelty"),
@@ -194,7 +198,7 @@ def _llm_json(prompt: str, image_urls: list[str] | None = None) -> dict[str, Any
                     raise
                 time.sleep(2**attempt)
                 continue
-            if resp.status_code in {429, 500, 502, 503, 504} and attempt < 2:
+            if resp.status_code in _RETRY_STATUS and attempt < 2:
                 time.sleep(2**attempt)
                 continue
             break

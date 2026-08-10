@@ -454,6 +454,15 @@ def _priority_map(param_records: list[dict[str, Any]]) -> dict[str, str]:
     return result
 
 
+def analysis_failure_is_systemic(failed: int, attempted: int) -> bool:
+    """判断本轮分析失败是「个别抽风」还是「那头整个挂了」。
+
+    个别失败跳过即可，丢一条信号远好过丢一整天的推送；但过半失败通常是配额、
+    鉴权或网关问题，这时推出去的简报是残缺的，宁可让流水线红掉让人来看。
+    """
+    return bool(attempted) and failed > attempted / 2
+
+
 def _active_source_ids(param_records: list[dict[str, Any]]) -> set[str]:
     # 简报候选来源白名单：active 的正式采集源。
     # 让抓取型来源也能进入每日简报，而不只是 RSS。
@@ -998,13 +1007,24 @@ def generate(day: str | None = None) -> dict[str, Any]:
 
     updates: list[dict[str, Any]] = []
     analyzed: list[dict[str, Any]] = []
+    attempted = 0
+    failed: list[str] = []
     for index, item in enumerate(candidates, 1):
         fields = item["fields"]
         analysis = _existing_analysis(fields)
         update_fields: dict[str, Any] = {}
         if analysis is None:
             log.info("分析 %d/%d: %s", index, len(candidates), scalar(fields.get("标题")))
-            analysis = analyze_signal(fields)
+            attempted += 1
+            try:
+                analysis = analyze_signal(fields)
+            except Exception as exc:
+                # 单条信号的 LLM 调用失败不该让整份简报作废：这一步跑在几十分钟的
+                # 采集之后，为一条抓不到的解读丢掉当天全部推送，代价完全不成比例。
+                title = str(scalar(fields.get("标题")) or item.get("record_id") or "")
+                log.warning("分析失败，跳过该信号: %s (%s)", title, exc)
+                failed.append(title)
+                continue
             update_fields = {
                 "中文标题": analysis["title_cn"],
                 "中文摘要": analysis["summary_cn"],
@@ -1098,6 +1118,15 @@ def generate(day: str | None = None) -> dict[str, Any]:
         )
         analyzed.append(signal)
     feishu.batch_update_records(token, config.FEISHU_ENTRY_TABLE_ID, updates)
+
+    if failed:
+        log.warning("本轮 %d/%d 条分析失败：%s", len(failed), attempted, "；".join(failed[:5]))
+    if analysis_failure_is_systemic(len(failed), attempted):
+        raise RuntimeError(
+            f"LLM 分析大面积失败（{len(failed)}/{attempted}），疑似配额或网关问题，本轮不发布"
+        )
+    if not analyzed:
+        raise RuntimeError("没有可用于简报的已分析信号")
 
     def _display_quality(s: dict[str, Any]) -> float:
         q = float(s.get("qualityScore") or 0)

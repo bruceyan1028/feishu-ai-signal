@@ -2,9 +2,16 @@
 from __future__ import annotations
 
 import unittest
+from datetime import datetime, timedelta, timezone
 from unittest.mock import MagicMock, patch
 
 from src import scrape
+
+
+def ms_days_ago(n: float) -> int:
+    """相对当前时间造毫秒时间戳；写死的时间戳会随 recent_days 窗口滑动而失效。"""
+    moment = datetime.now(timezone.utc) - timedelta(days=n)
+    return int(moment.timestamp() * 1000)
 
 
 class SeedApiTest(unittest.TestCase):
@@ -28,7 +35,7 @@ class SeedApiTest(unittest.TestCase):
                     "ArticleMeta": {
                         "ID": 1,
                         "ArticleID": 1783417209913,
-                        "PublishDate": 1783440000000,
+                        "PublishDate": ms_days_ago(10),
                     },
                     "ArticleSubContentEn": {
                         "Title": "Introducing Seedream 5.0 Pro",
@@ -69,9 +76,10 @@ class SeedApiTest(unittest.TestCase):
             "sub_article_list": [
                 {
                     "ArticleMeta": {
+                        # 只有编辑时间、没有 PublishDate：编辑不等于发布
                         "ID": 1,
                         "ArticleID": 1,
-                        "UpdateTime": 1783440000000,
+                        "UpdateTime": ms_days_ago(1),
                     },
                     "ArticleSubContentEn": {
                         "Title": "Edited old article",
