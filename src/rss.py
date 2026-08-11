@@ -36,6 +36,42 @@ _DISPLAY_IMAGE_NOISE_RE = re.compile(
     r")"
 )
 
+# 这四类源的文章经常同时包含「营销封面/人物照片/装饰插画」和真正有信息量的
+# 图表。对它们采用严格策略：只把架构图、流程图、评测图、数据图等正文证据送到
+# 详情页；没有证据图时宁可不放图。
+_EVIDENCE_IMAGE_HOSTS = frozenset(
+    {
+        "openai.com",
+        "cloud.google.com",
+        "huxiu.com",
+        "wallstreetcn.com",
+    }
+)
+_EVIDENCE_SOURCE_IDS = frozenset({"openai-news", "gcp-ai-infra", "huxiu", "wallstreetcn"})
+_EVIDENCE_HINT_RE = re.compile(
+    r"(?i)(?:"
+    r"chart|graph|plot|table|diagram|architecture|pipeline|workflow|benchmark|evaluation"
+    r"|performance|comparison|scatter|trend|figure|fig[_-]?\d+|data[_-]?flow"
+    r"|图表|架构图|流程图|数据图|基准|评测|性能|对比|趋势|散点图|柱状图|折线图"
+    r"|数据显示|如下图|上图|下图|价格.*智能|参数规模"
+    r")"
+)
+_HUXIU_EVIDENCE_HINT_RE = re.compile(
+    r"(?:图表|架构图|流程图|散点图|柱状图|折线图|曲线图|热力图|表格"
+    r"|数据显示|如下图|上图|下图|统计图|能力与成本|第三方追踪"
+    r"|闭源领先.{0,12}混合共存.{0,12}开放主流"
+    r"|(?:价格|成本|性能|参数).{0,30}(?:对比|曲线)"
+    r"|(?:对比|曲线).{0,30}(?:价格|成本|性能|参数))"
+)
+_DECORATIVE_IMAGE_RE = re.compile(
+    r"(?i)(?:"
+    r"art[_-]?card|(?:^|[-_/])hero(?:[-_.]|$)|general[_-]?cover|article[_-]?cover"
+    r"|portrait|headshot|author|avatar|related|newsletter|promo|shield-text"
+    r"|人物|头像|工作场景|工厂|示意图|扫码|二维码|会员"
+    r")"
+)
+_WALLSTREETCN_ARTICLE_RE = re.compile(r"/articles/(\d+)")
+
 
 def strip_trailing_promo(body: str) -> str:
     """截掉正文尾部的推广/订阅区块。
@@ -159,22 +195,89 @@ def _meta_image_from_html(html: str, page_url: str) -> str:
     return ""
 
 
-def fetch_article_image(page_url: str) -> str:
-    """RSS 未提供图片时，读取原文的 OG/Twitter 图片；失败不阻断简报。"""
+def _wallstreetcn_article_media(page_url: str) -> dict[str, Any] | None:
+    match = _WALLSTREETCN_ARTICLE_RE.search(page_url)
+    if not match:
+        return None
+    api_url = (
+        f"https://api-one-wscn.awtmt.com/apiv1/content/articles/{match.group(1)}"
+        "?extract=0"
+    )
+    try:
+        response = requests.get(api_url, timeout=20)
+        response.raise_for_status()
+        data = response.json().get("data") or {}
+    except (requests.RequestException, ValueError) as exc:
+        log.info("华尔街见闻正文图片 API 失败 %s: %s", page_url, exc)
+        return {"cover": "", "images": []}
+    cover = str((data.get("image") or {}).get("uri") or "")
+    content = str(data.get("content") or "")
+    return {
+        "cover": cover if _image_ok(cover) else "",
+        "images": extract_article_evidence_images(content, page_url),
+    }
+
+
+def fetch_article_media(page_url: str, title: str = "") -> dict[str, Any]:
+    """读取文章封面和正文证据图；失败不阻断简报。
+
+    普通源仍使用 OG 封面。OpenAI / Google Cloud / 虎嗅 / 华尔街见闻同时
+    提取正文图表，后续严格策略会丢弃营销封面和装饰插画。
+    """
+    empty: dict[str, Any] = {"cover": "", "images": []}
     if not page_url.startswith(("http://", "https://")):
-        return ""
+        return empty
+    if _normalized_host(page_url) == "wallstreetcn.com":
+        return _wallstreetcn_article_media(page_url) or empty
+
+    html = ""
+    final_url = page_url
     try:
         response = requests.get(
             page_url,
-            headers={"User-Agent": "Mozilla/5.0 (compatible; AI-Signal/1.0)"},
+            headers={
+                "User-Agent": (
+                    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
+                    "AppleWebKit/537.36 Chrome/138 Safari/537.36"
+                ),
+                "Accept": "text/html,application/xhtml+xml",
+            },
             timeout=12,
         )
         response.raise_for_status()
         html = response.content[:1_500_000].decode(response.encoding or "utf-8", errors="replace")
-        return _meta_image_from_html(html, response.url)
+        final_url = response.url or page_url
     except requests.RequestException as exc:
         log.info("原文配图读取失败 %s: %s", page_url, exc)
-        return ""
+    if html:
+        cover = _meta_image_from_html(html, final_url)
+        chunk = _PAGE_NOISE_RE.sub(" ", strip_trailing_promo(_pick_content_chunk(html)))
+        figures = (
+            extract_article_evidence_images(chunk, final_url)
+            if strict_evidence_image_source(page_url)
+            else []
+        )
+        cover_key = cover.split("?", 1)[0].lower()
+        if cover_key:
+            figures = [
+                image
+                for image in figures
+                if str(image.get("url") or "").split("?", 1)[0].lower() != cover_key
+            ]
+        return {
+            "cover": cover,
+            "images": figures,
+        }
+
+    # OpenAI 对普通直连返回 403。不要在发布阶段再启动一次可能很慢的 Jina 请求：
+    # RSS 正文补全本来就通过 Jina 把图片存进 mediaAssets，curate_display_media 会从
+    # 现有资产中保留评测图。存量只有 Art_Card 的条目会变成无图，而不是继续展示插画。
+    return empty
+
+
+def fetch_article_image(page_url: str) -> str:
+    """兼容旧调用：只返回原文声明的封面。"""
+    return str(fetch_article_media(page_url).get("cover") or "")
 
 
 def image_asset_is_noise(asset: dict[str, Any]) -> bool:
@@ -187,11 +290,11 @@ def image_asset_is_noise(asset: dict[str, Any]) -> bool:
 
 def curate_display_media(
     signal: dict[str, Any],
-    article_cover: str = "",
+    article_media: dict[str, Any] | str | None = None,
 ) -> tuple[dict[str, Any], str]:
     """按载体整理网页展示图片。
 
-    网页与公众号只保留原文声明的封面，避免把作者卡、广告和相关推荐混入正文。
+    严格源保留最多四张正文证据图；普通网页/公众号只保留原文声明的封面。
     视频、播客使用平台自身封面；论文等其它载体保留专用图表链路。
     """
     media = dict(signal.get("mediaAssets") or signal.get("media_assets") or {})
@@ -202,6 +305,14 @@ def curate_display_media(
     ]
     content_type = str(signal.get("contentType") or signal.get("source_type") or "")
     current = str(signal.get("imageUrl") or signal.get("image_url") or "").strip()
+    if isinstance(article_media, dict):
+        article_cover = str(article_media.get("cover") or "")
+        fetched_images = [
+            dict(item) for item in article_media.get("images") or [] if isinstance(item, dict)
+        ]
+    else:
+        article_cover = str(article_media or "")
+        fetched_images = []
 
     if content_type == "视频":
         video = next(
@@ -224,6 +335,10 @@ def curate_display_media(
         return media, ""
 
     if content_type in {"文章", "公众号", sources.SIGNAL_FORMAT_WEB, sources.SIGNAL_FORMAT_WECHAT}:
+        if strict_evidence_image_source(signal):
+            evidence = curate_evidence_images(fetched_images + images, str(signal.get("url") or ""))
+            media["images"] = evidence
+            return media, str(evidence[0].get("url") or "") if evidence else ""
         cover = str(article_cover or "").strip()
         if cover and _image_ok(cover) and not _DISPLAY_IMAGE_NOISE_RE.search(cover):
             media["images"] = [{"url": cover, "alt": str(signal.get("titleCn") or signal.get("title") or ""), "kind": "article-cover"}]
@@ -241,6 +356,18 @@ def curate_display_media(
 
     media["images"] = images
     return media, current
+
+
+def preferred_article_image(signal: dict[str, Any], article_media: dict[str, Any]) -> str:
+    """去重后需要补图时选候选；严格源永远不退回装饰封面。"""
+    figures = [
+        item for item in article_media.get("images") or [] if isinstance(item, dict)
+    ]
+    if figures:
+        return str(figures[0].get("url") or "")
+    if strict_evidence_image_source(signal):
+        return ""
+    return str(article_media.get("cover") or "")
 
 
 # 只有 RSS 摘要、没有全文的条目：回源抓正文，否则前端只能显示一两句话
@@ -511,6 +638,24 @@ def _image_ok(url: str) -> bool:
     )
 
 
+def _normalized_host(url: str) -> str:
+    return (urlsplit(str(url or "")).hostname or "").lower().removeprefix("www.")
+
+
+def strict_evidence_image_source(signal_or_url: dict[str, Any] | str) -> bool:
+    """这些源只展示可用于理解正文的图表，不用营销封面填空。"""
+    if isinstance(signal_or_url, dict):
+        source_id = str(
+            signal_or_url.get("sourceId") or signal_or_url.get("source_id") or ""
+        ).lower()
+        if source_id in _EVIDENCE_SOURCE_IDS:
+            return True
+        page_url = str(signal_or_url.get("url") or "")
+    else:
+        page_url = str(signal_or_url or "")
+    return _normalized_host(page_url) in _EVIDENCE_IMAGE_HOSTS
+
+
 def _is_site_logo(url: str, page_url: str) -> bool:
     """文件名正好是站点名的图基本都是页头 logo，例如 jmlr.org 上的 /img/jmlr.jpg。"""
     stem = urlsplit(url).path.rsplit("/", 1)[-1].rsplit(".", 1)[0].lower()
@@ -518,6 +663,139 @@ def _is_site_logo(url: str, page_url: str) -> bool:
     return bool(stem) and stem in {
         label for label in host.split(".") if label and label not in _SITE_LABEL_SKIP
     }
+
+
+def _nearby_image_text(html: str, start: int, end: int) -> str:
+    """取图片附近的正文/图注，供无 alt 的财经图表判断。
+
+    华尔街见闻和虎嗅的正文图通常没有 alt，但前后句会写「从上面的散点图」
+    「数据显示」。只看 URL（随机 UUID）无法区分图表与会员推广长图。
+    """
+    fragment = html[max(0, start - 420) : min(len(html), end + 260)]
+    fragment = _IMG_TAG_RE.sub(" ", fragment)
+    # 窗口可能恰好截在下一个 <img ...> 中间；不清掉残缺标签会把
+    # member-promo.png 这样的 URL 当成当前图片语义。
+    text = re.sub(r"<[^>]*(?:>|$)", " ", fragment)
+    return re.sub(r"\s+", " ", unescape(text)).strip()[-500:]
+
+
+def _evidence_image_score(
+    asset: dict[str, Any], page_url: str, *, tag: str = "", context: str = ""
+) -> int:
+    url = str(asset.get("url") or "")
+    alt = str(asset.get("alt") or "")
+    kind = str(asset.get("kind") or "")
+    host = _normalized_host(page_url)
+    haystack = f"{url} {alt} {kind} {context}"
+    score = 0
+    if _EVIDENCE_HINT_RE.search(haystack):
+        score += 5
+    if _DECORATIVE_IMAGE_RE.search(haystack):
+        score -= 8
+
+    if host == "cloud.google.com":
+        # Google Cloud 正文图有 JcsBte；相关推荐小卡是 D5RK8d / max-700x700。
+        if "JcsBte" in tag:
+            score += 2
+        if "D5RK8d" in tag or "max-700x700" in url:
+            score -= 8
+    elif host == "huxiu.com":
+        # /article/content/ 只说明在正文里，人物照仍很多；必须另有图表语义。
+        if "/article/content/" in url:
+            score += 1
+        if _HUXIU_EVIDENCE_HINT_RE.search(haystack):
+            score += 4
+        else:
+            score -= 8
+    elif host == "wallstreetcn.com":
+        if "wscnph" in tag and _attr(tag, "data-wscntype") == "image":
+            score += 3
+        if "shield-text" in tag:
+            score -= 12
+        width = _attr(tag, "data-wscnw")
+        height = _attr(tag, "data-wscnh")
+        if width.isdigit() and height.isdigit() and min(int(width), int(height)) >= 250:
+            score += 1
+    elif host == "openai.com":
+        if "images.ctfassets.net" in url:
+            score += 1
+        # 历史发布流程曾把第一张正文图统一标成 article-cover；OpenAI 的
+        # *-inline-* 资产实际是正文内评测图，不能因旧 kind 被误删。
+        if re.search(r"(?:^|[-_/])inline(?:[-_.]|$)", url, re.I):
+            score += 12
+
+    return score
+
+
+def extract_article_evidence_images(
+    html_chunk: str, page_url: str, limit: int = 4
+) -> list[dict[str, str]]:
+    """从正文中只取图表/架构/评测等证据图，保留顺序并剔除推广长图。"""
+    images: list[dict[str, str]] = []
+    seen: set[str] = set()
+    for match in _IMG_TAG_RE.finditer(html_chunk):
+        tag = match.group(0)
+        raw_url = next((_attr(tag, attr) for attr in _SRC_ATTRS if _attr(tag, attr)), "")
+        if not raw_url:
+            srcset = _attr(tag, "srcset")
+            raw_url = srcset.split(",")[0].strip().split(" ")[0] if srcset else ""
+        if not raw_url or raw_url.startswith("data:"):
+            continue
+        url = urljoin(page_url, unescape(raw_url))
+        if not _image_ok(url) or _is_site_logo(url, page_url) or _img_too_small(tag, url):
+            continue
+        context = _nearby_image_text(html_chunk, match.start(), match.end())
+        alt = unescape(_attr(tag, "alt")).strip()
+        if alt == url:  # Google Cloud 把 URL 本身塞进 alt，没有展示价值
+            alt = ""
+        scored_asset: dict[str, Any] = {
+            "url": url,
+            "alt": alt,
+            "kind": "article-figure",
+        }
+        if _evidence_image_score(scored_asset, page_url, tag=tag, context=context) < 4:
+            continue
+        asset = {
+            **scored_asset,
+            # 周边正文只用于判定，不直接当图注：虎嗅/华尔街见闻的 HTML
+            # 常没有 alt，把截断段落展示在图下会比没有图注更混乱。
+            "alt": alt or "原文数据图表",
+        }
+        key = url.split("?", 1)[0].lower()
+        if key in seen:
+            continue
+        seen.add(key)
+        images.append({key: str(value) for key, value in asset.items()})
+        if len(images) >= limit:
+            break
+    return images
+
+
+def curate_evidence_images(
+    assets: list[dict[str, Any]], page_url: str, limit: int = 4
+) -> list[dict[str, str]]:
+    """给 Jina/RSS 已存下来的图片做第二次严格筛选。"""
+    curated: list[dict[str, str]] = []
+    seen: set[str] = set()
+    for raw in assets:
+        if not isinstance(raw, dict) or image_asset_is_noise(raw):
+            continue
+        scored_asset = {
+            "url": str(raw.get("url") or ""),
+            "alt": str(raw.get("alt") or ""),
+            "kind": str(raw.get("kind") or ""),
+        }
+        if _evidence_image_score(scored_asset, page_url) < 4:
+            continue
+        asset = {**scored_asset, "kind": "article-figure"}
+        key = asset["url"].split("?", 1)[0].lower()
+        if key in seen:
+            continue
+        seen.add(key)
+        curated.append(asset)
+        if len(curated) >= limit:
+            break
+    return curated
 
 
 def extract_article_images(html_chunk: str, page_url: str, limit: int = 4) -> list[dict[str, str]]:

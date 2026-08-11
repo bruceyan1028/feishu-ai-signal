@@ -1160,17 +1160,18 @@ def generate(day: str | None = None) -> dict[str, Any]:
         and str(signal.get("url") or "").startswith(("http://", "https://"))
         and "arxiv.org/" not in str(signal.get("url") or "")
     ]
-    article_covers: dict[str, str] = {}
+    article_media: dict[str, dict[str, Any]] = {}
     if article_targets:
         with ThreadPoolExecutor(max_workers=min(8, len(article_targets))) as executor:
-            covers = executor.map(
-                rss.fetch_article_image,
+            fetched_media = executor.map(
+                rss.fetch_article_media,
                 [str(signal.get("url") or "") for signal in article_targets],
+                [str(signal.get("title") or signal.get("titleCn") or "") for signal in article_targets],
             )
-            article_covers = {
-                str(signal.get("recordId") or ""): cover
-                for signal, cover in zip(article_targets, covers)
-                if cover
+            article_media = {
+                str(signal.get("recordId") or ""): bundle
+                for signal, bundle in zip(article_targets, fetched_media)
+                if bundle.get("cover") or bundle.get("images")
             }
     image_updates = []
     seen_images: set[str] = set()
@@ -1179,9 +1180,10 @@ def generate(day: str | None = None) -> dict[str, Any]:
         original_media = media
         original_image = str(signal.get("imageUrl") or "").strip()
         if signal.get("contentType") in {"文章", "公众号", "视频", "播客"}:
+            bundle = article_media.get(str(signal.get("recordId") or ""), {})
             media, curated_image = rss.curate_display_media(
                 signal,
-                article_covers.get(str(signal.get("recordId") or ""), ""),
+                bundle,
             )
             signal["mediaAssets"] = media
             signal["imageUrl"] = curated_image
@@ -1208,7 +1210,8 @@ def generate(day: str | None = None) -> dict[str, Any]:
         if image_key in seen_images:
             image_url = ""
         if not image_url:
-            candidate = article_covers.get(str(signal.get("recordId") or ""), "")
+            bundle = article_media.get(str(signal.get("recordId") or ""), {})
+            candidate = rss.preferred_article_image(signal, bundle)
             candidate_key = candidate.split("?", 1)[0].split("#", 1)[0].lower()
             if candidate_key and candidate_key not in seen_images:
                 image_url = candidate

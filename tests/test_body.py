@@ -373,6 +373,138 @@ class ArticleMediaTest(unittest.TestCase):
             "https://mmbiz.qpic.cn/cover.jpg",
         )
 
+    def test_google_cloud_prefers_architecture_figures_over_hero_and_related_cards(self):
+        url = "https://cloud.google.com/blog/products/ai/demo"
+        html = """
+        <article>
+          <img class="rFf1Dd" src="https://storage.googleapis.com/x/marketing-hero.png">
+          <p>Data enters the processing pipeline.</p>
+          <img class="JcsBte" src="https://storage.googleapis.com/x/data-flow-architecture.jpg">
+          <p>The deployment architecture keeps production immutable.</p>
+          <img class="JcsBte" src="https://storage.googleapis.com/x/platform_engineering.png">
+        </article>
+        <section class="related">
+          <img class="D5RK8d" src="https://storage.googleapis.com/x/other.max-700x700.png">
+        </section>
+        """
+        self.assertEqual(
+            [item["url"] for item in rss.extract_article_evidence_images(html, url)],
+            [
+                "https://storage.googleapis.com/x/data-flow-architecture.jpg",
+                "https://storage.googleapis.com/x/platform_engineering.png",
+            ],
+        )
+
+    def test_huxiu_drops_people_and_decorative_illustrations(self):
+        url = "https://www.huxiu.com/article/1.html"
+        html = """
+        <article>
+          <p>本·伯南克表示社会需要提前准备。</p>
+          <img data-w="554" data-h="367" src="https://img.huxiucdn.com/article/content/person.png">
+          <p>本·伯南克，图源：诺贝尔官网</p>
+          <p>工业革命时期的工厂，图源：英国国家博物馆</p>
+          <img data-w="554" data-h="317" src="https://img.huxiucdn.com/article/content/factory.png">
+        </article>
+        """
+        self.assertEqual(rss.extract_article_evidence_images(html, url), [])
+
+    def test_huxiu_keeps_a_body_chart_when_context_identifies_it(self):
+        url = "https://www.huxiu.com/article/1.html"
+        html = """
+        <article>
+          <p>下图对比了不同模型的推理成本与准确率趋势。</p>
+          <img data-w="1000" data-h="620" src="https://img.huxiucdn.com/article/content/model-cost.png">
+          <p>主流大模型 API 输出价格对比。</p>
+          <img data-w="1080" data-h="729" src="https://img.huxiucdn.com/article/content/model-price.png">
+        </article>
+        """
+        self.assertEqual(
+            [item["url"] for item in rss.extract_article_evidence_images(html, url)],
+            [
+                "https://img.huxiucdn.com/article/content/model-cost.png",
+                "https://img.huxiucdn.com/article/content/model-price.png",
+            ],
+        )
+
+    def test_openai_strict_curation_drops_art_card_and_keeps_evaluation_chart(self):
+        signal = {
+            "sourceId": "openai-news",
+            "url": "https://openai.com/index/demo",
+            "contentType": "文章",
+            "titleCn": "模型安全评测",
+            "imageUrl": "https://images.ctfassets.net/x/Art_Card.png",
+            "mediaAssets": {
+                "images": [
+                    {"url": "https://images.ctfassets.net/x/Art_Card.png", "alt": ""},
+                    {
+                        "url": "https://images.ctfassets.net/x/exploitgym-inline-results.png",
+                        "alt": "ExploitGym evaluation results",
+                        "kind": "article-cover",
+                    },
+                ],
+                "videos": [],
+            },
+        }
+        media, primary = rss.curate_display_media(signal)
+        self.assertEqual(primary, "https://images.ctfassets.net/x/exploitgym-inline-results.png")
+        self.assertEqual(len(media["images"]), 1)
+        self.assertEqual(media["images"][0]["kind"], "article-figure")
+
+    @mock.patch.object(rss.requests, "get")
+    def test_wallstreetcn_uses_detail_api_and_drops_membership_promo(self, get):
+        response = mock.Mock()
+        response.raise_for_status.return_value = None
+        response.json.return_value = {
+            "data": {
+                "image": {"uri": "https://wpimg-wscn.awtmt.com/decorative-cover.jpeg"},
+                "content": """
+                  <p>从上面的散点图可以看到，智能指数与价格正相关。</p>
+                  <img class="wscnph" data-wscntype="image" data-wscnw="634"
+                       data-wscnh="435" src="https://wpimg-wscn.awtmt.com/chart.png">
+                  <p>风险提示</p>
+                  <img class="shield-text wscnph" data-wscntype="image"
+                       data-wscnw="1080" data-wscnh="3130"
+                       src="https://wpimg-wscn.awtmt.com/member-promo.png">
+                """,
+            }
+        }
+        get.return_value = response
+        result = rss.fetch_article_media("https://wallstreetcn.com/articles/3779138")
+        self.assertIn("/apiv1/content/articles/3779138?extract=0", get.call_args.args[0])
+        self.assertEqual(
+            [item["url"] for item in result["images"]],
+            ["https://wpimg-wscn.awtmt.com/chart.png"],
+        )
+
+    def test_strict_sources_keep_multiple_figures_and_never_fall_back_to_cover(self):
+        signal = {
+            "sourceId": "gcp-ai-infra",
+            "url": "https://cloud.google.com/blog/products/ai/demo",
+            "contentType": "文章",
+            "imageUrl": "https://storage.googleapis.com/x/marketing-hero.png",
+            "mediaAssets": {
+                "images": [
+                    {
+                        "url": "https://storage.googleapis.com/x/marketing-hero.png",
+                        "alt": "营销封面",
+                        "kind": "article-cover",
+                    }
+                ],
+                "videos": [],
+            },
+        }
+        bundle = {
+            "cover": "https://storage.googleapis.com/x/marketing-hero.png",
+            "images": [
+                {"url": "https://storage.googleapis.com/x/data-flow-architecture.jpg", "alt": ""},
+                {"url": "https://storage.googleapis.com/x/benchmark-chart.png", "alt": ""},
+            ],
+        }
+        media, primary = rss.curate_display_media(signal, bundle)
+        self.assertEqual(primary, bundle["images"][0]["url"])
+        self.assertEqual(len(media["images"]), 2)
+        self.assertNotIn(bundle["cover"], [item["url"] for item in media["images"]])
+
 
 class LeadingBoilerplateTest(unittest.TestCase):
     def test_keeps_short_lede(self):

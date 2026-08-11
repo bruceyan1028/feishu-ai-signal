@@ -3,17 +3,38 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 import shutil
 from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any
+from urllib.parse import urlsplit
 
-from . import cluster, config, daily, feishu, paper_fulltext, policy_document, rss, source_view
+import requests
+
+from . import (
+    cluster,
+    config,
+    daily,
+    feishu,
+    openai_charts,
+    paper_fulltext,
+    policy_document,
+    rss,
+    source_view,
+)
 
 CN_TZ = timezone(timedelta(hours=8))
 ROOT = Path(__file__).resolve().parent.parent
 TEMPLATE = ROOT / "index.html"
+_SAFE_FILENAME_RE = re.compile(r"[^a-zA-Z0-9_-]+")
+_IMAGE_EXTENSIONS = {
+    "image/jpeg": ".jpg",
+    "image/png": ".png",
+    "image/webp": ".webp",
+    "image/gif": ".gif",
+}
 
 
 def _json_cell(value: Any, fallback: Any) -> Any:
@@ -195,6 +216,73 @@ def curate_web_media(briefs: list[dict[str, Any]]) -> None:
         signal["imageUrl"] = cover
 
 
+def mirror_huxiu_images(
+    briefs: list[dict[str, Any]],
+    output_dir: Path | str,
+) -> None:
+    """把虎嗅正文图落到站内，避免 img.huxiucdn.com 的 Referer 防盗链。"""
+    destination = Path(output_dir)
+    downloaded: dict[str, str] = {}
+    for brief in briefs:
+        for signal in brief.get("signals") or []:
+            if (urlsplit(str(signal.get("url") or "")).hostname or "").lower().removeprefix(
+                "www."
+            ) != "huxiu.com":
+                continue
+            media = dict(signal.get("mediaAssets") or {})
+            mirrored: list[dict[str, Any]] = []
+            original_primary = str(signal.get("imageUrl") or "")
+            new_primary = ""
+            prefix = _SAFE_FILENAME_RE.sub(
+                "-", str(signal.get("recordId") or "huxiu")
+            ).strip("-")
+            for index, image in enumerate(media.get("images") or [], 1):
+                if not isinstance(image, dict):
+                    continue
+                source_url = str(image.get("url") or "")
+                if (
+                    urlsplit(source_url).hostname or ""
+                ).lower().removeprefix("www.") != "img.huxiucdn.com":
+                    mirrored.append(image)
+                    continue
+                relative = downloaded.get(source_url)
+                if not relative:
+                    try:
+                        response = requests.get(
+                            source_url,
+                            headers={
+                                "User-Agent": (
+                                    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
+                                    "AppleWebKit/537.36 Chrome/138 Safari/537.36"
+                                )
+                            },
+                            timeout=30,
+                        )
+                        response.raise_for_status()
+                        content_type = response.headers.get("content-type", "").split(";", 1)[
+                            0
+                        ].lower()
+                        extension = _IMAGE_EXTENSIONS.get(content_type)
+                        if not extension or len(response.content) > 12_000_000:
+                            continue
+                        destination.mkdir(parents=True, exist_ok=True)
+                        filename = f"{prefix}-{index}{extension}"
+                        (destination / filename).write_bytes(response.content)
+                        relative = f"media/huxiu/{filename}"
+                        downloaded[source_url] = relative
+                    except requests.RequestException:
+                        continue
+                local_image = {**image, "url": relative}
+                mirrored.append(local_image)
+                if source_url == original_primary:
+                    new_primary = relative
+            media["images"] = mirrored
+            signal["mediaAssets"] = media
+            signal["imageUrl"] = new_primary or (
+                str(mirrored[0].get("url") or "") if mirrored else ""
+            )
+
+
 def build_site(
     briefs: list[dict[str, Any]],
     site_dir: Path | str = ROOT / "site",
@@ -209,7 +297,42 @@ def build_site(
     data_dir.mkdir(parents=True)
     paper_media_dir = site / "media" / "papers"
     policy_media_dir = site / "media" / "policies"
+    openai_chart_dir = site / "media" / "openai-charts"
+    huxiu_media_dir = site / "media" / "huxiu"
     shutil.copy2(TEMPLATE, site / "index.html")
+    rendered_openai_charts: dict[str, list[dict[str, str]]] = {}
+    for brief in briefs:
+        for signal in brief.get("signals") or []:
+            article_url = str(signal.get("url") or "")
+            if not openai_charts.is_openai_article(article_url):
+                continue
+            if article_url not in rendered_openai_charts:
+                files = openai_charts.write_article_charts(
+                    article_url,
+                    openai_chart_dir,
+                    str(signal.get("recordId") or "openai"),
+                )
+                rendered_openai_charts[article_url] = [
+                    {
+                        "url": f"media/openai-charts/{item['filename']}",
+                        "alt": item["alt"],
+                        "kind": "openai-vega-chart",
+                    }
+                    for item in files
+                ]
+            chart_images = rendered_openai_charts[article_url]
+            if not chart_images:
+                continue
+            media = dict(signal.get("mediaAssets") or {})
+            existing = [
+                item
+                for item in media.get("images") or []
+                if not str(item.get("url") or "").startswith("media/openai-charts/")
+            ]
+            media["images"] = chart_images + existing
+            signal["mediaAssets"] = media
+            signal["imageUrl"] = chart_images[0]["url"]
+    mirror_huxiu_images(briefs, huxiu_media_dir)
     rendered: dict[str, list[dict[str, str]]] = {}
     for brief in briefs:
         for signal in brief.get("signals") or []:
