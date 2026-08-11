@@ -828,15 +828,9 @@
         "硬件",
         "其他"
       ],
-      "imageUrl": "https://img.huxiucdn.com/ai/ai-general-cover/202608/06/31406-prod-nb2ep-general-1-1785981817649.png?imageView2/1/w/788/h/444/|imageMogr2/strip/interlace/1/quality/85",
+      "imageUrl": "",
       "mediaAssets": {
-        "images": [
-          {
-            "url": "https://img.huxiucdn.com/ai/ai-general-cover/202608/06/31406-prod-nb2ep-general-1-1785981817649.png?imageView2/1/w/788/h/444/|imageMogr2/strip/interlace/1/quality/85",
-            "alt": "美国启动创世纪计划，构建AI驱动的科研基础设施",
-            "kind": "article-cover"
-          }
-        ],
+        "images": [],
         "videos": []
       },
       "editorialStructure": "",
@@ -1005,15 +999,9 @@
         "监管",
         "其他"
       ],
-      "imageUrl": "https://wpimg-wscn.awtmt.com/5d8f1020-649a-43bb-88b1-484e11bce9bc.png",
+      "imageUrl": "",
       "mediaAssets": {
-        "images": [
-          {
-            "url": "https://wpimg-wscn.awtmt.com/5d8f1020-649a-43bb-88b1-484e11bce9bc.png",
-            "alt": "AI语音钓鱼攻击集中 targeting 华尔街顶级对冲基金",
-            "kind": "article-cover"
-          }
-        ],
+        "images": [],
         "videos": []
       },
       "editorialStructure": "",
@@ -1059,13 +1047,13 @@
         "硬件",
         "融资"
       ],
-      "imageUrl": "https://wpimg-wscn.awtmt.com/102f982f-b22c-4960-8090-efc9a4f50d84.jpeg",
+      "imageUrl": "https://wpimg-wscn.awtmt.com/76199e5b-40f0-40e0-b485-370d1adceae5.png",
       "mediaAssets": {
         "images": [
           {
-            "url": "https://wpimg-wscn.awtmt.com/102f982f-b22c-4960-8090-efc9a4f50d84.jpeg",
-            "alt": "存储长协重塑定价权：周期底部被抬至历史峰值之上",
-            "kind": "article-cover"
+            "url": "https://wpimg-wscn.awtmt.com/76199e5b-40f0-40e0-b485-370d1adceae5.png",
+            "alt": "原文数据图表",
+            "kind": "article-figure"
           }
         ],
         "videos": []
@@ -1712,15 +1700,9 @@
         "AI",
         "其他"
       ],
-      "imageUrl": "https://wpimg-wscn.awtmt.com/1aaa8b52-f1e7-4dc4-ac11-4cf4c44df611.png",
+      "imageUrl": "",
       "mediaAssets": {
-        "images": [
-          {
-            "url": "https://wpimg-wscn.awtmt.com/1aaa8b52-f1e7-4dc4-ac11-4cf4c44df611.png",
-            "alt": "特朗普与沃什频繁私下通话引发美联储独立性担忧",
-            "kind": "article-cover"
-          }
-        ],
+        "images": [],
         "videos": []
       },
       "editorialStructure": "",

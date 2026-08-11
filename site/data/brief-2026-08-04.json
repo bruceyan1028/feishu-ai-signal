@@ -889,15 +889,9 @@
         "产品",
         "融资"
       ],
-      "imageUrl": "https://img.huxiucdn.com/ai/ai-general-cover/202608/04/31131-prod-nb2ep-general-1-1785808819672.png?imageView2/1/w/788/h/444/|imageMogr2/strip/interlace/1/quality/85",
+      "imageUrl": "",
       "mediaAssets": {
-        "images": [
-          {
-            "url": "https://img.huxiucdn.com/ai/ai-general-cover/202608/04/31131-prod-nb2ep-general-1-1785808819672.png?imageView2/1/w/788/h/444/|imageMogr2/strip/interlace/1/quality/85",
-            "alt": "推理成本大降后，AI厂商将节省的算力转化为毛利",
-            "kind": "article-cover"
-          }
-        ],
+        "images": [],
         "videos": []
       },
       "editorialStructure": "",
@@ -1171,13 +1165,28 @@
         "Agent",
         "产品"
       ],
-      "imageUrl": "https://storage.googleapis.com/gweb-cloudblog-publish/images/19_-_Infrastructure_Modernization_o5CKMmf.max-2600x2600.jpg",
+      "imageUrl": "https://storage.googleapis.com/gweb-cloudblog-publish/images/1_RjwJHTJ.max-1500x1500.png",
       "mediaAssets": {
         "images": [
           {
-            "url": "https://storage.googleapis.com/gweb-cloudblog-publish/images/19_-_Infrastructure_Modernization_o5CKMmf.max-2600x2600.jpg",
-            "alt": "谷歌云以AI推动主机渐进式现代化",
-            "kind": "article-cover"
+            "url": "https://storage.googleapis.com/gweb-cloudblog-publish/images/1_RjwJHTJ.max-1500x1500.png",
+            "alt": "原文数据图表",
+            "kind": "article-figure"
+          },
+          {
+            "url": "https://storage.googleapis.com/gweb-cloudblog-publish/images/2_2jb2Sd1.max-2000x2000.png",
+            "alt": "原文数据图表",
+            "kind": "article-figure"
+          },
+          {
+            "url": "https://storage.googleapis.com/gweb-cloudblog-publish/images/3_5ATKeUA.max-2000x2000.png",
+            "alt": "原文数据图表",
+            "kind": "article-figure"
+          },
+          {
+            "url": "https://storage.googleapis.com/gweb-cloudblog-publish/images/4_5GuaY6m.max-1400x1400.png",
+            "alt": "原文数据图表",
+            "kind": "article-figure"
           }
         ],
         "videos": []
@@ -1462,15 +1471,9 @@
         "产品",
         "其他"
       ],
-      "imageUrl": "https://img.huxiucdn.com/ai/ai-general-cover/202608/04/31132-prod-kl-general-1-1785809245667.png?imageView2/1/w/788/h/444/|imageMogr2/strip/interlace/1/quality/85",
+      "imageUrl": "",
       "mediaAssets": {
-        "images": [
-          {
-            "url": "https://img.huxiucdn.com/ai/ai-general-cover/202608/04/31132-prod-kl-general-1-1785809245667.png?imageView2/1/w/788/h/444/|imageMogr2/strip/interlace/1/quality/85",
-            "alt": "章鱼能源以合资模式进入中国电力市场，押注Kraken能源数字化平台",
-            "kind": "article-cover"
-          }
-        ],
+        "images": [],
         "videos": []
       },
       "editorialStructure": "",

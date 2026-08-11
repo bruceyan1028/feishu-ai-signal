@@ -795,13 +795,28 @@
         "开源",
         "产品"
       ],
-      "imageUrl": "https://wpimg-wscn.awtmt.com/73d457ff-705f-48bf-804b-d45d7c18c185.png",
+      "imageUrl": "https://wpimg-wscn.awtmt.com/8643d431-54ef-4f06-ab32-4c9365778e5d.png",
       "mediaAssets": {
         "images": [
           {
-            "url": "https://wpimg-wscn.awtmt.com/73d457ff-705f-48bf-804b-d45d7c18c185.png",
-            "alt": "阿里发布千问3.8-Max：2.4万亿参数，长程智能体与自动编程能力突出",
-            "kind": "article-cover"
+            "url": "https://wpimg-wscn.awtmt.com/8643d431-54ef-4f06-ab32-4c9365778e5d.png",
+            "alt": "原文数据图表",
+            "kind": "article-figure"
+          },
+          {
+            "url": "https://wpimg-wscn.awtmt.com/44da3bdf-bcf3-45f5-89e6-726d4344b6e9.png",
+            "alt": "原文数据图表",
+            "kind": "article-figure"
+          },
+          {
+            "url": "https://wpimg-wscn.awtmt.com/5f2b80b5-d71a-4b79-9bee-684f2be76555.png",
+            "alt": "原文数据图表",
+            "kind": "article-figure"
+          },
+          {
+            "url": "https://wpimg-wscn.awtmt.com/d8a61925-1988-4e81-9aad-f8d8db35e706.png",
+            "alt": "原文数据图表",
+            "kind": "article-figure"
           }
         ],
         "videos": []
@@ -850,13 +865,13 @@
         "监管",
         "其他"
       ],
-      "imageUrl": "https://wpimg-wscn.awtmt.com/content_default_7.jpg",
+      "imageUrl": "https://wpimg-wscn.awtmt.com/a86d114d-01d4-4c35-9691-ea79bc144491.png",
       "mediaAssets": {
         "images": [
           {
-            "url": "https://wpimg-wscn.awtmt.com/content_default_7.jpg",
-            "alt": "OpenAI据称确认Astra模型家族，宣称以约2000美元算力攻克十项数学难题",
-            "kind": "article-cover"
+            "url": "https://wpimg-wscn.awtmt.com/a86d114d-01d4-4c35-9691-ea79bc144491.png",
+            "alt": "原文数据图表",
+            "kind": "article-figure"
           }
         ],
         "videos": []
@@ -960,13 +975,23 @@
         "硬件",
         "其他"
       ],
-      "imageUrl": "https://wpimg-wscn.awtmt.com/53f8497d-7023-4916-8704-a5330b4579fe.png",
+      "imageUrl": "https://wpimg-wscn.awtmt.com/715a5405-c4c6-4737-97e5-84f6734c0310.png",
       "mediaAssets": {
         "images": [
           {
-            "url": "https://wpimg-wscn.awtmt.com/53f8497d-7023-4916-8704-a5330b4579fe.png",
-            "alt": "高盛：AI等多重资本需求将推高融资成本并重塑投资范式",
-            "kind": "article-cover"
+            "url": "https://wpimg-wscn.awtmt.com/715a5405-c4c6-4737-97e5-84f6734c0310.png",
+            "alt": "原文数据图表",
+            "kind": "article-figure"
+          },
+          {
+            "url": "https://wpimg-wscn.awtmt.com/2af4269d-ee70-4051-8a8e-7ca7d0a779a6.png",
+            "alt": "原文数据图表",
+            "kind": "article-figure"
+          },
+          {
+            "url": "https://wpimg-wscn.awtmt.com/eb3beeb8-6ac4-4c9f-9517-6786b861d053.png",
+            "alt": "原文数据图表",
+            "kind": "article-figure"
           }
         ],
         "videos": []
@@ -1200,13 +1225,28 @@
         "融资",
         "其他"
       ],
-      "imageUrl": "https://wpimg-wscn.awtmt.com/87b4d001-413a-4469-b4a7-80e0d2a16c90.png",
+      "imageUrl": "https://wpimg-wscn.awtmt.com/00da4096-6824-40d3-820a-31b45fb6fa28.jpeg",
       "mediaAssets": {
         "images": [
           {
-            "url": "https://wpimg-wscn.awtmt.com/87b4d001-413a-4469-b4a7-80e0d2a16c90.png",
-            "alt": "大摩：AI板块回调主要是技术面因素，算力供需与电力瓶颈仍在",
-            "kind": "article-cover"
+            "url": "https://wpimg-wscn.awtmt.com/00da4096-6824-40d3-820a-31b45fb6fa28.jpeg",
+            "alt": "图片",
+            "kind": "article-figure"
+          },
+          {
+            "url": "https://wpimg-wscn.awtmt.com/55a61d55-9cdb-4db1-af7b-96200f6529ac.jpeg",
+            "alt": "图片",
+            "kind": "article-figure"
+          },
+          {
+            "url": "https://wpimg-wscn.awtmt.com/e0201451-4572-42fc-9801-9eea2ed0fbcd.jpeg",
+            "alt": "图片",
+            "kind": "article-figure"
+          },
+          {
+            "url": "https://wpimg-wscn.awtmt.com/c55e6625-453b-4942-986b-c26431d25263.jpeg",
+            "alt": "图片",
+            "kind": "article-figure"
           }
         ],
         "videos": []
@@ -1255,15 +1295,9 @@
         "硬件",
         "产品"
       ],
-      "imageUrl": "https://img.huxiucdn.com/ai/ai-general-cover/202608/03/30986-prod-db-general-1-1785715582303.png?imageView2/1/w/788/h/444/|imageMogr2/strip/interlace/1/quality/85",
+      "imageUrl": "",
       "mediaAssets": {
-        "images": [
-          {
-            "url": "https://img.huxiucdn.com/ai/ai-general-cover/202608/03/30986-prod-db-general-1-1785715582303.png?imageView2/1/w/788/h/444/|imageMogr2/strip/interlace/1/quality/85",
-            "alt": "浪潮信息彭震：AI原生转型的核心难题是组织与人的变革",
-            "kind": "article-cover"
-          }
-        ],
+        "images": [],
         "videos": []
       },
       "editorialStructure": "",
@@ -1364,13 +1398,13 @@
         "其他",
         "产品"
       ],
-      "imageUrl": "https://img.huxiucdn.com/article/cover/202608/03/084023392734.jpg?imageView2/1/w/788/h/444/|imageMogr2/strip/interlace/1/quality/85",
+      "imageUrl": "media/huxiu/recvrcKpOTegSV-1.png",
       "mediaAssets": {
         "images": [
           {
-            "url": "https://img.huxiucdn.com/article/cover/202608/03/084023392734.jpg?imageView2/1/w/788/h/444/|imageMogr2/strip/interlace/1/quality/85",
-            "alt": "中国商务部发布“产能过剩”立场文件，质疑其定义与贸易政策合法性",
-            "kind": "article-cover"
+            "url": "media/huxiu/recvrcKpOTegSV-1.png",
+            "alt": "原文数据图表",
+            "kind": "article-figure"
           }
         ],
         "videos": []
@@ -1418,15 +1452,9 @@
         "硬件",
         "产品"
       ],
-      "imageUrl": "https://img.huxiucdn.com/ai/ai-general-cover/202608/03/30989-prod-nb2ep-general-1-1785715863700.png?imageView2/1/w/788/h/444/|imageMogr2/strip/interlace/1/quality/85",
+      "imageUrl": "",
       "mediaAssets": {
-        "images": [
-          {
-            "url": "https://img.huxiucdn.com/ai/ai-general-cover/202608/03/30989-prod-nb2ep-general-1-1785715863700.png?imageView2/1/w/788/h/444/|imageMogr2/strip/interlace/1/quality/85",
-            "alt": "台积电携手景硕研发类EMIB硅桥封装技术",
-            "kind": "article-cover"
-          }
-        ],
+        "images": [],
         "videos": []
       },
       "editorialStructure": "",
@@ -1729,15 +1757,9 @@
         "融资",
         "其他"
       ],
-      "imageUrl": "https://img.huxiucdn.com/ai/ai-general-cover/202608/02/30934-prod-db-general-1-1785639198616.png?imageView2/1/w/788/h/444/|imageMogr2/strip/interlace/1/quality/85",
+      "imageUrl": "",
       "mediaAssets": {
-        "images": [
-          {
-            "url": "https://img.huxiucdn.com/ai/ai-general-cover/202608/02/30934-prod-db-general-1-1785639198616.png?imageView2/1/w/788/h/444/|imageMogr2/strip/interlace/1/quality/85",
-            "alt": "离职标签带来流量，垂直在职创作者更具持续变现能力",
-            "kind": "article-cover"
-          }
-        ],
+        "images": [],
         "videos": []
       },
       "editorialStructure": "",

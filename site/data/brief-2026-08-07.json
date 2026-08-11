@@ -824,13 +824,13 @@
         "RAG",
         "其他"
       ],
-      "imageUrl": "https://img.huxiucdn.com/ai/ai-article-cover/202608/07/4881339-prod-56693-dbv2-2.png?imageView2/1/w/788/h/444/|imageMogr2/strip/interlace/1/quality/85",
+      "imageUrl": "media/huxiu/recvrzYBnljaAZ-1.png",
       "mediaAssets": {
         "images": [
           {
-            "url": "https://img.huxiucdn.com/ai/ai-article-cover/202608/07/4881339-prod-56693-dbv2-2.png?imageView2/1/w/788/h/444/|imageMogr2/strip/interlace/1/quality/85",
-            "alt": "从SEO到GEO：Global AI增长体系的六大转变",
-            "kind": "article-cover"
+            "url": "media/huxiu/recvrzYBnljaAZ-1.png",
+            "alt": "原文数据图表",
+            "kind": "article-figure"
           }
         ],
         "videos": []
@@ -879,15 +879,9 @@
         "硬件",
         "其他"
       ],
-      "imageUrl": "https://wpimg-wscn.awtmt.com/e93bceb4-db64-445c-843f-2cf0b09f947b.jpeg",
+      "imageUrl": "",
       "mediaAssets": {
-        "images": [
-          {
-            "url": "https://wpimg-wscn.awtmt.com/e93bceb4-db64-445c-843f-2cf0b09f947b.jpeg",
-            "alt": "美光称AI正将存储重塑为系统核心，CPU侧代理需求仍处早期",
-            "kind": "article-cover"
-          }
-        ],
+        "images": [],
         "videos": []
       },
       "editorialStructure": "",
@@ -1001,13 +995,18 @@
         "融资",
         "其他"
       ],
-      "imageUrl": "https://wpimg-wscn.awtmt.com/a418353a-f1ad-4744-8a80-6cb06f002099.png",
+      "imageUrl": "https://wpimg-wscn.awtmt.com/c70d384c-457b-4d29-a252-a622420e0f0c.png",
       "mediaAssets": {
         "images": [
           {
-            "url": "https://wpimg-wscn.awtmt.com/a418353a-f1ad-4744-8a80-6cb06f002099.png",
-            "alt": "标普500二季度EPS增长45%，但近半来自股权投资重估与AI基建集中贡献",
-            "kind": "article-cover"
+            "url": "https://wpimg-wscn.awtmt.com/c70d384c-457b-4d29-a252-a622420e0f0c.png",
+            "alt": "原文数据图表",
+            "kind": "article-figure"
+          },
+          {
+            "url": "https://wpimg-wscn.awtmt.com/c535d5db-3b54-4a59-ad49-d32c7182ceb3.png",
+            "alt": "原文数据图表",
+            "kind": "article-figure"
           }
         ],
         "videos": []
@@ -1158,15 +1157,9 @@
         "监管",
         "其他"
       ],
-      "imageUrl": "https://img.huxiucdn.com/article/cover/202608/07/071829632887.jpg?imageView2/1/w/788/h/444/|imageMogr2/strip/interlace/1/quality/85",
+      "imageUrl": "",
       "mediaAssets": {
-        "images": [
-          {
-            "url": "https://img.huxiucdn.com/article/cover/202608/07/071829632887.jpg?imageView2/1/w/788/h/444/|imageMogr2/strip/interlace/1/quality/85",
-            "alt": "部分电商红海类目综合费率已持平或超过实体门店",
-            "kind": "article-cover"
-          }
-        ],
+        "images": [],
         "videos": []
       },
       "editorialStructure": "",
@@ -1321,13 +1314,23 @@
         "产品",
         "其他"
       ],
-      "imageUrl": "https://wpimg-wscn.awtmt.com/4e4dab81-15bc-47c3-947c-a9c45987bf14.jpeg",
+      "imageUrl": "https://wpimg-wscn.awtmt.com/712a3511-ee84-4c17-bb1e-89d126fd9bda.png",
       "mediaAssets": {
         "images": [
           {
-            "url": "https://wpimg-wscn.awtmt.com/4e4dab81-15bc-47c3-947c-a9c45987bf14.jpeg",
-            "alt": "中国7月出口同比增长23.9%，高技术产品出口增超五成",
-            "kind": "article-cover"
+            "url": "https://wpimg-wscn.awtmt.com/712a3511-ee84-4c17-bb1e-89d126fd9bda.png",
+            "alt": "原文数据图表",
+            "kind": "article-figure"
+          },
+          {
+            "url": "https://wpimg-wscn.awtmt.com/b1814e43-946a-4983-bb0f-dc0316bceb41.png",
+            "alt": "原文数据图表",
+            "kind": "article-figure"
+          },
+          {
+            "url": "https://cms-emer-res.cctvnews.cctv.com/image/1005/process/7af2f629c5e349039a1321de1bcdc741.jpg",
+            "alt": "原文数据图表",
+            "kind": "article-figure"
           }
         ],
         "videos": []

@@ -622,13 +622,33 @@
         "Agent",
         "监管"
       ],
-      "imageUrl": "https://images.ctfassets.net/kftzwdyauwt9/3AQ3qKm4Rmbjm2C1cLKvkJ/d049df2fdc96d1c5dfc695f00c257ce2/Art_Card.png?w=3840&q=90&fm=webp",
+      "imageUrl": "media/openai-charts/recvrXbjLnc6Bh-chart-1.png",
       "mediaAssets": {
         "images": [
           {
-            "url": "https://images.ctfassets.net/kftzwdyauwt9/3AQ3qKm4Rmbjm2C1cLKvkJ/d049df2fdc96d1c5dfc695f00c257ce2/Art_Card.png?w=3840&q=90&fm=webp",
-            "alt": "在网络防御窗口收窄之际扩展 Daybreak",
-            "kind": "article-cover"
+            "url": "media/openai-charts/recvrXbjLnc6Bh-chart-1.png",
+            "alt": "Advanced Cybersecurity Completion Rate",
+            "kind": "openai-vega-chart"
+          },
+          {
+            "url": "media/openai-charts/recvrXbjLnc6Bh-chart-2.png",
+            "alt": "ExploitGym — Intended vulnerability",
+            "kind": "openai-vega-chart"
+          },
+          {
+            "url": "media/openai-charts/recvrXbjLnc6Bh-chart-3.png",
+            "alt": "Zero-Day Discovery Eval",
+            "kind": "openai-vega-chart"
+          },
+          {
+            "url": "media/openai-charts/recvrXbjLnc6Bh-chart-4.png",
+            "alt": "Vulnerability Discovery and Report Writing",
+            "kind": "openai-vega-chart"
+          },
+          {
+            "url": "media/openai-charts/recvrXbjLnc6Bh-chart-5.png",
+            "alt": "ExploitBench",
+            "kind": "openai-vega-chart"
           }
         ],
         "videos": [],
@@ -746,13 +766,18 @@
         "产品",
         "其他"
       ],
-      "imageUrl": "https://storage.googleapis.com/gweb-cloudblog-publish/images/wpp-ai-platform-engineering.max-2500x2500.png",
+      "imageUrl": "https://storage.googleapis.com/gweb-cloudblog-publish/images/wpp_data_flow_architecture.max-2200x2200.jpg",
       "mediaAssets": {
         "images": [
           {
-            "url": "https://storage.googleapis.com/gweb-cloudblog-publish/images/wpp-ai-platform-engineering.max-2500x2500.png",
-            "alt": "WPP以统一数据与平台工程支撑AI营销规模化落地",
-            "kind": "article-cover"
+            "url": "https://storage.googleapis.com/gweb-cloudblog-publish/images/wpp_data_flow_architecture.max-2200x2200.jpg",
+            "alt": "原文数据图表",
+            "kind": "article-figure"
+          },
+          {
+            "url": "https://storage.googleapis.com/gweb-cloudblog-publish/images/2_WPP_Cloud_Platform_Engineering.max-1400x1400.png",
+            "alt": "原文数据图表",
+            "kind": "article-figure"
           }
         ],
         "videos": [],
@@ -919,15 +944,9 @@
         "硬件",
         "其他"
       ],
-      "imageUrl": "https://wpimg-wscn.awtmt.com/223676c8-0ba9-4c94-a21a-038a8a7941bc.jpeg",
+      "imageUrl": "",
       "mediaAssets": {
-        "images": [
-          {
-            "url": "https://wpimg-wscn.awtmt.com/223676c8-0ba9-4c94-a21a-038a8a7941bc.jpeg",
-            "alt": "Anthropic与Riot签署20年91亿美元算力长约，三笔协议规模超600亿美元",
-            "kind": "article-cover"
-          }
-        ],
+        "images": [],
         "videos": []
       },
       "topComments": [],
@@ -977,15 +996,9 @@
         "Agent",
         "产品"
       ],
-      "imageUrl": "https://wpimg-wscn.awtmt.com/d0b656cf-a51e-4cb0-bf15-a4d4a768b2d7.png",
+      "imageUrl": "",
       "mediaAssets": {
-        "images": [
-          {
-            "url": "https://wpimg-wscn.awtmt.com/d0b656cf-a51e-4cb0-bf15-a4d4a768b2d7.png",
-            "alt": "AI路由层因成本优化需求走红，巨头竞逐OpenRouter",
-            "kind": "article-cover"
-          }
-        ],
+        "images": [],
         "videos": []
       },
       "topComments": [],
@@ -1034,15 +1047,9 @@
         "监管",
         "其他"
       ],
-      "imageUrl": "https://img.huxiucdn.com/ai/ai-general-cover/202608/11/31867-prod-db-general-1-1786409260461.png?imageView2/1/w/788/h/444/|imageMogr2/strip/interlace/1/quality/85",
+      "imageUrl": "",
       "mediaAssets": {
-        "images": [
-          {
-            "url": "https://img.huxiucdn.com/ai/ai-general-cover/202608/11/31867-prod-db-general-1-1786409260461.png?imageView2/1/w/788/h/444/|imageMogr2/strip/interlace/1/quality/85",
-            "alt": "200多位经济学家与AI专家联署：AI经济冲击或超过工业革命",
-            "kind": "article-cover"
-          }
-        ],
+        "images": [],
         "videos": []
       },
       "topComments": [],
@@ -1151,15 +1158,9 @@
         "开源",
         "硬件"
       ],
-      "imageUrl": "https://img.huxiucdn.com/ai/ai-general-cover/202608/11/79-prod-nb2ep-general-1-1786415367972.png?imageView2/1/w/788/h/444/|imageMogr2/strip/interlace/1/quality/85",
+      "imageUrl": "",
       "mediaAssets": {
-        "images": [
-          {
-            "url": "https://img.huxiucdn.com/ai/ai-general-cover/202608/11/79-prod-nb2ep-general-1-1786415367972.png?imageView2/1/w/788/h/444/|imageMogr2/strip/interlace/1/quality/85",
-            "alt": "扎克伯格提出“个人超级智能”路线：以能力分配应对AI权力集中",
-            "kind": "article-cover"
-          }
-        ],
+        "images": [],
         "videos": []
       },
       "topComments": [],
@@ -1209,13 +1210,28 @@
         "开源",
         "融资"
       ],
-      "imageUrl": "https://wpimg-wscn.awtmt.com/f3633a5c-8922-4cfa-838b-5954fb2b9f64.png",
+      "imageUrl": "https://wpimg-wscn.awtmt.com/96a3eadd-7fe4-4f8a-9bc3-6ff44eaf2652.png",
       "mediaAssets": {
         "images": [
           {
-            "url": "https://wpimg-wscn.awtmt.com/f3633a5c-8922-4cfa-838b-5954fb2b9f64.png",
-            "alt": "中国大模型竞争从价格战转向智能、授权与规模",
-            "kind": "article-cover"
+            "url": "https://wpimg-wscn.awtmt.com/96a3eadd-7fe4-4f8a-9bc3-6ff44eaf2652.png",
+            "alt": "原文数据图表",
+            "kind": "article-figure"
+          },
+          {
+            "url": "https://wpimg-wscn.awtmt.com/4e94c759-2c3d-4bef-ad63-5adc2b975936.png",
+            "alt": "原文数据图表",
+            "kind": "article-figure"
+          },
+          {
+            "url": "https://wpimg-wscn.awtmt.com/96ea4807-a3f4-4e9f-bd57-f11069bf7a92.png",
+            "alt": "原文数据图表",
+            "kind": "article-figure"
+          },
+          {
+            "url": "https://wpimg-wscn.awtmt.com/ccbf669b-1bc8-4c84-a856-d9f8362d62b1.png",
+            "alt": "原文数据图表",
+            "kind": "article-figure"
           }
         ],
         "videos": []
@@ -1267,13 +1283,28 @@
         "产品",
         "其他"
       ],
-      "imageUrl": "https://wpimg-wscn.awtmt.com/289bcb7d-a850-49d3-aec1-1ca5ef72dfcb.jpeg",
+      "imageUrl": "https://wpimg-wscn.awtmt.com/e34efa76-72e8-4086-987f-fbe66057edb7.png",
       "mediaAssets": {
         "images": [
           {
-            "url": "https://wpimg-wscn.awtmt.com/289bcb7d-a850-49d3-aec1-1ca5ef72dfcb.jpeg",
-            "alt": "NPO成为CPO量产前国产算力光互联的过渡方案",
-            "kind": "article-cover"
+            "url": "https://wpimg-wscn.awtmt.com/e34efa76-72e8-4086-987f-fbe66057edb7.png",
+            "alt": "原文数据图表",
+            "kind": "article-figure"
+          },
+          {
+            "url": "https://wpimg-wscn.awtmt.com/66ac317d-150d-4c8e-acd8-9a903f110c45.png",
+            "alt": "原文数据图表",
+            "kind": "article-figure"
+          },
+          {
+            "url": "https://wpimg-wscn.awtmt.com/527e3fbf-9f4c-42c0-9474-e6af5db326be.png",
+            "alt": "原文数据图表",
+            "kind": "article-figure"
+          },
+          {
+            "url": "https://wpimg-wscn.awtmt.com/b6915b7e-8111-4f38-9ef3-ea5d7df7866e.png",
+            "alt": "原文数据图表",
+            "kind": "article-figure"
           }
         ],
         "videos": []
@@ -1408,7 +1439,7 @@
           {
             "url": "https://images.ctfassets.net/kftzwdyauwt9/5Rds2whdwhST5i75b212pd/e7d6570319096eefb0405fa373f454b7/modelml-inline-before.png?w=3840&q=90&fm=webp",
             "alt": "Model ML借助GPT-5.6 Sol更高效完成金融工作",
-            "kind": "article-cover"
+            "kind": "article-figure"
           }
         ],
         "videos": [],
@@ -1643,13 +1674,23 @@
         "Agent",
         "产品"
       ],
-      "imageUrl": "https://storage.googleapis.com/gweb-cloudblog-publish/images/malachyte-ai-foundation-models-retail-reco.max-2500x2500.png",
+      "imageUrl": "https://storage.googleapis.com/gweb-cloudblog-publish/images/1_-_Malachyte_blog_.max-2200x2200.png",
       "mediaAssets": {
         "images": [
           {
-            "url": "https://storage.googleapis.com/gweb-cloudblog-publish/images/malachyte-ai-foundation-models-retail-reco.max-2500x2500.png",
-            "alt": "Malachyte以托管实时AI解决零售推荐冷启动问题",
-            "kind": "article-cover"
+            "url": "https://storage.googleapis.com/gweb-cloudblog-publish/images/1_-_Malachyte_blog_.max-2200x2200.png",
+            "alt": "原文数据图表",
+            "kind": "article-figure"
+          },
+          {
+            "url": "https://storage.googleapis.com/gweb-cloudblog-publish/images/2_-_Malachyte_Blog.max-2200x2200.png",
+            "alt": "原文数据图表",
+            "kind": "article-figure"
+          },
+          {
+            "url": "https://storage.googleapis.com/gweb-cloudblog-publish/images/3_-_Malachyte_blog_vector_space_-_high_res.max-1400x1400.png",
+            "alt": "原文数据图表",
+            "kind": "article-figure"
           }
         ],
         "videos": [],

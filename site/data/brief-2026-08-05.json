@@ -685,15 +685,9 @@
         "Agent",
         "监管"
       ],
-      "imageUrl": "https://images.ctfassets.net/kftzwdyauwt9/2PwBCyZF0Z5WLRtsbOpDdQ/338e19fbc39e5b9a63b1db664c006e74/Art_Card__5_.png?w=3840&q=90&fm=webp",
+      "imageUrl": "",
       "mediaAssets": {
-        "images": [
-          {
-            "url": "https://images.ctfassets.net/kftzwdyauwt9/2PwBCyZF0Z5WLRtsbOpDdQ/338e19fbc39e5b9a63b1db664c006e74/Art_Card__5_.png?w=3840&q=90&fm=webp",
-            "alt": "OpenAI披露第三方网络安全评测中的模型越界事件",
-            "kind": "article-cover"
-          }
-        ],
+        "images": [],
         "videos": []
       },
       "editorialStructure": "",
@@ -740,15 +734,9 @@
         "Agent",
         "融资"
       ],
-      "imageUrl": "https://wpimg-wscn.awtmt.com/3fedca1b-c2b2-42d7-b3ba-72cd8f91dce6.jpeg",
+      "imageUrl": "",
       "mediaAssets": {
-        "images": [
-          {
-            "url": "https://wpimg-wscn.awtmt.com/3fedca1b-c2b2-42d7-b3ba-72cd8f91dce6.jpeg",
-            "alt": "报道称DeepSeek重启第二轮融资，拟募资500亿元",
-            "kind": "article-cover"
-          }
-        ],
+        "images": [],
         "videos": []
       },
       "editorialStructure": "",
@@ -899,15 +887,9 @@
         "LLM",
         "产品"
       ],
-      "imageUrl": "https://storage.googleapis.com/gweb-cloudblog-publish/images/29_-_Retail_HmMLc8R.max-2600x2600.jpg",
+      "imageUrl": "",
       "mediaAssets": {
-        "images": [
-          {
-            "url": "https://storage.googleapis.com/gweb-cloudblog-publish/images/29_-_Retail_HmMLc8R.max-2600x2600.jpg",
-            "alt": "Target采用Spanner Graph增强零售商品发现并将数据库维护时间减少50%",
-            "kind": "article-cover"
-          }
-        ],
+        "images": [],
         "videos": []
       },
       "editorialStructure": "",
@@ -1145,13 +1127,18 @@
         "硬件",
         "监管"
       ],
-      "imageUrl": "https://wpimg-wscn.awtmt.com/1022467a-1433-4f47-913f-785f2ba39165.png",
+      "imageUrl": "https://wpimg-wscn.awtmt.com/de98d652-b1f1-4c66-8847-d4ac6d0b5026.png",
       "mediaAssets": {
         "images": [
           {
-            "url": "https://wpimg-wscn.awtmt.com/1022467a-1433-4f47-913f-785f2ba39165.png",
-            "alt": "Gavin Baker：AI与半导体抛售背离强劲算力基本面",
-            "kind": "article-cover"
+            "url": "https://wpimg-wscn.awtmt.com/de98d652-b1f1-4c66-8847-d4ac6d0b5026.png",
+            "alt": "原文数据图表",
+            "kind": "article-figure"
+          },
+          {
+            "url": "https://wpimg-wscn.awtmt.com/c0dd31c7-3fb9-41ec-b892-8bde1e700163.png",
+            "alt": "原文数据图表",
+            "kind": "article-figure"
           }
         ],
         "videos": []
@@ -1200,13 +1187,13 @@
         "融资",
         "其他"
       ],
-      "imageUrl": "https://wpimg-wscn.awtmt.com/1df7b775-65c2-4d16-a953-91c3afbe0df7.png",
+      "imageUrl": "https://wpimg-wscn.awtmt.com/796fc257-8a26-4a16-bf00-33a081b84c14.png",
       "mediaAssets": {
         "images": [
           {
-            "url": "https://wpimg-wscn.awtmt.com/1df7b775-65c2-4d16-a953-91c3afbe0df7.png",
-            "alt": "摩根大通：亚洲科技股回调未改AI资本开支与盈利上行趋势",
-            "kind": "article-cover"
+            "url": "https://wpimg-wscn.awtmt.com/796fc257-8a26-4a16-bf00-33a081b84c14.png",
+            "alt": "原文数据图表",
+            "kind": "article-figure"
           }
         ],
         "videos": []

@@ -191,26 +191,32 @@ def curate_web_media(briefs: list[dict[str, Any]]) -> None:
         for signal in brief.get("signals") or []
         if signal.get("contentType") in {"文章", "公众号", "视频", "播客"}
     ]
-    article_urls = sorted(
-        {
-            str(signal.get("url") or "")
-            for signal in signals
-            if signal.get("contentType") in {"文章", "公众号"}
-            and str(signal.get("url") or "").startswith(("http://", "https://"))
-        }
-    )
-    covers: dict[str, str] = {}
+    article_titles = {
+        str(signal.get("url") or ""): str(
+            signal.get("title") or signal.get("titleCn") or ""
+        )
+        for signal in signals
+        if signal.get("contentType") in {"文章", "公众号"}
+        and str(signal.get("url") or "").startswith(("http://", "https://"))
+    }
+    article_urls = sorted(article_titles)
+    article_media: dict[str, dict[str, Any]] = {}
     if article_urls:
         with ThreadPoolExecutor(max_workers=min(8, len(article_urls))) as executor:
-            covers = {
-                url: cover
-                for url, cover in zip(article_urls, executor.map(rss.fetch_article_image, article_urls))
-                if cover
+            fetched_media = executor.map(
+                rss.fetch_article_media,
+                article_urls,
+                [article_titles[url] for url in article_urls],
+            )
+            article_media = {
+                url: bundle
+                for url, bundle in zip(article_urls, fetched_media)
+                if bundle.get("cover") or bundle.get("images")
             }
     for signal in signals:
         media, cover = rss.curate_display_media(
             signal,
-            covers.get(str(signal.get("url") or ""), ""),
+            article_media.get(str(signal.get("url") or ""), {}),
         )
         signal["mediaAssets"] = media
         signal["imageUrl"] = cover

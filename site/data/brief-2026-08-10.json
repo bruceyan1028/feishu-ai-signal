@@ -572,15 +572,9 @@
         "产品",
         "其他"
       ],
-      "imageUrl": "https://img.huxiucdn.com/article/cover/202608/10/085820915441.jpg?imageView2/1/w/788/h/444/|imageMogr2/strip/interlace/1/quality/85",
+      "imageUrl": "",
       "mediaAssets": {
-        "images": [
-          {
-            "url": "https://img.huxiucdn.com/article/cover/202608/10/085820915441.jpg?imageView2/1/w/788/h/444/|imageMogr2/strip/interlace/1/quality/85",
-            "alt": "郑州短剧业在AI与平台政策冲击下集体转向",
-            "kind": "article-cover"
-          }
-        ],
+        "images": [],
         "videos": []
       },
       "editorialStructure": "",
@@ -680,15 +674,9 @@
         "AI",
         "其他"
       ],
-      "imageUrl": "https://img.huxiucdn.com/ai/ai-general-cover/202608/08/31631-prod-kl-general-1-1786152212782.png?imageView2/1/w/788/h/444/|imageMogr2/strip/interlace/1/quality/85",
+      "imageUrl": "",
       "mediaAssets": {
-        "images": [
-          {
-            "url": "https://img.huxiucdn.com/ai/ai-general-cover/202608/08/31631-prod-kl-general-1-1786152212782.png?imageView2/1/w/788/h/444/|imageMogr2/strip/interlace/1/quality/85",
-            "alt": "DARPA生物技术办公室：以高风险研发推动AI与生物经济融合",
-            "kind": "article-cover"
-          }
-        ],
+        "images": [],
         "videos": []
       },
       "editorialStructure": "",
@@ -735,13 +723,28 @@
         "开源",
         "产品"
       ],
-      "imageUrl": "https://img.huxiucdn.com/ai/ai-general-cover/202608/10/31754-prod-db-general-1-1786321396913.png?imageView2/1/w/788/h/444/|imageMogr2/strip/interlace/1/quality/85",
+      "imageUrl": "media/huxiu/recvrRf54h3vN5-1.png",
       "mediaAssets": {
         "images": [
           {
-            "url": "https://img.huxiucdn.com/ai/ai-general-cover/202608/10/31754-prod-db-general-1-1786321396913.png?imageView2/1/w/788/h/444/|imageMogr2/strip/interlace/1/quality/85",
-            "alt": "低价大模型重塑定价与白领自动化边界",
-            "kind": "article-cover"
+            "url": "media/huxiu/recvrRf54h3vN5-1.png",
+            "alt": "原文数据图表",
+            "kind": "article-figure"
+          },
+          {
+            "url": "media/huxiu/recvrRf54h3vN5-2.png",
+            "alt": "原文数据图表",
+            "kind": "article-figure"
+          },
+          {
+            "url": "media/huxiu/recvrRf54h3vN5-3.png",
+            "alt": "原文数据图表",
+            "kind": "article-figure"
+          },
+          {
+            "url": "media/huxiu/recvrRf54h3vN5-4.png",
+            "alt": "原文数据图表",
+            "kind": "article-figure"
           }
         ],
         "videos": []
@@ -888,15 +891,9 @@
         "监管",
         "其他"
       ],
-      "imageUrl": "https://img.huxiucdn.com/ai/ai-article-cover/202608/10/4881892-prod-56776-nb2epv2-1.png?imageView2/1/w/788/h/444/|imageMogr2/strip/interlace/1/quality/85",
+      "imageUrl": "",
       "mediaAssets": {
-        "images": [
-          {
-            "url": "https://img.huxiucdn.com/ai/ai-article-cover/202608/10/4881892-prod-56776-nb2epv2-1.png?imageView2/1/w/788/h/444/|imageMogr2/strip/interlace/1/quality/85",
-            "alt": "三大AI实验室Agent评测逃逸，安全事故被指转化为监管叙事",
-            "kind": "article-cover"
-          }
-        ],
+        "images": [],
         "videos": []
       },
       "editorialStructure": "",
@@ -1523,13 +1520,13 @@
         "产品",
         "监管"
       ],
-      "imageUrl": "https://wpimg-wscn.awtmt.com/85be87b0-63eb-40d7-a0f0-3176d1002587.png",
+      "imageUrl": "https://wpimg-wscn.awtmt.com/b26fa86a-83fb-4bcf-b003-123448f0c510.png",
       "mediaAssets": {
         "images": [
           {
-            "url": "https://wpimg-wscn.awtmt.com/85be87b0-63eb-40d7-a0f0-3176d1002587.png",
-            "alt": "Palantir美国商业业务激增，股价创2024年11月以来最强单周表现",
-            "kind": "article-cover"
+            "url": "https://wpimg-wscn.awtmt.com/b26fa86a-83fb-4bcf-b003-123448f0c510.png",
+            "alt": "原文数据图表",
+            "kind": "article-figure"
           }
         ],
         "videos": []

@@ -1728,7 +1728,7 @@ function articleBody(A, s){
       </div>`
     : '';
 
-  const images = (s.mediaAssets?.images || []).filter(item=>item?.url).slice(0,4);
+  const images = (s.mediaAssets?.images || []).filter(item=>item?.url).slice(0,6);
   const videos = s.kind==='视频' ? [] : (s.mediaAssets?.videos || []).filter(item=>item?.embedUrl).slice(0,1);
   const policy = s.mediaAssets?.policy || {};
   const documents = (s.mediaAssets?.documents || []).filter(item=>item?.url).slice(0,4);
