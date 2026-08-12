@@ -22,14 +22,11 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  build-deploy-send:
+  build:
     # LLM Center 仅允许本机飞连网络访问；使用专用 Mac Runner，
     # 避免 GitHub 托管 Runner 的动态公网出口被 WAF 拦截。
     runs-on: [self-hosted, macOS, ARM64, feishu-ai-signal]
     timeout-minutes: 45
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
     # 所有步骤共享的配置：一处集中，避免各步骤漏传导致新库回退到旧库默认表 ID。
     env:
       FEISHU_APP_ID: ${{ secrets.FEISHU_APP_ID }}
@@ -96,6 +93,35 @@ jobs:
             git push origin HEAD:main
           fi
 
+  deploy-send:
+    # Pages 官方上传 action 在 macOS 上依赖额外的 gtar。生成完成并回写 site 后，
+    # 交给托管 Runner 做纯静态部署和通知，不再从公网调用 LLM Center。
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    env:
+      FEISHU_APP_ID: ${{ secrets.FEISHU_APP_ID }}
+      FEISHU_APP_SECRET: ${{ secrets.FEISHU_APP_SECRET }}
+      FEISHU_BASE_ID: ${{ secrets.FEISHU_BASE_ID }}
+      FEISHU_BRIEF_TABLE_ID: ${{ secrets.FEISHU_BRIEF_TABLE_ID }}
+      FEISHU_RECIPIENT_OPEN_ID: ${{ secrets.FEISHU_RECIPIENT_OPEN_ID }}
+      FEISHU_RECIPIENT_OPEN_IDS: ${{ secrets.FEISHU_RECIPIENT_OPEN_IDS }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
       - uses: actions/configure-pages@v5
         with:
           enablement: true
@@ -112,4 +138,4 @@ jobs:
         env:
           PUBLIC_BASE_URL: ${{ steps.deployment.outputs.page_url }}
           FORCE_FLAG: ${{ inputs.force_send && '--force' || '' }}
-        run: python -m src.notify --input output/daily-brief.json $FORCE_FLAG
+        run: python -m src.notify --input site/data/brief-latest.json $FORCE_FLAG
