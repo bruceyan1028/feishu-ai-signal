@@ -77,25 +77,17 @@ jobs:
       - name: Build static site from Feishu
         run: python -m src.publish --input output/daily-brief.json
 
-      # Pages 的内容是每次 run 的产物、不落库；而 pages-preview.yml 会在任何一次
-      # 改前端的 push 上、用仓库里的 site/ 重新部署。不回写就会出现「改一次前端，
-      # 线上简报被打回上次提交时的日期」。回写后两条部署路径的内容才一致。
-      - name: Commit generated brief data
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add -A site
-          if git diff --cached --quiet; then
-            echo "站点数据无变化，跳过提交"
-          else
-            git commit -m "chore(site): 发布 $(TZ=Asia/Shanghai date +%Y-%m-%d) 简报数据 [skip ci]"
-            git pull --rebase --autostash origin main
-            git push origin HEAD:main
-          fi
+      - name: Upload generated site
+        uses: actions/upload-artifact@v4
+        with:
+          name: generated-site
+          path: site
+          include-hidden-files: true
+          retention-days: 1
 
   deploy-send:
-    # Pages 官方上传 action 在 macOS 上依赖额外的 gtar。生成完成并回写 site 后，
-    # 交给托管 Runner 做纯静态部署和通知，不再从公网调用 LLM Center。
+    # Pages 官方上传 action 在 macOS 上依赖额外的 gtar。Mac 只生成并上传产物，
+    # 托管 Runner 负责回写仓库、静态部署和通知，不再从公网调用 LLM Center。
     needs: build
     runs-on: ubuntu-latest
     timeout-minutes: 20
@@ -113,6 +105,28 @@ jobs:
       - uses: actions/checkout@v4
         with:
           ref: main
+
+      - name: Replace site with generated artifact
+        run: rm -rf site
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: generated-site
+          path: site
+
+      # 回写生成结果，避免后续只改前端时 pages-preview 用旧数据重新部署。
+      - name: Commit generated brief data
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A site
+          if git diff --cached --quiet; then
+            echo "站点数据无变化，跳过提交"
+          else
+            git commit -m "chore(site): 发布 $(TZ=Asia/Shanghai date +%Y-%m-%d) 简报数据 [skip ci]"
+            git pull --rebase --autostash origin main
+            git push origin HEAD:main
+          fi
 
       - uses: actions/setup-python@v5
         with:
