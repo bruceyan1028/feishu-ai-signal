@@ -23,7 +23,9 @@ concurrency:
 
 jobs:
   build-deploy-send:
-    runs-on: ubuntu-latest
+    # LLM Center 仅允许本机飞连网络访问；使用专用 Mac Runner，
+    # 避免 GitHub 托管 Runner 的动态公网出口被 WAF 拦截。
+    runs-on: [self-hosted, macOS, ARM64, feishu-ai-signal]
     timeout-minutes: 45
     environment:
       name: github-pages
