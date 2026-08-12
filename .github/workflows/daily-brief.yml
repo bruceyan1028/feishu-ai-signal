@@ -60,15 +60,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up local Python environment
+      - name: Use prebuilt local Python environment
         run: |
-          /usr/bin/python3 -m venv .venv-ci
-          echo "$GITHUB_WORKSPACE/.venv-ci/bin" >> "$GITHUB_PATH"
+          test -x /Users/batlap/Projects/feishu-ai-signal/.venv/bin/python
+          echo "/Users/batlap/Projects/feishu-ai-signal/.venv/bin" >> "$GITHUB_PATH"
 
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          python -m pip install -r requirements.txt
+      - name: Verify dependencies
+        run: python -m pip check
 
       - name: Run tests
         run: python -m unittest discover -s tests -v
