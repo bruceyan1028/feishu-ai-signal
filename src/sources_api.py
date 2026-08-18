@@ -1,4 +1,4 @@
-"""本地数据源配置服务：静态托管 site/ 目录，并提供 /api/sources 读写飞书一级参数表。
+"""本地配置服务：静态托管 site/，提供信号源、周报队列和动向追踪 API。
 
 只监听回环地址。它持有飞书凭据，而公开的 GitHub Pages 站点是纯静态的，拿不到也
 不该拿到这些凭据——那份站点读的是 publish 导出的 data/sources.json 只读快照。
@@ -12,18 +12,23 @@ import argparse
 import functools
 import json
 import re
+import threading
+import time
 from http import HTTPStatus
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from typing import Any
 from urllib.parse import unquote
 
-from . import config, feishu, source_view, sources
+from . import config, feishu, source_view, sources, timeline
 
 ROOT = Path(__file__).resolve().parent.parent
 SITE_DIR = ROOT / "site"
 API_PREFIX = "/api/sources"
+PENDING_PREFIX = "/api/report-pending"
+TIMELINE_PREFIX = "/api/tracked-entities"
 _SOURCE_ID_RE = re.compile(r"[^a-z0-9]+")
+_TRACKED_ENTITY_WRITE_LOCK = threading.Lock()
 
 
 class ApiError(Exception):
@@ -163,6 +168,195 @@ def delete_source(record_id: str) -> dict[str, Any]:
     return {"ok": True}
 
 
+def _pending_table_id(token: str) -> str:
+    return config.FEISHU_WEEKLY_PENDING_TABLE_ID or feishu.ensure_weekly_pending_table(token)
+
+
+def read_pending_payload() -> dict[str, Any]:
+    token = feishu.get_tenant_access_token()
+    records = feishu.read_all_records_with_ids(token, _pending_table_id(token))
+    items = []
+    for record in records:
+        fields = record.get("fields") or {}
+        status = str(sources.cell(fields.get("状态")) or "")
+        if status == "已移除":
+            continue
+        items.append(
+            {
+                "id": str(record.get("record_id") or ""),
+                "recordId": str(sources.cell(fields.get("条目记录ID")) or ""),
+                "title": str(sources.cell(fields.get("中文标题")) or ""),
+                "targetWeek": str(sources.cell(fields.get("目标周期")) or ""),
+                "status": status,
+                "addedAt": int(float(sources.cell(fields.get("添加时间")) or 0)),
+            }
+        )
+    items.sort(key=lambda item: item["addedAt"], reverse=True)
+    return {"items": items, "writable": True}
+
+
+def create_pending(body: dict[str, Any]) -> dict[str, Any]:
+    record_id = str(body.get("recordId") or "").strip()
+    if not record_id:
+        raise ApiError("缺少条目 recordId")
+    token = feishu.get_tenant_access_token()
+    entry = next(
+        (
+            item
+            for item in feishu.read_all_records_with_ids(token, config.FEISHU_ENTRY_TABLE_ID)
+            if str(item.get("record_id") or "") == record_id
+        ),
+        None,
+    )
+    if not entry:
+        raise ApiError("信号条目不存在", HTTPStatus.NOT_FOUND)
+    table_id = _pending_table_id(token)
+    for existing in feishu.read_all_records_with_ids(token, table_id):
+        fields = existing.get("fields") or {}
+        if (
+            str(sources.cell(fields.get("条目记录ID")) or "") == record_id
+            and str(sources.cell(fields.get("状态")) or "") == "待纳入"
+        ):
+            return {"item": {"id": existing.get("record_id"), "recordId": record_id}}
+    entry_fields = entry.get("fields") or {}
+    title = str(
+        sources.cell(entry_fields.get("中文标题"))
+        or sources.cell(entry_fields.get("标题"))
+        or record_id
+    )
+    created = feishu.create_record(
+        token,
+        table_id,
+        {
+            "条目记录ID": record_id,
+            "中文标题": title,
+            "添加人open_id": str(body.get("openId") or "").strip(),
+            "添加时间": int(time.time() * 1000),
+            "目标周期": str(body.get("targetWeek") or "").strip(),
+            "状态": "待纳入",
+        },
+    )
+    return {
+        "item": {
+            "id": str(created.get("record_id") or ""),
+            "recordId": record_id,
+            "title": title,
+            "status": "待纳入",
+        }
+    }
+
+
+def remove_pending(queue_record_id: str) -> dict[str, Any]:
+    token = feishu.get_tenant_access_token()
+    feishu.update_record(
+        token, _pending_table_id(token), queue_record_id, {"状态": "已移除"}
+    )
+    return {"ok": True}
+
+
+def read_timeline_payload() -> dict[str, Any]:
+    payload = timeline.sync()
+    timeline.write_payload(payload, SITE_DIR / "data" / "timeline-latest.json")
+    payload["writable"] = True
+    return payload
+
+
+def _create_tracked_entity_unlocked(body: dict[str, Any]) -> dict[str, Any]:
+    name = str(body.get("name") or "").strip()
+    if not name:
+        raise ApiError("追踪对象名称不能为空")
+    entity_type = str(body.get("type") or "机构").strip()
+    if entity_type not in {"机构", "人物", "技术"}:
+        raise ApiError(f"未知的追踪对象类型：{entity_type}")
+    token = feishu.get_tenant_access_token()
+    table_id = (
+        config.FEISHU_TRACKED_ENTITY_TABLE_ID
+        or feishu.ensure_tracked_entity_table(token)
+    )
+    records = feishu.read_all_records_with_ids(token, table_id)
+    entities = [timeline.entity_from_record(record) for record in records]
+    if any(entity["name"].lower() == name.lower() for entity in entities):
+        raise ApiError(f"已在追踪：{name}")
+    taken = {entity["id"] for entity in entities}
+    entity_id = timeline.slugify_entity_id(name, taken)
+
+    def term_text(key: str) -> str:
+        value = body.get(key) or ""
+        if isinstance(value, list):
+            return "，".join(str(item).strip() for item in value if str(item).strip())
+        return str(value).strip()
+
+    created = feishu.create_record(
+        token,
+        table_id,
+        {
+            "entity_id": entity_id,
+            "名称": name,
+            "类型": entity_type,
+            "别名": term_text("aliases"),
+            "关键词": term_text("keywords"),
+            "排除词": term_text("excludes"),
+            "状态": "active",
+            "回溯天数": int(
+                body.get("lookbackDays") or config.TIMELINE_DEFAULT_LOOKBACK_DAYS
+            ),
+            "最低影响分": int(
+                body.get("minImpact") or config.TIMELINE_DEFAULT_MIN_IMPACT
+            ),
+            "创建时间": int(time.time() * 1000),
+        },
+    )
+    payload = timeline.sync(entity_id)
+    timeline.write_payload(payload, SITE_DIR / "data" / "timeline-latest.json")
+    entity = next(
+        (item for item in payload["entities"] if item["id"] == entity_id),
+        {"id": entity_id, "name": name, "events": []},
+    )
+    entity["recordId"] = str(created.get("record_id") or entity.get("recordId") or "")
+    return {"entity": entity, "createdEvents": payload["createdEvents"]}
+
+
+def create_tracked_entity(body: dict[str, Any]) -> dict[str, Any]:
+    # ThreadingHTTPServer 可能同时收到双击请求；锁住“查重 → 创建”避免重复对象。
+    with _TRACKED_ENTITY_WRITE_LOCK:
+        return _create_tracked_entity_unlocked(body)
+
+
+def delete_tracked_entity(record_id: str) -> dict[str, Any]:
+    token = feishu.get_tenant_access_token()
+    entity_table_id = (
+        config.FEISHU_TRACKED_ENTITY_TABLE_ID
+        or feishu.ensure_tracked_entity_table(token)
+    )
+    record = next(
+        (
+            item
+            for item in feishu.read_all_records_with_ids(token, entity_table_id)
+            if str(item.get("record_id") or "") == record_id
+        ),
+        None,
+    )
+    if not record:
+        raise ApiError("追踪对象不存在", HTTPStatus.NOT_FOUND)
+    entity_id = timeline.entity_from_record(record)["id"]
+    event_table_id = (
+        config.FEISHU_TRACKED_EVENT_TABLE_ID
+        or feishu.ensure_tracked_event_table(token)
+    )
+    event_record_ids = [
+        str(item.get("record_id") or "")
+        for item in feishu.read_all_records_with_ids(token, event_table_id)
+        if str(
+            sources.cell((item.get("fields") or {}).get("entity_id")) or ""
+        ) == entity_id
+    ]
+    feishu.batch_delete_records(token, event_table_id, event_record_ids)
+    feishu.delete_record(token, entity_table_id, record_id)
+    payload = timeline.sync()
+    timeline.write_payload(payload, SITE_DIR / "data" / "timeline-latest.json")
+    return {"ok": True}
+
+
 class SourcesHandler(SimpleHTTPRequestHandler):
     site_dir: Path = SITE_DIR
 
@@ -184,8 +378,8 @@ class SourcesHandler(SimpleHTTPRequestHandler):
         except (UnicodeDecodeError, ValueError) as exc:
             raise ApiError(f"请求体不是合法 JSON：{exc}") from exc
 
-    def _record_id(self) -> str:
-        record_id = unquote(self.path[len(API_PREFIX) :].strip("/"))
+    def _record_id(self, prefix: str = API_PREFIX) -> str:
+        record_id = unquote(self.path[len(prefix) :].strip("/"))
         if not record_id or "/" in record_id:
             raise ApiError("缺少 recordId")
         return record_id
@@ -202,13 +396,26 @@ class SourcesHandler(SimpleHTTPRequestHandler):
         if self.path.rstrip("/") == API_PREFIX:
             self._dispatch(lambda: read_payload(self.site_dir))
             return
+        if self.path.rstrip("/") == PENDING_PREFIX:
+            self._dispatch(read_pending_payload)
+            return
+        if self.path.rstrip("/") == TIMELINE_PREFIX:
+            self._dispatch(read_timeline_payload)
+            return
         super().do_GET()
 
     def do_POST(self) -> None:  # noqa: N802
-        if self.path.rstrip("/") != API_PREFIX:
-            self.send_error(HTTPStatus.NOT_FOUND)
+        path = self.path.rstrip("/")
+        if path == API_PREFIX:
+            self._dispatch(lambda: create_source(self._read_body(), self.site_dir))
             return
-        self._dispatch(lambda: create_source(self._read_body(), self.site_dir))
+        if path == PENDING_PREFIX:
+            self._dispatch(lambda: create_pending(self._read_body()))
+            return
+        if path == TIMELINE_PREFIX:
+            self._dispatch(lambda: create_tracked_entity(self._read_body()))
+            return
+        self.send_error(HTTPStatus.NOT_FOUND)
 
     def do_PATCH(self) -> None:  # noqa: N802
         if not self.path.startswith(f"{API_PREFIX}/"):
@@ -217,10 +424,20 @@ class SourcesHandler(SimpleHTTPRequestHandler):
         self._dispatch(lambda: apply_patch(self._record_id(), self._read_body()))
 
     def do_DELETE(self) -> None:  # noqa: N802
-        if not self.path.startswith(f"{API_PREFIX}/"):
-            self.send_error(HTTPStatus.NOT_FOUND)
+        if self.path.startswith(f"{API_PREFIX}/"):
+            self._dispatch(lambda: delete_source(self._record_id()))
             return
-        self._dispatch(lambda: delete_source(self._record_id()))
+        if self.path.startswith(f"{PENDING_PREFIX}/"):
+            self._dispatch(
+                lambda: remove_pending(self._record_id(PENDING_PREFIX))
+            )
+            return
+        if self.path.startswith(f"{TIMELINE_PREFIX}/"):
+            self._dispatch(
+                lambda: delete_tracked_entity(self._record_id(TIMELINE_PREFIX))
+            )
+            return
+        self.send_error(HTTPStatus.NOT_FOUND)
 
     def log_message(self, fmt: str, *args: Any) -> None:
         if "/api/" in self.path:

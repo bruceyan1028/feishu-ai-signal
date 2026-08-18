@@ -395,6 +395,40 @@ class ArticleMediaTest(unittest.TestCase):
             ],
         )
 
+    def test_google_deepmind_uses_full_size_lazy_loaded_benchmark_charts(self):
+        self.assertTrue(
+            rss.strict_evidence_image_source(
+                {
+                    "sourceId": "google-deepmind-blog",
+                    "url": "https://deepmind.google/blog/demo",
+                }
+            )
+        )
+        url = "https://blog.google/innovation-and-ai/models-and-research/gemini-models/demo/"
+        html = """
+        <article>
+          <img alt="Gemini launch hero"
+               src="https://storage.googleapis.com/x/gemini.width-200.webp">
+          <img alt="a chart showing production code quality"
+               src="https://storage.googleapis.com/x/frontier.width-100.webp"
+               data-loading='{ "mobile": "https://storage.googleapis.com/x/frontier.width-500.webp",
+                               "desktop": "https://storage.googleapis.com/x/frontier.width-1000.webp" }'>
+          <img alt="a chart showing enterprise workflow automation"
+               src="https://storage.googleapis.com/x/automation.width-100.webp"
+               data-loading='{ "mobile": "https://storage.googleapis.com/x/automation.width-500.webp",
+                               "desktop": "https://storage.googleapis.com/x/automation.width-1000.webp" }'>
+          <img alt="Quote from a customer"
+               src="https://storage.googleapis.com/x/testimonial.width-1000.webp">
+        </article>
+        """
+        self.assertEqual(
+            [item["url"] for item in rss.extract_article_evidence_images(html, url)],
+            [
+                "https://storage.googleapis.com/x/frontier.width-1000.webp",
+                "https://storage.googleapis.com/x/automation.width-1000.webp",
+            ],
+        )
+
     def test_huxiu_drops_people_and_decorative_illustrations(self):
         url = "https://www.huxiu.com/article/1.html"
         html = """

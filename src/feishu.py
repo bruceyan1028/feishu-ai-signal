@@ -638,11 +638,30 @@ def batch_update_records(
     return updated
 
 
+def _ensure_named_table(
+    token: str, name: str, fields: list[dict[str, Any]], error_label: str
+) -> str:
+    for table in list_tables(token):
+        if table.get("name") == name:
+            return str(table["table_id"])
+    url = f"{config.FEISHU_HOST}/open-apis/bitable/v1/apps/{config.FEISHU_BASE_ID}/tables"
+    resp = _SESSION.post(
+        url,
+        headers={"Authorization": f"Bearer {token}", "Content-Type": "application/json; charset=utf-8"},
+        json={"table": {"name": name, "default_view_name": "全部", "fields": fields}},
+        timeout=30,
+    )
+    data = resp.json()
+    if data.get("code") != 0:
+        raise FeishuError(
+            f"Feishu create {error_label} table failed: {data.get('code')} {data.get('msg')}"
+        )
+    payload = data.get("data") or {}
+    return str(payload.get("table_id") or (payload.get("table") or {}).get("table_id"))
+
+
 def ensure_daily_brief_table(token: str) -> str:
     """幂等创建每日简报表并返回 table_id。"""
-    for table in list_tables(token):
-        if table.get("name") == "每日简报":
-            return str(table["table_id"])
     fields = [
         {"field_name": "简报ID", "type": 1},
         {"field_name": "简报日期", "type": 5},
@@ -656,18 +675,103 @@ def ensure_daily_brief_table(token: str) -> str:
         {"field_name": "消息ID", "type": 1},
         {"field_name": "发送时间", "type": 5},
     ]
-    url = f"{config.FEISHU_HOST}/open-apis/bitable/v1/apps/{config.FEISHU_BASE_ID}/tables"
-    resp = _SESSION.post(
-        url,
-        headers={"Authorization": f"Bearer {token}", "Content-Type": "application/json; charset=utf-8"},
-        json={"table": {"name": "每日简报", "default_view_name": "全部", "fields": fields}},
-        timeout=30,
+    return _ensure_named_table(token, "每日简报", fields, "brief")
+
+
+def ensure_weekly_report_table(token: str) -> str:
+    """幂等创建 AI 周报表并返回 table_id。"""
+    fields = [
+        {"field_name": "周报ID", "type": 1},
+        {"field_name": "周期开始", "type": 5},
+        {"field_name": "周期结束", "type": 5},
+        {"field_name": "周报标题", "type": 1},
+        {"field_name": "核心判断", "type": 1},
+        {"field_name": "综述", "type": 1},
+        {"field_name": "周报内容", "type": 1},
+        {"field_name": "信号记录ID", "type": 1},
+        {"field_name": "额外关注记录ID", "type": 1},
+        {
+            "field_name": "状态",
+            "type": 3,
+            "property": {"options": [{"name": x} for x in ("草稿", "已发布")]},
+        },
+        {"field_name": "网页路径", "type": 1},
+        {
+            "field_name": "发送状态",
+            "type": 3,
+            "property": {"options": [{"name": x} for x in ("待发送", "已发送", "失败")]},
+        },
+        {"field_name": "消息ID", "type": 1},
+        {"field_name": "发送时间", "type": 5},
+    ]
+    return _ensure_named_table(token, "AI 周报", fields, "weekly report")
+
+
+def ensure_weekly_pending_table(token: str) -> str:
+    """幂等创建周报待分析队列表并返回 table_id。"""
+    fields = [
+        {"field_name": "条目记录ID", "type": 1},
+        {"field_name": "中文标题", "type": 1},
+        {"field_name": "添加人open_id", "type": 1},
+        {"field_name": "添加时间", "type": 5},
+        {"field_name": "目标周期", "type": 1},
+        {
+            "field_name": "状态",
+            "type": 3,
+            "property": {"options": [{"name": x} for x in ("待纳入", "已纳入", "已移除")]},
+        },
+    ]
+    return _ensure_named_table(
+        token, "周报待分析", fields, "weekly pending"
     )
-    data = resp.json()
-    if data.get("code") != 0:
-        raise FeishuError(f"Feishu create brief table failed: {data.get('code')} {data.get('msg')}")
-    payload = data.get("data") or {}
-    return str(payload.get("table_id") or (payload.get("table") or {}).get("table_id"))
+
+
+def ensure_tracked_entity_table(token: str) -> str:
+    """幂等创建追踪对象表并返回 table_id。"""
+    fields = [
+        {"field_name": "entity_id", "type": 1},
+        {"field_name": "名称", "type": 1},
+        {
+            "field_name": "类型",
+            "type": 3,
+            "property": {
+                "options": [{"name": value} for value in ("机构", "人物", "技术")]
+            },
+        },
+        {"field_name": "别名", "type": 1},
+        {"field_name": "关键词", "type": 1},
+        {"field_name": "排除词", "type": 1},
+        {
+            "field_name": "状态",
+            "type": 3,
+            "property": {"options": [{"name": value} for value in ("active", "paused")]},
+        },
+        {"field_name": "回溯天数", "type": 2},
+        {"field_name": "最低影响分", "type": 2},
+        {"field_name": "创建时间", "type": 5},
+    ]
+    return _ensure_named_table(token, "追踪对象", fields, "tracked entity")
+
+
+def ensure_tracked_event_table(token: str) -> str:
+    """幂等创建追踪事件表并返回 table_id。"""
+    fields = [
+        {"field_name": "event_id", "type": 1},
+        {"field_name": "entity_id", "type": 1},
+        {"field_name": "追踪对象", "type": 1},
+        {"field_name": "信号记录ID", "type": 1},
+        {"field_name": "事件日期", "type": 5},
+        {"field_name": "事件类型", "type": 1},
+        {"field_name": "标题", "type": 1},
+        {"field_name": "摘要", "type": 1},
+        {"field_name": "影响分", "type": 2},
+        {"field_name": "来源", "type": 1},
+        {"field_name": "原文链接", "type": 1},
+        {"field_name": "匹配依据", "type": 1},
+        {"field_name": "置信度", "type": 2},
+        {"field_name": "更新时间", "type": 5},
+    ]
+    return _ensure_named_table(token, "追踪事件", fields, "tracked event")
 
 
 def create_record(token: str, table_id: str, fields: dict[str, Any]) -> dict[str, Any]:

@@ -430,11 +430,34 @@ def build_site(
     return site
 
 
+def export_weekly(
+    payload: dict[str, Any], site_dir: Path | str = ROOT / "site"
+) -> Path:
+    """只更新周报 JSON 与前端模板，不触发耗时的正文媒体重新抓取。"""
+    week_id = str(payload.get("weekId") or "").strip()
+    if not week_id or not payload.get("signals"):
+        raise RuntimeError("周报缺少 weekId 或 signals")
+    site = Path(site_dir)
+    data_dir = site / "data"
+    data_dir.mkdir(parents=True, exist_ok=True)
+    shutil.copy2(TEMPLATE, site / "index.html")
+    content = json.dumps(payload, ensure_ascii=False, indent=2)
+    (data_dir / f"weekly-{week_id}.json").write_text(content, encoding="utf-8")
+    (data_dir / "weekly-latest.json").write_text(content, encoding="utf-8")
+    (site / ".nojekyll").write_text("", encoding="utf-8")
+    return site
+
+
 def run() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--input", help="优先加入本次生成的简报 JSON")
+    parser.add_argument("--weekly-input", help="只发布本次生成的周报 JSON")
     parser.add_argument("--site-dir", default=str(ROOT / "site"))
     args = parser.parse_args()
+    if args.weekly_input:
+        payload = json.loads(Path(args.weekly_input).read_text(encoding="utf-8"))
+        print(export_weekly(payload, args.site_dir))
+        return 0
     token = feishu.get_tenant_access_token()
     entries = load_entry_pool(token)
     params = feishu.read_param_records(token)

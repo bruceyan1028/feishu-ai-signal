@@ -1,0 +1,856 @@
+{
+  "generatedAt": "2026-08-18T14:13:33+08:00",
+  "entities": [
+    {
+      "recordId": "recvsCzCEOp4PA",
+      "id": "nvidia",
+      "name": "NVIDIA",
+      "type": "机构",
+      "aliases": [],
+      "keywords": [],
+      "excludes": [],
+      "status": "active",
+      "lookbackDays": 90,
+      "minImpact": 0,
+      "events": [
+        {
+          "id": "daily:2026-08-17",
+          "recordId": "recvsCjlvMsAos",
+          "date": "2026-08-17",
+          "type": "每日汇总",
+          "title": "英伟达投资15亿美元于软银关联数据中心开发商",
+          "summary": "英伟达将向与软银、OpenAI有关联的SB Energy投资15亿美元，并成为OpenAI Ports-Pike数据中心计算基础设施的独家供应商。英伟达还将提供最高1050亿美元信贷支持，该项目初始规模为4.25吉瓦，未来可扩展至8吉瓦。",
+          "impact": 86,
+          "source": "",
+          "url": "",
+          "matchBasis": "",
+          "confidence": 95,
+          "count": 1,
+          "originals": [
+            {
+              "title": "英伟达投资15亿美元于软银关联数据中心开发商",
+              "url": "https://techcrunch.com/2026/08/17/nvidia-investing-1-5b-in-softbank-data-center-developer-behind-openai-project",
+              "source": "TechCrunch AI",
+              "recordId": "recvsCjlvMsAos",
+              "type": "其他动向",
+              "impact": 86
+            }
+          ]
+        },
+        {
+          "id": "daily:2026-08-15",
+          "recordId": "recvslgGzdC9IL",
+          "date": "2026-08-15",
+          "type": "每日汇总",
+          "title": "印尼首个大学人工智能技术中心在日惹成立",
+          "summary": "印尼通信与数字事务部、Indosat、NVIDIA与加查马达大学在日惹成立该国首个大学型人工智能技术中心，为研究人员和学生提供主权GPU算力、模型、软件及技术指导。中心首批项目聚焦结核病筛查、精准农业和自然灾害响应。",
+          "impact": 84,
+          "source": "",
+          "url": "",
+          "matchBasis": "",
+          "confidence": 95,
+          "count": 1,
+          "originals": [
+            {
+              "title": "印尼首个大学人工智能技术中心在日惹成立",
+              "url": "https://blogs.nvidia.com/blog/ugm-indosat-nvidia-ai-technology-center",
+              "source": "NVIDIA Blog",
+              "recordId": "recvslgGzdC9IL",
+              "type": "技术成果",
+              "impact": 84
+            }
+          ]
+        },
+        {
+          "id": "daily:2026-08-13",
+          "recordId": "recvs8ZBk7JiSM",
+          "date": "2026-08-13",
+          "type": "每日汇总",
+          "title": "NVIDIA Spectrum-X以太网光子网络进入全面量产",
+          "summary": "NVIDIA宣布Spectrum-X Ethernet Photonics进入全面量产，面向吉瓦级AI工厂的横向扩展网络基础设施。官方称其可将激光器数量减少4倍、功耗降低5倍，并将平均故障间隔提升10倍。",
+          "impact": 82,
+          "source": "",
+          "url": "",
+          "matchBasis": "",
+          "confidence": 95,
+          "count": 1,
+          "originals": [
+            {
+              "title": "NVIDIA Spectrum-X以太网光子网络进入全面量产",
+              "url": "https://www.youtube.com/watch?v=cnm6mmqrfeg",
+              "source": "NVIDIA YouTube",
+              "recordId": "recvs8ZBk7JiSM",
+              "type": "其他动向",
+              "impact": 82
+            }
+          ]
+        },
+        {
+          "id": "daily:2026-08-12",
+          "recordId": "recvs2ZlMUH59P",
+          "date": "2026-08-12",
+          "type": "每日汇总",
+          "title": "英伟达联合六大资管机构推动AI工厂成为可投资资产",
+          "summary": "英伟达宣布与Apollo、贝莱德、黑石、Brookfield、高盛和KKR合作，建立独立融资平台，计划长期撬动逾5000亿美元第三方资本建设AI基础设施。其核心主张是，将标准化、可升级和可再部署的AI工厂塑造成能够持续产生收入的基础设施资产；NVIDIA 邀请欧洲 AI 创业者、开发者、投资人和生态合作伙伴参加 10 月 20—22 日举行的 GTC Berlin，重点展示初创企业如何构建、扩展并推动突破性 AI 进入市场。相关宣传视频时长 107 秒，当前播放量为 1262 次。",
+          "impact": 90,
+          "source": "",
+          "url": "",
+          "matchBasis": "",
+          "confidence": 95,
+          "count": 2,
+          "originals": [
+            {
+              "title": "英伟达联合六大资管机构推动AI工厂成为可投资资产",
+              "url": "https://blogs.nvidia.com/blog/nvidia-ai-factory-compute",
+              "source": "NVIDIA Blog",
+              "recordId": "recvs2ZlMUH59P",
+              "type": "融资并购",
+              "impact": 90
+            },
+            {
+              "title": "NVIDIA 宣布 GTC 柏林站将于 10 月 20—22 日举行",
+              "url": "https://www.youtube.com/watch?v=iq3gwdriiru",
+              "source": "NVIDIA YouTube",
+              "recordId": "recvs8ZBk7ITuZ",
+              "type": "合作",
+              "impact": 42
+            }
+          ]
+        },
+        {
+          "id": "daily:2026-08-11",
+          "recordId": "recvs2ZlMUwwIM",
+          "date": "2026-08-11",
+          "type": "每日汇总",
+          "title": "扩展AI算力为何需要全新的800V直流供电架构",
+          "summary": "NVIDIA提出以800 VDC减少电网到GPU之间的电力转换环节，并通过兼容现有交流设施的混合方案、行级供电中心和原生直流电力模块分阶段落地。该架构正由NVIDIA、Google、Microsoft及OCP生态推动标准化，但产品交付和大规模部署仍主要指向2026年下半年及以后；NVIDIA推出30亿参数级混合专家模型Nemotron 3.5 Lightning，以及用于智能路由的开源库NeMo Switchyard。前者面向高频、专用型智能体任务，后者可在不同模型间自动分配请求，以兼顾质量、延迟与成本；Ollama v0.32.9 新增 NVIDIA Nemotron 3.5 Lightning 架构支持，该模型是一个 30B 参数、3B 激活参数的开放式 MoE 模型，面向持续运行的智能体执行层。版本同时修复 Muse Glimmer 函数调用解析器的边界条件，并继续通过 REST API、Python、JavaScript 及多种智能体和客户端集…。",
+          "impact": 86,
+          "source": "",
+          "url": "",
+          "matchBasis": "",
+          "confidence": 95,
+          "count": 6,
+          "originals": [
+            {
+              "title": "扩展AI算力为何需要全新的800V直流供电架构",
+              "url": "https://blogs.nvidia.com/blog/800-vdc-power-architecture-ai-factory",
+              "source": "NVIDIA Blog",
+              "recordId": "recvs2ZlMUwwIM",
+              "type": "其他动向",
+              "impact": 86
+            },
+            {
+              "title": "NVIDIA发布Nemotron 3.5 Lightning与NeMo Switchyard，提升智能体AI速度与效率",
+              "url": "https://blogs.nvidia.com/blog/nemotron-lightning-switchyard-rtx-dgx",
+              "source": "NVIDIA Blog",
+              "recordId": "recvs2ZlMUqDx6",
+              "type": "产品发布",
+              "impact": 85
+            },
+            {
+              "title": "Ollama v0.32.9 发布并支持 NVIDIA Nemotron 3.5 Lightning",
+              "url": "https://github.com/ollama/ollama/releases/tag/v0.32.9",
+              "source": "GitHub Trending",
+              "recordId": "recvs2ZlMUCjaO",
+              "type": "产品发布",
+              "impact": 84
+            },
+            {
+              "title": "英伟达联合本地 AI 社区推动开放模型与智能体",
+              "url": "https://blogs.nvidia.com/blog/local-ai-open-source-models-agents-nemotron",
+              "source": "NVIDIA Blog",
+              "recordId": "recvs2ZlMUO4ZB",
+              "type": "产品发布",
+              "impact": 82
+            },
+            {
+              "title": "GTC SJ 2026：以仿真优先方法加速医疗机器人开发",
+              "url": "https://www.youtube.com/watch?v=rrkucx0kwci",
+              "source": "NVIDIA YouTube",
+              "recordId": "recvrXbjLnYHbB",
+              "type": "其他动向",
+              "impact": 78
+            },
+            {
+              "title": "Ollama v0.32.8 新增 Muse Glimmer 多平台支持",
+              "url": "https://github.com/ollama/ollama/releases/tag/v0.32.8-rc0",
+              "source": "GitHub Trending",
+              "recordId": "recvrXbjLnlbkQ",
+              "type": "产品发布",
+              "impact": 74
+            }
+          ]
+        },
+        {
+          "id": "daily:2026-08-08",
+          "recordId": "recvrRf54hyL8R",
+          "date": "2026-08-08",
+          "type": "每日汇总",
+          "title": "Firebird在亚美尼亚启动独联体地区最大AI工厂",
+          "summary": "Firebird在亚美尼亚启动其宣称为独联体地区规模最大的AI工厂，采用NVIDIA加速计算与戴尔科技高性能AI基础设施。项目旨在建设新的AI计算枢纽，承接全球AI基础设施需求并带动当地开发机会和经济增长。",
+          "impact": 73,
+          "source": "",
+          "url": "",
+          "matchBasis": "",
+          "confidence": 95,
+          "count": 1,
+          "originals": [
+            {
+              "title": "Firebird在亚美尼亚启动独联体地区最大AI工厂",
+              "url": "https://www.youtube.com/watch?v=xctrtots9-a",
+              "source": "NVIDIA YouTube",
+              "recordId": "recvrRf54hyL8R",
+              "type": "其他动向",
+              "impact": 73
+            }
+          ]
+        },
+        {
+          "id": "daily:2026-08-07",
+          "recordId": "recvrFH0FgwxAd",
+          "date": "2026-08-07",
+          "type": "每日汇总",
+          "title": "Infosys与NVIDIA联合推动企业生成式AI规模化部署",
+          "summary": "Infosys将其Topaz平台与NVIDIA技术结合，面向企业快速部署安全、生产级的生成式AI解决方案。方案采用NVIDIA NIM微服务进行高性能推理，以NeMo定制模型，并通过NeMo Guardrails实施安全与合规控制。",
+          "impact": 68,
+          "source": "",
+          "url": "",
+          "matchBasis": "",
+          "confidence": 95,
+          "count": 1,
+          "originals": [
+            {
+              "title": "Infosys与NVIDIA联合推动企业生成式AI规模化部署",
+              "url": "https://www.youtube.com/watch?v=ev1z2xqzgva",
+              "source": "NVIDIA YouTube",
+              "recordId": "recvrFH0FgwxAd",
+              "type": "政策动作",
+              "impact": 68
+            }
+          ]
+        },
+        {
+          "id": "daily:2026-08-06",
+          "recordId": "recvrzYBnliVOU",
+          "date": "2026-08-06",
+          "type": "每日汇总",
+          "title": "迈向全能宇宙：开放世界模型推动物理人工智能前沿",
+          "summary": "文章介绍开放世界模型如何通过生成物理可信数据、预测环境状态和测试行动策略，支撑机器人、自动驾驶与视觉人工智能系统的开发。NVIDIA重点展示了开放模型家族 Cosmos 3，以及与 Omniverse、OpenUSD 结合的仿真和专业化工作流；Google Cloud宣布，前沿AI实验室Mirendil将使用AI Hypercomputer中的Google TPU和全栈NVIDIA AI基础设施，支持模型预训练、后训练及大规模强化学习。Mirendil已上线由TPU v5P芯片组成的集群，NVIDIA AI加速计算系统即将投入使用；NVIDIA 介绍了网络自动化与自主网络的区别，并将智能体 AI、闭环运营和基于 NVIDIA 平台构建的合作生态视为迈向自主网络的关键。该内容来自一段114秒的 NVIDIA 官方视频，未披露具体技术架构、客户案例或量化效果。",
+          "impact": 86,
+          "source": "",
+          "url": "",
+          "matchBasis": "",
+          "confidence": 95,
+          "count": 4,
+          "originals": [
+            {
+              "title": "迈向全能宇宙：开放世界模型推动物理人工智能前沿",
+              "url": "https://blogs.nvidia.com/blog/open-world-models-physical-ai",
+              "source": "NVIDIA Blog",
+              "recordId": "recvrzYBnliVOU",
+              "type": "产品发布",
+              "impact": 86
+            },
+            {
+              "title": "Mirendil采用Google Cloud AI Hypercomputer混合TPU与GPU基础设施",
+              "url": "https://cloud.google.com/blog/topics/startups/mirendil-selects-ai-hypercomputer",
+              "source": "Google Cloud AI Blog",
+              "recordId": "recvrzYBnlU64G",
+              "type": "产品发布",
+              "impact": 76
+            },
+            {
+              "title": "智能体 AI 如何驱动电信自主网络",
+              "url": "https://www.youtube.com/watch?v=awrbir1cjg0",
+              "source": "NVIDIA YouTube",
+              "recordId": "recvrucKw8HAHF",
+              "type": "合作",
+              "impact": 62
+            },
+            {
+              "title": "如何向兄弟解释世界模型？",
+              "url": "https://www.youtube.com/watch?v=zyrwgq8zl-4",
+              "source": "NVIDIA YouTube",
+              "recordId": "recvrucKw8RFTq",
+              "type": "其他动向",
+              "impact": 48
+            }
+          ]
+        },
+        {
+          "id": "daily:2026-08-05",
+          "recordId": "recvrok1iw1WU4",
+          "date": "2026-08-05",
+          "type": "每日汇总",
+          "title": "英伟达加入 NSF 州级与区域 AI 基础设施枢纽计划",
+          "summary": "英伟达参与美国国家科学基金会启动的州级与区域 AI 基础设施枢纽计划，支持高校联盟共享先进计算、数据、软件和专业能力。该计划还将基础设施与课程、证书及职业培训结合，以促进科研、教育和区域 AI 人才培养；NVIDIA 在一段 114 秒的视频中指出，网络自动化并不等同于自主网络，两者之间的关键差距在于智能体 AI 与闭环运营能力。其主张是通过基于 NVIDIA 平台构建的生态系统，推动下一代电信运营向自主化演进；NVIDIA 在一段118秒的解释视频中提出，生产级 AI 智能体通常需要组合多种模型：强大模型负责规划复杂工作流，专用模型负责搜索企业数据、调用工具、审查代码和验证结果。系统可按任务匹配前沿模型与开放模型，以平衡准确性、效率、定制能力和控制力。",
+          "impact": 84,
+          "source": "",
+          "url": "",
+          "matchBasis": "",
+          "confidence": 95,
+          "count": 3,
+          "originals": [
+            {
+              "title": "英伟达加入 NSF 州级与区域 AI 基础设施枢纽计划",
+              "url": "https://blogs.nvidia.com/blog/nsf-state-regional-ai-hub-program",
+              "source": "NVIDIA Blog",
+              "recordId": "recvrok1iw1WU4",
+              "type": "组织变动",
+              "impact": 84
+            },
+            {
+              "title": "智能体 AI 如何驱动电信自主网络",
+              "url": "https://www.youtube.com/watch?v=gdl8czsrze4",
+              "source": "NVIDIA YouTube",
+              "recordId": "recvrok1iwjARO",
+              "type": "其他动向",
+              "impact": 62
+            },
+            {
+              "title": "为什么 AI 智能体需要多模型协作",
+              "url": "https://www.youtube.com/watch?v=np0afrwtdp8",
+              "source": "NVIDIA YouTube",
+              "recordId": "recvrok1iwC2iF",
+              "type": "产品发布",
+              "impact": 62
+            }
+          ]
+        },
+        {
+          "id": "daily:2026-08-04",
+          "recordId": "recvrok1iwCSe8",
+          "date": "2026-08-04",
+          "type": "每日汇总",
+          "title": "英伟达开放Alpamayo 2 Super商用，面向机器人出租车与自动驾驶",
+          "summary": "英伟达宣布Alpamayo 2 Super现已采用OpenMDW-1.1许可开放商业使用，支持微调、衍生模型和商业再分发。该模型面向自动驾驶长尾场景，融合360度摄像头信息，可同时生成轨迹、因果链解释、驾驶意图、自动标注及带二维定位的视觉问答结果；论文提出一个160亿参数的分块自回归扩散框架，通过重采样强制、源锚定分布匹配蒸馏和长时程自回归蒸馏，实现无需未来帧和预设视频长度的流式编辑。完整系统在单张 Nvidia B200 上以约30 FPS处理720p视频，并在短视频与一分钟长视频基准上领先现有流式方法；Linux Foundation 发布“共享 AI 发现交换”（SAFE）指南征求意见稿，拟通过保密收集和分析智能体 AI 事故及险情，将个别事件转化为生态共享防护。该工作由拥有逾120家成员的开放安全 AI 联盟推进，NVIDIA、Cisco、CrowdStrike、Hugging Face 和 Red Hat 等参与初始提案。",
+          "impact": 89,
+          "source": "",
+          "url": "",
+          "matchBasis": "",
+          "confidence": 95,
+          "count": 5,
+          "originals": [
+            {
+              "title": "英伟达开放Alpamayo 2 Super商用，面向机器人出租车与自动驾驶",
+              "url": "https://blogs.nvidia.com/blog/alpamayo-2-super-open-model-now-available",
+              "source": "NVIDIA Blog",
+              "recordId": "recvrok1iwCSe8",
+              "type": "产品发布",
+              "impact": 89
+            },
+            {
+              "title": "JoyAI-Video-Edit：基于自回归扩散的实时开放式视频编辑",
+              "url": "https://huggingface.co/papers/2608.03974",
+              "source": "HF Papers Trending",
+              "recordId": "recvrucKw87OwS",
+              "type": "技术成果",
+              "impact": 88
+            },
+            {
+              "title": "开放安全 AI 联盟提出 SAFE 指南，推动智能体安全事件共享",
+              "url": "https://blogs.nvidia.com/blog/open-secure-ai-alliance-contributions",
+              "source": "NVIDIA Blog",
+              "recordId": "recvrok1iwPhIi",
+              "type": "合作",
+              "impact": 86
+            },
+            {
+              "title": "NVIDIA探讨在AI工厂中安全部署自主智能体",
+              "url": "https://www.youtube.com/watch?v=8tqykjviabq",
+              "source": "NVIDIA YouTube",
+              "recordId": "recvrivenGclam",
+              "type": "组织变动",
+              "impact": 76
+            },
+            {
+              "title": "借助英伟达 Inception 扩展 NeuroDX AI 实时神经健康洞察",
+              "url": "https://www.youtube.com/watch?v=3sdecfo2cqu",
+              "source": "NVIDIA YouTube",
+              "recordId": "recvrivenGP2Zg",
+              "type": "融资并购",
+              "impact": 65
+            }
+          ]
+        },
+        {
+          "id": "daily:2026-08-02",
+          "recordId": "recvrcKpOTQCVH",
+          "date": "2026-08-02",
+          "type": "每日汇总",
+          "title": "NVIDIA 的 AI 研究：仅复制人类行为并不够",
+          "summary": "Two Minute Papers 发布了一期介绍相关研究的视频，标题强调 AI 仅通过复制人类行为可能不足以实现目标。原文提供了论文链接 HIL 以及 Lambda GPU Cloud 的推广信息，但未披露论文的方法、实验结果或具体结论。",
+          "impact": 35,
+          "source": "",
+          "url": "",
+          "matchBasis": "",
+          "confidence": 95,
+          "count": 1,
+          "originals": [
+            {
+              "title": "NVIDIA 的 AI 研究：仅复制人类行为并不够",
+              "url": "https://www.youtube.com/watch?v=8b05cy3uuse",
+              "source": "Two Minute Papers YouTube",
+              "recordId": "recvrcKpOTQCVH",
+              "type": "技术成果",
+              "impact": 35
+            }
+          ]
+        },
+        {
+          "id": "daily:2026-07-29",
+          "recordId": "recvqJBWhbQH8I",
+          "date": "2026-07-29",
+          "type": "每日汇总",
+          "title": "GTC SJ 2026：面向开发者的AI原生数字健康技术栈指南",
+          "summary": "NVIDIA介绍数字健康技术栈从数据孤岛和人工流程转向AI原生、可互操作架构的方向，并面向开发者讲解生成式推理、先进语音模型及智能体医疗应用。内容涵盖核心架构模式、工具和案例，目标是支持面向真实场景的部署。",
+          "impact": 72,
+          "source": "",
+          "url": "",
+          "matchBasis": "",
+          "confidence": 95,
+          "count": 1,
+          "originals": [
+            {
+              "title": "GTC SJ 2026：面向开发者的AI原生数字健康技术栈指南",
+              "url": "https://www.youtube.com/watch?v=iwsksxyfria",
+              "source": "NVIDIA YouTube",
+              "recordId": "recvqJBWhbQH8I",
+              "type": "其他动向",
+              "impact": 72
+            }
+          ]
+        },
+        {
+          "id": "daily:2026-07-28",
+          "recordId": "recvqJBUmVfMPs",
+          "date": "2026-07-28",
+          "type": "每日汇总",
+          "title": "NVIDIA Jetson：将生成式 AI 与机器人算力装进便携式边缘平台",
+          "summary": "NVIDIA 介绍 Jetson 平台如何以便携式模块和开发套件支持机器人、自动机器及边缘 AI 项目，并重点展示 Jetson Orin Nano Super 的 67 TOPS AI 性能。平台支持本地运行语音与视觉助手、构建 AI Agent 及部署开放模型，面向学生、研究者和开发者提供从学习到原型开发的路径；How BharatGen is building India AI with NVIDIA Nemotron。",
+          "impact": 78,
+          "source": "",
+          "url": "",
+          "matchBasis": "",
+          "confidence": 95,
+          "count": 2,
+          "originals": [
+            {
+              "title": "NVIDIA Jetson：将生成式 AI 与机器人算力装进便携式边缘平台",
+              "url": "https://blogs.nvidia.com/blog/build-ai-with-nvidia-jetson",
+              "source": "NVIDIA Blog",
+              "recordId": "recvqJBUmVfMPs",
+              "type": "技术成果",
+              "impact": 78
+            },
+            {
+              "title": "How BharatGen is building India AI with NVIDIA Nemotron",
+              "url": "https://www.youtube.com/watch?v=rpqpbcdv5pc",
+              "source": "NVIDIA YouTube",
+              "recordId": "recvqJBWhbnjPk",
+              "type": "其他动向",
+              "impact": 0
+            }
+          ]
+        }
+      ],
+      "strategy": {
+        "fingerprint": "11fe37d32d60a011db2fbfc0c78a75d946bb585cc1f7b55d7f44043b6358ff46",
+        "generatedAt": "2026-08-18T13:15:19+08:00",
+        "overview": "证据显示，NVIDIA正把业务从GPU及软件供应商推进为AI基础设施、模型运行时、开发者生态与资本组织者的综合平台。其一，以Spectrum-X光子网络、800V直流供电和AI工厂标准化解决吉瓦级算力扩张的工程约束；其二，通过联合资管机构融资、投资SB Energy并锁定大型数据中心供应关系，前置绑定电力、机房和长期需求；其三，以Nemotron、NeMo、NIM、Cosmos、Alpamayo及Jetson覆盖云端、企业、机器人和边缘场景，并借开放许可、教育中心及区域枢纽扩大采用。长期意图可能是形成“资本建设基础设施—NVIDIA提供全栈—开发者与行业应用消化算力”的闭环，但投资回报、项目落地和生态黏性仍需后续验证。",
+        "themes": [
+          {
+            "id": "theme-1",
+            "name": "AI工厂基础设施与资本化",
+            "summary": "NVIDIA同时推进网络、供电、数据中心建设和第三方融资：Spectrum-X进入量产，800V架构开始标准化，AI工厂被包装为可投资资产，并通过对SB Energy的投资及独家供应安排绑定大型算力项目，形成从底层工程到资本供给的前置布局。",
+            "eventIds": [
+              "daily:2026-08-13",
+              "daily:2026-08-11",
+              "daily:2026-08-12",
+              "daily:2026-08-17",
+              "daily:2026-08-08"
+            ]
+          },
+          {
+            "id": "theme-2",
+            "name": "全栈模型与智能体生态",
+            "summary": "Nemotron和NeMo Switchyard覆盖开放模型、模型路由及持续运行的智能体执行层，NIM、NeMo和Guardrails则由Infosys带入企业生产环境；GTC及本地AI社区进一步承担开发者、初创企业和合作伙伴扩张功能。",
+            "eventIds": [
+              "daily:2026-08-11",
+              "daily:2026-08-07",
+              "daily:2026-08-12",
+              "daily:2026-08-05"
+            ]
+          },
+          {
+            "id": "theme-3",
+            "name": "主权AI与全球人才网络",
+            "summary": "NVIDIA通过美国区域基础设施枢纽和印尼大学型AI中心，把GPU、软件、课程、职业培训及本地应用结合起来；亚美尼亚AI工厂和印度模型生态则显示其在非核心市场培育算力节点、人才和本地开发需求。",
+            "eventIds": [
+              "daily:2026-08-05",
+              "daily:2026-08-15",
+              "daily:2026-08-08",
+              "daily:2026-07-28"
+            ]
+          },
+          {
+            "id": "theme-4",
+            "name": "物理AI与边缘商业化",
+            "summary": "Cosmos、Omniverse和OpenUSD面向仿真与世界模型，Alpamayo 2 Super开放商业使用，Jetson把生成式AI和智能体推向机器人及边缘设备；数字健康内容和SAFE安全机制则补充行业落地与风险治理层。",
+            "eventIds": [
+              "daily:2026-08-06",
+              "daily:2026-08-04",
+              "daily:2026-07-28",
+              "daily:2026-07-29"
+            ]
+          }
+        ],
+        "relations": [
+          {
+            "fromEventId": "daily:2026-08-11",
+            "toEventId": "daily:2026-08-13",
+            "type": "capability",
+            "label": "供电与网络协同",
+            "explanation": "800V直流供电针对高密度AI工厂的能效和扩展约束，光子网络则针对横向扩展通信约束，两者共同补齐吉瓦级集群的基础设施能力。",
+            "confidence": 88
+          },
+          {
+            "fromEventId": "daily:2026-08-12",
+            "toEventId": "daily:2026-08-17",
+            "type": "capital",
+            "label": "融资到项目绑定",
+            "explanation": "独立融资平台旨在调动大规模第三方资本；随后对SB Energy投资并提供信贷支持，体现资本组织能力向具体数据中心项目的落地，但两者是否属于同一融资平台尚无证据。",
+            "confidence": 82
+          },
+          {
+            "fromEventId": "daily:2026-08-13",
+            "toEventId": "daily:2026-08-17",
+            "type": "commercialization",
+            "label": "基础设施产品化",
+            "explanation": "光子网络全面量产提供可交付的集群网络组件，SB Energy项目则提供大型部署场景；二者共同支持AI工厂从技术方案走向规模建设。",
+            "confidence": 78
+          },
+          {
+            "fromEventId": "daily:2026-08-12",
+            "toEventId": "daily:2026-08-08",
+            "type": "expansion",
+            "label": "标准化工厂外延",
+            "explanation": "将AI工厂标准化并吸引资本，有利于复制到亚美尼亚等区域节点；但Firebird项目是否使用该融资平台或标准化资产模型，证据未明确。",
+            "confidence": 68
+          },
+          {
+            "fromEventId": "daily:2026-08-11",
+            "toEventId": "daily:2026-08-07",
+            "type": "commercialization",
+            "label": "模型栈进入企业",
+            "explanation": "Nemotron、模型路由和智能体执行能力提供模型层基础，Infosys则把NIM、NeMo和Guardrails组合成面向企业的生产部署方案。",
+            "confidence": 86
+          },
+          {
+            "fromEventId": "daily:2026-08-11",
+            "toEventId": "daily:2026-08-05",
+            "type": "reinforces",
+            "label": "多模型生态扩散",
+            "explanation": "多模型协作理念与Nemotron及Switchyard的产品方向一致，教育、开发者和企业生态可扩大这些组件的使用范围。",
+            "confidence": 84
+          },
+          {
+            "fromEventId": "daily:2026-08-05",
+            "toEventId": "daily:2026-08-15",
+            "type": "expansion",
+            "label": "主权AI复制",
+            "explanation": "美国区域枢纽强调共享算力、软件和人才培养，印尼中心将类似要素落到国家级大学场景，显示主权AI能力建设模式具有跨地区扩展特征。",
+            "confidence": 83
+          },
+          {
+            "fromEventId": "daily:2026-08-06",
+            "toEventId": "daily:2026-08-04",
+            "type": "capability",
+            "label": "仿真支撑自动驾驶",
+            "explanation": "Cosmos、Omniverse和OpenUSD面向物理世界建模与仿真，Alpamayo 2 Super则把相关能力推进到自动驾驶模型的商业使用，形成从研发工具到应用模型的承接。",
+            "confidence": 79
+          },
+          {
+            "fromEventId": "daily:2026-08-04",
+            "toEventId": "daily:2026-07-28",
+            "type": "expansion",
+            "label": "云端模型下沉边缘",
+            "explanation": "Alpamayo支持商业再分发和衍生模型，Jetson提供机器人与边缘设备运行平台，两者共同扩大物理AI从模型开发到终端部署的范围。",
+            "confidence": 76
+          },
+          {
+            "fromEventId": "daily:2026-08-04",
+            "toEventId": "daily:2026-08-04",
+            "type": "partnership",
+            "label": "开放与安全并行",
+            "explanation": "同一事件中，Alpamayo扩大商业开放，SAFE推动智能体事故信息共享；前者降低采用门槛，后者试图降低大规模部署的治理风险。",
+            "confidence": 73
+          }
+        ],
+        "hypotheses": [
+          {
+            "title": "NVIDIA正谋求成为AI工厂全生命周期的基础设施平台，而非单纯芯片供应商",
+            "assessment": "这是战略假设。光子网络、800V供电、AI工厂资产化融资、SB Energy投资及大型项目独家供应安排，组合起来表明NVIDIA可能希望同时影响算力架构、资金来源和项目交付，从而提高基础设施层的控制力与收入持续性。",
+            "confidence": 89,
+            "themeIds": [
+              "theme-1"
+            ],
+            "evidenceEventIds": [
+              "daily:2026-08-11",
+              "daily:2026-08-12",
+              "daily:2026-08-13",
+              "daily:2026-08-17"
+            ],
+            "counterSignals": "融资平台长期没有实际募资或项目，SB Energy安排未形成持续订单，且客户转向自研网络、供电方案或多供应商采购，将削弱该判断。",
+            "watchFor": [
+              "AI工厂融资平台披露实际募集金额、项目清单和NVIDIA收入结构",
+              "800V与Spectrum-X在大型客户集群中的订单和部署规模",
+              "更多数据中心项目出现类似股权、信贷或独家供应安排"
+            ]
+          },
+          {
+            "title": "NVIDIA可能通过开放模型和软件运行时锁定企业智能体的开发与推理层",
+            "assessment": "这是战略假设。Nemotron、Switchyard、NIM、NeMo和Guardrails分别覆盖模型、路由、推理、定制及安全；Infosys的企业渠道和Ollama的兼容支持进一步降低部署门槛，可能形成比单一硬件更深的软件黏性。",
+            "confidence": 85,
+            "themeIds": [
+              "theme-2"
+            ],
+            "evidenceEventIds": [
+              "daily:2026-08-11",
+              "daily:2026-08-07",
+              "daily:2026-08-05"
+            ],
+            "counterSignals": "企业普遍采用与NVIDIA无关的模型路由、推理栈和安全工具，或Nemotron生态使用增长有限，将说明软件锁定效应不足。",
+            "watchFor": [
+              "NIM、NeMo及Switchyard的企业生产案例和付费使用量",
+              "更多云厂商、系统集成商和开发工具默认支持Nemotron",
+              "客户是否因软件栈迁移成本而持续采购NVIDIA加速资源"
+            ]
+          },
+          {
+            "title": "NVIDIA可能把主权AI和教育项目作为全球需求培育及市场进入机制",
+            "assessment": "这是战略假设。美国区域枢纽、印尼大学中心、亚美尼亚AI工厂和印度模型生态覆盖算力、人才、本地应用与产业节点，可能不是孤立公益项目，而是培育未来GPU需求和本地合作网络的长期方式。",
+            "confidence": 81,
+            "themeIds": [
+              "theme-3"
+            ],
+            "evidenceEventIds": [
+              "daily:2026-08-05",
+              "daily:2026-08-15",
+              "daily:2026-08-08",
+              "daily:2026-07-28"
+            ],
+            "counterSignals": "相关中心主要停留在培训或试点，缺乏后续采购、企业应用和本地开发者增长；或政府转向其他供应商，将削弱该判断。",
+            "watchFor": [
+              "中心和枢纽后续GPU采购、课程认证人数及企业项目数量",
+              "本地模型和应用是否在NVIDIA平台上商业化",
+              "更多国家采用类似大学中心、区域枢纽或AI工厂模式"
+            ]
+          },
+          {
+            "title": "物理AI将成为NVIDIA下一阶段连接云端算力与终端设备的增长方向",
+            "assessment": "这是战略假设。Cosmos和Omniverse提供世界模型与仿真基础，Alpamayo开放商业化，Jetson覆盖边缘机器人，数字健康和自动驾驶等行业内容则提供落地入口；组合显示NVIDIA可能在打造跨云、边缘和实体设备的物理AI栈。",
+            "confidence": 83,
+            "themeIds": [
+              "theme-4"
+            ],
+            "evidenceEventIds": [
+              "daily:2026-08-06",
+              "daily:2026-08-04",
+              "daily:2026-07-28",
+              "daily:2026-07-29"
+            ],
+            "counterSignals": "自动驾驶、机器人和数字健康客户未形成规模部署，开放模型被竞争平台主导，或Jetson销售未随应用增长，将削弱该判断。",
+            "watchFor": [
+              "Alpamayo衍生模型及机器人出租车的量产部署",
+              "Cosmos、Omniverse与OpenUSD在工业客户中的付费项目",
+              "Jetson边缘设备出货、开发者数量及机器人应用收入增长"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "recordId": "recvsCRZoYBN5R",
+      "id": "黄仁勋",
+      "name": "黄仁勋",
+      "type": "机构",
+      "aliases": [],
+      "keywords": [],
+      "excludes": [],
+      "status": "active",
+      "lookbackDays": 90,
+      "minImpact": 0,
+      "events": [
+        {
+          "id": "daily:2026-08-14",
+          "recordId": "recvsf8ziDqxqO",
+          "date": "2026-08-14",
+          "type": "每日汇总",
+          "title": "中国开放权重模型崛起，推动中美AI开源生态与商业模式重构",
+          "summary": "DeepSeek、Kimi等中国模型厂商通过开放权重、宽松许可证、详细技术报告及基础设施工具，将行业竞争从单纯模型能力扩展到开放生态。美国主要AI与基础设施企业组建联盟支持开放模型，但安全、蒸馏、商业利益和治理风险仍存在争议。",
+          "impact": 91,
+          "source": "",
+          "url": "",
+          "matchBasis": "",
+          "confidence": 95,
+          "count": 1,
+          "originals": [
+            {
+              "title": "中国开放权重模型崛起，推动中美AI开源生态与商业模式重构",
+              "url": "https://www.huxiu.com/article/4883109.html",
+              "source": "虎嗅",
+              "recordId": "recvsf8ziDqxqO",
+              "type": "合作",
+              "impact": 91
+            }
+          ]
+        },
+        {
+          "id": "daily:2026-08-12",
+          "recordId": "recvs8ZBk7ObSW",
+          "date": "2026-08-12",
+          "type": "每日汇总",
+          "title": "黄仁勋力挺开源AI后，英伟达甩出两大开源利器！输出速度快4倍、成本砍至1/3",
+          "summary": "黄仁勋力挺开源AI后，英伟达甩出两大开源利器！输出速度快4倍、成本砍至1/3。",
+          "impact": 0,
+          "source": "",
+          "url": "",
+          "matchBasis": "",
+          "confidence": 95,
+          "count": 1,
+          "originals": [
+            {
+              "title": "黄仁勋力挺开源AI后，英伟达甩出两大开源利器！输出速度快4倍、成本砍至1/3",
+              "url": "https://zhidx.com/p/584189.html",
+              "source": "智东西",
+              "recordId": "recvs8ZBk7ObSW",
+              "type": "其他动向",
+              "impact": 0
+            }
+          ]
+        },
+        {
+          "id": "daily:2026-08-10",
+          "recordId": "recvrXbjLnxawK",
+          "date": "2026-08-10",
+          "type": "每日汇总",
+          "title": "135亿！曝黄仁勋投了OpenAI供应商",
+          "summary": "135亿！曝黄仁勋投了OpenAI供应商。",
+          "impact": 0,
+          "source": "",
+          "url": "",
+          "matchBasis": "",
+          "confidence": 95,
+          "count": 1,
+          "originals": [
+            {
+              "title": "135亿！曝黄仁勋投了OpenAI供应商",
+              "url": "https://zhidx.com/p/583422.html",
+              "source": "智东西",
+              "recordId": "recvrXbjLnxawK",
+              "type": "其他动向",
+              "impact": 0
+            }
+          ]
+        },
+        {
+          "id": "daily:2026-08-05",
+          "recordId": "recvrucKw8mx9Z",
+          "date": "2026-08-05",
+          "type": "每日汇总",
+          "title": "AI支出暴增2013%！马斯克原来在给黄仁勋“打工”？",
+          "summary": "AI支出暴增2013%！马斯克原来在给黄仁勋“打工”？。",
+          "impact": 0,
+          "source": "",
+          "url": "",
+          "matchBasis": "",
+          "confidence": 95,
+          "count": 1,
+          "originals": [
+            {
+              "title": "AI支出暴增2013%！马斯克原来在给黄仁勋“打工”？",
+              "url": "https://zhidx.com/p/582272.html",
+              "source": "智东西",
+              "recordId": "recvrucKw8mx9Z",
+              "type": "其他动向",
+              "impact": 0
+            }
+          ]
+        },
+        {
+          "id": "daily:2026-07-29",
+          "recordId": "recvqPdD88i929",
+          "date": "2026-07-29",
+          "type": "每日汇总",
+          "title": "黄仁勋力挺开源同一天，蚂蚁百灵扔出124B“执行模型”",
+          "summary": "黄仁勋力挺开源同一天，蚂蚁百灵扔出124B“执行模型”。",
+          "impact": 0,
+          "source": "",
+          "url": "",
+          "matchBasis": "",
+          "confidence": 95,
+          "count": 1,
+          "originals": [
+            {
+              "title": "黄仁勋力挺开源同一天，蚂蚁百灵扔出124B“执行模型”",
+              "url": "https://zhidx.com/p/580582.html",
+              "source": "智东西",
+              "recordId": "recvqPdD88i929",
+              "type": "其他动向",
+              "impact": 0
+            }
+          ]
+        },
+        {
+          "id": "daily:2026-07-28",
+          "recordId": "recvqJBVmqpeCF",
+          "date": "2026-07-28",
+          "type": "每日汇总",
+          "title": "Ilya获黄仁勋重金押注！10倍算力供给，50亿美金投资在路上了？",
+          "summary": "Ilya获黄仁勋重金押注！10倍算力供给，50亿美金投资在路上了？；黄仁勋倡议的开源联名信，Anthropic 为何不愿签名?；黄仁勋、Kimi K3，与一场即将到来的开源战争。| 果壳 科技有意思。",
+          "impact": 0,
+          "source": "",
+          "url": "",
+          "matchBasis": "",
+          "confidence": 95,
+          "count": 3,
+          "originals": [
+            {
+              "title": "Ilya获黄仁勋重金押注！10倍算力供给，50亿美金投资在路上了？",
+              "url": "https://zhidx.com/p/580055.html",
+              "source": "智东西",
+              "recordId": "recvqJBVmqpeCF",
+              "type": "其他动向",
+              "impact": 0
+            },
+            {
+              "title": "黄仁勋倡议的开源联名信，Anthropic 为何不愿签名?",
+              "url": "https://www.leiphone.com/category/ai/w2vbquwfmmiijoto.html",
+              "source": "AI科技评论 / 雷峰网",
+              "recordId": "recvqJBVmqqq7x",
+              "type": "其他动向",
+              "impact": 0
+            },
+            {
+              "title": "黄仁勋、Kimi K3，与一场即将到来的开源战争。| 果壳 科技有意思",
+              "url": "https://www.guokr.com/article/469780",
+              "source": "果壳",
+              "recordId": "recvqJBWhbGaEk",
+              "type": "其他动向",
+              "impact": 0
+            }
+          ]
+        }
+      ],
+      "strategy": {
+        "fingerprint": "93dd4315b11eb3f32da879000570634415ba217d70098eda24d108d79c1955fd",
+        "overview": "",
+        "themes": [],
+        "relations": [],
+        "hypotheses": []
+      }
+    }
+  ],
+  "createdEvents": 0
+}

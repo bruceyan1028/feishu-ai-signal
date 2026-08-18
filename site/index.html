@@ -142,6 +142,14 @@
   .chip-btn:hover { border-color: var(--accent-border, rgba(194,47,42,.4)) !important; color: var(--ds-text) !important; }
   .cmt-row:hover { background: rgba(22,19,15,.03); }
   .like-btn:hover { border-color: var(--accent-border) !important; color: var(--accent-bright) !important; }
+  .strategy-evidence { transition: background .16s ease, border-color .16s ease, color .16s ease, transform .16s ease; }
+  .strategy-evidence:hover { background: var(--accent-soft) !important; border-color: var(--accent-border) !important; color: var(--accent-bright) !important; transform: translateX(2px); }
+  .strategy-evidence:hover div { color: var(--accent-bright) !important; }
+  .strategy-original { transition: background .16s ease, border-color .16s ease, transform .16s ease; }
+  .strategy-original:hover { background: var(--accent-soft) !important; border-color: var(--accent-border) !important; transform: translateX(2px); }
+  .strategy-clamp { display: -webkit-box; -webkit-box-orient: vertical; overflow: hidden; }
+  .strategy-clamp-2 { -webkit-line-clamp: 2; }
+  .strategy-clamp-3 { -webkit-line-clamp: 3; }
   /* --- 索引跳转:卡片高亮闪动 --- */
   @keyframes flashred { 0%, 30%, 60%, 100% { box-shadow: 0 0 0 0 rgba(255,90,90,0); } 15%, 45%, 75% { box-shadow: 0 0 0 3px rgba(255,90,90,.5); } }
   .flash-red { animation: flashred 1.5s ease-in-out; }
@@ -251,6 +259,7 @@ const state = {
   sortKey: 'impact',
   showScoreBars: true,
   detailRank: null,
+  detailSignal: null,
   detailTab: '正文',
   notesOpen: false,
   dialogueOpen: false,
@@ -264,6 +273,11 @@ const state = {
   debates: [],
   favorites: [],
   pending: [],
+  pendingQueue: {},
+  pendingWritable: false,
+  timelineWritable: false,
+  timelineRecords: {},
+  timelineStatus: { loading:true, error:'' },
   bottomChat: [
     { role:'user', text:'今天最值得先看的是哪条?' },
     { role:'ai', text:'优先看「Claude Sonnet 5 登陆 AWS」(影响 90):同价位能力升级,现有 Bedrock 集成零改造即可切换,建议本周在评测集做回归。其次是「NVIDIA 每 token 成本拆解」,可直接用于本季度推理预算测算。' },
@@ -449,48 +463,13 @@ const modelPersonas = {
   'Grok':   { color: '#16130f', bg: 'rgba(22,19,15,.09)', border: 'rgba(22,19,15,.26)', t: '𝕏' },
 };
 
-const weeklyReport = {
-  period: '2026-06-30 → 2026-07-07',
-  headline: '本周主线:AI 竞争从「模型更强」转向「更便宜、更可靠、更合规地把模型跑进生产」。',
-  thesis: '前沿能力的获取窗口在缩短(Claude Sonnet 5 上 AWS、Gemma 4 开源),而真正拉开差距的是推理单位经济学、Agent 工程化与合规护栏三条工程化主线。本周 19 条信号中,算力/成本与工程化相关占比过半,监管风险类信号的紧迫度显著上升,端侧模型专题首次成型。',
-  metrics: [
-    { label: '信号总数', value: '19', sub: '较上周 +4' },
-    { label: '高影响(≥80)', value: '5', sub: '占 24%' },
-    { label: '覆盖领域', value: '5+1', sub: '五领域 + 端侧专题' },
-    { label: '均影响分', value: '74', sub: '较上周 +2' },
-  ],
-  areas: [
-    { cat: '算力芯片云', text: '推理单位经济学成为公开战场:NVIDIA 指标化每 token 成本,AMD 以投机解码+量化贴身竞争,Google 补齐低成本梯队,采购侧议价窗口打开。', refs: [6,8,7,5] },
-    { cat: '技术研究开源', text: 'RAG 走向图结构(HippoRAG)、Agent 走向可运维(A2A 网关/SelfMem/结构化记忆),数据层与记忆层是本周工程化重心。', refs: [12,9,10,11] },
-    { cat: '前沿模型公司', text: 'Claude Sonnet 5、Gemma 4、Gemini 低成本档密集发布,SOTA 与低价档同时扩张;OpenAI 采用曲线显示工作流内嵌化加速。', refs: [3,4,15] },
-    { cat: '政策监管地缘', text: 'ChatGPT 致害诉讼进入实审、深伪/语音克隆诈骗常态化,内容护栏与来源标注从加分项变硬约束。', refs: [14,16,18] },
-    { cat: '专题 · 端侧模型', text: '端侧能力密度跃升:高通 10B 级模型跑进手机 NPU,Apple 3B 对标 7B 质量,Gemma 4 4B 实测超预期——「云端大模型 + 端侧小模型」分层架构正在成型。', refs: [19,20,4,21] },
-  ],
-  topSignals: [3, 4, 6, 14, 12],
-  risks: [
-    'LLM 安全责任判例一旦成型,对话类产品的护栏与脆弱用户识别将成合规硬要求。',
-    'HBM 供给偏紧可能限制推理成本的下行空间,需纳入算力预算敏感性分析。',
-    '深伪/语音克隆向弱势群体下沉,涉 UGC 或语音的产品面临内容溯源合规压力。',
-  ],
-  opportunities: [
-    '同价位能力升级(Sonnet 5)+低成本梯队,可立即改善现有工作负载性价比。',
-    '图结构 RAG 与「数据库即大脑」为知识密集应用提供更低复杂度的检索架构。',
-    '合成内容检测与 C2PA 来源标注是潜在的产品与合规双重机会点。',
-  ],
-  actions: [
-    '在内部评测集上回归验证 Claude Sonnet 5,评估设为默认模型并复核 token 预算。',
-    '把高频轻任务下沉到低成本模型梯队 + 上下文缓存,目标推理开销压缩 30%+。',
-    '将 HippoRAG / AlloyDB AI Functions 纳入下一轮后端选型同题评测。',
-    '预研合成内容检测与 C2PA 来源标注,规避监管落地后的被动整改。',
-  ],
-  nextWeek: [
-    'Claude Sonnet 5 灰度评测的首批指标(p95 延迟 / 每 token 成本 / 人工评测)。',
-    'Gemma 4 70B 档位的第三方复现基准是否接近闭源第一梯队。',
-    'AI 致害诉讼的庭审进展与可能的合规先例。',
-  ],
-};
+let weeklyReport = null;
+let weeklySignals = [];
+let weeklyStatus = { loading:true, error:'' };
 
-const timelineData = {
+let timelineData = {};
+let timelineStrategies = {};
+const timelinePreviewData = {
   'NVIDIA': [
     { date:'2026-06-30', title:'公开「每 token 成本」推理软件栈', desc:'TensorRT-LLM 编译 + KV 缓存 + 动态批处理的降本路径,给出负载分型成本模型。', ref:6 },
     { date:'2026-07-07', title:'开放规模化 AI 算力,邀伙伴共建「AI 工厂」', desc:'开放参考架构与供应链协同,压缩算力集群建设周期至数个季度。', ref:5 },
@@ -547,6 +526,7 @@ function hexToRgb(h){ const m=h.replace('#',''); const n=parseInt(m.length===3?m
 function scoreColor(v){ if(v>=75) return '#16a34a'; if(v>=55) return '#ca8a04'; return '#dc2626'; }
 function scoreBadge(v){ if(v>=75) return {bg:'#f0fdf4',color:'#15803d',border:'#bbf7d0'}; if(v>=55) return {bg:'#fefce8',color:'#a16207',border:'#fde68a'}; return {bg:'#fef2f2',color:'#b91c1c',border:'#fecaca'}; }
 function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function shortText(s,n=180){ const t=String(s||'').trim(); return t.length>n?t.slice(0,n).replace(/[，,；;。\s]+$/,'')+'…':t; }
 function zhProse(s){
   return String(s)
     .replace(/,(?=[\u3400-\u9fff“「（])/g, '，')
@@ -749,6 +729,123 @@ async function loadBrief(){
     render();
   }
 }
+function weeklySignalById(recordId){
+  return weeklySignals.find(s=>s.recordId===String(recordId));
+}
+async function loadWeekly(){
+  const params = new URLSearchParams(location.search);
+  const requestedWeek = params.get('week');
+  if(params.get('page')==='tasks'){
+    state.page='tasks';
+    state.taskTab=params.get('tab') || 'report';
+  }
+  const path = requestedWeek ? `data/weekly-${encodeURIComponent(requestedWeek)}.json` : 'data/weekly-latest.json';
+  weeklyStatus = { loading:true, error:'' };
+  render();
+  try {
+    const response = await fetch(path, { cache:'no-store' });
+    if(!response.ok) throw new Error(`HTTP ${response.status}`);
+    weeklyReport = await response.json();
+    weeklySignals = (weeklyReport.signals || []).map((s,index)=>({
+      rank:10001+index,
+      recordId:String(s.recordId || ''),
+      sourceId:s.sourceId || '',
+      impact:Number(s.impact) || 0,
+      urgency:s.urgency || '中',
+      contentType:s.contentType || s.kind || '文章',
+      kind:s.contentType || s.kind || '文章',
+      zhTitle:s.titleCn || s.title || '未命名信号',
+      title:s.title || '',
+      source:s.source || '未知来源',
+      url:s.url || '',
+      cat:s.category || '其他',
+      date:s.publishedDate || weeklyReport.periodEnd || '',
+      summary:s.summary || '',
+      deepAnalysis:s.deepAnalysis || '',
+      editorialStructure:s.editorialStructure || '',
+      why:s.why || '',
+      novel:Number(s.novelty) || 0,
+      action:Number(s.actionability) || 0,
+      tags:Array.isArray(s.tags) ? s.tags : [],
+      image:s.imageUrl || '',
+      mediaAssets:s.mediaAssets || {images:[],videos:[]},
+      transcriptEvidence:s.transcriptEvidence || '',
+      podcastMetrics:s.podcastMetrics || null,
+      topComments:Array.isArray(s.topComments) ? s.topComments : [],
+      commentFetchError:s.commentFetchError || '',
+      eventAggregation:s.eventAggregation || null,
+      tier:s.tier || '',
+      priority:s.priority || '',
+      pdfUrl:s.pdfUrl || '',
+      paperFullTextSource:s.paperFullTextSource || '',
+      paperPages:Number(s.paperPages) || 0,
+      paperCaptions:Array.isArray(s.paperCaptions) ? s.paperCaptions : [],
+    }));
+    weeklyStatus = { loading:false, error:'' };
+  } catch(error) {
+    weeklyReport = null;
+    weeklySignals = [];
+    weeklyStatus = { loading:false, error:error.message };
+  }
+  render();
+}
+async function loadPending(){
+  if(!isConfigHost()){
+    state.pendingWritable=false;
+    return;
+  }
+  try {
+    const body = await sourceApi('/api/report-pending');
+    state.pending = (body.items || []).filter(item=>item.status==='待纳入').map(item=>item.recordId);
+    state.pendingQueue = Object.fromEntries((body.items || []).map(item=>[item.recordId,item.id]));
+    state.pendingWritable = Boolean(body.writable);
+  } catch(error) {
+    state.pendingWritable=false;
+  }
+  render();
+}
+function applyTimelinePayload(body){
+  const entities=Array.isArray(body.entities)?body.entities:[];
+  timelineData={};
+  timelineStrategies={};
+  state.timelineRecords={};
+  entities.filter(entity=>entity.status!=='paused').forEach(entity=>{
+    const name=String(entity.name||entity.id||'').trim();
+    if(!name) return;
+    state.timelineRecords[name]=String(entity.recordId||'');
+    timelineStrategies[name]=entity.strategy||null;
+    timelineData[name]=(entity.events||[]).map(event=>({
+      id:String(event.id||''),
+      date:String(event.date||''),
+      title:`〔${event.type||'动向'}〕${event.title||''}`,
+      desc:String(event.summary||''),
+      ref:String(event.recordId||''),
+      url:String(event.url||''),
+      impact:Number(event.impact||0),
+      confidence:Number(event.confidence||0),
+      count:Number(event.count||1),
+      originals:Array.isArray(event.originals)?event.originals:[],
+    }));
+  });
+  const names=Object.keys(timelineData);
+  if(!names.includes(state.timelineEntity)) state.timelineEntity=names[0]||'';
+}
+async function loadTimeline(){
+  state.timelineStatus={loading:true,error:''};
+  render();
+  const local=isConfigHost();
+  const url=local?'/api/tracked-entities':'data/timeline-latest.json';
+  try {
+    const body=await sourceApi(url);
+    applyTimelinePayload(body);
+    state.timelineWritable=local&&Boolean(body.writable);
+    state.timelineStatus={loading:false,error:''};
+  } catch(error) {
+    state.timelineWritable=false;
+    state.timelineStatus={loading:false,error:String(error.message||error)};
+  }
+  render();
+}
 const App = {
   goBrief(){ state.page='brief'; state.detailRank=null; render(); },
   goSources(){ state.page='sources'; state.detailRank=null; render(); },
@@ -756,11 +853,12 @@ const App = {
   goTimeline(){ state.page='tasks'; state.taskTab='timeline'; state.detailRank=null; render(); },
   setTaskTab(t){ state.taskTab=t; render(); },
   setTimelineEntity(e){ state.timelineEntity=e; render(); },
-  openDetail(rank){ state.detailRank=rank; state.detailTab='正文'; state.notesOpen=false; state.dialogueOpen=false; renderDetailLayer(); const ov=document.querySelector('.detail-overlay'); if(ov) ov.scrollTop=0; },
+  openDetail(rank){ state.detailSignal=signals.find(x=>x.rank===rank)||null; state.detailRank=rank; state.detailTab='正文'; state.notesOpen=false; state.dialogueOpen=false; renderDetailLayer(); const ov=document.querySelector('.detail-overlay'); if(ov) ov.scrollTop=0; },
+  openWeeklyDetail(recordId){ const s=weeklySignalById(recordId); if(!s) return; state.detailSignal=s; state.detailRank=s.rank; state.detailTab='正文'; state.notesOpen=false; state.dialogueOpen=false; renderDetailLayer(); const ov=document.querySelector('.detail-overlay'); if(ov) ov.scrollTop=0; },
   setDetailTab(t){ state.detailTab=t; state.notesOpen=false; state.dialogueOpen=false; renderDetailLayer(); const ov=document.querySelector('.detail-overlay'); if(ov) ov.scrollTop=0; },
   toggleNotes(){ state.notesOpen=!state.notesOpen; if(state.notesOpen) state.dialogueOpen=false; renderDetailLayer(); },
   toggleDialogue(){ state.dialogueOpen=!state.dialogueOpen; if(state.dialogueOpen) state.notesOpen=false; renderDetailLayer(); },
-  closeDetail(){ if(state.detailRank==null) return; state.detailRank=null; state.notesOpen=false; state.dialogueOpen=false; renderDetailLayer(); },
+  closeDetail(){ if(state.detailRank==null) return; state.detailRank=null; state.detailSignal=null; state.notesOpen=false; state.dialogueOpen=false; renderDetailLayer(); },
   sendChat(){
     const el=document.getElementById('chatInput'); const t=(el && el.value || '').trim();
     if(!t) return;
@@ -801,7 +899,7 @@ const App = {
   askDetail(rank){
     const el=document.getElementById('detailAsk'); const t=(el && el.value || '').trim();
     if(!t) return;
-    const s = signals.find(x=>x.rank===rank);
+    const s = state.detailSignal || signals.find(x=>x.rank===rank);
     const a = `就你的问题「${t}」,结合本条信号:${s.why} 如需多视角分析,可到「任务视图 · 多模型辩论」发起讨论。`;
     (state.detailQA[rank] = state.detailQA[rank] || []).push({ q: t, a });
     state.detailTab='正文'; state.dialogueOpen=true; state.notesOpen=false;
@@ -818,12 +916,43 @@ const App = {
   toggleFav(rank){ const i=state.favorites.indexOf(rank); if(i>=0) state.favorites.splice(i,1); else { state.favorites.unshift(rank); state.favOpen=true; } render(); },
   removeFav(rank){ const i=state.favorites.indexOf(rank); if(i>=0) state.favorites.splice(i,1); render(); },
   toggleFavPanel(){ state.favOpen=!state.favOpen; render(); },
-  addPending(rank){ if(!state.pending.includes(rank)) state.pending.push(rank); render(); },
-  removePending(rank){ const i=state.pending.indexOf(rank); if(i>=0) state.pending.splice(i,1); render(); },
+  async addPending(rank){
+    if(!state.pendingWritable) return;
+    const signal=signals.find(x=>x.rank===rank); if(!signal || state.pending.includes(signal.recordId)) return;
+    const body=await sourceApi('/api/report-pending',{method:'POST',body:JSON.stringify({recordId:signal.recordId})});
+    state.pending.unshift(signal.recordId); state.pendingQueue[signal.recordId]=body.item?.id||''; render();
+  },
+  async removePending(recordId){
+    if(!state.pendingWritable) return;
+    const queueId=state.pendingQueue[recordId]; if(queueId) await sourceApi(`/api/report-pending/${encodeURIComponent(queueId)}`,{method:'DELETE'});
+    state.pending=state.pending.filter(id=>id!==recordId); delete state.pendingQueue[recordId]; render();
+  },
   toggleHistory(){ state.historyOpen=!state.historyOpen; render(); },
   setFeedback(rank, key){ const cur=state.feedback[rank]; state.feedback[rank] = (cur===key ? null : key); renderDetailLayer(); },
   reportMissing(){ const el=document.getElementById('missInput'); const t=(el && el.value || '').trim(); if(!t) return; state.missing.unshift(t); el.value=''; render(); },
-  trackEntity(){ const el=document.getElementById('trackInput'); const t=(el && el.value || '').replace(/["'\\<>]/g,'').trim(); if(!t) return; state.customTimelines[t]=buildTimeline(t); state.timelineEntity=t; state.taskTab='timeline'; render(); },
+  async trackEntity(){
+    if(!state.timelineWritable) return;
+    const el=document.getElementById('trackInput');
+    const typeEl=document.getElementById('trackType');
+    const t=(el&&el.value||'').replace(/["'\\<>]/g,'').trim();
+    if(!t) return;
+    const body=await sourceApi('/api/tracked-entities',{method:'POST',body:JSON.stringify({name:t,type:typeEl?.value||'机构'})});
+    const entity=body.entity||{};
+    timelineData[t]=(entity.events||[]).map(event=>({id:event.id||'',date:event.date||'',title:`〔${event.type||'动向'}〕${event.title||''}`,desc:event.summary||'',ref:event.recordId||'',url:event.url||'',impact:event.impact||0,confidence:event.confidence||0,count:event.count||1,originals:event.originals||[]}));
+    timelineStrategies[t]=entity.strategy||null;
+    state.timelineRecords[t]=entity.recordId||'';
+    state.timelineEntity=t;
+    render();
+  },
+  async removeTrackedEntity(name){
+    if(!state.timelineWritable) return;
+    const recordId=state.timelineRecords[name];
+    if(!recordId||!confirm(`停止追踪「${name}」并删除其已匹配事件？`)) return;
+    await sourceApi(`/api/tracked-entities/${encodeURIComponent(recordId)}`,{method:'DELETE'});
+    delete timelineData[name]; delete timelineStrategies[name]; delete state.timelineRecords[name];
+    state.timelineEntity=Object.keys(timelineData)[0]||'';
+    render();
+  },
   jumpTo(rank){
     // 索引可能指向被筛掉/在另一页的卡片:先回到简报「全部」再滚动
     if(state.page!=='brief' || state.filter!=='全部'){ state.page='brief'; state.filter='全部'; render(); }
@@ -944,6 +1073,39 @@ function buildTimeline(name){
   return [...matched, head];
 }
 function getTimeline(name){ return state.customTimelines[name] || timelineData[name] || []; }
+function strategyMapHtml(strategy, events, A){
+  if(!strategy || !strategy.overview) return '';
+  const eventMap=Object.fromEntries(events.map(event=>[event.id,event]));
+  const themeMap=Object.fromEntries((strategy.themes||[]).map(theme=>[theme.id,theme]));
+  const hypotheses=(strategy.hypotheses||[]);
+  const rows=hypotheses.map(hypothesis=>{
+    const evidence=(hypothesis.evidenceEventIds||[]).map(id=>eventMap[id]).filter(Boolean).slice(0,4);
+    const themes=(hypothesis.themeIds||[]).map(id=>themeMap[id]).filter(Boolean);
+    const confidence=Number(hypothesis.confidence||0);
+    return `<div style="display:grid;grid-template-columns:minmax(160px,1fr) 34px minmax(150px,.85fr) 34px minmax(240px,1.5fr);gap:8px;align-items:stretch;padding:12px 0;border-top:1px solid ${UI.border};">
+      <div style="display:flex;flex-direction:column;gap:6px;">${evidence.map(event=>{ const original=(event.originals||[]).find(item=>item.url); return original?`<a class="strategy-evidence" href="${esc(original.url)}" target="_blank" rel="noopener" title="打开代表原文：${esc(original.title)}" style="display:block;padding:7px 9px;border-radius:8px;background:${UI.panelSolid};border:1px solid ${UI.border};text-decoration:none;"><div style="display:flex;justify-content:space-between;gap:6px;font-family:'Geist Mono',monospace;font-size:10px;color:${UI.text3};"><span>${esc(event.date)}</span><span>原文 ↗</span></div><div class="strategy-clamp strategy-clamp-2" style="margin-top:2px;font-size:11px;line-height:1.45;color:${UI.text2};">${esc(event.title.replace(/^〔[^〕]+〕/,''))}</div></a>`:`<div style="padding:7px 9px;border-radius:8px;background:${UI.panelSolid};border:1px solid ${UI.border};"><div style="font-family:'Geist Mono',monospace;font-size:10px;color:${UI.text3};">${esc(event.date)}</div><div class="strategy-clamp strategy-clamp-2" style="font-size:11px;line-height:1.45;color:${UI.text2};">${esc(event.title.replace(/^〔[^〕]+〕/,''))}</div></div>`; }).join('')}</div>
+      <div style="display:flex;align-items:center;justify-content:center;color:${A.accent};font-size:18px;">→</div>
+      <div style="display:flex;flex-direction:column;gap:6px;justify-content:center;">${themes.map(theme=>`<div style="padding:8px 9px;border-radius:8px;background:${A.accentSoft};border:1px solid ${A.accentBorder};"><div style="font-size:11.5px;font-weight:700;color:${A.accentBright};">${esc(theme.name)}</div><div class="strategy-clamp strategy-clamp-3" style="margin-top:3px;font-size:10.5px;line-height:1.45;color:${UI.text2};">${esc(shortText(theme.summary,120))}</div></div>`).join('')}</div>
+      <div style="display:flex;align-items:center;justify-content:center;color:${A.accent};font-size:18px;">→</div>
+      <div style="padding:12px 14px;border-radius:10px;background:${UI.panelSolid};border:1px solid ${UI.border};">
+        <div style="display:flex;align-items:flex-start;gap:8px;"><div style="flex:1;font-size:13px;font-weight:700;color:${UI.text};">${esc(hypothesis.title)}</div><span style="flex:none;font-family:'Geist Mono',monospace;font-size:10px;color:${scoreColor(confidence)};">置信度 ${confidence}</span></div>
+        <div class="strategy-clamp strategy-clamp-3" style="margin-top:7px;font-size:11.5px;line-height:1.6;color:${UI.text2};">${esc(shortText(hypothesis.assessment,200))}</div>
+        ${hypothesis.counterSignals||(hypothesis.watchFor||[]).length?`<details style="margin-top:8px;"><summary style="font-size:10.5px;color:${A.accentBright};cursor:pointer;">反证与后续观察</summary>${hypothesis.counterSignals?`<div style="margin-top:6px;font-size:10.5px;line-height:1.5;color:${UI.text3};"><strong>可能反证：</strong>${esc(hypothesis.counterSignals)}</div>`:''}${(hypothesis.watchFor||[]).length?`<div style="margin-top:5px;font-size:10.5px;line-height:1.5;color:${UI.text3};"><strong>继续观察：</strong>${hypothesis.watchFor.map(esc).join(' · ')}</div>`:''}</details>`:''}
+      </div>
+    </div>`;
+  }).join('');
+  const relations=(strategy.relations||[]).map(relation=>{
+    const from=eventMap[relation.fromEventId],to=eventMap[relation.toEventId];
+    if(!from||!to) return '';
+    return `<div style="display:grid;grid-template-columns:80px minmax(120px,1fr) auto minmax(120px,1fr);gap:8px;align-items:center;font-size:10.5px;color:${UI.text2};"><span style="font-family:'Geist Mono',monospace;color:${UI.text3};">${esc(from.date)} → ${esc(to.date)}</span><span>${esc(from.title.replace(/^〔[^〕]+〕/,''))}</span><span style="color:${A.accentBright};font-weight:700;">${esc(relation.label)} →</span><span>${esc(to.title.replace(/^〔[^〕]+〕/,''))}</span></div>`;
+  }).filter(Boolean).join('');
+  return `<section style="padding:22px 24px;border-radius:16px;background:${UI.panel};border:1px solid ${UI.border};overflow-x:auto;">
+    <div style="display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;"><h2 style="margin:0;font-size:18px;color:${UI.text};">长期布局研判</h2><span style="font-size:10.5px;color:${UI.text3};">假设均由下方事件证据支持，不等同于已确认事实</span></div>
+    <p style="margin:12px 0 18px;font-size:12.5px;line-height:1.75;color:${UI.text2};">${esc(strategy.overview)}</p>
+    ${rows?`<div style="display:grid;grid-template-columns:minmax(160px,1fr) 34px minmax(150px,.85fr) 34px minmax(240px,1.5fr);gap:8px;padding:0 0 7px;font-size:10px;font-weight:700;color:${UI.text3};"><span>事件证据</span><span></span><span>战略主题</span><span></span><span>潜在布局意图</span></div>${rows}`:''}
+    ${relations?`<details style="margin-top:14px;border-top:1px solid ${UI.border};padding-top:12px;"><summary style="font-size:11.5px;color:${A.accentBright};cursor:pointer;">查看跨事件关系</summary><div style="display:flex;flex-direction:column;gap:8px;margin-top:10px;">${relations}</div></details>`:''}
+  </section>`;
+}
 
 // ============ Render ============
 function computeAccents(){
@@ -985,7 +1147,7 @@ function headerHtml(A){
   const items = [
     { key: 'brief',   label: '今日简报', act: 'App.goBrief()',   icon: '<path d="M4 5h16M4 10h16M4 15h10M4 20h7"/>' },
     { key: 'sources', label: '信号源', act: 'App.goSources()', icon: '<path d="M12 3v18M5 8l7-5 7 5M5 8v8l7 5 7-5V8"/>' },
-    { key: 'tasks',   label: '任务视图', preview: true, act: 'App.goTasks()', icon: '<rect x="3" y="4" width="7" height="7" rx="1.4"/><rect x="14" y="4" width="7" height="4" rx="1.4"/><rect x="3" y="15" width="7" height="5" rx="1.4"/><rect x="14" y="11" width="7" height="9" rx="1.4"/>' },
+    { key: 'tasks',   label: '任务视图', act: 'App.goTasks()', icon: '<rect x="3" y="4" width="7" height="7" rx="1.4"/><rect x="14" y="4" width="7" height="4" rx="1.4"/><rect x="3" y="15" width="7" height="5" rx="1.4"/><rect x="14" y="11" width="7" height="9" rx="1.4"/>' },
   ];
   const navBtns = items.map(it => {
     const on = state.page === it.key;
@@ -1944,7 +2106,7 @@ function myNotesPopup(A, s){
 
 
 function detailHtml(A){
-  const s = signals.find(x=>x.rank===state.detailRank);
+  const s = state.detailSignal || signals.find(x=>x.rank===state.detailRank);
   if(!s) return '';
   const ib = scoreBadgeD(s.impact); const u = urgD[s.urgency];
   const sourceUrl = s.url || sourceUrls[s.source] || '#';
@@ -2305,25 +2467,39 @@ function sourcesHtml(A){
 function refChip(A,r){
   return `<button onclick="App.openDetail(${r})" title="查看 #${r} 信号" style="display: inline-flex; align-items: center; justify-content: center; min-width: 20px; height: 19px; padding: 0 5px; border: 1px solid ${A.accentBorder}; border-radius: 5px; background: ${A.accentSoft}; color: ${A.accentBright}; font-size: 10.5px; font-weight: 600; font-family: 'Geist Mono', monospace; cursor: pointer;">#${r}</button>`;
 }
+function weeklyRefChip(A,recordId){
+  const s=weeklySignalById(recordId);
+  return s ? `<button onclick="App.openWeeklyDetail('${esc(recordId)}')" title="查看引用信号" style="display:inline-flex;align-items:center;justify-content:center;height:19px;padding:0 6px;border:1px solid ${A.accentBorder};border-radius:5px;background:${A.accentSoft};color:${A.accentBright};font-size:10px;font-weight:600;cursor:pointer;">引用</button>` : '';
+}
 
 // 任务视图:AI 周报 / 多模型辩论 / 动向追踪
 function tasksHtml(A){
   const tabs = [['report','AI 自动周报'],['debate','多模型辩论'],['timeline','动向追踪'],['meetings','会议助手']];
-  const tabNav = tabs.map(([k,l])=>{ const on=state.taskTab===k; return `<button onclick="App.setTaskTab('${k}')" style="display:inline-flex;align-items:center;gap:7px;height:38px;padding:0 18px;border-radius:10px;border:1px solid ${on?A.accentBorder:UI.border};background:${on?A.accentSoft:'transparent'};color:${on?A.accentBright:UI.text2};font-size:13px;font-weight:${on?700:600};cursor:pointer;">${l}${previewBadge('预览')}</button>`; }).join('');
+  const tabNav = tabs.map(([k,l])=>{ const on=state.taskTab===k; const badge=k==='report'?(weeklyReport?'':previewBadge('待生成')):k==='timeline'?'':previewBadge('预览'); return `<button onclick="App.setTaskTab('${k}')" style="display:inline-flex;align-items:center;gap:7px;height:38px;padding:0 18px;border-radius:10px;border:1px solid ${on?A.accentBorder:UI.border};background:${on?A.accentSoft:'transparent'};color:${on?A.accentBright:UI.text2};font-size:13px;font-weight:${on?700:600};cursor:pointer;">${l}${badge}</button>`; }).join('');
 
   let body = '';
 
-  if(state.taskTab==='report'){
+  if(state.taskTab==='report' && !weeklyReport){
+    body = `<div style="padding:44px 28px;border:1px solid ${UI.border};border-radius:16px;background:${UI.panel};text-align:center;">
+      <div style="font-size:16px;font-weight:700;color:${UI.text};">${weeklyStatus.loading?'正在加载本周周报…':'本周周报尚未生成'}</div>
+      <div style="margin-top:8px;font-size:12.5px;color:${UI.text3};">${weeklyStatus.error?`读取失败 · ${esc(weeklyStatus.error)}`:'周报将在每周一上午自动生成并推送。'}</div>
+    </div>`;
+  }
+  else if(state.taskTab==='report'){
     const rep = weeklyReport;
     const pendingPanel = () => {
-      const items = state.pending.map(r=>{ const s=signals.find(x=>x.rank===r); if(!s) return ''; return `
+      if(!state.pendingWritable) return `<div style="position:sticky;top:74px;padding:18px;border-radius:14px;background:${UI.panelSolid};border:1px solid ${UI.border};">
+        <div style="font-size:13px;font-weight:700;color:${UI.text};">报告待分析区</div>
+        <p style="margin:8px 0 0;font-size:11.5px;line-height:1.7;color:${UI.text3};">公开站为只读模式。请在本地配置台从收藏栏加入下一期周报的额外关注条目。</p>
+      </div>`;
+      const items = state.pending.map(recordId=>{ const s=signals.find(x=>x.recordId===recordId)||weeklySignalById(recordId); if(!s) return ''; return `
         <div style="display: flex; gap: 9px; align-items: flex-start; padding: 11px; border-radius: 10px; border: 1px solid ${UI.border}; background: rgba(22,19,15,.02);">
           ${topicAvatarHtml(s)}
           <div style="flex: 1; min-width: 0;">
             <div style="font-size: 12px; font-weight: 600; color: ${UI.text}; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">${esc(s.zhTitle)}</div>
             <div style="margin-top: 3px; font-size: 10px; color: ${UI.text3}; font-family: 'Geist Mono', monospace;">#${s.rank} · ${s.date}</div>
           </div>
-          <button onclick="App.removePending(${r})" title="移出待分析" style="flex: none; width: 22px; height: 22px; border-radius: 6px; border: 1px solid ${UI.border}; background: transparent; color: ${UI.text3}; cursor: pointer; font-size: 12px;">×</button>
+          <button onclick="App.removePending('${esc(recordId)}')" title="移出待分析" style="flex: none; width: 22px; height: 22px; border-radius: 6px; border: 1px solid ${UI.border}; background: transparent; color: ${UI.text3}; cursor: pointer; font-size: 12px;">×</button>
         </div>`; }).join('');
       return `<div style="position: sticky; top: 74px; padding: 18px; border-radius: 14px; background: ${UI.panelSolid}; border: 1px solid ${UI.border};">
         <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;"><span style="width: 4px; height: 14px; border-radius: 2px; background: ${A.accent};"></span><span style="font-size: 13px; font-weight: 700; color: var(--ds-text);">报告待分析区</span><span style="margin-left: auto; font-size: 11px; color: ${UI.text3}; font-family: 'Geist Mono', monospace;">${state.pending.length}</span></div>
@@ -2342,21 +2518,21 @@ function tasksHtml(A){
         <div style="flex: 1;">
           <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px; flex-wrap: wrap;">
             <span style="font-size: 13px; font-weight: 700; color: var(--ds-text);">${esc(a.cat)}</span>
-            ${a.refs.map(r=>refChip(A,r)).join('')}
+            ${(a.refs||[]).map(r=>weeklyRefChip(A,r)).join('')}
           </div>
           <div style="font-size: 13px; line-height: 1.7; color: ${UI.text2};">${esc(a.text)}</div>
         </div>
       </div>`).join('');
-    const topHtml = rep.topSignals.map(r=>{ const s=signals.find(x=>x.rank===r); if(!s) return ''; return `
-      <div onclick="App.openDetail(${r})" class="rel-card" style="cursor: pointer; display: flex; gap: 10px; align-items: center; padding: 10px 12px; border-radius: 10px; border: 1px solid ${UI.border}; background: rgba(22,19,15,.02); transition: border-color .15s, background .15s;">
+    const topHtml = rep.topSignals.map(recordId=>{ const s=weeklySignalById(recordId); if(!s) return ''; return `
+      <div onclick="App.openWeeklyDetail('${esc(recordId)}')" class="rel-card" style="cursor: pointer; display: flex; gap: 10px; align-items: center; padding: 10px 12px; border-radius: 10px; border: 1px solid ${UI.border}; background: rgba(22,19,15,.02); transition: border-color .15s, background .15s;">
         ${topicAvatarHtml(s)}
-        <div style="min-width: 0; flex: 1;"><div style="font-size: 12.5px; font-weight: 600; color: ${UI.text}; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${esc(s.zhTitle)}</div><div style="font-size: 10.5px; color: ${UI.text3}; font-family: 'Geist Mono', monospace;">#${s.rank} · 影响 ${s.impact} · ${s.date}</div></div>
+        <div style="min-width: 0; flex: 1;"><div style="font-size: 12.5px; font-weight: 600; color: ${UI.text}; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${esc(s.zhTitle)}</div><div style="font-size: 10.5px; color: ${UI.text3}; font-family: 'Geist Mono', monospace;">影响 ${s.impact} · ${s.date}</div></div>
       </div>`; }).join('');
     const listBlock = (title,items)=>`<div style="font-size: 13px; font-weight: 700; color: var(--ds-text); margin: 24px 0 10px;">${title}</div><ul style="margin: 0; padding-left: 18px;">${items.map(x=>`<li style="margin: 0 0 8px; font-size: 13px; line-height: 1.7; color: ${UI.text2};">${esc(x)}</li>`).join('')}</ul>`;
-    const focusHtml = state.pending.length ? `
+    const focusHtml = (rep.pendingFocus||[]).length ? `
       <div style="margin-top: 24px; padding: 14px 16px; border-radius: 12px; background: ${A.accentSoft}; border: 1px solid ${A.accentBorder}; border-left: 3px solid ${A.accent};">
-        <div style="font-size: 12px; font-weight: 700; color: ${A.accentBright}; margin-bottom: 8px;">★ 本期额外关注(来自待分析 ${state.pending.length} 条)</div>
-        ${state.pending.map(r=>{ const s=signals.find(x=>x.rank===r); return s?`<div style="font-size: 12.5px; color: ${UI.text}; line-height: 1.8;">· ${esc(s.zhTitle)} ${refChip(A,r)}</div>`:''; }).join('')}
+        <div style="font-size: 12px; font-weight: 700; color: ${A.accentBright}; margin-bottom: 8px;">★ 本期额外关注 ${rep.pendingFocus.length} 条</div>
+        ${rep.pendingFocus.map(item=>`<div style="font-size: 12.5px; color: ${UI.text}; line-height: 1.8;">· <button onclick="App.openWeeklyDetail('${esc(item.recordId)}')" style="border:0;background:transparent;color:inherit;cursor:pointer;padding:0;text-align:left;">${esc(item.titleCn||item.recordId)}</button></div>`).join('')}
       </div>` : '';
     const reportCard = `
       <div style="padding: 30px 34px 34px; border-radius: 16px; background: ${UI.panel}; border: 1px solid ${UI.border}; position: relative; overflow: hidden;">
@@ -2497,29 +2673,33 @@ function tasksHtml(A){
         <div style="font-family: 'Geist Mono', monospace; font-size: 11.5px; color: ${A.accentBright}; margin-bottom: 5px;">${ev.date}</div>
         <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 5px; flex-wrap: wrap;">
           <span style="font-size: 14px; font-weight: 700; color: var(--ds-text);">${esc(ev.title)}</span>
-          ${ev.ref?refChip(A,ev.ref):''}
+          ${ev.url?`<a href="${esc(ev.url)}" target="_blank" rel="noopener" style="font-size:10.5px;color:${A.accentBright};text-decoration:none;border:1px solid ${A.accentBorder};border-radius:5px;padding:2px 6px;">原文</a>`:''}
         </div>
         <div style="font-size: 12.5px; line-height: 1.65; color: ${UI.text2};">${esc(ev.desc)}</div>
+        ${ev.originals?.length?`<details style="margin-top:10px;"><summary style="font-size:11.5px;color:${A.accentBright};cursor:pointer;">查看 ${ev.originals.length} 篇原文</summary><div style="display:flex;flex-direction:column;gap:7px;margin-top:9px;">${ev.originals.map((item,index)=>`<a class="strategy-original" href="${esc(item.url)}" target="_blank" rel="noopener" style="display:flex;gap:9px;align-items:baseline;padding:8px 10px;border-radius:8px;border:1px solid ${A.accentBorder};background:${A.accentFaint||A.accentSoft};color:${UI.text2};text-decoration:none;font-size:11.5px;line-height:1.5;"><span style="flex:none;color:${A.accentBright};font-family:'Geist Mono',monospace;">${index+1}</span><span style="flex:1;">${esc(item.title)}</span><span style="flex:none;color:${UI.text3};">${esc(item.source||'原文')} ↗</span></a>`).join('')}</div></details>`:''}
       </div>`; }).join('');
     body = `
       <div style="display: flex; flex-direction: column; gap: 18px;">
         <div style="padding: 16px 18px; border-radius: 14px; background: ${UI.panel}; border: 1px solid ${UI.border};">
           <div style="font-size: 13px; font-weight: 700; color: var(--ds-text); margin-bottom: 4px;">追踪你关心的对象</div>
-          <p style="margin: 0 0 12px; font-size: 12px; color: ${UI.text3};">输入机构 / 人物 / 技术,系统会聚合相关信号并按时间维度追踪其动向。</p>
+          <p style="margin: 0 0 12px; font-size: 12px; color: ${UI.text3};">${state.timelineWritable?'输入机构 / 人物 / 技术，保存后会立即回填历史信号，并在每日采集后增量更新。':'公开站为只读模式；请在本地配置台新增或删除追踪对象。'}</p>
           <div style="display: flex; gap: 8px;">
+            <select id="trackType" ${state.timelineWritable?'':'disabled'} style="height:40px;padding:0 10px;border-radius:10px;border:1px solid ${UI.border};background:${UI.panelSolid};color:${UI.text};"><option>机构</option><option>人物</option><option>技术</option></select>
             <input id="trackInput" placeholder="例如:Anthropic / 黄仁勋 / 投机解码 / 向量数据库…" onkeydown="if(event.key==='Enter'){event.preventDefault();App.trackEntity();}" style="flex: 1; height: 40px; padding: 0 14px; border-radius: 10px; border: 1px solid ${UI.border}; background: ${UI.panelSolid}; color: ${UI.text}; font-size: 13px; outline: none;" />
-            <button class="send-btn" onclick="App.trackEntity()" style="height: 40px; padding: 0 20px; border-radius: 10px; border: none; background: ${A.accent}; color: #ffffff; font-size: 13px; font-weight: 700; cursor: pointer;">＋ 追踪</button>
+            <button class="send-btn" onclick="App.trackEntity()" ${state.timelineWritable?'':'disabled'} style="height: 40px; padding: 0 20px; border-radius: 10px; border: none; background: ${A.accent}; color: #ffffff; font-size: 13px; font-weight: 700; cursor: ${state.timelineWritable?'pointer':'default'};opacity:${state.timelineWritable?1:.45};">＋ 追踪</button>
           </div>
         </div>
         <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
           <span style="font-size: 12.5px; color: ${UI.text3}; margin-right: 4px;">已追踪</span>${entBtns}
         </div>
-        <div style="max-width: 760px; padding: 26px 28px; border-radius: 16px; background: ${UI.panel}; border: 1px solid ${UI.border};">
+        ${strategyMapHtml(timelineStrategies[ent],events,A)}
+        <div style="width:100%;box-sizing:border-box;padding:26px 28px;border-radius:16px;background:${UI.panel};border:1px solid ${UI.border};">
           <div style="display: flex; align-items: baseline; gap: 10px; margin-bottom: 22px;">
-            <h2 style="margin: 0; font-size: 20px; font-weight: 700; color: var(--ds-text);">${esc(ent)}</h2>
-            <span style="font-size: 12px; color: ${UI.text3};">时间维度动向 · ${events.length} 条</span>
+            <h2 style="margin: 0; font-size: 20px; font-weight: 700; color: var(--ds-text);">事件证据时间线</h2>
+            <span style="font-size: 12px; color: ${UI.text3};">${esc(ent)} · ${events.length} 个日期摘要</span>
+            ${state.timelineWritable&&ent?`<button onclick="App.removeTrackedEntity('${esc(ent)}')" style="margin-left:auto;border:0;background:transparent;color:${UI.text3};cursor:pointer;font-size:12px;">停止追踪</button>`:''}
           </div>
-          ${tl || `<div style="font-size: 13px; color: ${UI.text3};">该对象暂无记录 · 新增匹配将自动出现在此时间线</div>`}
+          ${state.timelineStatus.loading?`<div style="font-size:13px;color:${UI.text3};">正在加载真实时间线…</div>`:state.timelineStatus.error?`<div style="font-size:13px;color:#b91c1c;">时间线加载失败：${esc(state.timelineStatus.error)}</div>`:tl||`<div style="font-size: 13px; color: ${UI.text3};">${entities.length?'该对象暂无记录 · 新增匹配将自动出现在此时间线':'尚未建立追踪对象，请在本地配置台添加。'}</div>`}
         </div>
       </div>`;
   }
@@ -2530,12 +2710,12 @@ function tasksHtml(A){
       <section style="margin-bottom: 20px;">
         <div style="display: flex; align-items: baseline; gap: 12px; margin-bottom: 8px; flex-wrap: wrap;">
           <h1 class="page-title" style="margin: 0; font-size: 27px; font-weight: 700; letter-spacing: -.015em; color: var(--ds-text);">任务视图</h1>
-          ${previewBadge('仅预览')}
+          ${previewBadge('部分预览')}
           <span style="font-size: 12.5px; color: ${UI.text3};">周报 · 多模型辩论 · 动向追踪 · 会议助手</span>
         </div>
         <p style="margin: 0; font-size: 13.5px; line-height: 1.7; color: ${UI.text2}; max-width: 720px;">由 AI 基于信号库自动生成的周报、可发起的多模型交叉辩论、机构 / 人物 / 技术的动向追踪,以及自动参会记纪要的会议助手。</p>
       </section>
-      ${previewNotice('仅预览 · 尚未实现', 'AI 自动周报、多模型辩论、动向追踪和会议助手均为界面与交互效果预览，当前展示内容不会触发真实任务、持续追踪或自动参会。')}
+      ${previewNotice('部分功能仍为预览', 'AI 自动周报和动向追踪已接入真实数据；多模型辩论和会议助手仍为界面预览。')}
       <div style="display: flex; gap: 8px; margin-bottom: 24px; flex-wrap: wrap;">${tabNav}</div>
       ${body}
     </div>
@@ -2555,9 +2735,9 @@ function favPanelHtml(A){
   const order = filters.filter(f=>f!=='全部' && f!==EDGE_FILTER);
   const groupHtml = order.filter(c=>groups[c]).map(c=>{
     const arr = groups[c].slice().sort((a,b)=>b.date.localeCompare(a.date));
-    const rows = arr.map(s=>{ const inPend=state.pending.includes(s.rank); return `
+    const rows = arr.map(s=>{ const inPend=state.pending.includes(s.recordId); const canQueue=state.pendingWritable; return `
       <div style="display: flex; gap: 7px; align-items: flex-start; padding: 8px; border: 1px solid ${FB}; background: ${FFill};">
-        <button onclick="App.addPending(${s.rank})" title="${inPend?'已在待分析':'加入报告待分析'}" ${inPend?'disabled':''} style="flex: none; width: 22px; height: 22px; border: 1px solid ${inPend?A.accentBorder:'rgba(22,19,15,.2)'}; background: ${inPend?A.accentSoft:'transparent'}; color: ${inPend?A.accent:FC2}; cursor: ${inPend?'default':'pointer'}; font-size: 13px; line-height: 1;">${inPend?'✓':'＋'}</button>
+        <button onclick="App.addPending(${s.rank})" title="${!canQueue?'请在本地配置台管理周报待分析':inPend?'已在待分析':'加入报告待分析'}" ${inPend||!canQueue?'disabled':''} style="flex: none; width: 22px; height: 22px; border: 1px solid ${inPend?A.accentBorder:'rgba(22,19,15,.2)'}; background: ${inPend?A.accentSoft:'transparent'}; color: ${inPend?A.accent:FC2}; cursor: ${inPend||!canQueue?'default':'pointer'}; opacity:${canQueue?1:.45}; font-size: 13px; line-height: 1;">${inPend?'✓':'＋'}</button>
         <div onclick="App.openDetail(${s.rank})" style="flex: 1; min-width: 0; cursor: pointer;">
           <div style="font-size: 12px; font-weight: 600; color: ${FC}; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">${esc(s.zhTitle)}</div>
           <div style="margin-top: 2px; font-size: 10px; color: ${FC2}; font-family: 'Geist Mono', monospace;">#${s.rank} · ${s.date}</div>
@@ -2636,6 +2816,9 @@ window.addEventListener('keydown', (e)=>{ if(e.key==='Escape'){ App.closeDetail(
 render();
 loadBrief();
 loadSources();
+loadWeekly();
+loadPending();
+loadTimeline();
 </script>
 </body>
 </html>

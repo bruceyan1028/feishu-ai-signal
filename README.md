@@ -4,7 +4,7 @@
 
 `飞书参数表 → RSS / Scrape / Media / Social / Podcast 抓取 → 条目表 → LLM 分析回写 → 每日简报表 → GitHub Pages → 飞书消息卡片`
 
-网页沿用 `ai-signal-dashboard/demo/index.html` 的视觉与交互；今日简报、信号列表与详情为真实数据，评论/笔记/周报等演示功能仍为本地模拟。
+网页沿用 `ai-signal-dashboard/demo/index.html` 的视觉与交互；今日简报、信号列表、详情、AI 自动周报和动向追踪为真实数据，评论/笔记、多模型辩论等功能仍为本地模拟。
 
 ---
 
@@ -96,7 +96,10 @@ python -m src.daily --output output/daily-brief.json
 # ⑥ 从飞书拉数据生成静态站点
 python -m src.publish --input output/daily-brief.json
 
-# ⑥ 本地预览
+# ⑦ 自动创建追踪表、回填事件并导出时间线
+python -m src.timeline --output site/data/timeline-latest.json
+
+# ⑧ 本地预览
 python -m http.server 4173 --directory site
 ```
 
@@ -127,7 +130,18 @@ python -m src.source_view --seed     # 无飞书凭据时，用仓库快照生�
 这个源，且它已经入库的旧条目也不会再进简报——`daily` 的候选白名单只放行 `active`。
 开关右侧的状态文字可以点，用来把源退回「待测」，对应「改过配置先标 experimental」的约定。
 
-### 7.（可选）发送飞书卡片
+### 7. 动向追踪
+
+`python -m src.timeline` 会在当前 Base 中按表名幂等查找或自动创建「追踪对象」和「追踪事件」
+两张表。追踪对象支持机构、人物、技术三类，可配置别名、关键词、排除词、回溯天数和最低影响分。
+同步时按稳定的 `entity_id + 信号记录ID` 去重，首次建立对象会回填历史条目，之后每日简报工作流
+自动增量更新 `site/data/timeline-latest.json`。
+
+公开站只读。本机运行 `python -m src.sources_api` 后，可在「任务视图 → 动向追踪」直接新增和删除
+追踪对象，变更会写回飞书并立即回填。若不配置 `FEISHU_TRACKED_ENTITY_TABLE_ID` /
+`FEISHU_TRACKED_EVENT_TABLE_ID`，程序会按表名自动发现，无需手工填写。
+
+### 8.（可选）发送飞书卡片
 
 ```bash
 python -m src.notify --input output/daily-brief.json
@@ -200,9 +214,10 @@ python -m src.diag_scrape --write --source-id huxiu --limit 1
 
 ## GitHub Pages 自动化
 
-四个工作流：
+五个主要工作流：
 
-- `daily-brief.yml`：北京时间每天 09:00 采集 RSS、LLM 分析、部署 Pages、发送飞书卡片；支持手动运行（`workflow_dispatch`）与强制重发。
+- `daily-brief.yml`：北京时间每天 11:00 采集 RSS、LLM 分析、部署 Pages、发送飞书卡片；支持手动运行（`workflow_dispatch`）与强制重发。
+- `weekly-report.yml`：北京时间每周一 11:30 聚合近 7 天已分析信号，生成 AI 周报、部署任务视图并推送飞书。
 - `ingest.yml`：仅手动触发（`workflow_dispatch`）的 RSS 采集，日常采集已并入 `daily-brief.yml`（每日一次）。
 - `social-ingest.yml`：每 2 小时触发 X 白名单采集；采集器内部将 P0/P1 分别限制为 2 小时/4 小时间隔。
 - `podcast-ingest.yml`：每天独立处理白名单播客，安装 ffmpeg，并为长音频转录保留更长超时。
@@ -210,7 +225,7 @@ python -m src.diag_scrape --write --source-id huxiu --limit 1
 在 GitHub Actions Secrets 配置：
 
 - 必填：`FEISHU_APP_ID`、`FEISHU_APP_SECRET`、`LLM_API_KEY`、`FEISHU_RECIPIENT_OPEN_IDS`
-- 可选：`FEISHU_BASE_ID`、`FEISHU_PARAM_TABLE_ID`、`FEISHU_ENTRY_TABLE_ID`、`FEISHU_BRIEF_TABLE_ID`
+- 可选：`FEISHU_BASE_ID`、`FEISHU_PARAM_TABLE_ID`、`FEISHU_ENTRY_TABLE_ID`、`FEISHU_BRIEF_TABLE_ID`、`FEISHU_WEEKLY_TABLE_ID`、`FEISHU_WEEKLY_PENDING_TABLE_ID`（后两项留空时首次运行按表名自动创建）
 - 可选论文/LLM：`PAPER_QUALITY_MIN_SCORE`、`MAX_ARXIV_ITEMS`、`PAPER_ENRICH_ENABLED`、`LLM_BASE_URL`、`LLM_MODEL`
 - 可选社媒：`X_BEARER_TOKEN`（启用 Social 源时必填）
 - 可选播客：`ASR_API_KEY`、`ASR_BASE_URL`、`ASR_MODEL`（无公开 transcript 时必填）

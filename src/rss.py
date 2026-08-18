@@ -5,6 +5,7 @@
 """
 from __future__ import annotations
 
+import json
 import logging
 import re
 from concurrent.futures import ThreadPoolExecutor, as_completed
@@ -43,11 +44,14 @@ _EVIDENCE_IMAGE_HOSTS = frozenset(
     {
         "openai.com",
         "cloud.google.com",
+        "deepmind.google",
         "huxiu.com",
         "wallstreetcn.com",
     }
 )
-_EVIDENCE_SOURCE_IDS = frozenset({"openai-news", "gcp-ai-infra", "huxiu", "wallstreetcn"})
+_EVIDENCE_SOURCE_IDS = frozenset(
+    {"openai-news", "gcp-ai-infra", "google-deepmind-blog", "huxiu", "wallstreetcn"}
+)
 _EVIDENCE_HINT_RE = re.compile(
     r"(?i)(?:"
     r"chart|graph|plot|table|diagram|architecture|pipeline|workflow|benchmark|evaluation"
@@ -65,8 +69,9 @@ _HUXIU_EVIDENCE_HINT_RE = re.compile(
 )
 _DECORATIVE_IMAGE_RE = re.compile(
     r"(?i)(?:"
-    r"art[_-]?card|(?:^|[-_/])hero(?:[-_.]|$)|general[_-]?cover|article[_-]?cover"
-    r"|portrait|headshot|author|avatar|related|newsletter|promo|shield-text"
+    r"art[_-]?card|\bhero\b|general[_-]?cover|article[_-]?cover"
+    r"|portrait|headshot|author|avatar|\bicon\b|related|newsletter|promo|shield-text"
+    r"|testimonial|\bquote\b"
     r"|人物|头像|工作场景|工厂|示意图|扫码|二维码|会员"
     r")"
 )
@@ -595,8 +600,27 @@ _WIDE_IMG_SIDE = 600
 
 
 def _attr(tag: str, name: str) -> str:
-    match = re.search(rf"(?is)\b{name}\s*=\s*[\"']([^\"']*)[\"']", tag)
-    return match.group(1).strip() if match else ""
+    match = re.search(rf"(?is)\b{name}\s*=\s*([\"'])(.*?)\1", tag)
+    return match.group(2).strip() if match else ""
+
+
+def _best_image_url_from_tag(tag: str) -> str:
+    """优先取响应式图片的大图，避免 Google Blog 的 100px 懒加载占位图。"""
+    loading = unescape(_attr(tag, "data-loading"))
+    if loading:
+        try:
+            variants = json.loads(loading)
+        except (TypeError, ValueError):
+            variants = {}
+        if isinstance(variants, dict):
+            preferred = str(variants.get("desktop") or variants.get("mobile") or "")
+            if preferred:
+                return preferred
+    direct = next((_attr(tag, attr) for attr in _SRC_ATTRS if _attr(tag, attr)), "")
+    if direct:
+        return direct
+    srcset = _attr(tag, "srcset") or _attr(tag, "data-srcset")
+    return srcset.split(",")[0].strip().split(" ")[0] if srcset else ""
 
 
 _PIXEL_DIM_RE = re.compile(r"^\s*(\d{1,5})(?:\s*px)?\s*$", re.I)
@@ -728,17 +752,14 @@ def _evidence_image_score(
 
 
 def extract_article_evidence_images(
-    html_chunk: str, page_url: str, limit: int = 4
+    html_chunk: str, page_url: str, limit: int = 6
 ) -> list[dict[str, str]]:
     """从正文中只取图表/架构/评测等证据图，保留顺序并剔除推广长图。"""
     images: list[dict[str, str]] = []
     seen: set[str] = set()
     for match in _IMG_TAG_RE.finditer(html_chunk):
         tag = match.group(0)
-        raw_url = next((_attr(tag, attr) for attr in _SRC_ATTRS if _attr(tag, attr)), "")
-        if not raw_url:
-            srcset = _attr(tag, "srcset")
-            raw_url = srcset.split(",")[0].strip().split(" ")[0] if srcset else ""
+        raw_url = _best_image_url_from_tag(tag)
         if not raw_url or raw_url.startswith("data:"):
             continue
         url = urljoin(page_url, unescape(raw_url))
@@ -772,7 +793,7 @@ def extract_article_evidence_images(
 
 
 def curate_evidence_images(
-    assets: list[dict[str, Any]], page_url: str, limit: int = 4
+    assets: list[dict[str, Any]], page_url: str, limit: int = 6
 ) -> list[dict[str, str]]:
     """给 Jina/RSS 已存下来的图片做第二次严格筛选。"""
     curated: list[dict[str, str]] = []
@@ -803,10 +824,7 @@ def extract_article_images(html_chunk: str, page_url: str, limit: int = 4) -> li
     images: list[dict[str, str]] = []
     seen: set[str] = set()
     for tag in _IMG_TAG_RE.findall(html_chunk):
-        url = next((_attr(tag, attr) for attr in _SRC_ATTRS if _attr(tag, attr)), "")
-        if not url:
-            srcset = _attr(tag, "srcset")
-            url = srcset.split(",")[0].strip().split(" ")[0] if srcset else ""
+        url = _best_image_url_from_tag(tag)
         if not url or url.startswith("data:"):
             continue
         url = urljoin(page_url, unescape(url))

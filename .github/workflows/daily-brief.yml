@@ -36,6 +36,8 @@ jobs:
       FEISHU_PARAM_TABLE_ID: ${{ secrets.FEISHU_PARAM_TABLE_ID }}
       FEISHU_ENTRY_TABLE_ID: ${{ secrets.FEISHU_ENTRY_TABLE_ID }}
       FEISHU_BRIEF_TABLE_ID: ${{ secrets.FEISHU_BRIEF_TABLE_ID }}
+      FEISHU_TRACKED_ENTITY_TABLE_ID: ${{ secrets.FEISHU_TRACKED_ENTITY_TABLE_ID }}
+      FEISHU_TRACKED_EVENT_TABLE_ID: ${{ secrets.FEISHU_TRACKED_EVENT_TABLE_ID }}
       FEISHU_PAPER_CONFIG_TABLE_ID: ${{ secrets.FEISHU_PAPER_CONFIG_TABLE_ID }}
       FEISHU_WECHAT_CONFIG_TABLE_ID: ${{ secrets.FEISHU_WECHAT_CONFIG_TABLE_ID }}
       FEISHU_VIDEO_CONFIG_TABLE_ID: ${{ secrets.FEISHU_VIDEO_CONFIG_TABLE_ID }}
@@ -76,6 +78,9 @@ jobs:
 
       - name: Build static site from Feishu
         run: python -m src.publish --input output/daily-brief.json
+
+      - name: Update tracked entity timelines
+        run: python -m src.timeline --output site/data/timeline-latest.json
 
       - name: Upload generated site
         uses: actions/upload-artifact@v4

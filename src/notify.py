@@ -1,4 +1,4 @@
-"""发送飞书每日情报消息卡片，并回写发送状态。"""
+"""发送飞书每日情报或 AI 周报卡片，并回写发送状态。"""
 from __future__ import annotations
 
 import argparse
@@ -16,6 +16,11 @@ log = logging.getLogger(__name__)
 
 def detail_url(base_url: str, day: str) -> str:
     return f"{base_url.rstrip('/')}/?{urlencode({'date': day})}"
+
+
+def weekly_detail_url(base_url: str, week_id: str) -> str:
+    query = urlencode({"page": "tasks", "tab": "report", "week": week_id})
+    return f"{base_url.rstrip('/')}/?{query}"
 
 
 def build_card(brief: dict[str, Any], url: str) -> dict[str, Any]:
@@ -68,6 +73,72 @@ def build_card(brief: dict[str, Any], url: str) -> dict[str, Any]:
         "header": {
             "template": "red",
             "title": {"tag": "plain_text", "content": str(brief.get("title") or "AI Signal 每日情报")},
+        },
+        "elements": elements,
+    }
+
+
+def build_weekly_card(brief: dict[str, Any], url: str) -> dict[str, Any]:
+    metric_text = " · ".join(
+        f"{item.get('label')} {item.get('value')}" for item in brief.get("metrics") or []
+    )
+    by_id = {
+        str(signal.get("recordId") or ""): signal
+        for signal in brief.get("signals") or []
+    }
+    top = [
+        by_id[record_id]
+        for record_id in brief.get("topSignals") or []
+        if record_id in by_id
+    ][:3]
+    elements: list[dict[str, Any]] = [
+        {
+            "tag": "div",
+            "text": {
+                "tag": "lark_md",
+                "content": (
+                    f"**{brief.get('headline', '')}**\n\n{brief.get('thesis', '')}\n\n"
+                    f"{metric_text}"
+                ).strip(),
+            },
+        },
+        {"tag": "hr"},
+    ]
+    for index, signal in enumerate(top, 1):
+        elements.append(
+            {
+                "tag": "div",
+                "text": {
+                    "tag": "lark_md",
+                    "content": (
+                        f"**{index}. {signal.get('titleCn') or signal.get('title', '')}**\n"
+                        f"{signal.get('source', '')} · 影响分 {signal.get('impact', 0)}\n"
+                        f"{signal.get('summary', '')}"
+                    ),
+                },
+            }
+        )
+    elements.append(
+        {
+            "tag": "action",
+            "actions": [
+                {
+                    "tag": "button",
+                    "type": "primary",
+                    "text": {"tag": "plain_text", "content": "查看完整 AI 周报"},
+                    "url": url,
+                }
+            ],
+        }
+    )
+    return {
+        "config": {"wide_screen_mode": True},
+        "header": {
+            "template": "blue",
+            "title": {
+                "tag": "plain_text",
+                "content": str(brief.get("title") or "AI Signal 自动周报"),
+            },
         },
         "elements": elements,
     }
@@ -136,6 +207,73 @@ def send_many(
     }
 
 
+def send_weekly_many(
+    brief: dict[str, Any], base_url: str, open_ids: list[str], force: bool = False
+) -> dict[str, Any]:
+    if not base_url:
+        raise config.ConfigError("缺少 PUBLIC_BASE_URL")
+    recipients = list(dict.fromkeys(item.strip() for item in open_ids if item.strip()))
+    if not recipients:
+        raise config.ConfigError("缺少 FEISHU_RECIPIENT_OPEN_IDS")
+    token = feishu.get_tenant_access_token()
+    table_id = str(
+        brief.get("weeklyTableId")
+        or config.FEISHU_WEEKLY_TABLE_ID
+        or feishu.ensure_weekly_report_table(token)
+    )
+    week_id = str(brief["weekId"])
+    record = next(
+        (
+            item
+            for item in feishu.read_all_records_with_ids(token, table_id)
+            if str(daily.scalar((item.get("fields") or {}).get("周报ID"))) == week_id
+        ),
+        None,
+    )
+    if not record:
+        raise RuntimeError(f"多维表中不存在 {week_id} 的周报")
+    fields = record.get("fields") or {}
+    url = weekly_detail_url(base_url, week_id)
+    if str(daily.scalar(fields.get("发送状态"))) == "已发送" and not force:
+        return {
+            "skipped": True,
+            "messageIds": str(daily.scalar(fields.get("消息ID")) or ""),
+            "detailUrl": url,
+        }
+    card = build_weekly_card(brief, url)
+    message_ids: dict[str, str] = {}
+    failures: dict[str, str] = {}
+    for open_id in recipients:
+        try:
+            message_ids[open_id] = feishu.send_interactive_message(token, open_id, card)
+        except Exception as exc:  # noqa: BLE001
+            failures[open_id] = str(exc)
+            log.warning("周报发送给 %s 失败: %s", open_id, exc)
+    if not message_ids:
+        feishu.update_record(
+            token, table_id, str(record["record_id"]), {"发送状态": "失败"}
+        )
+        raise RuntimeError(
+            f"所有收件人都发送失败: {json.dumps(failures, ensure_ascii=False)}"
+        )
+    feishu.update_record(
+        token,
+        table_id,
+        str(record["record_id"]),
+        {
+            "发送状态": "已发送",
+            "发送时间": int(datetime.now(timezone.utc).timestamp() * 1000),
+            "消息ID": json.dumps(message_ids, ensure_ascii=False),
+        },
+    )
+    return {
+        "skipped": False,
+        "messageIds": message_ids,
+        "failed": failures,
+        "detailUrl": url,
+    }
+
+
 def send(brief: dict[str, Any], base_url: str, open_id: str, force: bool = False) -> dict[str, Any]:
     """向单个接收人发送，保留原有调用兼容性。"""
     result = send_many(brief, base_url, [open_id], force)
@@ -167,7 +305,8 @@ def run() -> int:
     recipients = [item.strip() for item in args.open_ids.split(",") if item.strip()]
     if not recipients and args.open_id:
         recipients = [args.open_id]
-    print(json.dumps(send_many(brief, args.base_url, recipients, args.force), ensure_ascii=False))
+    sender = send_weekly_many if brief.get("weekId") else send_many
+    print(json.dumps(sender(brief, args.base_url, recipients, args.force), ensure_ascii=False))
     return 0
 
 

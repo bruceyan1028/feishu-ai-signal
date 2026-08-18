@@ -36,6 +36,16 @@ FEISHU_VIDEO_CONFIG_TABLE_ID = _env("FEISHU_VIDEO_CONFIG_TABLE_ID", "")
 FEISHU_SOCIAL_CONFIG_TABLE_ID = _env("FEISHU_SOCIAL_CONFIG_TABLE_ID", "")
 FEISHU_GITHUB_CONFIG_TABLE_ID = _env("FEISHU_GITHUB_CONFIG_TABLE_ID", "")
 FEISHU_BRIEF_TABLE_ID = os.environ.get("FEISHU_BRIEF_TABLE_ID", "").strip()
+FEISHU_WEEKLY_TABLE_ID = os.environ.get("FEISHU_WEEKLY_TABLE_ID", "").strip()
+FEISHU_WEEKLY_PENDING_TABLE_ID = os.environ.get(
+    "FEISHU_WEEKLY_PENDING_TABLE_ID", ""
+).strip()
+FEISHU_TRACKED_ENTITY_TABLE_ID = os.environ.get(
+    "FEISHU_TRACKED_ENTITY_TABLE_ID", ""
+).strip()
+FEISHU_TRACKED_EVENT_TABLE_ID = os.environ.get(
+    "FEISHU_TRACKED_EVENT_TABLE_ID", ""
+).strip()
 
 
 def require_tables(*names: str) -> None:
@@ -94,6 +104,14 @@ DAILY_MAX_PER_SOURCE = int(os.environ.get("DAILY_MAX_PER_SOURCE", "4"))
 # 给非 P0 来源保留的名额：P0 源数量多时会填满候选池，
 # 导致中文媒体、实验室等 P1/P2 源永远进不了简报。
 DAILY_MIN_NON_P0 = int(os.environ.get("DAILY_MIN_NON_P0", "8"))
+WEEKLY_LOOKBACK_DAYS = int(os.environ.get("WEEKLY_LOOKBACK_DAYS", "7"))
+WEEKLY_SIGNAL_LIMIT = int(os.environ.get("WEEKLY_SIGNAL_LIMIT", "80"))
+TIMELINE_DEFAULT_LOOKBACK_DAYS = int(
+    os.environ.get("TIMELINE_DEFAULT_LOOKBACK_DAYS", "90")
+)
+TIMELINE_DEFAULT_MIN_IMPACT = int(
+    os.environ.get("TIMELINE_DEFAULT_MIN_IMPACT", "0")
+)
 # 英文正文翻译的字数上限：超长部分截断并提示读原文。
 # 3000 字符只够译出一千余字中文，正文普遍断在句子中间，故普通条目抬到 6000。
 BODY_TRANSLATE_LIMIT = int(os.environ.get("BODY_TRANSLATE_LIMIT", "6000"))
