@@ -45,6 +45,7 @@ _EVIDENCE_IMAGE_HOSTS = frozenset(
         "openai.com",
         "cloud.google.com",
         "deepmind.google",
+        "blog.google",
         "huxiu.com",
         "wallstreetcn.com",
     }

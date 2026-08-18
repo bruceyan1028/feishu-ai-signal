@@ -744,13 +744,38 @@
         "推理",
         "产品"
       ],
-      "imageUrl": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/gemini-3-7-flash.width-1300.png",
+      "imageUrl": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/gemini-3-7-flash__evals__frontie.width-1000.format-webp.webp",
       "mediaAssets": {
         "images": [
           {
-            "url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/gemini-3-7-flash.width-1300.png",
-            "alt": "Google 发布 Gemini 3.7 Flash",
-            "kind": "article-cover"
+            "url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/gemini-3-7-flash__evals__frontie.width-1000.format-webp.webp",
+            "alt": "a chart showing production code quality",
+            "kind": "article-figure"
+          },
+          {
+            "url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/gemini-3-7-flash__evals__deepswe.width-1000.format-webp.webp",
+            "alt": "a chart showing long-horizon software engineering",
+            "kind": "article-figure"
+          },
+          {
+            "url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/gemini-3-7-flash__evals__codeare.width-1000.format-webp.webp",
+            "alt": "a chart showing web development",
+            "kind": "article-figure"
+          },
+          {
+            "url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/gemini-3-7-flash__evals__gdp-pdf.width-1000.format-webp.webp",
+            "alt": "a chart showing Expert PDF document comprehension",
+            "kind": "article-figure"
+          },
+          {
+            "url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/gemini-3-7-flash__evals__automat.width-1000.format-webp.webp",
+            "alt": "a chart showing enterprise workflow automation",
+            "kind": "article-figure"
+          },
+          {
+            "url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/gemini-3-7-flash__evals__perform.width-1200.format-webp.webp",
+            "alt": "an image of a performance to cost comparison chart",
+            "kind": "article-figure"
           }
         ],
         "videos": [],

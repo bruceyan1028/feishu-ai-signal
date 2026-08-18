@@ -404,6 +404,11 @@ class ArticleMediaTest(unittest.TestCase):
                 }
             )
         )
+        self.assertTrue(
+            rss.strict_evidence_image_source(
+                "https://blog.google/innovation-and-ai/models-and-research/demo/"
+            )
+        )
         url = "https://blog.google/innovation-and-ai/models-and-research/gemini-models/demo/"
         html = """
         <article>
