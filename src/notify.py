@@ -151,6 +151,68 @@ def _brief_record(token: str, table_id: str, day: str) -> dict[str, Any] | None:
     return None
 
 
+def recipient_statuses(
+    recipients: list[str],
+    message_ids: dict[str, str],
+    failures: dict[str, str],
+) -> dict[str, str]:
+    """以人名而非 open_id 输出逐人发送状态。"""
+    statuses: dict[str, str] = {}
+    for index, open_id in enumerate(recipients, 1):
+        name = config.FEISHU_RECIPIENT_NAME_BY_OPEN_ID.get(open_id) or f"recipient_{index}"
+        statuses[name] = "success" if open_id in message_ids else "failed"
+    return statuses
+
+
+def build_delivery_report_card(day: str, statuses: dict[str, str]) -> dict[str, Any]:
+    lines = [
+        f"{'✅' if status == 'success' else '❌'} {name}："
+        f"{'发送成功' if status == 'success' else '发送失败'}"
+        for name, status in statuses.items()
+    ]
+    return {
+        "config": {"wide_screen_mode": True},
+        "header": {
+            "template": "green" if all(status == "success" for status in statuses.values()) else "orange",
+            "title": {"tag": "plain_text", "content": f"每日简报发送结果 · {day}"},
+        },
+        "elements": [
+            {
+                "tag": "div",
+                "text": {"tag": "lark_md", "content": "\n".join(lines)},
+            },
+            {
+                "tag": "note",
+                "elements": [
+                    {
+                        "tag": "plain_text",
+                        "content": "“发送成功”表示飞书接口已接受消息，不代表对方已读。",
+                    }
+                ],
+            },
+        ],
+    }
+
+
+def send_delivery_report(
+    token: str,
+    day: str,
+    recipients: list[str],
+    message_ids: dict[str, str],
+    failures: dict[str, str],
+) -> tuple[dict[str, str], str]:
+    statuses = recipient_statuses(recipients, message_ids, failures)
+    target = config.FEISHU_DELIVERY_REPORT_OPEN_ID
+    if not target:
+        return statuses, ""
+    message_id = feishu.send_interactive_message(
+        token,
+        target,
+        build_delivery_report_card(day, statuses),
+    )
+    return statuses, message_id
+
+
 def send_many(
     brief: dict[str, Any], base_url: str, open_ids: list[str], force: bool = False
 ) -> dict[str, Any]:
@@ -185,9 +247,14 @@ def send_many(
             message_ids[open_id] = feishu.send_interactive_message(token, open_id, card)
         except Exception as exc:  # noqa: BLE001
             failures[open_id] = str(exc)
-            log.warning("发送给 %s 失败: %s", open_id, exc)
+            name = config.FEISHU_RECIPIENT_NAME_BY_OPEN_ID.get(open_id) or "未命名收件人"
+            log.warning("发送给 %s 失败: %s", name, exc)
     if not message_ids:
         feishu.update_record(token, table_id, str(record["record_id"]), {"发送状态": "失败"})
+        try:
+            send_delivery_report(token, str(brief["date"]), recipients, message_ids, failures)
+        except Exception as exc:  # noqa: BLE001
+            log.warning("发送每日结果汇总失败: %s", exc)
         raise RuntimeError(f"所有收件人都发送失败: {json.dumps(failures, ensure_ascii=False)}")
     feishu.update_record(
         token,
@@ -199,10 +266,24 @@ def send_many(
             "消息ID": json.dumps(message_ids, ensure_ascii=False),
         },
     )
+    report_message_id = ""
+    try:
+        statuses, report_message_id = send_delivery_report(
+            token,
+            str(brief["date"]),
+            recipients,
+            message_ids,
+            failures,
+        )
+    except Exception as exc:  # noqa: BLE001
+        statuses = recipient_statuses(recipients, message_ids, failures)
+        log.warning("发送每日结果汇总失败: %s", exc)
     return {
         "skipped": False,
         "messageIds": message_ids,
         "failed": failures,
+        "recipientStatuses": statuses,
+        "deliveryReportMessageId": report_message_id,
         "detailUrl": url,
     }
 

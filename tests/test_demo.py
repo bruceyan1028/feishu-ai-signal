@@ -814,6 +814,41 @@ class DeliveryTests(unittest.TestCase):
     @patch("src.notify.feishu.update_record")
     @patch(
         "src.notify.feishu.send_interactive_message",
+        side_effect=["msg1", "msg2", "report-msg"],
+    )
+    @patch("src.notify.feishu.get_tenant_access_token", return_value="token")
+    @patch("src.notify.feishu.read_all_records_with_ids")
+    def test_daily_delivery_report_uses_names_without_open_ids(
+        self, read_records, _token, send_message, _update_record
+    ) -> None:
+        read_records.return_value = [
+            {"record_id": "brief1", "fields": {"简报ID": "2026-07-13", "发送状态": "待发送"}}
+        ]
+        with (
+            patch.object(
+                config,
+                "FEISHU_RECIPIENT_NAME_BY_OPEN_ID",
+                {"ou_one": "yanyufeng", "ou_two": "guojiexin"},
+            ),
+            patch.object(config, "FEISHU_DELIVERY_REPORT_OPEN_ID", "ou_one"),
+        ):
+            result = notify.send_many(
+                self.sample_brief(), "https://example.com", ["ou_one", "ou_two"]
+            )
+        self.assertEqual(
+            result["recipientStatuses"],
+            {"yanyufeng": "success", "guojiexin": "success"},
+        )
+        self.assertEqual(result["deliveryReportMessageId"], "report-msg")
+        report_card = send_message.call_args_list[2].args[2]
+        report_text = report_card["elements"][0]["text"]["content"]
+        self.assertIn("yanyufeng：发送成功", report_text)
+        self.assertIn("guojiexin：发送成功", report_text)
+        self.assertNotIn("ou_one", json.dumps(report_card, ensure_ascii=False))
+
+    @patch("src.notify.feishu.update_record")
+    @patch(
+        "src.notify.feishu.send_interactive_message",
         side_effect=[RuntimeError("open_id cross app"), "msg2", "msg3"],
     )
     @patch("src.notify.feishu.get_tenant_access_token", return_value="token")

@@ -106,6 +106,8 @@ jobs:
       FEISHU_BRIEF_TABLE_ID: ${{ secrets.FEISHU_BRIEF_TABLE_ID }}
       FEISHU_RECIPIENT_OPEN_ID: ${{ secrets.FEISHU_RECIPIENT_OPEN_ID }}
       FEISHU_RECIPIENT_OPEN_IDS: ${{ secrets.FEISHU_RECIPIENT_OPEN_IDS }}
+      FEISHU_RECIPIENT_NAMES: ${{ secrets.FEISHU_RECIPIENT_NAMES }}
+      FEISHU_DELIVERY_REPORT_OPEN_ID: ${{ secrets.FEISHU_DELIVERY_REPORT_OPEN_ID }}
     steps:
       - uses: actions/checkout@v4
         with:

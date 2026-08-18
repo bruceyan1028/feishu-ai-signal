@@ -62,6 +62,20 @@ FEISHU_RECIPIENT_OPEN_IDS = [
     for item in _recipient_open_ids.split(",")
     if item.strip()
 ]
+# 与 FEISHU_RECIPIENT_OPEN_IDS 按顺序对应；用于日志和发送结果卡片，避免暴露 open_id。
+FEISHU_RECIPIENT_NAMES = [
+    item.strip()
+    for item in os.environ.get("FEISHU_RECIPIENT_NAMES", "").split(",")
+    if item.strip()
+]
+FEISHU_RECIPIENT_NAME_BY_OPEN_ID = {
+    open_id: FEISHU_RECIPIENT_NAMES[index]
+    for index, open_id in enumerate(FEISHU_RECIPIENT_OPEN_IDS)
+    if index < len(FEISHU_RECIPIENT_NAMES)
+}
+FEISHU_DELIVERY_REPORT_OPEN_ID = os.environ.get(
+    "FEISHU_DELIVERY_REPORT_OPEN_ID", ""
+).strip()
 PUBLIC_BASE_URL = os.environ.get("PUBLIC_BASE_URL", "").strip().rstrip("/")
 
 # --- Jina Reader ---
