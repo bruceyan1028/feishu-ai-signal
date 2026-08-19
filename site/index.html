@@ -1587,44 +1587,20 @@ function detailMediaHtml(A, s){
   return '';
 }
 
-// 部分网络直连不到 YouTube，内嵌 iframe 会静默变成一块黑屏且无处可点。
-// 改为封面占位：封面能加载即说明可达，点击就地内嵌播放；封面加载失败则点击跳原站。
-let YT_REACHABLE = null;
-function mountVideoFrame(el, autoplay){
-  const src = el.getAttribute('data-embed') || '';
-  if(!src || el.dataset.mounted) return;
-  el.dataset.mounted = '1';
-  const frame = document.createElement('iframe');
-  frame.src = autoplay ? src + (src.includes('?') ? '&' : '?') + 'autoplay=1' : src;
-  frame.title = el.getAttribute('data-title') || '';
-  frame.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
-  frame.referrerPolicy = 'strict-origin-when-cross-origin';
-  frame.allowFullscreen = true;
-  frame.setAttribute('style', 'position:absolute;inset:0;width:100%;height:100%;border:0;');
-  el.innerHTML = '';
-  el.appendChild(frame);
-}
-function ytPosterLoaded(img){
-  YT_REACHABLE = true;
-  // 封面能加载即说明可直连，立刻挂上播放器，体验与直接内嵌一致（无需多一次点击）
-  document.querySelectorAll('[data-embed]').forEach(el => mountVideoFrame(el, false));
-}
-function playVideo(el){
-  if(YT_REACHABLE === true){ mountVideoFrame(el, true); return; }
-  const watch = el.getAttribute('data-watch') || '';
-  if(watch) window.open(watch, '_blank', 'noopener');
-}
 function videoFacadeHtml(video, title, fallbackUrl, poster){
-  const src = String(video.embedUrl || '').replace('youtube-nocookie.com', 'youtube.com');
-  const watch = video.url || fallbackUrl || '';
+  // i.ytimg.com 封面能加载，不代表 youtube.com/embed 可用。此前自动挂载 iframe
+  // 会覆盖可点击封面，播放器被网络或嵌入策略拦截后只剩黑屏。
+  const embed = String(video.embedUrl || '');
+  const youtubeId = (embed.match(/youtube(?:-nocookie)?\.com\/embed\/([^?/#]+)/i) || [])[1] || '';
+  const watch = video.url || (youtubeId ? `https://www.youtube.com/watch?v=${youtubeId}` : fallbackUrl) || '';
   const cover = video.thumbnailUrl || poster || '';
-  return `<div data-embed="${esc(src)}" data-watch="${esc(watch)}" data-title="${esc(title)}" onclick="playVideo(this)" role="button" tabindex="0" style="position:relative;padding-top:56.25%;cursor:pointer;background:#0d0b09;overflow:hidden;">
-    ${cover?`<img src="${esc(cover)}" alt="" loading="lazy" onload="ytPosterLoaded(this)" onerror="this.style.display='none'" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;">`:''}
+  return `<a href="${esc(watch)}" target="_blank" rel="noopener" aria-label="打开原视频：${esc(title)}" style="display:block;position:relative;padding-top:56.25%;cursor:pointer;background:#0d0b09;overflow:hidden;">
+    ${cover?`<img src="${esc(cover)}" alt="" loading="lazy" onerror="this.style.display='none'" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;">`:''}
     <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:9px;background:rgba(13,11,9,.34);color:#fff;">
       <span style="display:flex;align-items:center;justify-content:center;width:58px;height:58px;border-radius:50%;background:rgba(13,11,9,.72);border:1.5px solid rgba(255,255,255,.85);font-size:19px;padding-left:4px;">▶</span>
       <span data-yt-hint style="font-size:11.5px;font-weight:700;text-shadow:0 1px 3px rgba(0,0,0,.6);">点击打开原视频 ↗</span>
     </div>
-  </div>`;
+  </a>`;
 }
 function sourceVideoHtml(s){
   if(s.kind!=='视频') return '';

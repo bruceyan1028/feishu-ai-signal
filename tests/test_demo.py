@@ -730,6 +730,15 @@ class DeliveryTests(unittest.TestCase):
         self.assertIn("真实中文标题", json.dumps(card, ensure_ascii=False))
         self.assertIn(url, json.dumps(card, ensure_ascii=False))
 
+    def test_youtube_preview_keeps_a_clickable_original_link(self) -> None:
+        template = Path("index.html").read_text(encoding="utf-8")
+        self.assertIn(
+            'return `<a href="${esc(watch)}" target="_blank" rel="noopener"',
+            template,
+        )
+        self.assertNotIn("ytPosterLoaded", template)
+        self.assertNotIn("mountVideoFrame", template)
+
     def test_historical_brief_drops_meta_signal_outside_24h_window(self) -> None:
         old_meta = {
             "sourceId": "meta-ai-blog",
