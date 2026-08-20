@@ -173,6 +173,51 @@ class WeeklyReportTest(unittest.TestCase):
             self.assertEqual(archive, payload)
             self.assertTrue((site / "index.html").exists())
 
+    def test_daily_site_rebuild_keeps_existing_weekly_and_timeline(self) -> None:
+        brief = {
+            "date": "2026-08-20",
+            "title": "日报",
+            "intro": "引言",
+            "bullets": [],
+            "signals": [
+                {
+                    "recordId": "r1",
+                    "title": "title",
+                    "titleCn": "标题",
+                    "source": "OpenAI",
+                    "url": "https://example.com/a",
+                    "category": "前沿模型公司",
+                    "publishedDate": "2026-08-20",
+                    "summary": "摘要",
+                    "why": "原因",
+                    "impact": 80,
+                    "novelty": 70,
+                    "actionability": 60,
+                    "urgency": "中",
+                    "tags": ["AI"],
+                }
+            ],
+        }
+        with tempfile.TemporaryDirectory() as directory:
+            data = Path(directory) / "data"
+            data.mkdir(parents=True)
+            (data / "weekly-latest.json").write_text(
+                '{"weekId":"2026-W34","signals":[{"recordId":"r1"}]}',
+                encoding="utf-8",
+            )
+            (data / "weekly-2026-W34.json").write_text(
+                '{"weekId":"2026-W34"}', encoding="utf-8"
+            )
+            (data / "timeline-latest.json").write_text(
+                '{"entities":[{"id":"nvidia"}]}', encoding="utf-8"
+            )
+            site = publish.build_site([brief], directory)
+            latest = json.loads((site / "data" / "weekly-latest.json").read_text())
+            self.assertEqual(latest["weekId"], "2026-W34")
+            self.assertTrue((site / "data" / "weekly-2026-W34.json").exists())
+            timeline = json.loads((site / "data" / "timeline-latest.json").read_text())
+            self.assertEqual(timeline["entities"][0]["id"], "nvidia")
+
     def test_weekly_card_uses_stable_record_ids_for_top_signals(self):
         brief = {
             "title": "AI 周报",
@@ -203,8 +248,10 @@ class WeeklyReportTest(unittest.TestCase):
             encoding="utf-8"
         )
         self.assertIn("data/weekly-latest.json", html)
+        self.assertIn("data/timeline-latest.json", html)
         self.assertIn("App.openWeeklyDetail", html)
         self.assertIn("/api/report-pending", html)
+        self.assertIn("/api/tracked-entities", html)
         self.assertNotIn("2026-06-30 → 2026-07-07", html)
 
     @patch("src.sources_api.feishu.create_record")

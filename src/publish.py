@@ -35,6 +35,30 @@ _IMAGE_EXTENSIONS = {
     "image/webp": ".webp",
     "image/gif": ".gif",
 }
+# 日报重建会清空 site/，周报和战略时间线必须单独保留，直到下一期覆盖。
+_PERSISTENT_DATA_GLOBS = ("weekly-*.json", "timeline-latest.json")
+
+
+def stash_persistent_site_data(site: Path) -> dict[str, bytes]:
+    data_dir = Path(site) / "data"
+    kept: dict[str, bytes] = {}
+    if not data_dir.is_dir():
+        return kept
+    for pattern in _PERSISTENT_DATA_GLOBS:
+        for path in data_dir.glob(pattern):
+            kept[path.name] = path.read_bytes()
+    return kept
+
+
+def restore_persistent_site_data(site: Path, kept: dict[str, bytes]) -> None:
+    if not kept:
+        return
+    data_dir = Path(site) / "data"
+    data_dir.mkdir(parents=True, exist_ok=True)
+    for name, content in kept.items():
+        dest = data_dir / name
+        if not dest.exists():
+            dest.write_bytes(content)
 
 
 def _json_cell(value: Any, fallback: Any) -> Any:
@@ -297,6 +321,7 @@ def build_site(
     if not briefs:
         raise RuntimeError("没有可发布的已发布简报")
     site = Path(site_dir)
+    kept = stash_persistent_site_data(site)
     if site.exists():
         shutil.rmtree(site)
     data_dir = site / "data"
@@ -427,6 +452,7 @@ def build_site(
         encoding="utf-8",
     )
     (site / ".nojekyll").write_text("", encoding="utf-8")
+    restore_persistent_site_data(site, kept)
     return site
 
 

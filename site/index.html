@@ -834,11 +834,23 @@ async function loadTimeline(){
   state.timelineStatus={loading:true,error:''};
   render();
   const local=isConfigHost();
-  const url=local?'/api/tracked-entities':'data/timeline-latest.json';
   try {
-    const body=await sourceApi(url);
-    applyTimelinePayload(body);
-    state.timelineWritable=local&&Boolean(body.writable);
+    if(local){
+      try {
+        const body=await sourceApi('/api/tracked-entities');
+        applyTimelinePayload(body);
+        state.timelineWritable=Boolean(body.writable);
+        state.timelineStatus={loading:false,error:''};
+        render();
+        return;
+      } catch(error) {
+        state.timelineWritable=false;
+      }
+    }
+    const response=await fetch('data/timeline-latest.json', { cache:'no-store' });
+    if(!response.ok) throw new Error(`HTTP ${response.status}`);
+    applyTimelinePayload(await response.json());
+    state.timelineWritable=false;
     state.timelineStatus={loading:false,error:''};
   } catch(error) {
     state.timelineWritable=false;
@@ -1133,14 +1145,14 @@ function strategyMapHtml(strategy, events, A){
     const evidence=(hypothesis.evidenceEventIds||[]).map(id=>eventMap[id]).filter(Boolean).slice(0,4);
     const themes=(hypothesis.themeIds||[]).map(id=>themeMap[id]).filter(Boolean);
     const confidence=Number(hypothesis.confidence||0);
-    return `<div style="display:grid;grid-template-columns:minmax(160px,1fr) 34px minmax(150px,.85fr) 34px minmax(240px,1.5fr);gap:8px;align-items:stretch;padding:12px 0;border-top:1px solid ${UI.border};">
+    return `<div style="display:grid;grid-template-columns:minmax(180px,.9fr) 28px minmax(240px,1.25fr) 28px minmax(240px,1.25fr);gap:8px;align-items:stretch;padding:12px 0;border-top:1px solid ${UI.border};">
       <div style="display:flex;flex-direction:column;gap:6px;">${evidence.map(event=>{ const original=(event.originals||[]).find(item=>item.url); return original?`<a class="strategy-evidence" href="${esc(original.url)}" target="_blank" rel="noopener" title="打开代表原文：${esc(original.title)}" style="display:block;padding:7px 9px;border-radius:8px;background:${UI.panelSolid};border:1px solid ${UI.border};text-decoration:none;"><div style="display:flex;justify-content:space-between;gap:6px;font-family:'Geist Mono',monospace;font-size:10px;color:${UI.text3};"><span>${esc(event.date)}</span><span>原文 ↗</span></div><div class="strategy-clamp strategy-clamp-2" style="margin-top:2px;font-size:11px;line-height:1.45;color:${UI.text2};">${esc(event.title.replace(/^〔[^〕]+〕/,''))}</div></a>`:`<div style="padding:7px 9px;border-radius:8px;background:${UI.panelSolid};border:1px solid ${UI.border};"><div style="font-family:'Geist Mono',monospace;font-size:10px;color:${UI.text3};">${esc(event.date)}</div><div class="strategy-clamp strategy-clamp-2" style="font-size:11px;line-height:1.45;color:${UI.text2};">${esc(event.title.replace(/^〔[^〕]+〕/,''))}</div></div>`; }).join('')}</div>
       <div style="display:flex;align-items:center;justify-content:center;color:${A.accent};font-size:18px;">→</div>
-      <div style="display:flex;flex-direction:column;gap:6px;justify-content:center;">${themes.map(theme=>`<div style="padding:8px 9px;border-radius:8px;background:${A.accentSoft};border:1px solid ${A.accentBorder};"><div style="font-size:11.5px;font-weight:700;color:${A.accentBright};">${esc(theme.name)}</div><div class="strategy-clamp strategy-clamp-3" style="margin-top:3px;font-size:10.5px;line-height:1.45;color:${UI.text2};">${esc(shortText(theme.summary,120))}</div></div>`).join('')}</div>
+      <div style="display:flex;flex-direction:column;gap:6px;justify-content:center;">${themes.map(theme=>`<div style="padding:10px 12px;border-radius:8px;background:${A.accentSoft};border:1px solid ${A.accentBorder};"><div style="font-size:12.5px;font-weight:700;color:${A.accentBright};">${esc(theme.name)}</div><div style="margin-top:6px;font-size:12px;line-height:1.7;color:${UI.text2};">${esc(theme.summary)}</div></div>`).join('')}</div>
       <div style="display:flex;align-items:center;justify-content:center;color:${A.accent};font-size:18px;">→</div>
       <div style="padding:12px 14px;border-radius:10px;background:${UI.panelSolid};border:1px solid ${UI.border};">
         <div style="display:flex;align-items:flex-start;gap:8px;"><div style="flex:1;font-size:13px;font-weight:700;color:${UI.text};">${esc(hypothesis.title)}</div><span style="flex:none;font-family:'Geist Mono',monospace;font-size:10px;color:${scoreColor(confidence)};">置信度 ${confidence}</span></div>
-        <div class="strategy-clamp strategy-clamp-3" style="margin-top:7px;font-size:11.5px;line-height:1.6;color:${UI.text2};">${esc(shortText(hypothesis.assessment,200))}</div>
+        <div style="margin-top:7px;font-size:12px;line-height:1.7;color:${UI.text2};">${esc(hypothesis.assessment)}</div>
         ${hypothesis.counterSignals||(hypothesis.watchFor||[]).length?`<details style="margin-top:8px;"><summary style="font-size:10.5px;color:${A.accentBright};cursor:pointer;">反证与后续观察</summary>${hypothesis.counterSignals?`<div style="margin-top:6px;font-size:10.5px;line-height:1.5;color:${UI.text3};"><strong>可能反证：</strong>${esc(hypothesis.counterSignals)}</div>`:''}${(hypothesis.watchFor||[]).length?`<div style="margin-top:5px;font-size:10.5px;line-height:1.5;color:${UI.text3};"><strong>继续观察：</strong>${hypothesis.watchFor.map(esc).join(' · ')}</div>`:''}</details>`:''}
       </div>
     </div>`;
@@ -1153,7 +1165,7 @@ function strategyMapHtml(strategy, events, A){
   return `<section style="padding:22px 24px;border-radius:16px;background:${UI.panel};border:1px solid ${UI.border};overflow-x:auto;">
     <div style="display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;"><h2 style="margin:0;font-size:18px;color:${UI.text};">长期布局研判</h2><span style="font-size:10.5px;color:${UI.text3};">假设均由下方事件证据支持，不等同于已确认事实</span></div>
     <p style="margin:12px 0 18px;font-size:12.5px;line-height:1.75;color:${UI.text2};">${esc(strategy.overview)}</p>
-    ${rows?`<div style="display:grid;grid-template-columns:minmax(160px,1fr) 34px minmax(150px,.85fr) 34px minmax(240px,1.5fr);gap:8px;padding:0 0 7px;font-size:10px;font-weight:700;color:${UI.text3};"><span>事件证据</span><span></span><span>战略主题</span><span></span><span>潜在布局意图</span></div>${rows}`:''}
+    ${rows?`<div style="display:grid;grid-template-columns:minmax(180px,.9fr) 28px minmax(240px,1.25fr) 28px minmax(240px,1.25fr);gap:8px;padding:0 0 7px;font-size:10px;font-weight:700;color:${UI.text3};"><span>事件证据</span><span></span><span>战略主题</span><span></span><span>潜在布局意图</span></div>${rows}`:''}
     ${relations?`<details style="margin-top:14px;border-top:1px solid ${UI.border};padding-top:12px;"><summary style="font-size:11.5px;color:${A.accentBright};cursor:pointer;">查看跨事件关系</summary><div style="display:flex;flex-direction:column;gap:8px;margin-top:10px;">${relations}</div></details>`:''}
   </section>`;
 }
@@ -2541,8 +2553,8 @@ function tasksHtml(A){
 
   if(state.taskTab==='report' && !weeklyReport){
     body = `<div style="padding:44px 28px;border:1px solid ${UI.border};border-radius:16px;background:${UI.panel};text-align:center;">
-      <div style="font-size:16px;font-weight:700;color:${UI.text};">${weeklyStatus.loading?'正在加载本周周报…':'本周周报尚未生成'}</div>
-      <div style="margin-top:8px;font-size:12.5px;color:${UI.text3};">${weeklyStatus.error?`读取失败 · ${esc(weeklyStatus.error)}`:'周报将在每周一上午自动生成并推送。'}</div>
+      <div style="font-size:16px;font-weight:700;color:${UI.text};">${weeklyStatus.loading?'正在加载周报…':'还没有可展示的周报'}</div>
+      <div style="margin-top:8px;font-size:12.5px;color:${UI.text3};">${weeklyStatus.error?`读取失败 · ${esc(weeklyStatus.error)}`:'上一期周报会一直保留在这里，直到新一周生成。'}</div>
     </div>`;
   }
   else if(state.taskTab==='report'){
@@ -2756,7 +2768,7 @@ function tasksHtml(A){
         <div style="width:100%;box-sizing:border-box;padding:26px 28px;border-radius:16px;background:${UI.panel};border:1px solid ${UI.border};">
           <div style="display: flex; align-items: baseline; gap: 10px; margin-bottom: 22px;">
             <h2 style="margin: 0; font-size: 20px; font-weight: 700; color: var(--ds-text);">事件证据时间线</h2>
-            <span style="font-size: 12px; color: ${UI.text3};">${esc(ent)} · ${events.length} 个日期摘要</span>
+            <span style="font-size: 12px; color: ${UI.text3};">${esc(ent||'')} · ${events.length} 个日期摘要</span>
             ${state.timelineWritable&&ent?`<button onclick="App.removeTrackedEntity('${esc(ent)}')" style="margin-left:auto;border:0;background:transparent;color:${UI.text3};cursor:pointer;font-size:12px;">停止追踪</button>`:''}
           </div>
           ${state.timelineStatus.loading?`<div style="font-size:13px;color:${UI.text3};">正在加载真实时间线…</div>`:state.timelineStatus.error?`<div style="font-size:13px;color:#b91c1c;">时间线加载失败：${esc(state.timelineStatus.error)}</div>`:tl||`<div style="font-size: 13px; color: ${UI.text3};">${entities.length?'该对象暂无记录 · 新增匹配将自动出现在此时间线':'尚未建立追踪对象，请在本地配置台添加。'}</div>`}
