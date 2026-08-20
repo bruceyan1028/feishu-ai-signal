@@ -10,12 +10,28 @@ from datetime import datetime, timezone
 from typing import Any
 
 import requests
+from requests.adapters import HTTPAdapter
+from urllib3.util.retry import Retry
 
 from . import config
 
 log = logging.getLogger(__name__)
 
 _SESSION = requests.Session()
+_SESSION.mount(
+    "https://",
+    HTTPAdapter(
+        max_retries=Retry(
+            total=5,
+            connect=5,
+            read=5,
+            backoff_factor=1,
+            status_forcelist=(429, 500, 502, 503, 504),
+            allowed_methods=frozenset(["GET", "POST", "PUT", "DELETE", "PATCH"]),
+            raise_on_status=False,
+        )
+    ),
+)
 
 
 class FeishuError(RuntimeError):
@@ -842,6 +858,22 @@ def send_interactive_message(token: str, open_id: str, card: dict[str, Any]) -> 
     if data.get("code") != 0:
         raise FeishuError(f"Feishu send message failed: {data.get('code')} {data.get('msg')}")
     return str(((data.get("data") or {}).get("message_id")) or "")
+
+
+def upload_image(token: str, data: bytes, filename: str = "cover.png") -> str:
+    """上传图片素材，返回卡片 img 元素所需的 image_key。"""
+    url = f"{config.FEISHU_HOST}/open-apis/im/v1/images"
+    resp = _SESSION.post(
+        url,
+        headers={"Authorization": f"Bearer {token}"},
+        data={"image_type": "message"},
+        files={"image": (filename, data, "image/png")},
+        timeout=60,
+    )
+    payload = resp.json()
+    if payload.get("code") != 0:
+        raise FeishuError(f"Feishu upload image failed: {payload.get('code')} {payload.get('msg')}")
+    return str((payload.get("data") or {}).get("image_key") or "")
 
 
 def batch_create_records(token: str, fields_list: list[dict[str, Any]], chunk: int = 100) -> int:

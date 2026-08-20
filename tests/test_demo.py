@@ -7,7 +7,7 @@ from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from unittest.mock import MagicMock, patch
 
-from src import config, daily, main, notify, process, publish, rss, scrape, sources
+from src import card_image, config, daily, main, notify, process, publish, rss, scrape, sources
 
 
 class PipelineTests(unittest.TestCase):
@@ -688,6 +688,11 @@ class DailyTests(unittest.TestCase):
 
 
 class DeliveryTests(unittest.TestCase):
+    def setUp(self) -> None:
+        uploader = patch("src.notify.feishu.upload_image", return_value="img_key_test")
+        uploader.start()
+        self.addCleanup(uploader.stop)
+
     def sample_brief(self) -> dict:
         return {
             "date": "2026-07-13",
@@ -729,6 +734,60 @@ class DeliveryTests(unittest.TestCase):
         card = notify.build_card(brief, url)
         self.assertIn("真实中文标题", json.dumps(card, ensure_ascii=False))
         self.assertIn(url, json.dumps(card, ensure_ascii=False))
+
+    def multi_category_brief(self) -> dict:
+        brief = self.sample_brief()
+        brief["signals"].append(
+            {
+                "recordId": "rec2",
+                "title": "Second",
+                "titleCn": "第二条中文标题",
+                "source": "量子位",
+                "url": "https://example.com/second",
+                "category": "中文科技媒体",
+                "summary": "第二条摘要，" * 20,
+                "impact": 80,
+                "contentType": "公众号",
+            }
+        )
+        return brief
+
+    def test_daily_card_uses_cover_image_and_grouped_sections(self) -> None:
+        brief = self.multi_category_brief()
+        card = notify.build_card(brief, "https://example.com/brief", "img_key_1")
+        images = [item for item in card["elements"] if item.get("tag") == "img"]
+        self.assertEqual([item["img_key"] for item in images], ["img_key_1"])
+        dumped = json.dumps(card, ensure_ascii=False)
+        self.assertIn("**🚀 前沿模型公司**", dumped)
+        self.assertIn("**📰 中文科技媒体**", dumped)
+        self.assertIn("**1. 真实中文标题**", dumped)
+        self.assertIn("**2. 第二条中文标题**", dumped)
+        notes = [
+            element["elements"][0]["content"]
+            for element in card["elements"]
+            if element.get("tag") == "note" and element["elements"][0].get("tag") == "lark_md"
+        ]
+        self.assertIn("来源：[OpenAI](https://example.com/news) · 影响分 90", notes)
+        # 摘要过长会拖垮观感，正文里必须是截断后的短句
+        self.assertNotIn("第二条摘要，" * 20, dumped)
+
+    def test_daily_card_falls_back_to_text_when_cover_fails(self) -> None:
+        with patch.object(
+            notify.card_image, "render_daily_cover", side_effect=RuntimeError("render boom")
+        ):
+            key = notify.cover_image_key("token", self.sample_brief())
+        self.assertEqual(key, "")
+        card = notify.build_card(self.sample_brief(), "https://example.com/brief", key)
+        self.assertFalse([item for item in card["elements"] if item.get("tag") == "img"])
+        self.assertIn("真实中文标题", json.dumps(card, ensure_ascii=False))
+
+    def test_daily_cover_renders_png_with_capped_groups(self) -> None:
+        brief = self.multi_category_brief()
+        groups = card_image.group_signals(brief["signals"])
+        self.assertEqual([name for name, _ in groups], ["前沿模型公司", "中文科技媒体"])
+        self.assertTrue(all(len(items) <= card_image.MAX_ITEMS_PER_GROUP for _, items in groups))
+        png = card_image.render_daily_cover(brief)
+        self.assertTrue(png.startswith(b"\x89PNG"))
 
     def test_youtube_preview_keeps_a_clickable_original_link(self) -> None:
         template = Path("index.html").read_text(encoding="utf-8")
