@@ -859,6 +859,57 @@ const App = {
   toggleNotes(){ state.notesOpen=!state.notesOpen; if(state.notesOpen) state.dialogueOpen=false; renderDetailLayer(); },
   toggleDialogue(){ state.dialogueOpen=!state.dialogueOpen; if(state.dialogueOpen) state.notesOpen=false; renderDetailLayer(); },
   closeDetail(){ if(state.detailRank==null) return; state.detailRank=null; state.detailSignal=null; state.notesOpen=false; state.dialogueOpen=false; renderDetailLayer(); },
+  playVideo(el){
+    if(!el || el.dataset.mounted) return;
+    const embed = el.getAttribute('data-embed') || '';
+    const watch = el.getAttribute('data-watch') || '';
+    const title = el.getAttribute('data-title') || '';
+    if(!embed){
+      if(watch) window.open(watch, '_blank', 'noopener');
+      return;
+    }
+    el.dataset.mounted = '1';
+    const isYouTube = /youtube(?:-nocookie)?\.com\/embed\//i.test(embed);
+    const frame = document.createElement('iframe');
+    frame.src = isYouTube ? youtubeEmbedSrc(embed, true) : embed;
+    frame.title = title;
+    frame.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
+    frame.referrerPolicy = 'strict-origin-when-cross-origin';
+    frame.allowFullscreen = true;
+    frame.setAttribute('style', 'position:absolute;inset:0;width:100%;height:100%;border:0;');
+    el.innerHTML = '';
+    el.appendChild(frame);
+    if(!isYouTube) return;
+    el.dataset.ytWaiting = '1';
+    bindYoutubeMessages();
+    const ping = ()=>{ try{ frame.contentWindow && frame.contentWindow.postMessage(JSON.stringify({event:'listening', id:1}), '*'); }catch(err){} };
+    frame.addEventListener('load', ping);
+    setTimeout(ping, 400);
+    const status = document.createElement('div');
+    status.setAttribute('data-yt-status', '');
+    status.setAttribute('style', 'position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#fff;background:rgba(13,11,9,.45);font-size:12px;font-weight:700;pointer-events:none;');
+    status.textContent = '正在加载播放器…';
+    el.appendChild(status);
+    setTimeout(()=>{
+      if(!el.hasAttribute('data-yt-waiting')) return;
+      el.removeAttribute('data-yt-waiting');
+      status.style.pointerEvents = 'auto';
+      status.style.flexDirection = 'column';
+      status.style.gap = '10px';
+      status.style.background = 'rgba(13,11,9,.78)';
+      status.textContent = '';
+      const msg = document.createElement('div');
+      msg.textContent = '当前网络无法在页面内播放';
+      const link = document.createElement('a');
+      link.href = watch;
+      link.target = '_blank';
+      link.rel = 'noopener';
+      link.textContent = '在 YouTube 打开 ↗';
+      link.setAttribute('style', 'color:#fff;border:1px solid rgba(255,255,255,.7);padding:6px 12px;font-size:12px;font-weight:700;');
+      status.appendChild(msg);
+      status.appendChild(link);
+    }, 6000);
+  },
   sendChat(){
     const el=document.getElementById('chatInput'); const t=(el && el.value || '').trim();
     if(!t) return;
@@ -1587,20 +1638,53 @@ function detailMediaHtml(A, s){
   return '';
 }
 
+function youtubeEmbedSrc(embed, autoplay){
+  const raw = String(embed || '');
+  const id = (raw.match(/youtube(?:-nocookie)?\.com\/embed\/([^?/#]+)/i) || [])[1];
+  if(!id) return raw;
+  const params = new URLSearchParams({ rel:'0', playsinline:'1', enablejsapi:'1', origin: location.origin });
+  if(autoplay) params.set('autoplay', '1');
+  return `https://www.youtube-nocookie.com/embed/${id}?${params}`;
+}
+function bindYoutubeMessages(){
+  if(bindYoutubeMessages.bound) return;
+  bindYoutubeMessages.bound = true;
+  window.addEventListener('message', ev=>{
+    if(!/^https:\/\/www\.youtube(?:-nocookie)?\.com$/.test(ev.origin)) return;
+    let data = ev.data;
+    if(typeof data==='string'){ try{ data=JSON.parse(data); }catch{ return; } }
+    if(!data || !['onReady','infoDelivery','initialDelivery'].includes(data.event)) return;
+    document.querySelectorAll('[data-yt-waiting] iframe').forEach(frame=>{
+      if(frame.contentWindow!==ev.source) return;
+      const host = frame.parentElement;
+      if(!host) return;
+      host.removeAttribute('data-yt-waiting');
+      const status = host.querySelector('[data-yt-status]');
+      if(status) status.remove();
+    });
+  });
+}
 function videoFacadeHtml(video, title, fallbackUrl, poster){
-  // i.ytimg.com 封面能加载，不代表 youtube.com/embed 可用。此前自动挂载 iframe
-  // 会覆盖可点击封面，播放器被网络或嵌入策略拦截后只剩黑屏。
   const embed = String(video.embedUrl || '');
   const youtubeId = (embed.match(/youtube(?:-nocookie)?\.com\/embed\/([^?/#]+)/i) || [])[1] || '';
   const watch = video.url || (youtubeId ? `https://www.youtube.com/watch?v=${youtubeId}` : fallbackUrl) || '';
   const cover = video.thumbnailUrl || poster || '';
-  return `<a href="${esc(watch)}" target="_blank" rel="noopener" aria-label="打开原视频：${esc(title)}" style="display:block;position:relative;padding-top:56.25%;cursor:pointer;background:#0d0b09;overflow:hidden;">
+  if(!embed){
+    return `<a href="${esc(watch)}" target="_blank" rel="noopener" aria-label="打开原视频：${esc(title)}" style="display:block;position:relative;padding-top:56.25%;cursor:pointer;background:#0d0b09;overflow:hidden;">
+      ${cover?`<img src="${esc(cover)}" alt="" loading="lazy" onerror="this.style.display='none'" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;">`:''}
+      <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:9px;background:rgba(13,11,9,.34);color:#fff;">
+        <span style="display:flex;align-items:center;justify-content:center;width:58px;height:58px;border-radius:50%;background:rgba(13,11,9,.72);border:1.5px solid rgba(255,255,255,.85);font-size:19px;padding-left:4px;">▶</span>
+        <span style="font-size:11.5px;font-weight:700;text-shadow:0 1px 3px rgba(0,0,0,.6);">点击打开原视频 ↗</span>
+      </div>
+    </a>`;
+  }
+  return `<div role="button" tabindex="0" data-embed="${esc(embed)}" data-watch="${esc(watch)}" data-title="${esc(title)}" onclick="App.playVideo(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();App.playVideo(this)}" aria-label="播放：${esc(title)}" style="display:block;position:relative;padding-top:56.25%;cursor:pointer;background:#0d0b09;overflow:hidden;">
     ${cover?`<img src="${esc(cover)}" alt="" loading="lazy" onerror="this.style.display='none'" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;">`:''}
     <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:9px;background:rgba(13,11,9,.34);color:#fff;">
       <span style="display:flex;align-items:center;justify-content:center;width:58px;height:58px;border-radius:50%;background:rgba(13,11,9,.72);border:1.5px solid rgba(255,255,255,.85);font-size:19px;padding-left:4px;">▶</span>
-      <span data-yt-hint style="font-size:11.5px;font-weight:700;text-shadow:0 1px 3px rgba(0,0,0,.6);">点击打开原视频 ↗</span>
+      <span style="font-size:11.5px;font-weight:700;text-shadow:0 1px 3px rgba(0,0,0,.6);">点击播放</span>
     </div>
-  </a>`;
+  </div>`;
 }
 function sourceVideoHtml(s){
   if(s.kind!=='视频') return '';

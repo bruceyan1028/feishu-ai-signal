@@ -789,14 +789,13 @@ class DeliveryTests(unittest.TestCase):
         png = card_image.render_daily_cover(brief)
         self.assertTrue(png.startswith(b"\x89PNG"))
 
-    def test_youtube_preview_keeps_a_clickable_original_link(self) -> None:
+    def test_youtube_preview_tries_in_page_player_with_fallback_link(self) -> None:
         template = Path("index.html").read_text(encoding="utf-8")
-        self.assertIn(
-            'return `<a href="${esc(watch)}" target="_blank" rel="noopener"',
-            template,
-        )
+        self.assertIn("App.playVideo(this)", template)
+        self.assertIn("data-embed=", template)
+        self.assertIn("youtube-nocookie.com/embed/", template)
+        self.assertIn("在 YouTube 打开 ↗", template)
         self.assertNotIn("ytPosterLoaded", template)
-        self.assertNotIn("mountVideoFrame", template)
 
     def test_historical_brief_drops_meta_signal_outside_24h_window(self) -> None:
         old_meta = {
