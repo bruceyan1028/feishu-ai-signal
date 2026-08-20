@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-20T12:20:22+08:00",
+  "generatedAt": "2026-08-20T16:33:17+08:00",
   "entities": [
     {
       "recordId": "recvsCzCEOp4PA",
@@ -685,49 +685,61 @@
       }
     },
     {
-      "recordId": "recvsCRZoYBN5R",
-      "id": "黄仁勋",
-      "name": "黄仁勋",
-      "type": "机构",
-      "aliases": [],
-      "keywords": [],
+      "recordId": "recvsP96x9PBsP",
+      "id": "马斯克",
+      "name": "马斯克",
+      "type": "人物",
+      "aliases": [
+        "Elon Musk",
+        "埃隆·马斯克"
+      ],
+      "keywords": [
+        "Tesla",
+        "特斯拉",
+        "SpaceX",
+        "xAI",
+        "Grok",
+        "Neuralink",
+        "Starlink",
+        "星链"
+      ],
       "excludes": [],
       "status": "active",
       "lookbackDays": 90,
       "minImpact": 0,
       "events": [
         {
-          "id": "daily:2026-08-14",
-          "recordId": "recvsf8ziDqxqO",
-          "date": "2026-08-14",
+          "id": "daily:2026-08-20",
+          "recordId": "recvsNYdBzK1JN",
+          "date": "2026-08-20",
           "type": "每日汇总",
-          "title": "中国开放权重模型崛起，推动中美AI开源生态与商业模式重构",
-          "summary": "DeepSeek、Kimi等中国模型厂商通过开放权重、宽松许可证、详细技术报告及基础设施工具，将行业竞争从单纯模型能力扩展到开放生态。美国主要AI与基础设施企业组建联盟支持开放模型，但安全、蒸馏、商业利益和治理风险仍存在争议。",
-          "impact": 91,
+          "title": "Cognition CEO 否认 SpaceX 曾尝试收购该公司",
+          "summary": "彭博报道称，SpaceX 曾尝试收购 AI 编程初创公司 Cognition，但 Cognition CEO Scott Wu 随后否认，称该报道不准确、公司“不出售”，双方也未进行相关谈判。报道同时称，双方目前仍可能围绕算力使用展开合作讨论。",
+          "impact": 72,
           "source": "",
           "url": "",
           "matchBasis": "",
-          "confidence": 95,
+          "confidence": 75,
           "count": 1,
           "originals": [
             {
-              "title": "中国开放权重模型崛起，推动中美AI开源生态与商业模式重构",
-              "url": "https://www.huxiu.com/article/4883109.html",
-              "source": "虎嗅",
-              "recordId": "recvsf8ziDqxqO",
-              "type": "合作",
-              "impact": 91
+              "title": "Cognition CEO 否认 SpaceX 曾尝试收购该公司",
+              "url": "https://techcrunch.com/2026/08/19/cognition-ceo-denies-report-that-spacex-tried-to-acquire-the-startup",
+              "source": "TechCrunch AI",
+              "recordId": "recvsNYdBzK1JN",
+              "type": "组织变动",
+              "impact": 72
             }
           ]
         },
         {
-          "id": "daily:2026-08-12",
-          "recordId": "recvs8ZBk7ObSW",
-          "date": "2026-08-12",
+          "id": "daily:2026-08-14",
+          "recordId": "recvseSwXILuX2",
+          "date": "2026-08-14",
           "type": "每日汇总",
-          "title": "黄仁勋力挺开源AI后，英伟达甩出两大开源利器！输出速度快4倍、成本砍至1/3",
-          "summary": "黄仁勋力挺开源AI后，英伟达甩出两大开源利器！输出速度快4倍、成本砍至1/3。",
-          "impact": 0,
+          "title": "Grok 4.6跻身第一梯队，商业闭环仍受长任务可靠性制约",
+          "summary": "Grok 4.6凭借接近OpenAI、Anthropic旗舰模型的能力和较低API价格进入美国大模型第一梯队，但在长链条Agent任务中的稳定收尾能力仍然落后。面对巨额AI资本开支，xAI还需补齐企业渠道、客户信任和跨业务协同，才能将算力与模型优势转化为持续收入。",
+          "impact": 82,
           "source": "",
           "url": "",
           "matchBasis": "",
@@ -735,53 +747,157 @@
           "count": 1,
           "originals": [
             {
-              "title": "黄仁勋力挺开源AI后，英伟达甩出两大开源利器！输出速度快4倍、成本砍至1/3",
-              "url": "https://zhidx.com/p/584189.html",
+              "title": "Grok 4.6跻身第一梯队，商业闭环仍受长任务可靠性制约",
+              "url": "https://www.huxiu.com/article/4883041.html",
+              "source": "虎嗅",
+              "recordId": "recvseSwXILuX2",
+              "type": "定价变化",
+              "impact": 82
+            }
+          ]
+        },
+        {
+          "id": "daily:2026-08-13",
+          "recordId": "recvs8ZBk7HPTd",
+          "date": "2026-08-13",
+          "type": "每日汇总",
+          "title": "DeepSeek V4 Pro与Grok 4.6发布，准旗舰能力下探至更低价格",
+          "summary": "DeepSeek V4 Pro与Grok 4.6在两小时内相继发布，作者实测认为二者分别以极低API价格和高速开发体验逼近Claude Fable 5。新模型同时改善性能、价格与速度，可能显著抬高大模型及Agent产品的竞争门槛；昨夜，马斯克甩出Grok 4.6！性能直逼Fable 5，英伟达祝贺。",
+          "impact": 90,
+          "source": "",
+          "url": "",
+          "matchBasis": "",
+          "confidence": 95,
+          "count": 2,
+          "originals": [
+            {
+              "title": "DeepSeek V4 Pro与Grok 4.6发布，准旗舰能力下探至更低价格",
+              "url": "https://www.huxiu.com/article/4882744.html",
+              "source": "虎嗅",
+              "recordId": "recvs8ZBk7HPTd",
+              "type": "定价变化",
+              "impact": 90
+            },
+            {
+              "title": "昨夜，马斯克甩出Grok 4.6！性能直逼Fable 5，英伟达祝贺",
+              "url": "https://zhidx.com/p/584444.html",
               "source": "智东西",
-              "recordId": "recvs8ZBk7ObSW",
+              "recordId": "recvseOUq8wloC",
               "type": "其他动向",
               "impact": 0
             }
           ]
         },
         {
-          "id": "daily:2026-08-10",
-          "recordId": "recvrXbjLnxawK",
-          "date": "2026-08-10",
+          "id": "daily:2026-08-12",
+          "recordId": "recvs2ZlMUmyA7",
+          "date": "2026-08-12",
           "type": "每日汇总",
-          "title": "135亿！曝黄仁勋投了OpenAI供应商",
-          "summary": "135亿！曝黄仁勋投了OpenAI供应商。",
-          "impact": 0,
+          "title": "SpaceXAI推出Grok Bot，押注可跨应用执行任务的AI代理",
+          "summary": "SpaceXAI于8月11日发布处于早期测试阶段的Grok Bot，定位为拥有独立云端计算机、可像真人一样跨应用完成工作的AI队友。产品已在销售、财务、运营和工程团队内部使用，并向部分SuperGrok Heavy及Cursor订阅用户开放；由 xAI 联合创始人 Igor Babuschkin 创办、成立仅两个月的 River AI，获得由 General Catalyst 和 AMP PBC 领投的 11 亿美元种子/Series A 轮融资，英伟达、AMD Ventures、Y Combinator 与淡马锡参与。公司希望从训练、模型、产品层和硬件端到端重构个人 AI，并已推出支持强…；马斯克：AI收入下月将超越SpaceX全部其他业务，五年后AI占SpaceX价值99%。",
+          "impact": 83,
           "source": "",
           "url": "",
           "matchBasis": "",
           "confidence": 95,
+          "count": 3,
+          "originals": [
+            {
+              "title": "SpaceXAI推出Grok Bot，押注可跨应用执行任务的AI代理",
+              "url": "https://wallstreetcn.com/articles/3779240",
+              "source": "华尔街见闻",
+              "recordId": "recvs2ZlMUmyA7",
+              "type": "产品发布",
+              "impact": 83
+            },
+            {
+              "title": "xAI 联合创始人创办的 River AI 获 11 亿美元融资",
+              "url": "https://techcrunch.com/2026/08/11/general-catalyst-leads-1-1b-round-into-2-month-old-river-ai",
+              "source": "TechCrunch AI",
+              "recordId": "recvs2ZlMU1AIe",
+              "type": "融资并购",
+              "impact": 82
+            },
+            {
+              "title": "马斯克：AI收入下月将超越SpaceX全部其他业务，五年后AI占SpaceX价值99%",
+              "url": "https://wallstreetcn.com/articles/3779250",
+              "source": "华尔街见闻",
+              "recordId": "recvs39MliFIWc",
+              "type": "其他动向",
+              "impact": 0
+            }
+          ]
+        },
+        {
+          "id": "daily:2026-08-07",
+          "recordId": "recvrFH0Fgyfbb",
+          "date": "2026-08-07",
+          "type": "每日汇总",
+          "title": "多项AI进展集中发布：小米开源具身模型、京东推出实时视频编辑模型",
+          "summary": "原文汇总了小米开源具身机器人基座模型、京东开源实时流式视频编辑模型，以及OpenAI更新ChatGPT和曝光首款AI硬件等消息。相关进展覆盖机器人控制、视频生成式编辑、推理交互和AI硬件，但多数信息来自企业或媒体披露，独立验证仍有限。",
+          "impact": 78,
+          "source": "",
+          "url": "",
+          "matchBasis": "",
+          "confidence": 75,
           "count": 1,
           "originals": [
             {
-              "title": "135亿！曝黄仁勋投了OpenAI供应商",
-              "url": "https://zhidx.com/p/583422.html",
-              "source": "智东西",
-              "recordId": "recvrXbjLnxawK",
-              "type": "其他动向",
+              "title": "多项AI进展集中发布：小米开源具身模型、京东推出实时视频编辑模型",
+              "url": "https://www.guokr.com/article/469867",
+              "source": "果壳",
+              "recordId": "recvrFH0Fgyfbb",
+              "type": "产品发布",
+              "impact": 78
+            }
+          ]
+        },
+        {
+          "id": "daily:2026-08-06",
+          "recordId": "recvrzYBnlPg0q",
+          "date": "2026-08-06",
+          "type": "每日汇总",
+          "title": "频发高温故障！特斯拉FSD升级事故，看清中美智驾监管根本差异",
+          "summary": "频发高温故障！特斯拉FSD升级事故，看清中美智驾监管根本差异。",
+          "impact": 0,
+          "source": "",
+          "url": "",
+          "matchBasis": "",
+          "confidence": 75,
+          "count": 1,
+          "originals": [
+            {
+              "title": "频发高温故障！特斯拉FSD升级事故，看清中美智驾监管根本差异",
+              "url": "https://www.leiphone.com/category/industrynews/zprxn4ogbqvkrtie.html",
+              "source": "AI科技评论 / 雷峰网",
+              "recordId": "recvrzYBnlPg0q",
+              "type": "政策动作",
               "impact": 0
             }
           ]
         },
         {
           "id": "daily:2026-08-05",
-          "recordId": "recvrucKw8mx9Z",
+          "recordId": "recvrsebLptgdl",
           "date": "2026-08-05",
           "type": "每日汇总",
-          "title": "AI支出暴增2013%！马斯克原来在给黄仁勋“打工”？",
-          "summary": "AI支出暴增2013%！马斯克原来在给黄仁勋“打工”？。",
-          "impact": 0,
+          "title": "盛颖：从xAI到SGLang与RadixArk",
+          "summary": "本期对话盛颖，回顾她从数学、形式化验证转向AI基础设施的研究与职业路径，以及其间的迷茫、低谷和重新出发。节目介绍SGLang如何从学术项目成长为面向生产环境的开源推理引擎，也涉及她在xAI参与生产级推理系统建设、因社区维护需求创立RadixArk的选择，并延伸至开源生态、平等理念及人与强力AI共存的愿景；AI支出暴增2013%！马斯克原来在给黄仁勋“打工”？。",
+          "impact": 82,
           "source": "",
           "url": "",
           "matchBasis": "",
           "confidence": 95,
-          "count": 1,
+          "count": 2,
           "originals": [
+            {
+              "title": "盛颖：从xAI到SGLang与RadixArk",
+              "url": "https://sv101.fireside.fm/260",
+              "source": "硅谷 101",
+              "recordId": "recvrsebLptgdl",
+              "type": "技术成果",
+              "impact": 82
+            },
             {
               "title": "AI支出暴增2013%！马斯克原来在给黄仁勋“打工”？",
               "url": "https://zhidx.com/p/582272.html",
@@ -793,101 +909,78 @@
           ]
         },
         {
-          "id": "daily:2026-07-29",
-          "recordId": "recvqPdD88i929",
-          "date": "2026-07-29",
+          "id": "daily:2026-07-30",
+          "recordId": "recvqPdD88vgzj",
+          "date": "2026-07-30",
           "type": "每日汇总",
-          "title": "黄仁勋力挺开源同一天，蚂蚁百灵扔出124B“执行模型”",
-          "summary": "黄仁勋力挺开源同一天，蚂蚁百灵扔出124B“执行模型”。",
-          "impact": 0,
+          "title": "Harness从可选组件走向Agent规模化交付的必选中间层",
+          "summary": "原文认为，随着Agent从单轮问答转向长程执行和Multi-Agent协同，Harness通过状态管理、工具编排、权限控制、多模型路由与结果验证，将模型能力转化为稳定、可控、低成本的任务交付。阿里、腾讯、OpenAI、xAI等头部厂商近期整合相关产品，竞争重点正由单点模型能力转向统一入口、任务执行和数据回流；SpaceXAI发布语音到语音模型Grok Voice Think Fast 2.0，其在Tau Voice基准测试中以56.5%排名第一，平均首次语音响应时间为0.70秒。模型每分钟定价0.08美元，低于文中对比的GPT-Realtime-2.1 High，但实际能力与成本仍需更多开发者和企业验证。",
+          "impact": 85,
           "source": "",
           "url": "",
           "matchBasis": "",
           "confidence": 95,
-          "count": 1,
+          "count": 2,
           "originals": [
             {
-              "title": "黄仁勋力挺开源同一天，蚂蚁百灵扔出124B“执行模型”",
-              "url": "https://zhidx.com/p/580582.html",
-              "source": "智东西",
-              "recordId": "recvqPdD88i929",
+              "title": "Harness从可选组件走向Agent规模化交付的必选中间层",
+              "url": "https://wallstreetcn.com/articles/3778280",
+              "source": "华尔街见闻",
+              "recordId": "recvqPdD88vgzj",
               "type": "其他动向",
-              "impact": 0
-            }
-          ]
-        },
-        {
-          "id": "daily:2026-07-28",
-          "recordId": "recvqJBVmqpeCF",
-          "date": "2026-07-28",
-          "type": "每日汇总",
-          "title": "Ilya获黄仁勋重金押注！10倍算力供给，50亿美金投资在路上了？",
-          "summary": "Ilya获黄仁勋重金押注！10倍算力供给，50亿美金投资在路上了？；黄仁勋倡议的开源联名信，Anthropic 为何不愿签名?；黄仁勋、Kimi K3，与一场即将到来的开源战争。| 果壳 科技有意思。",
-          "impact": 0,
-          "source": "",
-          "url": "",
-          "matchBasis": "",
-          "confidence": 95,
-          "count": 3,
-          "originals": [
-            {
-              "title": "Ilya获黄仁勋重金押注！10倍算力供给，50亿美金投资在路上了？",
-              "url": "https://zhidx.com/p/580055.html",
-              "source": "智东西",
-              "recordId": "recvqJBVmqpeCF",
-              "type": "其他动向",
-              "impact": 0
+              "impact": 85
             },
             {
-              "title": "黄仁勋倡议的开源联名信，Anthropic 为何不愿签名?",
-              "url": "https://www.leiphone.com/category/ai/w2vbquwfmmiijoto.html",
-              "source": "AI科技评论 / 雷峰网",
-              "recordId": "recvqJBVmqqq7x",
-              "type": "其他动向",
-              "impact": 0
-            },
-            {
-              "title": "黄仁勋、Kimi K3，与一场即将到来的开源战争。| 果壳 科技有意思",
-              "url": "https://www.guokr.com/article/469780",
-              "source": "果壳",
-              "recordId": "recvqJBWhbGaEk",
-              "type": "其他动向",
-              "impact": 0
+              "title": "Grok Voice Think Fast 2.0发布：语音智能体测评第一，响应时间降至0.70秒",
+              "url": "https://zhidx.com/p/580752.html",
+              "source": "智东西",
+              "recordId": "recvqPdD88eQQ6",
+              "type": "定价变化",
+              "impact": 84
             }
           ]
         }
       ],
       "strategy": {
-        "fingerprint": "93dd4315b11eb3f32da879000570634415ba217d70098eda24d108d79c1955fd",
-        "generatedAt": "2026-08-20T12:22:15+08:00",
-        "overview": "证据显示，黄仁勋相关动作正在形成“资本下注—算力供给—开源工具—模型生态”的连续链条：7月下旬出现对顶级模型团队及大额算力扩张的押注线索，随后英伟达推出更高效、低成本的开源工具；同期中国开放权重模型和执行模型加速扩张，竞争焦点由单一模型性能转向开发者、基础设施与商业模式。已发生的是投资传闻、开源倡议及工具发布等动作，尚不足以证明完整交易或统一战略。较合理的长期研判是，黄仁勋可能试图以开放软件和资本网络扩大GPU平台控制力，同时通过投资算力需求方、供应商及模型生态，提前锁定AI基础设施增长与行业标准。",
+        "fingerprint": "5bdf2803948c1bc5d325d1383ed1830bc0d5e4f96beaead50262b5b9332b3442",
+        "generatedAt": "2026-08-20T16:34:19+08:00",
+        "overview": "现有证据显示，马斯克相关业务正在从单纯训练大模型，转向“模型—推理基础设施—跨应用智能体—企业与个人入口”的纵向整合。Grok 4.6改善了性能、速度与价格，但长任务可靠性、企业信任和销售渠道仍是商业化瓶颈；Grok Bot则开始验证跨应用执行的产品形态。与此同时，xAI相关人才、推理系统、Harness式中间层及外部AI初创公司的潜在合作，反映出补齐工程与生态能力的倾向。SpaceX与AI业务的价值叙事明显增强，但Cognition收购报道已被否认，当前更应视为算力合作或能力协同的可能性，而非已完成资本整合。",
         "themes": [
           {
             "id": "theme-1",
-            "name": "以开源软件扩大GPU平台生态",
-            "summary": "7月28日已有黄仁勋倡议开源及相关开源竞争讨论，8月12日英伟达推出强调速度和成本优势的开源工具，8月14日行业竞争进一步转向开放权重、工具链和基础设施生态。这表明开源可能被用于降低采用门槛、吸引开发者并强化英伟达软硬件平台，而非仅作为技术立场表达。",
+            "name": "从基础模型到可执行AI代理",
+            "summary": "Grok 4.6以较低价格进入第一梯队，但长链条任务仍不稳定；随后Grok Bot被用于跨应用执行，显示战略重点由模型指标转向可交付任务。语音模型和Harness式编排能力进一步支持多模态、低延迟和规模化Agent入口。",
             "eventIds": [
-              "daily:2026-07-28",
+              "daily:2026-08-14",
               "daily:2026-08-12",
-              "daily:2026-08-14"
+              "daily:2026-07-30"
             ]
           },
           {
             "id": "theme-2",
-            "name": "资本前置与算力供给控制",
-            "summary": "7月28日出现对Ilya相关团队及大规模算力投资的报道，8月5日又出现AI支出暴增与算力需求扩张叙事，8月10日进一步传出投资OpenAI供应商。若这些报道得到确认，组合上体现的是把资本从单纯卖芯片延伸至模型客户、算力建设和供应链关键节点。",
+            "name": "AI全栈能力与基础设施控制",
+            "summary": "xAI相关人员参与生产级推理系统建设，外部讨论则强调状态管理、工具编排、权限控制和结果验证等中间层价值。结合Grok Bot自带云端计算机的定位，相关布局可能试图把训练、推理、执行环境和产品入口连接起来。",
             "eventIds": [
-              "daily:2026-07-28",
               "daily:2026-08-05",
-              "daily:2026-08-10"
+              "daily:2026-07-30",
+              "daily:2026-08-12"
             ]
           },
           {
             "id": "theme-3",
-            "name": "围绕执行型模型的商业化竞争",
-            "summary": "7月29日蚂蚁发布124B执行模型，8月12日英伟达发布强调推理速度和成本的开源工具，8月14日开放权重生态被描述为重构商业模式。相关承接说明竞争重点正从训练规模转向可部署、可执行、低成本的推理应用，英伟达可能通过工具性能把模型热度转化为持续算力需求。",
+            "name": "跨主体协同与资本生态扩张",
+            "summary": "River AI获得大额早期融资，且投资方覆盖芯片、创业资本与产业资本；Cognition收购传闻虽被否认，但仍存在算力合作讨论。证据更支持通过人才、供应链、算力和产品伙伴扩展生态，而非已确认的大规模并购。",
             "eventIds": [
-              "daily:2026-07-29",
+              "daily:2026-08-12",
+              "daily:2026-08-20",
+              "daily:2026-08-05"
+            ]
+          },
+          {
+            "id": "theme-4",
+            "name": "AI成为SpaceX及关联业务的价值叙事核心",
+            "summary": "马斯克被引述称AI收入可能超过SpaceX其他业务，并预测五年后AI占SpaceX价值的极高比例；同时，模型商业闭环尚受可靠性、客户信任和资本开支约束。因此这更像强烈的长期方向声明，尚不能等同于已实现的收入或估值结果。",
+            "eventIds": [
               "daily:2026-08-12",
               "daily:2026-08-14"
             ]
@@ -895,109 +988,126 @@
         ],
         "relations": [
           {
-            "fromEventId": "daily:2026-07-28",
+            "fromEventId": "daily:2026-08-05",
+            "toEventId": "daily:2026-07-30",
+            "type": "capability",
+            "label": "推理系统到执行中间层",
+            "explanation": "xAI生产级推理经验与Harness所代表的状态管理、工具编排和结果验证能力，在技术上共同指向把模型输出转化为稳定任务交付。",
+            "confidence": 82
+          },
+          {
+            "fromEventId": "daily:2026-08-14",
             "toEventId": "daily:2026-08-12",
+            "type": "commercialization",
+            "label": "模型能力产品化",
+            "explanation": "Grok 4.6的性能和价格竞争力为Agent产品提供基础，但Grok Bot将竞争从API指标推进到跨应用执行和实际工作流。",
+            "confidence": 89
+          },
+          {
+            "fromEventId": "daily:2026-07-30",
+            "toEventId": "daily:2026-08-12",
+            "type": "capability",
+            "label": "Agent中间层支撑入口",
+            "explanation": "Harness类能力解决权限、工具、多模型路由和结果验证问题，与Grok Bot的云端计算机和跨应用执行定位形成能力承接。",
+            "confidence": 84
+          },
+          {
+            "fromEventId": "daily:2026-08-13",
+            "toEventId": "daily:2026-08-14",
             "type": "reinforces",
-            "label": "开源倡议落到工具",
-            "explanation": "7月28日的开源倡议及开源竞争讨论，随后对应到8月12日英伟达发布具体开源工具，形成从理念传播到产品供给的强化关系。",
-            "confidence": 88
+            "label": "价格性能竞赛强化",
+            "explanation": "两项证据共同表明准旗舰模型的价格、速度和性能门槛下移，迫使xAI同时补足可靠性、企业渠道和客户信任。",
+            "confidence": 91
+          },
+          {
+            "fromEventId": "daily:2026-08-12",
+            "toEventId": "daily:2026-08-20",
+            "type": "partnership",
+            "label": "潜在算力协同",
+            "explanation": "Grok Bot和AI全栈扩张提高算力及工程需求；Cognition收购已被否认，但证据明确保留算力合作讨论的可能，故只能判定为潜在伙伴关系。",
+            "confidence": 67
+          },
+          {
+            "fromEventId": "daily:2026-08-05",
+            "toEventId": "daily:2026-08-12",
+            "type": "expansion",
+            "label": "人才技术向产品延伸",
+            "explanation": "生产级推理系统和开源基础设施经验，为从模型研发走向Agent产品、开发者生态和企业交付提供可能的技术前置。",
+            "confidence": 76
           },
           {
             "fromEventId": "daily:2026-08-12",
             "toEventId": "daily:2026-08-14",
-            "type": "expansion",
-            "label": "工具生态应对开放权重",
-            "explanation": "低成本、高速度工具有助于承接开放权重模型的开发和部署需求；8月14日的行业变化则显示，这类工具可能成为开放生态竞争的基础设施层。",
-            "confidence": 82
-          },
-          {
-            "fromEventId": "daily:2026-07-28",
-            "toEventId": "daily:2026-08-10",
             "type": "capital",
-            "label": "从模型到供应链下注",
-            "explanation": "7月28日的模型团队及算力投资线索，与8月10日投资OpenAI供应商的报道共同指向资本覆盖模型、算力和供应链多个环节；但两者是否属于同一投资计划尚未被证实。",
-            "confidence": 73
-          },
-          {
-            "fromEventId": "daily:2026-08-05",
-            "toEventId": "daily:2026-08-10",
-            "type": "capability",
-            "label": "需求扩张牵引供应布局",
-            "explanation": "8月5日关于AI支出和算力需求激增的报道，为8月10日供应商投资传闻提供了商业背景，体现潜在的需求侧扩张与供给侧保障关系。",
-            "confidence": 68
-          },
-          {
-            "fromEventId": "daily:2026-07-29",
-            "toEventId": "daily:2026-08-12",
-            "type": "commercialization",
-            "label": "执行模型推动推理优化",
-            "explanation": "7月29日执行模型的出现强化了实际部署和推理效率需求，8月12日英伟达以速度和成本为卖点发布工具，二者在应用商业化方向上具有承接关系。",
-            "confidence": 76
+            "label": "AI价值叙事与商业约束并存",
+            "explanation": "AI收入和SpaceX价值占比的表述提升了资本叙事强度，但模型商业闭环尚未成熟，短期仍需收入、客户和留存数据验证。",
+            "confidence": 80
           }
         ],
         "hypotheses": [
           {
-            "title": "以开放软件换取GPU平台长期锁定",
-            "assessment": "战略假设：黄仁勋可能并不追求封闭控制模型本身，而是通过支持开放模型、提供高性价比工具和完善基础设施，使更多模型和开发者依赖英伟达的计算、软件栈与部署能力。这样可在模型层竞争加剧时，保留平台层的控制力。该判断主要来自开源倡议、工具发布及开放权重生态变化，不能视为已证实的公司整体战略。",
-            "confidence": 86,
+            "title": "长期目标是建立可执行AI的全栈平台，而非只销售模型API",
+            "assessment": "Grok 4.6负责基础模型竞争，Grok Bot负责用户入口，Harness式中间层负责任务编排，生产级推理能力负责成本与稳定性；这些动作组合支持向“模型加执行环境加工作流”的平台化方向演进。",
+            "confidence": 88,
             "themeIds": [
               "theme-1",
-              "theme-3"
-            ],
-            "evidenceEventIds": [
-              "daily:2026-07-28",
-              "daily:2026-08-12",
-              "daily:2026-08-14"
-            ],
-            "counterSignals": "若英伟达后续明显收紧工具许可、限制开放权重模型适配，或开源工具无法带来GPU采用和开发者增长，该判断将被削弱。",
-            "watchFor": [
-              "英伟达继续发布开放权重模型适配工具、推理框架或开发者服务",
-              "开源工具是否优先优化英伟达硬件并带来实际部署增长",
-              "英伟达是否参与更多开放模型联盟或生态治理机制"
-            ]
-          },
-          {
-            "title": "通过资本布局提前锁定AI基础设施需求链",
-            "assessment": "战略假设：黄仁勋可能在扩大算力供给的同时，以投资模型公司、算力需求方及供应商的方式，提前锁定未来订单、技术协同和产业链关键节点。7月28日、8月5日和8月10日的报道共同支持这一方向，但其中多项内容属于媒体曝料，交易规模、对象和是否完成均未被证实。",
-            "confidence": 74,
-            "themeIds": [
               "theme-2"
             ],
             "evidenceEventIds": [
-              "daily:2026-07-28",
-              "daily:2026-08-05",
-              "daily:2026-08-10"
+              "daily:2026-08-14",
+              "daily:2026-08-12",
+              "daily:2026-07-30",
+              "daily:2026-08-05"
             ],
-            "counterSignals": "若相关投资被证实为误报、规模有限，或英伟达仅维持芯片销售而不参与模型和供应链资本安排，则资本网络化布局的判断会明显减弱。",
+            "counterSignals": "若Grok Bot长期停留在有限测试，企业Agent收入不足，或xAI继续主要依赖低价API竞争，则平台化判断会减弱。",
             "watchFor": [
-              "相关投资是否出现正式公告、监管披露或明确金额",
-              "被投模型公司是否获得优先算力、联合开发或采购安排",
-              "英伟达是否持续投资服务器、数据中心、网络和先进封装等环节"
+              "Grok Bot扩大至更多企业和开发者并形成付费工作流",
+              "发布长任务成功率、任务完成率和企业客户留存数据",
+              "xAI持续整合权限、工具编排、评测和多模型路由能力"
             ]
           },
           {
-            "title": "把开放模型竞争转化为推理基础设施增长",
-            "assessment": "战略假设：面对中国开放权重模型和执行模型扩张，黄仁勋可能主动接受模型层的多样化，通过降低推理成本、提升输出速度和扩大部署范围，推动更多应用进入生产环境，进而扩大GPU及相关软件基础设施需求。8月12日的工具定位与7月29日、8月14日的生态变化相互支持，但尚不能证明其直接针对某一竞争对手制定计划。",
-            "confidence": 81,
+            "title": "AI可能被定位为SpaceX及关联资产的核心增长和估值引擎",
+            "assessment": "马斯克已作出AI收入及未来价值占比的激进表述，且AI产品发布密集；若模型、Agent和算力业务形成可量化收入，AI可能从关联能力升级为集团级主导业务。这仍是战略假设，不是已实现事实。",
+            "confidence": 74,
             "themeIds": [
-              "theme-1",
-              "theme-3"
+              "theme-4",
+              "theme-1"
             ],
             "evidenceEventIds": [
-              "daily:2026-07-29",
               "daily:2026-08-12",
               "daily:2026-08-14"
             ],
-            "counterSignals": "若模型开放导致价格持续下跌却未带来推理量增长，或执行型模型主要迁移至非英伟达硬件，该商业化路径将受到挑战。",
+            "counterSignals": "AI收入未按预期超过其他业务，巨额算力支出持续侵蚀现金流，或产品可靠性和监管问题阻碍商业部署，都会削弱该判断。",
             "watchFor": [
-              "开源和执行型模型的生产部署量是否持续增长",
-              "英伟达工具是否在单位推理成本和吞吐量上形成可量化优势",
-              "开发者和云厂商是否将这些工具纳入标准部署栈"
+              "AI业务单独披露收入、客户数、毛利或合同规模",
+              "SpaceX或关联主体出现正式的AI资产、融资或估值安排",
+              "AI基础设施投入与商业收入增长是否同步改善"
+            ]
+          },
+          {
+            "title": "扩张方式可能偏向算力、人才和伙伴网络协同，而非立即并购",
+            "assessment": "Cognition收购被其CEO否认，说明不能把传闻视作资本动作；但算力合作仍可能讨论，且River AI融资、xAI推理人才与基础设施生态显示，马斯克相关体系可能通过合作、投资、人才流动和供应链关系补齐能力。",
+            "confidence": 72,
+            "themeIds": [
+              "theme-2",
+              "theme-3"
+            ],
+            "evidenceEventIds": [
+              "daily:2026-08-20",
+              "daily:2026-08-12",
+              "daily:2026-08-05"
+            ],
+            "counterSignals": "若后续没有正式合作、投资或产品接口，且Cognition等公司明确排除任何算力关系，则生态协同判断会退化为媒体推测。",
+            "watchFor": [
+              "Cognition与SpaceX或xAI公布算力、模型或企业服务合作",
+              "River AI与xAI在模型、硬件或产品层出现正式整合",
+              "更多推理基础设施、芯片和Agent公司进入股权或联合产品网络"
             ]
           }
         ]
       }
     }
   ],
-  "createdEvents": 1
+  "createdEvents": 13
 }

@@ -251,7 +251,9 @@ class WeeklyReportTest(unittest.TestCase):
         self.assertIn("data/timeline-latest.json", html)
         self.assertIn("App.openWeeklyDetail", html)
         self.assertIn("/api/report-pending", html)
-        self.assertIn("/api/tracked-entities", html)
+        self.assertIn('id="trackType"', html)
+        self.assertNotIn('id="trackType" ${state.timelineWritable?\'\':\'disabled\'}', html)
+        self.assertIn('<option value="人物">人物</option>', html)
         self.assertNotIn("2026-06-30 → 2026-07-07", html)
 
     @patch("src.sources_api.feishu.create_record")

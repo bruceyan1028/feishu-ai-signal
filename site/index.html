@@ -142,9 +142,74 @@
   .chip-btn:hover { border-color: var(--accent-border, rgba(194,47,42,.4)) !important; color: var(--ds-text) !important; }
   .cmt-row:hover { background: rgba(22,19,15,.03); }
   .like-btn:hover { border-color: var(--accent-border) !important; color: var(--accent-bright) !important; }
-  .strategy-evidence { transition: background .16s ease, border-color .16s ease, color .16s ease, transform .16s ease; }
-  .strategy-evidence:hover { background: var(--accent-soft) !important; border-color: var(--accent-border) !important; color: var(--accent-bright) !important; transform: translateX(2px); }
-  .strategy-evidence:hover div { color: var(--accent-bright) !important; }
+  .strategy-map { padding:22px 0 0; background:#fff; border:1.5px solid var(--ds-ink-line); overflow-x:auto; color: var(--ds-text); }
+  .strategy-map-head, .strategy-map-overview, .strategy-flow-head, .strategy-relations { padding-left:24px; padding-right:24px; }
+  .strategy-map-head { display:flex; align-items:baseline; gap:10px; flex-wrap:wrap; }
+  .strategy-map-head h2 { margin:0; font-size:18px; color: var(--ds-text); }
+  .strategy-map-head span { font-size:10.5px; color: var(--ds-text-3); }
+  .strategy-map-overview { margin:12px 0 18px; font-size:12.5px; line-height:1.75; color: var(--ds-text-2); }
+  .strategy-flow { display:grid; grid-template-columns:minmax(200px,1fr) 28px minmax(220px,1.1fr) 28px minmax(240px,1.25fr); gap:6px; align-items:center; }
+  .strategy-flow-head { padding-top:2px; padding-bottom:12px; align-items:end; }
+  .strategy-flow-head > span:nth-child(odd) { text-align:center; font-size:13px; font-weight:800; letter-spacing:.14em; color: var(--ds-text); padding-bottom:7px; border-bottom:2px solid var(--ds-accent); }
+  .strategy-row { margin:0; padding:18px 24px; border:0; }
+  .strategy-col { display:flex; flex-direction:column; justify-content:center; gap:10px; min-width:0; }
+  .strategy-spine { position:relative; padding-left:22px; }
+  .strategy-spine::before { content:''; position:absolute; left:6px; top:12px; bottom:12px; width:1.5px; }
+  .strategy-node { position:relative; display:grid; grid-template-columns:72px minmax(0,1fr) auto; gap:8px; align-items:start; padding:8px 0 8px 6px; text-decoration:none; color:inherit; }
+  .strategy-node::before { content:''; position:absolute; left:-19px; top:12px; width:9px; height:9px; transform:rotate(45deg); border:1.5px solid; }
+  .strategy-node:hover::before { background: var(--ds-accent); border-color: var(--ds-accent); }
+  .strategy-node:hover .strategy-node-title,
+  .strategy-node:hover .strategy-node-link { color: var(--ds-accent) !important; }
+  .strategy-node-date { font-family:"Geist Mono",ui-monospace,Menlo,monospace; font-size:10px; font-weight:700; letter-spacing:.03em; color: var(--ds-accent); padding-top:1px; }
+  .strategy-node-title { font-size:12px; line-height:1.5; }
+  .strategy-node-link { flex:none; font-size:10px; font-weight:700; white-space:nowrap; padding-top:2px; }
+  .strategy-arrow { width:22px; height:22px; justify-self:center; align-self:center; background: var(--ds-accent); clip-path: polygon(0 32%, 58% 32%, 58% 0, 100% 50%, 58% 100%, 58% 68%, 0 68%); }
+  .strategy-para { background: var(--ds-accent); border:1.5px solid var(--ds-accent); }
+  .strategy-para-inner { padding:12px 14px; }
+  .strategy-para-name { font-size:12.5px; font-weight:700; color:#fff; }
+  .strategy-para-body { margin-top:6px; font-size:12px; line-height:1.65; color:#fff; }
+  .strategy-result { clip-path: polygon(0 0, calc(100% - 18px) 0, 100% 50%, calc(100% - 18px) 100%, 0 100%); padding:1.5px; }
+  .strategy-result-inner { clip-path: polygon(0 0, calc(100% - 17px) 0, calc(100% - 1.5px) 50%, calc(100% - 17px) 100%, 0 100%); padding:12px 28px 12px 16px; }
+  .strategy-result-title { flex:1; font-size:13px; font-weight:700; }
+  .strategy-result-body { margin-top:7px; font-size:12px; line-height:1.7; }
+  .strategy-details { margin-top:2px; }
+  .strategy-details > summary { font-size:10.5px; cursor:pointer; list-style:none; }
+  .strategy-details > summary::-webkit-details-marker { display:none; }
+  .strategy-details > summary::before { content:'▸ '; }
+  .strategy-details[open] > summary::before { content:'▾ '; }
+  .strategy-details[open] .strategy-counter { display:flex; flex-direction:column; gap:10px; margin-top:10px; }
+  .strategy-counter-block strong { display:block; margin-bottom:6px; font-size:10.5px; letter-spacing:.04em; }
+  .strategy-watch { display:flex; flex-direction:column; gap:6px; }
+  .strategy-watch span { display:block; padding:7px 9px; font-size:11px; line-height:1.55; border:1px solid; }
+  .strategy-rows > .strategy-row:nth-child(odd) { background: var(--ds-ink-line); color: var(--ds-on-dark); }
+  .strategy-rows > .strategy-row:nth-child(odd) .strategy-spine::before { background: rgba(250,247,240,.45); }
+  .strategy-rows > .strategy-row:nth-child(odd) .strategy-node::before { background: var(--ds-ink-line); border-color: var(--ds-on-dark); }
+  .strategy-rows > .strategy-row:nth-child(odd) .strategy-node-title { color: var(--ds-on-dark); }
+  .strategy-rows > .strategy-row:nth-child(odd) .strategy-node-link { color: rgba(250,247,240,.62); }
+  .strategy-rows > .strategy-row:nth-child(odd) .strategy-result { background: var(--ds-on-dark); }
+  .strategy-rows > .strategy-row:nth-child(odd) .strategy-result-inner { background: var(--ds-ink-line); }
+  .strategy-rows > .strategy-row:nth-child(odd) .strategy-result-title { color: var(--ds-on-dark); }
+  .strategy-rows > .strategy-row:nth-child(odd) .strategy-result-body { color: var(--ds-on-dark); }
+  .strategy-rows > .strategy-row:nth-child(odd) .strategy-details > summary,
+  .strategy-rows > .strategy-row:nth-child(odd) .strategy-counter-block strong { color: #ff8d86; }
+  .strategy-rows > .strategy-row:nth-child(odd) .strategy-watch span { background: rgba(250,247,240,.08); border-color: rgba(250,247,240,.4); color: var(--ds-on-dark); }
+  .strategy-rows > .strategy-row:nth-child(even) { background:#fff; color: var(--ds-text); border-top:1.5px solid var(--ds-ink-line); }
+  .strategy-rows > .strategy-row:nth-child(even) .strategy-spine::before { background: var(--ds-ink-line); }
+  .strategy-rows > .strategy-row:nth-child(even) .strategy-node::before { background:#fff; border-color: var(--ds-ink-line); }
+  .strategy-rows > .strategy-row:nth-child(even) .strategy-node-title { color: var(--ds-text); }
+  .strategy-rows > .strategy-row:nth-child(even) .strategy-node-link { color: var(--ds-text-3); }
+  .strategy-rows > .strategy-row:nth-child(even) .strategy-result { background: var(--ds-ink-line); }
+  .strategy-rows > .strategy-row:nth-child(even) .strategy-result-inner { background:#fff; }
+  .strategy-rows > .strategy-row:nth-child(even) .strategy-result-title { color: var(--ds-text); }
+  .strategy-rows > .strategy-row:nth-child(even) .strategy-result-body { color: var(--ds-text-2); }
+  .strategy-rows > .strategy-row:nth-child(even) .strategy-details > summary,
+  .strategy-rows > .strategy-row:nth-child(even) .strategy-counter-block strong { color: var(--ds-accent); }
+  .strategy-rows > .strategy-row:nth-child(even) .strategy-watch span { background:#fff; border-color: var(--ds-ink-line); color: var(--ds-text-2); }
+  .strategy-relations { margin:0; border-top:1.5px solid var(--ds-ink-line); padding-top:12px; padding-bottom:16px; color: var(--ds-text-2); }
+  .strategy-relations > summary { font-size:11.5px; color: var(--ds-accent); cursor:pointer; }
+  .strategy-relations-row { display:grid; grid-template-columns:80px minmax(120px,1fr) auto minmax(120px,1fr); gap:8px; align-items:center; font-size:10.5px; }
+  .strategy-relations-row > span:first-child { font-family:"Geist Mono",ui-monospace,Menlo,monospace; color: var(--ds-text-3); }
+  .strategy-relations-label { color: var(--ds-accent); font-weight:700; }
   .strategy-original { transition: background .16s ease, border-color .16s ease, transform .16s ease; }
   .strategy-original:hover { background: var(--accent-soft) !important; border-color: var(--accent-border) !important; transform: translateX(2px); }
   .strategy-clamp { display: -webkit-box; -webkit-box-orient: vertical; overflow: hidden; }
@@ -241,6 +306,10 @@
     .bottom-bar { padding: 8px 10px calc(8px + env(safe-area-inset-bottom)) !important; }
     .bot-avatar { display: none !important; }
     .send-btn { padding: 0 16px !important; }
+
+    .strategy-flow { grid-template-columns: 1fr !important; gap: 8px !important; }
+    .strategy-flow-head { display: none !important; }
+    .strategy-arrow { transform: rotate(90deg); margin: 2px auto; }
   }
 </style>
 </head>
@@ -1145,28 +1214,30 @@ function strategyMapHtml(strategy, events, A){
     const evidence=(hypothesis.evidenceEventIds||[]).map(id=>eventMap[id]).filter(Boolean).slice(0,4);
     const themes=(hypothesis.themeIds||[]).map(id=>themeMap[id]).filter(Boolean);
     const confidence=Number(hypothesis.confidence||0);
-    return `<div style="display:grid;grid-template-columns:minmax(180px,.9fr) 28px minmax(240px,1.25fr) 28px minmax(240px,1.25fr);gap:8px;align-items:stretch;padding:12px 0;border-top:1px solid ${UI.border};">
-      <div style="display:flex;flex-direction:column;gap:6px;">${evidence.map(event=>{ const original=(event.originals||[]).find(item=>item.url); return original?`<a class="strategy-evidence" href="${esc(original.url)}" target="_blank" rel="noopener" title="打开代表原文：${esc(original.title)}" style="display:block;padding:7px 9px;border-radius:8px;background:${UI.panelSolid};border:1px solid ${UI.border};text-decoration:none;"><div style="display:flex;justify-content:space-between;gap:6px;font-family:'Geist Mono',monospace;font-size:10px;color:${UI.text3};"><span>${esc(event.date)}</span><span>原文 ↗</span></div><div class="strategy-clamp strategy-clamp-2" style="margin-top:2px;font-size:11px;line-height:1.45;color:${UI.text2};">${esc(event.title.replace(/^〔[^〕]+〕/,''))}</div></a>`:`<div style="padding:7px 9px;border-radius:8px;background:${UI.panelSolid};border:1px solid ${UI.border};"><div style="font-family:'Geist Mono',monospace;font-size:10px;color:${UI.text3};">${esc(event.date)}</div><div class="strategy-clamp strategy-clamp-2" style="font-size:11px;line-height:1.45;color:${UI.text2};">${esc(event.title.replace(/^〔[^〕]+〕/,''))}</div></div>`; }).join('')}</div>
-      <div style="display:flex;align-items:center;justify-content:center;color:${A.accent};font-size:18px;">→</div>
-      <div style="display:flex;flex-direction:column;gap:6px;justify-content:center;">${themes.map(theme=>`<div style="padding:10px 12px;border-radius:8px;background:${A.accentSoft};border:1px solid ${A.accentBorder};"><div style="font-size:12.5px;font-weight:700;color:${A.accentBright};">${esc(theme.name)}</div><div style="margin-top:6px;font-size:12px;line-height:1.7;color:${UI.text2};">${esc(theme.summary)}</div></div>`).join('')}</div>
-      <div style="display:flex;align-items:center;justify-content:center;color:${A.accent};font-size:18px;">→</div>
-      <div style="padding:12px 14px;border-radius:10px;background:${UI.panelSolid};border:1px solid ${UI.border};">
-        <div style="display:flex;align-items:flex-start;gap:8px;"><div style="flex:1;font-size:13px;font-weight:700;color:${UI.text};">${esc(hypothesis.title)}</div><span style="flex:none;font-family:'Geist Mono',monospace;font-size:10px;color:${scoreColor(confidence)};">置信度 ${confidence}</span></div>
-        <div style="margin-top:7px;font-size:12px;line-height:1.7;color:${UI.text2};">${esc(hypothesis.assessment)}</div>
-        ${hypothesis.counterSignals||(hypothesis.watchFor||[]).length?`<details style="margin-top:8px;"><summary style="font-size:10.5px;color:${A.accentBright};cursor:pointer;">反证与后续观察</summary>${hypothesis.counterSignals?`<div style="margin-top:6px;font-size:10.5px;line-height:1.5;color:${UI.text3};"><strong>可能反证：</strong>${esc(hypothesis.counterSignals)}</div>`:''}${(hypothesis.watchFor||[]).length?`<div style="margin-top:5px;font-size:10.5px;line-height:1.5;color:${UI.text3};"><strong>继续观察：</strong>${hypothesis.watchFor.map(esc).join(' · ')}</div>`:''}</details>`:''}
+    return `<div class="strategy-flow strategy-row">
+      <div class="strategy-col"><div class="strategy-spine">${evidence.map(event=>{ const original=(event.originals||[]).find(item=>item.url); const title=esc(event.title.replace(/^〔[^〕]+〕/,'')); const inner=`<span class="strategy-node-date">${esc(event.date)}</span><span class="strategy-node-title strategy-clamp strategy-clamp-2">${title}</span>${original?'<span class="strategy-node-link">原文 ↗</span>':'<span></span>'}`; return original?`<a class="strategy-node" href="${esc(original.url)}" target="_blank" rel="noopener" title="打开代表原文：${esc(original.title)}">${inner}</a>`:`<div class="strategy-node">${inner}</div>`; }).join('')}</div></div>
+      <div class="strategy-arrow" aria-hidden="true"></div>
+      <div class="strategy-col">${themes.map(theme=>`<div class="strategy-para"><div class="strategy-para-inner"><div class="strategy-para-name">${esc(theme.name)}</div><div class="strategy-para-body">${esc(theme.summary)}</div></div></div>`).join('')}</div>
+      <div class="strategy-arrow" aria-hidden="true"></div>
+      <div class="strategy-col">
+        <div class="strategy-result"><div class="strategy-result-inner">
+          <div style="display:flex;align-items:flex-start;gap:8px;"><div class="strategy-result-title">${esc(hypothesis.title)}</div><span style="flex:none;font-family:'Geist Mono',monospace;font-size:10px;color:${scoreColor(confidence)};">置信度 ${confidence}</span></div>
+          <div class="strategy-result-body">${esc(hypothesis.assessment)}</div>
+          ${hypothesis.counterSignals||(hypothesis.watchFor||[]).length?`<details class="strategy-details"><summary>反证与后续观察</summary><div class="strategy-counter">${hypothesis.counterSignals?`<div class="strategy-counter-block"><strong>可能反证</strong><div class="strategy-watch"><span>${esc(hypothesis.counterSignals)}</span></div></div>`:''}${(hypothesis.watchFor||[]).length?`<div class="strategy-counter-block"><strong>继续观察</strong><div class="strategy-watch">${hypothesis.watchFor.map(item=>`<span>${esc(item)}</span>`).join('')}</div></div>`:''}</div></details>`:''}
+        </div></div>
       </div>
     </div>`;
   }).join('');
   const relations=(strategy.relations||[]).map(relation=>{
     const from=eventMap[relation.fromEventId],to=eventMap[relation.toEventId];
     if(!from||!to) return '';
-    return `<div style="display:grid;grid-template-columns:80px minmax(120px,1fr) auto minmax(120px,1fr);gap:8px;align-items:center;font-size:10.5px;color:${UI.text2};"><span style="font-family:'Geist Mono',monospace;color:${UI.text3};">${esc(from.date)} → ${esc(to.date)}</span><span>${esc(from.title.replace(/^〔[^〕]+〕/,''))}</span><span style="color:${A.accentBright};font-weight:700;">${esc(relation.label)} →</span><span>${esc(to.title.replace(/^〔[^〕]+〕/,''))}</span></div>`;
+    return `<div class="strategy-relations-row"><span>${esc(from.date)} → ${esc(to.date)}</span><span>${esc(from.title.replace(/^〔[^〕]+〕/,''))}</span><span class="strategy-relations-label">${esc(relation.label)} →</span><span>${esc(to.title.replace(/^〔[^〕]+〕/,''))}</span></div>`;
   }).filter(Boolean).join('');
-  return `<section style="padding:22px 24px;border-radius:16px;background:${UI.panel};border:1px solid ${UI.border};overflow-x:auto;">
-    <div style="display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;"><h2 style="margin:0;font-size:18px;color:${UI.text};">长期布局研判</h2><span style="font-size:10.5px;color:${UI.text3};">假设均由下方事件证据支持，不等同于已确认事实</span></div>
-    <p style="margin:12px 0 18px;font-size:12.5px;line-height:1.75;color:${UI.text2};">${esc(strategy.overview)}</p>
-    ${rows?`<div style="display:grid;grid-template-columns:minmax(180px,.9fr) 28px minmax(240px,1.25fr) 28px minmax(240px,1.25fr);gap:8px;padding:0 0 7px;font-size:10px;font-weight:700;color:${UI.text3};"><span>事件证据</span><span></span><span>战略主题</span><span></span><span>潜在布局意图</span></div>${rows}`:''}
-    ${relations?`<details style="margin-top:14px;border-top:1px solid ${UI.border};padding-top:12px;"><summary style="font-size:11.5px;color:${A.accentBright};cursor:pointer;">查看跨事件关系</summary><div style="display:flex;flex-direction:column;gap:8px;margin-top:10px;">${relations}</div></details>`:''}
+  return `<section class="strategy-map">
+    <div class="strategy-map-head"><h2>长期布局研判</h2><span>假设均由下方事件证据支持，不等同于已确认事实</span></div>
+    <p class="strategy-map-overview">${esc(strategy.overview)}</p>
+    ${rows?`<div class="strategy-flow strategy-flow-head"><span>事件证据</span><span></span><span>战略主题</span><span></span><span>潜在布局意图</span></div><div class="strategy-rows">${rows}</div>`:''}
+    ${relations?`<details class="strategy-relations"><summary>查看跨事件关系</summary><div style="display:flex;flex-direction:column;gap:8px;margin-top:10px;">${relations}</div></details>`:''}
   </section>`;
 }
 
@@ -2755,9 +2826,13 @@ function tasksHtml(A){
         <div style="padding: 16px 18px; border-radius: 14px; background: ${UI.panel}; border: 1px solid ${UI.border};">
           <div style="font-size: 13px; font-weight: 700; color: var(--ds-text); margin-bottom: 4px;">追踪你关心的对象</div>
           <p style="margin: 0 0 12px; font-size: 12px; color: ${UI.text3};">${state.timelineWritable?'输入机构 / 人物 / 技术，保存后会立即回填历史信号，并在每日采集后增量更新。':'公开站为只读模式；请在本地配置台新增或删除追踪对象。'}</p>
-          <div style="display: flex; gap: 8px;">
-            <select id="trackType" ${state.timelineWritable?'':'disabled'} style="height:40px;padding:0 10px;border-radius:10px;border:1px solid ${UI.border};background:${UI.panelSolid};color:${UI.text};"><option>机构</option><option>人物</option><option>技术</option></select>
-            <input id="trackInput" placeholder="例如:Anthropic / 黄仁勋 / 投机解码 / 向量数据库…" onkeydown="if(event.key==='Enter'){event.preventDefault();App.trackEntity();}" style="flex: 1; height: 40px; padding: 0 14px; border-radius: 10px; border: 1px solid ${UI.border}; background: ${UI.panelSolid}; color: ${UI.text}; font-size: 13px; outline: none;" />
+          <div style="display: flex; gap: 8px; align-items: stretch;">
+            <select id="trackType" aria-label="追踪对象类型" style="flex:none;min-width:112px;height:40px;padding:0 28px 0 12px;border-radius:10px;border:1px solid ${UI.border};background:${UI.panelSolid};color:${UI.text};font-size:13px;font-weight:600;cursor:pointer;">
+              <option value="机构">机构</option>
+              <option value="人物">人物</option>
+              <option value="技术">技术</option>
+            </select>
+            <input id="trackInput" placeholder="例如:Anthropic / 马斯克 / 投机解码 / 向量数据库…" onkeydown="if(event.key==='Enter'){event.preventDefault();App.trackEntity();}" style="flex: 1; height: 40px; padding: 0 14px; border-radius: 10px; border: 1px solid ${UI.border}; background: ${UI.panelSolid}; color: ${UI.text}; font-size: 13px; outline: none;" />
             <button class="send-btn" onclick="App.trackEntity()" ${state.timelineWritable?'':'disabled'} style="height: 40px; padding: 0 20px; border-radius: 10px; border: none; background: ${A.accent}; color: #ffffff; font-size: 13px; font-weight: 700; cursor: ${state.timelineWritable?'pointer':'default'};opacity:${state.timelineWritable?1:.45};">＋ 追踪</button>
           </div>
         </div>
