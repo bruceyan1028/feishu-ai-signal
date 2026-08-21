@@ -1377,11 +1377,12 @@
     "link": "https://www.anthropic.com/news",
     "text": "https://www.anthropic.com/news"
    },
+   "extra_config": "{\"list_parser\":\"anthropic_news\",\"max_articles\":20}",
    "fetch_method": "Scrape",
    "keyword_regex": "(model|gpt|claude|gemini|llama|qwen|deepseek|grok|command|mistral|doubao|seed|volc|agent|reasoning|multimodal|context|rlhf|inference|training|fine-tun|moe|rag|release|launch|announce|introducing|now available|update|preview|GA)",
    "lookback_window": "24h",
    "name": "Anthropic News",
-   "notes": "无官方RSS；重点Announcements/Research",
+   "notes": "无官方RSS；按官网 News 表（Date/Category/Title）抽取，勿按 URL 字母序截断",
    "priority": "P0",
    "source_id": "anthropic-news",
    "status": "active",

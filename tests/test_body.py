@@ -148,6 +148,35 @@ class ScrapeParagraphTest(unittest.TestCase):
         self.assertEqual(links[0]["published_raw"], "2026/03/31")
         self.assertEqual(links[0]["title"], "智谱首份业绩报告发布，探索 AGI 智能上界")
 
+    def test_anthropic_news_table_keeps_date_order(self):
+        html = """
+        <div class="PublicationList">
+          <ul>
+            <li><a href="/news/claude-text-watermark" class="PublicationList-module__listItem">
+              <time>Aug 14, 2026</time><span class="subject">Announcements</span>
+              <span class="title">How Claude's text watermark works</span>
+            </a></li>
+            <li><a href="/news/improving-fable-5-s-biology-safeguards" class="PublicationList-module__listItem">
+              <time>Aug 7, 2026</time><span class="subject">Product</span>
+              <span class="title">Improving Fable 5's biology safeguards</span>
+            </a></li>
+            <li><a href="/news/tino-cuellar" class="PublicationList-module__listItem">
+              <time>Aug 4, 2026</time><span class="subject">Announcements</span>
+              <span class="title">Tino Cuellar to join Anthropic</span>
+            </a></li>
+          </ul>
+        </div>
+        <a href="/news/zzz-old-featured">featured decoy</a>
+        """
+        feed = {"id": "anthropic-news", "url": "https://www.anthropic.com/news", "max_articles": 8}
+        links = scrape._extract_links_for_feed(html, feed, use_jina=False)
+        self.assertEqual(
+            [item["url"].rsplit("/", 1)[-1] for item in links],
+            ["claude-text-watermark", "improving-fable-5-s-biology-safeguards", "tino-cuellar"],
+        )
+        self.assertEqual(links[0]["title"], "How Claude's text watermark works")
+        self.assertEqual(links[0]["published_raw"], "Aug 14, 2026")
+
     def test_zhipu_article_h1_overrides_generic_page_title(self):
         html = """
         <html><head><title>Z.ai - Inspiring AGI to Benefit Humanity</title></head>

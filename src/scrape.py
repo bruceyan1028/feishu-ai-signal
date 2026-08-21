@@ -1618,12 +1618,66 @@ def _fetch_json_api_items(feed: dict[str, Any]) -> list[dict[str, Any]]:
     return []
 
 
+def _is_anthropic_news_feed(feed: dict[str, Any]) -> bool:
+    sid = str(feed.get("id") or "").strip().lower()
+    if sid == "anthropic-news" or str(_feed_extra(feed).get("list_parser") or "").strip() == "anthropic_news":
+        return True
+    return _host(feed.get("url") or "") == "anthropic.com" and _path_of(feed.get("url") or "").rstrip("/") == "/news"
+
+
 def _extract_links_for_feed(page: str, feed: dict[str, Any], *, use_jina: bool) -> list[dict[str, Any]]:
     if _is_hf_pwc_paper_feed(feed):
         return _extract_hf_pwc_paper_links(page, feed)
+    if _is_anthropic_news_feed(feed):
+        links = _extract_anthropic_news_links(page, feed)
+        if links:
+            return links
     if str(_feed_extra(feed).get("list_parser") or "").strip() == "zhipu_news":
         return _extract_zhipu_news_links(page, feed)
     return _extract_links(page, feed) if use_jina else _extract_links_html(page, feed)
+
+
+def _extract_anthropic_news_links(html: str, feed: dict[str, Any]) -> list[dict[str, str]]:
+    """官网 /news 页底部 PublicationList（Date / Category / Title），按页面日期顺序抽取。
+
+    通用 href 扫描会按路径字母序截断，Claude 产品公告（/news/claude-*）会被挤出前 8 条。
+    """
+    from urllib.parse import urljoin
+
+    src_url = str(feed.get("url") or "https://www.anthropic.com/news")
+    max_n = int(feed.get("max_articles") or config.DEFAULT_MAX_ARTICLES)
+    rows = re.finditer(
+        r"""<a\b(?=[^>]*listItem)[^>]*\bhref=["'](/news/[^"'#?]+)["'][^>]*>(.*?)</a>"""
+        r"""|<a\b[^>]*\bhref=["'](/news/[^"'#?]+)["'](?=[^>]*listItem)[^>]*>(.*?)</a>""",
+        html or "",
+        re.I | re.S,
+    )
+    links: list[dict[str, str]] = []
+    seen: set[str] = set()
+    for match in rows:
+        raw_path = match.group(1) or match.group(3) or ""
+        card = match.group(2) or match.group(4) or ""
+        url = urljoin(src_url, raw_path).split("#")[0]
+        if not raw_path or url in seen:
+            continue
+        title_match = re.search(
+            r"""<span\b[^>]*title[^>]*>(.*?)</span>""",
+            card,
+            re.I | re.S,
+        )
+        time_match = re.search(r"<time\b[^>]*>(.*?)</time>", card, re.I | re.S)
+        title = _one_line(_html_to_text(title_match.group(1) if title_match else ""))
+        published = _one_line(_html_to_text(time_match.group(1) if time_match else ""))
+        if not title:
+            continue
+        seen.add(url)
+        item = {"url": url, "title": title[:200]}
+        if published:
+            item["published_raw"] = published
+        links.append(item)
+        if len(links) >= max_n:
+            break
+    return links
 
 
 def _extract_zhipu_news_links(html: str, feed: dict[str, Any]) -> list[dict[str, str]]:
