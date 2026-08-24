@@ -1160,11 +1160,11 @@
         "RAG",
         "产品"
       ],
-      "imageUrl": "https://storage.googleapis.com/gweb-cloudblog-publish/original_images/GIF_1_1AuFwiE.gif",
+      "imageUrl": "https://storage.googleapis.com/gweb-cloudblog-publish/original_images/image_bu28HMu.gif",
       "mediaAssets": {
         "images": [
           {
-            "url": "https://storage.googleapis.com/gweb-cloudblog-publish/original_images/GIF_1_1AuFwiE.gif",
+            "url": "https://storage.googleapis.com/gweb-cloudblog-publish/original_images/image_bu28HMu.gif",
             "alt": "原文数据图表",
             "kind": "article-figure"
           },
@@ -1180,6 +1180,11 @@
           },
           {
             "url": "https://storage.googleapis.com/gweb-cloudblog-publish/images/4_IAwu96l.max-1800x1800.png",
+            "alt": "原文数据图表",
+            "kind": "article-figure"
+          },
+          {
+            "url": "https://storage.googleapis.com/gweb-cloudblog-publish/original_images/GIF_1_1AuFwiE.gif",
             "alt": "原文数据图表",
             "kind": "article-figure"
           }
