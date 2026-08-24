@@ -2,8 +2,8 @@ name: Daily AI Signal Brief
 
 on:
   schedule:
-    # 北京时间每天 11:00（UTC 03:00）。GitHub 定时可能存在延迟。
-    - cron: "0 3 * * *"
+    # 北京时间每天 10:45（UTC 02:45）。GitHub 定时可能再晚几分钟。
+    - cron: "45 2 * * *"
   workflow_dispatch:
     inputs:
       force_send:

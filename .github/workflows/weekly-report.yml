@@ -2,7 +2,7 @@ name: Weekly AI Signal Report
 
 on:
   schedule:
-    # 北京时间每周一 11:30（UTC 03:30），排在 11:00 日报之后。
+    # 北京时间每周一 11:30（UTC 03:30），排在 10:45 日报之后。
     - cron: "30 3 * * 1"
   workflow_dispatch:
     inputs:
