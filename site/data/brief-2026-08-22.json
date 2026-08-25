@@ -92,7 +92,7 @@
           },
           {
             "url": "media/papers/recvsTQVqfBrqz-p14-f2.png",
-            "alt": "PDF 第 14 页图表：Table 3 The full adaptive configuration outperforms every partial and frozen-designer control. Games setting, Qwen3-30B- A3B-Instruct-2507. Best checkpoint per variant on suite average; Avg is the unweighted mean over the same eight benchmarks as Table 1; full trajectories in Figure 10. Best in bold, second best underlined.",
+            "alt": "PDF 第 14 页图表：Table 3 The full adaptive configuration outperforms every partial and non-adaptive control. Games setting, Qwen3-30B- A3B-Instruct-2507. Best checkpoint per variant on suite average; Avg is the unweighted mean over the same eight benchmarks as Table 1; full trajectories in Figure 10. Best in bold, second best underlined.",
             "kind": "pdf-page"
           },
           {
