@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-25T12:03:48+08:00",
+  "generatedAt": "2026-08-26T12:28:46+08:00",
   "entities": [
     {
       "recordId": "recvsCzCEOp4PA",
@@ -13,6 +13,54 @@
       "lookbackDays": 90,
       "minImpact": 0,
       "events": [
+        {
+          "id": "daily:2026-08-26",
+          "recordId": "recvtna5VII6Ka",
+          "date": "2026-08-26",
+          "type": "每日汇总",
+          "title": "NVIDIA Vera Rubin NVL72 生产机架开始交付",
+          "summary": "NVIDIA表示，Vera Rubin NVL72生产机架已下线，Microsoft获得首批已投入运行的机架，相关产品正在Foxconn Ingrasys产线上持续生产。其计算托盘面向快速计算、组装和维护设计，制造流程实现100%自动化，每个托盘组装耗时约1分钟。",
+          "impact": 72,
+          "source": "",
+          "url": "",
+          "matchBasis": "",
+          "confidence": 95,
+          "count": 1,
+          "originals": [
+            {
+              "title": "NVIDIA Vera Rubin NVL72 生产机架开始交付",
+              "url": "https://www.youtube.com/watch?v=nqpsqci0yzs",
+              "source": "NVIDIA YouTube",
+              "recordId": "recvtna5VII6Ka",
+              "type": "其他动向",
+              "impact": 72
+            }
+          ]
+        },
+        {
+          "id": "daily:2026-08-25",
+          "recordId": "recvtna5VItVP3",
+          "date": "2026-08-25",
+          "type": "每日汇总",
+          "title": "NVIDIA携手多家发行商为RTX Spark带来大型PC游戏与AI图形技术",
+          "summary": "NVIDIA在科隆Gamescom期间宣布，Electronic Arts、Embark和Ubisoft等发行商将为预计今年秋季发布的RTX Spark提供游戏支持，涵盖多款大型PC游戏及EA Javelin反作弊技术。同期，NVIDIA还公布了DLSS 4.5、路径追踪、ACE和RTX Mega Geometry等游戏技术更新。",
+          "impact": 80,
+          "source": "",
+          "url": "",
+          "matchBasis": "",
+          "confidence": 95,
+          "count": 1,
+          "originals": [
+            {
+              "title": "NVIDIA携手多家发行商为RTX Spark带来大型PC游戏与AI图形技术",
+              "url": "https://blogs.nvidia.com/blog/gamescom-rtx-spark-pc-games-technology",
+              "source": "NVIDIA Blog",
+              "recordId": "recvtna5VItVP3",
+              "type": "产品发布",
+              "impact": 80
+            }
+          ]
+        },
         {
           "id": "daily:2026-08-24",
           "recordId": "recvthcdYqo1ad",
@@ -543,216 +591,210 @@
         }
       ],
       "strategy": {
-        "fingerprint": "c64d978c88c94a54d1a03bc3d4f5e1c6564dd4ba793ba93737bd4c14cd56ed06",
-        "generatedAt": "2026-08-25T12:04:51+08:00",
-        "overview": "证据显示，NVIDIA正把竞争边界从GPU芯片扩展至“AI工厂”全栈：以800V直流供电、Spectrum-X光子网络、NVLink Fusion、Vera Rubin与Groq推理系统，提前补齐大规模算力的电力、互联、机架和软件能力；再以Nemotron、NeMo、NIM、Cosmos及Alpamayo等模型和工具，把智能体、机器人、自动驾驶和行业应用转化为持续算力需求。同时，公司通过资管机构融资、数据中心投资、主权算力中心、教育计划和开放模型降低客户采用门槛，形成从资本建设、基础设施交付到开发者与行业生态的闭环。部分性能指标仍属早期测量，若干架构也尚待规模部署验证。",
+        "fingerprint": "1dcbbd70359ddd1cca6fc56e75869a3f214bb84c7781a29ce8c85e789b1bdbfd",
+        "generatedAt": "2026-08-26T12:29:53+08:00",
+        "overview": "NVIDIA正在把竞争边界从GPU芯片扩展为覆盖芯片、互联、供电、机架、工厂软件、模型、开发工具和融资的“AI工厂”全栈体系。Vera Rubin、Groq推理模块、Spectrum-X光子网络及800V直流架构，体现其对大规模训练和智能体推理的能力前置；NVLink Fusion则尝试把定制XPU纳入其基础设施。与此同时，RTX Spark、Jetson、开放模型、NIM/NeMo和行业方案把能力向开发者、企业及边缘设备下沉。通过资管机构、数据中心投资和教育科研枢纽，NVIDIA还在扩大资本供给、客户锁定和人才生态。长期看，其潜在意图不是单纯销售加速卡，而是将AI算力基础设施标准化、金融化并持续绑定软件与应用生态；但部分性能、商业回报和规模化部署仍属公司披露或早期验证，不能视为已实现结果。",
         "themes": [
           {
             "id": "theme-1",
-            "name": "从GPU供应商升级为AI工厂全栈平台",
-            "summary": "NVIDIA同时推进供电、网络、互联、机架架构、芯片和工厂软件，意图将客户建设吉瓦级AI基础设施所需的关键环节纳入自身平台，并通过标准化、可升级和可再部署设计提升复购与迁移黏性。",
+            "name": "AI工厂全栈化与规模部署",
+            "summary": "NVIDIA已从GPU供应商延伸至机架、互联、供电、工厂软件和定制XPU接入：NVLink Fusion连接定制XPU与既有基础设施，Spectrum-X进入量产，800V直流架构开始推动生态标准化，Vera Rubin NVL72则已有首批机架交付并持续生产。这些动作共同指向可复制、可维护、面向吉瓦级负载的AI工厂产品体系；其中部分性能优势仍待独立审核和实际部署验证。",
             "eventIds": [
-              "daily:2026-08-11",
+              "daily:2026-08-24",
               "daily:2026-08-13",
-              "daily:2026-08-24"
+              "daily:2026-08-11",
+              "daily:2026-08-26"
             ]
           },
           {
             "id": "theme-2",
-            "name": "以智能体推理和物理AI扩大算力需求",
-            "summary": "Nemotron、Switchyard、Groq 3 LPX和Hermes覆盖模型路由、长上下文、持续运行智能体及本地开发；Cosmos、Omniverse、Alpamayo和Jetson则把平台延伸至机器人、自动驾驶和边缘设备，形成云端训练、数据中心推理、边缘执行的应用链条。",
+            "name": "智能体推理与软件生态控制",
+            "summary": "Nemotron 3.5 Lightning、NeMo Switchyard、Groq 3 LPX和Vera Rubin分别覆盖专用模型、请求路由、长上下文低延迟推理及大规模部署；Infosys的NIM、NeMo和Guardrails方案则把这些能力包装为企业生产系统。RTX Spark本地Hermes演示进一步把持续运行的智能体带到开发者PC，显示NVIDIA试图同时控制云端、企业端和本地端的智能体执行层。",
             "eventIds": [
-              "daily:2026-08-04",
-              "daily:2026-08-06",
               "daily:2026-08-11",
-              "daily:2026-08-21",
               "daily:2026-08-24",
-              "daily:2026-07-28"
+              "daily:2026-08-07",
+              "daily:2026-08-21",
+              "daily:2026-08-19"
             ]
           },
           {
             "id": "theme-3",
-            "name": "资本化AI基础设施并锁定大型建设需求",
-            "summary": "NVIDIA既向SB Energy注资并提供大额信贷支持，又联合全球资管机构建立融资平台，试图把AI工厂变成可融资、可运营、可持续产生收入的基础设施资产，从而扩大客户建设规模并强化其作为独家或核心供应商的地位。",
+            "name": "从开发者平台到物理AI与行业市场",
+            "summary": "RTX Spark和Jetson分别覆盖创作游戏PC、边缘设备与机器人开发，Cosmos、Omniverse、OpenUSD及Alpamayo 2 Super将能力延伸到仿真、自动驾驶和物理AI；数字健康、医疗机器人、大学AI中心及NSF区域枢纽则扩大行业试点和人才供给。游戏发行商支持RTX Spark，进一步补强终端产品的应用生态与商业化入口。",
             "eventIds": [
-              "daily:2026-08-12",
-              "daily:2026-08-17"
+              "daily:2026-08-25",
+              "daily:2026-07-28",
+              "daily:2026-08-06",
+              "daily:2026-08-04",
+              "daily:2026-07-29",
+              "daily:2026-08-15",
+              "daily:2026-08-05"
             ]
           },
           {
             "id": "theme-4",
-            "name": "主权算力与开放生态扩张",
-            "summary": "通过印尼大学AI中心、NSF区域枢纽、Firebird工厂、Infosys企业方案、Ollama模型支持及Alpamayo商业开放许可，NVIDIA同时培育政府、教育、企业、开发者和区域数据中心客户，降低生态进入成本并扩大平台标准覆盖面。",
+            "name": "资本化基础设施与区域生态扩张",
+            "summary": "NVIDIA联合六大资管机构推动AI工厂成为可融资、可升级和可再部署的基础设施资产，并向SB Energy投资且争取成为相关数据中心的独家计算基础设施供应商；亚美尼亚AI工厂、印尼大学中心和NSF枢纽则把其平台带入新区域、科研和人才体系。事实显示其正在扩大资本与生态触点，但逾5000亿美元撬动规模和长期资产回报仍是计划而非既成结果。",
             "eventIds": [
-              "daily:2026-08-05",
-              "daily:2026-08-07",
               "daily:2026-08-12",
+              "daily:2026-08-17",
+              "daily:2026-08-08",
               "daily:2026-08-15",
-              "daily:2026-08-04",
-              "daily:2026-08-08"
+              "daily:2026-08-05"
             ]
           }
         ],
         "relations": [
           {
-            "fromEventId": "daily:2026-08-11",
-            "toEventId": "daily:2026-08-13",
+            "fromEventId": "daily:2026-08-24",
+            "toEventId": "daily:2026-08-26",
             "type": "capability",
-            "label": "供电与网络补齐",
-            "explanation": "800V直流架构解决高密度AI工厂的供电扩展问题，Spectrum-X光子网络进一步解决横向扩展、功耗和可靠性问题，两者共同构成大规模部署的基础设施前置能力。",
-            "confidence": 91
+            "label": "XPU方案走向交付",
+            "explanation": "NVLink Fusion强调把定制XPU接入完整AI基础设施，随后Vera Rubin NVL72已有生产机架交付，体现从架构兼容能力向标准化机架产品落地的承接。",
+            "confidence": 88
           },
           {
             "fromEventId": "daily:2026-08-13",
             "toEventId": "daily:2026-08-24",
             "type": "reinforces",
-            "label": "网络能力支撑XPU工厂",
-            "explanation": "光子网络进入量产后，可与NVLink Fusion及机架级系统共同支撑定制XPU接入既有AI基础设施，强化NVIDIA作为异构算力整合平台的角色。",
+            "label": "网络支撑推理扩展",
+            "explanation": "Spectrum-X光子网络量产提供横向扩展基础，Vera Rubin与Groq 3 LPX面向长上下文和智能体推理，前者强化后者的集群互联与规模化部署能力。",
             "confidence": 86
           },
           {
             "fromEventId": "daily:2026-08-11",
             "toEventId": "daily:2026-08-24",
             "type": "capability",
-            "label": "电力效率支撑推理扩张",
-            "explanation": "800V直流架构面向未来高功率算力，Vera Rubin与Groq 3 LPX则针对智能体和长上下文推理效率，前者提供扩容条件，后者提供扩容后的利用率与经济性。",
-            "confidence": 84
+            "label": "供电架构前置推理增长",
+            "explanation": "800V直流方案针对高密度AI工厂的电力瓶颈，后续Vera Rubin与Groq 3 LPX强调每瓦吞吐和低延迟推理，构成从能源基础设施到计算效率的能力配套。",
+            "confidence": 82
           },
           {
             "fromEventId": "daily:2026-08-11",
-            "toEventId": "daily:2026-08-24",
+            "toEventId": "daily:2026-08-07",
             "type": "commercialization",
-            "label": "模型软件导向推理采购",
-            "explanation": "Nemotron和Switchyard将多模型协作、路由和成本控制产品化，Groq 3 LPX及Vera Rubin则把这些智能体负载转化为可量化的数据中心推理需求。",
-            "confidence": 88
+            "label": "模型能力企业化",
+            "explanation": "Nemotron、模型路由和智能体执行层提供基础软件能力，Infosys再以NIM、NeMo和Guardrails包装为安全、生产级企业方案，形成技术到商业部署的转化路径。",
+            "confidence": 91
           },
           {
-            "fromEventId": "daily:2026-08-04",
-            "toEventId": "daily:2026-07-28",
-            "type": "expansion",
-            "label": "模型能力下沉边缘",
-            "explanation": "Alpamayo面向自动驾驶商业使用，Jetson面向便携式机器人和边缘AI，显示NVIDIA将模型与开发工具从数据中心延展至实际设备部署。",
+            "fromEventId": "daily:2026-08-19",
+            "toEventId": "daily:2026-08-25",
+            "type": "partnership",
+            "label": "Spark补齐应用生态",
+            "explanation": "RTX Spark先被定位为融合本地AI、创作和游戏的一体化PC，随后获得EA、Embark和Ubisoft等发行商支持，降低终端产品上市后的内容生态风险。",
             "confidence": 87
           },
           {
-            "fromEventId": "daily:2026-08-06",
+            "fromEventId": "daily:2026-07-28",
             "toEventId": "daily:2026-08-04",
-            "type": "capability",
-            "label": "仿真支撑物理AI",
-            "explanation": "Cosmos、Omniverse和OpenUSD提供物理世界数据与仿真工作流，Alpamayo则将相关能力落到自动驾驶长尾场景，形成从数据生成、训练到商业模型开放的承接关系。",
-            "confidence": 82
+            "type": "expansion",
+            "label": "边缘算力进入物理AI",
+            "explanation": "Jetson为机器人和边缘设备提供本地模型及智能体开发路径，Alpamayo 2 Super进一步以开放商业许可切入自动驾驶和机器人出租车，体现从开发平台到行业模型的扩张。",
+            "confidence": 85
           },
           {
             "fromEventId": "daily:2026-08-12",
             "toEventId": "daily:2026-08-17",
             "type": "capital",
-            "label": "融资平台落到项目投资",
-            "explanation": "面向逾5000亿美元第三方资本的融资平台，与对SB Energy的直接投资及最高1050亿美元信贷支持相互强化，表明NVIDIA不仅销售设备，也在参与项目资本组织。",
-            "confidence": 93
-          },
-          {
-            "fromEventId": "daily:2026-08-12",
-            "toEventId": "daily:2026-08-08",
-            "type": "commercialization",
-            "label": "资产化扩大区域工厂",
-            "explanation": "AI工厂资产化叙事有助于为Firebird等区域算力枢纽寻找资本与运营逻辑，扩大NVIDIA基础设施方案在非核心市场的落地范围。",
-            "confidence": 76
-          },
-          {
-            "fromEventId": "daily:2026-08-15",
-            "toEventId": "daily:2026-08-05",
-            "type": "expansion",
-            "label": "主权算力与人才复制",
-            "explanation": "印尼大学中心提供主权GPU、模型和指导，NSF枢纽则连接区域高校、课程和职业培训，两者共同培育本地使用者、人才和长期算力需求。",
+            "label": "资本平台绑定算力需求",
+            "explanation": "独立融资平台试图动员长期资本建设AI工厂，对SB Energy投资并争取成为特定数据中心独家供应商，则把资本参与与NVIDIA计算基础设施销售和部署机会直接连接。",
             "confidence": 89
           },
           {
-            "fromEventId": "daily:2026-08-07",
-            "toEventId": "daily:2026-08-11",
-            "type": "commercialization",
-            "label": "企业方案连接基础设施",
-            "explanation": "Infosys以NIM、NeMo和Guardrails封装企业部署，Nemotron与Switchyard进一步补充模型协作和推理效率，二者共同降低生产级智能体落地门槛。",
-            "confidence": 85
+            "fromEventId": "daily:2026-08-05",
+            "toEventId": "daily:2026-08-15",
+            "type": "expansion",
+            "label": "区域生态复制",
+            "explanation": "NSF区域枢纽把算力、软件、课程和人才结合，印尼大学AI中心则将类似模式落到主权算力和本地应用，体现从美国公共科研生态向海外区域生态复制。",
+            "confidence": 84
           }
         ],
         "hypotheses": [
           {
-            "title": "NVIDIA的长期核心目标是出售并控制AI工厂平台，而非仅扩大GPU销量",
-            "assessment": "供电、网络、互联、机架、软件和融资动作同时推进，且SB Energy项目存在独家供应安排；这更符合通过全栈标准提高单客户价值、部署黏性和长期服务收入的战略假设，而非单一芯片产品扩张。",
-            "confidence": 93,
+            "title": "NVIDIA将把AI工厂打造为可复制且可金融化的基础设施标准",
+            "assessment": "这是最强的长期布局假设。800V供电、Spectrum-X网络、NVLink Fusion和Vera Rubin机架分别解决能源、互联、异构接入和交付问题；资管合作进一步尝试把标准化AI工厂变成可投资资产。由此推测，NVIDIA可能寻求掌握AI基础设施的技术标准、供应链接口和资本入口，而不只是销售芯片。",
+            "confidence": 91,
             "themeIds": [
               "theme-1",
-              "theme-3"
+              "theme-4"
             ],
             "evidenceEventIds": [
               "daily:2026-08-11",
               "daily:2026-08-13",
-              "daily:2026-08-17",
-              "daily:2026-08-24"
+              "daily:2026-08-24",
+              "daily:2026-08-26",
+              "daily:2026-08-12"
             ],
-            "counterSignals": "客户广泛采用竞争性网络、互联和加速器组合，或AI工厂融资项目主要由客户自行采购且NVIDIA无法保持系统级份额，将削弱该判断。",
+            "counterSignals": "客户大规模转向自研或其他供应商的整机与互联方案，800V和Spectrum-X缺乏标准采纳，或AI工厂项目无法获得稳定利用率和融资回报，都会削弱该判断。",
             "watchFor": [
-              "NVIDIA发布更多整机架、供电、网络和软件打包订单",
-              "大型云厂商或数据中心项目采用其标准化AI工厂方案",
-              "融资平台披露具体项目、收益结构和NVIDIA供应份额"
+              "Vera Rubin后续机架订单、交付规模和客户扩展",
+              "NVLink Fusion接入的第三方XPU数量及实际客户案例",
+              "800V直流架构和Spectrum-X在主流AI工厂中的标准化部署",
+              "AI工厂融资平台公布的项目、资产收益率和重复融资情况"
             ]
           },
           {
-            "title": "智能体推理将成为NVIDIA下一阶段算力增长的主要需求引擎",
-            "assessment": "Nemotron、NeMo Switchyard、Groq 3 LPX、Vera Rubin和本地Hermes分别覆盖模型路由、持续运行、长上下文和低延迟推理；这些动作组合显示公司正在围绕智能体工作负载优化软硬件，而不只是等待训练需求自然增长。",
-            "confidence": 88,
+            "title": "NVIDIA可能争夺智能体AI的执行层和推理经济性",
+            "assessment": "Nemotron、Switchyard、Groq 3 LPX、NIM/NeMo以及RTX Spark本地智能体形成云端集群、企业软件和个人设备的连续栈。基于证据可推测，NVIDIA意图让模型路由、工具调用、低延迟推理和安全控制更多运行在其软硬件体系内，从而提高客户迁移成本并扩大每次AI任务的基础设施消耗。",
+            "confidence": 87,
             "themeIds": [
               "theme-2"
             ],
             "evidenceEventIds": [
               "daily:2026-08-11",
-              "daily:2026-08-21",
-              "daily:2026-08-24"
+              "daily:2026-08-24",
+              "daily:2026-08-07",
+              "daily:2026-08-21"
             ],
-            "counterSignals": "智能体调用频率和推理规模未持续增长，客户转向CPU、专用ASIC或其他推理平台，且NVIDIA宣传的性能和成本优势无法在独立基准中复现，将削弱该判断。",
+            "counterSignals": "开发者和企业广泛采用非NVIDIA推理栈，开放模型及路由工具削弱平台绑定，或智能体工作负载增长未能转化为NVIDIA计算需求，将削弱该判断。",
             "watchFor": [
-              "企业和云服务商公布基于NIM、NeMo或Nemotron的生产级智能体规模",
-              "Groq 3 LPX与Vera Rubin形成批量部署和收入贡献",
-              "独立评测验证每瓦吞吐量、延迟和单位Token成本优势"
+              "NIM、NeMo和Switchyard在大型企业生产环境的部署数量",
+              "Groq 3 LPX与Vera Rubin的实际推理收入和利用率",
+              "RTX Spark上市后的销量、开发者活跃度和本地智能体应用数量",
+              "客户是否同时采用竞争性ASIC、TPU或自研推理方案"
             ]
           },
           {
-            "title": "NVIDIA正以开放模型与主权项目建立跨区域生态锁定",
-            "assessment": "大学中心、区域基础设施枢纽、企业集成商、开放许可模型和Ollama支持共同扩大开发者与机构触点；其潜在意图是让NVIDIA软件栈成为本地AI能力建设的默认入口，同时将教育和试验用户转化为未来采购者。",
+            "title": "NVIDIA将以开放模型和开发者入口提前锁定物理AI与行业生态",
+            "assessment": "Jetson提供边缘开发入口，Cosmos与Omniverse支持仿真，Alpamayo 2 Super采用开放商业许可，大学、NSF和行业方案则扩大人才及应用试点。可推测NVIDIA在提前培育机器人、自动驾驶、医疗和工业智能的开发者与数据生态，以便未来硬件、仿真、模型和部署服务形成组合销售。",
+            "confidence": 82,
+            "themeIds": [
+              "theme-3"
+            ],
+            "evidenceEventIds": [
+              "daily:2026-07-28",
+              "daily:2026-08-04",
+              "daily:2026-08-06",
+              "daily:2026-07-29",
+              "daily:2026-08-05"
+            ],
+            "counterSignals": "开放模型无法形成持续硬件或软件收入，自动驾驶、机器人和医疗项目商业化缓慢，或开发者转向跨平台工具链，都会降低生态锁定效果。",
+            "watchFor": [
+              "Alpamayo及Cosmos衍生模型的商业部署和合作车企数量",
+              "Jetson在机器人量产项目中的设计导入",
+              "Omniverse/OpenUSD仿真项目是否转化为真实设备订单",
+              "大学和区域枢纽培养的项目、初创企业及NVIDIA平台留存率"
+            ]
+          },
+          {
+            "title": "NVIDIA可能通过战略投资和独家供应安排控制AI基础设施扩张节奏",
+            "assessment": "对SB Energy的15亿美元投资、OpenAI Ports-Pike独家供应安排及最高1050亿美元信贷支持，显示NVIDIA不仅等待客户采购，也可能参与数据中心开发、融资和算力供给设计。结合AI工厂资产化计划，推测其意图是锁定长期容量与大型客户需求，并降低基础设施建设对单一客户资本预算的依赖。",
             "confidence": 84,
             "themeIds": [
               "theme-4"
             ],
             "evidenceEventIds": [
-              "daily:2026-08-04",
-              "daily:2026-08-05",
-              "daily:2026-08-07",
-              "daily:2026-08-15",
-              "daily:2026-07-28"
+              "daily:2026-08-17",
+              "daily:2026-08-12"
             ],
-            "counterSignals": "这些项目停留在演示、培训或小规模试点，缺少持续预算、商业部署和本地开发者活跃度，或开放模型被竞争平台更快吸收，将削弱生态锁定效果。",
+            "counterSignals": "投资项目延期或取消，独家供应安排未形成实质订单，信贷承诺造成较大风险敞口，或监管限制NVIDIA参与下游基础设施融资，都会削弱该假设。",
             "watchFor": [
-              "主权AI中心扩展至更多国家并形成采购或云服务合同",
-              "开放模型下载量、衍生模型和企业集成数量持续增长",
-              "Infosys等伙伴将方案复制到多个行业和区域"
-            ]
-          },
-          {
-            "title": "NVIDIA可能通过资本参与分享AI基础设施运营价值",
-            "assessment": "与六大资管机构构建长期融资平台，同时直接投资数据中心开发商并提供大额信贷，说明公司可能从设备供应商进一步介入AI基础设施的资本形成与项目配置；但目前尚不足以证明其将大规模持有或运营资产。",
-            "confidence": 80,
-            "themeIds": [
-              "theme-3"
-            ],
-            "evidenceEventIds": [
-              "daily:2026-08-12",
-              "daily:2026-08-17"
-            ],
-            "counterSignals": "融资平台未形成实际项目，信贷承诺未转化为部署，或NVIDIA仅作为设备供应商而不获得项目经济利益，将削弱该判断。",
-            "watchFor": [
-              "融资平台公布首批AI工厂资产、租赁或收益分成安排",
-              "NVIDIA继续投资数据中心开发商或算力运营商",
-              "公司披露基础设施融资、服务或运营相关收入"
+              "Ports-Pike项目的开工、通电、GPU部署及收入确认",
+              "SB Energy项目是否扩展至8吉瓦目标",
+              "NVIDIA后续是否复制对数据中心开发商的股权、信贷或独家供应模式",
+              "资管平台是否形成多项目、长期化的AI工厂投资组合"
             ]
           }
         ]
@@ -1242,5 +1284,5 @@
       }
     }
   ],
-  "createdEvents": 4
+  "createdEvents": 2
 }
