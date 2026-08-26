@@ -860,22 +860,6 @@ def send_interactive_message(token: str, open_id: str, card: dict[str, Any]) -> 
     return str(((data.get("data") or {}).get("message_id")) or "")
 
 
-def upload_image(token: str, data: bytes, filename: str = "cover.png") -> str:
-    """上传图片素材，返回卡片 img 元素所需的 image_key。"""
-    url = f"{config.FEISHU_HOST}/open-apis/im/v1/images"
-    resp = _SESSION.post(
-        url,
-        headers={"Authorization": f"Bearer {token}"},
-        data={"image_type": "message"},
-        files={"image": (filename, data, "image/png")},
-        timeout=60,
-    )
-    payload = resp.json()
-    if payload.get("code") != 0:
-        raise FeishuError(f"Feishu upload image failed: {payload.get('code')} {payload.get('msg')}")
-    return str((payload.get("data") or {}).get("image_key") or "")
-
-
 def batch_create_records(token: str, fields_list: list[dict[str, Any]], chunk: int = 100) -> int:
     """对应 Create Feishu Record 节点：改用 batch_create 批量写入以减少请求数。"""
     if not fields_list:

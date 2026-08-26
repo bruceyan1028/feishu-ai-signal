@@ -9,9 +9,14 @@ from pathlib import Path
 from typing import Any
 from urllib.parse import urlencode
 
-from . import card_image, config, daily, feishu, publish
+from . import config, daily, feishu, publish
 
 log = logging.getLogger(__name__)
+
+# 卡片只当目录：板块与条目都设上限，超出的靠网页简报承载。
+MAX_GROUPS = 4
+MAX_ITEMS_PER_GROUP = 3
+MAX_CARD_ITEMS = 8
 
 CATEGORY_ICONS = {
     "前沿模型公司": "🚀",
@@ -24,6 +29,20 @@ CATEGORY_ICONS = {
     "中文科技媒体": "📰",
     "中文综合媒体": "📰",
 }
+
+# 板块色块：取飞书官方颜色枚举，100 级作底、基础色作字，深色主题下由客户端自动换算。
+CATEGORY_THEMES = {
+    "前沿模型公司": ("blue-100", "blue"),
+    "技术研究开源": ("turquoise-100", "turquoise"),
+    "算力芯片云": ("orange-100", "orange"),
+    "政策监管地缘": ("red-100", "red"),
+    "模型评测基准": ("purple-100", "purple"),
+    "产品化企业采用": ("indigo-100", "indigo"),
+    "创业融资并购": ("lime-100", "lime"),
+    "中文科技媒体": ("wathet-100", "wathet"),
+    "中文综合媒体": ("grey-100", "grey"),
+}
+DEFAULT_THEME = ("grey-100", "grey")
 
 
 def detail_url(base_url: str, day: str) -> str:
@@ -40,64 +59,90 @@ def _short(text: Any, limit: int) -> str:
     return value if len(value) <= limit else value[: limit - 1].rstrip("，。、；：,. ") + "…"
 
 
-def _signal_source_line(signal: dict[str, Any]) -> str:
-    source = str(signal.get("source") or "来源").strip()
-    link = str(signal.get("url") or "").strip()
-    label = f"[{source}]({link})" if link.startswith("http") else source
-    parts = [f"来源：{label}", f"影响分 {int(signal.get('impact') or 0)}"]
-    content_type = str(signal.get("contentType") or "").strip()
-    if content_type:
-        parts.append(content_type)
-    return " · ".join(parts)
+def group_signals(signals: list[dict[str, Any]]) -> list[tuple[str, list[dict[str, Any]]]]:
+    """按分类聚合，保留原有排序（已按质量与影响分排过）。"""
+    grouped: dict[str, list[dict[str, Any]]] = {}
+    for signal in signals:
+        name = str(signal.get("category") or "其他").strip() or "其他"
+        grouped.setdefault(name, []).append(signal)
+    ordered = sorted(grouped.items(), key=lambda item: -len(item[1]))[:MAX_GROUPS]
+    result: list[tuple[str, list[dict[str, Any]]]] = []
+    used = 0
+    for name, items in ordered:
+        if used >= MAX_CARD_ITEMS:
+            break
+        take = items[: min(MAX_ITEMS_PER_GROUP, MAX_CARD_ITEMS - used)]
+        used += len(take)
+        result.append((name, take))
+    return result
 
 
-def build_card(brief: dict[str, Any], url: str, image_key: str = "") -> dict[str, Any]:
-    """一图打底 + 分区分条的正文，避免整屏文字糊成一片。"""
-    elements: list[dict[str, Any]] = []
-    if image_key:
-        elements.append(
+def _band(background: str, font: str, text: str, *, size: str) -> dict[str, Any]:
+    """整行色块 + 居中文字，用来切分标题和各板块。"""
+    return {
+        "tag": "column_set",
+        "flex_mode": "none",
+        "background_style": background,
+        "horizontal_spacing": "default",
+        "columns": [
             {
-                "tag": "img",
-                "img_key": image_key,
-                "alt": {"tag": "plain_text", "content": "今日要闻速览"},
-                "mode": "fit_horizontal",
-                "preview": True,
-                "compact_width": False,
+                "tag": "column",
+                "width": "weighted",
+                "weight": 1,
+                "vertical_align": "center",
+                "elements": [
+                    {
+                        "tag": "markdown",
+                        "text_align": "center",
+                        "text_size": size,
+                        "content": f"<font color='{font}'>**{text}**</font>",
+                    }
+                ],
             }
-        )
-    intro = _short(brief.get("intro"), 140)
-    if intro:
-        elements.append({"tag": "div", "text": {"tag": "lark_md", "content": f"**今日主线**\n{intro}"}})
-    for item in (brief.get("bullets") or [])[:2]:
-        title = _short(item.get("title"), 24)
-        text = _short(item.get("text"), 70)
-        content = f"• **{title}** {text}".strip() if title else f"• {text}"
-        elements.append({"tag": "div", "text": {"tag": "lark_md", "content": content}})
+        ],
+    }
 
+
+def _signal_blocks(signal: dict[str, Any]) -> list[dict[str, Any]]:
+    """标题可点进原文，来源与形态降到辅助字号的灰字。"""
+    title = _short(signal.get("titleCn") or signal.get("title"), 34)
+    link = str(signal.get("url") or "").strip()
+    meta = " · ".join(
+        part
+        for part in (
+            str(signal.get("source") or "").strip(),
+            str(signal.get("contentType") or "").strip(),
+        )
+        if part
+    )
+    return [
+        {
+            "tag": "markdown",
+            "content": f"**[{title}]({link})**" if link.startswith("http") else f"**{title}**",
+        },
+        {
+            "tag": "markdown",
+            "text_size": "notation",
+            "content": f"<font color='grey'>{meta}</font>",
+        },
+    ]
+
+
+def build_card(brief: dict[str, Any], url: str) -> dict[str, Any]:
+    """纯文字目录卡：分板块的标题清单，导语、摘要与解读都交给网页。"""
     signals = [item for item in (brief.get("signals") or []) if isinstance(item, dict)]
-    index = 1
-    for name, items in card_image.group_signals(signals):
-        elements.append({"tag": "hr"})
+    groups = group_signals(signals)
+    shown = sum(len(items) for _, items in groups)
+
+    title = str(brief.get("title") or "AI Signal 每日情报")
+    elements: list[dict[str, Any]] = [_band("red-100", "red", title, size="heading")]
+    for name, items in groups:
+        background, font = CATEGORY_THEMES.get(name, DEFAULT_THEME)
         icon = CATEGORY_ICONS.get(name, "🔎")
-        elements.append({"tag": "div", "text": {"tag": "lark_md", "content": f"**{icon} {name}**"}})
+        elements.append(_band(background, font, f"{icon} {name}", size="normal"))
         for signal in items:
-            title = signal.get("titleCn") or signal.get("title") or ""
-            elements.append(
-                {
-                    "tag": "div",
-                    "text": {
-                        "tag": "lark_md",
-                        "content": f"**{index}. {title}**\n{_short(signal.get('summary'), 90)}",
-                    },
-                }
-            )
-            elements.append(
-                {
-                    "tag": "note",
-                    "elements": [{"tag": "lark_md", "content": _signal_source_line(signal)}],
-                }
-            )
-            index += 1
+            elements.extend(_signal_blocks(signal))
+
     elements.extend(
         [
             {"tag": "hr"},
@@ -114,28 +159,16 @@ def build_card(brief: dict[str, Any], url: str, image_key: str = "") -> dict[str
             },
             {
                 "tag": "note",
-                "elements": [{"tag": "plain_text", "content": "内容来自真实 RSS，并已写入飞书多维表格"}],
+                "elements": [
+                    {
+                        "tag": "plain_text",
+                        "content": f"今日入选 {len(signals)} 条，卡片列出 {shown} 条",
+                    }
+                ],
             },
         ]
     )
-    return {
-        "config": {"wide_screen_mode": True},
-        "header": {
-            "template": "red",
-            "title": {"tag": "plain_text", "content": str(brief.get("title") or "AI Signal 每日情报")},
-        },
-        "elements": elements,
-    }
-
-
-def cover_image_key(token: str, brief: dict[str, Any]) -> str:
-    """头图失败不该阻断发送，取不到 key 时自动退回纯文字卡片。"""
-    try:
-        png = card_image.render_daily_cover(brief)
-        return feishu.upload_image(token, png, f"brief-{brief.get('date', 'latest')}.png")
-    except Exception as exc:  # noqa: BLE001
-        log.warning("生成或上传简报头图失败，改用纯文字卡片: %s", exc)
-        return ""
+    return {"config": {"wide_screen_mode": True}, "elements": elements}
 
 
 def build_weekly_card(brief: dict[str, Any], url: str) -> dict[str, Any]:
@@ -297,7 +330,7 @@ def send_many(
     message_ids: dict[str, str] = {}
     failures: dict[str, str] = {}
     try:
-        card = build_card(brief, url, cover_image_key(token, brief))
+        card = build_card(brief, url)
     except Exception:
         feishu.update_record(token, table_id, str(record["record_id"]), {"发送状态": "失败"})
         raise

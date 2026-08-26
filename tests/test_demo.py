@@ -7,7 +7,7 @@ from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from unittest.mock import MagicMock, patch
 
-from src import card_image, config, daily, main, notify, process, publish, rss, scrape, sources
+from src import config, daily, main, notify, process, publish, rss, scrape, sources
 
 
 class PipelineTests(unittest.TestCase):
@@ -688,11 +688,6 @@ class DailyTests(unittest.TestCase):
 
 
 class DeliveryTests(unittest.TestCase):
-    def setUp(self) -> None:
-        uploader = patch("src.notify.feishu.upload_image", return_value="img_key_test")
-        uploader.start()
-        self.addCleanup(uploader.stop)
-
     def sample_brief(self) -> dict:
         return {
             "date": "2026-07-13",
@@ -752,42 +747,70 @@ class DeliveryTests(unittest.TestCase):
         )
         return brief
 
-    def test_daily_card_uses_cover_image_and_grouped_sections(self) -> None:
+    def test_daily_card_is_text_only_directory(self) -> None:
         brief = self.multi_category_brief()
-        card = notify.build_card(brief, "https://example.com/brief", "img_key_1")
-        images = [item for item in card["elements"] if item.get("tag") == "img"]
-        self.assertEqual([item["img_key"] for item in images], ["img_key_1"])
+        card = notify.build_card(brief, "https://example.com/brief")
         dumped = json.dumps(card, ensure_ascii=False)
-        self.assertIn("**🚀 前沿模型公司**", dumped)
-        self.assertIn("**📰 中文科技媒体**", dumped)
-        self.assertIn("**1. 真实中文标题**", dumped)
-        self.assertIn("**2. 第二条中文标题**", dumped)
-        notes = [
-            element["elements"][0]["content"]
-            for element in card["elements"]
-            if element.get("tag") == "note" and element["elements"][0].get("tag") == "lark_md"
-        ]
-        self.assertIn("来源：[OpenAI](https://example.com/news) · 影响分 90", notes)
-        # 摘要过长会拖垮观感，正文里必须是截断后的短句
-        self.assertNotIn("第二条摘要，" * 20, dumped)
-
-    def test_daily_card_falls_back_to_text_when_cover_fails(self) -> None:
-        with patch.object(
-            notify.card_image, "render_daily_cover", side_effect=RuntimeError("render boom")
-        ):
-            key = notify.cover_image_key("token", self.sample_brief())
-        self.assertEqual(key, "")
-        card = notify.build_card(self.sample_brief(), "https://example.com/brief", key)
         self.assertFalse([item for item in card["elements"] if item.get("tag") == "img"])
-        self.assertIn("真实中文标题", json.dumps(card, ensure_ascii=False))
+        # 导语、摘要与内部打分只属于网页，卡片里不该出现
+        self.assertNotIn("今日真实情报。", dumped)
+        self.assertNotIn("第二条摘要，", dumped)
+        self.assertNotIn("影响分", dumped)
 
-    def test_daily_cover_renders_png_with_capped_groups(self) -> None:
+    def test_daily_card_title_and_groups_are_centered_color_bands(self) -> None:
         brief = self.multi_category_brief()
-        groups = card_image.group_signals(brief["signals"])
+        card = notify.build_card(brief, "https://example.com/brief")
+        # 标题移进正文才能居中，因此卡片不再带 header
+        self.assertNotIn("header", card)
+        bands = [item for item in card["elements"] if item.get("tag") == "column_set"]
+        self.assertEqual(
+            [band["background_style"] for band in bands],
+            ["red-100", "blue-100", "wathet-100"],
+        )
+        headings = [band["columns"][0]["elements"][0] for band in bands]
+        self.assertTrue(all(item["text_align"] == "center" for item in headings))
+        self.assertEqual(
+            [item["content"] for item in headings],
+            [
+                "<font color='red'>**AI Signal 每日情报 · 2026-07-13**</font>",
+                "<font color='blue'>**🚀 前沿模型公司**</font>",
+                "<font color='wathet'>**📰 中文科技媒体**</font>",
+            ],
+        )
+
+    def test_daily_card_links_title_and_greys_out_meta(self) -> None:
+        brief = self.multi_category_brief()
+        card = notify.build_card(brief, "https://example.com/brief")
+        rows = [
+            item
+            for item in card["elements"]
+            if item.get("tag") == "markdown" and item.get("text_align") != "center"
+        ]
+        self.assertEqual(
+            [item["content"] for item in rows],
+            [
+                "**[真实中文标题](https://example.com/news)**",
+                "<font color='grey'>OpenAI</font>",
+                "**[第二条中文标题](https://example.com/second)**",
+                "<font color='grey'>量子位 · 公众号</font>",
+            ],
+        )
+        # 来源行必须降到辅助字号，否则和标题挤在一起
+        self.assertEqual([item.get("text_size") for item in rows[1::2]], ["notation"] * 2)
+
+    def test_daily_card_caps_groups_and_items(self) -> None:
+        brief = self.multi_category_brief()
+        groups = notify.group_signals(brief["signals"])
         self.assertEqual([name for name, _ in groups], ["前沿模型公司", "中文科技媒体"])
-        self.assertTrue(all(len(items) <= card_image.MAX_ITEMS_PER_GROUP for _, items in groups))
-        png = card_image.render_daily_cover(brief)
-        self.assertTrue(png.startswith(b"\x89PNG"))
+        self.assertTrue(all(len(items) <= notify.MAX_ITEMS_PER_GROUP for _, items in groups))
+        crowded = [
+            dict(signal, recordId=f"rec{index}", category=f"板块{index // 4}")
+            for index in range(40)
+            for signal in [brief["signals"][0]]
+        ]
+        capped = notify.group_signals(crowded)
+        self.assertLessEqual(len(capped), notify.MAX_GROUPS)
+        self.assertLessEqual(sum(len(items) for _, items in capped), notify.MAX_CARD_ITEMS)
 
     def test_youtube_preview_tries_in_page_player_with_fallback_link(self) -> None:
         template = Path("index.html").read_text(encoding="utf-8")
