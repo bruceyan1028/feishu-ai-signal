@@ -841,14 +841,48 @@ def update_record(
     return (data.get("data") or {}).get("record") or {}
 
 
-def send_interactive_message(token: str, open_id: str, card: dict[str, Any]) -> str:
-    """以应用机器人身份向指定 open_id 发送交互卡片。"""
-    url = f"{config.FEISHU_HOST}/open-apis/im/v1/messages?receive_id_type=open_id"
+def list_bot_chats(token: str) -> list[dict[str, Any]]:
+    """列出当前应用机器人已加入的群。"""
+    items: list[dict[str, Any]] = []
+    page_token = ""
+    while True:
+        params: dict[str, Any] = {"page_size": 50, "sort_type": "ByCreateTimeAsc"}
+        if page_token:
+            params["page_token"] = page_token
+        resp = _SESSION.get(
+            f"{config.FEISHU_HOST}/open-apis/im/v1/chats",
+            headers={"Authorization": f"Bearer {token}"},
+            params=params,
+            timeout=30,
+        )
+        data = resp.json()
+        if data.get("code") != 0:
+            raise FeishuError(f"Feishu list chats failed: {data.get('code')} {data.get('msg')}")
+        payload = data.get("data") or {}
+        items.extend(payload.get("items") or [])
+        if not payload.get("has_more"):
+            break
+        page_token = str(payload.get("page_token") or "")
+        if not page_token:
+            break
+    return items
+
+
+def send_interactive_message(
+    token: str,
+    receive_id: str,
+    card: dict[str, Any],
+    receive_id_type: str = "open_id",
+) -> str:
+    """以应用机器人身份发送交互卡片。receive_id_type=open_id 私聊，chat_id 发群。"""
+    if receive_id_type not in {"open_id", "chat_id"}:
+        raise ValueError(f"不支持的 receive_id_type: {receive_id_type}")
+    url = f"{config.FEISHU_HOST}/open-apis/im/v1/messages?receive_id_type={receive_id_type}"
     resp = _SESSION.post(
         url,
         headers={"Authorization": f"Bearer {token}", "Content-Type": "application/json; charset=utf-8"},
         json={
-            "receive_id": open_id,
+            "receive_id": receive_id,
             "msg_type": "interactive",
             "content": json.dumps(card, ensure_ascii=False),
         },

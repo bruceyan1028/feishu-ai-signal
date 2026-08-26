@@ -244,17 +244,58 @@ def _brief_record(token: str, table_id: str, day: str) -> dict[str, Any] | None:
     return None
 
 
+def _unique_ids(values: list[str] | None) -> list[str]:
+    return list(dict.fromkeys(item.strip() for item in (values or []) if item.strip()))
+
+
+def resolve_targets(
+    open_ids: list[str] | None = None,
+    chat_ids: list[str] | None = None,
+) -> list[tuple[str, str]]:
+    """群聊优先：有 chat_id 就只发群，不再逐人私聊。"""
+    chats = _unique_ids(chat_ids)
+    if chats:
+        return [("chat_id", chat_id) for chat_id in chats]
+    return [("open_id", open_id) for open_id in _unique_ids(open_ids)]
+
+
+def recipient_label(receive_id: str, receive_id_type: str, index: int) -> str:
+    if receive_id_type == "chat_id":
+        return config.FEISHU_RECIPIENT_CHAT_NAME_BY_ID.get(receive_id) or f"chat_{index}"
+    return config.FEISHU_RECIPIENT_NAME_BY_OPEN_ID.get(receive_id) or f"recipient_{index}"
+
+
 def recipient_statuses(
-    recipients: list[str],
+    targets: list[tuple[str, str]],
     message_ids: dict[str, str],
     failures: dict[str, str],
 ) -> dict[str, str]:
-    """以人名而非 open_id 输出逐人发送状态。"""
+    """以名称而非 id 输出发送状态。"""
     statuses: dict[str, str] = {}
-    for index, open_id in enumerate(recipients, 1):
-        name = config.FEISHU_RECIPIENT_NAME_BY_OPEN_ID.get(open_id) or f"recipient_{index}"
-        statuses[name] = "success" if open_id in message_ids else "failed"
+    for index, (receive_id_type, receive_id) in enumerate(targets, 1):
+        name = recipient_label(receive_id, receive_id_type, index)
+        statuses[name] = "success" if receive_id in message_ids else "failed"
     return statuses
+
+
+def _send_card_to_targets(
+    token: str, card: dict[str, Any], targets: list[tuple[str, str]]
+) -> tuple[dict[str, str], dict[str, str]]:
+    message_ids: dict[str, str] = {}
+    failures: dict[str, str] = {}
+    for index, (receive_id_type, receive_id) in enumerate(targets, 1):
+        try:
+            message_ids[receive_id] = feishu.send_interactive_message(
+                token, receive_id, card, receive_id_type=receive_id_type
+            )
+        except Exception as exc:  # noqa: BLE001
+            failures[receive_id] = str(exc)
+            log.warning(
+                "发送给 %s 失败: %s",
+                recipient_label(receive_id, receive_id_type, index),
+                exc,
+            )
+    return message_ids, failures
 
 
 def build_delivery_report_card(day: str, statuses: dict[str, str]) -> dict[str, Any]:
@@ -290,30 +331,35 @@ def build_delivery_report_card(day: str, statuses: dict[str, str]) -> dict[str, 
 def send_delivery_report(
     token: str,
     day: str,
-    recipients: list[str],
+    targets: list[tuple[str, str]],
     message_ids: dict[str, str],
     failures: dict[str, str],
 ) -> tuple[dict[str, str], str]:
-    statuses = recipient_statuses(recipients, message_ids, failures)
-    target = config.FEISHU_DELIVERY_REPORT_OPEN_ID
-    if not target:
+    statuses = recipient_statuses(targets, message_ids, failures)
+    report_to = config.FEISHU_DELIVERY_REPORT_OPEN_ID
+    if not report_to:
         return statuses, ""
     message_id = feishu.send_interactive_message(
         token,
-        target,
+        report_to,
         build_delivery_report_card(day, statuses),
+        receive_id_type="open_id",
     )
     return statuses, message_id
 
 
 def send_many(
-    brief: dict[str, Any], base_url: str, open_ids: list[str], force: bool = False
+    brief: dict[str, Any],
+    base_url: str,
+    open_ids: list[str] | None = None,
+    force: bool = False,
+    chat_ids: list[str] | None = None,
 ) -> dict[str, Any]:
     if not base_url:
         raise config.ConfigError("缺少 PUBLIC_BASE_URL")
-    recipients = list(dict.fromkeys(item.strip() for item in open_ids if item.strip()))
-    if not recipients:
-        raise config.ConfigError("缺少 FEISHU_RECIPIENT_OPEN_IDS")
+    targets = resolve_targets(open_ids, chat_ids)
+    if not targets:
+        raise config.ConfigError("缺少 FEISHU_RECIPIENT_CHAT_IDS 或 FEISHU_RECIPIENT_OPEN_IDS")
     token = feishu.get_tenant_access_token()
     table_id = str(brief.get("briefTableId") or config.FEISHU_BRIEF_TABLE_ID or feishu.ensure_daily_brief_table(token))
     record = _brief_record(token, table_id, str(brief["date"]))
@@ -327,25 +373,17 @@ def send_many(
             "detailUrl": detail_url(base_url, str(brief["date"])),
         }
     url = detail_url(base_url, str(brief["date"]))
-    message_ids: dict[str, str] = {}
-    failures: dict[str, str] = {}
     try:
         card = build_card(brief, url)
     except Exception:
         feishu.update_record(token, table_id, str(record["record_id"]), {"发送状态": "失败"})
         raise
-    # 逐人发送互不牵连：一个 open_id 失效不该让其他收件人也收不到
-    for open_id in recipients:
-        try:
-            message_ids[open_id] = feishu.send_interactive_message(token, open_id, card)
-        except Exception as exc:  # noqa: BLE001
-            failures[open_id] = str(exc)
-            name = config.FEISHU_RECIPIENT_NAME_BY_OPEN_ID.get(open_id) or "未命名收件人"
-            log.warning("发送给 %s 失败: %s", name, exc)
+    # 多个目标互不牵连：一个 chat_id / open_id 失效不该让其它接收方也收不到
+    message_ids, failures = _send_card_to_targets(token, card, targets)
     if not message_ids:
         feishu.update_record(token, table_id, str(record["record_id"]), {"发送状态": "失败"})
         try:
-            send_delivery_report(token, str(brief["date"]), recipients, message_ids, failures)
+            send_delivery_report(token, str(brief["date"]), targets, message_ids, failures)
         except Exception as exc:  # noqa: BLE001
             log.warning("发送每日结果汇总失败: %s", exc)
         raise RuntimeError(f"所有收件人都发送失败: {json.dumps(failures, ensure_ascii=False)}")
@@ -364,12 +402,12 @@ def send_many(
         statuses, report_message_id = send_delivery_report(
             token,
             str(brief["date"]),
-            recipients,
+            targets,
             message_ids,
             failures,
         )
     except Exception as exc:  # noqa: BLE001
-        statuses = recipient_statuses(recipients, message_ids, failures)
+        statuses = recipient_statuses(targets, message_ids, failures)
         log.warning("发送每日结果汇总失败: %s", exc)
     return {
         "skipped": False,
@@ -382,13 +420,17 @@ def send_many(
 
 
 def send_weekly_many(
-    brief: dict[str, Any], base_url: str, open_ids: list[str], force: bool = False
+    brief: dict[str, Any],
+    base_url: str,
+    open_ids: list[str] | None = None,
+    force: bool = False,
+    chat_ids: list[str] | None = None,
 ) -> dict[str, Any]:
     if not base_url:
         raise config.ConfigError("缺少 PUBLIC_BASE_URL")
-    recipients = list(dict.fromkeys(item.strip() for item in open_ids if item.strip()))
-    if not recipients:
-        raise config.ConfigError("缺少 FEISHU_RECIPIENT_OPEN_IDS")
+    targets = resolve_targets(open_ids, chat_ids)
+    if not targets:
+        raise config.ConfigError("缺少 FEISHU_RECIPIENT_CHAT_IDS 或 FEISHU_RECIPIENT_OPEN_IDS")
     token = feishu.get_tenant_access_token()
     table_id = str(
         brief.get("weeklyTableId")
@@ -415,14 +457,7 @@ def send_weekly_many(
             "detailUrl": url,
         }
     card = build_weekly_card(brief, url)
-    message_ids: dict[str, str] = {}
-    failures: dict[str, str] = {}
-    for open_id in recipients:
-        try:
-            message_ids[open_id] = feishu.send_interactive_message(token, open_id, card)
-        except Exception as exc:  # noqa: BLE001
-            failures[open_id] = str(exc)
-            log.warning("周报发送给 %s 失败: %s", open_id, exc)
+    message_ids, failures = _send_card_to_targets(token, card, targets)
     if not message_ids:
         feishu.update_record(
             token, table_id, str(record["record_id"]), {"发送状态": "失败"}
@@ -466,6 +501,7 @@ def run() -> int:
     parser.add_argument("--base-url", default=config.PUBLIC_BASE_URL)
     parser.add_argument("--open-id", default=config.FEISHU_RECIPIENT_OPEN_ID)
     parser.add_argument("--open-ids", default=",".join(config.FEISHU_RECIPIENT_OPEN_IDS))
+    parser.add_argument("--chat-ids", default=",".join(config.FEISHU_RECIPIENT_CHAT_IDS))
     parser.add_argument("--force", action="store_true")
     args = parser.parse_args()
     if args.input:
@@ -479,8 +515,14 @@ def run() -> int:
     recipients = [item.strip() for item in args.open_ids.split(",") if item.strip()]
     if not recipients and args.open_id:
         recipients = [args.open_id]
+    chat_ids = [item.strip() for item in args.chat_ids.split(",") if item.strip()]
     sender = send_weekly_many if brief.get("weekId") else send_many
-    print(json.dumps(sender(brief, args.base_url, recipients, args.force), ensure_ascii=False))
+    print(
+        json.dumps(
+            sender(brief, args.base_url, recipients, args.force, chat_ids=chat_ids),
+            ensure_ascii=False,
+        )
+    )
     return 0
 
 

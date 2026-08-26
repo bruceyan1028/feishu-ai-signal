@@ -5,7 +5,7 @@ import tempfile
 import unittest
 from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
-from unittest.mock import patch
+from unittest.mock import ANY, patch
 
 from src import notify, publish, sources_api, weekly
 
@@ -302,6 +302,38 @@ class WeeklyReportTest(unittest.TestCase):
         )
         self.assertFalse(result["skipped"])
         self.assertEqual(result["messageIds"], {"ou_1": "message-1"})
+        self.assertEqual(update_record.call_args.args[3]["发送状态"], "已发送")
+
+    @patch("src.notify.feishu.update_record")
+    @patch("src.notify.feishu.send_interactive_message", return_value="group-message")
+    @patch("src.notify.feishu.read_all_records_with_ids")
+    @patch("src.notify.feishu.get_tenant_access_token", return_value="token")
+    def test_weekly_send_prefers_group_chat(
+        self, _token, read_records, send_message, update_record
+    ):
+        read_records.return_value = [
+            {
+                "record_id": "weekly-row",
+                "fields": {"周报ID": "2026-W34", "发送状态": "待发送"},
+            }
+        ]
+        brief = {
+            "weekId": "2026-W34",
+            "weeklyTableId": "weekly-table",
+            "title": "AI 周报",
+            "headline": "主线",
+            "thesis": "综述",
+            "metrics": [],
+            "topSignals": [],
+            "signals": [{"recordId": "r1"}],
+        }
+        result = notify.send_weekly_many(
+            brief, "https://example.com", ["ou_1"], force=False, chat_ids=["oc_group"]
+        )
+        self.assertEqual(result["messageIds"], {"oc_group": "group-message"})
+        send_message.assert_called_once_with(
+            "token", "oc_group", ANY, receive_id_type="chat_id"
+        )
         self.assertEqual(update_record.call_args.args[3]["发送状态"], "已发送")
 
 

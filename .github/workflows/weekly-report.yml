@@ -77,6 +77,7 @@ jobs:
       FEISHU_WEEKLY_TABLE_ID: ${{ secrets.FEISHU_WEEKLY_TABLE_ID }}
       FEISHU_RECIPIENT_OPEN_ID: ${{ secrets.FEISHU_RECIPIENT_OPEN_ID }}
       FEISHU_RECIPIENT_OPEN_IDS: ${{ secrets.FEISHU_RECIPIENT_OPEN_IDS }}
+      FEISHU_RECIPIENT_CHAT_IDS: ${{ secrets.FEISHU_RECIPIENT_CHAT_IDS }}
     steps:
       - uses: actions/checkout@v4
         with:

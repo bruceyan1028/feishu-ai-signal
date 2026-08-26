@@ -73,6 +73,22 @@ FEISHU_RECIPIENT_NAME_BY_OPEN_ID = {
     for index, open_id in enumerate(FEISHU_RECIPIENT_OPEN_IDS)
     if index < len(FEISHU_RECIPIENT_NAMES)
 }
+# 群聊优先：配置后日报/周报只发群，不再逐人私聊。chat_id 形如 oc_xxx。
+FEISHU_RECIPIENT_CHAT_IDS = [
+    item.strip()
+    for item in os.environ.get("FEISHU_RECIPIENT_CHAT_IDS", "").split(",")
+    if item.strip()
+]
+FEISHU_RECIPIENT_CHAT_NAMES = [
+    item.strip()
+    for item in os.environ.get("FEISHU_RECIPIENT_CHAT_NAMES", "").split(",")
+    if item.strip()
+]
+FEISHU_RECIPIENT_CHAT_NAME_BY_ID = {
+    chat_id: FEISHU_RECIPIENT_CHAT_NAMES[index]
+    for index, chat_id in enumerate(FEISHU_RECIPIENT_CHAT_IDS)
+    if index < len(FEISHU_RECIPIENT_CHAT_NAMES)
+}
 FEISHU_DELIVERY_REPORT_OPEN_ID = os.environ.get(
     "FEISHU_DELIVERY_REPORT_OPEN_ID", ""
 ).strip()

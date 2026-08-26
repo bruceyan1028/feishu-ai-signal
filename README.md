@@ -1,6 +1,6 @@
 # 飞书 AI 情报（feishu-ai-signal）
 
-端到端 AI 行业情报系统：从飞书多维表读源配置，采集网页 / RSS / 视频 / 社媒 / 播客，清洗去重后写入条目表，再用 LLM 生成每日简报与周报，发布到 GitHub Pages，并通过飞书卡片推送给人。
+端到端 AI 行业情报系统：从飞书多维表读源配置，采集网页 / RSS / 视频 / 社媒 / 播客，清洗去重后写入条目表，再用 LLM 生成每日简报与周报，发布到 GitHub Pages，并通过飞书卡片推送到群聊。
 
 ```
 飞书一级参数表（源配置，运行时唯一真相）
@@ -56,7 +56,7 @@ site/（GitHub Pages） + 飞书消息卡片
 5. 改飞书源配置或二级参数后：`python -m tools.export_seed` 刷新 `src/seed_default.json`，再和代码一起提交。条目表、每日简报是产物，不导出。
 6. **公开站不带筛选规则**。`keyword_regex`、`min_content_chars`、`dedup_key`、`extra_config` 不得出现在 `site/data/sources.json`。
 7. 列表抽取是解析器问题，不要用 LLM 替代。模型只适合临界内容精筛（社媒已有；网页媒体可按源开关加）。
-8. `open_id` 由自建应用签发、跨应用不通用。换应用必须重取，否则发卡片会报 `99992361 open_id cross app`。
+8. `open_id` / `chat_id` 由自建应用签发、跨应用不通用。换应用必须重取，并把机器人重新拉进目标群。
 9. 本地 `127.0.0.1` 预览别人打不开。发给别人看的是 GitHub Pages 公网地址。
 
 ---
@@ -329,12 +329,14 @@ python -m src.sources_api    # http://127.0.0.1:8787 ，只绑回环
 
 `python -m src.notify --input site/data/brief-latest.json`
 
-- 接收人：`FEISHU_RECIPIENT_OPEN_IDS`（逗号分隔），名称 `FEISHU_RECIPIENT_NAMES` 按序对应
+- 接收群：`FEISHU_RECIPIENT_CHAT_IDS`（逗号分隔，优先）。配置后不再逐人私聊
+- 接收人回退：`FEISHU_RECIPIENT_OPEN_IDS`（仅未配置群聊时使用），名称 `FEISHU_RECIPIENT_NAMES` 按序对应
+- 查群：把机器人拉进群后 `python -m tools.list_bot_chats`
 - 投递汇总：`FEISHU_DELIVERY_REPORT_OPEN_ID`
 - 卡片：纯文字目录。居中色块标题 + 分板块的标题清单（最多 4 个板块、8 条），标题即原文链接，来源与形态是 `notation` 灰字；摘要和影响分等内部打分只在网页
 - 标题为了居中放进正文色块，卡片不再带 `header`
 - 本地预览：`python -m tools.preview_card`，渲染 `notify.build_card` 的真实 JSON，不连飞书
-- 发预览给自己验收：`python -m tools.send_card_preview --open-id ou_xxx`，只发消息不改简报发送状态
+- 发预览到群验收：`python -m tools.send_card_preview --chat-id oc_xxx`，只发消息不改简报发送状态
 - 跳转：`PUBLIC_BASE_URL/?date=YYYY-MM-DD`；周报为 `?page=tasks&tab=report&week=`
 - 默认一天不重发；`--force` 强制
 - 代理断开时上传/发送有重试
@@ -357,7 +359,7 @@ python -m src.sources_api    # http://127.0.0.1:8787 ，只绑回环
 | `report` | 统一 LLM JSON（chat/completions，失败试 responses） |
 | `daily` / `weekly` / `timeline` | 简报、周报、追踪 |
 | `publish` | 静态站 |
-| `notify` | 飞书卡片：分组、排版、逐人发送与投递汇总 |
+| `notify` | 飞书卡片：分组、排版、群聊优先发送与投递汇总 |
 | `source_view` / `sources_api` | 信号源展示模型与本机配置台 |
 | `openai_charts` | OpenAI 文章里的 Vega 图转图片 |
 | `diag_*` | 单通道诊断，默认不写条目（播客统计仍回写；`--write` 才入库） |
@@ -427,7 +429,7 @@ GitHub Pages：仓库 Settings → Pages → Source = GitHub Actions。公网形
 - `FEISHU_APP_ID` / `FEISHU_APP_SECRET` / `FEISHU_BASE_ID`
 - `FEISHU_PARAM_TABLE_ID` / `FEISHU_ENTRY_TABLE_ID`（bootstrap 打印）
 - 生成简报：`LLM_API_KEY`（`LLM_BASE_URL` / `LLM_MODEL` 可选，默认 DeepSeek）
-- 发卡片：`FEISHU_RECIPIENT_OPEN_IDS`、`PUBLIC_BASE_URL`
+- 发卡片：`FEISHU_RECIPIENT_CHAT_IDS`（优先）或 `FEISHU_RECIPIENT_OPEN_IDS`、`PUBLIC_BASE_URL`
 
 常用可选：各表 ID、`JINA_API_KEY`、`YOUTUBE_API_KEY`、`X_BEARER_TOKEN`、`ASR_*`、`DAILY_*`、`PAPER_*`、`MAX_ARXIV_ITEMS`。
 
@@ -521,7 +523,7 @@ python -m tools.export_seed
 调 `DAILY_MAX_PAPERS`、`MAX_ARXIV_ITEMS`、`ARXIV_QUALITY_WEIGHT` 或论文二级表阈值。
 
 **卡片没人收到**  
-查 `open_id` 是否当前应用签发、Runner/本机能否访问 `open.feishu.cn`、当日是否已发送需 `--force`。
+查机器人是否已进群、`chat_id` 是否当前应用可见、Runner/本机能否访问 `open.feishu.cn`、当日是否已发送需 `--force`。未配群聊时才查 `open_id` 是否当前应用签发。
 
 **网站和飞书源状态不一致**  
 公开站是上次 `publish` 的快照。本机用 `sources_api` 才实时。改完参数要重新 `publish` 或等日报。

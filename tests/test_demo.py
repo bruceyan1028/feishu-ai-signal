@@ -5,7 +5,7 @@ import tempfile
 import unittest
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
-from unittest.mock import MagicMock, patch
+from unittest.mock import ANY, MagicMock, patch
 
 from src import config, daily, main, notify, process, publish, rss, scrape, sources
 
@@ -971,6 +971,42 @@ class DeliveryTests(unittest.TestCase):
         with self.assertRaises(RuntimeError):
             notify.send_many(self.sample_brief(), "https://example.com", ["ou_a", "ou_b"])
         self.assertEqual(update_record.call_args[0][3]["发送状态"], "失败")
+
+    def test_resolve_targets_prefers_group_chats(self) -> None:
+        self.assertEqual(
+            notify.resolve_targets(["ou_one"], ["oc_group"]),
+            [("chat_id", "oc_group")],
+        )
+        self.assertEqual(
+            notify.resolve_targets(["ou_one", "ou_one"], []),
+            [("open_id", "ou_one")],
+        )
+
+    @patch("src.notify.feishu.update_record")
+    @patch("src.notify.feishu.send_interactive_message", side_effect=["group-msg"])
+    @patch("src.notify.feishu.get_tenant_access_token", return_value="token")
+    @patch("src.notify.feishu.read_all_records_with_ids")
+    def test_brief_sends_to_group_instead_of_people(
+        self, read_records, _token, send_message, update_record
+    ) -> None:
+        read_records.return_value = [
+            {"record_id": "brief1", "fields": {"简报ID": "2026-07-13", "发送状态": "待发送"}}
+        ]
+        with patch.object(
+            config, "FEISHU_RECIPIENT_CHAT_NAME_BY_ID", {"oc_group": "AI Signal 每日情报"}
+        ):
+            result = notify.send_many(
+                self.sample_brief(),
+                "https://example.com",
+                ["ou_one", "ou_two"],
+                chat_ids=["oc_group"],
+            )
+        self.assertEqual(result["messageIds"], {"oc_group": "group-msg"})
+        self.assertEqual(result["recipientStatuses"], {"AI Signal 每日情报": "success"})
+        send_message.assert_called_once_with(
+            "token", "oc_group", ANY, receive_id_type="chat_id"
+        )
+        self.assertEqual(update_record.call_args[0][3]["发送状态"], "已发送")
 
 
 if __name__ == "__main__":
