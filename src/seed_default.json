@@ -1323,7 +1323,7 @@
    }
   },
   {
-   "主要看什么": "White House 科技报告、事实清单、OSTP 公告与 AI/科研政策",
+   "主要看什么": "White House 明确涉及 AI/ML/模型的科技政策；不含航天运输、关税等泛科技备忘录",
    "优先级": "P0",
    "分类": "政策监管地缘",
    "名称": "White House 科技政策发布",
@@ -1337,7 +1337,7 @@
    }
   },
   {
-   "主要看什么": "White House AI、科技与科研相关行政命令和总统备忘录",
+   "主要看什么": "White House 明确涉及 AI/ML/模型的行政命令和总统备忘录",
    "优先级": "P0",
    "分类": "政策监管地缘",
    "名称": "White House 科技总统行动",
@@ -3223,11 +3223,12 @@
     "link": "https://www.whitehouse.gov/releases/feed/",
     "text": "https://www.whitehouse.gov/releases/feed/"
    },
-   "extra_config": "{\"keyword_min_hits\":2,\"policy_stage_extract\":true,\"document_pdf_enrich\":true,\"max_document_pdfs\":2,\"title_exclude_regex\":\"(trade agenda|auto manufacturing|stationary sources|chemical manufacturing|tariffs?|duties on|adjusting imports)\"}",
+   "extra_config": "{\"keyword_min_hits\":2,\"policy_stage_extract\":true,\"document_pdf_enrich\":true,\"max_document_pdfs\":2,\"title_exclude_regex\":\"(trade agenda|auto manufacturing|stationary sources|chemical manufacturing|tariffs?|duties on|adjusting imports|space transportation|space launch)\"}",
    "fetch_method": "RSS",
-   "keyword_regex": "(artificial intelligence|\\bAI\\b|AI for science|science and technology|scientific (?:research|discovery|infrastructure|foundation model)|research and development|\\bR&D\\b|OSTP|Genesis Mission|quantum|semiconductor|microelectronics|robotics|autonomous laborator|cybersecurity|data center|high-performance computing|advanced manufacturing|biotechnology|nuclear (?:fission|fusion)|critical minerals)",
+   "keyword_regex": "(artificial intelligence|\\bA\\.I\\.\\b|\\bAI\\b|machine learning|foundation models?|large language models?|\\bLLMs?\\b|generative AI|AI safety|AI governance|Genesis Mission)",
    "lookback_window": "30d",
    "name": "White House 科技政策发布",
+   "notes": "仅收录明确谈 AI/ML/模型的政策；science and technology、R&D 不能单独过",
    "priority": "P0",
    "source_id": "whitehouse-tech-releases",
    "status": "active",
@@ -3241,11 +3242,12 @@
     "link": "https://www.whitehouse.gov/presidential-actions/feed/",
     "text": "https://www.whitehouse.gov/presidential-actions/feed/"
    },
-   "extra_config": "{\"keyword_min_hits\":2,\"policy_stage_extract\":true,\"document_pdf_enrich\":true,\"max_document_pdfs\":2,\"title_exclude_regex\":\"(trade agenda|auto manufacturing|stationary sources|chemical manufacturing|tariffs?|duties on|adjusting imports)\"}",
+   "extra_config": "{\"keyword_min_hits\":2,\"policy_stage_extract\":true,\"document_pdf_enrich\":true,\"max_document_pdfs\":2,\"title_exclude_regex\":\"(trade agenda|auto manufacturing|stationary sources|chemical manufacturing|tariffs?|duties on|adjusting imports|space transportation|space launch)\"}",
    "fetch_method": "RSS",
-   "keyword_regex": "(artificial intelligence|\\bAI\\b|AI for science|science and technology|scientific (?:research|discovery|infrastructure|foundation model)|research and development|\\bR&D\\b|OSTP|Genesis Mission|quantum|semiconductor|microelectronics|robotics|autonomous laborator|cybersecurity|data center|high-performance computing|advanced manufacturing|biotechnology|nuclear (?:fission|fusion)|critical minerals)",
+   "keyword_regex": "(artificial intelligence|\\bA\\.I\\.\\b|\\bAI\\b|machine learning|foundation models?|large language models?|\\bLLMs?\\b|generative AI|AI safety|AI governance|Genesis Mission)",
    "lookback_window": "30d",
    "name": "White House 科技总统行动",
+   "notes": "仅收录明确谈 AI/ML/模型的总统行动；航天运输等泛科技备忘录不入库",
    "priority": "P0",
    "source_id": "whitehouse-tech-actions",
    "status": "active",
