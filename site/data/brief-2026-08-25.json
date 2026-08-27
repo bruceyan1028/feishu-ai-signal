@@ -632,12 +632,7 @@
             "kind": "pdf-page"
           },
           {
-            "url": "media/papers/recvthcdYqAH36-p27-f2.png",
-            "alt": "PDF 第 27 页图表：Table 1 : Representative benchmarks, datasets, and executable environments across Model, Individual, and System Intelligence. Type: B = benchmark or evaluation protocol; D = released dataset, annotations, or traces; E = executable or interactive environment. Focus denotes the principal capability or structural property evaluated.",
-            "kind": "pdf-page"
-          },
-          {
-            "url": "media/papers/recvthcdYqAH36-p30-f3.png",
+            "url": "media/papers/recvthcdYqAH36-p30-f2.png",
             "alt": "PDF 第 30 页图表：Table 2 : Representative open-source projects and engineering systems across Model, Individual, and System Intelligence. Li- braries are grouped by their primary engineering target rather than exclusive functionality. Focus summarizes the main engineering concerns exposed by each system.",
             "kind": "pdf-page"
           },
