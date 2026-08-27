@@ -866,17 +866,32 @@ class DeliveryTests(unittest.TestCase):
         self.assertNotIn("pc-score", template)
         self.assertNotIn("pc-basis", template)
 
+    def test_article_body_places_llm_figures_after_headings(self) -> None:
+        template = Path("index.html").read_text(encoding="utf-8")
+        self.assertIn("curatedBy === 'llm'", template)
+        self.assertIn("afterHeading", template)
+        self.assertIn("flushHeading", template)
+        self.assertIn("pendingImages", template)
+
     def test_homepage_is_three_columns_with_data_on_both_sides(self) -> None:
         template = Path("index.html").read_text(encoding="utf-8")
         self.assertIn('grid-template-areas: "points points points" "nav feed data"', template)
         self.assertIn("function heatmapHtml", template)
         self.assertIn("function feedNavHtml", template)
+        self.assertIn("nav-item.is-empty", template)
+        self.assertIn("is-empty", template)
         self.assertIn("function dataRailHtml", template)
         # 要点全宽在最上，下面才是左栏 / 全部信号 / 右栏
         self.assertIn("techDivider(A, '01', '今日核心要点'", template)
         self.assertIn("techDivider(A, '02', '全部信号'", template)
         self.assertIn("class=\"feed-points\"", template)
         self.assertIn("nav-all-btn", template)
+        self.assertNotIn("nav-block sort", template)
+        self.assertNotIn("App.setSort", template)
+        self.assertNotIn(">SORT<", template)
+        header = template.split("function headerHtml")[1].split("function bottomBarHtml")[0]
+        self.assertIn("briefMeta.date", header)
+        self.assertNotIn("条 ·", header)
         self.assertIn("position: sticky", template)
         self.assertIn(".feed-data", template)
         self.assertIn(".feed-data > * { flex: none; }", template)
@@ -898,6 +913,9 @@ class DeliveryTests(unittest.TestCase):
         self.assertNotIn("background-size: 44px 44px", board)
         self.assertNotIn("esc(m.creator)", board)
         self.assertIn("logoChip(m.logoDomain", board)
+        self.assertIn("data/logos/openai.svg?v=3", board)
+        self.assertIn("data/logos/qwen.svg?v=3", board)
+        self.assertNotIn("alibabadotcom.svg", board)
         # 智能指数是模型名的背景填色，不是独立一列；当日区间在窄栏里不渲染
         self.assertIn("fillWidth(m.intelligence)", board)
         self.assertNotIn("当日区间", board)
@@ -907,6 +925,11 @@ class DeliveryTests(unittest.TestCase):
         self.assertIn("grid-template-columns: 1fr 1fr", board)
         self.assertIn("class=\"quote-row\"", board)
         self.assertIn("MiniMax", board)
+        self.assertIn("nasdaq.com/market-activity/stocks/", board)
+        self.assertIn("sse.com.cn/assortment/stock/list/info/company", board)
+        self.assertIn("szse.cn/certificate/individual", board)
+        self.assertIn("hkex.com.hk/Market-Data/Securities-Prices/Equities", board)
+        self.assertNotIn("q.logoDomain ? `https://${q.logoDomain}`", board)
 
     def test_favorites_and_chat_history_are_gone(self) -> None:
         # 收藏是纯前端状态，刷新就没；「加入周报待分析」才是真写飞书的动作，

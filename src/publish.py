@@ -209,7 +209,10 @@ def load_recent_briefs(
 
 
 def curate_web_media(briefs: list[dict[str, Any]]) -> None:
-    """发布前按载体重整封面，避免旧记录中的作者头像和广告继续出现在网页。"""
+    """发布前按载体重整封面，避免旧记录中的作者头像和广告继续出现在网页。
+
+    入选文章若尚未由模型选过图，会再读原文候选，选定封面并把插图挂到分析小节。
+    """
     signals = [
         signal
         for brief in briefs
@@ -223,6 +226,7 @@ def curate_web_media(briefs: list[dict[str, Any]]) -> None:
         for signal in signals
         if signal.get("contentType") in {"文章", "公众号"}
         and str(signal.get("url") or "").startswith(("http://", "https://"))
+        and (signal.get("mediaAssets") or {}).get("curatedBy") != "llm"
     }
     article_urls = sorted(article_titles)
     article_media: dict[str, dict[str, Any]] = {}
@@ -236,10 +240,12 @@ def curate_web_media(briefs: list[dict[str, Any]]) -> None:
             article_media = {
                 url: bundle
                 for url, bundle in zip(article_urls, fetched_media)
-                if bundle.get("cover") or bundle.get("images")
+                if bundle.get("cover") or bundle.get("images") or bundle.get("candidates")
             }
     for signal in signals:
-        media, cover = rss.curate_display_media(
+        if (signal.get("mediaAssets") or {}).get("curatedBy") == "llm":
+            continue
+        media, cover = rss.select_pushed_article_images(
             signal,
             article_media.get(str(signal.get("url") or ""), {}),
         )

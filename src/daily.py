@@ -1178,7 +1178,7 @@ def generate(day: str | None = None) -> dict[str, Any]:
             article_media = {
                 str(signal.get("recordId") or ""): bundle
                 for signal, bundle in zip(article_targets, fetched_media)
-                if bundle.get("cover") or bundle.get("images")
+                if bundle.get("cover") or bundle.get("images") or bundle.get("candidates")
             }
     image_updates = []
     seen_images: set[str] = set()
@@ -1188,7 +1188,7 @@ def generate(day: str | None = None) -> dict[str, Any]:
         original_image = str(signal.get("imageUrl") or "").strip()
         if signal.get("contentType") in {"文章", "公众号", "视频", "播客"}:
             bundle = article_media.get(str(signal.get("recordId") or ""), {})
-            media, curated_image = rss.curate_display_media(
+            media, curated_image = rss.select_pushed_article_images(
                 signal,
                 bundle,
             )

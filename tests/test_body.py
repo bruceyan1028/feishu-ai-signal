@@ -5,7 +5,7 @@ import json
 import unittest
 from unittest import mock
 
-from src import config, daily, process, rss, scrape
+from src import config, daily, process, publish, rss, scrape
 
 
 class CleanBodyTest(unittest.TestCase):
@@ -572,6 +572,107 @@ class ArticleMediaTest(unittest.TestCase):
         self.assertEqual(primary, bundle["images"][0]["url"])
         self.assertEqual(len(media["images"]), 2)
         self.assertNotIn(bundle["cover"], [item["url"] for item in media["images"]])
+
+    def test_candidate_extractor_keeps_nearby_text_and_drops_avatars(self):
+        html = """
+        <article>
+          <p>下图对比了不同模型的推理成本。</p>
+          <img src="/model-cost.png" alt="成本曲线" width="1000" height="620">
+          <img src="/author-avatar.jpg" alt="作者头像" width="400" height="400">
+          <img src="/icon.png" width="24" height="24">
+        </article>
+        """
+        candidates = rss.extract_article_image_candidates(html, self.PAGE)
+        self.assertEqual(
+            [item["url"] for item in candidates],
+            ["https://example.com/model-cost.png"],
+        )
+        self.assertIn("推理成本", candidates[0]["context"])
+
+    def test_analysis_headings_read_chinese_and_markdown_sections(self):
+        self.assertEqual(
+            rss.analysis_section_headings("【发生了什么】正文\n## 关键结果\n结论"),
+            ["发生了什么", "关键结果"],
+        )
+
+    @mock.patch.object(rss, "_llm_pick_article_images")
+    def test_pushed_article_uses_llm_cover_and_section_figures(self, pick):
+        pick.return_value = {
+            "cover_index": 0,
+            "body": [
+                {"index": 1, "after_heading": "关键结果", "alt": "评测曲线"},
+                {"index": 0, "after_heading": "发生了什么", "alt": "应被去重"},
+                {"index": 99, "after_heading": "关键结果", "alt": "越界"},
+            ],
+        }
+        signal = {
+            "contentType": "文章",
+            "titleCn": "新模型发布",
+            "deepAnalysis": "【发生了什么】发布。\n【关键结果】评测上升。",
+            "mediaAssets": {"images": [], "videos": []},
+        }
+        bundle = {
+            "cover": "https://example.com/hero.jpg",
+            "excerpt": "原文讲评测曲线。",
+            "candidates": [
+                {"url": "https://example.com/hero.jpg", "alt": "现场", "context": "封面"},
+                {"url": "https://example.com/chart.png", "alt": "曲线", "context": "评测"},
+            ],
+            "images": [],
+        }
+        media, cover = rss.select_pushed_article_images(signal, bundle)
+        self.assertEqual(cover, "https://example.com/hero.jpg")
+        self.assertEqual(media["curatedBy"], "llm")
+        self.assertEqual(media["cover"], cover)
+        self.assertEqual(
+            media["images"],
+            [
+                {
+                    "url": "https://example.com/chart.png",
+                    "alt": "评测曲线",
+                    "kind": "article-figure",
+                    "afterHeading": "关键结果",
+                }
+            ],
+        )
+
+    @mock.patch.object(rss, "_llm_pick_article_images", return_value=None)
+    def test_pushed_article_falls_back_to_heuristic_when_llm_unavailable(self, _pick):
+        signal = {
+            "contentType": "文章",
+            "titleCn": "Jeff Dean 创办新公司",
+            "imageUrl": "https://example.com/lucas.png",
+            "mediaAssets": {"images": [], "videos": []},
+        }
+        media, cover = rss.select_pushed_article_images(
+            signal, "https://example.com/jeff-dean.jpg"
+        )
+        self.assertEqual(cover, "https://example.com/jeff-dean.jpg")
+        self.assertEqual(media["images"][0]["kind"], "article-cover")
+        self.assertNotEqual(media.get("curatedBy"), "llm")
+
+    @mock.patch.object(rss, "fetch_article_media")
+    def test_publish_skips_refetch_when_llm_already_curated(self, fetch):
+        signal = {
+            "contentType": "文章",
+            "url": "https://example.com/a",
+            "imageUrl": "https://example.com/cover.jpg",
+            "mediaAssets": {
+                "curatedBy": "llm",
+                "cover": "https://example.com/cover.jpg",
+                "images": [
+                    {
+                        "url": "https://example.com/fig.png",
+                        "afterHeading": "关键结果",
+                        "kind": "article-figure",
+                    }
+                ],
+            },
+        }
+        publish.curate_web_media([{"signals": [signal]}])
+        fetch.assert_not_called()
+        self.assertEqual(signal["imageUrl"], "https://example.com/cover.jpg")
+        self.assertEqual(signal["mediaAssets"]["images"][0]["afterHeading"], "关键结果")
 
 
 class LeadingBoilerplateTest(unittest.TestCase):

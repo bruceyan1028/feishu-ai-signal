@@ -199,7 +199,7 @@
         "prevClose": 209.66,
         "marketCap": 54438.2,
         "quotedAt": "2026-08-27 11:30:00",
-        "url": "https://nvidia.com"
+        "url": "https://www.nasdaq.com/market-activity/stocks/nvda"
       },
       {
         "code": "usAMD",
@@ -217,7 +217,7 @@
         "prevClose": 480.93,
         "marketCap": 7756.6,
         "quotedAt": "2026-08-27 11:30:00",
-        "url": "https://amd.com"
+        "url": "https://www.nasdaq.com/market-activity/stocks/amd"
       },
       {
         "code": "usAVGO",
@@ -235,7 +235,7 @@
         "prevClose": 355.59,
         "marketCap": 17557.4,
         "quotedAt": "2026-08-27 11:30:00",
-        "url": "https://broadcom.com"
+        "url": "https://www.nasdaq.com/market-activity/stocks/avgo"
       },
       {
         "code": "usTSM",
@@ -253,7 +253,7 @@
         "prevClose": 417.69,
         "marketCap": 21983.1,
         "quotedAt": "2026-08-27 11:30:00",
-        "url": "https://tsmc.com"
+        "url": "https://www.nasdaq.com/market-activity/stocks/tsm"
       },
       {
         "code": "usMU",
@@ -271,7 +271,7 @@
         "prevClose": 938.4,
         "marketCap": 10345.7,
         "quotedAt": "2026-08-27 11:30:00",
-        "url": "https://micron.com"
+        "url": "https://www.nasdaq.com/market-activity/stocks/mu"
       },
       {
         "code": "usARM",
@@ -289,7 +289,7 @@
         "prevClose": 251.06,
         "marketCap": 2709.3,
         "quotedAt": "2026-08-27 11:29:55",
-        "url": "https://arm.com"
+        "url": "https://www.nasdaq.com/market-activity/stocks/arm"
       },
       {
         "code": "usMRVL",
@@ -307,7 +307,7 @@
         "prevClose": 245.11,
         "marketCap": 2187.2,
         "quotedAt": "2026-08-27 11:30:00",
-        "url": "https://marvell.com"
+        "url": "https://www.nasdaq.com/market-activity/stocks/mrvl"
       },
       {
         "code": "usMSFT",
@@ -325,7 +325,7 @@
         "prevClose": 496.37,
         "marketCap": 37152.2,
         "quotedAt": "2026-08-27 11:29:59",
-        "url": "https://microsoft.com"
+        "url": "https://www.nasdaq.com/market-activity/stocks/msft"
       },
       {
         "code": "usGOOGL",
@@ -343,7 +343,7 @@
         "prevClose": 342.0,
         "marketCap": 41656.4,
         "quotedAt": "2026-08-27 11:30:00",
-        "url": "https://google.com"
+        "url": "https://www.nasdaq.com/market-activity/stocks/googl"
       },
       {
         "code": "usAMZN",
@@ -361,7 +361,7 @@
         "prevClose": 260.28,
         "marketCap": 27658.3,
         "quotedAt": "2026-08-27 11:30:00",
-        "url": "https://amazon.com"
+        "url": "https://www.nasdaq.com/market-activity/stocks/amzn"
       },
       {
         "code": "usMETA",
@@ -379,7 +379,7 @@
         "prevClose": 576.14,
         "marketCap": 14559.0,
         "quotedAt": "2026-08-27 11:30:00",
-        "url": "https://meta.com"
+        "url": "https://www.nasdaq.com/market-activity/stocks/meta"
       },
       {
         "code": "usAAPL",
@@ -397,7 +397,7 @@
         "prevClose": 313.45,
         "marketCap": 45923.5,
         "quotedAt": "2026-08-27 11:30:00",
-        "url": "https://apple.com"
+        "url": "https://www.nasdaq.com/market-activity/stocks/aapl"
       },
       {
         "code": "usORCL",
@@ -415,7 +415,7 @@
         "prevClose": 148.87,
         "marketCap": 4273.2,
         "quotedAt": "2026-08-27 11:29:59",
-        "url": "https://oracle.com"
+        "url": "https://www.nasdaq.com/market-activity/stocks/orcl"
       },
       {
         "code": "usTSLA",
@@ -433,7 +433,7 @@
         "prevClose": 345.82,
         "marketCap": 13919.8,
         "quotedAt": "2026-08-27 11:29:59",
-        "url": "https://tesla.com"
+        "url": "https://www.nasdaq.com/market-activity/stocks/tsla"
       },
       {
         "code": "usPLTR",
@@ -451,7 +451,7 @@
         "prevClose": 177.5,
         "marketCap": 4444.2,
         "quotedAt": "2026-08-27 11:30:00",
-        "url": "https://palantir.com"
+        "url": "https://www.nasdaq.com/market-activity/stocks/pltr"
       },
       {
         "code": "usCRWV",
@@ -469,7 +469,7 @@
         "prevClose": 88.01,
         "marketCap": 485.2,
         "quotedAt": "2026-08-27 11:30:00",
-        "url": "https://coreweave.com"
+        "url": "https://www.nasdaq.com/market-activity/stocks/crwv"
       },
       {
         "code": "usSMCI",
@@ -487,7 +487,7 @@
         "prevClose": 37.39,
         "marketCap": 245.6,
         "quotedAt": "2026-08-27 11:29:58",
-        "url": "https://supermicro.com"
+        "url": "https://www.nasdaq.com/market-activity/stocks/smci"
       },
       {
         "code": "usSNOW",
@@ -505,7 +505,7 @@
         "prevClose": 315.37,
         "marketCap": 1146.5,
         "quotedAt": "2026-08-27 11:29:58",
-        "url": "https://snowflake.com"
+        "url": "https://www.nasdaq.com/market-activity/stocks/snow"
       },
       {
         "code": "sh688256",
@@ -523,7 +523,7 @@
         "prevClose": 1020.0,
         "marketCap": 6590.4,
         "quotedAt": "20260827161449",
-        "url": "https://cambricon.com"
+        "url": "https://www.sse.com.cn/assortment/stock/list/info/company/index.shtml?COMPANY_CODE=688256"
       },
       {
         "code": "sh688041",
@@ -541,7 +541,7 @@
         "prevClose": 230.96,
         "marketCap": 5717.2,
         "quotedAt": "20260827161456",
-        "url": "https://www.hygon.cn"
+        "url": "https://www.sse.com.cn/assortment/stock/list/info/company/index.shtml?COMPANY_CODE=688041"
       },
       {
         "code": "sh688795",
@@ -559,7 +559,7 @@
         "prevClose": 526.62,
         "marketCap": 2557.1,
         "quotedAt": "20260827161432",
-        "url": "https://www.mthreads.com"
+        "url": "https://www.sse.com.cn/assortment/stock/list/info/company/index.shtml?COMPANY_CODE=688795"
       },
       {
         "code": "sh688802",
@@ -577,7 +577,7 @@
         "prevClose": 657.0,
         "marketCap": 2763.9,
         "quotedAt": "20260827161452",
-        "url": "https://www.metax-tech.com"
+        "url": "https://www.sse.com.cn/assortment/stock/list/info/company/index.shtml?COMPANY_CODE=688802"
       },
       {
         "code": "sh688981",
@@ -595,7 +595,7 @@
         "prevClose": 124.15,
         "marketCap": 10815.2,
         "quotedAt": "20260827161437",
-        "url": "https://www.smics.com"
+        "url": "https://www.sse.com.cn/assortment/stock/list/info/company/index.shtml?COMPANY_CODE=688981"
       },
       {
         "code": "sz300308",
@@ -613,7 +613,7 @@
         "prevClose": 850.9,
         "marketCap": 10131.3,
         "quotedAt": "20260827161448",
-        "url": "https://innolight.com"
+        "url": "https://www.szse.cn/certificate/individual/index.html?code=300308"
       },
       {
         "code": "sz300502",
@@ -631,7 +631,7 @@
         "prevClose": 398.78,
         "marketCap": 5703.9,
         "quotedAt": "20260827161421",
-        "url": "https://eoptolink.com"
+        "url": "https://www.szse.cn/certificate/individual/index.html?code=300502"
       },
       {
         "code": "sz000977",
@@ -649,7 +649,7 @@
         "prevClose": 73.79,
         "marketCap": 1149.4,
         "quotedAt": "20260827161445",
-        "url": "https://inspur.com"
+        "url": "https://www.szse.cn/certificate/individual/index.html?code=000977"
       },
       {
         "code": "sh601138",
@@ -667,7 +667,7 @@
         "prevClose": 60.57,
         "marketCap": 12672.4,
         "quotedAt": "20260827161454",
-        "url": "https://fii-foxconn.com"
+        "url": "https://www.sse.com.cn/assortment/stock/list/info/company/index.shtml?COMPANY_CODE=601138"
       },
       {
         "code": "sz002230",
@@ -685,7 +685,7 @@
         "prevClose": 39.66,
         "marketCap": 955.3,
         "quotedAt": "20260827161439",
-        "url": "https://iflytek.com"
+        "url": "https://www.szse.cn/certificate/individual/index.html?code=002230"
       },
       {
         "code": "sh688111",
@@ -703,7 +703,7 @@
         "prevClose": 233.03,
         "marketCap": 1105.4,
         "quotedAt": "20260827161444",
-        "url": "https://www.wps.cn"
+        "url": "https://www.sse.com.cn/assortment/stock/list/info/company/index.shtml?COMPANY_CODE=688111"
       },
       {
         "code": "sz300418",
@@ -721,7 +721,7 @@
         "prevClose": 39.7,
         "marketCap": 525.5,
         "quotedAt": "20260827161442",
-        "url": "https://www.kunlun.com"
+        "url": "https://www.szse.cn/certificate/individual/index.html?code=300418"
       },
       {
         "code": "sh601360",
@@ -739,7 +739,7 @@
         "prevClose": 8.67,
         "marketCap": 610.4,
         "quotedAt": "20260827161436",
-        "url": "https://360.cn"
+        "url": "https://www.sse.com.cn/assortment/stock/list/info/company/index.shtml?COMPANY_CODE=601360"
       },
       {
         "code": "hk02513",
@@ -757,7 +757,7 @@
         "prevClose": 1030.0,
         "marketCap": 5401.2,
         "quotedAt": "2026/08/27 16:08:32",
-        "url": "https://z.ai"
+        "url": "https://www.hkex.com.hk/Market-Data/Securities-Prices/Equities/Equities-Quote?sc_lang=zh-HK&sym=2513"
       },
       {
         "code": "hk00100",
@@ -775,7 +775,7 @@
         "prevClose": 303.0,
         "marketCap": 1098.7,
         "quotedAt": "2026/08/27 16:08:34",
-        "url": "https://minimaxi.com"
+        "url": "https://www.hkex.com.hk/Market-Data/Securities-Prices/Equities/Equities-Quote?sc_lang=zh-HK&sym=100"
       },
       {
         "code": "hk06082",
@@ -793,7 +793,7 @@
         "prevClose": 36.66,
         "marketCap": 1017.6,
         "quotedAt": "2026/08/27 16:08:35",
-        "url": "https://www.birentech.com"
+        "url": "https://www.hkex.com.hk/Market-Data/Securities-Prices/Equities/Equities-Quote?sc_lang=zh-HK&sym=6082"
       },
       {
         "code": "hk09903",
@@ -811,7 +811,7 @@
         "prevClose": 366.2,
         "marketCap": 1089.6,
         "quotedAt": "2026/08/27 16:08:35",
-        "url": "https://www.iluvatar.ai"
+        "url": "https://www.hkex.com.hk/Market-Data/Securities-Prices/Equities/Equities-Quote?sc_lang=zh-HK&sym=9903"
       }
     ]
   }

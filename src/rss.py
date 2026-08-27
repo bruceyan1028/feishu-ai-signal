@@ -202,6 +202,29 @@ def _meta_image_from_html(html: str, page_url: str) -> str:
     return ""
 
 
+def _plain_text(html: str) -> str:
+    text = re.sub(r"(?is)<script[^>]*>.*?</script>", " ", html or "")
+    text = re.sub(r"(?is)<style[^>]*>.*?</style>", " ", text)
+    text = re.sub(r"<[^>]+>", " ", text)
+    return re.sub(r"\s+", " ", unescape(text)).strip()
+
+
+def _article_media_bundle(
+    page_url: str,
+    *,
+    cover: str = "",
+    html_chunk: str = "",
+    figures: list[dict[str, Any]] | None = None,
+) -> dict[str, Any]:
+    chunk = html_chunk or ""
+    return {
+        "cover": cover,
+        "images": list(figures or []),
+        "candidates": extract_article_image_candidates(chunk, page_url),
+        "excerpt": _plain_text(chunk)[:4000],
+    }
+
+
 def _wallstreetcn_article_media(page_url: str) -> dict[str, Any] | None:
     match = _WALLSTREETCN_ARTICLE_RE.search(page_url)
     if not match:
@@ -216,22 +239,25 @@ def _wallstreetcn_article_media(page_url: str) -> dict[str, Any] | None:
         data = response.json().get("data") or {}
     except (requests.RequestException, ValueError) as exc:
         log.info("华尔街见闻正文图片 API 失败 %s: %s", page_url, exc)
-        return {"cover": "", "images": []}
+        return {"cover": "", "images": [], "candidates": [], "excerpt": ""}
     cover = str((data.get("image") or {}).get("uri") or "")
     content = str(data.get("content") or "")
-    return {
-        "cover": cover if _image_ok(cover) else "",
-        "images": extract_article_evidence_images(content, page_url),
-    }
+    cover_url = cover if _image_ok(cover) else ""
+    return _article_media_bundle(
+        page_url,
+        cover=cover_url,
+        html_chunk=content,
+        figures=extract_article_evidence_images(content, page_url),
+    )
 
 
 def fetch_article_media(page_url: str, title: str = "") -> dict[str, Any]:
-    """读取文章封面和正文证据图；失败不阻断简报。
+    """读取文章封面、正文证据图，以及供入选条目 LLM 选图的候选/节选。
 
     普通源仍使用 OG 封面。OpenAI / Google Cloud / 虎嗅 / 华尔街见闻同时
     提取正文图表，后续严格策略会丢弃营销封面和装饰插画。
     """
-    empty: dict[str, Any] = {"cover": "", "images": []}
+    empty: dict[str, Any] = {"cover": "", "images": [], "candidates": [], "excerpt": ""}
     if not page_url.startswith(("http://", "https://")):
         return empty
     if _normalized_host(page_url) == "wallstreetcn.com":
@@ -271,10 +297,12 @@ def fetch_article_media(page_url: str, title: str = "") -> dict[str, Any]:
                 for image in figures
                 if str(image.get("url") or "").split("?", 1)[0].lower() != cover_key
             ]
-        return {
-            "cover": cover,
-            "images": figures,
-        }
+        return _article_media_bundle(
+            final_url,
+            cover=cover,
+            html_chunk=chunk,
+            figures=figures,
+        )
 
     # OpenAI 对普通直连返回 403。不要在发布阶段再启动一次可能很慢的 Jina 请求：
     # RSS 正文补全本来就通过 Jina 把图片存进 mediaAssets，curate_display_media 会从
@@ -363,6 +391,223 @@ def curate_display_media(
 
     media["images"] = images
     return media, current
+
+
+_ANALYSIS_HEADING_RE = re.compile(r"【([^】]+)】|^##\s+(.+)$", re.M)
+_MAX_PUSHED_BODY_IMAGES = 4
+
+
+def analysis_section_headings(text: str) -> list[str]:
+    headings: list[str] = []
+    seen: set[str] = set()
+    for match in _ANALYSIS_HEADING_RE.finditer(str(text or "")):
+        label = (match.group(1) or match.group(2) or "").strip()
+        if label and label not in seen:
+            seen.add(label)
+            headings.append(label)
+    return headings
+
+
+def extract_article_image_candidates(
+    html_chunk: str, page_url: str, limit: int = 12
+) -> list[dict[str, str]]:
+    """正文图候选：带附近文字，供入选条目的 LLM 选封面/插图。"""
+    images: list[dict[str, str]] = []
+    seen: set[str] = set()
+    for match in _IMG_TAG_RE.finditer(html_chunk or ""):
+        tag = match.group(0)
+        raw_url = _best_image_url_from_tag(tag)
+        if not raw_url or raw_url.startswith("data:"):
+            continue
+        url = urljoin(page_url, unescape(raw_url))
+        if not _image_ok(url) or _is_site_logo(url, page_url) or _img_too_small(tag, url):
+            continue
+        alt = unescape(_attr(tag, "alt")).strip()
+        if alt == url:
+            alt = ""
+        context = _nearby_image_text(html_chunk, match.start(), match.end())[:180]
+        asset = {"url": url, "alt": alt, "context": context, "kind": "candidate"}
+        if image_asset_is_noise(asset):
+            continue
+        key = url.split("?", 1)[0].lower()
+        if key in seen:
+            continue
+        seen.add(key)
+        images.append(asset)
+        if len(images) >= limit:
+            break
+    return images
+
+
+def _dedupe_image_candidates(
+    *groups: list[dict[str, Any]],
+) -> list[dict[str, str]]:
+    merged: list[dict[str, str]] = []
+    seen: set[str] = set()
+    for group in groups:
+        for raw in group:
+            if not isinstance(raw, dict):
+                continue
+            url = str(raw.get("url") or "").strip()
+            if not url or image_asset_is_noise(raw):
+                continue
+            key = url.split("?", 1)[0].lower()
+            if key in seen:
+                continue
+            seen.add(key)
+            merged.append(
+                {
+                    "url": url,
+                    "alt": str(raw.get("alt") or "").strip(),
+                    "context": str(raw.get("context") or "").strip()[:180],
+                    "kind": str(raw.get("kind") or "candidate"),
+                }
+            )
+    return merged
+
+
+def _match_heading(label: str, headings: list[str]) -> str:
+    want = str(label or "").strip()
+    if not want:
+        return ""
+    for heading in headings:
+        if want == heading or want in heading or heading in want:
+            return heading
+    return ""
+
+
+def _llm_pick_article_images(
+    signal: dict[str, Any],
+    excerpt: str,
+    candidates: list[dict[str, str]],
+) -> dict[str, Any] | None:
+    from . import config, report
+
+    if not config.LLM_API_KEY or not candidates:
+        return None
+    headings = analysis_section_headings(
+        str(signal.get("deepAnalysis") or signal.get("deep_analysis") or "")
+    )
+    lines = []
+    for index, item in enumerate(candidates):
+        lines.append(
+            f"[{index}] url={item['url']}\nalt={item.get('alt') or '（无）'}\n"
+            f"附近文字={item.get('context') or '（无）'}"
+        )
+    heading_hint = "、".join(headings) if headings else "（暂无小节标题）"
+    prompt = f"""你在为已入选的 AI 新闻简报选图。只依据原文节选和候选图，输出 JSON，禁止编造 URL。
+字段：
+- cover_index: 封面候选下标，没有合适封面则 null
+- body: 最多 {_MAX_PUSHED_BODY_IMAGES} 项，每项 {{"index": 下标, "after_heading": "分析小节标题或空串", "alt": "不超过 24 字的中文图注"}}
+
+规则：
+- 封面必须能代表这条新闻的主体（现场、产品、关键图表）。作者头像、logo、广告、相关推荐缩略图、二维码一律不要。
+- 正文插图只选能帮助理解论述的图，插在最相关的分析小节之后。after_heading 必须是下列标题之一，没有合适小节就留空（放到文末）。
+- 正文图不要与封面重复。候选不够就少选。
+
+标题：{signal.get("titleCn") or signal.get("title") or ""}
+摘要：{str(signal.get("summary") or signal.get("summary_cn") or "")[:400]}
+分析小节：{heading_hint}
+原文节选：{excerpt[:2800]}
+候选图：
+{chr(10).join(lines)}
+"""
+    try:
+        raw = report._llm_json(prompt)
+    except Exception as exc:  # noqa: BLE001 - 选图失败回退启发式，不阻断简报
+        log.info("入选条目 LLM 选图失败 %s: %s", signal.get("url"), exc)
+        return None
+    return raw if isinstance(raw, dict) else None
+
+
+def select_pushed_article_images(
+    signal: dict[str, Any],
+    article_media: dict[str, Any] | str | None = None,
+) -> tuple[dict[str, Any], str]:
+    """入选推送的文章：让模型读原文后选封面，并把插图挂到对应分析小节。"""
+    content_type = str(signal.get("contentType") or signal.get("source_type") or "")
+    if content_type not in {
+        "文章",
+        "公众号",
+        sources.SIGNAL_FORMAT_WEB,
+        sources.SIGNAL_FORMAT_WECHAT,
+    }:
+        return curate_display_media(signal, article_media)
+
+    bundle = article_media if isinstance(article_media, dict) else {"cover": str(article_media or "")}
+    existing = [
+        dict(item)
+        for item in (signal.get("mediaAssets") or signal.get("media_assets") or {}).get("images")
+        or []
+        if isinstance(item, dict)
+    ]
+    cover_hint = str(bundle.get("cover") or "")
+    title = str(signal.get("titleCn") or signal.get("title") or "")
+    cover_candidate = (
+        [{"url": cover_hint, "alt": title, "context": "原文声明的封面", "kind": "candidate"}]
+        if cover_hint
+        else []
+    )
+    candidates = _dedupe_image_candidates(
+        cover_candidate,
+        list(bundle.get("candidates") or []),
+        list(bundle.get("images") or []),
+        existing,
+    )
+    picked = _llm_pick_article_images(signal, str(bundle.get("excerpt") or ""), candidates)
+    if not picked or (
+        picked.get("cover_index") in (None, "") and not picked.get("body")
+    ):
+        return curate_display_media(signal, article_media)
+
+    headings = analysis_section_headings(
+        str(signal.get("deepAnalysis") or signal.get("deep_analysis") or "")
+    )
+    media = dict(signal.get("mediaAssets") or signal.get("media_assets") or {})
+    cover_url = ""
+    cover_index = picked.get("cover_index")
+    if cover_index is not None and str(cover_index).strip() != "":
+        try:
+            idx = int(cover_index)
+        except (TypeError, ValueError):
+            idx = -1
+        if 0 <= idx < len(candidates):
+            cover_url = candidates[idx]["url"]
+    cover_key = cover_url.split("?", 1)[0].lower()
+    body: list[dict[str, str]] = []
+    used = {cover_key} if cover_key else set()
+    for item in picked.get("body") or []:
+        if not isinstance(item, dict) or len(body) >= _MAX_PUSHED_BODY_IMAGES:
+            continue
+        try:
+            idx = int(item.get("index"))
+        except (TypeError, ValueError):
+            continue
+        if not 0 <= idx < len(candidates):
+            continue
+        chosen = candidates[idx]
+        key = chosen["url"].split("?", 1)[0].lower()
+        if key in used:
+            continue
+        used.add(key)
+        alt = str(item.get("alt") or chosen.get("alt") or title).strip()
+        body.append(
+            {
+                "url": chosen["url"],
+                "alt": alt[:80],
+                "kind": "article-figure",
+                "afterHeading": _match_heading(str(item.get("after_heading") or ""), headings),
+            }
+        )
+    if not cover_url and not body:
+        return curate_display_media(signal, article_media)
+    media["images"] = body
+    media["cover"] = cover_url
+    media["curatedBy"] = "llm"
+    if not cover_url and body:
+        cover_url = body[0]["url"]
+        media["cover"] = cover_url
+    return media, cover_url
 
 
 def preferred_article_image(signal: dict[str, Any], article_media: dict[str, Any]) -> str:

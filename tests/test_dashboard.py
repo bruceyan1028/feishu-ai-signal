@@ -33,7 +33,7 @@ class ParseQuotesTest(unittest.TestCase):
         self.assertEqual(len(rows), 1)
         row = rows[0]
         self.assertEqual(row["name"], "寒武纪")
-        self.assertEqual(row["url"], "https://cambricon.com")
+        self.assertEqual(row["url"], "https://www.sse.com.cn/assortment/stock/list/info/company/index.shtml?COMPANY_CODE=688256")
         self.assertEqual(row["market"], "A股")
         self.assertEqual(row["currency"], "CNY")
         self.assertEqual(row["logoDomain"], "cambricon.com")
@@ -48,8 +48,22 @@ class ParseQuotesTest(unittest.TestCase):
         self.assertEqual(dashboard.display_quote_name("摩尔线程-U"), "摩尔线程")
         self.assertEqual(dashboard.display_quote_name("沐曦股份-U"), "沐曦股份")
         self.assertEqual(dashboard.display_quote_name("MINIMAX-W"), "MiniMax")
-        self.assertEqual(dashboard.quote_url("usMETA", "meta.com"), "https://meta.com")
-        self.assertEqual(dashboard.quote_url("sh688795", ""), "https://www.mthreads.com")
+        self.assertEqual(
+            dashboard.quote_url("usMETA", "meta.com"),
+            "https://www.nasdaq.com/market-activity/stocks/meta",
+        )
+        self.assertEqual(
+            dashboard.quote_url("sh688795", ""),
+            "https://www.sse.com.cn/assortment/stock/list/info/company/index.shtml?COMPANY_CODE=688795",
+        )
+        self.assertEqual(
+            dashboard.quote_url("sz300308"),
+            "https://www.szse.cn/certificate/individual/index.html?code=300308",
+        )
+        self.assertEqual(
+            dashboard.quote_url("hk02513"),
+            "https://www.hkex.com.hk/Market-Data/Securities-Prices/Equities/Equities-Quote?sc_lang=zh-HK&sym=2513",
+        )
 
     def test_currency_follows_market_prefix(self):
         body = (
@@ -252,6 +266,22 @@ class FrontendContractTest(unittest.TestCase):
         # 条款要求署名；标题本身链回官网，不再单独做底栏
         self.assertIn("artificialanalysis.ai", template)
         self.assertNotIn("腾讯财经", template)
+
+    def test_model_board_logos_use_official_colors(self):
+        logos = Path("site/data/logos")
+        openai = (logos / "openai.svg").read_text(encoding="utf-8")
+        anthropic = (logos / "anthropic.svg").read_text(encoding="utf-8")
+        qwen = (logos / "qwen.svg").read_text(encoding="utf-8")
+        zai = (logos / "zai.svg").read_text(encoding="utf-8")
+        self.assertIn('fill="#000000"', openai)
+        self.assertNotIn("#10A37F", openai)
+        self.assertIn('fill="#000000"', anthropic)
+        self.assertNotIn("#D4A27F", anthropic)
+        self.assertIn("#615CED", qwen)
+        self.assertIn("#191919", zai)
+        template = Path("index.html").read_text(encoding="utf-8")
+        self.assertIn("data/logos/qwen.svg", template)
+        self.assertNotIn("alibabadotcom.svg", template)
 
     def test_masthead_drops_title_and_intro(self):
         template = Path("index.html").read_text(encoding="utf-8")

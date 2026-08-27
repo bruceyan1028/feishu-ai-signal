@@ -102,18 +102,6 @@ _NAME_ALIASES = {
     "MINIMAX-": "MiniMax",
 }
 
-# 没有 favicon 域名的标的也要能点进官网。
-_SITE_BY_CODE = {
-    "sh688041": "https://www.hygon.cn",
-    "sh688795": "https://www.mthreads.com",
-    "sh688802": "https://www.metax-tech.com",
-    "sh688981": "https://www.smics.com",
-    "sh688111": "https://www.wps.cn",
-    "sz300418": "https://www.kunlun.com",
-    "hk06082": "https://www.birentech.com",
-    "hk09903": "https://www.iluvatar.ai",
-}
-
 
 def display_quote_name(raw: str) -> str:
     name = str(raw or "").strip()
@@ -131,9 +119,29 @@ def display_quote_name(raw: str) -> str:
 
 
 def quote_url(code: str, domain: str = "") -> str:
-    if domain:
-        return domain if domain.startswith("http") else f"https://{domain}"
-    return _SITE_BY_CODE.get(code, "")
+    """点进行情页：美股 Nasdaq、沪市上交所、深市深交所、港股港交所。
+
+    domain 只给 logo 用，不拿来拼链接——公司主页不是股票站。
+    """
+    del domain
+    prefix, rest = code[:2].lower(), code[2:]
+    if not rest:
+        return ""
+    if prefix == "us":
+        return f"https://www.nasdaq.com/market-activity/stocks/{rest.lower()}"
+    if prefix == "sh":
+        return (
+            "https://www.sse.com.cn/assortment/stock/list/info/company/index.shtml"
+            f"?COMPANY_CODE={rest}"
+        )
+    if prefix == "sz":
+        return f"https://www.szse.cn/certificate/individual/index.html?code={rest}"
+    if prefix == "hk":
+        return (
+            "https://www.hkex.com.hk/Market-Data/Securities-Prices/Equities/"
+            f"Equities-Quote?sc_lang=zh-HK&sym={rest.lstrip('0') or rest}"
+        )
+    return ""
 
 # 榜单的模型厂商由接口动态给出，按名字取 logo 域名；认不出的前端回退字标。
 # 放在这里而不是前端：页面不该知道「智谱」对应哪个域名。

@@ -96,14 +96,12 @@
   .nav-clear { flex: none; border: none; background: none; padding: 0 4px; font-size: 11.5px; color: var(--ds-accent); cursor: pointer; font-family: inherit; white-space: nowrap; }
   .nav-clear:hover { text-decoration: underline; }
   .nav-block { border: 1.5px solid var(--ds-ink-line); overflow: hidden; background: #0a0a0a; box-shadow: 5px 5px 0 rgba(22,19,15,.10); }
-  .nav-block.formats, .nav-block.sort { margin-top: 12px; }
+  .nav-block.formats { margin-top: 12px; }
   .nav-block .nav-item { background: transparent; color: #faf7f0; }
+  .nav-block .nav-item.is-empty { background: #5a564f; color: #c4bfb6; }
   .nav-block .nav-item:hover { background: #fff; color: #16130f; }
   .nav-block .nav-item.on { background: var(--ds-accent); color: #fff; }
   .nav-block .nav-item.on:hover { background: #fff; color: #16130f; }
-  .nav-block.sort { color: #faf7f0; }
-  .nav-block.sort select { background: #16130f; color: #faf7f0; border-color: rgba(255,255,255,.16); }
-  .nav-block.sort select option { background: #16130f; color: #faf7f0; }
   .feed-main { grid-area: feed; min-width: 0; }
   .feed-data { grid-area: data; min-width: 0; display: flex; flex-direction: column; gap: 18px; position: sticky; top: 76px; max-height: calc(100vh - 92px); overflow-x: hidden; overflow-y: auto; overscroll-behavior: contain; scrollbar-width: thin; scrollbar-color: rgba(255,255,255,.32) transparent; }
   .feed-data > * { flex: none; }
@@ -1222,7 +1220,6 @@ const App = {
     render();
   },
   setFilter(f){ state.filter=f; render(); },
-  setSort(v){ state.sortKey=v; render(); },
   logoFallback(img){
     if(!img) return;
     const parent = img.parentNode;
@@ -1526,7 +1523,7 @@ function headerHtml(A){
     </div>
     <nav class="top-nav" style="display: flex; align-items: center; gap: 6px;">${navBtns}</nav>
     <div class="top-actions" style="margin-left: auto; display: flex; align-items: center; gap: 10px; font-size: 12px; font-family: 'Geist Mono', ui-monospace, Menlo, monospace;">
-      <span class="top-stats" style="display: inline-flex; align-items: center; height: 32px; padding: 0 11px; background: #fff; border: 1.5px solid var(--ds-ink-line); color: var(--ds-text); font-weight: 700;">${signals.length} 条 · ${state.sources.filter(s=>s.on).length} 源</span>
+      <span class="top-stats" style="display: inline-flex; align-items: center; height: 32px; padding: 0 11px; background: #fff; border: 1.5px solid var(--ds-ink-line); color: var(--ds-text); font-weight: 700;">${esc(briefMeta.date || '')}</span>
     </div>
   </header>`;
 }
@@ -1681,15 +1678,15 @@ function dataRailHtml(A){
 
   // 外网 favicon 在国内经常打不开，已知厂商用仓库里的 SVG；其余再试 Google，最后才露字标。
   const LOGO_ASSET = {
-    'anthropic.com': 'data/logos/anthropic.svg?v=2',
-    'openai.com': 'data/logos/openai.svg?v=2',
-    'x.ai': 'data/logos/x.svg?v=2',
-    'meta.com': 'data/logos/meta.svg?v=2',
-    'google.com': 'data/logos/google.svg?v=2',
-    'nvidia.com': 'data/logos/nvidia.svg?v=2',
-    'qwen.ai': 'data/logos/alibabadotcom.svg?v=2',
-    'moonshot.cn': 'data/logos/moonshot.svg?v=2',
-    'z.ai': 'data/logos/zai.svg?v=2',
+    'anthropic.com': 'data/logos/anthropic.svg?v=3',
+    'openai.com': 'data/logos/openai.svg?v=3',
+    'x.ai': 'data/logos/x.svg?v=3',
+    'meta.com': 'data/logos/meta.svg?v=3',
+    'google.com': 'data/logos/google.svg?v=3',
+    'nvidia.com': 'data/logos/nvidia.svg?v=3',
+    'qwen.ai': 'data/logos/qwen.svg?v=3',
+    'moonshot.cn': 'data/logos/moonshot.svg?v=3',
+    'z.ai': 'data/logos/zai.svg?v=3',
   };
   const logoChip = (domain, fallback, size) => {
     const local = LOGO_ASSET[domain] || '';
@@ -1757,7 +1754,17 @@ function dataRailHtml(A){
     if(/^MINIMAX/i.test(raw)) return 'MiniMax';
     return raw.replace(/-U$/, '').replace(/\s+Inc\.?$/i, '');
   };
-  const quoteHref = q => q.url || (q.logoDomain ? `https://${q.logoDomain}` : '');
+  const quoteHref = q => {
+    const code = String(q.code || '');
+    const prefix = code.slice(0, 2).toLowerCase();
+    const rest = code.slice(2);
+    if(!rest) return '';
+    if(prefix === 'us') return `https://www.nasdaq.com/market-activity/stocks/${rest.toLowerCase()}`;
+    if(prefix === 'sh') return `https://www.sse.com.cn/assortment/stock/list/info/company/index.shtml?COMPANY_CODE=${rest}`;
+    if(prefix === 'sz') return `https://www.szse.cn/certificate/individual/index.html?code=${rest}`;
+    if(prefix === 'hk') return `https://www.hkex.com.hk/Market-Data/Securities-Prices/Equities/Equities-Quote?sc_lang=zh-HK&sym=${rest.replace(/^0+/, '') || rest}`;
+    return q.url || '';
+  };
   const quoteRow = q => {
     const pct = q.changePct;
     const color = pctColor(pct);
@@ -1895,15 +1902,15 @@ function heatmapHtml(A){
     </section>`;
 }
 
-function feedNavHtml(A, counts, sortOpts){
+function feedNavHtml(A, counts){
   const mono = "'Geist Mono', ui-monospace, Menlo, monospace";
   const cats = filters.filter(f => f !== '全部');
 
-  const navItem = (f) => {
+  const navItem = (f, empty) => {
     const active = state.filter === f;
     const isEdge = f === EDGE_FILTER;
     return `
-      <button class="nav-item${active?' on':''}" onclick="App.setFilter('${f}')" title="${isEdge?'专题:按「端侧」标签聚合,跨领域':`只看${f}`}" style="display: flex; align-items: center; width: 100%; padding: 6px 8px; border: 1px ${isEdge?'dashed':'solid'} ${active?A.accent:'transparent'}; font-size: 12px; font-weight: ${active?700:550}; font-family: inherit; text-align: left; cursor: pointer;">
+      <button class="nav-item${active?' on':''}${empty?' is-empty':''}" onclick="App.setFilter('${f}')" title="${isEdge?'专题:按「端侧」标签聚合,跨领域':`只看${f}`}" style="display: flex; align-items: center; width: 100%; padding: 6px 8px; border: 1px ${isEdge?'dashed':'solid'} ${active?A.accent:'transparent'}; font-size: 12px; font-weight: ${active?700:550}; font-family: inherit; text-align: left; cursor: pointer;">
         <span style="min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${isEdge?'✦ ':''}${esc(f)}</span>
       </button>`;
   };
@@ -1919,7 +1926,7 @@ function feedNavHtml(A, counts, sortOpts){
       <div style="padding: 12px 8px 14px;">
         <div class="nav-label" style="padding: 0 9px 7px; font-family: ${mono}; font-size: 10px; font-weight: 700; letter-spacing: .14em; color: #8f887a;">SECTIONS</div>
         <div class="nav-group">
-          ${cats.map(f => navItem(f)).join('')}
+          ${cats.map(f => navItem(f, !counts[f])).join('')}
         </div>
       </div>
     </div>
@@ -1931,13 +1938,6 @@ function feedNavHtml(A, counts, sortOpts){
         <div class="nav-group">
           ${FORMAT_FILTERS.map(f => navItem(f)).join('')}
         </div>
-      </div>
-    </div>
-
-    <div class="nav-block sort">
-      <div style="display: flex; align-items: center; gap: 8px; padding: 10px 12px;">
-        <span style="font-family: ${mono}; font-size: 10px; letter-spacing: .14em; color: #8f887a;">SORT</span>
-        <select onchange="App.setSort(this.value)" style="margin-left: auto; height: 28px; padding: 0 8px; font-size: 12px;">${sortOpts}</select>
       </div>
     </div>
   </aside>`;
@@ -1977,9 +1977,6 @@ function briefHtml(A){
     if(f === '全部') return;
     counts[f] = signals.filter(s => matchesFilter(s, f)).length;
   });
-
-  const sortOpts = [['impact','默认'],['date','时间']]
-    .map(([v,l])=>`<option value="${v}" ${state.sortKey===v?'selected':''}>${l}</option>`).join('');
 
   const cardsHtml = visible.map((s, idx) => {
     // 「待分析」是真会写进周报待纳入表的动作，公开站只读时按钮置灰而不是藏起来，
@@ -2051,7 +2048,7 @@ function briefHtml(A){
       </div>` : `<div style="padding:18px 4px;font-size:12.5px;color:#8f887a;">暂无要点</div>`}
     </div>
 
-    ${feedNavHtml(A, counts, sortOpts)}
+    ${feedNavHtml(A, counts)}
 
     <div class="feed-main">
       ${techDivider(A, '02', '全部信号', `${briefMeta.date || ''} · ${visible.length}/${signals.length}`)}
@@ -2432,7 +2429,28 @@ function articleBody(A, s){
       </div>`
     : '';
 
-  const images = (s.mediaAssets?.images || []).filter(item=>item?.url).slice(0,6);
+  const coverUrl = String(s.imageUrl || s.mediaAssets?.cover || '').split('?')[0].toLowerCase();
+  const llmPlaced = s.mediaAssets?.curatedBy === 'llm';
+  const images = (s.mediaAssets?.images || []).filter(item=>{
+    if(!item?.url) return false;
+    return item.url.split('?')[0].toLowerCase() !== coverUrl;
+  }).slice(0,6);
+  let pendingImages = images.slice();
+  const headingOf = item => String(item.afterHeading || item.after_heading || '').trim();
+  const takeForHeading = heading => {
+    const key = String(heading||'').trim();
+    if(!llmPlaced || !key) return [];
+    const matched = [];
+    const rest = [];
+    pendingImages.forEach(item=>{
+      const h = headingOf(item);
+      if(h && (h === key || key.includes(h) || h.includes(key))) matched.push(item);
+      else rest.push(item);
+    });
+    pendingImages = rest;
+    return matched;
+  };
+  const flushHeading = heading => takeForHeading(heading).forEach(item=>blocks.push(figure(item)));
   const videos = s.kind==='视频' ? [] : (s.mediaAssets?.videos || []).filter(item=>item?.embedUrl).slice(0,1);
   const policy = s.mediaAssets?.policy || {};
   const documents = (s.mediaAssets?.documents || []).filter(item=>item?.url).slice(0,4);
@@ -2462,12 +2480,12 @@ function articleBody(A, s){
         <strong style="color:${UI.text2};">原文结构精编</strong> · 沿用作者的小标题与论证顺序，仅压缩重复和低信息内容
       </div>`
     : '';
-  const editorialCover = sourceStructured && images[0] ? figure(images[0]) : '';
-  const imageStep = images.length && deepParas.length
+  const editorialCover = !llmPlaced && sourceStructured && images[0] ? figure(images[0]) : '';
+  const imageStep = !llmPlaced && images.length && deepParas.length
     ? Math.max(1, Math.ceil(deepParas.length / images.length))
     : 0;
   let sectionCount = 0;
-  let placedImages = sourceStructured && images.length ? 1 : 0;
+  let placedImages = !llmPlaced && sourceStructured && images.length ? 1 : 0;
   deepParas.forEach((para, index)=>{
     const sourceSection = sourceStructured ? para.match(/^##\s+([^\n]+)\n?([\s\S]*)$/) : null;
     const section = para.match(/^【([^】]+)】[：:]?\s*([\s\S]*)$/);
@@ -2482,6 +2500,8 @@ function articleBody(A, s){
         </div>
         ${sourceSection[2].trim()?`<div style="font-size:15px;line-height:2.08;color:${UI.text2};${proseStyle}">${zhProseHtml(esc(sourceSection[2].trim()).replace(/\n/g,'<br>'))}</div>`:''}
       </section>`);
+      flushHeading(headCn);
+      flushHeading(sourceSection[1]);
     } else if(section){
       const isPodcastBoundary = s.kind==='播客' && /信息边界|资料边界/.test(section[1]);
       if(isPodcastBoundary){
@@ -2516,6 +2536,7 @@ function articleBody(A, s){
             ${section[2].trim()?`<div style="padding:15px 17px 16px;font-size:14.5px;line-height:2;color:${UI.text2};${proseStyle}">${zhProseHtml(esc(section[2].trim()).replace(/\n/g,'<br>'))}</div>`:''}
           </section>`);
         }
+        flushHeading(section[1]);
       }
     } else if(sourceStructured) {
       blocks.push(`<p style="margin:0 0 20px;font-size:15px;line-height:2.08;color:${UI.text2};${proseStyle}">${zhProseHtml(esc(para).replace(/\n/g,'<br>'))}</p>`);
@@ -2527,11 +2548,12 @@ function articleBody(A, s){
       while(placedImages < target) blocks.push(figure(images[placedImages++]));
     } else if(s.kind==='论文' && section && /证据强度|局限/.test(section[1])){
       while(placedImages < images.length) blocks.push(figure(images[placedImages++]));
-    } else if(s.kind!=='论文' && imageStep && (index + 1) % imageStep === 0 && images[placedImages]){
+    } else if(!llmPlaced && s.kind!=='论文' && imageStep && (index + 1) % imageStep === 0 && images[placedImages]){
       blocks.push(figure(images[placedImages++]));
     }
   });
-  images.slice(placedImages).forEach(item=> blocks.push(figure(item)));
+  if(llmPlaced) pendingImages.forEach(item=> blocks.push(figure(item)));
+  else images.slice(placedImages).forEach(item=> blocks.push(figure(item)));
   videos.forEach(item=> blocks.push(`<div style="margin:24px 0;background:#000;">${videoFacadeHtml(item, s.zhTitle, s.url, s.imageUrl)}</div>`));
 
   const evidence = s.kind==='播客' && s.transcriptEvidence
