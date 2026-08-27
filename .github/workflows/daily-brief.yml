@@ -51,6 +51,8 @@ jobs:
       LLM_BASE_URL: ${{ secrets.LLM_BASE_URL }}
       LLM_MODEL: ${{ secrets.LLM_MODEL }}
       JINA_API_KEY: ${{ secrets.JINA_API_KEY }}
+      # 首页模型榜单看板；未配置时看板显示「暂无数据」，不影响简报
+      ARTIFICIAL_ANALYSIS_API_KEY: ${{ secrets.ARTIFICIAL_ANALYSIS_API_KEY }}
       # GitHub 热榜要查搜索/README/issue：未鉴权每小时只有 60 次，一轮就会被限流。
       # runner 自带的这个 token 只读公开仓库即可，额度 5000/h。
       GITHUB_TOKEN: ${{ github.token }}
@@ -81,6 +83,15 @@ jobs:
 
       - name: Update tracked entity timelines
         run: python -m src.timeline --output site/data/timeline-latest.json
+
+      - name: Refresh dashboards
+        run: python -m src.dashboard --output site/data/dashboard-latest.json
+
+      - name: Tag today's brief and refresh topic heatmap
+        continue-on-error: true
+        run: |
+          python -m src.tag_topics --ingest-brief site/data/brief-latest.json
+          python -m src.aggregate
 
       - name: Upload generated site
         uses: actions/upload-artifact@v4

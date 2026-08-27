@@ -837,6 +837,85 @@ class DeliveryTests(unittest.TestCase):
         self.assertNotIn("影响分 <strong", template)
         self.assertIn("keepOriginalTitle(s)", template)
 
+    def test_homepage_keeps_core_points_in_the_personal_board_shell(self) -> None:
+        template = Path("index.html").read_text(encoding="utf-8")
+        self.assertNotIn("今日情报简报", template)
+        self.assertNotIn("brief-card", template)
+        self.assertNotIn("brief-grid", template)
+        self.assertNotIn("App.jumpTo", template)
+        self.assertIn("今日核心要点", template)
+        self.assertIn("briefMeta.bullets", template)
+        self.assertIn("esc(briefMeta.title)", template)
+        self.assertIn("pc-media", template)
+        self.assertIn("pc-title", template)
+        self.assertIn("topicImageUrl(s)", template)
+        self.assertIn("pointsTrack", template)
+        self.assertIn("function bindPointsMarquee", template)
+        self.assertIn("POINTS_LOOP_MS = 56000", template)
+        self.assertIn("function pointsOverflows", template)
+        self.assertIn("querySelectorAll('.personal-card')", template)
+        self.assertNotIn("set.scrollWidth > viewport.clientWidth", template)
+        self.assertIn("is-static", template)
+        self.assertRegex(
+            template,
+            r"\.personal-viewport\.is-static \.personal-set \{[^}]*justify-content: center",
+        )
+        self.assertIn("width: 100%; justify-content: center", template)
+        self.assertIn("points-bar", template)
+        self.assertNotIn("personal-board", template)
+        self.assertNotIn("pc-score", template)
+        self.assertNotIn("pc-basis", template)
+
+    def test_homepage_is_three_columns_with_data_on_both_sides(self) -> None:
+        template = Path("index.html").read_text(encoding="utf-8")
+        self.assertIn('grid-template-areas: "points points points" "nav feed data"', template)
+        self.assertIn("function heatmapHtml", template)
+        self.assertIn("function feedNavHtml", template)
+        self.assertIn("function dataRailHtml", template)
+        # 要点全宽在最上，下面才是左栏 / 全部信号 / 右栏
+        self.assertIn("techDivider(A, '01', '今日核心要点'", template)
+        self.assertIn("techDivider(A, '02', '全部信号'", template)
+        self.assertIn("class=\"feed-points\"", template)
+        self.assertIn("nav-all-btn", template)
+        self.assertIn("position: sticky", template)
+        self.assertIn(".feed-data", template)
+        self.assertIn(".feed-data > * { flex: none; }", template)
+        self.assertNotIn("function expandSignalsPastRail", template)
+        self.assertNotIn("signal-card.is-wide", template)
+        self.assertIn("class=\"sc-spacer\"", template)
+        self.assertIn("height: 288px", template)
+        self.assertIn("class=\"sc-copy\"", template)
+        self.assertNotIn("nav-count", template)
+        self.assertNotIn("filterChipsHtml", template)
+        self.assertIn("模型评测基准", template)
+        self.assertIn("产品化企业采用", template)
+        self.assertIn("'Github热榜'", template)
+        self.assertNotIn("问 AI 助手", template)
+
+    def test_dashboard_rail_is_flat_black_without_vendor_names(self) -> None:
+        template = Path("index.html").read_text(encoding="utf-8")
+        board = template.split("function dataRailHtml")[1].split("function heatmapHtml")[0]
+        self.assertNotIn("background-size: 44px 44px", board)
+        self.assertNotIn("esc(m.creator)", board)
+        self.assertIn("logoChip(m.logoDomain", board)
+        # 智能指数是模型名的背景填色，不是独立一列；当日区间在窄栏里不渲染
+        self.assertIn("fillWidth(m.intelligence)", board)
+        self.assertNotIn("当日区间", board)
+        self.assertNotIn("dash-range", board)
+        self.assertIn("quoteGroup('美股'", board)
+        self.assertIn("quoteGroup('中资'", board)
+        self.assertIn("grid-template-columns: 1fr 1fr", board)
+        self.assertIn("class=\"quote-row\"", board)
+        self.assertIn("MiniMax", board)
+
+    def test_favorites_and_chat_history_are_gone(self) -> None:
+        # 收藏是纯前端状态，刷新就没；「加入周报待分析」才是真写飞书的动作，
+        # 删收藏时要保证这个入口还在信号卡上。
+        template = Path("index.html").read_text(encoding="utf-8")
+        for gone in ("favPanelHtml", "historyPanelHtml", "toggleFav", "state.favorites", "AI 对话历史"):
+            self.assertNotIn(gone, template)
+        self.assertIn("App.addPending(${s.rank})", template)
+
     def test_historical_brief_drops_meta_signal_outside_24h_window(self) -> None:
         old_meta = {
             "sourceId": "meta-ai-blog",

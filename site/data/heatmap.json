@@ -1,0 +1,842 @@
+{
+  "weeks": [
+    "2026-W32",
+    "2026-W33",
+    "2026-W34",
+    "2026-W35"
+  ],
+  "topics": [
+    "agent",
+    "reasoning",
+    "multimodal",
+    "open-source-model",
+    "rag-search",
+    "infra",
+    "embodied",
+    "safety-policy",
+    "product",
+    "funding",
+    "other"
+  ],
+  "labels": {
+    "agent": "智能体",
+    "reasoning": "推理",
+    "multimodal": "多模态",
+    "open-source-model": "开源模型",
+    "rag-search": "RAG / 检索",
+    "infra": "算力基建",
+    "embodied": "具身智能",
+    "safety-policy": "安全监管",
+    "product": "应用产品",
+    "funding": "融资并购",
+    "other": "其他"
+  },
+  "matrix": {
+    "raw": [
+      [
+        1,
+        3,
+        6,
+        9
+      ],
+      [
+        0,
+        2,
+        3,
+        4
+      ],
+      [
+        0,
+        2,
+        0,
+        3
+      ],
+      [
+        0,
+        0,
+        3,
+        2
+      ],
+      [
+        0,
+        0,
+        2,
+        0
+      ],
+      [
+        5,
+        5,
+        6,
+        5
+      ],
+      [
+        0,
+        0,
+        0,
+        3
+      ],
+      [
+        2,
+        0,
+        0,
+        0
+      ],
+      [
+        4,
+        3,
+        4,
+        5
+      ],
+      [
+        8,
+        6,
+        3,
+        1
+      ],
+      [
+        0,
+        0,
+        0,
+        0
+      ]
+    ],
+    "normalized": [
+      [
+        0.1111,
+        0.3333,
+        0.6667,
+        1.0
+      ],
+      [
+        0.0,
+        0.5,
+        0.75,
+        1.0
+      ],
+      [
+        0.0,
+        0.6667,
+        0.0,
+        1.0
+      ],
+      [
+        0.0,
+        0.0,
+        1.0,
+        0.6667
+      ],
+      [
+        0.0,
+        0.0,
+        1.0,
+        0.0
+      ],
+      [
+        0.8333,
+        0.8333,
+        1.0,
+        0.8333
+      ],
+      [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      [
+        1.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      [
+        0.8,
+        0.6,
+        0.8,
+        1.0
+      ],
+      [
+        1.0,
+        0.75,
+        0.375,
+        0.125
+      ],
+      [
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    ]
+  },
+  "items": {
+    "infra|2026-W32": [
+      "mock-2026-08-05-016",
+      "mock-2026-08-05-017",
+      "mock-2026-08-05-013",
+      "mock-2026-08-05-015",
+      "mock-2026-08-05-014"
+    ],
+    "product|2026-W32": [
+      "mock-2026-08-05-010",
+      "mock-2026-08-05-009",
+      "mock-2026-08-05-011",
+      "mock-2026-08-05-012"
+    ],
+    "funding|2026-W32": [
+      "mock-2026-08-05-007",
+      "mock-2026-08-05-004",
+      "mock-2026-08-05-006",
+      "mock-2026-08-05-003",
+      "mock-2026-08-05-005",
+      "mock-2026-08-05-008",
+      "mock-2026-08-05-001",
+      "mock-2026-08-05-002"
+    ],
+    "agent|2026-W32": [
+      "mock-2026-08-05-018"
+    ],
+    "safety-policy|2026-W32": [
+      "mock-2026-08-05-019",
+      "mock-2026-08-05-020"
+    ],
+    "funding|2026-W33": [
+      "mock-2026-08-12-025",
+      "mock-2026-08-12-022",
+      "mock-2026-08-12-023",
+      "mock-2026-08-12-024",
+      "mock-2026-08-12-026",
+      "mock-2026-08-12-021"
+    ],
+    "infra|2026-W33": [
+      "mock-2026-08-12-031",
+      "mock-2026-08-12-034",
+      "mock-2026-08-12-030",
+      "mock-2026-08-12-033",
+      "mock-2026-08-12-032"
+    ],
+    "reasoning|2026-W33": [
+      "mock-2026-08-12-039",
+      "mock-2026-08-12-038"
+    ],
+    "agent|2026-W33": [
+      "mock-2026-08-12-035",
+      "mock-2026-08-12-037",
+      "mock-2026-08-12-036"
+    ],
+    "product|2026-W33": [
+      "mock-2026-08-12-027",
+      "mock-2026-08-12-028",
+      "mock-2026-08-12-029"
+    ],
+    "multimodal|2026-W33": [
+      "mock-2026-08-12-040",
+      "mock-2026-08-12-041"
+    ],
+    "rag-search|2026-W34": [
+      "mock-2026-08-19-067",
+      "mock-2026-08-19-068"
+    ],
+    "infra|2026-W34": [
+      "mock-2026-08-19-049",
+      "mock-2026-08-19-050",
+      "mock-2026-08-19-054",
+      "mock-2026-08-19-052",
+      "mock-2026-08-19-053",
+      "mock-2026-08-19-051"
+    ],
+    "product|2026-W34": [
+      "mock-2026-08-19-046",
+      "mock-2026-08-19-048",
+      "mock-2026-08-19-047",
+      "mock-2026-08-19-045"
+    ],
+    "funding|2026-W34": [
+      "mock-2026-08-19-044",
+      "mock-2026-08-19-042",
+      "mock-2026-08-19-043"
+    ],
+    "open-source-model|2026-W34": [
+      "mock-2026-08-19-066",
+      "mock-2026-08-19-065",
+      "mock-2026-08-19-064"
+    ],
+    "agent|2026-W34": [
+      "mock-2026-08-19-058",
+      "mock-2026-08-19-060",
+      "mock-2026-08-19-057",
+      "mock-2026-08-19-056",
+      "mock-2026-08-19-055",
+      "mock-2026-08-19-059"
+    ],
+    "reasoning|2026-W34": [
+      "mock-2026-08-19-063",
+      "mock-2026-08-19-062",
+      "mock-2026-08-19-061"
+    ],
+    "reasoning|2026-W35": [
+      "mock-2026-08-26-090",
+      "mock-2026-08-26-089",
+      "mock-2026-08-26-091",
+      "mock-2026-08-26-092"
+    ],
+    "agent|2026-W35": [
+      "mock-2026-08-26-085",
+      "mock-2026-08-26-087",
+      "mock-2026-08-26-084",
+      "mock-2026-08-26-083",
+      "mock-2026-08-26-088",
+      "mock-2026-08-26-086",
+      "mock-2026-08-26-080",
+      "mock-2026-08-26-081",
+      "mock-2026-08-26-082"
+    ],
+    "multimodal|2026-W35": [
+      "mock-2026-08-26-097",
+      "mock-2026-08-26-098",
+      "mock-2026-08-26-096"
+    ],
+    "embodied|2026-W35": [
+      "mock-2026-08-26-095",
+      "mock-2026-08-26-094",
+      "mock-2026-08-26-093"
+    ],
+    "open-source-model|2026-W35": [
+      "mock-2026-08-26-099",
+      "mock-2026-08-26-100"
+    ],
+    "infra|2026-W35": [
+      "mock-2026-08-26-077",
+      "mock-2026-08-26-075",
+      "mock-2026-08-26-078",
+      "mock-2026-08-26-079",
+      "mock-2026-08-26-076"
+    ],
+    "funding|2026-W35": [
+      "mock-2026-08-26-069"
+    ],
+    "product|2026-W35": [
+      "mock-2026-08-26-071",
+      "mock-2026-08-26-072",
+      "mock-2026-08-26-073",
+      "mock-2026-08-26-070",
+      "mock-2026-08-26-074"
+    ]
+  },
+  "itemIndex": {
+    "mock-2026-08-05-016": {
+      "title": "推理框架把定制芯片的吞吐再抬一档（16）",
+      "source": "华尔街见闻",
+      "url": "https://example.com/ai/mock-2026-08-05-016"
+    },
+    "mock-2026-08-05-010": {
+      "title": "办公套件把助手默开放进付费档（10）",
+      "source": "The Information",
+      "url": "https://example.com/ai/mock-2026-08-05-010"
+    },
+    "mock-2026-08-05-007": {
+      "title": "某模型公司完成新一轮融资并调整管理层（7）",
+      "source": "The Information",
+      "url": "https://example.com/ai/mock-2026-08-05-007"
+    },
+    "mock-2026-08-05-017": {
+      "title": "推理框架把定制芯片的吞吐再抬一档（17）",
+      "source": "TechCrunch AI",
+      "url": "https://example.com/ai/mock-2026-08-05-017"
+    },
+    "mock-2026-08-05-018": {
+      "title": "多智能体工作流把 MCP 工具调用接到生产编排（18）",
+      "source": "GitHub Trending",
+      "url": "https://example.com/ai/mock-2026-08-05-018"
+    },
+    "mock-2026-08-05-013": {
+      "title": "推理框架把定制芯片的吞吐再抬一档（13）",
+      "source": "arXiv cs.AI",
+      "url": "https://example.com/ai/mock-2026-08-05-013"
+    },
+    "mock-2026-08-05-009": {
+      "title": "办公套件把助手默开放进付费档（9）",
+      "source": "The Information",
+      "url": "https://example.com/ai/mock-2026-08-05-009"
+    },
+    "mock-2026-08-05-004": {
+      "title": "某模型公司完成新一轮融资并调整管理层（4）",
+      "source": "arXiv cs.AI",
+      "url": "https://example.com/ai/mock-2026-08-05-004"
+    },
+    "mock-2026-08-05-006": {
+      "title": "某模型公司完成新一轮融资并调整管理层（6）",
+      "source": "TechCrunch AI",
+      "url": "https://example.com/ai/mock-2026-08-05-006"
+    },
+    "mock-2026-08-05-003": {
+      "title": "某模型公司完成新一轮融资并调整管理层（3）",
+      "source": "The Information",
+      "url": "https://example.com/ai/mock-2026-08-05-003"
+    },
+    "mock-2026-08-05-005": {
+      "title": "某模型公司完成新一轮融资并调整管理层（5）",
+      "source": "TechCrunch AI",
+      "url": "https://example.com/ai/mock-2026-08-05-005"
+    },
+    "mock-2026-08-05-008": {
+      "title": "某模型公司完成新一轮融资并调整管理层（8）",
+      "source": "GitHub Trending",
+      "url": "https://example.com/ai/mock-2026-08-05-008"
+    },
+    "mock-2026-08-05-011": {
+      "title": "办公套件把助手默开放进付费档（11）",
+      "source": "The Information",
+      "url": "https://example.com/ai/mock-2026-08-05-011"
+    },
+    "mock-2026-08-05-019": {
+      "title": "监管草案要求生成内容必须可追溯来源（19）",
+      "source": "TechCrunch AI",
+      "url": "https://example.com/ai/mock-2026-08-05-019"
+    },
+    "mock-2026-08-05-001": {
+      "title": "某模型公司完成新一轮融资并调整管理层（1）",
+      "source": "华尔街见闻",
+      "url": "https://example.com/ai/mock-2026-08-05-001"
+    },
+    "mock-2026-08-05-012": {
+      "title": "办公套件把助手默开放进付费档（12）",
+      "source": "华尔街见闻",
+      "url": "https://example.com/ai/mock-2026-08-05-012"
+    },
+    "mock-2026-08-05-015": {
+      "title": "推理框架把定制芯片的吞吐再抬一档（15）",
+      "source": "arXiv cs.AI",
+      "url": "https://example.com/ai/mock-2026-08-05-015"
+    },
+    "mock-2026-08-05-002": {
+      "title": "某模型公司完成新一轮融资并调整管理层（2）",
+      "source": "The Information",
+      "url": "https://example.com/ai/mock-2026-08-05-002"
+    },
+    "mock-2026-08-05-020": {
+      "title": "监管草案要求生成内容必须可追溯来源（20）",
+      "source": "GitHub Trending",
+      "url": "https://example.com/ai/mock-2026-08-05-020"
+    },
+    "mock-2026-08-05-014": {
+      "title": "推理框架把定制芯片的吞吐再抬一档（14）",
+      "source": "arXiv cs.AI",
+      "url": "https://example.com/ai/mock-2026-08-05-014"
+    },
+    "mock-2026-08-12-025": {
+      "title": "某模型公司完成新一轮融资并调整管理层（25）",
+      "source": "华尔街见闻",
+      "url": "https://example.com/ai/mock-2026-08-12-025"
+    },
+    "mock-2026-08-12-031": {
+      "title": "推理框架把定制芯片的吞吐再抬一档（31）",
+      "source": "TechCrunch AI",
+      "url": "https://example.com/ai/mock-2026-08-12-031"
+    },
+    "mock-2026-08-12-022": {
+      "title": "某模型公司完成新一轮融资并调整管理层（22）",
+      "source": "GitHub Trending",
+      "url": "https://example.com/ai/mock-2026-08-12-022"
+    },
+    "mock-2026-08-12-039": {
+      "title": "测试时计算让小模型在数学基准追上更大参数量（39）",
+      "source": "The Information",
+      "url": "https://example.com/ai/mock-2026-08-12-039"
+    },
+    "mock-2026-08-12-035": {
+      "title": "多智能体工作流把 MCP 工具调用接到生产编排（35）",
+      "source": "GitHub Trending",
+      "url": "https://example.com/ai/mock-2026-08-12-035"
+    },
+    "mock-2026-08-12-034": {
+      "title": "推理框架把定制芯片的吞吐再抬一档（34）",
+      "source": "The Information",
+      "url": "https://example.com/ai/mock-2026-08-12-034"
+    },
+    "mock-2026-08-12-027": {
+      "title": "办公套件把助手默开放进付费档（27）",
+      "source": "The Information",
+      "url": "https://example.com/ai/mock-2026-08-12-027"
+    },
+    "mock-2026-08-12-030": {
+      "title": "推理框架把定制芯片的吞吐再抬一档（30）",
+      "source": "arXiv cs.AI",
+      "url": "https://example.com/ai/mock-2026-08-12-030"
+    },
+    "mock-2026-08-12-023": {
+      "title": "某模型公司完成新一轮融资并调整管理层（23）",
+      "source": "TechCrunch AI",
+      "url": "https://example.com/ai/mock-2026-08-12-023"
+    },
+    "mock-2026-08-12-024": {
+      "title": "某模型公司完成新一轮融资并调整管理层（24）",
+      "source": "arXiv cs.AI",
+      "url": "https://example.com/ai/mock-2026-08-12-024"
+    },
+    "mock-2026-08-12-033": {
+      "title": "推理框架把定制芯片的吞吐再抬一档（33）",
+      "source": "arXiv cs.AI",
+      "url": "https://example.com/ai/mock-2026-08-12-033"
+    },
+    "mock-2026-08-12-040": {
+      "title": "开源视觉语言模型补上长视频理解缺口（40）",
+      "source": "华尔街见闻",
+      "url": "https://example.com/ai/mock-2026-08-12-040"
+    },
+    "mock-2026-08-12-037": {
+      "title": "多智能体工作流把 MCP 工具调用接到生产编排（37）",
+      "source": "华尔街见闻",
+      "url": "https://example.com/ai/mock-2026-08-12-037"
+    },
+    "mock-2026-08-12-036": {
+      "title": "多智能体工作流把 MCP 工具调用接到生产编排（36）",
+      "source": "GitHub Trending",
+      "url": "https://example.com/ai/mock-2026-08-12-036"
+    },
+    "mock-2026-08-12-028": {
+      "title": "办公套件把助手默开放进付费档（28）",
+      "source": "GitHub Trending",
+      "url": "https://example.com/ai/mock-2026-08-12-028"
+    },
+    "mock-2026-08-12-038": {
+      "title": "测试时计算让小模型在数学基准追上更大参数量（38）",
+      "source": "TechCrunch AI",
+      "url": "https://example.com/ai/mock-2026-08-12-038"
+    },
+    "mock-2026-08-12-029": {
+      "title": "办公套件把助手默开放进付费档（29）",
+      "source": "TechCrunch AI",
+      "url": "https://example.com/ai/mock-2026-08-12-029"
+    },
+    "mock-2026-08-12-026": {
+      "title": "某模型公司完成新一轮融资并调整管理层（26）",
+      "source": "arXiv cs.AI",
+      "url": "https://example.com/ai/mock-2026-08-12-026"
+    },
+    "mock-2026-08-12-041": {
+      "title": "开源视觉语言模型补上长视频理解缺口（41）",
+      "source": "华尔街见闻",
+      "url": "https://example.com/ai/mock-2026-08-12-041"
+    },
+    "mock-2026-08-12-021": {
+      "title": "某模型公司完成新一轮融资并调整管理层（21）",
+      "source": "TechCrunch AI",
+      "url": "https://example.com/ai/mock-2026-08-12-021"
+    },
+    "mock-2026-08-12-032": {
+      "title": "推理框架把定制芯片的吞吐再抬一档（32）",
+      "source": "华尔街见闻",
+      "url": "https://example.com/ai/mock-2026-08-12-032"
+    },
+    "mock-2026-08-19-067": {
+      "title": "企业知识库把检索和重排收进同一条流水线（67）",
+      "source": "The Information",
+      "url": "https://example.com/ai/mock-2026-08-19-067"
+    },
+    "mock-2026-08-19-049": {
+      "title": "推理框架把定制芯片的吞吐再抬一档（49）",
+      "source": "TechCrunch AI",
+      "url": "https://example.com/ai/mock-2026-08-19-049"
+    },
+    "mock-2026-08-19-046": {
+      "title": "办公套件把助手默开放进付费档（46）",
+      "source": "The Information",
+      "url": "https://example.com/ai/mock-2026-08-19-046"
+    },
+    "mock-2026-08-19-044": {
+      "title": "某模型公司完成新一轮融资并调整管理层（44）",
+      "source": "The Information",
+      "url": "https://example.com/ai/mock-2026-08-19-044"
+    },
+    "mock-2026-08-19-066": {
+      "title": "新的开源权重发布并放出推理代码（66）",
+      "source": "TechCrunch AI",
+      "url": "https://example.com/ai/mock-2026-08-19-066"
+    },
+    "mock-2026-08-19-050": {
+      "title": "推理框架把定制芯片的吞吐再抬一档（50）",
+      "source": "The Information",
+      "url": "https://example.com/ai/mock-2026-08-19-050"
+    },
+    "mock-2026-08-19-054": {
+      "title": "推理框架把定制芯片的吞吐再抬一档（54）",
+      "source": "GitHub Trending",
+      "url": "https://example.com/ai/mock-2026-08-19-054"
+    },
+    "mock-2026-08-19-058": {
+      "title": "多智能体工作流把 MCP 工具调用接到生产编排（58）",
+      "source": "The Information",
+      "url": "https://example.com/ai/mock-2026-08-19-058"
+    },
+    "mock-2026-08-19-052": {
+      "title": "推理框架把定制芯片的吞吐再抬一档（52）",
+      "source": "华尔街见闻",
+      "url": "https://example.com/ai/mock-2026-08-19-052"
+    },
+    "mock-2026-08-19-048": {
+      "title": "办公套件把助手默开放进付费档（48）",
+      "source": "GitHub Trending",
+      "url": "https://example.com/ai/mock-2026-08-19-048"
+    },
+    "mock-2026-08-19-060": {
+      "title": "多智能体工作流把 MCP 工具调用接到生产编排（60）",
+      "source": "华尔街见闻",
+      "url": "https://example.com/ai/mock-2026-08-19-060"
+    },
+    "mock-2026-08-19-065": {
+      "title": "新的开源权重发布并放出推理代码（65）",
+      "source": "GitHub Trending",
+      "url": "https://example.com/ai/mock-2026-08-19-065"
+    },
+    "mock-2026-08-19-068": {
+      "title": "企业知识库把检索和重排收进同一条流水线（68）",
+      "source": "arXiv cs.AI",
+      "url": "https://example.com/ai/mock-2026-08-19-068"
+    },
+    "mock-2026-08-19-063": {
+      "title": "测试时计算让小模型在数学基准追上更大参数量（63）",
+      "source": "TechCrunch AI",
+      "url": "https://example.com/ai/mock-2026-08-19-063"
+    },
+    "mock-2026-08-19-057": {
+      "title": "多智能体工作流把 MCP 工具调用接到生产编排（57）",
+      "source": "TechCrunch AI",
+      "url": "https://example.com/ai/mock-2026-08-19-057"
+    },
+    "mock-2026-08-19-053": {
+      "title": "推理框架把定制芯片的吞吐再抬一档（53）",
+      "source": "The Information",
+      "url": "https://example.com/ai/mock-2026-08-19-053"
+    },
+    "mock-2026-08-19-047": {
+      "title": "办公套件把助手默开放进付费档（47）",
+      "source": "The Information",
+      "url": "https://example.com/ai/mock-2026-08-19-047"
+    },
+    "mock-2026-08-19-042": {
+      "title": "某模型公司完成新一轮融资并调整管理层（42）",
+      "source": "TechCrunch AI",
+      "url": "https://example.com/ai/mock-2026-08-19-042"
+    },
+    "mock-2026-08-19-056": {
+      "title": "多智能体工作流把 MCP 工具调用接到生产编排（56）",
+      "source": "GitHub Trending",
+      "url": "https://example.com/ai/mock-2026-08-19-056"
+    },
+    "mock-2026-08-19-062": {
+      "title": "测试时计算让小模型在数学基准追上更大参数量（62）",
+      "source": "GitHub Trending",
+      "url": "https://example.com/ai/mock-2026-08-19-062"
+    },
+    "mock-2026-08-19-055": {
+      "title": "多智能体工作流把 MCP 工具调用接到生产编排（55）",
+      "source": "TechCrunch AI",
+      "url": "https://example.com/ai/mock-2026-08-19-055"
+    },
+    "mock-2026-08-19-059": {
+      "title": "多智能体工作流把 MCP 工具调用接到生产编排（59）",
+      "source": "arXiv cs.AI",
+      "url": "https://example.com/ai/mock-2026-08-19-059"
+    },
+    "mock-2026-08-19-043": {
+      "title": "某模型公司完成新一轮融资并调整管理层（43）",
+      "source": "华尔街见闻",
+      "url": "https://example.com/ai/mock-2026-08-19-043"
+    },
+    "mock-2026-08-19-045": {
+      "title": "办公套件把助手默开放进付费档（45）",
+      "source": "TechCrunch AI",
+      "url": "https://example.com/ai/mock-2026-08-19-045"
+    },
+    "mock-2026-08-19-061": {
+      "title": "测试时计算让小模型在数学基准追上更大参数量（61）",
+      "source": "GitHub Trending",
+      "url": "https://example.com/ai/mock-2026-08-19-061"
+    },
+    "mock-2026-08-19-064": {
+      "title": "新的开源权重发布并放出推理代码（64）",
+      "source": "TechCrunch AI",
+      "url": "https://example.com/ai/mock-2026-08-19-064"
+    },
+    "mock-2026-08-19-051": {
+      "title": "推理框架把定制芯片的吞吐再抬一档（51）",
+      "source": "华尔街见闻",
+      "url": "https://example.com/ai/mock-2026-08-19-051"
+    },
+    "mock-2026-08-26-090": {
+      "title": "测试时计算让小模型在数学基准追上更大参数量（90）",
+      "source": "The Information",
+      "url": "https://example.com/ai/mock-2026-08-26-090"
+    },
+    "mock-2026-08-26-085": {
+      "title": "多智能体工作流把 MCP 工具调用接到生产编排（85）",
+      "source": "The Information",
+      "url": "https://example.com/ai/mock-2026-08-26-085"
+    },
+    "mock-2026-08-26-089": {
+      "title": "测试时计算让小模型在数学基准追上更大参数量（89）",
+      "source": "华尔街见闻",
+      "url": "https://example.com/ai/mock-2026-08-26-089"
+    },
+    "mock-2026-08-26-097": {
+      "title": "开源视觉语言模型补上长视频理解缺口（97）",
+      "source": "arXiv cs.AI",
+      "url": "https://example.com/ai/mock-2026-08-26-097"
+    },
+    "mock-2026-08-26-095": {
+      "title": "具身模型在仓库拣货任务上完成闭环演示（95）",
+      "source": "GitHub Trending",
+      "url": "https://example.com/ai/mock-2026-08-26-095"
+    },
+    "mock-2026-08-26-094": {
+      "title": "具身模型在仓库拣货任务上完成闭环演示（94）",
+      "source": "The Information",
+      "url": "https://example.com/ai/mock-2026-08-26-094"
+    },
+    "mock-2026-08-26-091": {
+      "title": "测试时计算让小模型在数学基准追上更大参数量（91）",
+      "source": "arXiv cs.AI",
+      "url": "https://example.com/ai/mock-2026-08-26-091"
+    },
+    "mock-2026-08-26-093": {
+      "title": "具身模型在仓库拣货任务上完成闭环演示（93）",
+      "source": "arXiv cs.AI",
+      "url": "https://example.com/ai/mock-2026-08-26-093"
+    },
+    "mock-2026-08-26-098": {
+      "title": "开源视觉语言模型补上长视频理解缺口（98）",
+      "source": "TechCrunch AI",
+      "url": "https://example.com/ai/mock-2026-08-26-098"
+    },
+    "mock-2026-08-26-099": {
+      "title": "新的开源权重发布并放出推理代码（99）",
+      "source": "华尔街见闻",
+      "url": "https://example.com/ai/mock-2026-08-26-099"
+    },
+    "mock-2026-08-26-077": {
+      "title": "推理框架把定制芯片的吞吐再抬一档（77）",
+      "source": "TechCrunch AI",
+      "url": "https://example.com/ai/mock-2026-08-26-077"
+    },
+    "mock-2026-08-26-092": {
+      "title": "测试时计算让小模型在数学基准追上更大参数量（92）",
+      "source": "GitHub Trending",
+      "url": "https://example.com/ai/mock-2026-08-26-092"
+    },
+    "mock-2026-08-26-096": {
+      "title": "开源视觉语言模型补上长视频理解缺口（96）",
+      "source": "TechCrunch AI",
+      "url": "https://example.com/ai/mock-2026-08-26-096"
+    },
+    "mock-2026-08-26-087": {
+      "title": "多智能体工作流把 MCP 工具调用接到生产编排（87）",
+      "source": "华尔街见闻",
+      "url": "https://example.com/ai/mock-2026-08-26-087"
+    },
+    "mock-2026-08-26-084": {
+      "title": "多智能体工作流把 MCP 工具调用接到生产编排（84）",
+      "source": "arXiv cs.AI",
+      "url": "https://example.com/ai/mock-2026-08-26-084"
+    },
+    "mock-2026-08-26-083": {
+      "title": "多智能体工作流把 MCP 工具调用接到生产编排（83）",
+      "source": "华尔街见闻",
+      "url": "https://example.com/ai/mock-2026-08-26-083"
+    },
+    "mock-2026-08-26-088": {
+      "title": "多智能体工作流把 MCP 工具调用接到生产编排（88）",
+      "source": "arXiv cs.AI",
+      "url": "https://example.com/ai/mock-2026-08-26-088"
+    },
+    "mock-2026-08-26-069": {
+      "title": "某模型公司完成新一轮融资并调整管理层（69）",
+      "source": "TechCrunch AI",
+      "url": "https://example.com/ai/mock-2026-08-26-069"
+    },
+    "mock-2026-08-26-086": {
+      "title": "多智能体工作流把 MCP 工具调用接到生产编排（86）",
+      "source": "GitHub Trending",
+      "url": "https://example.com/ai/mock-2026-08-26-086"
+    },
+    "mock-2026-08-26-100": {
+      "title": "新的开源权重发布并放出推理代码（100）",
+      "source": "GitHub Trending",
+      "url": "https://example.com/ai/mock-2026-08-26-100"
+    },
+    "mock-2026-08-26-075": {
+      "title": "推理框架把定制芯片的吞吐再抬一档（75）",
+      "source": "GitHub Trending",
+      "url": "https://example.com/ai/mock-2026-08-26-075"
+    },
+    "mock-2026-08-26-080": {
+      "title": "多智能体工作流把 MCP 工具调用接到生产编排（80）",
+      "source": "The Information",
+      "url": "https://example.com/ai/mock-2026-08-26-080"
+    },
+    "mock-2026-08-26-071": {
+      "title": "办公套件把助手默开放进付费档（71）",
+      "source": "The Information",
+      "url": "https://example.com/ai/mock-2026-08-26-071"
+    },
+    "mock-2026-08-26-081": {
+      "title": "多智能体工作流把 MCP 工具调用接到生产编排（81）",
+      "source": "The Information",
+      "url": "https://example.com/ai/mock-2026-08-26-081"
+    },
+    "mock-2026-08-26-072": {
+      "title": "办公套件把助手默开放进付费档（72）",
+      "source": "arXiv cs.AI",
+      "url": "https://example.com/ai/mock-2026-08-26-072"
+    },
+    "mock-2026-08-26-073": {
+      "title": "办公套件把助手默开放进付费档（73）",
+      "source": "arXiv cs.AI",
+      "url": "https://example.com/ai/mock-2026-08-26-073"
+    },
+    "mock-2026-08-26-070": {
+      "title": "办公套件把助手默开放进付费档（70）",
+      "source": "TechCrunch AI",
+      "url": "https://example.com/ai/mock-2026-08-26-070"
+    },
+    "mock-2026-08-26-078": {
+      "title": "推理框架把定制芯片的吞吐再抬一档（78）",
+      "source": "arXiv cs.AI",
+      "url": "https://example.com/ai/mock-2026-08-26-078"
+    },
+    "mock-2026-08-26-079": {
+      "title": "推理框架把定制芯片的吞吐再抬一档（79）",
+      "source": "GitHub Trending",
+      "url": "https://example.com/ai/mock-2026-08-26-079"
+    },
+    "mock-2026-08-26-082": {
+      "title": "多智能体工作流把 MCP 工具调用接到生产编排（82）",
+      "source": "TechCrunch AI",
+      "url": "https://example.com/ai/mock-2026-08-26-082"
+    },
+    "mock-2026-08-26-076": {
+      "title": "推理框架把定制芯片的吞吐再抬一档（76）",
+      "source": "华尔街见闻",
+      "url": "https://example.com/ai/mock-2026-08-26-076"
+    },
+    "mock-2026-08-26-074": {
+      "title": "办公套件把助手默开放进付费档（74）",
+      "source": "华尔街见闻",
+      "url": "https://example.com/ai/mock-2026-08-26-074"
+    }
+  },
+  "trend": {
+    "agent": 3.75,
+    "reasoning": 3.5,
+    "multimodal": 1.5,
+    "open-source-model": 2.0,
+    "rag-search": 2.0,
+    "infra": 1.1,
+    "embodied": 2.0,
+    "safety-policy": 0.0,
+    "product": 1.286,
+    "funding": 0.286,
+    "other": 1.0
+  },
+  "window_end": "2026-W35"
+}

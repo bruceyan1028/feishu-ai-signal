@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>AI Signal 智能仪表板 v2</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&family=Noto+Serif+SC:wght@600;700&family=Source+Serif+4:opsz,wght@8..60,600;700&display=swap" rel="stylesheet">
 <style>
   /* ============================================================
      浅色红黑主题 — 所有视觉色集中在此 :root。
@@ -81,19 +81,97 @@
   @keyframes popIn { from { opacity: 0; transform: translateY(14px) scale(.985); } to { opacity: 1; transform: translateY(0) scale(1); } }
   @keyframes slideRight { from { opacity: 0; transform: translateX(-8px); } to { opacity: 1; transform: translateX(0); } }
   button, input, select, textarea { font-family: inherit; }
+  /* ------------------------------------------------------------------
+     首页三列骨架:左栏板块筛选 / 中间信息流 / 右栏数据看板（话题热度在最上）。
+     ------------------------------------------------------------------ */
+  .feed-shell { display: grid; grid-template-columns: 148px minmax(0, 1fr) 304px; grid-template-areas: "points points points" "nav feed data"; gap: 24px; max-width: 1480px; margin: 0 auto; padding: 26px 24px 60px; align-items: start; --feed-data-col: 304px; --feed-gap: 24px; }
+  /* 三个格子都要 min-width:0。栅格项默认 min-width:auto，里面一行横滑的筛选条
+     或一个不折行的长标题就能把整列顶宽，窄屏上整页跟着横向溢出。 */
+  .feed-points { grid-area: points; min-width: 0; }
+  .feed-nav { grid-area: nav; min-width: 0; position: sticky; top: 76px; }
+  .nav-all { display: flex; flex-direction: column; align-items: stretch; gap: 6px; margin-bottom: 12px; }
+  .nav-all-btn { width: 100%; height: 34px; border: 1.5px solid var(--ds-ink-line); background: #0a0a0a; color: #faf7f0; font-size: 12.5px; font-weight: 700; cursor: pointer; font-family: inherit; }
+  .nav-all-btn.on { background: var(--ds-accent); color: #fff; border-color: var(--ds-accent); }
+  .nav-all-btn:hover { background: #fff; color: #16130f; }
+  .nav-clear { flex: none; border: none; background: none; padding: 0 4px; font-size: 11.5px; color: var(--ds-accent); cursor: pointer; font-family: inherit; white-space: nowrap; }
+  .nav-clear:hover { text-decoration: underline; }
+  .nav-block { border: 1.5px solid var(--ds-ink-line); overflow: hidden; background: #0a0a0a; box-shadow: 5px 5px 0 rgba(22,19,15,.10); }
+  .nav-block.formats, .nav-block.sort { margin-top: 12px; }
+  .nav-block .nav-item { background: transparent; color: #faf7f0; }
+  .nav-block .nav-item:hover { background: #fff; color: #16130f; }
+  .nav-block .nav-item.on { background: var(--ds-accent); color: #fff; }
+  .nav-block .nav-item.on:hover { background: #fff; color: #16130f; }
+  .nav-block.sort { color: #faf7f0; }
+  .nav-block.sort select { background: #16130f; color: #faf7f0; border-color: rgba(255,255,255,.16); }
+  .nav-block.sort select option { background: #16130f; color: #faf7f0; }
+  .feed-main { grid-area: feed; min-width: 0; }
+  .feed-data { grid-area: data; min-width: 0; display: flex; flex-direction: column; gap: 18px; position: sticky; top: 76px; max-height: calc(100vh - 92px); overflow-x: hidden; overflow-y: auto; overscroll-behavior: contain; scrollbar-width: thin; scrollbar-color: rgba(255,255,255,.32) transparent; }
+  .feed-data > * { flex: none; }
+  .feed-data::-webkit-scrollbar { width: 7px; }
+  .feed-data::-webkit-scrollbar-thumb { background: rgba(255,255,255,.32); }
+  .feed-data::-webkit-scrollbar-track { background: transparent; }
+  .quote-row { display: grid; grid-template-columns: minmax(0,1fr) auto; gap: 6px; align-items: baseline; padding: 5px 8px; border-bottom: 1px solid rgba(255,255,255,.05); text-decoration: none; color: inherit; }
+  .quote-row:hover { background: #fff; }
+  .quote-row:hover .quote-name { color: #16130f; }
+  .heat-toggle { display: flex; border: 1px solid rgba(255,255,255,.12); margin: 0 14px 8px; }
+  .heat-toggle button { flex: 1; height: 26px; border: none; background: transparent; color: #8f887a; font-size: 11px; font-weight: 650; cursor: pointer; }
+  .heat-toggle button + button { border-left: 1px solid rgba(255,255,255,.12); }
+  .heat-toggle button.on { background: var(--ds-accent); color: #fff; }
+  .heat-legend { display: flex; align-items: center; gap: 4px; padding: 0 14px 8px; font-size: 9.5px; color: #8f887a; }
+  .heat-legend i { width: 14px; height: 8px; display: inline-block; border: 1px solid rgba(255,255,255,.22); }
+  .heat-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; padding: 4px 10px 10px; }
+  .heat-table { border-collapse: separate; border-spacing: 2px; font-size: 11px; min-width: 100%; }
+  .heat-table thead th { font-family: "Geist Mono", ui-monospace, Menlo, monospace; font-size: 9px; font-weight: 600; color: #8f887a; padding: 0 1px 5px; text-align: center; }
+  .heat-table tbody th { position: sticky; left: 0; z-index: 1; background: #0a0a0a; text-align: left; font-weight: 600; padding: 0 8px 0 4px; white-space: nowrap; color: #faf7f0; }
+  .heat-table td { padding: 0; }
+  .heat-topic { font-size: 11.5px; }
+  .heat-badge { margin-left: 3px; font-size: 10px; }
+  .heat-cell { width: 24px; height: 20px; border: 1px solid rgba(22,19,15,.16); padding: 0; cursor: pointer; font-family: "Geist Mono", ui-monospace, Menlo, monospace; font-size: 8px; font-weight: 700; }
+  .heat-cell.is-on { outline: 2px solid var(--ds-accent); outline-offset: -2px; }
+  .heat-panel { margin: 0 10px 10px; padding: 8px 10px 10px; border: 1px solid rgba(255,255,255,.10); background: rgba(255,255,255,.04); }
+  .heat-panel-h { display: flex; align-items: baseline; gap: 8px; margin-bottom: 6px; font-size: 12px; font-weight: 700; color: #faf7f0; }
+  .heat-x { margin-left: auto; border: none; background: none; padding: 0; font-size: 11px; color: #ff8d86; cursor: pointer; font-family: inherit; }
+  .heat-hits { display: flex; flex-direction: column; max-height: 160px; overflow: auto; }
+  .heat-hit { display: block; padding: 6px 0; border-bottom: 1px dashed rgba(255,255,255,.10); font-size: 11.5px; line-height: 1.45; color: #faf7f0; }
+  .heat-hit:last-child { border-bottom: none; }
+  .heat-hit .src { display: block; margin-top: 2px; font-size: 10px; color: #8f887a; }
+  .heat-empty, .heat-status { margin: 0; padding: 8px 14px 14px; font-size: 11.5px; line-height: 1.6; color: #8f887a; }
+  .heat-tip { position: fixed; z-index: 80; max-width: 240px; padding: 8px 10px; background: #16130f; color: #faf7f0; font-size: 11.5px; line-height: 1.55; pointer-events: none; box-shadow: 4px 4px 0 rgba(0,0,0,.25); }
+  /* 两列:右栏落到左栏下面,信息流保持一整条 */
+  @media (max-width: 1280px) {
+    .feed-shell { grid-template-columns: 148px minmax(0, 1fr); grid-template-areas: "points points" "nav feed" "data feed"; }
+    .feed-nav { position: static; }
+    .feed-data { position: static; max-height: none; overflow: visible; margin-top: 18px; }
+  }
   /* --- 信号卡片:可点,悬停做硬阴影位移(编辑/野兽派风) --- */
-  .signal-card { cursor: pointer; transition: transform .12s ease, box-shadow .12s ease; }
+  .signal-card { cursor: pointer; transition: transform .12s ease, box-shadow .12s ease; align-items: stretch; height: 288px; }
   .signal-card:hover { transform: translate(-2px, -2px); box-shadow: 6px 6px 0 var(--ds-accent) !important; }
   .signal-card:hover .card-hint { opacity: 1; transform: translateX(0); }
   .card-hint { opacity: 0; transform: translateX(-4px); transition: opacity .2s ease, transform .2s ease; }
-  .personal-card { transition: transform .12s ease, box-shadow .12s ease; }
-  .personal-card:hover { transform: translate(-2px,-2px); box-shadow: 6px 6px 0 var(--ds-accent) !important; }
-  /* --- 简报卡片 --- */
-  .brief-card { transition: transform .12s ease, box-shadow .12s ease; }
-  .brief-card:hover { transform: translate(-2px,-2px); box-shadow: 6px 6px 0 var(--ds-accent) !important; }
-  .brief-card .ref:hover { background: var(--ds-accent) !important; color: #fff !important; }
-  .brief-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); grid-auto-rows: auto; gap: 16px; }
-  @media (max-width: 760px) { .brief-grid { grid-template-columns: 1fr; } }
+  .sc-media { flex: none; width: 288px; height: 288px; align-self: flex-start; overflow: hidden; }
+  .sc-body { min-height: 0; height: 100%; }
+  .sc-main { display: flex; flex-direction: column; }
+  .sc-spacer { flex: 1 1 0; min-height: 0; }
+  .sc-copy { flex: none; }
+  .personal-viewport { overflow: hidden; cursor: grab; user-select: none; touch-action: none; }
+  .personal-viewport.is-drag { cursor: grabbing; }
+  .personal-card img { -webkit-user-drag: none; pointer-events: none; }
+  .personal-grid { display: flex; width: max-content; will-change: transform; }
+  .personal-set { display: flex; gap: 14px; padding-right: 14px; }
+  .personal-viewport.is-static { overflow: visible; cursor: default; touch-action: auto; user-select: auto; }
+  .personal-viewport.is-static .personal-grid { transform: none !important; will-change: auto; width: 100%; }
+  .personal-viewport.is-static .personal-set { width: 100%; justify-content: center; padding-right: 0; }
+  .personal-viewport.is-static .personal-set[aria-hidden] { display: none; }
+  .points-bar { margin: 10px 0 28px; height: 16px; padding: 5px 0; cursor: pointer; }
+  .personal-viewport.is-static + .points-bar { display: none; }
+  .points-bar-track { position: relative; height: 6px; background: rgba(22,19,15,.12); border: 1px solid var(--ds-ink-line); }
+  .points-bar-thumb { position: absolute; top: -5px; width: 42px; height: 16px; background: var(--ds-accent); border: 1.5px solid var(--ds-ink-line); pointer-events: none; }
+  .personal-card { flex: 0 0 228px; width: 228px; min-width: 0; box-sizing: border-box; display: flex; flex-direction: column; background: #fff; border: 1px solid rgba(22,19,15,.10); border-radius: 14px; overflow: hidden; box-shadow: 0 10px 24px -14px rgba(22,19,15,.28); transition: transform .16s ease, box-shadow .16s ease; }
+  .personal-card:hover { transform: translateY(-3px); box-shadow: 0 16px 32px -16px rgba(22,19,15,.38); }
+  .pc-media { position: relative; aspect-ratio: 16 / 10; overflow: hidden; background: #111; }
+  .pc-media img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
+  .pc-fallback { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-family: "Geist Mono", ui-monospace, Menlo, monospace; font-size: 28px; font-weight: 700; opacity: .45; }
+  .pc-title { margin: 0; padding: 14px 15px 16px; font-family: "Source Serif 4", "Noto Serif SC", "Songti SC", Georgia, serif; font-size: 15px; font-weight: 700; line-height: 1.45; letter-spacing: -.01em; color: var(--ds-text); display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 4; overflow: hidden; }
   .src-row:hover { background: rgba(22,19,15,.03); }
   .src-link:hover { color: var(--accent-bright, #a78bff) !important; border-bottom-color: var(--accent-bright, #a78bff) !important; }
   .del-btn:hover { color: #ff8a8a !important; border-color: rgba(255,120,120,.4) !important; }
@@ -109,16 +187,6 @@
   .bot-input { flex: 1; height: 40px; padding: 0 14px; border: 1.5px solid var(--ds-ink-line); background: #fff; color: var(--ds-text); font-size: 13px; outline: none; }
   .bot-input::placeholder { color: var(--ds-text-3); }
   .bot-input:focus { box-shadow: inset 0 0 0 1px var(--ds-accent); }
-  /* --- 简报每条:单行长条 + 深色小标题色块 + 加粗紫色竖条 --- */
-  .brief-bullet { position: relative; display: flex; align-items: center; gap: 12px; padding: 8px 16px 8px 10px; min-height: 44px; border: 1px solid rgba(22,19,15,.09); border-radius: 10px; background: linear-gradient(90deg, var(--accent-soft, rgba(108,71,255,.14)) 0, rgba(22,19,15,.045) 180px, rgba(22,19,15,.02) 100%); box-shadow: 0 1px 2px rgba(0,0,0,.3); transition: background .2s ease, box-shadow .2s ease, border-color .2s ease, transform .12s ease; }
-  .brief-bullet:hover { border-color: var(--accent-border, rgba(108,71,255,.4)); box-shadow: 0 8px 22px -12px rgba(0,0,0,.7); transform: translateX(2px); }
-  .bl-bar { flex: none; width: 6px; align-self: stretch; min-height: 28px; border-radius: 4px; background: linear-gradient(180deg, var(--accent-bright, #a78bff), var(--accent, #6C47FF)); box-shadow: 0 0 0 1px rgba(0,0,0,.3), 0 3px 12px -1px var(--accent-glow, rgba(108,71,255,.55)); }
-  .bl-title { flex: none; font-size: 13px; font-weight: 700; color: #ffffff; background: linear-gradient(180deg, #34343e, #1c1c22); padding: 6px 13px; border-radius: 7px; white-space: nowrap; border: 1px solid rgba(22,19,15,.1); box-shadow: 0 1px 3px rgba(0,0,0,.4), inset 0 1px 0 rgba(22,19,15,.08); }
-  .bl-text { flex: 1; min-width: 0; font-size: 13.5px; line-height: 1.5; color: var(--ds-text-2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .bl-refs { flex: none; display: inline-flex; gap: 5px; }
-  .brief-bullet .ref { opacity: .45; transition: opacity .2s ease, transform .15s ease, box-shadow .15s ease; cursor: pointer; }
-  .brief-bullet:hover .ref { opacity: 1; }
-  .brief-bullet .ref:hover { transform: translateY(-1px); box-shadow: 0 3px 10px -3px var(--accent-glow, rgba(108,71,255,.5)); }
   /* --- 详情覆盖层 --- */
   .detail-overlay { position: fixed; inset: 0; z-index: 200; display: flex; align-items: flex-start; justify-content: center; padding: 40px 20px; background: rgba(4,4,6,.72); backdrop-filter: blur(8px); overflow-y: auto; animation: fadeIn .18s ease; }
   .detail-panel { position: relative; width: 100%; max-width: 1040px; margin: auto; border-radius: 20px; background: var(--ds-panel); border: 1px solid rgba(22,19,15,.12); box-shadow: 0 40px 90px -30px rgba(0,0,0,.85); overflow: hidden; animation: popIn .24s cubic-bezier(.2,.7,.3,1); }
@@ -215,14 +283,10 @@
   .strategy-clamp { display: -webkit-box; -webkit-box-orient: vertical; overflow: hidden; }
   .strategy-clamp-2 { -webkit-line-clamp: 2; }
   .strategy-clamp-3 { -webkit-line-clamp: 3; }
-  /* --- 索引跳转:卡片高亮闪动 --- */
-  @keyframes flashred { 0%, 30%, 60%, 100% { box-shadow: 0 0 0 0 rgba(255,90,90,0); } 15%, 45%, 75% { box-shadow: 0 0 0 3px rgba(255,90,90,.5); } }
-  .flash-red { animation: flashred 1.5s ease-in-out; }
 
   /* ============================================================
      移动端布局。桌面尺寸全部写在内联 style 上,行内样式优先级高于
      选择器,所以这一段必须用 !important 才能覆盖。
-     断点 760px 与 .brief-grid 保持一致。
      ============================================================ */
   @media (max-width: 760px) {
     /* 硬阴影(box-shadow: 5px 5px 0)会撑出横向滚动条 */
@@ -242,33 +306,21 @@
 
     /* --- 版心:去掉左右虚线轨道,收紧留白 --- */
     .page-rail { border-left: none !important; border-right: none !important; }
-    .personal-rail { padding: 16px 12px !important; }
     .sec-pad { padding: 22px 16px 30px !important; }
     .page-shell { padding: 22px 16px 48px !important; }
     .page-title { font-size: 21px !important; }
-    .divider-row { gap: 10px !important; padding: 12px 14px !important; }
+    .divider-row { gap: 10px !important; padding: 12px 0 !important; }
     .divider-tail { display: none !important; }
 
-    /* --- 简报头 --- */
-    .masthead { flex-wrap: wrap; gap: 8px !important; margin-bottom: 18px !important; }
-    .masthead > span:last-child { display: none; }
-    .hero-title { font-size: 29px !important; line-height: 1.15 !important; }
-    .hero-intro { font-size: 15px !important; line-height: 1.65 !important; margin-bottom: 20px !important; }
-
-    /* --- 简报卡片:头条编号改为顶部色带,标题一律折行 --- */
-    .brief-grid { gap: 12px; }
-    .brief-featured { flex-direction: column !important; }
-    .bf-num { width: 100% !important; height: 42px !important; justify-content: flex-start !important; padding-left: 15px !important; border-right: none !important; border-bottom: 1.5px solid var(--ds-ink-line) !important; }
-    .bf-num span { font-size: 24px !important; }
-    .bf-body { padding: 15px 14px !important; gap: 9px !important; }
-    .bf-head { flex-wrap: wrap; gap: 8px !important; }
-    .bc-title { font-size: 16px !important; white-space: normal !important; padding: 6px 10px !important; }
-    .bc-title br { display: none; }
-    .bc-text { font-size: 14.5px !important; line-height: 1.7 !important; }
+    /* --- 三列塌成一列:筛选在上,看板沉到信息流下面 --- */
+    .feed-shell { grid-template-columns: minmax(0, 1fr) !important; grid-template-areas: "points" "nav" "feed" "data" !important; gap: 18px !important; padding: 16px 12px 40px !important; }
+    .feed-nav { position: static !important; }
+    .feed-data { position: static !important; max-height: none !important; overflow: visible !important; margin-top: 0 !important; }
 
     /* --- 信号卡片:配图与正文改为上下堆叠 --- */
-    .signal-card { flex-direction: column !important; min-height: 0 !important; }
-    .sc-media { width: 100% !important; height: 166px !important; border-right: none !important; border-bottom: 1.5px solid var(--ds-ink-line) !important; }
+    .signal-card { flex-direction: column !important; min-height: 0 !important; height: auto !important; }
+    .sc-body { min-height: 0 !important; }
+    .sc-media { width: 100% !important; height: auto !important; aspect-ratio: 1 !important; border-right: none !important; border-bottom: 1.5px solid var(--ds-ink-line) !important; }
     .sc-meta { padding: 9px 42px 9px 12px !important; gap: 6px !important; }
     .sc-scores { margin-left: 0 !important; }
     .sc-main { padding: 13px 12px !important; }
@@ -276,11 +328,13 @@
     .sc-subtitle { font-size: 11px !important; }
     .sc-why { padding: 11px 12px !important; }
     /* 触屏没有 hover,位移效果会让卡片看着像错位 */
-    .signal-card:hover, .brief-card:hover, .personal-card:hover { transform: none !important; }
+    .signal-card:hover, .personal-card:hover { transform: none !important; }
 
     /* --- 多列区块一律单列 --- */
-    .personal-grid, .task-split, .form-grid { grid-template-columns: 1fr !important; }
-    .pc-basis { flex-direction: column !important; gap: 6px !important; }
+    .task-split, .form-grid { grid-template-columns: 1fr !important; }
+    .personal-viewport { margin-bottom: 24px !important; }
+    .personal-card { flex-basis: 200px !important; width: 200px !important; }
+    .pc-title { font-size: 14px !important; padding: 11px 12px 13px !important; }
     /* 数据源表是真表格,窄屏改为容器内横向滚动而不是压扁 */
     .src-table { overflow-x: auto !important; -webkit-overflow-scrolling: touch; }
     .src-table > div { min-width: 860px; }
@@ -296,15 +350,6 @@
     .detail-ask { padding: 10px 12px 14px !important; }
     .detail-close { top: 10px !important; right: 10px !important; }
     .dtab { height: 34px !important; padding: 0 12px !important; font-size: 12.5px !important; }
-
-    /* --- 侧栏:改为近全宽抽屉,收起把手交给顶栏按钮 --- */
-    .edge-tab { display: none !important; }
-    .side-panel { left: 8px !important; right: 8px !important; width: auto !important; top: 64px !important; bottom: 84px !important; }
-
-    /* --- 底部对话条 --- */
-    .bottom-bar { padding: 8px 10px calc(8px + env(safe-area-inset-bottom)) !important; }
-    .bot-avatar { display: none !important; }
-    .send-btn { padding: 0 16px !important; }
 
     .strategy-flow { grid-template-columns: 1fr !important; gap: 8px !important; }
     .strategy-flow-head { display: none !important; }
@@ -325,6 +370,10 @@ const state = {
   srcFormat: '全部',
   srcQuery: '',
   sortKey: 'impact',
+  heatmapSource: 'google-trends',
+  heatmapPick: null,
+  pointsShift: 0,
+  pointsPaused: false,
   showScoreBars: true,
   detailRank: null,
   detailSignal: null,
@@ -339,7 +388,6 @@ const state = {
     { role: 'ai', text: '已把「推理成本」「Agent 基础设施」设为高权重,并下调「创业融资并购」的匹配优先级。建议新增来源:AMD Instinct Blog(投机解码 / 量化)与 LangChain Blog(Agent 编排),需要我加入吗?' },
   ],
   debates: [],
-  favorites: [],
   pending: [],
   pendingQueue: {},
   pendingWritable: false,
@@ -379,8 +427,6 @@ const state = {
     { id: 3, title: 'Q3 算力预算对齐会', link: 'meet.feishu.cn/j/q3-budget', time: '2026-07-10 16:00', status: '待参会', mode: '自动参会', tool: 'Fathom AI', mins: 0, participants: 0, summary: [], actions: [] },
   ],
   nextMeetId: 4,
-  favOpen: false,
-  historyOpen: false,
   feedback: {},
   missing: [],
   customTimelines: {},
@@ -397,16 +443,6 @@ const state = {
 };
 
 // ============ Static data ============
-let bullets = [
-  { text: '推理经济学成为新战场:NVIDIA 把「每 token 成本」摆上台面,AMD 用投机解码正面抢占推理性价比,算力资本继续加码 AI 工厂。', refs: [6, 8, 7] },
-  { text: '前沿模型可得性加速:Claude Sonnet 5 登陆 AWS、开源 Gemma 4 与 Google 低成本新模型密集发布,SOTA 能力的获取窗口正在缩短。', refs: [3, 4, 5] },
-  { text: 'Agent 从 demo 走向基础设施:A2A 网关、自优化记忆与结构化记忆过滤共同指向多智能体的工程化。', refs: [9, 10, 11] },
-  { text: 'RAG 与向量/图数据层成为标配:HippoRAG 与 AlloyDB AI Functions 印证「数据库即大脑」,对本项目后端选型有直接参考。', refs: [12, 13] },
-  { text: '安全与监管风险实质化:ChatGPT 致害诉讼与深伪/语音诈骗表明,内容可信与产品护栏正从加分项变为硬约束。', refs: [14, 15, 16] },
-  { text: '资本继续涌入算力链:SK Hynix 赴美 IPO、Mistral 持续融资,产业链上下游景气延续。', refs: [17, 18] },
-  { text: '端侧模型能力密度跃升:高通把 10B 级模型跑进手机 NPU,Apple 3B 对标 7B 质量,「云+端」分层架构正在成型。', refs: [19, 20, 21] },
-];
-
 let personal = [
   { ref: 12, match: 94, title: 'HippoRAG: Neurobiologically inspired RAG using Amazon Bedrock', reason: '命中关注方向「RAG 后端选型」— 图结构 + 个性化 PageRank 的检索方案,可直接对比你当前的向量方案。', basis: [['内部相关文档','模型选型评测表'],['追踪动向','RAG / 向量与图数据层']] },
   { ref: 9, match: 88, title: 'Building a serverless A2A gateway for agent discovery, routing, and access control', reason: '命中关注方向「Agent 基础设施」— serverless A2A 网关与你在评估的多智能体路由架构高度重合。', basis: [['内部相关文档','技术决策记录库'],['追踪动向','Agent 路由 / A2A 协议']] },
@@ -485,10 +521,102 @@ let briefMeta = {
   date: '2026-07-07',
   title: 'AI 竞争主线正在切换',
   intro: '从「谁的模型更强」转向「谁能更便宜、更可靠、更合规地把模型跑进生产」',
+  bullets: [],
+};
+// 看板是当期快照,由 src/dashboard.py 落成静态 JSON;两块各自带 error,一块挂了另一块照常显示
+let dashboard = { generatedAt:'', leaderboard:null, market:null };
+let dashboardStatus = { loading:true, error:'' };
+let heatmap = { days:[], topics:[], labels:{}, matrix:{raw:[],normalized:[]}, items:{}, itemIndex:{}, trend:{}, source:'google-trends', sources:{} };
+let heatmapStatus = { loading:false, error:'', demo:true };
+
+// 前端演示：Google Trends 兴趣指数 + X 热搜讨论量。真实采集接上后同一份结构替换即可。
+const HEAT_TOPIC_LABELS = {
+  agent:'智能体', reasoning:'推理', multimodal:'多模态', 'open-source-model':'开源模型',
+  'rag-search':'RAG / 检索', infra:'算力基建', embodied:'具身智能',
+  'safety-policy':'安全监管', product:'应用产品', funding:'融资并购',
+};
+const HEAT_TOPIC_KEYS = Object.keys(HEAT_TOPIC_LABELS);
+const HEAT_QUERIES = {
+  agent: { g:'AI agent MCP', x:'#AIAgents' },
+  reasoning: { g:'test time compute', x:'#Reasoning' },
+  multimodal: { g:'image video generation AI', x:'#Multimodal' },
+  'open-source-model': { g:'open source LLM', x:'#OpenSourceAI' },
+  'rag-search': { g:'RAG retrieval augmented', x:'#RAG' },
+  infra: { g:'AI chips inference GPU', x:'#AIInfra' },
+  embodied: { g:'humanoid robot AI', x:'#EmbodiedAI' },
+  'safety-policy': { g:'AI regulation safety', x:'#AISafety' },
+  product: { g:'ChatGPT Copilot product', x:'#AIProduct' },
+  funding: { g:'AI startup funding', x:'#AIFunding' },
+};
+const HEAT_G_RAW = {
+  agent:[42,48,55,61,70,78,88], reasoning:[30,32,28,40,44,50,52], multimodal:[36,40,38,41,47,49,58],
+  'open-source-model':[22,24,31,28,35,40,44], 'rag-search':[18,20,19,21,24,23,26],
+  infra:[50,52,55,58,57,60,63], embodied:[12,14,18,22,28,34,41],
+  'safety-policy':[25,24,22,20,18,16,15], product:[40,42,45,48,46,50,54], funding:[62,55,48,40,33,28,22],
+};
+const HEAT_X_RAW = {
+  agent:[18,22,31,40,48,55,72], reasoning:[9,11,10,16,19,21,24], multimodal:[14,16,15,17,20,22,29],
+  'open-source-model':[8,9,14,12,16,19,21], 'rag-search':[5,6,5,7,8,7,9],
+  infra:[20,21,23,25,24,26,28], embodied:[4,5,7,9,12,15,19],
+  'safety-policy':[11,10,9,8,7,6,5], product:[16,17,18,20,19,22,25], funding:[28,24,20,16,13,11,8],
 };
 
-const filters = ['全部', '端侧模型', '算力芯片云', '政策监管地缘', '前沿模型公司', '技术研究开源', '创业融资并购', '中文媒体'];
-const FORMAT_FILTERS = ['论文', '视频', '播客', '社交媒体帖子', '公众号'];
+function packHeatSource(rawMap, kind){
+  const days = ['08-21','08-22','08-23','08-24','08-25','08-26','今天'];
+  const raw = HEAT_TOPIC_KEYS.map(t => (rawMap[t] || days.map(()=>0)).slice());
+  const normalized = raw.map(row => {
+    const peak = Math.max(...row, 1);
+    return row.map(v => +(v / peak).toFixed(4));
+  });
+  const trend = {};
+  const items = {};
+  const itemIndex = {};
+  HEAT_TOPIC_KEYS.forEach((topic, i) => {
+    const row = raw[i];
+    const prior = row.slice(0, -1);
+    const priorMean = prior.reduce((a,b)=>a+b,0) / (prior.length || 1);
+    trend[topic] = priorMean ? +(row[row.length-1] / priorMean).toFixed(3) : 1;
+    days.forEach((day, j) => {
+      const q = HEAT_QUERIES[topic] || { g:topic, x:'#'+topic };
+      const ident = `${kind}-${topic}-${day}`;
+      const isG = kind === 'g';
+      itemIndex[ident] = {
+        title: isG ? `Google Trends · ${q.g}` : `X 热搜 · ${q.x}`,
+        source: isG ? 'Google Trends' : 'X',
+        url: isG
+          ? `https://trends.google.com/trends/explore?q=${encodeURIComponent(q.g)}`
+          : `https://x.com/search?q=${encodeURIComponent(q.x)}&src=typed_query&f=live`,
+      };
+      items[`${topic}|${day}`] = [ident];
+    });
+  });
+  return { days, raw, normalized, trend, items, itemIndex };
+}
+
+function applyHeatDemo(source){
+  const src = source === 'x' ? 'x' : 'google-trends';
+  const packed = src === 'x' ? packHeatSource(HEAT_X_RAW, 'x') : packHeatSource(HEAT_G_RAW, 'g');
+  heatmap = {
+    days: packed.days,
+    topics: HEAT_TOPIC_KEYS.slice(),
+    labels: { ...HEAT_TOPIC_LABELS },
+    matrix: { raw: packed.raw, normalized: packed.normalized },
+    items: packed.items,
+    itemIndex: packed.itemIndex,
+    trend: packed.trend,
+    source: src,
+    sources: {
+      'google-trends': { name:'Google Trends', url:'https://trends.google.com' },
+      x: { name:'X Trending', url:'https://x.com/explore' },
+    },
+  };
+  heatmapStatus = { loading:false, error:'', demo:true };
+}
+
+applyHeatDemo('google-trends');
+
+const filters = ['全部', '端侧模型', '前沿模型公司', '技术研究开源', '算力芯片云', '政策监管地缘', '模型评测基准', '产品化企业采用', '创业融资并购', '中文媒体', '其他'];
+const FORMAT_FILTERS = ['论文', '视频', '播客', '社交媒体帖子', '公众号', 'Github热榜'];
 // 「端侧模型」是标签驱动的横切专题,不是领域分类:按 tags 匹配
 const EDGE_FILTER = '端侧模型';
 function normalizeCategory(cat){
@@ -700,8 +828,8 @@ async function loadBrief(){
       date: data.date || '',
       title: data.title || 'AI Signal 每日情报',
       intro: data.intro || '',
+      bullets: Array.isArray(data.bullets) ? data.bullets : [],
     };
-    bullets = Array.isArray(data.bullets) ? data.bullets : [];
     signals = (data.signals || []).map((s, index)=>({
       rank: index + 1,
       recordId: s.recordId,
@@ -740,20 +868,13 @@ async function loadBrief(){
     signals.forEach(s => { s.contentType = signalContentType(s); s.kind = s.contentType || '文章'; });
     // 编号即阅读顺序：按影响分从高到低重排后再编号，默认视图才会是连续的 1、2、3…
     // 同分时用新颖度、发布时间兜底，保证每次加载的顺序稳定。
-    // 简报要点里的引用编号是按后端给出的信号顺序算的，重排后必须一并改写，
-    // 否则「跳转到 #N」会跳到另一条信号上。
-    const refRemap = new Map();
     signals.sort((a, b) =>
       b.impact - a.impact ||
       b.novel - a.novel ||
       String(b.date).localeCompare(String(a.date)) ||
       a.rank - b.rank
     );
-    signals.forEach((s, index) => { refRemap.set(s.rank, index + 1); s.rank = index + 1; });
-    bullets = bullets.map(b => ({
-      ...b,
-      refs: (b.refs || []).map(r => refRemap.get(r)).filter(Boolean),
-    }));
+    signals.forEach((s, index) => { s.rank = index + 1; });
     const seenImages = new Set();
     signals.forEach(s=>{
       const imageKey = s.image.split(/[?#]/)[0].toLowerCase();
@@ -788,8 +909,8 @@ async function loadBrief(){
       intro: date
         ? '没有找到该日期的简报数据：这天可能没有运行采集，或者链接里的日期有误。去掉网址里的 ?date= 参数即可查看最新一期。'
         : `简报数据加载失败（${error.message}），请稍后重试。`,
+      bullets: [],
     };
-    bullets = [];
     signals = [];
     personal = [];
     render();
@@ -924,6 +1045,28 @@ async function loadTimeline(){
   }
   render();
 }
+async function loadDashboard(){
+  dashboardStatus={loading:true,error:''};
+  try {
+    const response=await fetch('data/dashboard-latest.json', { cache:'no-store' });
+    if(!response.ok) throw new Error(`HTTP ${response.status}`);
+    const data=await response.json();
+    dashboard={
+      generatedAt:data.generatedAt||'',
+      leaderboard:data.leaderboard||null,
+      market:data.market||null,
+    };
+    dashboardStatus={loading:false,error:''};
+  } catch(error) {
+    dashboard={generatedAt:'',leaderboard:null,market:null};
+    dashboardStatus={loading:false,error:String(error.message||error)};
+  }
+  render();
+}
+async function loadHeatmap(){
+  applyHeatDemo(state.heatmapSource);
+  render();
+}
 const App = {
   goBrief(){ state.page='brief'; state.detailRank=null; render(); },
   goSources(){ state.page='sources'; state.detailRank=null; render(); },
@@ -1042,9 +1185,6 @@ const App = {
     render();
   },
   removeMeeting(id){ state.meetings = state.meetings.filter(m=>m.id!==id); render(); },
-  toggleFav(rank){ const i=state.favorites.indexOf(rank); if(i>=0) state.favorites.splice(i,1); else { state.favorites.unshift(rank); state.favOpen=true; } render(); },
-  removeFav(rank){ const i=state.favorites.indexOf(rank); if(i>=0) state.favorites.splice(i,1); render(); },
-  toggleFavPanel(){ state.favOpen=!state.favOpen; render(); },
   async addPending(rank){
     if(!state.pendingWritable) return;
     const signal=signals.find(x=>x.rank===rank); if(!signal || state.pending.includes(signal.recordId)) return;
@@ -1056,7 +1196,6 @@ const App = {
     const queueId=state.pendingQueue[recordId]; if(queueId) await sourceApi(`/api/report-pending/${encodeURIComponent(queueId)}`,{method:'DELETE'});
     state.pending=state.pending.filter(id=>id!==recordId); delete state.pendingQueue[recordId]; render();
   },
-  toggleHistory(){ state.historyOpen=!state.historyOpen; render(); },
   setFeedback(rank, key){ const cur=state.feedback[rank]; state.feedback[rank] = (cur===key ? null : key); renderDetailLayer(); },
   reportMissing(){ const el=document.getElementById('missInput'); const t=(el && el.value || '').trim(); if(!t) return; state.missing.unshift(t); el.value=''; render(); },
   async trackEntity(){
@@ -1082,20 +1221,58 @@ const App = {
     state.timelineEntity=Object.keys(timelineData)[0]||'';
     render();
   },
-  jumpTo(rank){
-    // 索引可能指向被筛掉/在另一页的卡片:先回到简报「全部」再滚动
-    if(state.page!=='brief' || state.filter!=='全部'){ state.page='brief'; state.filter='全部'; render(); }
-    const go = () => {
-      const el = document.getElementById('signal-'+rank);
-      if(!el) return;
-      el.scrollIntoView({ behavior:'smooth', block:'center' });
-      el.classList.remove('flash-red'); void el.offsetWidth; el.classList.add('flash-red');
-      setTimeout(()=>el.classList.remove('flash-red'), 1600);
-    };
-    requestAnimationFrame(()=>requestAnimationFrame(go));
-  },
   setFilter(f){ state.filter=f; render(); },
   setSort(v){ state.sortKey=v; render(); },
+  logoFallback(img){
+    if(!img) return;
+    const parent = img.parentNode;
+    const letters = img.dataset.fb || '?';
+    const step = img.dataset.step || '';
+    if(step !== 'g' && img.dataset.domain){
+      img.dataset.step = 'g';
+      img.src = 'https://www.google.com/s2/favicons?sz=128&domain=' + encodeURIComponent(img.dataset.domain);
+      return;
+    }
+    img.remove();
+    if(parent && !parent.querySelector('.logo-fb')){
+      const fb = document.createElement('span');
+      fb.className = 'logo-fb';
+      fb.textContent = letters;
+      parent.appendChild(fb);
+    }
+  },
+  setHeatmapSource(source){
+    state.heatmapSource = source === 'x' ? 'x' : 'google-trends';
+    state.heatmapPick = null;
+    applyHeatDemo(state.heatmapSource);
+    render();
+  },
+  pickHeatmapCell(topic, day, evt){
+    if(evt) evt.stopPropagation();
+    App.hideHeatTip();
+    const cur = state.heatmapPick;
+    if(cur && cur.topic === topic && cur.day === day){
+      state.heatmapPick = null;
+    } else {
+      state.heatmapPick = { topic, day };
+    }
+    render();
+  },
+  hideHeatTip(){
+    const el = document.getElementById('heatTip');
+    if(el) el.hidden = true;
+  },
+  showHeatTip(evt, topic, week, raw, norm){
+    const el = document.getElementById('heatTip');
+    if(!el) return;
+    const label = (heatmap.labels && heatmap.labels[topic]) || topic;
+    el.innerHTML = `<strong>${esc(label)}</strong><br>${esc(week)} · ${raw}${heatmap.source==='x'?' 条':' 兴趣'} · 相对 ${Number(norm).toFixed(2)}`;
+    el.hidden = false;
+    const r = evt.currentTarget.getBoundingClientRect();
+    const tw = el.offsetWidth || 180;
+    el.style.left = Math.min(window.innerWidth - tw - 12, r.left) + 'px';
+    el.style.top = (r.bottom + 8) + 'px';
+  },
   setSrcTab(t){ state.srcTab=t; render(); },
   setSrcFormat(f){ state.srcFormat=f; render(); },
   setSrcQuery(v){
@@ -1350,22 +1527,13 @@ function headerHtml(A){
     <nav class="top-nav" style="display: flex; align-items: center; gap: 6px;">${navBtns}</nav>
     <div class="top-actions" style="margin-left: auto; display: flex; align-items: center; gap: 10px; font-size: 12px; font-family: 'Geist Mono', ui-monospace, Menlo, monospace;">
       <span class="top-stats" style="display: inline-flex; align-items: center; height: 32px; padding: 0 11px; background: #fff; border: 1.5px solid var(--ds-ink-line); color: var(--ds-text); font-weight: 700;">${signals.length} 条 · ${state.sources.filter(s=>s.on).length} 源</span>
-      <button onclick="App.toggleHistory()" title="AI 对话历史" style="display: inline-flex; align-items: center; gap: 5px; height: 32px; padding: 0 12px; border: 1.5px solid var(--ds-ink-line); background: ${state.historyOpen?A.accent:'#fff'}; color: ${state.historyOpen?'#fff':'var(--ds-text)'}; font-size: 12px; font-weight: 700; cursor: pointer; font-family: inherit;">✦ 历史</button>
-      <button onclick="App.toggleFavPanel()" title="收藏栏" style="display: inline-flex; align-items: center; gap: 5px; height: 32px; padding: 0 12px; border: 1.5px solid var(--ds-ink-line); background: ${state.favOpen?A.accent:'#fff'}; color: ${state.favOpen?'#fff':'var(--ds-text)'}; font-size: 12px; font-weight: 700; cursor: pointer; font-family: inherit;">★ ${state.favorites.length}</button>
     </div>
   </header>`;
 }
 
 // 底部 AI 对话条:浅色底,输入区附方角卡片层(历史见左侧栏)
 function bottomBarHtml(A){
-  return `
-  <nav class="bottom-bar" style="position: fixed; left: 0; right: 0; bottom: 0; z-index: 60; padding: 12px 16px calc(12px + env(safe-area-inset-bottom)); background: #f4f1ea; border-top: 1.5px solid var(--ds-ink-line);">
-    <div style="display: flex; gap: 8px; width: min(760px, 100%); margin: 0 auto; align-items: center;">
-      <span class="bot-avatar" style="flex: none; width: 40px; height: 40px; display: inline-flex; align-items: center; justify-content: center; background: var(--ds-ink-line); color: #fff; font-size: 15px;">✦</span>
-      <input id="botInput" class="bot-input" placeholder="问 AI 助手:调整偏好、解读信号、推荐来源…" onkeydown="if(event.key==='Enter'){event.preventDefault();App.sendBottomChat();}" />
-      <button class="send-btn" onclick="App.sendBottomChat()" style="height: 40px; padding: 0 22px; border: 1.5px solid var(--ds-ink-line); background: ${A.accent}; color: #ffffff; font-size: 13px; font-weight: 700; cursor: pointer;">发送</button>
-    </div>
-  </nav>`;
+  return '';
 }
 
 // 机构 logo / 头像:优先真实 logo(favicon),失败回退圆形单色字标
@@ -1481,109 +1649,318 @@ function coverHtml(A, s, h){
   </div>`;
 }
 
-// 复杂的分区分隔带:mono 编号 + 标题 + 刻度虚线 + 菱形节点 + 流光细线
-function techDivider(A, num, label, onDark){
-  const line = onDark ? 'rgba(22,19,15,.28)' : 'rgba(19,19,22,.28)';
-  const rail = onDark ? 'rgba(22,19,15,.14)' : 'rgba(19,19,22,.12)';
-  const titleColor = onDark ? '#ffffff' : '#131316';
-  const bg = onDark ? 'transparent' : '#ffffff';
+// 分区分隔带:mono 编号 + 标题 + 刻度虚线 + 菱形节点 + 流光细线。
+// 撑满所在容器，由外层决定宽度——现在它长在信息流那一列里，不再是整页通栏。
+function techDivider(A, num, label, tail){
+  const line = 'rgba(19,19,22,.28)';
+  const rail = 'rgba(19,19,22,.12)';
   return `
-  <div style="position: relative; background: ${bg};">
-    <div class="page-rail" style="max-width: 1180px; margin: 0 auto; border-left: 1px dashed ${rail}; border-right: 1px dashed ${rail};">
-      <div class="divider-row" style="position: relative; display: flex; align-items: center; gap: 14px; padding: 16px 24px;">
-        <span style="width: 7px; height: 7px; border: 1px solid ${A.accent}; background: ${A.accentSoft}; transform: rotate(45deg); flex: none;"></span>
-        <span style="font-family: 'Geist Mono', ui-monospace, Menlo, monospace; font-size: 11px; font-weight: 600; letter-spacing: .12em; color: ${A.accentBright}; background: ${A.accentSoft}; border: 1px solid ${A.accentBorder}; padding: 4px 10px; border-radius: 6px; white-space: nowrap;">${num}</span>
-        <span style="font-size: 13px; font-weight: 700; letter-spacing: .02em; color: ${titleColor}; white-space: nowrap;">${label}</span>
-        <span style="flex: 1; height: 9px; background: repeating-linear-gradient(90deg, ${line} 0 2px, transparent 2px 10px); -webkit-mask-image: linear-gradient(90deg, #000 0, #000 55%, transparent 100%); mask-image: linear-gradient(90deg, #000 0, #000 55%, transparent 100%);"></span>
-        <span class="divider-tail" style="font-family: 'Geist Mono', ui-monospace, Menlo, monospace; font-size: 10.5px; color: var(--ds-text-3); letter-spacing: .1em; white-space: nowrap;">SIGNAL // ${num}</span>
-        <span class="divider-tail" style="width: 7px; height: 7px; border: 1px solid ${rail}; transform: rotate(45deg); flex: none;"></span>
-      </div>
-      <div style="height: 5px; background: linear-gradient(90deg, ${A.accent}, ${A.accent} 18%, ${A.accentBorder} 42%, transparent 72%); background-size: 200% 100%; animation: hairline 7s linear infinite;"></div>
+  <div style="position: relative; margin-bottom: 18px;">
+    <div class="divider-row" style="position: relative; display: flex; align-items: center; gap: 12px; padding: 12px 0;">
+      <span style="width: 7px; height: 7px; border: 1px solid ${A.accent}; background: ${A.accentSoft}; transform: rotate(45deg); flex: none;"></span>
+      <span style="font-family: 'Geist Mono', ui-monospace, Menlo, monospace; font-size: 11px; font-weight: 600; letter-spacing: .12em; color: ${A.accentBright}; background: ${A.accentSoft}; border: 1px solid ${A.accentBorder}; padding: 4px 10px; border-radius: 6px; white-space: nowrap;">${num}</span>
+      <span style="font-size: 14px; font-weight: 700; letter-spacing: .02em; color: #131316; white-space: nowrap;">${label}</span>
+      <span style="flex: 1; height: 9px; background: repeating-linear-gradient(90deg, ${line} 0 2px, transparent 2px 10px); -webkit-mask-image: linear-gradient(90deg, #000 0, #000 55%, transparent 100%); mask-image: linear-gradient(90deg, #000 0, #000 55%, transparent 100%);"></span>
+      ${tail ? `<span class="divider-tail" style="font-family: 'Geist Mono', ui-monospace, Menlo, monospace; font-size: 10.5px; color: var(--ds-text-3); letter-spacing: .08em; white-space: nowrap;">${esc(tail)}</span>` : ''}
+      <span class="divider-tail" style="width: 7px; height: 7px; border: 1px solid ${rail}; transform: rotate(45deg); flex: none;"></span>
     </div>
+    <div style="height: 4px; background: linear-gradient(90deg, ${A.accent}, ${A.accent} 18%, ${A.accentBorder} 42%, transparent 72%); background-size: 200% 100%; animation: hairline 7s linear infinite;"></div>
   </div>`;
+}
+
+// 右栏两块看板。深色终端风,数字在黑底上更跳,和左边浅色信息流拉开层次。
+// 窄栏只放「名次 / 名字 / 一个数」这种一眼能扫的量,吞吐、单价、市值这些
+// 需要横向对比的列放不下也不该硬塞——挤成三号字反而谁都不看。
+function dataRailHtml(A){
+  const mono = "'Geist Mono', ui-monospace, Menlo, monospace";
+  const TXT = '#faf7f0', DIM = '#8f887a', LINE = 'rgba(255,255,255,.10)';
+  // 涨绿跌红是欧美惯例,中文财经反过来:这里跟 A 股读者的直觉走
+  const UP = '#ff5f52', DOWN = '#34d399';
+  const num = (v, digits) => (v===null || v===undefined || v==='') ? '—' : Number(v).toFixed(digits);
+  const pctColor = p => (p===null || p===undefined) ? DIM : (p>0 ? UP : p<0 ? DOWN : TXT);
+
+  // 外网 favicon 在国内经常打不开，已知厂商用仓库里的 SVG；其余再试 Google，最后才露字标。
+  const LOGO_ASSET = {
+    'anthropic.com': 'data/logos/anthropic.svg?v=2',
+    'openai.com': 'data/logos/openai.svg?v=2',
+    'x.ai': 'data/logos/x.svg?v=2',
+    'meta.com': 'data/logos/meta.svg?v=2',
+    'google.com': 'data/logos/google.svg?v=2',
+    'nvidia.com': 'data/logos/nvidia.svg?v=2',
+    'qwen.ai': 'data/logos/alibabadotcom.svg?v=2',
+    'moonshot.cn': 'data/logos/moonshot.svg?v=2',
+    'z.ai': 'data/logos/zai.svg?v=2',
+  };
+  const logoChip = (domain, fallback, size) => {
+    const local = LOGO_ASSET[domain] || '';
+    const src = local || (domain ? `https://www.google.com/s2/favicons?sz=128&domain=${esc(domain)}` : '');
+    const letters = esc(String(fallback||'?').slice(0,2));
+    const inner = src
+      ? `<img src="${src}" alt="" loading="lazy" referrerpolicy="no-referrer" data-domain="${esc(domain)}" data-fb="${letters}" onerror="App.logoFallback(this)" style="width: ${size-4}px; height: ${size-4}px; object-fit: contain; display: block;">`
+      : `<span class="logo-fb">${letters}</span>`;
+    return `<span class="aa-logo" style="flex: none; width: ${size}px; height: ${size}px; border-radius: 5px; display: inline-flex; align-items: center; justify-content: center; overflow: hidden; background: #fff; color: #16130f; font-family: ${mono}; font-size: ${Math.round(size*0.42)}px; font-weight: 700;">${inner}</span>`;
+  };
+
+  const empty = msg => `<p style="margin: 0; padding: 26px 14px; text-align: center; font-family: ${mono}; font-size: 11.5px; line-height: 1.7; color: ${DIM};">${esc(msg)}</p>`;
+
+  // 看板缺数据要明说是哪一块、为什么,留白会让停更看起来像正常状态
+  const boardBody = (board, label, rows, build) => {
+    if(dashboardStatus.loading) return empty('LOADING…');
+    if(dashboardStatus.error) return empty(`看板数据加载失败（${dashboardStatus.error}）`);
+    if(!board) return empty(`暂无${label}数据`);
+    if(board.error) return empty(`暂无${label}数据：${board.error}`);
+    if(!rows.length) return empty(`暂无${label}数据`);
+    return build();
+  };
+
+  const board = (title, time, body, titleHref) => `
+    <section style="position: relative; background: #0a0a0a; border: 1.5px solid var(--ds-ink-line); box-shadow: 5px 5px 0 rgba(22,19,15,.10); overflow: hidden;">
+      <div style="height: 3px; background: ${A.accent};"></div>
+      <div style="display: flex; align-items: center; gap: 8px; padding: 11px 14px; border-bottom: 1px solid ${LINE};">
+        <span style="width: 6px; height: 6px; background: ${A.accent}; transform: rotate(45deg); flex: none;"></span>
+        ${titleHref
+          ? `<a href="${esc(titleHref)}" target="_blank" rel="noopener" style="font-size: 13.5px; font-weight: 700; color: ${TXT};">${esc(title)}</a>`
+          : `<span style="font-size: 13.5px; font-weight: 700; color: ${TXT};">${esc(title)}</span>`}
+        <span style="margin-left: auto; font-family: ${mono}; font-size: 9px; letter-spacing: .08em; color: ${DIM};">${esc(time || '—')}</span>
+      </div>
+      ${body}
+    </section>`;
+
+  const lb = dashboard.leaderboard;
+  const models = (lb && lb.models) || [];
+  const arenaBody = boardBody(lb, '榜单', models, () => {
+    // 智能指数不占独立一列，直接当模型名的背景填色：一根条 + 一行字用同一块地方，
+    // 窄栏里省下的就是名字能完整显示的那几十像素。
+    // 填色按可见区间（末位→榜首）铺开，用 0 或 100 做基准时前 12 名只差几分，
+    // 所有行会填成一样长，看不出梯队。
+    const scores = models.map(m => m.intelligence || 0);
+    const hi = Math.max(...scores), lo = Math.min(...scores);
+    const fillWidth = v => hi > lo ? 8 + 92 * ((v || 0) - lo) / (hi - lo) : 100;
+    return `<div>${models.map(m => `
+      <div style="display: grid; grid-template-columns: 20px 22px minmax(0,1fr); gap: 8px; align-items: center; padding: 5px 14px; border-bottom: 1px solid rgba(255,255,255,.05);">
+        <span style="font-family: ${mono}; font-size: 11px; font-weight: 700; color: ${m.rank<=3 ? A.accent : DIM};">${String(m.rank).padStart(2,'0')}</span>
+        ${logoChip(m.logoDomain, m.creator, 22)}
+        <span style="position: relative; display: flex; align-items: center; gap: 8px; min-width: 0; height: 26px; padding: 0 8px; overflow: hidden; background: rgba(255,255,255,.05);">
+          <span style="position: absolute; left: 0; top: 0; bottom: 0; width: ${fillWidth(m.intelligence)}%; background: linear-gradient(90deg, color-mix(in srgb, ${A.accent} 78%, transparent), color-mix(in srgb, ${A.accent} 26%, transparent));"></span>
+          <span style="position: relative; min-width: 0; font-size: 12.5px; font-weight: 650; color: ${TXT}; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${esc(m.name)}</span>
+          <span style="position: relative; margin-left: auto; font-family: ${mono}; font-size: 11.5px; font-weight: 700; color: ${TXT}; font-variant-numeric: tabular-nums;">${num(m.intelligence,1)}</span>
+        </span>
+      </div>`).join('')}</div>`;
+  });
+
+  const mk = dashboard.market;
+  const quotes = (mk && mk.quotes) || [];
+  const quoteName = q => {
+    const raw = String(q.name || '').trim();
+    if(raw==='Meta Platforms' || /^Meta\s+Platform/i.test(raw)) return 'Meta';
+    if(raw==='Snowflake Inc.' || /^Snowflake/i.test(raw)) return 'Snowflake';
+    if(/^MINIMAX/i.test(raw)) return 'MiniMax';
+    return raw.replace(/-U$/, '').replace(/\s+Inc\.?$/i, '');
+  };
+  const quoteHref = q => q.url || (q.logoDomain ? `https://${q.logoDomain}` : '');
+  const quoteRow = q => {
+    const pct = q.changePct;
+    const color = pctColor(pct);
+    const sign = pct>0 ? '+' : '';
+    const href = quoteHref(q);
+    const inner = `
+        <span class="quote-name" style="min-width: 0; font-size: 12px; font-weight: 650; color: ${TXT}; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${esc(quoteName(q))}</span>
+        <span style="font-family: ${mono}; font-size: 11.5px; font-weight: 700; font-variant-numeric: tabular-nums; color: ${color};">${sign}${num(pct,2)}%</span>`;
+    return href
+      ? `<a class="quote-row" href="${esc(href)}" target="_blank" rel="noopener" title="${esc(quoteName(q))}">${inner}</a>`
+      : `<div class="quote-row">${inner}</div>`;
+  };
+  const quoteGroup = (label, rows) => rows.length ? `
+    <div style="min-width: 0;">
+      <div style="padding: 8px 8px 4px; font-family: ${mono}; font-size: 9px; letter-spacing: .14em; color: ${DIM};">${esc(label)}</div>
+      ${rows.map(quoteRow).join('')}
+    </div>` : '';
+  const marketBody = boardBody(mk, '行情', quotes, () => {
+    const us = quotes.filter(q => q.market === '美股');
+    const cn = quotes.filter(q => q.market !== '美股');
+    return `<div style="display: grid; grid-template-columns: 1fr 1fr; min-width: 0;">${quoteGroup('美股', us)}${quoteGroup('中资', cn)}</div>`;
+  });
+
+  const stamp = b => (b && b.updatedAt ? b.updatedAt.slice(5,16).replace('T',' ') : '');
+
+  return `
+  <aside class="feed-data">
+    ${heatmapHtml(A)}
+    ${board('Artificial Analysis', stamp(lb), arenaBody, (lb&&lb.sourceUrl)||'https://artificialanalysis.ai/')}
+    ${board('AI 概念股', stamp(mk), marketBody)}
+  </aside>`;
+}
+
+// 右栏最上：话题热度。黑底看板与下面两块同一套壳。
+function heatmapHtml(A){
+  const TXT = '#faf7f0', DIM = '#8f887a', LINE = 'rgba(255,255,255,.10)';
+  const days = heatmap.days || [];
+  const labels = heatmap.labels || {};
+  const trends = heatmap.trend || {};
+  const rawM = (heatmap.matrix && heatmap.matrix.raw) || [];
+  const normM = (heatmap.matrix && heatmap.matrix.normalized) || [];
+  const src = heatmap.source === 'x' ? 'x' : 'google-trends';
+  const ordered = (heatmap.topics || []).slice().sort((a,b)=> (Number(trends[b])||0) - (Number(trends[a])||0));
+  const topicIdx = {};
+  (heatmap.topics || []).forEach((t,i)=>{ topicIdx[t]=i; });
+
+  const heatStops = [[255,255,255],[255,176,168],[194,47,42],[110,12,14]];
+  const heatMix = (v)=>{
+    const t = Math.max(0, Math.min(1, Number(v)||0));
+    const n = heatStops.length - 1;
+    const x = t * n;
+    const i = Math.min(n - 1, Math.floor(x));
+    const u = x - i;
+    return heatStops[i].map((c,k)=>Math.round(c + (heatStops[i+1][k]-c)*u));
+  };
+  const heatColor = (v)=> { const c = heatMix(v); return `rgb(${c[0]},${c[1]},${c[2]})`; };
+  const heatInk = (v)=>{
+    const c = heatMix(v);
+    return (0.299*c[0] + 0.587*c[1] + 0.114*c[2]) > 160 ? '#16130f' : '#faf7f0';
+  };
+  const globalPeak = Math.max(1, ...rawM.flat().map(Number));
+
+  const dayHead = days.map(d=>{
+    const short = d === '今天' ? '今' : String(d).replace(/^0/,'').replace(/^.*-/, '');
+    return `<th scope="col" title="${esc(d)}">${esc(short)}</th>`;
+  }).join('');
+
+  const rows = ordered.map(topic=>{
+    const i = topicIdx[topic];
+    const tr = Number(trends[topic]||0);
+    const badge = tr > 1.5 ? '🔥' : (tr < 0.5 ? '❄️' : '');
+    const cells = days.map((day, j)=>{
+      const raw = (rawM[i] && rawM[i][j]) || 0;
+      const norm = (normM[i] && normM[i][j]) || 0;
+      const intensity = raw / globalPeak;
+      const on = state.heatmapPick && state.heatmapPick.topic===topic && state.heatmapPick.day===day;
+      const tArg = JSON.stringify(topic);
+      const dArg = JSON.stringify(day);
+      return `<td><button type="button" class="heat-cell${on?' is-on':''}" style="background:${heatColor(intensity)};color:${heatInk(intensity)}"
+        aria-label="${esc(labels[topic]||topic)} ${esc(day)} ${raw}"
+        onmouseenter="App.showHeatTip(event,${tArg},${dArg},${raw},${Number(norm)||0})"
+        onmouseleave="App.hideHeatTip()"
+        onclick="App.pickHeatmapCell(${tArg},${dArg},event)"></button></td>`;
+    }).join('');
+    return `<tr>
+      <th scope="row"><span class="heat-topic">${esc(labels[topic]||topic)}</span>${badge?`<span class="heat-badge" title="今日 / 近6日均 ${tr.toFixed(2)}">${badge}</span>`:''}</th>
+      ${cells}
+    </tr>`;
+  }).join('');
+
+  let panel = '';
+  const pick = state.heatmapPick;
+  if(pick){
+    const key = pick.topic + '|' + pick.day;
+    const ids = (heatmap.items && heatmap.items[key]) || [];
+    const extra = heatmap.itemIndex || {};
+    const cards = ids.map(id=>{
+      const s = extra[id] || {};
+      return `<a class="heat-hit" href="${esc(s.url||'#')}" target="_blank" rel="noopener">${esc(s.title||id)}${s.source?`<span class="src">${esc(s.source)}</span>`:''}</a>`;
+    }).join('');
+    panel = `<div class="heat-panel">
+      <div class="heat-panel-h">${esc(labels[pick.topic]||pick.topic)} · ${esc(pick.day)}
+        <button type="button" class="heat-x" onclick="state.heatmapPick=null;render()">关闭</button>
+      </div>
+      <div class="heat-hits">${cards || '<div class="heat-empty">该格暂无条目</div>'}</div>
+    </div>`;
+  }
+
+  const legend = heatStops.map((_, i) => `<i style="background:${heatColor(i / (heatStops.length - 1))}"></i>`).join('');
+
+  const body = days.length ? `
+    <div class="heat-toggle" role="group" aria-label="热搜来源">
+      <button type="button" class="${src==='google-trends'?'on':''}" onclick="App.setHeatmapSource('google-trends')">Google</button>
+      <button type="button" class="${src==='x'?'on':''}" onclick="App.setHeatmapSource('x')">X</button>
+    </div>
+    <div class="heat-legend"><span>低</span>${legend}<span>高</span><span style="margin-left:auto;">近 7 日</span></div>
+    <div class="heat-scroll" onscroll="App.hideHeatTip()">
+      <table class="heat-table">
+        <thead><tr><th scope="col"></th>${dayHead}</tr></thead>
+        <tbody>${rows}</tbody>
+      </table>
+    </div>
+    ${panel}
+    <div id="heatTip" class="heat-tip" hidden></div>` : `<p class="heat-status">暂无热度数据</p>`;
+
+  return `
+    <section style="position: relative; background: #0a0a0a; border: 1.5px solid var(--ds-ink-line); box-shadow: 5px 5px 0 rgba(22,19,15,.10); overflow: hidden;">
+      <div style="height: 3px; background: ${A.accent};"></div>
+      <div style="display: flex; align-items: center; gap: 8px; padding: 11px 14px; border-bottom: 1px solid ${LINE};">
+        <span style="width: 6px; height: 6px; background: ${A.accent}; transform: rotate(45deg); flex: none;"></span>
+        <span style="font-size: 13.5px; font-weight: 700; color: ${TXT};">话题热度</span>
+        <span style="margin-left: auto; font-family: 'Geist Mono', ui-monospace, Menlo, monospace; font-size: 9px; letter-spacing: .14em; color: ${DIM};">TOPIC HEAT</span>
+      </div>
+      ${body}
+    </section>`;
+}
+
+function feedNavHtml(A, counts, sortOpts){
+  const mono = "'Geist Mono', ui-monospace, Menlo, monospace";
+  const cats = filters.filter(f => f !== '全部');
+
+  const navItem = (f) => {
+    const active = state.filter === f;
+    const isEdge = f === EDGE_FILTER;
+    return `
+      <button class="nav-item${active?' on':''}" onclick="App.setFilter('${f}')" title="${isEdge?'专题:按「端侧」标签聚合,跨领域':`只看${f}`}" style="display: flex; align-items: center; width: 100%; padding: 6px 8px; border: 1px ${isEdge?'dashed':'solid'} ${active?A.accent:'transparent'}; font-size: 12px; font-weight: ${active?700:550}; font-family: inherit; text-align: left; cursor: pointer;">
+        <span style="min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${isEdge?'✦ ':''}${esc(f)}</span>
+      </button>`;
+  };
+
+  return `
+  <aside class="feed-nav">
+    <div class="nav-all">
+      <button type="button" class="nav-all-btn${state.filter==='全部'?' on':''}" onclick="App.setFilter('全部')">全部 · ${counts['全部']||0}</button>
+      <button type="button" class="nav-clear" onclick="App.setFilter('全部')">清除筛选</button>
+    </div>
+    <div class="nav-block sections">
+      <div style="height: 3px; background: ${A.accent};"></div>
+      <div style="padding: 12px 8px 14px;">
+        <div class="nav-label" style="padding: 0 9px 7px; font-family: ${mono}; font-size: 10px; font-weight: 700; letter-spacing: .14em; color: #8f887a;">SECTIONS</div>
+        <div class="nav-group">
+          ${cats.map(f => navItem(f)).join('')}
+        </div>
+      </div>
+    </div>
+
+    <div class="nav-block formats">
+      <div style="height: 3px; background: #34d399;"></div>
+      <div style="padding: 12px 8px 14px;">
+        <div class="nav-label" style="padding: 0 9px 7px; font-family: ${mono}; font-size: 10px; font-weight: 700; letter-spacing: .14em; color: #8f887a;">FORMATS</div>
+        <div class="nav-group">
+          ${FORMAT_FILTERS.map(f => navItem(f)).join('')}
+        </div>
+      </div>
+    </div>
+
+    <div class="nav-block sort">
+      <div style="display: flex; align-items: center; gap: 8px; padding: 10px 12px;">
+        <span style="font-family: ${mono}; font-size: 10px; letter-spacing: .14em; color: #8f887a;">SORT</span>
+        <select onchange="App.setSort(this.value)" style="margin-left: auto; height: 28px; padding: 0 8px; font-size: 12px;">${sortOpts}</select>
+      </div>
+    </div>
+  </aside>`;
 }
 
 function briefHtml(A){
   const mono = "'Geist Mono', ui-monospace, Menlo, monospace";
-  // 简报卡片:编号 + 标题 + 正文 + 引用角标,沿用信号卡片墨线风(带彩色底)
-  // 每条简报一个主题色,文字衬同色系色块
-  const BRIEF_COLORS = ['#c22f2a','#2b6cb0','#1f7a45','#a06600','#5a4fb5','#0f766e','#b23a6a'];
-  const briefCard = (b, i, featured) => {
-    const c = BRIEF_COLORS[i % BRIEF_COLORS.length];
-    const tint = `color-mix(in srgb, ${c} 8%, #fff)`;
-    const chip = `color-mix(in srgb, ${c} 16%, #fff)`;
-    const cbd = `color-mix(in srgb, ${c} 40%, transparent)`;
-    const m = b.text.match(/^(.*?)[:：]([\s\S]*)$/);
-    const clause = b.text.match(/^(.{6,28}?)[，。；;]([\s\S]+)$/);
-    const explicitTitle = b.title && !/^要点\s*\d*$/i.test(b.title.trim()) ? b.title.trim() : '';
-    const title = explicitTitle || (m ? m[1] : clause ? clause[1] : `${b.text.slice(0,24)}${b.text.length>24?'…':''}`);
-    const rest = m ? m[2] : clause ? clause[2] : b.text;
-    const num = String(i+1).padStart(2,'0');
-    const refsHtml = b.refs.map(r=>`<button class="ref" onclick="event.stopPropagation(); App.jumpTo(${r})" title="跳转到 #${r} 信号卡片" style="display: inline-flex; align-items: center; justify-content: center; min-width: 20px; height: 19px; padding: 0 6px; border: 1px solid ${cbd}; background: ${chip}; color: ${c}; font-size: 11px; font-weight: 700; font-family: ${mono}; cursor: pointer;">${r}</button>`).join(`<span style="color:${cbd}; font-weight:700;">/</span>`);
-    const compactRefs = title.length > 18 || b.refs.length > 4;
-    const refsGridHtml = b.refs.map(r=>`<button class="ref" onclick="event.stopPropagation(); App.jumpTo(${r})" title="跳转到 #${r} 信号卡片" style="display:inline-flex; align-items:center; justify-content:center; min-width:${compactRefs?17:20}px; height:${compactRefs?17:20}px; padding:0 ${compactRefs?3:5}px; border:1px solid ${cbd}; background:${chip}; color:${c}; font-size:${compactRefs?9.5:10.5}px; font-weight:700; font-family:${mono}; cursor:pointer;">${r}</button>`).join('');
-    const balancedTitle = title.length > 22
-      ? `${esc(title.slice(0,Math.floor(title.length*.45)))}<br>${esc(title.slice(Math.floor(title.length*.45)))}`
-      : esc(title);
-    if(featured){
-      return `
-      <div class="brief-card brief-featured" style="position: relative; display: flex; align-items: stretch; background: ${tint}; border: 1.5px solid var(--ds-ink-line); box-shadow: 5px 5px 0 rgba(22,19,15,.08); overflow: hidden;">
-        <div class="bf-num" style="flex: none; display: flex; align-items: center; justify-content: center; width: 130px; border-right: 1.5px solid var(--ds-ink-line); background: ${c};">
-          <span style="font-family: ${mono}; font-size: 52px; font-weight: 700; color: #fff; letter-spacing: -.03em;">${num}</span>
-        </div>
-        <div class="bf-body" style="flex: 1; min-width: 0; display: flex; flex-direction: column; justify-content: center; gap: 12px; padding: 22px 26px;">
-          <div class="bf-head" style="display:flex; align-items:center; gap:12px;">
-            <div class="bc-title" style="font-size: 20px; font-weight: 700; letter-spacing: -.01em; color: var(--ds-text); background: ${chip}; border-left: 4px solid ${c}; padding: 7px 14px;">${esc(title)}</div>
-            <div style="margin-left:auto; display:flex; align-items:center; gap:6px; flex:none;">${refsHtml}</div>
-          </div>
-          <div class="bc-text" style="font-size: 16px; line-height: 1.75; color: ${UI.text2};">${esc(rest)}</div>
-        </div>
-      </div>`;
-    }
-    return `
-      <div class="brief-card" style="position: relative; display: flex; flex-direction: column; gap: 10px; height: 100%; box-sizing: border-box; padding: 16px 16px 14px; background: ${tint}; border: 1.5px solid var(--ds-ink-line); box-shadow: 4px 4px 0 rgba(22,19,15,.06);">
-        <div style="display: flex; align-items: flex-start; gap: 12px;">
-          <span style="font-family: ${mono}; font-size: 34px; font-weight: 700; line-height: .9; color: ${c}; letter-spacing: -.03em; flex: none;">${num}</span>
-          <div class="bc-title" style="flex:1; min-width:0; font-size:20px; font-weight:700; line-height:1.35; letter-spacing:-.01em; color:var(--ds-text); background:${chip}; border-left:3px solid ${c}; padding:6px 10px; white-space:${title.length<=22?'nowrap':'normal'};">${balancedTitle}</div>
-          <div style="margin-left:auto; display:grid; grid-template-columns:repeat(2,minmax(0,auto)); gap:${compactRefs?3:5}px; flex:none;">${refsGridHtml}</div>
-        </div>
-        <div class="bc-text" style="font-size: 16px; line-height: 1.75; color: ${UI.text2}; border-top: 1px solid ${cbd}; padding-top: 10px;">${esc(rest)}</div>
-      </div>`;
-  };
-  const featuredHtml = bullets.length ? briefCard(bullets[0], 0, true) : '';
-  const promoteLast = bullets.length > 2 && bullets.length % 2 === 0;
-  const gridBullets = promoteLast ? bullets.slice(1,-1) : bullets.slice(1);
-  const gridHtml = gridBullets.map((b,i)=>briefCard(b, i+1, false)).join('');
-  const trailingFeaturedHtml = promoteLast
-    ? `<div style="margin-top:16px;">${briefCard(bullets[bullets.length-1], bullets.length-1, true)}</div>`
-    : '';
 
-  const personalHtml = personal.map(p => {
-    const basisHtml = (p.basis || []).map(([label,value])=>{
-      const isDoc = label==='内部相关文档';
-      const color = isDoc ? '#2563a6' : '#187a56';
-      const bg = isDoc ? '#edf5ff' : '#edf9f3';
-      const action = isDoc ? 'App.goSources()' : 'App.goTimeline()';
-      return `<button onclick="event.stopPropagation();${action}" title="${esc(value)}" style="min-width:0; flex:1; display:flex; align-items:center; gap:6px; padding:7px 9px; border:0; border-left:3px solid ${color}; background:${bg}; color:${color}; cursor:pointer;">
-        <span style="flex:none; font-family:${mono}; font-size:10.5px; font-weight:750;">${esc(label)}</span>
-        <span style="min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-size:11.5px;">${esc(value)}</span>
-      </button>`;
-    }).join('');
+  const bullets = briefMeta.bullets || [];
+  const pointsHtml = (bullets.length ? bullets : (briefMeta.intro ? [{ title: briefMeta.title, text: briefMeta.intro, refs: [] }] : [])).map((b) => {
+    const firstRef = (b.refs && b.refs[0]) || 0;
+    const s = firstRef ? signals.find(x => x.rank === firstRef) : null;
+    const imgUrl = s ? topicImageUrl(s) : '';
+    const tp = s ? topicFor(s) : { t: 'AI', bg: '#111', color: '#c22f2a' };
+    const click = firstRef ? `onclick="App.openDetail(${firstRef})" style="cursor:pointer;"` : '';
     return `
-    <div class="personal-card" onclick="App.openDetail(${p.ref})" style="cursor: pointer; display: flex; flex-direction: column; height:100%; box-sizing:border-box; background: ${UI.card}; border: 1.5px solid var(--ds-ink-line); box-shadow: 3px 3px 0 ${A.accentBorder}; overflow: hidden;">
-      <div style="display: flex; align-items: center; gap: 8px; padding: 9px 13px; border-bottom: 1px solid var(--ds-ink-line);">
-        <span style="font-family: ${mono}; font-size: 10.5px; font-weight: 700; letter-spacing: .04em; color: #fff; background: ${A.accent}; padding: 3px 9px;">匹配 ${p.match}%</span>
-        <span style="font-family: ${mono}; font-size: 11px; color: ${UI.text3};">#${p.ref}</span>
-        <span style="margin-left: auto; font-size: 11px; font-weight: 600; color: ${A.accent};">查看详情 →</span>
+    <article class="personal-card" ${click}>
+      <div class="pc-media" style="background: linear-gradient(135deg, ${tp.bg}, #0b0b0e);">
+        <span class="pc-fallback" style="color: ${tp.color};">${esc(tp.t || '')}</span>
+        ${imgUrl ? `<img src="${esc(imgUrl)}" alt="${esc(b.title || '')}" loading="lazy" onerror="this.remove()">` : ''}
       </div>
-      <div style="flex:1; display:flex; flex-direction:column; padding:15px 14px 0;">
-        <div style="flex:1; display:flex; flex-direction:column; justify-content:center; gap:11px; padding:10px 0 14px;">
-          <div style="font-size: 18px; font-weight: 700; line-height: 1.45; color: var(--ds-text);">${esc(p.title)}</div>
-          <div style="font-size: 14.5px; line-height: 1.7; color: ${UI.text2}; border-left: 3px solid ${A.accent}; padding-left: 11px;">${esc(p.reason)}</div>
-        </div>
-        <div class="pc-basis" style="display:flex; gap:7px; padding:10px 0 14px; border-top:1px dashed ${UI.border};">${basisHtml}</div>
-      </div>
-    </div>`;
+      <h3 class="pc-title">${esc(b.title || '')}</h3>
+    </article>`;
   }).join('');
 
   const sortFns = {
@@ -1592,25 +1969,23 @@ function briefHtml(A){
     action: (a,b)=>b.action-a.action,
     date: (a,b)=>b.date.localeCompare(a.date),
   };
-  const sortLabels = { impact:'默认排序', novel:'按新颖度排序', action:'按可行动排序', date:'按时间排序' };
 
-  const filteredSignals = signals.filter(s => matchesFilter(s, state.filter)).slice().sort(sortFns[state.sortKey]);
-  const visible = filteredSignals;
+  const visible = signals.filter(s => matchesFilter(s, state.filter)).slice().sort(sortFns[state.sortKey]);
 
-  const filterChipsHtml = filters.map(f => {
-    const active = state.filter===f;
-    const isEdge = f===EDGE_FILTER;
-    return `<button onclick="App.setFilter('${f}')" title="${isEdge?'专题:按「端侧」标签聚合,跨领域':''}" style="height: 30px; padding: 0 14px; border-radius: 15px; border: 1px ${isEdge?'dashed':'solid'} ${active?A.accentBorder:UI.border}; background: ${active?A.accentSoft:'transparent'}; color: ${active?A.accentBright:UI.text2}; font-size: 12.5px; font-weight: ${active?700:550}; cursor: pointer;">${isEdge?'✦ ':''}${f}</button>`;
-  }).join('') + `<span aria-hidden="true" style="width: 1px; height: 22px; margin: 0 3px; background: ${UI.border2};"></span>` + FORMAT_FILTERS.map(f => {
-    const active = state.filter===f;
-    return `<button onclick="App.setFilter('${f}')" title="按内容形式筛选" style="height: 30px; padding: 0 13px; border-radius: 4px; border: 1px solid ${active?'#2f7d4f':'#8bc7a0'}; background: ${active?'#2f7d4f':'#e8f5eb'}; color: ${active?'#fff':'#17613a'}; font-size: 12.5px; font-weight: ${active?700:600}; cursor: pointer;">▦ ${f}</button>`;
-  }).join('');
+  const counts = { 全部: signals.length };
+  filters.concat(FORMAT_FILTERS).forEach(f => {
+    if(f === '全部') return;
+    counts[f] = signals.filter(s => matchesFilter(s, f)).length;
+  });
 
   const sortOpts = [['impact','默认'],['date','时间']]
     .map(([v,l])=>`<option value="${v}" ${state.sortKey===v?'selected':''}>${l}</option>`).join('');
 
   const cardsHtml = visible.map((s, idx) => {
-    const fav = state.favorites.includes(s.rank);
+    // 「待分析」是真会写进周报待纳入表的动作，公开站只读时按钮置灰而不是藏起来，
+    // 否则读者不知道这条能不能被排进下期周报。
+    const queued = state.pending.includes(s.recordId);
+    const canQueue = state.pendingWritable;
     const num = String(s.rank).padStart(2,'0');
     const tp = topicFor(s);
     const imgUrl = topicImageUrl(s);
@@ -1624,9 +1999,9 @@ function briefHtml(A){
       ? `<div class="sc-subtitle" style="font-family: ${mono}; font-size: 11.5px; line-height: 1.5; color: ${UI.text3}; margin-bottom: 10px;">${esc(s.title)}</div>`
       : '';
     return `
-    <article id="signal-${s.rank}" class="signal-card" onclick="App.openDetail(${s.rank})" style="position: relative; display: flex; background: ${UI.card}; border: 1.5px solid var(--ds-ink-line); box-shadow: 5px 5px 0 rgba(22,19,15,.07); overflow: hidden; min-height: 214px;">
+    <article id="signal-${s.rank}" class="signal-card" onclick="App.openDetail(${s.rank})" style="position: relative; display: flex; background: ${UI.card}; border: 1.5px solid var(--ds-ink-line); box-shadow: 5px 5px 0 rgba(22,19,15,.07); overflow: hidden; height: 288px;">
       <!-- 左:配图,编号角标(=信号号)覆盖左上角 -->
-      <div class="sc-media" style="flex: none; width: 288px; position: relative; border-right: 1.5px solid var(--ds-ink-line); background: linear-gradient(135deg, ${tp.bg}, #0b0b0e); overflow: hidden;">
+      <div class="sc-media" style="flex: none; width: 288px; height: 288px; align-self: flex-start; position: relative; border-right: 1.5px solid var(--ds-ink-line); background: linear-gradient(135deg, ${tp.bg}, #0b0b0e); overflow: hidden;">
         <span style="position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); font-family: ${mono}; font-size: 40px; font-weight: 700; color: ${tp.color}; opacity: .5;">${tp.t}</span>
         <img src="${esc(imgUrl)}" alt="${esc(s.zhTitle)}" loading="lazy" onerror="this.remove()" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;">
         <span style="position: absolute; top: 0; left: 0; z-index: 2; min-width: 46px; height: 46px; padding: 0 8px; background: ${A.accent}; border-right: 1.5px solid var(--ds-ink-line); border-bottom: 1.5px solid var(--ds-ink-line); display: inline-flex; align-items: center; justify-content: center; font-family: ${mono}; font-size: 18px; font-weight: 700; color: #fff;">${num}</span>
@@ -1635,7 +2010,7 @@ function briefHtml(A){
         </span>
       </div>
       <!-- 右:内容,底部格子放为何重要 -->
-      <div class="sc-body" style="flex: 1; min-width: 0; display: flex; flex-direction: column;">
+      <div class="sc-body" style="flex: 1; min-width: 0; min-height: 0; height: 100%; display: flex; flex-direction: column;">
         <div class="sc-meta" style="display: flex; align-items: center; gap: 8px; padding: 10px 46px 10px 18px; border-bottom: 1px solid var(--ds-ink-line); font-family: ${mono}; font-size: 10.5px; letter-spacing: .04em; color: ${UI.text3}; flex-wrap: wrap;">
           ${catsHtml}
           ${tagsHtml ? `<span class="sc-tags" style="display: inline-flex; align-items: center; gap: 6px; flex-wrap: wrap;">${tagsHtml}</span>` : ''}
@@ -1643,11 +2018,15 @@ function briefHtml(A){
             <span>${s.date}</span>
           </span>
         </div>
-        <button onclick="event.stopPropagation(); App.toggleFav(${s.rank})" title="${fav?'取消收藏':'收藏'}" style="position: absolute; top: 0; right: 0; z-index: 2; width: 36px; height: 36px; border: none; border-left: 1px solid var(--ds-ink-line); border-bottom: 1px solid var(--ds-ink-line); background: ${fav?A.accent:'#fff'}; color: ${fav?'#fff':UI.text3}; font-size: 14px; cursor: pointer; display: inline-flex; align-items: center; justify-content: center;">${fav?'★':'☆'}</button>
-        <div class="sc-main" style="flex: 1; padding: 15px 18px;">
+        <button onclick="event.stopPropagation(); App.addPending(${s.rank})" title="${!canQueue?'公开站只读；在本地配置台可加入周报待分析':queued?'已在周报待分析':'加入周报待分析'}" ${queued||!canQueue?'disabled':''} style="position: absolute; top: 0; right: 0; z-index: 2; width: 36px; height: 36px; border: none; border-left: 1px solid var(--ds-ink-line); border-bottom: 1px solid var(--ds-ink-line); background: ${queued?A.accent:'#fff'}; color: ${queued?'#fff':UI.text3}; font-size: 14px; cursor: ${queued||!canQueue?'default':'pointer'}; opacity: ${canQueue?1:.45}; display: inline-flex; align-items: center; justify-content: center;">${queued?'✓':'＋'}</button>
+        <div class="sc-main" style="flex: 1; min-height: 0; display: flex; flex-direction: column; padding: 8px 18px;">
+          <div class="sc-spacer" aria-hidden="true"></div>
+          <div class="sc-copy">
           <h3 class="sc-title" style="margin: 0 0 ${originalLine ? '3px' : '10px'}; font-size: 19px; line-height: 1.4; font-weight: 700; letter-spacing: -.01em; color: var(--ds-text);">${esc(s.zhTitle)}</h3>
           ${originalLine}
           <p style="margin: 0; font-size: 13.5px; line-height: 1.75; color: ${UI.text2}; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;">${esc(s.summary)}</p>
+          </div>
+          <div class="sc-spacer" aria-hidden="true"></div>
         </div>
         <div class="sc-why" style="padding: 12px 18px; border-top: 1px solid var(--ds-ink-line); background: ${A.accentSoft}; border-left: 3px solid ${A.accent};">
           <p style="margin: 0; font-size: 12.5px; line-height: 1.65; color: ${UI.text2}; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;"><strong style="color: ${A.accentDeep};">为何重要</strong> · ${esc(s.why)}</p>
@@ -1657,79 +2036,49 @@ function briefHtml(A){
   }).join('');
 
   return `
-  <main>
-    <section style="position: relative;">
-      <div class="page-rail" style="position: relative; max-width: 1180px; margin: 0 auto; background-color: ${UI.section}; border-left: 1px dashed ${UI.border}; border-right: 1px dashed ${UI.border}; overflow: hidden;">
-        <div class="sec-pad" style="position: relative; padding: 34px 36px 52px;">
-          <!-- 报头 -->
-          <div class="masthead" style="display: flex; align-items: center; gap: 14px; padding-bottom: 14px; margin-bottom: 26px; border-bottom: 2px solid var(--ds-ink-line);">
-            <span style="font-size: 15px; font-weight: 700; color: ${A.accent};">今日情报简报</span>
-            <span style="width: 1px; height: 15px; background: ${UI.border2};"></span>
-            <span style="font-family: ${mono}; font-size: 13px; color: ${UI.text2};">${esc(briefMeta.date)}</span>
-            <span style="margin-left: auto; font-family: ${mono}; font-size: 13px; font-weight: 700; letter-spacing: .08em; color: var(--ds-ink-line);">${signals.length} SIGNALS</span>
-          </div>
-          <!-- 大标题 -->
-          <h1 class="hero-title" style="margin: 0 0 12px; font-size: 58px; line-height: 1.02; font-weight: 800; letter-spacing: -.03em; color: var(--ds-text);">${esc(briefMeta.title)}</h1>
-          <p class="hero-intro" style="margin: 0 0 30px; font-size: 20px; line-height: 1.45; font-weight: 500; color: ${UI.text2}; max-width: 880px;">${esc(briefMeta.intro)}</p>
-          <!-- 头条卡片 -->
-          <div style="margin-bottom: 16px;">${featuredHtml}</div>
-          <!-- 要点 2-5 自适应为两列两行,与头条同宽 -->
-          <div class="brief-grid">${gridHtml}</div>
-          ${trailingFeaturedHtml}
+  <main class="feed-shell">
+    <div class="feed-points">
+      ${techDivider(A, '01', '今日核心要点', briefMeta.date || '')}
+      ${pointsHtml ? `
+      <div class="personal-viewport" id="pointsViewport">
+        <div id="pointsTrack" class="personal-grid">
+          <div class="personal-set">${pointsHtml}</div>
+          <div class="personal-set" aria-hidden="true">${pointsHtml}</div>
         </div>
       </div>
-    </section>
+      <div class="points-bar" id="pointsBar" role="scrollbar" aria-label="要点滚动位置">
+        <div class="points-bar-track"><div class="points-bar-thumb" id="pointsThumb"></div></div>
+      </div>` : `<div style="padding:18px 4px;font-size:12.5px;color:#8f887a;">暂无要点</div>`}
+    </div>
 
-    ${techDivider(A, '02', '与我相关', false)}
-    <section style="position: relative;">
-      <div class="page-rail personal-rail" style="max-width: 1180px; margin: 0 auto; padding: 22px 0;">
-        <div style="position: relative; background: #0a0a0a; background-image: linear-gradient(rgba(255,255,255,.045) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.045) 1px, transparent 1px); background-size: 44px 44px; overflow: hidden; border: 1.5px solid var(--ds-ink-line); box-shadow: 8px 8px 0 rgba(22,19,15,.10);">
-          <div style="position: absolute; top: 0; left: 0; right: 0; height: 4px; background: ${A.accent};"></div>
-          <span style="position: absolute; bottom: 12px; right: 18px; color: rgba(255,255,255,.2); font-family: 'Geist Mono', monospace; font-size: 13px;">+</span>
-          <div class="sec-pad" style="position: relative; padding: 38px 36px 42px;">
-            <div style="display: flex; align-items: baseline; gap: 12px; margin-bottom: 8px; flex-wrap: wrap;">
-              <h2 style="margin: 0; font-size: 21px; font-weight: 700; letter-spacing: -.01em; color: #faf7f0;">与我相关</h2>
-              <span style="font-size: 12px; color: #8f887a;">基于你的关注方向匹配 · RAG 后端选型 / Agent 基础设施 / 推理成本</span>
-            </div>
-            <div class="personal-grid" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 24px;">${personalHtml}</div>
-          </div>
-        </div>
-      </div>
-    </section>
+    ${feedNavHtml(A, counts, sortOpts)}
 
-    ${techDivider(A, '03', '全部信号', false)}
-    <section style="position: relative;">
-      <div class="page-rail" style="position: relative; max-width: 1180px; margin: 0 auto; background-color: ${UI.section}; background-image: radial-gradient(rgba(22,19,15,.055) 1px, transparent 1px), linear-gradient(rgba(22,19,15,.028) 1px, transparent 1px), linear-gradient(90deg, rgba(22,19,15,.028) 1px, transparent 1px); background-size: 22px 22px, 88px 88px, 88px 88px; border-left: 1px dashed ${UI.border}; border-right: 1px dashed ${UI.border}; overflow: hidden;">
-        <div style="position: absolute; top: 120px; left: 3%; width: 300px; height: 300px; border-radius: 50%; background: radial-gradient(closest-side, ${A.accentFaint}, transparent); pointer-events: none;"></div>
-        <div class="sec-pad" style="position: relative; padding: 44px 36px 72px;">
-          <div style="display: flex; align-items: baseline; gap: 12px; margin-bottom: 18px;">
-            <h2 style="margin: 0; font-size: 21px; font-weight: 700; letter-spacing: -.01em; color: var(--ds-text);">全部信号</h2>
-            <span style="font-size: 12px; color: ${UI.text3};">${sortLabels[state.sortKey]}</span>
-          </div>
-          <div class="filter-row" style="display: flex; align-items: center; gap: 8px; margin-bottom: 24px; flex-wrap: wrap;">
-            ${filterChipsHtml}
-            <div style="margin-left: auto; display: flex; align-items: center; gap: 8px;">
-              <span style="font-size: 12px; color: ${UI.text3};">排序</span>
-              <select onchange="App.setSort(this.value)" style="height: 30px; padding: 0 10px; border-radius: 8px; border: 1px solid ${UI.border}; background: var(--ds-card); color: ${UI.text}; font-size: 12.5px;">${sortOpts}</select>
-            </div>
-          </div>
-          <div style="display: flex; flex-direction: column; gap: 20px;">${cardsHtml}</div>
-          <div style="margin-top: 40px; padding: 16px 18px; border: 1.5px solid var(--ds-ink-line); background: #fff; box-shadow: 4px 4px 0 rgba(22,19,15,.06);">
-            <div style="display: flex; align-items: baseline; gap: 10px; margin-bottom: 4px;">
-              <span style="font-size: 14px; font-weight: 700; color: var(--ds-text);">报告遗漏的重要信号</span>
-              <span style="font-size: 11.5px; color: ${UI.text3};">遗漏反馈直接进入召回复盘 · 已收到 ${state.missing.length} 条</span>
-            </div>
-            <p style="margin: 0 0 11px; font-size: 12px; color: ${UI.text3};">觉得「这是重要信号但系统没推」?写下来,系统会回溯该主体 / 主题并调整召回。</p>
-            <div style="display: flex; gap: 8px;">
-              <input id="missInput" placeholder="例如:某公司发布了 X,但今天没看到相关信号…" onkeydown="if(event.key==='Enter'){event.preventDefault();App.reportMissing();}" style="flex: 1; height: 38px; padding: 0 13px; border: 1.5px solid var(--ds-ink-line); background: var(--ds-card); color: ${UI.text}; font-size: 13px; outline: none;" />
-              <button class="send-btn" onclick="App.reportMissing()" style="height: 38px; padding: 0 18px; border: 1.5px solid var(--ds-ink-line); background: ${A.accent}; color: #fff; font-size: 13px; font-weight: 700; cursor: pointer;">提交</button>
-            </div>
-            ${state.missing.length?`<div style="margin-top: 12px; display: flex; flex-direction: column; gap: 6px;">${state.missing.slice(0,4).map(m=>`<div style="font-size: 12px; color: ${UI.text2}; border-left: 2px solid ${A.accent}; padding-left: 10px;">${esc(m)}</div>`).join('')}</div>`:''}
-          </div>
-          <footer style="margin-top: 40px; padding-top: 24px; border-top: 1px dashed ${UI.border}; font-size: 12px; color: ${UI.text3}; text-align: center;">本简报由 AI Signal 自动生成 · 依据「信号源」页配置的来源与优先级检索分析</footer>
+    <div class="feed-main">
+      ${techDivider(A, '02', '全部信号', `${briefMeta.date || ''} · ${visible.length}/${signals.length}`)}
+      ${signals.length ? '' : `
+      <div style="padding: 8px 0 26px;">
+        <h3 style="margin: 0 0 10px; font-size: 20px; font-weight: 700; letter-spacing: -.01em; color: var(--ds-text);">${esc(briefMeta.title)}</h3>
+        <p style="margin: 0; font-size: 14.5px; line-height: 1.7; color: ${UI.text2};">${esc(briefMeta.intro)}</p>
+      </div>`}
+      ${signals.length && !visible.length ? `<p style="padding: 28px 0; font-size: 13px; color: ${UI.text3};">「${esc(state.filter)}」今天没有信号，换个板块或点左栏「清除筛选」。</p>` : ''}
+      <div style="display: flex; flex-direction: column; gap: 20px;">${cardsHtml}</div>
+
+      <div style="margin-top: 34px; padding: 16px 18px; border: 1.5px solid var(--ds-ink-line); background: #fff; box-shadow: 4px 4px 0 rgba(22,19,15,.06);">
+        <div style="display: flex; align-items: baseline; gap: 10px; margin-bottom: 4px; flex-wrap: wrap;">
+          <span style="font-size: 14px; font-weight: 700; color: var(--ds-text);">报告遗漏的重要信号</span>
+          <span style="font-size: 11.5px; color: ${UI.text3};">遗漏反馈直接进入召回复盘 · 已收到 ${state.missing.length} 条</span>
         </div>
+        <p style="margin: 0 0 11px; font-size: 12px; color: ${UI.text3};">觉得「这是重要信号但系统没推」?写下来,系统会回溯该主体 / 主题并调整召回。</p>
+        <div style="display: flex; gap: 8px;">
+          <input id="missInput" placeholder="例如:某公司发布了 X,但今天没看到相关信号…" onkeydown="if(event.key==='Enter'){event.preventDefault();App.reportMissing();}" style="flex: 1; min-width: 0; height: 38px; padding: 0 13px; border: 1.5px solid var(--ds-ink-line); background: var(--ds-card); color: ${UI.text}; font-size: 13px; outline: none;" />
+          <button class="send-btn" onclick="App.reportMissing()" style="height: 38px; padding: 0 18px; border: 1.5px solid var(--ds-ink-line); background: ${A.accent}; color: #fff; font-size: 13px; font-weight: 700; cursor: pointer;">提交</button>
+        </div>
+        ${state.missing.length?`<div style="margin-top: 12px; display: flex; flex-direction: column; gap: 6px;">${state.missing.slice(0,4).map(m=>`<div style="font-size: 12px; color: ${UI.text2}; border-left: 2px solid ${A.accent}; padding-left: 10px;">${esc(m)}</div>`).join('')}</div>`:''}
       </div>
-    </section>
+      <footer style="margin-top: 32px; padding-top: 22px; border-top: 1px dashed ${UI.border}; font-size: 12px; color: ${UI.text3}; text-align: center;">本简报由 AI Signal 自动生成 · 依据「信号源」页配置的来源与优先级检索分析</footer>
+    </div>
+
+    ${dataRailHtml(A)}
   </main>`;
 }
 
@@ -2016,7 +2365,7 @@ function feedbackHtml(A, s){
   return `
   <div style="margin: 8px 0 24px; padding: 15px 16px; border: 1.5px solid var(--ds-ink-line); background: #fff;">
     <div style="font-size: 13px; font-weight: 700; color: ${UI.text}; margin-bottom: 4px;">这条对你怎么样?</div>
-    <div style="font-size: 11.5px; color: ${UI.text3}; margin-bottom: 11px;">负反馈直接参与去重与排序训练,比收藏 / 点赞更重要。</div>
+    <div style="font-size: 11.5px; color: ${UI.text3}; margin-bottom: 11px;">负反馈直接参与去重与排序训练,比点赞更重要。</div>
     <div style="display: flex; flex-wrap: wrap; gap: 8px;">${chips}</div>
     ${thanks}
   </div>`;
@@ -2767,7 +3116,7 @@ function tasksHtml(A){
     const pendingPanel = () => {
       if(!state.pendingWritable) return `<div style="position:sticky;top:74px;padding:18px;border-radius:14px;background:${UI.panelSolid};border:1px solid ${UI.border};">
         <div style="font-size:13px;font-weight:700;color:${UI.text};">报告待分析区</div>
-        <p style="margin:8px 0 0;font-size:11.5px;line-height:1.7;color:${UI.text3};">公开站为只读模式。请在本地配置台从收藏栏加入下一期周报的额外关注条目。</p>
+        <p style="margin:8px 0 0;font-size:11.5px;line-height:1.7;color:${UI.text3};">公开站为只读模式。请在本地配置台的信号卡片上点「＋」，加入下一期周报的额外关注条目。</p>
       </div>`;
       const items = state.pending.map(recordId=>{ const s=signals.find(x=>x.recordId===recordId)||weeklySignalById(recordId); if(!s) return ''; return `
         <div style="display: flex; gap: 9px; align-items: flex-start; padding: 11px; border-radius: 10px; border: 1px solid ${UI.border}; background: rgba(22,19,15,.02);">
@@ -2780,8 +3129,8 @@ function tasksHtml(A){
         </div>`; }).join('');
       return `<div style="position: sticky; top: 74px; padding: 18px; border-radius: 14px; background: ${UI.panelSolid}; border: 1px solid ${UI.border};">
         <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;"><span style="width: 4px; height: 14px; border-radius: 2px; background: ${A.accent};"></span><span style="font-size: 13px; font-weight: 700; color: var(--ds-text);">报告待分析区</span><span style="margin-left: auto; font-size: 11px; color: ${UI.text3}; font-family: 'Geist Mono', monospace;">${state.pending.length}</span></div>
-        <p style="margin: 0 0 14px; font-size: 11.5px; line-height: 1.6; color: ${UI.text3};">从收藏栏点「＋」加入的新闻会进入这里,下次周报生成时将额外关注。</p>
-        <div style="display: flex; flex-direction: column; gap: 9px;">${items || `<div style="font-size: 12px; color: ${UI.text3}; padding: 18px 0; text-align: center; line-height: 1.7;">暂无待分析条目<br>在右侧收藏栏点 ＋ 添加</div>`}</div>
+        <p style="margin: 0 0 14px; font-size: 11.5px; line-height: 1.6; color: ${UI.text3};">在信号卡片右上角点「＋」加入的新闻会进入这里,下次周报生成时将额外关注。</p>
+        <div style="display: flex; flex-direction: column; gap: 9px;">${items || `<div style="font-size: 12px; color: ${UI.text3}; padding: 18px 0; text-align: center; line-height: 1.7;">暂无待分析条目<br>在今日简报的信号卡片右上角点 ＋ 添加</div>`}</div>
       </div>`;
     };
     const metricsHtml = rep.metrics.map(m=>`<div style="padding: 14px 16px; border-radius: 12px; background: rgba(22,19,15,.03); border: 1px solid ${UI.border};">
@@ -3003,88 +3352,138 @@ function tasksHtml(A){
   </main>`;
 }
 
-// 右侧收藏栏(与 AI 历史统一的深色直角视觉,按主题 / 时间归类)
-function favPanelHtml(A){
-  const n = state.favorites.length;
-  const FT = '#f7f3eb', FT2 = '#d3ccbf', FT3 = '#968f83', FB = 'rgba(255,255,255,.18)', FFill = '#fff', FC = '#16130f', FC2 = '#6f685e';
-  if(!state.favOpen){
-    return `<button class="edge-tab" onclick="App.toggleFavPanel()" title="展开收藏栏" style="position: fixed; right: 0; top: 50%; transform: translateY(-50%); z-index: 70; display: flex; flex-direction: column; align-items: center; gap: 5px; padding: 12px 8px; border: 1px solid ${FB}; border-right: none; background: #1b1814; color: ${A.accentBright}; cursor: pointer; font-size: 15px;">★<span style="font-size: 11px; color: ${FT2}; font-family: 'Geist Mono', monospace;">${n}</span></button>`;
-  }
-  const favSignals = state.favorites.map(r=>signals.find(x=>x.rank===r)).filter(Boolean);
-  const groups = {};
-  favSignals.forEach(s=>{ (groups[s.cat]=groups[s.cat]||[]).push(s); });
-  const order = filters.filter(f=>f!=='全部' && f!==EDGE_FILTER);
-  const groupHtml = order.filter(c=>groups[c]).map(c=>{
-    const arr = groups[c].slice().sort((a,b)=>b.date.localeCompare(a.date));
-    const rows = arr.map(s=>{ const inPend=state.pending.includes(s.recordId); const canQueue=state.pendingWritable; return `
-      <div style="display: flex; gap: 7px; align-items: flex-start; padding: 8px; border: 1px solid ${FB}; background: ${FFill};">
-        <button onclick="App.addPending(${s.rank})" title="${!canQueue?'请在本地配置台管理周报待分析':inPend?'已在待分析':'加入报告待分析'}" ${inPend||!canQueue?'disabled':''} style="flex: none; width: 22px; height: 22px; border: 1px solid ${inPend?A.accentBorder:'rgba(22,19,15,.2)'}; background: ${inPend?A.accentSoft:'transparent'}; color: ${inPend?A.accent:FC2}; cursor: ${inPend||!canQueue?'default':'pointer'}; opacity:${canQueue?1:.45}; font-size: 13px; line-height: 1;">${inPend?'✓':'＋'}</button>
-        <div onclick="App.openDetail(${s.rank})" style="flex: 1; min-width: 0; cursor: pointer;">
-          <div style="font-size: 12px; font-weight: 600; color: ${FC}; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">${esc(s.zhTitle)}</div>
-          <div style="margin-top: 2px; font-size: 10px; color: ${FC2}; font-family: 'Geist Mono', monospace;">#${s.rank} · ${s.date}</div>
-        </div>
-        <button onclick="App.removeFav(${s.rank})" title="移除收藏" style="flex: none; width: 22px; height: 22px; border: 1px solid rgba(22,19,15,.2); background: transparent; color: ${FC2}; cursor: pointer; font-size: 12px; line-height: 1;">×</button>
-      </div>`; }).join('');
-    return `<div style="margin-bottom: 16px;">
-      <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 8px;"><span style="width: 6px; height: 6px; border-radius: 2px; background: ${A.accent};"></span><span style="font-size: 11px; font-weight: 700; letter-spacing: .04em; color: ${FT2};">${esc(c)}</span><span style="font-size: 10px; color: ${FT3}; font-family: 'Geist Mono', monospace;">${arr.length}</span></div>
-      <div style="display: flex; flex-direction: column; gap: 7px;">${rows}</div>
-    </div>`;
-  }).join('');
-  return `
-  <aside class="side-panel" style="position: fixed; right: 12px; top: 70px; bottom: 104px; z-index: 70; width: 288px; display: flex; flex-direction: column; background: #1b1814; border: 1px solid ${FB}; box-shadow: 5px 5px 0 rgba(0,0,0,.22); overflow: hidden;">
-    <div style="display: flex; align-items: center; gap: 8px; padding: 14px 16px; border-bottom: 1px solid ${FB};">
-      <span style="color: ${A.accentBright}; font-size: 15px;">★</span>
-      <span style="font-size: 13.5px; font-weight: 700; color: ${FT};">收藏栏</span>
-      <span style="font-size: 11px; color: ${FT3}; font-family: 'Geist Mono', monospace;">${n}</span>
-      <button onclick="App.toggleFavPanel()" title="收起" style="margin-left: auto; width: 26px; height: 26px; border: 1px solid ${FB}; background: transparent; color: ${FT2}; cursor: pointer; font-size: 14px;">→</button>
-    </div>
-    <div style="flex: 1; overflow-y: auto; padding: 14px 16px;">
-      ${n ? groupHtml : `<div style="font-size: 12px; color: ${FT3}; line-height: 1.9; text-align: center; padding: 30px 6px;">还没有收藏<br>点信号卡片右上角 ☆<br>收藏后自动按主题 / 时间归类到这里</div>`}
-    </div>
-    <div style="padding: 10px 16px; border-top: 1px solid ${FB}; font-size: 10.5px; color: ${FT3}; line-height: 1.5;">＋ 加入「报告待分析」· × 移除收藏</div>
-  </aside>`;
-}
-
-// 左侧:与 AI 交流的历史记录(来自底部 AI 助手对话)
-function historyPanelHtml(A){
-  const msgs = state.bottomChat;
-  const pairs = [];
-  for(let i=0;i<msgs.length;i++){ if(msgs[i].role==='user'){ pairs.push({ q: msgs[i].text, a: (msgs[i+1] && msgs[i+1].role==='ai') ? msgs[i+1].text : '' }); } }
-  const HT='#f7f3eb', HT2='#d3ccbf', HT3='#968f83', HB='rgba(255,255,255,.18)', HC='#16130f', HC2='#4a453d';
-  if(!state.historyOpen){
-    return `<button class="edge-tab" onclick="App.toggleHistory()" title="展开 AI 对话历史" style="position: fixed; left: 0; top: 50%; transform: translateY(-50%); z-index: 70; display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 13px 8px; border: 1px solid ${HB}; border-left: none; background: #1b1814; color: ${A.accentBright}; cursor: pointer; font-size: 14px; box-shadow: 3px 3px 0 rgba(0,0,0,.2);">✦<span style="font-size: 11px; color: ${HT2}; font-family: 'Geist Mono', monospace; writing-mode: vertical-rl;">历史 ${pairs.length}</span></button>`;
-  }
-  const rows = pairs.slice().reverse().map((p,i)=>`
-    <div style="border: 1px solid ${HB}; background: #fff;">
-      <div style="display: flex; gap: 7px; align-items: flex-start; padding: 9px 11px;">
-        <span style="flex: none; font-family: 'Geist Mono', monospace; font-size: 10px; font-weight: 700; color: #fff; background: ${A.accent}; padding: 2px 6px;">你</span>
-        <span style="font-size: 12.5px; font-weight: 600; line-height: 1.5; color: ${HC};">${esc(p.q)}</span>
-      </div>
-      ${p.a?`<div style="display: flex; gap: 7px; align-items: flex-start; padding: 9px 11px; border-top: 1px solid rgba(22,19,15,.14); background: ${A.accentFaint};">
-        <span style="flex: none; font-family: 'Geist Mono', monospace; font-size: 10px; font-weight: 700; color: ${A.accent}; border: 1px solid ${A.accentBorder}; padding: 2px 6px;">✦</span>
-        <span style="font-size: 12px; line-height: 1.6; color: ${HC2};">${esc(p.a)}</span>
-      </div>`:''}
-    </div>`).join('');
-  return `
-  <aside class="side-panel" style="position: fixed; left: 12px; top: 70px; bottom: 158px; z-index: 70; width: 292px; display: flex; flex-direction: column; background: #1b1814; border: 1px solid ${HB}; box-shadow: 5px 5px 0 rgba(0,0,0,.22);">
-    <div style="display: flex; align-items: center; gap: 8px; padding: 13px 14px; border-bottom: 1px solid ${HB}; background: #1b1814;">
-      <span style="color: ${A.accentBright}; font-size: 14px;">✦</span>
-      <span style="font-size: 13.5px; font-weight: 700; color: ${HT};">AI 对话历史</span>
-      <span style="font-size: 11px; color: ${HT3}; font-family: 'Geist Mono', monospace;">${pairs.length}</span>
-      <button onclick="App.toggleHistory()" title="收起" style="margin-left: auto; width: 26px; height: 26px; border: 1px solid ${HB}; background: transparent; color: ${HT2}; cursor: pointer; font-size: 14px;">←</button>
-    </div>
-    <div style="flex: 1; overflow-y: auto; padding: 13px 14px; display: flex; flex-direction: column; gap: 10px;">
-      ${rows || `<div style="font-size: 12px; color: ${HT3}; line-height: 1.9; text-align: center; padding: 30px 6px;">还没有对话记录<br>在底部「AI 助手」里提问<br>历史会按时间显示在这里</div>`}
-    </div>
-    <div style="padding: 9px 14px; border-top: 1px solid ${HB}; font-size: 10.5px; color: ${HT3}; line-height: 1.5;">最新对话在最上 · 点底部输入框继续提问</div>
-  </aside>`;
-}
-
 function render(){
   const A = computeAccents();
   const page = state.page==='brief' ? briefHtml(A) : state.page==='sources' ? sourcesHtml(A) : tasksHtml(A);
-  document.getElementById('app').innerHTML = `<div style="position: relative; z-index: 1; min-height: 100vh; background: ${UI.canvas}; padding-bottom: 150px;">${headerHtml(A)}${page}</div>${bottomBarHtml(A)}${favPanelHtml(A)}${historyPanelHtml(A)}`;
+  document.getElementById('app').innerHTML = `<div style="position: relative; z-index: 1; min-height: 100vh; background: ${UI.canvas}; padding-bottom: 48px;">${headerHtml(A)}${page}</div>${bottomBarHtml(A)}`;
   renderDetailLayer();
+  bindPointsMarquee();
+}
+
+// 原先 CSS `pointsSlide 56s` 走完一套卡片；能排进视口时不滚动、不复制。
+const POINTS_LOOP_MS = 56000;
+
+function pointsHalf(){
+  const track = document.getElementById('pointsTrack');
+  return track ? Math.max(1, track.scrollWidth / 2) : 1;
+}
+
+function pointsOverflows(){
+  const viewport = document.getElementById('pointsViewport');
+  const set = viewport && viewport.querySelector('.personal-set');
+  if(!viewport || !set) return false;
+  // 只量第一组卡片。set.scrollWidth 在双轨 flex 里会把复制组算进去，
+  // 于是永远判定要滚动，居中 class 也就加不上。
+  const cards = set.querySelectorAll('.personal-card');
+  if(!cards.length) return false;
+  const gap = parseFloat(getComputedStyle(set).gap) || 0;
+  let width = 0;
+  for(let i = 0; i < cards.length; i++) width += cards[i].getBoundingClientRect().width;
+  width += gap * Math.max(0, cards.length - 1);
+  return width > viewport.clientWidth + 1;
+}
+
+function syncPointsMarqueeMode(){
+  const viewport = document.getElementById('pointsViewport');
+  if(!viewport) return false;
+  const need = pointsOverflows();
+  viewport.classList.toggle('is-static', !need);
+  if(!need){
+    state.pointsShift = 0;
+    const track = document.getElementById('pointsTrack');
+    if(track) track.style.transform = '';
+  }
+  return need;
+}
+
+function applyPointsShift(){
+  if(!syncPointsMarqueeMode()) return;
+  const track = document.getElementById('pointsTrack');
+  if(!track) return;
+  const half = pointsHalf();
+  state.pointsShift = ((state.pointsShift % half) + half) % half;
+  track.style.transform = `translateX(${-state.pointsShift}px)`;
+  const thumb = document.getElementById('pointsThumb');
+  const bar = document.getElementById('pointsBar');
+  if(thumb && bar){
+    const max = Math.max(1, bar.clientWidth - thumb.offsetWidth);
+    thumb.style.left = `${(state.pointsShift / half) * max}px`;
+  }
+}
+
+function bindPointsMarquee(){
+  const viewport = document.getElementById('pointsViewport');
+  const bar = document.getElementById('pointsBar');
+  if(!viewport || !document.getElementById('pointsTrack')) return;
+  applyPointsShift();
+  requestAnimationFrame(() => applyPointsShift());
+
+  const drag = (startX, startShift, fromBar) => {
+    if(!pointsOverflows()) return;
+    state.pointsPaused = true;
+    viewport.classList.add('is-drag');
+    let moved = 0;
+    const onMove = (ev) => {
+      moved = ev.clientX - startX;
+      const half = pointsHalf();
+      if(fromBar){
+        const thumb = document.getElementById('pointsThumb');
+        const max = Math.max(1, bar.clientWidth - (thumb ? thumb.offsetWidth : 42));
+        state.pointsShift = startShift + (moved / max) * half;
+      } else {
+        state.pointsShift = startShift - moved;
+      }
+      applyPointsShift();
+    };
+    const onUp = (ev) => {
+      window.removeEventListener('pointermove', onMove);
+      window.removeEventListener('pointerup', onUp);
+      viewport.classList.remove('is-drag');
+      if(Math.abs(moved) > 6) state.pointsSkipClick = true;
+      setTimeout(() => { state.pointsPaused = false; }, 900);
+    };
+    window.addEventListener('pointermove', onMove);
+    window.addEventListener('pointerup', onUp);
+  };
+
+  viewport.addEventListener('pointerdown', (e) => {
+    if(e.button !== 0) return;
+    if(e.target.closest('.points-bar')) return;
+    drag(e.clientX, state.pointsShift, false);
+  });
+  viewport.addEventListener('click', (e) => {
+    if(state.pointsSkipClick){ e.preventDefault(); e.stopPropagation(); state.pointsSkipClick = false; }
+  }, true);
+  viewport.addEventListener('mouseenter', () => { state.pointsPaused = true; });
+  viewport.addEventListener('mouseleave', () => { if(!viewport.classList.contains('is-drag')) state.pointsPaused = false; });
+
+  if(bar){
+    bar.addEventListener('pointerdown', (e) => {
+      if(e.button !== 0) return;
+      e.preventDefault();
+      const thumb = document.getElementById('pointsThumb');
+      const rect = bar.getBoundingClientRect();
+      const max = Math.max(1, bar.clientWidth - (thumb ? thumb.offsetWidth : 42));
+      const x = e.clientX - rect.left - ((thumb ? thumb.offsetWidth : 42) / 2);
+      state.pointsShift = (Math.max(0, Math.min(max, x)) / max) * pointsHalf();
+      applyPointsShift();
+      drag(e.clientX, state.pointsShift, true);
+    });
+  }
+
+  if(!window._pointsRaf){
+    const tick = (now) => {
+      const last = tick._t || now;
+      const dt = Math.min(48, now - last);
+      tick._t = now;
+      if(!state.pointsPaused && pointsOverflows() && document.getElementById('pointsTrack')){
+        state.pointsShift += pointsHalf() * dt / POINTS_LOOP_MS;
+        applyPointsShift();
+      }
+      window._pointsRaf = requestAnimationFrame(tick);
+    };
+    window._pointsRaf = requestAnimationFrame(tick);
+  }
 }
 
 // 详情浮层单独渲染:切换标签 / 开合折叠只重绘这一层,避免整页重排闪烁
@@ -3094,12 +3493,15 @@ function renderDetailLayer(){
 }
 
 window.addEventListener('keydown', (e)=>{ if(e.key==='Escape'){ App.closeDetail(); } });
+window.addEventListener('resize', ()=>{ applyPointsShift(); });
 render();
 loadBrief();
 loadSources();
 loadWeekly();
 loadPending();
 loadTimeline();
+loadDashboard();
+loadHeatmap();
 </script>
 </body>
 </html>

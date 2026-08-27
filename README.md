@@ -18,7 +18,7 @@ RSS / Scrape / Media / Social / Podcast
 site/（GitHub Pages） + 飞书消息卡片
 ```
 
-网页沿用 `index.html` 的视觉与交互。今日简报、信号列表、详情、周报、动向追踪是真实数据；评论/笔记、多模型辩论等仍是前端本地模拟。
+网页沿用 `index.html` 的视觉与交互。数据看板、信号列表、详情、周报、动向追踪是真实数据；评论/笔记、多模型辩论等仍是前端本地模拟。
 
 本文给后续开发维护用：先讲数据与逻辑，再讲怎么跑。仓库公开，**不要把 `.env`、飞书 token、`open_id` 写进文档或提交**。
 
@@ -68,6 +68,8 @@ site/（GitHub Pages） + 飞书消息卡片
 | `src/` | 全部业务逻辑。入口都是 `python -m src.<模块>` |
 | `src/seed_default.json` | 信号源表 + 一级参数 + 五张二级参数的快照 |
 | `src/bootstrap.py` | 在空 Base 里幂等建表、可选灌种子 |
+| `src/heatmap.py` / `tag_topics.py` / `aggregate.py` | 话题打标与「话题 × 周」热力图 |
+| `data/items/` `data/tagged/` | 每日条目 JSONL 与打标结果；热力图的输入 |
 | `tools/export_seed.py` | 从现行飞书表反写种子 |
 | `index.html` | 前端单页；发布时复制到 `site/index.html` |
 | `site/` | GitHub Pages 产物：`index.html` + `data/*.json` + `media/` |
@@ -90,6 +92,7 @@ site/（GitHub Pages） + 飞书消息卡片
 | `site/data/sources.json` | 公开站信号源页（只读快照） | 展示用，规则字段已剥掉 |
 | `site/data/weekly-*.json` | 周报页 | 产物 |
 | `site/data/timeline-latest.json` | 动向追踪 | 产物 |
+| `site/data/dashboard-latest.json` | 首页数据看板（模型榜单 + AI 概念股） | 产物，外部行情快照 |
 
 配置台（`python -m src.sources_api`）在本机把飞书参数表现成可写 UI；公开 Pages 永远只读快照。
 
@@ -292,6 +295,8 @@ python -m src.health --days 30
 
 `publish` 把它写成 `site/data/brief-YYYY-MM-DD.json` 和 `brief-latest.json`。前端无 `?date=` 时读 latest。
 
+`intro` / `bullets` 喂首页「今日核心要点」磁贴，也喂飞书卡片和 `report.py` 的 HTML 导出。字段仍要生成。
+
 ---
 
 ## 周报与动向追踪
@@ -308,6 +313,41 @@ python -m src.health --days 30
 
 事件用 `entity_id + 信号 recordId` 去重。新建对象会回填历史；日报工作流每日增量更新 `timeline-latest.json`。配置台可增删对象并立即回填。公开站只读。
 
+### 数据看板
+
+`python -m src.dashboard`。首页右栏的两块「状态量」：读者想边翻当天的事件，边扫一眼模型排名和资金面。不进条目表、不打分、不去重，只有一份当期快照，写 `site/data/dashboard-latest.json`。
+
+| 看板 | 来源 | 鉴权 | 取值 |
+| --- | --- | --- | --- |
+| 模型竞技场 | Artificial Analysis 免费 API | `ARTIFICIAL_ANALYSIS_API_KEY` | 按智能指数取前 12，带吞吐与混合单价 |
+| AI 概念股 | 腾讯行情 `qt.gtimg.cn` | 无 | `TICKERS` 美股 / 中资（A 股+港股）分列，只收算力与半导体，不含腾讯阿里 |
+
+- 两个来源**各自捕获异常**，失败写进各自的 `error` 字段并照常落盘。看板缺数据顶多少一屏，把整轮日报拖挂就得不偿失；页面按 `error` 显示「暂无数据：原因」，留白会让停更看起来像正常状态。
+- 榜单缺 key 时同样走这条降级路径，不报错。key 按其条款不得进客户端代码、响应需缓存，所以只能在流水线里取；页面必须署名并链回 artificialanalysis.ai。
+- 行情接口返回 GBK，按位取值（现价 3、昨收 4、涨跌幅 32、总市值 45），各市场前 35 位布局一致。涨跌额一律用现价减昨收现算——涨跌幅那一位在个别市场会给空串，而现价和昨收一直有值。
+- logo 走仓库既有的 `s2/favicons` 机制。域名和标的写在一起（`TICKERS` 第三位、`_CREATOR_DOMAINS`），页面不该知道「智谱」对应哪个域名。取不到 favicon 的（中芯国际、海光）直接留空走字标，别配一个注定 404 的域名。
+- 深色终端风：纯黑底白字，涨红跌绿跟中文财经惯例。榜单只出模型名不出厂商名（logo 已经把归属说清楚了，再补一遍文字只是把行撑宽）。
+- 侧栏只有 300px 出头。吞吐、单价、当日区间、市值这些**需要横向对比才有意义的列，在窄栏里直接不渲染**——挤成三号字既比不出差距也没人看，要这些数字的人会点进数据源。
+- 智能指数也不占独立一列：填进模型名那一格的背景，长度按**可见区间**（末位→榜首）铺开，绝对值叠在字右边。一根条 + 一行字用同一块地方，名字也能完整显示。用 0 或 100 做基准时前 12 名只差几分，所有行会填成一样长。
+- `dashboard-latest.json` 在 `publish._PERSISTENT_DATA_GLOBS` 里：日报重建会清空 `site/`，被清掉就要等到明天才回来。
+
+### 话题热力图
+
+左栏「话题热度迁移」吃 `site/data/heatmap.json`，和当天简报解耦：简报是一天的切片，热力图是最多 12 个 ISO 周的累计。条目先落成每天一份 JSONL，打上固定枚举标签，再按周聚合。mock 数据和真实管道写出同一份 JSON，前端不用分叉。
+
+```bash
+# 打标（已打标的日期默认跳过；标签不在枚举内整批重打）
+python -m src.tag_topics --date 2026-08-27
+python -m src.tag_topics --ingest-brief site/data/brief-2026-08-27.json
+python -m src.tag_topics --all
+
+# 聚合；--seed-mock 会写出 4 周模拟条目，可直接预览
+python -m src.aggregate --seed-mock
+python -m src.aggregate
+```
+
+`data/items/{date}.jsonl` → `data/tagged/{date}.jsonl`（多一个 `topics` 字段）→ `data/heatmap.json` 与 `site/data/heatmap.json`。话题只能是 `agent` / `reasoning` / `multimodal` / `open-source-model` / `rag-search` / `infra` / `embodied` / `safety-policy` / `product` / `funding` / `other`，每条 1～2 个。趋势 = 最近 2 周均值 / 之前最多 10 周均值。
+
 ---
 
 ## 静态站与配置台
@@ -320,17 +360,28 @@ python -m src.health --days 30
 - 写近几日 `brief-*.json`、`brief-latest.json`
 - 导出剥掉规则的 `sources.json`
 - 镜像论文 PDF 页图、政策图、部分 OpenAI/虎嗅配图到 `site/media/`
-- `build_site` 会先清空 `site/` 再重建，但会 stash/restore 周报与时间线 JSON，避免发布日报时丢掉周报
+- `build_site` 会先清空 `site/` 再重建，但会 stash/restore 周报、时间线、看板与 `heatmap.json`，避免发布日报时丢掉它们
 
 前端页面（`index.html`，单页应用）：
 
 | `?page=` | 内容 | 数据 |
 | --- | --- | --- |
-| 默认 / `brief` | 今日简报、列表、详情 | `data/brief-latest.json` 或 `brief-{date}.json` |
+| 默认 / `brief` | 左栏话题热力图 / 信息流 / 右栏数据看板 | `data/brief-latest.json` 或 `brief-{date}.json`；看板读 `dashboard-latest.json`；热力图读 `heatmap.json` |
 | `sources` | 信号源表 | `data/sources.json`；本机优先 `/api/sources` |
 | `tasks` | 周报 / 动向追踪 | `weekly-*.json`、`timeline-latest.json` |
 
 本机 `localhost` / `127.0.0.1` 会被当成配置台主机，去打 `/api/sources`。若只开了 `python -m http.server`，接口 404，会退回静态快照。
+
+首页是 `.feed-shell` 三列栅格（`grid-template-areas: "nav feed data"`）：
+
+- **左栏**：SECTIONS / FORMATS 筛选。
+- **中栏**：全部信号卡片。
+- **右栏**：话题热力 + 模型榜单 + AI 概念股，三块作为整体 `sticky`，超出视口时整列滚动，单块不压缩。
+- 最上「今日核心要点」跨三列；卡片能排进一行时居中且不滚动。
+- 三个格子都写了 `min-width: 0`。栅格项默认 `min-width: auto`，热力图那行周列会把整列顶宽，窄屏上整页跟着横向溢出。
+- 断点：≤1280px 右栏落到左栏下面（两列）；≤760px 单列，热力图可横滑，看板沉到信息流下面。
+
+**没有收藏和 AI 对话历史。** 两者都是纯前端状态，刷新即失，却各占页面一侧的常驻入口。信号卡右上角保留的是「＋ 加入周报待分析」——那个会写飞书「周报待纳入」表，公开站只读时置灰而不是藏起来，否则读者不知道这条能不能排进下期周报。
 
 ### 配置台
 
@@ -391,6 +442,8 @@ python -m src.sources_api    # http://127.0.0.1:8787 ，只绑回环
 | `notify` | 飞书卡片：分组、排版、群聊优先发送与投递汇总 |
 | `source_view` / `sources_api` | 信号源展示模型与本机配置台（含规则字段编辑与校验） |
 | `health` | 分源采集健康记录与体检报告（`python -m src.health`） |
+| `dashboard` | 首页模型榜单与 AI 概念股看板（`python -m src.dashboard`） |
+| `heatmap` / `tag_topics` / `aggregate` | 话题打标与首页左栏热力图 |
 | `openai_charts` | OpenAI 文章里的 Vega 图转图片 |
 | `diag_*` | 单通道诊断，默认不写条目（播客统计仍回写；`--write` 才入库） |
 | `analyze` | 源贡献统计 HTML/CSV |
@@ -433,7 +486,7 @@ python -m src.sources_api    # http://127.0.0.1:8787 ，只绑回环
 
 | 工作流 | 触发 | 做什么 |
 | --- | --- | --- |
-| `daily-brief.yml` | 每天 UTC 02:45（北京 10:45），可手动 | 测试 → `main` → `daily` → `publish` → `timeline` → 回写 `site/` → Pages → `notify` |
+| `daily-brief.yml` | 每天 UTC 02:45（北京 10:45），可手动 | 测试 → `main` → `daily` → `publish` → `timeline` → `dashboard` → 话题打标/热力图 → 回写 `site/` → Pages → `notify` |
 | `weekly-report.yml` | 周一 UTC 03:30 | 周报 + 部署 + 推送 |
 | `pages-preview.yml` | 推送 `site/**` 或 `index.html` | 只部署当前仓库里的 `site/` |
 | `ingest.yml` | 仅手动 | 单独采集 |
@@ -503,6 +556,8 @@ python -m src.main
 python -m src.daily --output output/daily-brief.json
 python -m src.publish --input output/daily-brief.json
 python -m src.timeline --output site/data/timeline-latest.json
+python -m src.dashboard --output site/data/dashboard-latest.json
+python -m src.aggregate --seed-mock   # 预览热力图；有 tagged 数据后改跑不带 --seed-mock
 python -m src.sources_api          # 推荐：站点 + 实时参数表
 # 或：python -m http.server 4173 --directory site
 python -m src.notify --input site/data/brief-latest.json
