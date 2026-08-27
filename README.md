@@ -134,7 +134,7 @@ site/（GitHub Pages） + 飞书消息卡片
 | `dedup_key` | 通常 `normalize(url)`；X 为 `x_post_id` |
 | `extra_config` | JSON 字符串，专用解析器与排除规则 |
 | `来源类型` | 载体：论文 / 纯网页 / 视频 / 社交媒体 / 公众号 / Github热榜 / 播客 / 其他 |
-| `dimension` | 主题分类（前沿模型公司、政策监管地缘等），写入简报 `category` |
+| `dimension` | 主题分类（前沿模型公司、政策监管地缘、中文媒体等），写入简报 `category` |
 | `tier` / `priority` | L1–L4，P0–P2 |
 | `通过` | 验收勾选；`sync_param_collect_stats` 在本轮入库 > 0 时也会勾 |
 | `最近采集时间` / `条目数` / `查重过滤` / `时间窗过滤` | 每轮采集回写 |
@@ -177,7 +177,8 @@ site/（GitHub Pages） + 飞书消息卡片
   → process_and_clean
   → 跨轮去重（条目表已有去重键）
   → 论文 PDF / 政策 PDF / RSS 正文补全 / 播客转录摘要
-  → sync_param_collect_stats
+  → sync_param_collect_stats（覆盖式快照回写参数表）
+  → health.write_records（按轮留存分源漏斗，见「分源健康记录」）
   → format_for_feishu → 批量写入条目表
 ```
 
@@ -185,13 +186,31 @@ site/（GitHub Pages） + 飞书消息卡片
 
 | 方法 | 映射 | 抓取模块 | 说明 |
 | --- | --- | --- | --- |
-| RSS | `sources.map_feed_sources` | `rss.fetch_feed_sources` | 整份 feed；摘要型官方 RSS 会标 `needs_fulltext` 稍后回源 |
-| Scrape | `sources.map_scrape_sources` | `scrape.fetch_scrape_sources` | 列表抽链再抓正文；engine=`auto` 时 Jina 不可达会降级 direct |
+| RSS | `sources.map_feed_sources` | `rss.fetch_feed_sources_with_stats` | 整份 feed；摘要型官方 RSS 会标 `needs_fulltext` 稍后回源 |
+| Scrape | `sources.map_scrape_sources` | `scrape.fetch_scrape_sources_with_stats` | 列表抽链再抓正文；engine=`auto` 时 Jina 不可达会降级 direct |
 | Media | `sources.map_media_sources` | `video.fetch_video_sources` | YouTube Data API；`extra_config.channel_id` |
 | Social | `sources.map_social_sources` | `social.fetch_social_sources` | X API v2 + `since_id`；需 `X_BEARER_TOKEN` |
 | Podcast | `sources.map_podcast_sources` | `podcast.fetch_podcast_sources` | 白名单节目 RSS；转录见下 |
 
 单通道失败通常只打日志、不拖垮整轮（Scrape / Media / Social 有 try/except）。
+
+RSS 与 Scrape 的 `*_with_stats` 变体额外返回分源抓取结果（`error` / `entries` / `links` / `article_ok` / `timing_ms`），进 `health` 记录。不带 stats 的旧函数保留，只是丢掉统计。
+
+### 分源健康记录
+
+`src/health.py`。参数表回写的四个字段是覆盖式快照，答不了「这个源连续几天零产出」和「哪天开始死的」；清洗漏斗原先也只按原因聚合、不按源归属，所以看得见「本轮 keyword_regex 淘汰 40 条」，看不见是哪个源被自己的正则卡死。
+
+- `Funnel`：`process_and_clean` 的第 4 个可选出参。总计照旧打日志，不传它时行为与改造前一致。
+- `build_records`：本轮每个尝试过的源出一行，含 `fetch`（链路结果）、`funnel`（分源漏斗）、`written`、`dedup_dropped`、`blocked_at`（抓到却一条不留时淘汰最多的那一步）。**抓取为 0 的源也出行**，否则彻底静默的源在数据里根本不存在。
+- `write_records`：落 `output/health/dt=YYYY-MM-DD.jsonl`（`output/` 已 gitignore）。这是唯一落盘点，要换对象存储或数据库只改这一个函数。
+- `FUNNEL_STAGES` 必须与 `process.py` 的淘汰原因名对齐，`tests/test_health.py` 会校验。
+
+```bash
+python -m src.health              # 体检报告：按断流天数与卡点排序
+python -m src.health --days 30
+```
+
+报告把四类问题分开：抓取为 0 是链路问题；抓到很多却 `blocked_at=keyword_regex` 是规则问题；`dry_days` 有值是能定位到哪天断的；`dedup_dropped` 高是一直在重复抓老内容。
 
 ### B 类源（正式 Scrape 不跑）
 
@@ -321,6 +340,16 @@ python -m src.sources_api    # http://127.0.0.1:8787 ，只绑回环
 
 同时托管 `site/` 和 API：`/api/sources`、周报待纳入、追踪对象。写回一级参数（状态、优先级、新建、删除），并同步信号源表自动化状态。新源一律 `experimental`。
 
+`GET /api/sources/{recordId}/detail` 返回完整采集配置（`keyword_regex`、`min_content_chars`、`extra_config`、时间窗等），信号源表每行的「配置」按钮据此就地编辑，不必再开飞书多维表格。这些规则字段**只走这个按需接口**，不进 `build_payload`——那份载荷会被 `publish` 导出成公开站点的 `sources.json`。静态快照结构上就装不下一个实时接口的数据，所以不靠「记得别把字段加进那个 builder」来保证不泄露。
+
+`PATCH /api/sources/{recordId}` 的约定：
+
+- 从严校验。`process._safe_regex` 对坏正则、`sources.parse_lookback_hours` 对认不出的时间窗写法都会静默回落成默认值，这类错误在漏斗里跟「正常过滤」一模一样，所以拒在写入前。
+- 改了 `source_view.RULE_FIELDS`（endpoint / fetch_method / 来源类型 / 时间窗 / 正文门槛 / 去重键 / keyword_regex / extra_config）中任一字段 → 自动退回 `experimental` 并同步信号源表；显式传 `status` 的请求以调用方为准。只改名称、备注、层级、维度不降级。
+- 规则字段变了 → 自动跑 `tools.export_seed` 刷新种子，避免飞书与仓库快照漂移。
+- 提交值与当前值相同的字段不写回；`extra_config` 的空格与键序差异不算改动，否则每次保存都会无故降级一个正在跑的源。
+- 带非 localhost `Origin` 的写请求返回 403。这个服务持有飞书凭据，只绑回环挡不住浏览器里其他页面发来的跨站写请求。
+
 无飞书时：`python -m src.source_view --seed` 用种子生成只读 `sources.json`。
 
 ---
@@ -333,7 +362,7 @@ python -m src.sources_api    # http://127.0.0.1:8787 ，只绑回环
 - 接收人回退：`FEISHU_RECIPIENT_OPEN_IDS`（仅未配置群聊时使用），名称 `FEISHU_RECIPIENT_NAMES` 按序对应
 - 查群：把机器人拉进群后 `python -m tools.list_bot_chats`
 - 投递汇总：`FEISHU_DELIVERY_REPORT_OPEN_ID`
-- 卡片：纯文字目录。居中色块标题 + 分板块的标题清单（最多 4 个板块、8 条），标题即原文链接，来源与形态是 `notation` 灰字；摘要和影响分等内部打分只在网页
+- 卡片：纯文字目录。居中色块标题 + 分板块的标题清单（最多 4 个板块、8 条），标题即原文链接，来源与形态是 `notation` 灰字；摘要只在网页，卡片和网页都不展示影响分 / 紧迫度
 - 标题为了居中放进正文色块，卡片不再带 `header`
 - 本地预览：`python -m tools.preview_card`，渲染 `notify.build_card` 的真实 JSON，不连飞书
 - 发预览到群验收：`python -m tools.send_card_preview --chat-id oc_xxx`，只发消息不改简报发送状态
@@ -360,7 +389,8 @@ python -m src.sources_api    # http://127.0.0.1:8787 ，只绑回环
 | `daily` / `weekly` / `timeline` | 简报、周报、追踪 |
 | `publish` | 静态站 |
 | `notify` | 飞书卡片：分组、排版、群聊优先发送与投递汇总 |
-| `source_view` / `sources_api` | 信号源展示模型与本机配置台 |
+| `source_view` / `sources_api` | 信号源展示模型与本机配置台（含规则字段编辑与校验） |
+| `health` | 分源采集健康记录与体检报告（`python -m src.health`） |
 | `openai_charts` | OpenAI 文章里的 Vega 图转图片 |
 | `diag_*` | 单通道诊断，默认不写条目（播客统计仍回写；`--write` 才入库） |
 | `analyze` | 源贡献统计 HTML/CSV |

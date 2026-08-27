@@ -225,6 +225,7 @@ def process_and_clean(
     raw_items: list[dict[str, Any]],
     type_configs: dict[str, dict[str, Any]] | None = None,
     drop_stats: dict[str, int] | None = None,
+    funnel_out: Any = None,
 ) -> list[dict[str, Any]]:
     """对应 Process and Clean：时间窗/关键词/最小长度过滤 + 本轮去重。
 
@@ -233,6 +234,9 @@ def process_and_clean(
 
     drop_stats（可选出参）：source_id -> 「抽到有效内容但因时间窗被过滤」的条数。
     只统计本可通过其余过滤（有标题/链接、正文够长、命中关键词）却因 lookback 被丢的条目。
+
+    funnel_out（可选出参）：health.Funnel，把每一步的淘汰按 source_id 归属。总计
+    仍照旧打进日志，所以不传它时行为与改造前一致。
     """
     from collections import Counter
 
@@ -244,6 +248,15 @@ def process_and_clean(
     result: list[dict[str, Any]] = []
     funnel: Counter[str] = Counter()
     funnel["raw"] = len(raw_items)
+    if funnel_out is not None:
+        for item in raw_items:
+            funnel_out.bump(str((item.get("feed") or {}).get("id") or ""), "raw")
+
+    def drop(feed_id: str, stage: str) -> None:
+        """记一次淘汰：总计照旧，同时归属到源。"""
+        funnel[stage] += 1
+        if funnel_out is not None:
+            funnel_out.bump(feed_id, stage)
 
     for item in raw_items:
         feed = item.get("feed") or {}
@@ -251,7 +264,7 @@ def process_and_clean(
         feed_key = feed_id or feed.get("url") or "0"
         feed_hits = per_feed.get(feed_key, 0)
         if feed_hits >= config.MAX_ITEMS_PER_FEED:
-            funnel["per_feed_cap"] += 1
+            drop(feed_id, "per_feed_cap")
             continue
 
         # lookback_window 配了就按配置；没配才回落到默认（不再强制抬到 168h）
@@ -275,20 +288,20 @@ def process_and_clean(
         combined = f"{title} {body_text}"
 
         if not title or not url:
-            funnel["missing_title_url"] += 1
+            drop(feed_id, "missing_title_url")
             continue
         if title_exclude_re and title_exclude_re.search(title):
-            funnel["title_exclude_regex"] += 1
+            drop(feed_id, "title_exclude_regex")
             continue
         # 精准度优先：缺发布时间不能用采集时间冒充“刚发布”，否则任意旧页面都会进近七日池。
         if published_ms is None:
-            funnel["missing_or_invalid_date"] += 1
+            drop(feed_id, "missing_or_invalid_date")
             continue
         # heat_keep：超高热度旧文例外，跳过 lookback（仍写入真实发布时间）
         if not item.get("heat_keep") and (
             now - published_ms >= lookback_ms
         ):
-            funnel["lookback"] += 1
+            drop(feed_id, "lookback")
             if (
                 drop_stats is not None
                 and title
@@ -312,7 +325,7 @@ def process_and_clean(
             "Social",
         }
         if needs_fulltext and not _can_backfill_fulltext(url):
-            funnel["min_content_chars"] += 1
+            drop(feed_id, "min_content_chars")
             continue
         if not skip_keyword:
             keyword_ok = (
@@ -321,10 +334,10 @@ def process_and_clean(
                 else _keyword_ok(keyword_re, title, body_text, kw_min_hits)
             )
             if not keyword_ok:
-                funnel["keyword_regex"] += 1
+                drop(feed_id, "keyword_regex")
                 continue
         if is_whitehouse_source(feed_id) and not is_ai_policy_text(title, body_text):
-            funnel["not_ai_policy"] += 1
+            drop(feed_id, "not_ai_policy")
             continue
 
         metrics = dict(item.get("metrics") or {})
@@ -344,7 +357,7 @@ def process_and_clean(
             min_sig = params.get("min_signal_score")
             if min_sig is not None and metrics.get("signal_score") is not None:
                 if float(metrics["signal_score"]) < float(min_sig):
-                    funnel["min_signal_score"] += 1
+                    drop(feed_id, "min_signal_score")
                     continue
             enriched = paper_enrich.enrich_paper(
                 url,
@@ -403,7 +416,7 @@ def process_and_clean(
                 },
             )
             if not keep:
-                funnel[reason or "typed_filter"] += 1
+                drop(feed_id, reason or "typed_filter")
                 log.debug("类型过滤丢弃 %s（%s: %s）", url, type_cfg["entity_type"], reason)
                 continue
 
@@ -419,7 +432,7 @@ def process_and_clean(
             }
 
         if duplicate_key in seen:
-            funnel["dup_round"] += 1
+            drop(feed_id, "dup_round")
             continue
         seen.add(duplicate_key)
         per_feed[feed_key] = feed_hits + 1
@@ -443,7 +456,7 @@ def process_and_clean(
             "source_id": feed_id,
             "source_type": feed.get("source_type") or sources.SIGNAL_FORMAT_OTHER,
             "fetch_method": feed.get("fetch_method") or "",
-            "category": feed.get("category") or "",
+            "category": sources.normalize_category(feed.get("category") or ""),
             "tier": feed.get("tier") or "",
             "published_ms": published_ms,
             "collected_ms": collected_ms,
@@ -462,7 +475,7 @@ def process_and_clean(
         }
         row.update(quality_fields)
         result.append(row)
-        funnel["kept"] += 1
+        drop(feed_id, "kept")
 
     log.info(
         "清洗漏斗 raw=%d kept=%d drops=%s",

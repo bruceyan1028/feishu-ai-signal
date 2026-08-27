@@ -26,8 +26,7 @@ CATEGORY_ICONS = {
     "模型评测基准": "📊",
     "产品化企业采用": "🏢",
     "创业融资并购": "💰",
-    "中文科技媒体": "📰",
-    "中文综合媒体": "📰",
+    "中文媒体": "📰",
 }
 
 # 板块色块：取飞书官方颜色枚举，100 级作底、基础色作字，深色主题下由客户端自动换算。
@@ -39,8 +38,7 @@ CATEGORY_THEMES = {
     "模型评测基准": ("purple-100", "purple"),
     "产品化企业采用": ("indigo-100", "indigo"),
     "创业融资并购": ("lime-100", "lime"),
-    "中文科技媒体": ("wathet-100", "wathet"),
-    "中文综合媒体": ("grey-100", "grey"),
+    "中文媒体": ("wathet-100", "wathet"),
 }
 DEFAULT_THEME = ("grey-100", "grey")
 
@@ -205,8 +203,8 @@ def build_weekly_card(brief: dict[str, Any], url: str) -> dict[str, Any]:
                     "tag": "lark_md",
                     "content": (
                         f"**{index}. {signal.get('titleCn') or signal.get('title', '')}**\n"
-                        f"{signal.get('source', '')} · 影响分 {signal.get('impact', 0)}\n"
-                        f"{signal.get('summary', '')}"
+                        + (f"{signal.get('source')}\n" if signal.get("source") else "")
+                        + f"{signal.get('summary', '')}"
                     ),
                 },
             }

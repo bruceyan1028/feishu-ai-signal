@@ -18,7 +18,7 @@ from http import HTTPStatus
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from typing import Any
-from urllib.parse import unquote
+from urllib.parse import unquote, urlparse
 
 from . import config, feishu, source_view, sources, timeline
 
@@ -70,8 +70,12 @@ def read_payload(site_dir: Path) -> dict[str, Any]:
     )
 
 
-def _patch_fields(body: dict[str, Any]) -> dict[str, Any]:
+def _patch_fields(
+    body: dict[str, Any], current: dict[str, Any] | None = None
+) -> tuple[dict[str, Any], list[str]]:
+    """把请求体校验成飞书字段，并返回实际变化的 api 字段名（用于状态降级判断）。"""
     fields: dict[str, Any] = {}
+    changed: list[str] = []
     if "status" in body:
         raw = str(body.get("status") or "").strip()
         # normalize_status 对认不出的值兜底成 paused，用在写入上会把打错的字段
@@ -79,15 +83,55 @@ def _patch_fields(body: dict[str, Any]) -> dict[str, Any]:
         if raw not in source_view.STATUS_LABELS and raw not in source_view.LABEL_TO_STATUS:
             raise ApiError(f"未知的状态：{raw}")
         fields["status"] = source_view.normalize_status(raw)
+        changed.append("status")
     if "priority" in body:
         priority = str(body.get("priority") or "")
         code = source_view.CN_TO_PRIORITY.get(priority)
         if not code:
             raise ApiError(f"未知的优先级：{priority}")
         fields["priority"] = code
+        changed.append("priority")
+    try:
+        config_fields, config_changed = source_view.normalize_config_patch(
+            body, current or {}
+        )
+    except ValueError as exc:
+        raise ApiError(str(exc)) from exc
+    fields.update(config_fields)
+    changed += config_changed
     if not fields:
-        raise ApiError("没有可更新的字段")
-    return fields
+        raise ApiError("没有需要更新的字段（提交值与当前配置一致）")
+    return fields, changed
+
+
+def export_seed_snapshot() -> dict[str, Any]:
+    """改完飞书配置立刻刷新 src/seed_default.json。
+
+    仓库里只有这份快照，漏了它别人部署出来的库会缺配置，表被改坏也没有可回滚的
+    版本。靠人记着跑总会漏，所以挂在写入路径上。
+    """
+    try:
+        from tools import export_seed
+
+        export_seed.main()
+    except Exception as exc:  # noqa: BLE001 - 飞书已经写成功了，快照失败只降级提示
+        return {"ok": False, "message": f"{type(exc).__name__}: {exc}"}
+    return {"ok": True, "message": "已刷新 src/seed_default.json"}
+
+
+def read_detail(record_id: str) -> dict[str, Any]:
+    token = feishu.get_tenant_access_token()
+    record = next(
+        (
+            item
+            for item in feishu.read_param_records(token)
+            if str(item.get("record_id") or "") == record_id
+        ),
+        None,
+    )
+    if not record:
+        raise ApiError("信号源不存在", HTTPStatus.NOT_FOUND)
+    return source_view.build_detail(record)
 
 
 def sync_source_table_status(token: str, name: str, status: str) -> None:
@@ -117,18 +161,51 @@ def sync_source_table_status(token: str, name: str, status: str) -> None:
 
 
 def apply_patch(record_id: str, body: dict[str, Any]) -> dict[str, Any]:
-    # 先校验再取 token：请求本身不合法时应回 400，而不是被飞书的报错盖住。
-    fields = _patch_fields(body)
+    # 只改状态/优先级时不必读全表，快捷开关要保持原来的响应速度。
+    needs_current = any(key in body for key in source_view.CONFIG_KEYS)
     token = feishu.get_tenant_access_token()
-    feishu.update_record(token, config.FEISHU_PARAM_TABLE_ID, record_id, fields)
+    record = None
+    current: dict[str, Any] = {}
+    if needs_current:
+        record = next(
+            (
+                item
+                for item in feishu.read_param_records(token)
+                if str(item.get("record_id") or "") == record_id
+            ),
+            None,
+        )
+        if not record:
+            raise ApiError("信号源不存在", HTTPStatus.NOT_FOUND)
+        current = source_view.build_detail(record)["config"]
+
+    fields, changed = _patch_fields(body, current)
+
+    # 源状态约定：改过采集链路的字段就必须退回「待测」重新验收。显式传了 status
+    # 的请求（比如手动点「已接入」）以调用方为准。
+    rule_changed = sorted(set(changed) & source_view.RULE_FIELDS)
+    demoted = False
+    if rule_changed and "status" not in body:
+        if current.get("status") != source_view.STATUS_EXPERIMENTAL:
+            fields["status"] = source_view.STATUS_EXPERIMENTAL
+            demoted = True
+
+    updated = feishu.update_record(token, config.FEISHU_PARAM_TABLE_ID, record_id, fields)
     if "status" in fields:
-        name = ""
-        for record in feishu.read_param_records(token):
-            if str(record.get("record_id") or "") == record_id:
-                name = str(sources.cell((record.get("fields") or {}).get("name")) or "")
-                break
+        name = str(
+            (current.get("name") or "")
+            or sources.cell((updated.get("fields") or {}).get("name"))
+            or ""
+        )
         sync_source_table_status(token, name, str(fields["status"]))
-    return {"ok": True}
+
+    result: dict[str, Any] = {"ok": True, "changed": changed, "demoted": demoted}
+    if rule_changed:
+        result["ruleChanged"] = rule_changed
+        result["seed"] = export_seed_snapshot()
+    if needs_current:
+        result["detail"] = read_detail(record_id)
+    return result
 
 
 def create_source(body: dict[str, Any], site_dir: Path) -> dict[str, Any]:
@@ -159,13 +236,13 @@ def create_source(body: dict[str, Any], site_dir: Path) -> dict[str, Any]:
         "status": source_view.STATUS_EXPERIMENTAL,
     }
     record = feishu.create_record(token, config.FEISHU_PARAM_TABLE_ID, fields)
-    return {"source": source_view.build_source(record)}
+    return {"source": source_view.build_source(record), "seed": export_seed_snapshot()}
 
 
 def delete_source(record_id: str) -> dict[str, Any]:
     token = feishu.get_tenant_access_token()
     feishu.delete_record(token, config.FEISHU_PARAM_TABLE_ID, record_id)
-    return {"ok": True}
+    return {"ok": True, "seed": export_seed_snapshot()}
 
 
 def _pending_table_id(token: str) -> str:
@@ -384,8 +461,31 @@ class SourcesHandler(SimpleHTTPRequestHandler):
             raise ApiError("缺少 recordId")
         return record_id
 
-    def _dispatch(self, handler) -> None:
+    def _detail_record_id(self) -> str:
+        rest = unquote(self.path[len(API_PREFIX) :].strip("/"))
+        record_id = rest[: -len("/detail")].strip("/")
+        if not record_id or "/" in record_id:
+            raise ApiError("缺少 recordId")
+        return record_id
+
+    def _guard_cross_origin(self) -> None:
+        """挡住浏览器里其他页面对本服务的写请求。
+
+        这个服务持有飞书凭据、能改参数表，只监听回环并不足以保护它：你在浏览器里
+        打开的任意站点都能往 127.0.0.1 发跨站写请求。curl 和 agent 不带 Origin，
+        不受影响。
+        """
+        origin = self.headers.get("Origin")
+        if not origin:
+            return
+        hostname = urlparse(origin).hostname or ""
+        if hostname not in {"127.0.0.1", "localhost", "::1"}:
+            raise ApiError(f"拒绝跨站写请求：Origin {origin}", HTTPStatus.FORBIDDEN)
+
+    def _dispatch(self, handler, *, write: bool = False) -> None:
         try:
+            if write:
+                self._guard_cross_origin()
             self._send_json(handler())
         except ApiError as exc:
             self._send_json({"error": str(exc)}, exc.status)
@@ -395,6 +495,11 @@ class SourcesHandler(SimpleHTTPRequestHandler):
     def do_GET(self) -> None:  # noqa: N802 - BaseHTTPRequestHandler 约定
         if self.path.rstrip("/") == API_PREFIX:
             self._dispatch(lambda: read_payload(self.site_dir))
+            return
+        if self.path.startswith(f"{API_PREFIX}/") and self.path.rstrip("/").endswith(
+            "/detail"
+        ):
+            self._dispatch(lambda: read_detail(self._detail_record_id()))
             return
         if self.path.rstrip("/") == PENDING_PREFIX:
             self._dispatch(read_pending_payload)
@@ -407,13 +512,15 @@ class SourcesHandler(SimpleHTTPRequestHandler):
     def do_POST(self) -> None:  # noqa: N802
         path = self.path.rstrip("/")
         if path == API_PREFIX:
-            self._dispatch(lambda: create_source(self._read_body(), self.site_dir))
+            self._dispatch(
+                lambda: create_source(self._read_body(), self.site_dir), write=True
+            )
             return
         if path == PENDING_PREFIX:
-            self._dispatch(lambda: create_pending(self._read_body()))
+            self._dispatch(lambda: create_pending(self._read_body()), write=True)
             return
         if path == TIMELINE_PREFIX:
-            self._dispatch(lambda: create_tracked_entity(self._read_body()))
+            self._dispatch(lambda: create_tracked_entity(self._read_body()), write=True)
             return
         self.send_error(HTTPStatus.NOT_FOUND)
 
@@ -421,20 +528,23 @@ class SourcesHandler(SimpleHTTPRequestHandler):
         if not self.path.startswith(f"{API_PREFIX}/"):
             self.send_error(HTTPStatus.NOT_FOUND)
             return
-        self._dispatch(lambda: apply_patch(self._record_id(), self._read_body()))
+        self._dispatch(
+            lambda: apply_patch(self._record_id(), self._read_body()), write=True
+        )
 
     def do_DELETE(self) -> None:  # noqa: N802
         if self.path.startswith(f"{API_PREFIX}/"):
-            self._dispatch(lambda: delete_source(self._record_id()))
+            self._dispatch(lambda: delete_source(self._record_id()), write=True)
             return
         if self.path.startswith(f"{PENDING_PREFIX}/"):
             self._dispatch(
-                lambda: remove_pending(self._record_id(PENDING_PREFIX))
+                lambda: remove_pending(self._record_id(PENDING_PREFIX)), write=True
             )
             return
         if self.path.startswith(f"{TIMELINE_PREFIX}/"):
             self._dispatch(
-                lambda: delete_tracked_entity(self._record_id(TIMELINE_PREFIX))
+                lambda: delete_tracked_entity(self._record_id(TIMELINE_PREFIX)),
+                write=True,
             )
             return
         self.send_error(HTTPStatus.NOT_FOUND)

@@ -9,6 +9,7 @@ import requests
 from . import (
     config,
     feishu,
+    health,
     paper_fulltext,
     policy_document,
     podcast,
@@ -115,6 +116,7 @@ def run(methods: set[str] | None = None) -> int:
     # X / Social 暂停自动采集；仍保留显式 `--method Social` 供后续手动验收。
     enabled = methods or {"RSS", "Scrape", "Media"}
     config.validate()
+    run_id = health.new_run_id()
 
     token = feishu.get_tenant_access_token()
     log.info("已获取飞书 tenant_access_token")
@@ -187,14 +189,22 @@ def run(methods: set[str] | None = None) -> int:
     ))
 
     raw_items: list[dict] = []
+    # 分源抓取结果：区分「链路断了」和「源本身没更新」，两者的处置完全不同
+    fetch_stats: dict[str, dict] = {}
     social_batch = social.SocialFetchBatch()
     if feed_sources:
-        raw_items += rss.fetch_feed_sources(feed_sources)
+        rss_items, rss_stats = rss.fetch_feed_sources_with_stats(feed_sources)
+        raw_items += rss_items
+        fetch_stats.update(rss_stats)
     if scrape_sources:
         # 官方博客（Anthropic/Meta 等）与中文站点只有 Scrape 一条路，缺了它们
         # 重大发布只能靠公众号转述进来
         try:
-            raw_items += scrape.fetch_scrape_sources(scrape_sources, engine="auto")
+            scrape_items, scrape_stats = scrape.fetch_scrape_sources_with_stats(
+                scrape_sources, engine="auto"
+            )
+            raw_items += scrape_items
+            fetch_stats.update(scrape_stats)
         except Exception as exc:  # noqa: BLE001 - 与 RSS 一致：单条链路失败不拖垮整轮
             log.warning("Scrape 采集失败，本轮跳过：%s", exc)
     if media_sources:
@@ -229,7 +239,8 @@ def run(methods: set[str] | None = None) -> int:
     log.info("抓取到原始条目 %d 条", len(raw_items))
 
     drop_stats: dict[str, int] = {}
-    cleaned = process.process_and_clean(raw_items, type_configs, drop_stats)
+    funnel = health.Funnel()
+    cleaned = process.process_and_clean(raw_items, type_configs, drop_stats, funnel)
     log.info("清洗过滤后 %d 条", len(cleaned))
 
     existing = feishu.read_existing_dedup_keys(token)
@@ -272,24 +283,53 @@ def run(methods: set[str] | None = None) -> int:
         log.info("其中 arXiv %d 条（上限 %d）", arxiv_in, config.MAX_ARXIV_ITEMS)
 
     # 回写本轮采集统计（最近采集时间 / 条目数 / 查重过滤；即使 0 条入库也要写）
-    attempted_ids = (
-        {f["id"] for f in feed_sources}
-        | {f["id"] for f in scrape_sources}
-        | {f["id"] for f in media_sources}
-        | {f["id"] for f in podcast_sources}
-        | {f["id"] for f in social_sources}
-    )
+    attempted = {
+        str(f["id"]): f
+        for group in (
+            feed_sources,
+            scrape_sources,
+            media_sources,
+            podcast_sources,
+            social_sources,
+        )
+        for f in group
+        if f.get("id")
+    }
     try:
         feishu.sync_param_collect_stats(
             token,
             records,
-            attempted_ids,
+            set(attempted),
             cleaned,
             new_items,
             drop_stats,
         )
     except feishu.FeishuError as exc:
         log.warning("回写源采集统计失败: %s", exc)
+
+    # 参数表那份是覆盖式快照，答不了「连续几天零产出」。这里按轮留一份分源漏斗，
+    # 落盘失败不该影响已经完成的采集。
+    try:
+        rows = health.build_records(
+            run_id=run_id,
+            param_records=records,
+            attempted=attempted,
+            funnel=funnel,
+            fetch_stats=fetch_stats,
+            cleaned_items=cleaned,
+            final_items=new_items,
+        )
+        path = health.write_records(rows)
+        silent = [r["source_id"] for r in rows if not r["written"] and r["funnel"].get("raw")]
+        log.info(
+            "健康记录 %d 行 → %s；抓到但一条没留下的源 %d 个%s",
+            len(rows),
+            path,
+            len(silent),
+            ("：" + "、".join(silent[:8])) if silent else "",
+        )
+    except Exception as exc:  # noqa: BLE001 - 观测数据不该拖垮采集
+        log.warning("写健康记录失败：%s", exc)
 
     if not new_items:
         if social_batch.cursor_states:

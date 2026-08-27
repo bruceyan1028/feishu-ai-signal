@@ -739,7 +739,7 @@ class DeliveryTests(unittest.TestCase):
                 "titleCn": "第二条中文标题",
                 "source": "量子位",
                 "url": "https://example.com/second",
-                "category": "中文科技媒体",
+                "category": "中文媒体",
                 "summary": "第二条摘要，" * 20,
                 "impact": 80,
                 "contentType": "公众号",
@@ -774,7 +774,7 @@ class DeliveryTests(unittest.TestCase):
             [
                 "<font color='red'>**AI Signal 每日情报 · 2026-07-13**</font>",
                 "<font color='blue'>**🚀 前沿模型公司**</font>",
-                "<font color='wathet'>**📰 中文科技媒体**</font>",
+                "<font color='wathet'>**📰 中文媒体**</font>",
             ],
         )
 
@@ -801,7 +801,7 @@ class DeliveryTests(unittest.TestCase):
     def test_daily_card_caps_groups_and_items(self) -> None:
         brief = self.multi_category_brief()
         groups = notify.group_signals(brief["signals"])
-        self.assertEqual([name for name, _ in groups], ["前沿模型公司", "中文科技媒体"])
+        self.assertEqual([name for name, _ in groups], ["前沿模型公司", "中文媒体"])
         self.assertTrue(all(len(items) <= notify.MAX_ITEMS_PER_GROUP for _, items in groups))
         crowded = [
             dict(signal, recordId=f"rec{index}", category=f"板块{index // 4}")
@@ -819,6 +819,23 @@ class DeliveryTests(unittest.TestCase):
         self.assertIn("youtube-nocookie.com/embed/", template)
         self.assertIn("在 YouTube 打开 ↗", template)
         self.assertNotIn("ytPosterLoaded", template)
+
+    def test_chinese_media_is_a_single_frontend_filter_with_visible_tags(self) -> None:
+        template = Path("index.html").read_text(encoding="utf-8")
+        self.assertRegex(template, r"const filters = \[[^\]]*'中文媒体'")
+        self.assertRegex(template, r"const TYPE_ORDER = \[[^\]]*'中文媒体'")
+        self.assertNotRegex(template, r"const TYPE_ORDER = \[[^\]]*'中文科技媒体'")
+        self.assertNotRegex(template, r"const filters = \[[^\]]*'中文科技媒体'")
+        self.assertIn("function normalizeCategory", template)
+        self.assertIn("visibleTags", template)
+
+    def test_cards_hide_chinese_originals_and_score_badges(self) -> None:
+        template = Path("index.html").read_text(encoding="utf-8")
+        self.assertIn("function keepOriginalTitle", template)
+        self.assertNotIn("影响 ${s.impact}", template)
+        self.assertNotIn("紧迫 ${s.urgency}", template)
+        self.assertNotIn("影响分 <strong", template)
+        self.assertIn("keepOriginalTitle(s)", template)
 
     def test_historical_brief_drops_meta_signal_outside_24h_window(self) -> None:
         old_meta = {

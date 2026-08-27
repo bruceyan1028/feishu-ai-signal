@@ -476,7 +476,7 @@
    ],
    "层级": "L3 媒体研报",
    "来源类型": "纯网页",
-   "自动化状态": "待测",
+   "自动化状态": "已接入",
    "获取方式": "Manual",
    "链接": {
     "link": "https://www.mckinsey.com/capabilities/quantumblack/our-insights/the-state-of-ai",
@@ -1242,7 +1242,7 @@
    ],
    "层级": "L4 补充源",
    "来源类型": "播客",
-   "自动化状态": "待测",
+   "自动化状态": "已接入",
    "获取方式": "Podcast",
    "链接": {
     "link": "https://www.ximalaya.com/album/74194808.xml",
@@ -1349,6 +1349,142 @@
     "link": "https://www.whitehouse.gov/presidential-actions/feed/",
     "text": "https://www.whitehouse.gov/presidential-actions/feed/"
    }
+  },
+  {
+   "主要看什么": "AI 工程、Agent 系统与生产实践",
+   "优先级": "P2",
+   "分类": "其他",
+   "名称": "Practical AI",
+   "备注": [
+    "新增播客源；完整诊断通过后再转已接入"
+   ],
+   "层级": "L4 补充源",
+   "来源类型": "播客",
+   "自动化状态": "待测",
+   "获取方式": "Podcast",
+   "链接": {
+    "link": "https://feeds.transistor.fm/practical-ai-machine-learning-data-science-llm",
+    "text": "https://feeds.transistor.fm/practical-ai-machine-learning-data-science-llm"
+   }
+  },
+  {
+   "主要看什么": "前沿 AI 创业者、研究者与技术路线",
+   "优先级": "P2",
+   "分类": "其他",
+   "名称": "The Cognitive Revolution",
+   "备注": [
+    "新增播客源；完整诊断通过后再转已接入"
+   ],
+   "层级": "L4 补充源",
+   "来源类型": "播客",
+   "自动化状态": "已接入",
+   "获取方式": "Podcast",
+   "链接": {
+    "link": "https://feeds.megaphone.fm/RINTP3108857801",
+    "text": "https://feeds.megaphone.fm/RINTP3108857801"
+   }
+  },
+  {
+   "主要看什么": "机器学习研究、模型训练与产业应用",
+   "优先级": "P2",
+   "分类": "其他",
+   "名称": "The TWIML AI Podcast",
+   "备注": [
+    "新增播客源；完整诊断通过后再转已接入"
+   ],
+   "层级": "L4 补充源",
+   "来源类型": "播客",
+   "自动化状态": "已接入",
+   "获取方式": "Podcast",
+   "链接": {
+    "link": "https://feeds.megaphone.fm/MLN2155636147",
+    "text": "https://feeds.megaphone.fm/MLN2155636147"
+   }
+  },
+  {
+   "主要看什么": "AI 基础设施、创业公司与研究前沿",
+   "优先级": "P2",
+   "分类": "其他",
+   "名称": "Gradient Dissent",
+   "备注": [
+    "新增播客源；完整诊断通过后再转已接入"
+   ],
+   "层级": "L4 补充源",
+   "来源类型": "播客",
+   "自动化状态": "待测",
+   "获取方式": "Podcast",
+   "链接": {
+    "link": "https://feeds.captivate.fm/gradient-dissent/",
+    "text": "https://feeds.captivate.fm/gradient-dissent/"
+   }
+  },
+  {
+   "主要看什么": "基础模型、AI 研究与创业公司技术路线",
+   "优先级": "P2",
+   "分类": "其他",
+   "名称": "Training Data",
+   "备注": [
+    "新增播客源；完整诊断通过后再转已接入"
+   ],
+   "层级": "L4 补充源",
+   "来源类型": "播客",
+   "自动化状态": "已接入",
+   "获取方式": "Podcast",
+   "链接": {
+    "link": "https://feeds.megaphone.fm/trainingdata",
+    "text": "https://feeds.megaphone.fm/trainingdata"
+   }
+  },
+  {
+   "主要看什么": "AI 商业化、算力市场与企业采用",
+   "优先级": "P2",
+   "分类": "其他",
+   "名称": "Eye On AI",
+   "备注": [
+    "新增播客源；完整诊断通过后再转已接入"
+   ],
+   "层级": "L4 补充源",
+   "来源类型": "播客",
+   "自动化状态": "已接入",
+   "获取方式": "Podcast",
+   "链接": {
+    "link": "https://rss.libsyn.com/shows/123267/destinations/727317.xml",
+    "text": "https://rss.libsyn.com/shows/123267/destinations/727317.xml"
+   }
+  },
+  {
+   "主要看什么": "每周 AI 模型、政策与产业重要进展",
+   "优先级": "P2",
+   "分类": "其他",
+   "名称": "Last Week in AI",
+   "备注": [
+    "新增播客源；完整诊断通过后再转已接入"
+   ],
+   "层级": "L4 补充源",
+   "来源类型": "播客",
+   "自动化状态": "已接入",
+   "获取方式": "Podcast",
+   "链接": {
+    "link": "https://rss.art19.com/last-week-in-ai",
+    "text": "https://rss.art19.com/last-week-in-ai"
+   }
+  },
+  {
+   "主要看什么": "AI 基础设施、机器人与行业应用",
+   "优先级": "P2",
+   "分类": "其他",
+   "名称": "NVIDIA AI Podcast",
+   "备注": [
+    "新增播客源；完整诊断通过后再转已接入"
+   ],
+   "层级": "L4 补充源",
+   "来源类型": "播客",
+   "自动化状态": "待测",
+   "获取方式": "Podcast",
+   "链接": {
+    "link": "https://feeds.megaphone.fm/nvidiaaipodcast",
+    "text": "https://feeds.megaphone.fm/nvidiaaipodcast"
+   }
   }
  ],
  "一级参数": [
@@ -1377,7 +1513,7 @@
     "link": "https://www.anthropic.com/news",
     "text": "https://www.anthropic.com/news"
    },
-   "extra_config": "{\"list_parser\":\"anthropic_news\",\"max_articles\":20}",
+   "extra_config": "{\"list_parser\": \"anthropic_news\", \"max_articles\": 20}",
    "fetch_method": "Scrape",
    "keyword_regex": "(model|gpt|claude|gemini|llama|qwen|deepseek|grok|command|mistral|doubao|seed|volc|agent|reasoning|multimodal|context|rlhf|inference|training|fine-tun|moe|rag|release|launch|announce|introducing|now available|update|preview|GA)",
    "lookback_window": "24h",
@@ -1917,7 +2053,7 @@
    "notes": "PDF报告人工导入",
    "priority": "P0",
    "source_id": "mckinsey-state-of-ai",
-   "status": "experimental",
+   "status": "active",
    "tier": "L3",
    "来源类型": "纯网页"
   },
@@ -2015,7 +2151,7 @@
    "notes": "订阅/API",
    "priority": "P1",
    "source_id": "pitchbook",
-   "status": "experimental",
+   "status": "paused",
    "tier": "L3",
    "来源类型": "纯网页"
   },
@@ -2032,7 +2168,7 @@
    "name": "CB Insights AI 100",
    "priority": "P1",
    "source_id": "cb-insights",
-   "status": "experimental",
+   "status": "paused",
    "tier": "L3",
    "来源类型": "纯网页"
   },
@@ -2050,7 +2186,7 @@
    "notes": "订阅制",
    "priority": "P0",
    "source_id": "the-information",
-   "status": "experimental",
+   "status": "paused",
    "tier": "L3",
    "来源类型": "纯网页"
   },
@@ -2085,7 +2221,7 @@
    "notes": "订阅制",
    "priority": "P1",
    "source_id": "bloomberg-tech",
-   "status": "experimental",
+   "status": "paused",
    "tier": "L3",
    "来源类型": "纯网页"
   },
@@ -2183,7 +2319,7 @@
    "name": "公司注册和招聘变化",
    "priority": "P2",
    "source_id": "corp-signals",
-   "status": "experimental",
+   "status": "paused",
    "tier": "L4",
    "来源类型": "纯网页"
   },
@@ -2490,7 +2626,7 @@
    "来源类型": "纯网页"
   },
   {
-   "dimension": "中文科技媒体",
+   "dimension": "中文媒体",
    "endpoint": {
     "link": "https://www.qbitai.com/feed",
     "text": "https://www.qbitai.com/feed"
@@ -2504,7 +2640,7 @@
    "来源类型": "公众号"
   },
   {
-   "dimension": "中文科技媒体",
+   "dimension": "中文媒体",
    "endpoint": {
     "link": "https://zhidx.com/rss",
     "text": "https://zhidx.com/rss"
@@ -2518,7 +2654,7 @@
    "来源类型": "公众号"
   },
   {
-   "dimension": "中文科技媒体",
+   "dimension": "中文媒体",
    "endpoint": {
     "link": "https://www.jazzyear.com/",
     "text": "https://www.jazzyear.com/"
@@ -2533,7 +2669,7 @@
    "来源类型": "公众号"
   },
   {
-   "dimension": "中文科技媒体",
+   "dimension": "中文媒体",
    "endpoint": {
     "link": "https://www.leiphone.com/feed",
     "text": "https://www.leiphone.com/feed"
@@ -2547,7 +2683,7 @@
    "来源类型": "公众号"
   },
   {
-   "dimension": "中文科技媒体",
+   "dimension": "中文媒体",
    "endpoint": {
     "link": "https://www.huxiu.com/",
     "text": "https://www.huxiu.com/"
@@ -2563,7 +2699,7 @@
    "来源类型": "公众号"
   },
   {
-   "dimension": "中文科技媒体",
+   "dimension": "中文媒体",
    "endpoint": {
     "link": "https://www.geekpark.net/",
     "text": "https://www.geekpark.net/"
@@ -2579,7 +2715,7 @@
    "来源类型": "公众号"
   },
   {
-   "dimension": "中文科技媒体",
+   "dimension": "中文媒体",
    "endpoint": {
     "link": "https://www.pingwest.com/",
     "text": "https://www.pingwest.com/"
@@ -2595,7 +2731,7 @@
    "来源类型": "公众号"
   },
   {
-   "dimension": "中文综合媒体",
+   "dimension": "中文媒体",
    "endpoint": {
     "link": "https://www.thepaper.cn/",
     "text": "https://www.thepaper.cn/"
@@ -2611,7 +2747,7 @@
    "来源类型": "公众号"
   },
   {
-   "dimension": "中文综合媒体",
+   "dimension": "中文媒体",
    "endpoint": {
     "link": "https://a.jiemian.com/index.php?m=article&a=rss",
     "text": "https://a.jiemian.com/index.php?m=article&a=rss"
@@ -2625,7 +2761,7 @@
    "来源类型": "公众号"
   },
   {
-   "dimension": "中文综合媒体",
+   "dimension": "中文媒体",
    "endpoint": {
     "link": "https://wallstreetcn.com/",
     "text": "https://wallstreetcn.com/"
@@ -2641,7 +2777,7 @@
    "来源类型": "公众号"
   },
   {
-   "dimension": "中文综合媒体",
+   "dimension": "中文媒体",
    "endpoint": {
     "link": "https://www.caixin.com/",
     "text": "https://www.caixin.com/"
@@ -2657,7 +2793,7 @@
    "来源类型": "公众号"
   },
   {
-   "dimension": "中文综合媒体",
+   "dimension": "中文媒体",
    "endpoint": {
     "link": "https://www.guokr.com/",
     "text": "https://www.guokr.com/"
@@ -2963,7 +3099,7 @@
    "notes": "喜马拉雅 RSS 偶发超时；先诊断验收",
    "priority": "P2",
    "source_id": "podcast-ai-alchemy",
-   "status": "experimental",
+   "status": "active",
    "tier": "L4",
    "来源类型": "播客"
   },
@@ -3253,6 +3389,158 @@
    "status": "active",
    "tier": "L1",
    "来源类型": "纯网页"
+  },
+  {
+   "dedup_key": "podcast_guid",
+   "dimension": "其他",
+   "endpoint": {
+    "link": "https://feeds.transistor.fm/practical-ai-machine-learning-data-science-llm",
+    "text": "https://feeds.transistor.fm/practical-ai-machine-learning-data-science-llm"
+   },
+   "extra_config": "{\"max_items\":3,\"max_duration_sec\":14400}",
+   "fetch_method": "Podcast",
+   "lookback_window": "7d",
+   "min_content_chars": 1,
+   "name": "Practical AI",
+   "notes": "新增播客源；完整诊断通过后再转 active",
+   "priority": "P2",
+   "source_id": "podcast-practical-ai",
+   "status": "experimental",
+   "tier": "L4",
+   "来源类型": "播客"
+  },
+  {
+   "dedup_key": "podcast_guid",
+   "dimension": "其他",
+   "endpoint": {
+    "link": "https://feeds.megaphone.fm/RINTP3108857801",
+    "text": "https://feeds.megaphone.fm/RINTP3108857801"
+   },
+   "extra_config": "{\"max_items\":3,\"max_duration_sec\":14400}",
+   "fetch_method": "Podcast",
+   "lookback_window": "7d",
+   "min_content_chars": 1,
+   "name": "The Cognitive Revolution",
+   "notes": "新增播客源；完整诊断通过后再转 active",
+   "priority": "P2",
+   "source_id": "podcast-cognitive-revolution",
+   "status": "active",
+   "tier": "L4",
+   "来源类型": "播客"
+  },
+  {
+   "dedup_key": "podcast_guid",
+   "dimension": "其他",
+   "endpoint": {
+    "link": "https://feeds.megaphone.fm/MLN2155636147",
+    "text": "https://feeds.megaphone.fm/MLN2155636147"
+   },
+   "extra_config": "{\"max_items\":3,\"max_duration_sec\":14400}",
+   "fetch_method": "Podcast",
+   "lookback_window": "7d",
+   "min_content_chars": 1,
+   "name": "The TWIML AI Podcast",
+   "notes": "新增播客源；完整诊断通过后再转 active",
+   "priority": "P2",
+   "source_id": "podcast-twiml",
+   "status": "active",
+   "tier": "L4",
+   "来源类型": "播客"
+  },
+  {
+   "dedup_key": "podcast_guid",
+   "dimension": "其他",
+   "endpoint": {
+    "link": "https://feeds.captivate.fm/gradient-dissent/",
+    "text": "https://feeds.captivate.fm/gradient-dissent/"
+   },
+   "extra_config": "{\"max_items\":3,\"max_duration_sec\":14400}",
+   "fetch_method": "Podcast",
+   "lookback_window": "7d",
+   "min_content_chars": 1,
+   "name": "Gradient Dissent",
+   "notes": "新增播客源；完整诊断通过后再转 active",
+   "priority": "P2",
+   "source_id": "podcast-gradient-dissent",
+   "status": "experimental",
+   "tier": "L4",
+   "来源类型": "播客"
+  },
+  {
+   "dedup_key": "podcast_guid",
+   "dimension": "其他",
+   "endpoint": {
+    "link": "https://feeds.megaphone.fm/trainingdata",
+    "text": "https://feeds.megaphone.fm/trainingdata"
+   },
+   "extra_config": "{\"max_items\":3,\"max_duration_sec\":14400}",
+   "fetch_method": "Podcast",
+   "lookback_window": "7d",
+   "min_content_chars": 1,
+   "name": "Training Data",
+   "notes": "新增播客源；完整诊断通过后再转 active",
+   "priority": "P2",
+   "source_id": "podcast-training-data",
+   "status": "active",
+   "tier": "L4",
+   "来源类型": "播客"
+  },
+  {
+   "dedup_key": "podcast_guid",
+   "dimension": "其他",
+   "endpoint": {
+    "link": "https://rss.libsyn.com/shows/123267/destinations/727317.xml",
+    "text": "https://rss.libsyn.com/shows/123267/destinations/727317.xml"
+   },
+   "extra_config": "{\"max_items\":3,\"max_duration_sec\":14400}",
+   "fetch_method": "Podcast",
+   "lookback_window": "7d",
+   "min_content_chars": 1,
+   "name": "Eye On AI",
+   "notes": "新增播客源；完整诊断通过后再转 active",
+   "priority": "P2",
+   "source_id": "podcast-eye-on-ai",
+   "status": "active",
+   "tier": "L4",
+   "来源类型": "播客"
+  },
+  {
+   "dedup_key": "podcast_guid",
+   "dimension": "其他",
+   "endpoint": {
+    "link": "https://rss.art19.com/last-week-in-ai",
+    "text": "https://rss.art19.com/last-week-in-ai"
+   },
+   "extra_config": "{\"max_items\":3,\"max_duration_sec\":14400}",
+   "fetch_method": "Podcast",
+   "lookback_window": "7d",
+   "min_content_chars": 1,
+   "name": "Last Week in AI",
+   "notes": "新增播客源；完整诊断通过后再转 active",
+   "priority": "P2",
+   "source_id": "podcast-last-week-in-ai",
+   "status": "active",
+   "tier": "L4",
+   "来源类型": "播客"
+  },
+  {
+   "dedup_key": "podcast_guid",
+   "dimension": "其他",
+   "endpoint": {
+    "link": "https://feeds.megaphone.fm/nvidiaaipodcast",
+    "text": "https://feeds.megaphone.fm/nvidiaaipodcast"
+   },
+   "extra_config": "{\"max_items\":3,\"max_duration_sec\":14400}",
+   "fetch_method": "Podcast",
+   "lookback_window": "7d",
+   "min_content_chars": 1,
+   "name": "NVIDIA AI Podcast",
+   "notes": "新增播客源；完整诊断通过后再转 active",
+   "priority": "P2",
+   "source_id": "podcast-nvidia-ai",
+   "status": "experimental",
+   "tier": "L4",
+   "来源类型": "播客"
   }
  ],
  "二级参数-论文": [

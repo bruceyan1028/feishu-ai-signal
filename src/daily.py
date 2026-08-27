@@ -687,7 +687,7 @@ deep_analysis_cn（中文分析）。
 {analysis_format}
 {paper_extra}{policy_extra}标题：{scalar(fields.get("标题"))}
 来源：{scalar(fields.get("来源"))}
-分类：{scalar(fields.get("分类"))}
+分类：{sources.normalize_category(scalar(fields.get("分类")) or "其他")}
 分析依据：{"论文 PDF 全文及图表页" if is_paper and paper_full_text.get("source") == "pdf" else policy_basis}
 原文/论文证据：{analysis_text}"""
     raw = report._llm_json(prompt, image_urls=image_urls)
@@ -742,7 +742,7 @@ def _signal_from_fields(record_id: str, fields: dict[str, Any], analysis: dict[s
         "titleCn": analysis["title_cn"],
         "source": str(scalar(fields.get("来源"))),
         "url": link(fields.get("链接")),
-        "category": str(scalar(fields.get("分类")) or "其他"),
+        "category": sources.normalize_category(scalar(fields.get("分类")) or "其他"),
         "contentType": content_type(fields),
         "tier": tier or str(scalar(fields.get("层级")) or ""),
         "priority": priority,

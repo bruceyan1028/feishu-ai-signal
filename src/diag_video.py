@@ -133,7 +133,9 @@ def load_video_sources(
                 "id": source_id,
                 "name": str(sources.cell(fields.get("name")) or source_id),
                 "url": endpoint,
-                "category": str(sources.cell(fields.get("dimension")) or "其他"),
+                "category": sources.normalize_category(
+                    fields.get("dimension"), default="其他"
+                ),
                 "tier": str(sources.cell(fields.get("tier")) or "L2"),
                 "priority": str(sources.cell(fields.get("priority")) or "P1"),
                 "lookback": str(sources.cell(fields.get("lookback_window")) or ""),

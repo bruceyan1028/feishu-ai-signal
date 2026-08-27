@@ -270,7 +270,6 @@
     .signal-card { flex-direction: column !important; min-height: 0 !important; }
     .sc-media { width: 100% !important; height: 166px !important; border-right: none !important; border-bottom: 1.5px solid var(--ds-ink-line) !important; }
     .sc-meta { padding: 9px 42px 9px 12px !important; gap: 6px !important; }
-    .sc-tags { display: none !important; }
     .sc-scores { margin-left: 0 !important; }
     .sc-main { padding: 13px 12px !important; }
     .sc-title { font-size: 17px !important; }
@@ -392,6 +391,9 @@ const state = {
   sourceOrigin: 'feishu',
   briefWindowDays: 0,
   sources: [],
+  // 配置台的规则编辑面板。draft 只在输入时就地改，不触发 render——整页重绘会让
+  // 正在编辑的输入框丢焦点，字段一多就没法填了。
+  srcDetail: { recordId:'', loading:false, saving:false, error:'', message:'', data:null, draft:null },
 };
 
 // ============ Static data ============
@@ -485,10 +487,22 @@ let briefMeta = {
   intro: '从「谁的模型更强」转向「谁能更便宜、更可靠、更合规地把模型跑进生产」',
 };
 
-const filters = ['全部', '端侧模型', '算力芯片云', '政策监管地缘', '前沿模型公司', '技术研究开源', '创业融资并购'];
+const filters = ['全部', '端侧模型', '算力芯片云', '政策监管地缘', '前沿模型公司', '技术研究开源', '创业融资并购', '中文媒体'];
 const FORMAT_FILTERS = ['论文', '视频', '播客', '社交媒体帖子', '公众号'];
 // 「端侧模型」是标签驱动的横切专题,不是领域分类:按 tags 匹配
 const EDGE_FILTER = '端侧模型';
+function normalizeCategory(cat){
+  const raw = String(cat || '').trim();
+  if(raw==='中文科技媒体' || raw==='中文综合媒体') return '中文媒体';
+  return raw || '其他';
+}
+function keepOriginalTitle(s){
+  const original = String(s.title || '').trim();
+  const zh = String(s.zhTitle || '').trim();
+  if(!original || original === zh) return false;
+  if(/[\u3400-\u9fff]/.test(original)) return false;
+  return /[A-Za-z]/.test(original);
+}
 function matchesFilter(s, f){
   if(f==='全部') return true;
   if(f===EDGE_FILTER) return s.tags.includes('端侧');
@@ -502,11 +516,6 @@ const STATUS_TONES = {
   active: { color: '#15803d', bg: '#f0fdf4', border: '#bbf7d0' },
   experimental: { color: '#a16207', bg: '#fefce8', border: '#fde68a' },
   paused: { color: '#6b6b74', bg: '#fafafa', border: 'rgba(19,19,22,.12)' },
-};
-const urgStyles = {
-  '高': { bg: '#fef2f2', color: '#b91c1c', border: '#fecaca' },
-  '中': { bg: '#fefce8', color: '#a16207', border: '#fde68a' },
-  '低': { bg: '#fafafa', color: '#6b6b74', border: 'rgba(19,19,22,.12)' },
 };
 const idLabels = {
   '纯网页': ['采集地址', 'RSS / 页面地址'],
@@ -522,7 +531,7 @@ const idLabels = {
 // dataviz 深色类别色板(固定顺序,勿循环复用)
 const CAT = ['#3987e5','#199e70','#c98500','#9085e9','#e66767','#d55181','#d95926','#008300'];
 // 兜底顺序；实际取值来自飞书参数表的 dimension 与「来源类型」。
-const TYPE_ORDER = ['前沿模型公司','技术研究开源','算力芯片云','政策监管地缘','模型评测基准','产品化企业采用','创业融资并购','中文科技媒体','中文综合媒体','其他'];
+const TYPE_ORDER = ['前沿模型公司','技术研究开源','算力芯片云','政策监管地缘','模型评测基准','产品化企业采用','创业融资并购','中文媒体','其他'];
 const FORMAT_ORDER = ['纯网页','公众号','论文','视频','播客','社交媒体','Github热榜'];
 
 const modelPersonas = {
@@ -593,7 +602,6 @@ const debateSeed = [{
 // ============ Helpers ============
 function hexToRgb(h){ const m=h.replace('#',''); const n=parseInt(m.length===3?m.split('').map(c=>c+c).join(''):m,16); return [(n>>16)&255,(n>>8)&255,n&255]; }
 function scoreColor(v){ if(v>=75) return '#16a34a'; if(v>=55) return '#ca8a04'; return '#dc2626'; }
-function scoreBadge(v){ if(v>=75) return {bg:'#f0fdf4',color:'#15803d',border:'#bbf7d0'}; if(v>=55) return {bg:'#fefce8',color:'#a16207',border:'#fde68a'}; return {bg:'#fef2f2',color:'#b91c1c',border:'#fecaca'}; }
 function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 function shortText(s,n=180){ const t=String(s||'').trim(); return t.length>n?t.slice(0,n).replace(/[，,；;。\s]+$/,'')+'…':t; }
 function zhProse(s){
@@ -626,17 +634,6 @@ const UI = {
   chip: 'var(--ds-chip)',
 };
 const UI_DEFAULTS = { canvas: UI.canvas, section: UI.section, panelSolid: UI.panelSolid, panel: UI.panel, card: UI.card };
-// 徽章(影响分 / 紧迫度)— 浅底可读
-function scoreBadgeD(v){
-  if(v>=75) return { color:'var(--ds-good)', bg:'var(--ds-good-bg)', border:'var(--ds-good-border)' };
-  if(v>=55) return { color:'var(--ds-warn)', bg:'var(--ds-warn-bg)', border:'var(--ds-warn-border)' };
-  return { color:'var(--ds-crit)', bg:'var(--ds-crit-bg)', border:'var(--ds-crit-border)' };
-}
-const urgD = {
-  '高': { color:'var(--ds-crit)', bg:'var(--ds-crit-bg)', border:'var(--ds-crit-border)' },
-  '中': { color:'var(--ds-warn)', bg:'var(--ds-warn-bg)', border:'var(--ds-warn-border)' },
-  '低': { color:'var(--ds-text-2)', bg:'var(--ds-fill-1)', border:'var(--ds-border)' },
-};
 
 // ============ App / actions ============
 function sourceIdArg(id){
@@ -717,7 +714,7 @@ async function loadBrief(){
       title: s.title || '',
       source: s.source || '未知来源',
       url: s.url || '',
-      cat: s.category || '其他',
+      cat: normalizeCategory(s.category),
       date: s.publishedDate || data.date || '',
       summary: s.summary || '',
       deepAnalysis: s.deepAnalysis || '',
@@ -827,7 +824,7 @@ async function loadWeekly(){
       title:s.title || '',
       source:s.source || '未知来源',
       url:s.url || '',
-      cat:s.category || '其他',
+      cat: normalizeCategory(s.category),
       date:s.publishedDate || weeklyReport.periodEnd || '',
       summary:s.summary || '',
       deepAnalysis:s.deepAnalysis || '',
@@ -1135,6 +1132,61 @@ const App = {
   },
   setStatus(id, code){ if(this.canWrite('status')) this.setSrc(id,{status:code}); },
   setPriority(id,p){ if(this.canWrite('priority')) this.setSrc(id,{priority:p}); },
+  async toggleDetail(id){
+    const source = state.sources.find(x=>String(x.id)===String(id));
+    if(!source || !this.canWrite('config')) return;
+    if(state.srcDetail.recordId===source.recordId){
+      state.srcDetail = { recordId:'', loading:false, saving:false, error:'', message:'', data:null, draft:null };
+      render();
+      return;
+    }
+    state.srcDetail = { recordId:source.recordId, loading:true, saving:false, error:'', message:'', data:null, draft:null };
+    render();
+    try {
+      const body = await sourceApi(`/api/sources/${encodeURIComponent(source.recordId)}/detail`);
+      state.srcDetail = { recordId:source.recordId, loading:false, saving:false, error:'', message:'', data:body, draft:{ ...body.config } };
+    } catch(error) {
+      state.srcDetail = { recordId:source.recordId, loading:false, saving:false, error:error.message, message:'', data:null, draft:null };
+    }
+    render();
+  },
+  // 故意不 render：见 state.srcDetail 的注释
+  stashDetail(key, value){ if(state.srcDetail.draft) state.srcDetail.draft[key]=value; },
+  resetDetail(){
+    const d=state.srcDetail;
+    if(d.data){ d.draft={ ...d.data.config }; d.error=''; d.message=''; }
+    render();
+  },
+  async saveDetail(){
+    const d=state.srcDetail;
+    if(!d.data || !d.draft || d.saving) return;
+    // 只提交真正改过的字段，未改动的字段不该出现在写请求里
+    const patch={};
+    Object.keys(d.data.config).forEach(key=>{
+      if(key==='status') return;                      // 状态由开关和自动降级管
+      if(String(d.draft[key] ?? '')!==String(d.data.config[key] ?? '')) patch[key]=d.draft[key];
+    });
+    if(!Object.keys(patch).length){ d.message='没有改动'; d.error=''; render(); return; }
+    d.saving=true; d.error=''; d.message='正在写回飞书…';
+    render();
+    try {
+      const body=await sourceApi(`/api/sources/${encodeURIComponent(d.recordId)}`, { method:'PATCH', body:JSON.stringify(patch) });
+      const notes=[`已写回 ${(body.changed||[]).length} 个字段`];
+      if(body.demoted) notes.push('已按约定退回「待测」，验收通过后再启用');
+      if(body.seed) notes.push(body.seed.ok?'仓库快照已刷新':`仓库快照未刷新 · ${body.seed.message}`);
+      state.srcDetail={ ...d, saving:false, error:'', message:notes.join(' · '), data:body.detail||d.data, draft:{ ...((body.detail||d.data).config) } };
+      const index=state.sources.findIndex(x=>String(x.recordId)===String(d.recordId));
+      if(index>=0 && body.detail){
+        const cfg=body.detail.config;
+        state.sources[index]={ ...state.sources[index], name:cfg.name, url:cfg.endpoint, fetchMethod:cfg.fetchMethod,
+          format:cfg.format, type:cfg.dimension, tier:cfg.tier, priority:cfg.priority, lookback:cfg.lookbackWindow,
+          status:cfg.status, on:cfg.status==='active', statusLabel:STATUS_LABELS[cfg.status]||cfg.status };
+      }
+    } catch(error) {
+      state.srcDetail={ ...d, saving:false, error:error.message, message:'' };
+    }
+    render();
+  },
   async removeSrc(id){
     const index=state.sources.findIndex(x=>String(x.id)===String(id));
     if(index<0 || !this.canWrite('delete')) return;
@@ -1540,7 +1592,7 @@ function briefHtml(A){
     action: (a,b)=>b.action-a.action,
     date: (a,b)=>b.date.localeCompare(a.date),
   };
-  const sortLabels = { impact:'按影响分排序', novel:'按新颖度排序', action:'按可行动排序', date:'按时间排序' };
+  const sortLabels = { impact:'默认排序', novel:'按新颖度排序', action:'按可行动排序', date:'按时间排序' };
 
   const filteredSignals = signals.filter(s => matchesFilter(s, state.filter)).slice().sort(sortFns[state.sortKey]);
   const visible = filteredSignals;
@@ -1554,15 +1606,11 @@ function briefHtml(A){
     return `<button onclick="App.setFilter('${f}')" title="按内容形式筛选" style="height: 30px; padding: 0 13px; border-radius: 4px; border: 1px solid ${active?'#2f7d4f':'#8bc7a0'}; background: ${active?'#2f7d4f':'#e8f5eb'}; color: ${active?'#fff':'#17613a'}; font-size: 12.5px; font-weight: ${active?700:600}; cursor: pointer;">▦ ${f}</button>`;
   }).join('');
 
-  const sortOpts = [['impact','影响分'],['date','时间']]
+  const sortOpts = [['impact','默认'],['date','时间']]
     .map(([v,l])=>`<option value="${v}" ${state.sortKey===v?'selected':''}>${l}</option>`).join('');
 
   const cardsHtml = visible.map((s, idx) => {
-    const ib = scoreBadgeD(s.impact);
-    const u = urgD[s.urgency];
     const fav = state.favorites.includes(s.rank);
-    const sourceUrl = s.url || sourceUrls[s.source] || '#';
-    const mono = "'Geist Mono', ui-monospace, Menlo, monospace";
     const num = String(s.rank).padStart(2,'0');
     const tp = topicFor(s);
     const imgUrl = topicImageUrl(s);
@@ -1570,7 +1618,11 @@ function briefHtml(A){
     const catChip = v => `<span style="font-family: ${mono}; font-weight: 700; color: ${A.accent}; background: ${A.accentFaint}; border: 1px solid ${A.accentBorder}; padding: 3px 9px;">${esc(v)}</span>`;
     const typeChip = s.contentType ? `<span style="font-family: ${mono}; font-weight: 700; color: #17613a; background: #e5f5e9; border: 1px solid #8bc7a0; padding: 3px 9px;">${esc(s.contentType)}</span>` : '';
     const catsHtml = catChip(s.cat) + typeChip + (isEdge ? catChip(EDGE_FILTER) : '');
-    const tagsHtml = s.tags.map(t=>`<span style="font-family: ${mono}; font-size: 11px; color: ${UI.text3}; white-space: nowrap;">#${esc(t)}</span>`).join(`<span style="color: var(--ds-hair);">/</span>`);
+    const visibleTags = (s.tags || []).filter(t => t && t !== '其他' && !(isEdge && t === '端侧'));
+    const tagsHtml = visibleTags.map(t=>`<span style="font-family: ${mono}; font-weight: 600; color: ${UI.text2}; background: rgba(22,19,15,.04); border: 1px solid ${UI.border}; padding: 3px 8px; white-space: nowrap;">#${esc(t)}</span>`).join('');
+    const originalLine = keepOriginalTitle(s)
+      ? `<div class="sc-subtitle" style="font-family: ${mono}; font-size: 11.5px; line-height: 1.5; color: ${UI.text3}; margin-bottom: 10px;">${esc(s.title)}</div>`
+      : '';
     return `
     <article id="signal-${s.rank}" class="signal-card" onclick="App.openDetail(${s.rank})" style="position: relative; display: flex; background: ${UI.card}; border: 1.5px solid var(--ds-ink-line); box-shadow: 5px 5px 0 rgba(22,19,15,.07); overflow: hidden; min-height: 214px;">
       <!-- 左:配图,编号角标(=信号号)覆盖左上角 -->
@@ -1586,17 +1638,15 @@ function briefHtml(A){
       <div class="sc-body" style="flex: 1; min-width: 0; display: flex; flex-direction: column;">
         <div class="sc-meta" style="display: flex; align-items: center; gap: 8px; padding: 10px 46px 10px 18px; border-bottom: 1px solid var(--ds-ink-line); font-family: ${mono}; font-size: 10.5px; letter-spacing: .04em; color: ${UI.text3}; flex-wrap: wrap;">
           ${catsHtml}
-          <span class="sc-tags" style="display: inline-flex; align-items: center; gap: 6px; overflow: hidden;">${tagsHtml}</span>
+          ${tagsHtml ? `<span class="sc-tags" style="display: inline-flex; align-items: center; gap: 6px; flex-wrap: wrap;">${tagsHtml}</span>` : ''}
           <span class="sc-scores" style="margin-left: auto; display: inline-flex; gap: 6px; align-items: center;">
             <span>${s.date}</span>
-            <span style="font-weight: 700; padding: 3px 8px; background: ${ib.bg}; color: ${ib.color}; border: 1px solid ${ib.border};">影响 ${s.impact}</span>
-            <span style="font-weight: 700; padding: 3px 8px; background: ${u.bg}; color: ${u.color}; border: 1px solid ${u.border};">紧迫 ${s.urgency}</span>
           </span>
         </div>
         <button onclick="event.stopPropagation(); App.toggleFav(${s.rank})" title="${fav?'取消收藏':'收藏'}" style="position: absolute; top: 0; right: 0; z-index: 2; width: 36px; height: 36px; border: none; border-left: 1px solid var(--ds-ink-line); border-bottom: 1px solid var(--ds-ink-line); background: ${fav?A.accent:'#fff'}; color: ${fav?'#fff':UI.text3}; font-size: 14px; cursor: pointer; display: inline-flex; align-items: center; justify-content: center;">${fav?'★':'☆'}</button>
         <div class="sc-main" style="flex: 1; padding: 15px 18px;">
-          <h3 class="sc-title" style="margin: 0 0 3px; font-size: 19px; line-height: 1.4; font-weight: 700; letter-spacing: -.01em; color: var(--ds-text);">${esc(s.zhTitle)}</h3>
-          <div class="sc-subtitle" style="font-family: ${mono}; font-size: 11.5px; line-height: 1.5; color: ${UI.text3}; margin-bottom: 10px;">${esc(s.title)}</div>
+          <h3 class="sc-title" style="margin: 0 0 ${originalLine ? '3px' : '10px'}; font-size: 19px; line-height: 1.4; font-weight: 700; letter-spacing: -.01em; color: var(--ds-text);">${esc(s.zhTitle)}</h3>
+          ${originalLine}
           <p style="margin: 0; font-size: 13.5px; line-height: 1.75; color: ${UI.text2}; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;">${esc(s.summary)}</p>
         </div>
         <div class="sc-why" style="padding: 12px 18px; border-top: 1px solid var(--ds-ink-line); background: ${A.accentSoft}; border-left: 3px solid ${A.accent};">
@@ -2162,19 +2212,16 @@ function originalLink(A, s){
 
 // 分析:为何重要 + 对我们的影响(保留)
 function analysisHtml(A, s){
-  const ib = scoreBadgeD(s.impact); const u = urgD[s.urgency];
   const box = (title, body) => `
     <div style="margin: 8px 0 16px; padding: 14px 16px; background: ${A.accentSoft}; border: 1px solid ${A.accentBorder}; border-left: 3px solid ${A.accent};">
       <div style="font-size: 13px; font-weight: 700; color: ${A.accentDeep}; margin-bottom: 6px;">${title}</div>
       <div style="font-size: 13.5px; line-height: 1.85; color: ${UI.text2};">${body}</div>
     </div>`;
   if(!s.why) return '';
-  const meta = `影响分 <strong style="color:${ib.color};">${s.impact}</strong> · 紧迫度 <strong style="color:${u.color};">${s.urgency}</strong>`;
   return `
     <div style="margin-top: 24px; padding-top: 20px; border-top: 1.5px solid var(--ds-ink-line);">
       <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
         <span style="font-size: 13px; font-weight: 700; letter-spacing: .04em; color: ${UI.text3};">分析 · AI 观点</span>
-        <span style="font-size: 11.5px; color: ${UI.text3};">${meta}</span>
       </div>
       ${box('为何重要', esc(s.why))}
     </div>`;
@@ -2251,7 +2298,6 @@ function myNotesPopup(A, s){
 function detailHtml(A){
   const s = state.detailSignal || signals.find(x=>x.rank===state.detailRank);
   if(!s) return '';
-  const ib = scoreBadgeD(s.impact); const u = urgD[s.urgency];
   const sourceUrl = s.url || sourceUrls[s.source] || '#';
   const paperBasis = s.kind==='论文'
     ? (s.paperFullTextSource==='pdf'
@@ -2260,13 +2306,14 @@ function detailHtml(A){
     : '';
   const km = KIND_META[s.kind || '文章'] || KIND_META['文章'];
   const points = s.tags.map(t=>`<span style="font-size: 12px; color: ${A.accentBright}; background: ${A.accentSoft}; border: 1px solid ${A.accentBorder}; padding: 4px 11px; border-radius: 999px;">#${esc(t)}</span>`).join('');
+  const headerTags = (s.tags || []).filter(t => t && t !== '其他' && t !== '端侧').map(t=>`<span style="font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 6px; background: rgba(22,19,15,.04); color: ${UI.text2}; border: 1px solid ${UI.border};">#${esc(t)}</span>`).join('');
   const related = signals.filter(x=>x.cat===s.cat && x.rank!==s.rank).slice(0,3);
   const relatedHtml = related.map(r=>`
     <div class="rel-card" onclick="App.openDetail(${r.rank})" style="cursor: pointer; display: flex; gap: 11px; align-items: flex-start; padding: 13px; border-radius: 11px; border: 1px solid ${UI.border}; background: rgba(22,19,15,.02); transition: border-color .15s, background .15s;">
       ${avatarHtml(r.source)}
       <div style="min-width: 0;">
         <div style="font-size: 13px; font-weight: 600; color: ${UI.text}; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">${esc(r.zhTitle)}</div>
-        <div style="margin-top: 4px; font-size: 11px; color: ${UI.text3}; font-family: 'Geist Mono', monospace;">#${r.rank} · 影响 ${r.impact} · ${r.date}</div>
+        <div style="margin-top: 4px; font-size: 11px; color: ${UI.text3}; font-family: 'Geist Mono', monospace;">#${r.rank} · ${r.date}</div>
       </div>
     </div>`).join('');
 
@@ -2310,13 +2357,12 @@ function detailHtml(A){
           <span style="font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 6px; background: rgba(22,19,15,.06); color: ${UI.text2}; border: 1px solid ${UI.border2};">${km.icon} ${km.label}</span>
           <span style="font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 6px; background: ${A.accentSoft}; color: ${A.accentBright}; border: 1px solid ${A.accentBorder};">${esc(s.cat)}</span>
           ${s.tags.includes('端侧')?`<span style="font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 6px; background: ${A.accentSoft}; color: ${A.accentBright}; border: 1px solid ${A.accentBorder};">端侧模型</span>`:''}
+          ${headerTags}
           ${paperBasis}
-          <span style="font-size: 11px; font-weight: 700; padding: 4px 9px; border-radius: 6px; background: ${ib.bg}; color: ${ib.color}; border: 1px solid ${ib.border};">影响 ${s.impact}</span>
-          <span style="font-size: 11px; font-weight: 700; padding: 4px 9px; border-radius: 6px; background: ${u.bg}; color: ${u.color}; border: 1px solid ${u.border};">紧迫 ${s.urgency}</span>
           <span style="font-size: 11px; color: ${UI.text3}; font-family: 'Geist Mono', monospace;">#${s.rank}</span>
         </div>
-        <h1 class="detail-title" style="margin: 0 0 6px; font-size: 26px; line-height: 1.35; font-weight: 700; letter-spacing: -.015em; color: var(--ds-text);">${esc(s.zhTitle)}</h1>
-        <div style="font-size: 13px; color: ${UI.text3}; margin-bottom: 16px;">${esc(s.title)}</div>
+        <h1 class="detail-title" style="margin: 0 0 ${keepOriginalTitle(s)?'6px':'16px'}; font-size: 26px; line-height: 1.35; font-weight: 700; letter-spacing: -.015em; color: var(--ds-text);">${esc(s.zhTitle)}</h1>
+        ${keepOriginalTitle(s) ? `<div style="font-size: 13px; color: ${UI.text3}; margin-bottom: 16px;">${esc(s.title)}</div>` : ''}
         <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap; padding-bottom: 16px; border-bottom: 1px solid ${UI.border};">
           ${avatarHtml(s.source)}
           <a class="src-link" href="${esc(sourceUrl)}" target="_blank" rel="noopener" style="font-size: 13px; font-weight: 600; color: ${UI.text}; border-bottom: 1px dashed rgba(22,19,15,.28);">${esc(s.source)} ↗</a>
@@ -2344,6 +2390,90 @@ function detailHtml(A){
       ${state.dialogueOpen ? dialoguePopup(A, s) : ''}
     </div>
   </div>`;
+}
+
+// 配置台的规则编辑面板：keyword_regex / extra_config 这些字段只有本机配置台的
+// detail 接口才会返回，公开站点的 sources.json 里不存在。
+function sourceConfigPanel(A){
+  const d = state.srcDetail;
+  const wrap = inner => `<div style="grid-column: 1 / -1; padding: 18px 20px 20px; background: rgba(22,19,15,.02); border-bottom: 1px solid ${UI.border};">${inner}</div>`;
+  if(d.loading) return wrap(`<div style="font-size: 12.5px; color: ${UI.text3};">正在读取完整配置…</div>`);
+  if(d.error && !d.data) return wrap(`<div style="font-size: 12.5px; color: var(--ds-crit);">读取失败 · ${esc(d.error)}</div>`);
+  if(!d.data || !d.draft) return '';
+
+  const cfg = d.draft;
+  const eff = d.data.effective || {};
+  const rt = d.data.runtime || {};
+  const meta = d.data.meta || {};
+  const ruleFields = meta.ruleFields || [];
+
+  const label = (text, hint) => `<div style="display: flex; align-items: baseline; gap: 6px; margin-bottom: 5px;">
+      <span style="font-size: 11px; font-weight: 700; color: ${UI.text2};">${esc(text)}</span>
+      ${hint?`<span style="font-size: 10px; color: ${UI.text3};">${hint}</span>`:''}
+    </div>`;
+  const ruleMark = key => ruleFields.includes(key)
+    ? `<span title="改这个字段会让该源退回「待测」" style="font-size: 9.5px; font-weight: 700; color: ${A.accentBright};">规则</span>` : '';
+  const box = `width: 100%; box-sizing: border-box; padding: 7px 10px; border-radius: 7px; border: 1px solid ${UI.border}; background: var(--ds-card); color: ${UI.text}; font-size: 12.5px; outline: none;`;
+  const mono = `${box} font-family: 'Geist Mono', ui-monospace, Menlo, monospace; font-size: 12px;`;
+  const field = (key, text, hint, control) => `<div>${label(text, [hint, ruleMark(key)].filter(Boolean).join(' '))}${control}</div>`;
+  const text = (key, extra='') => `<input value="${esc(cfg[key] ?? '')}" oninput="App.stashDetail('${key}', this.value)" style="${extra||box}" />`;
+  const area = (key, rows) => `<textarea rows="${rows}" oninput="App.stashDetail('${key}', this.value)" style="${mono} line-height: 1.6; resize: vertical;">${esc(cfg[key] ?? '')}</textarea>`;
+  const select = (key, values) => `<select onchange="App.stashDetail('${key}', this.value)" style="${box} height: 33px;">
+      ${(values||[]).map(v=>`<option value="${esc(v)}" ${String(cfg[key])===String(v)?'selected':''}>${esc(v)}</option>`).join('')}
+    </select>`;
+
+  const badFlags = [
+    eff.keywordRegexValid===false ? 'keyword_regex 当前是坏正则，采集时会被静默换成默认关键词' : '',
+    eff.extraConfigValid===false ? 'extra_config 当前不是合法 JSON，里面的抽取参数全部失效' : '',
+  ].filter(Boolean);
+  const warning = badFlags.length
+    ? `<div style="margin-bottom: 14px; padding: 9px 12px; border-radius: 8px; border: 1px solid var(--ds-crit); background: rgba(200,40,40,.06); font-size: 11.5px; line-height: 1.6; color: var(--ds-crit);">${badFlags.map(esc).join('<br>')}</div>`
+    : '';
+
+  const runtimeBits = [
+    ['最近采集', rt.last || '从未'],
+    ['上轮入库', rt.perDay ?? 0],
+    ['查重过滤', rt.dupFiltered ?? 0],
+    ['时间窗过滤', rt.windowFiltered ?? 0],
+    ['实际时间窗', `${eff.lookbackHours ?? '—'}h`],
+    ['关键词命中门槛', eff.keywordMinHits ?? 1],
+  ].map(([k,v])=>`<span style="font-size: 11px; color: ${UI.text3};">${esc(k)} <b style="color: ${UI.text2}; font-family: 'Geist Mono', monospace;">${esc(String(v))}</b></span>`).join('');
+
+  const statusNote = d.data.config.status==='active'
+    ? '这个源当前是「已接入」。保存任何带「规则」标记的字段后会自动退回「待测」，正式流水线暂停跑它，验收通过再用开关启用。'
+    : '这个源当前不在正式流水线里。改完配置跑过诊断，再用左侧开关启用。';
+
+  return wrap(`
+    <div style="display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; margin-bottom: 4px;">
+      <span style="font-size: 12.5px; font-weight: 700; color: ${UI.text};">完整采集配置</span>
+      <span style="font-size: 11px; color: ${UI.text3}; font-family: 'Geist Mono', monospace;">${esc(d.data.id)}</span>
+    </div>
+    <div style="display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 14px;">${runtimeBits}</div>
+    ${warning}
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 12px 14px; margin-bottom: 12px;">
+      ${field('name','来源名称','',text('name'))}
+      ${field('fetchMethod','采集方式','',select('fetchMethod', meta.fetchMethods))}
+      ${field('format','载体','',select('format', meta.formats))}
+      ${field('dimension','内容维度','',text('dimension'))}
+      ${field('tier','层级','',select('tier', meta.tiers))}
+      ${field('lookbackWindow','时间窗','如 24h / 7d',text('lookbackWindow', mono))}
+      ${field('minContentChars','正文最少字符','0 表示用默认',text('minContentChars', mono))}
+      ${field('dedupKey','去重键','',text('dedupKey', mono))}
+    </div>
+    <div style="display: grid; gap: 12px; margin-bottom: 14px;">
+      ${field('endpoint','采集地址','',text('endpoint', mono))}
+      ${field('keywordRegex','主题关键词正则','标题命中直接过；否则正文命中数需达门槛',area('keywordRegex', 3))}
+      ${field('extraConfig','extra_config','JSON；title_exclude_regex 与 keyword_min_hits 放在这里',area('extraConfig', 3))}
+      ${field('notes','备注','',area('notes', 2))}
+    </div>
+    <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+      <button onclick="App.saveDetail()" ${d.saving?'disabled':''} style="height: 32px; padding: 0 16px; border-radius: 8px; border: none; background: ${A.accent}; color: #fff; font-size: 12.5px; font-weight: 700; cursor: ${d.saving?'wait':'pointer'}; opacity: ${d.saving?'.6':'1'};">${d.saving?'写入中…':'保存并写回飞书'}</button>
+      <button onclick="App.resetDetail()" style="height: 32px; padding: 0 14px; border-radius: 8px; border: 1px solid ${UI.border}; background: transparent; color: ${UI.text2}; font-size: 12.5px; font-weight: 600; cursor: pointer;">还原</button>
+      ${d.error?`<span style="font-size: 11.5px; color: var(--ds-crit);">${esc(d.error)}</span>`:''}
+      ${d.message&&!d.error?`<span style="font-size: 11.5px; color: var(--ds-good);">${esc(d.message)}</span>`:''}
+    </div>
+    <p style="margin: 12px 0 0; font-size: 11px; line-height: 1.7; color: ${UI.text3};">${esc(statusNote)}保存时会校验正则和 JSON——认不出的时间窗写法和坏正则在采集时都会被静默换成默认值，源看着正常但筛选规则已经失效。规则字段改动后会自动刷新仓库里的 <code>src/seed_default.json</code>。</p>
+  `);
 }
 
 function sourcesHtml(A){
@@ -2488,12 +2618,14 @@ function sourcesHtml(A){
     ${filterRow('信息类型', formatOrder, state.srcFormat, 'setSrcFormat', matchFormat, x=>matchType(x, state.srcTab) && matchQuery(x))}`;
 
   const filtered = state.sources.filter(x => matchType(x, state.srcTab) && matchFormat(x, state.srcFormat) && matchQuery(x));
+  const canConfig = writable.includes('config');
   const grid = canStatus
-    ? 'minmax(160px,1.6fr) 118px minmax(96px,1fr) 46px 112px minmax(78px,.9fr) 52px 60px 34px'
-    : 'minmax(160px,1.8fr) 76px minmax(96px,1fr) 46px 52px minmax(78px,.9fr) 52px 60px 34px';
+    ? `minmax(160px,1.6fr) 118px minmax(96px,1fr) 46px 112px minmax(78px,.9fr) 52px 60px ${canConfig?'46px ':''}34px`
+    : `minmax(160px,1.8fr) 76px minmax(96px,1fr) 46px 52px minmax(78px,.9fr) 52px 60px ${canConfig?'46px ':''}34px`;
 
   const rowsHtml = filtered.map(row => {
     const rowId = sourceIdArg(row.id);
+    const detailOpen = canConfig && state.srcDetail.recordId===row.recordId;
     const rowTone = STATUS_TONES[row.status] || STATUS_TONES.paused;
     // 只读时一个徽章就够。可写时用开关：开=active 才进正式采集，关=paused 连旧条目也不再进简报。
     const enabled = row.status==='active';
@@ -2523,8 +2655,10 @@ function sourcesHtml(A){
       <span style="font-size: 12px; color: ${UI.text3}; font-family: 'Geist Mono', ui-monospace, Menlo, monospace;">${esc(row.last||'从未')}</span>
       <span style="font-size: 12px; color: ${UI.text3}; text-align: right; font-family: 'Geist Mono', ui-monospace, Menlo, monospace;">${row.perDay}</span>
       <span title="近 ${state.briefWindowDays||7} 期简报里选中的条数" style="font-size: 12.5px; font-weight: 700; color: ${briefTone}; text-align: right; font-family: 'Geist Mono', ui-monospace, Menlo, monospace;">${row.briefCount}</span>
+      ${canConfig?`<button onclick="App.toggleDetail(${rowId})" title="展开完整采集配置：时间窗、关键词正则、extra_config" style="justify-self: end; height: 26px; padding: 0 9px; border-radius: 7px; border: 1px solid ${detailOpen?A.accentBorder:UI.border}; background: ${detailOpen?A.accentSoft:'transparent'}; color: ${detailOpen?A.accentBright:UI.text3}; font-size: 11px; font-weight: 700; cursor: pointer;">配置</button>`:''}
       ${canDelete?`<button class="del-btn" onclick="App.removeSrc(${rowId})" title="从飞书参数表删除" style="justify-self: end; width: 28px; height: 28px; border-radius: 8px; border: 1px solid ${UI.border}; background: transparent; color: ${UI.text3}; font-size: 14px; cursor: pointer;">×</button>`:'<span></span>'}
-    </div>`;
+    </div>
+    ${detailOpen?`<div style="display: grid; grid-template-columns: 1fr;">${sourceConfigPanel(A)}</div>`:''}`;
   }).join('');
 
   const emptyHtml = filtered.length===0 ? `<div style="padding: 36px 20px; text-align: center; font-size: 13px; color: ${UI.text3};">${!state.sources.length?'尚未读取到信号源配置':query?`没有匹配「${esc(state.srcQuery)}」的信号源`:'当前筛选组合下没有信号源'}</div>` : '';
@@ -2595,13 +2729,13 @@ function sourcesHtml(A){
 
       <section class="src-table" style="border: 1px solid ${UI.border}; border-radius: 12px; overflow: hidden; background: ${UI.panel}; position: relative;">
         <div style="display: grid; grid-template-columns: ${grid}; padding: 0 20px; height: 44px; align-items: center; background: rgba(22,19,15,.03); border-bottom: 1px solid ${UI.border}; font-size: 11px; font-weight: 700; letter-spacing: .06em; color: ${UI.text3};">
-          <span>来源名称</span><span>${canStatus?'采集开关':'接入状态'}</span><span>载体 / 方式</span><span>层级</span><span>优先级</span><span>最近采集</span><span style="text-align: right;">入库</span><span style="text-align: right;">入选</span><span></span>
+          <span>来源名称</span><span>${canStatus?'采集开关':'接入状态'}</span><span>载体 / 方式</span><span>层级</span><span>优先级</span><span>最近采集</span><span style="text-align: right;">入库</span><span style="text-align: right;">入选</span>${canConfig?'<span></span>':''}<span></span>
         </div>
         ${rowsHtml}
         ${emptyHtml}
       </section>
 
-      <p style="margin: 20px 0 0; font-size: 12px; line-height: 1.75; color: ${UI.text3};">「入库」是该源上一轮采集写入的条数，「入选」是近 ${state.briefWindowDays||7} 期简报里真正选中的条数，两者口径不同。${canStatus?'开关与优先级会直接写回飞书参数表：关掉后该源既停止采集，已入库的旧条目也不会再进下一期简报。':'当前为只读快照，修改需在本机运行配置台。'}</p>
+      <p style="margin: 20px 0 0; font-size: 12px; line-height: 1.75; color: ${UI.text3};">「入库」是该源上一轮采集写入的条数，「入选」是近 ${state.briefWindowDays||7} 期简报里真正选中的条数，两者口径不同。${canStatus?'开关与优先级会直接写回飞书参数表：关掉后该源既停止采集，已入库的旧条目也不会再进下一期简报。':'当前为只读快照，修改需在本机运行配置台。'}${canConfig?'点「配置」可以就地改时间窗、关键词正则和 extra_config，不必再去飞书多维表格；改动会先校验再写回，并自动把该源退回「待测」。':''}</p>
     </div>
   </main>`;
 }
@@ -2660,7 +2794,7 @@ function tasksHtml(A){
         <span style="flex: none; width: 26px; font-family: 'Geist Mono', monospace; font-size: 12px; color: ${A.accentBright};">0${i+1}</span>
         <div style="flex: 1;">
           <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px; flex-wrap: wrap;">
-            <span style="font-size: 13px; font-weight: 700; color: var(--ds-text);">${esc(a.cat)}</span>
+            <span style="font-size: 13px; font-weight: 700; color: var(--ds-text);">${esc(normalizeCategory(a.cat))}</span>
             ${(a.refs||[]).map(r=>weeklyRefChip(A,r)).join('')}
           </div>
           <div style="font-size: 13px; line-height: 1.7; color: ${UI.text2};">${esc(a.text)}</div>
@@ -2669,7 +2803,7 @@ function tasksHtml(A){
     const topHtml = rep.topSignals.map(recordId=>{ const s=weeklySignalById(recordId); if(!s) return ''; return `
       <div onclick="App.openWeeklyDetail('${esc(recordId)}')" class="rel-card" style="cursor: pointer; display: flex; gap: 10px; align-items: center; padding: 10px 12px; border-radius: 10px; border: 1px solid ${UI.border}; background: rgba(22,19,15,.02); transition: border-color .15s, background .15s;">
         ${topicAvatarHtml(s)}
-        <div style="min-width: 0; flex: 1;"><div style="font-size: 12.5px; font-weight: 600; color: ${UI.text}; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${esc(s.zhTitle)}</div><div style="font-size: 10.5px; color: ${UI.text3}; font-family: 'Geist Mono', monospace;">影响 ${s.impact} · ${s.date}</div></div>
+        <div style="min-width: 0; flex: 1;"><div style="font-size: 12.5px; font-weight: 600; color: ${UI.text}; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${esc(s.zhTitle)}</div><div style="font-size: 10.5px; color: ${UI.text3}; font-family: 'Geist Mono', monospace;">${s.date}</div></div>
       </div>`; }).join('');
     const listBlock = (title,items)=>`<div style="font-size: 13px; font-weight: 700; color: var(--ds-text); margin: 24px 0 10px;">${title}</div><ul style="margin: 0; padding-left: 18px;">${items.map(x=>`<li style="margin: 0 0 8px; font-size: 13px; line-height: 1.7; color: ${UI.text2};">${esc(x)}</li>`).join('')}</ul>`;
     const focusHtml = (rep.pendingFocus||[]).length ? `

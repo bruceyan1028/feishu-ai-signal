@@ -39,8 +39,17 @@ TABLES = {
     "二级参数-社媒": config.FEISHU_SOCIAL_CONFIG_TABLE_ID,
     "二级参数-GitHub": config.FEISHU_GITHUB_CONFIG_TABLE_ID,
 }
-# 一级参数的运行时统计字段不导出
-STAT_FIELDS = {"通过", "最近采集时间", "条目数", "查重过滤", "时间窗过滤"}
+# 一级参数里这些是运行时状态而非配置，不导出：导出了会被当成可版本化的配置，
+# 而它们每轮采集都在变。「采集游标」尤其不能进——社媒 since_id 属于跨轮状态，
+# 混进配置快照会在回滚配置时把游标一起退回去，导致重复采集。
+STATE_FIELDS = {
+    "通过",
+    "最近采集时间",
+    "条目数",
+    "查重过滤",
+    "时间窗过滤",
+    "采集游标",
+}
 
 
 def _token() -> str:
@@ -159,7 +168,7 @@ def main() -> None:
     for name, tid in TABLES.items():
         if not tid:
             continue
-        drop = STAT_FIELDS if name == "一级参数" else frozenset()
+        drop = STATE_FIELDS if name == "一级参数" else frozenset()
         bundle[name] = _clean(token, tid, drop)
     out = Path(__file__).resolve().parents[1] / "src" / "seed_default.json"
     out.write_text(json.dumps(bundle, ensure_ascii=False, indent=1), encoding="utf-8")

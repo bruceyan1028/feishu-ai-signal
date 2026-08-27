@@ -99,6 +99,20 @@ def cell(value: Any) -> Any:
     return str(value)
 
 
+# 源上的 dimension 一度按媒体类型拆成两类，和「前沿模型公司」这类主题分类不在同一轴。
+# 读配置、写条目、出简报时都并成「中文媒体」，旧值也能对上。
+_CATEGORY_ALIASES = {
+    "中文科技媒体": "中文媒体",
+    "中文综合媒体": "中文媒体",
+}
+
+
+def normalize_category(value: Any, default: str = "") -> str:
+    text = str(cell(value) or "").strip()
+    mapped = _CATEGORY_ALIASES.get(text, text)
+    return mapped or default
+
+
 def parse_lookback_hours(raw: Any) -> int:
     if not raw:
         return 168
@@ -268,7 +282,7 @@ def _is_active(f: dict[str, Any]) -> bool:
 
 def _base_feed(f: dict[str, Any], extra: dict[str, Any] | None, fetch_method: str) -> dict[str, Any]:
     source_id = cell(f.get("source_id")) or ""
-    dimension = cell(f.get("dimension")) or ""
+    dimension = normalize_category(cell(f.get("dimension")))
     tier_raw = cell(f.get("tier")) or "L2"
     min_from_extra = (extra or {}).get("min_abstract_chars")
     return {

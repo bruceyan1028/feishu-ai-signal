@@ -8,6 +8,7 @@ from __future__ import annotations
 import json
 import logging
 import re
+import time
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from html import unescape
 from typing import Any
@@ -1034,17 +1035,43 @@ def fetch_arxiv_figures(page_url: str, limit: int = 3) -> list[dict[str, str]]:
 
 def fetch_feed_sources(feeds: list[dict[str, Any]]) -> list[dict[str, Any]]:
     """逐个抓取 RSS 源，容错：单个源失败不影响其它源（对应 onError: continueRegularOutput）。"""
+    items, _stats = fetch_feed_sources_with_stats(feeds)
+    return items
+
+
+def fetch_feed_sources_with_stats(
+    feeds: list[dict[str, Any]],
+) -> tuple[list[dict[str, Any]], dict[str, dict[str, Any]]]:
+    """与 fetch_feed_sources 相同，额外返回分源抓取结果。
+
+    区分「feed 拿不到/解析不了」和「feed 正常但这几天没更新」很关键：前者要修链路，
+    后者是源自身的节奏，不该被当成故障去调规则。
+    """
     raw_items: list[dict[str, Any]] = []
+    stats: dict[str, dict[str, Any]] = {}
     for feed in feeds:
         url = feed["url"]
+        sid = str(feed.get("id") or url)
+        st = stats.setdefault(
+            sid,
+            {"source_id": sid, "engine": "feedparser", "entries": 0, "error": None},
+        )
+        t0 = time.perf_counter()
         try:
             parsed = feedparser.parse(url)
         except Exception as exc:  # noqa: BLE001 - 与 n8n 容错行为一致
             log.warning("RSS 抓取失败 %s: %s", url, exc)
+            st["error"] = f"fetch_failed: {type(exc).__name__}"
+            st["timing_ms"] = round((time.perf_counter() - t0) * 1000, 1)
             continue
+        st["timing_ms"] = round((time.perf_counter() - t0) * 1000, 1)
+        st["entries"] = len(parsed.entries)
         if getattr(parsed, "bozo", False) and not parsed.entries:
             log.warning("RSS 无法解析或为空 %s", url)
+            st["error"] = "unparseable_or_empty"
             continue
+        if not parsed.entries:
+            st["error"] = "feed_empty"
         for entry in parsed.entries:
             body = _best_body(entry)
             page_url = entry.get("link") or entry.get("id") or ""
@@ -1066,4 +1093,4 @@ def fetch_feed_sources(feeds: list[dict[str, Any]]) -> list[dict[str, Any]]:
                 }
             )
         log.info("RSS %s → %d 条", feed.get("id") or url, len(parsed.entries))
-    return raw_items
+    return raw_items, stats

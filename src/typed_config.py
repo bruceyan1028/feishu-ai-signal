@@ -13,6 +13,7 @@ from __future__ import annotations
 import logging
 import json
 import re
+from collections.abc import Iterable
 from typing import Any
 
 from . import config, feishu
@@ -209,20 +210,15 @@ def _parse_row(entity_type: str, fields: dict[str, Any]) -> dict[str, Any]:
     return params
 
 
-def load_typed_configs(token: str) -> dict[str, dict[str, Any]]:
-    """读取 4 张配置表，返回 source_id -> {entity_type, params}。
+def build_typed_configs(
+    rows_by_entity: Iterable[tuple[str, list[dict[str, Any]]]],
+) -> dict[str, dict[str, Any]]:
+    """从 (entity_type, rows) 组装 source_id -> {entity_type, params}。
 
-    读取失败不影响主流程（返回已成功的部分），只记录告警。
+    取数与组装分开，飞书和仓库文件两条读路径共用这一份解析，避免行为漂移。
     """
     result: dict[str, dict[str, Any]] = {}
-    for entity_type, table_id in _TABLES:
-        if not table_id:
-            continue
-        try:
-            rows = feishu.read_all_records(token, table_id)
-        except feishu.FeishuError as exc:
-            log.warning("读取 %s 配置表失败: %s", entity_type, exc)
-            continue
+    for entity_type, rows in rows_by_entity:
         for fields in rows:
             source_id = str(feishu._read_cell_key(fields.get("source_id")) or "").strip()
             if not source_id:
@@ -261,6 +257,24 @@ def load_typed_configs(token: str) -> dict[str, dict[str, Any]]:
                 "params": params,
             }
     return result
+
+
+def load_typed_configs(token: str) -> dict[str, dict[str, Any]]:
+    """从飞书读取 5 张配置表，返回 source_id -> {entity_type, params}。
+
+    读取失败不影响主流程（返回已成功的部分），只记录告警。
+    """
+
+    def _fetch() -> Iterable[tuple[str, list[dict[str, Any]]]]:
+        for entity_type, table_id in _TABLES:
+            if not table_id:
+                continue
+            try:
+                yield entity_type, feishu.read_all_records(token, table_id)
+            except feishu.FeishuError as exc:
+                log.warning("读取 %s 配置表失败: %s", entity_type, exc)
+
+    return build_typed_configs(_fetch())
 
 
 # 数据依赖型阈值：参数键 -> item.metrics 里的字段名。仅当 metrics 提供该字段才会生效。

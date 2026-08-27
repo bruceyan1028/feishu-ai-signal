@@ -23,6 +23,7 @@ from . import (
     policy_document,
     rss,
     source_view,
+    sources,
 )
 
 CN_TZ = timezone(timedelta(hours=8))
@@ -100,7 +101,7 @@ def _signal_from_record(record: dict[str, Any]) -> dict[str, Any]:
         "titleCn": str(daily.scalar(fields.get("中文标题")) or daily.scalar(fields.get("标题")) or ""),
         "source": str(daily.scalar(fields.get("来源")) or ""),
         "url": daily.link(fields.get("链接")),
-        "category": str(daily.scalar(fields.get("分类")) or "其他"),
+        "category": sources.normalize_category(daily.scalar(fields.get("分类")) or "其他"),
         "contentType": daily.content_type(fields),
         "publishedDate": published,
         "publishedAtMs": published_ms,
