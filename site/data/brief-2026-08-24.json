@@ -762,20 +762,16 @@
       ],
       "imageUrl": "https://www.whitehouse.gov/wp-content/uploads/2025/03/WH47-Presidential-Actions-Social-Share-Card.jpg",
       "mediaAssets": {
-        "images": [
-          {
-            "url": "https://www.whitehouse.gov/wp-content/uploads/2025/03/WH47-Presidential-Actions-Social-Share-Card.jpg",
-            "alt": "国家太空运输政策备忘录",
-            "kind": "article-cover"
-          }
-        ],
+        "images": [],
         "videos": [],
         "documents": [],
         "policy": {
           "agency": "White House / OMB",
           "stage": "总统备忘录",
           "authority": "whitehouse.gov"
-        }
+        },
+        "cover": "https://www.whitehouse.gov/wp-content/uploads/2025/03/WH47-Presidential-Actions-Social-Share-Card.jpg",
+        "curatedBy": "llm"
       },
       "editorialStructure": "",
       "eventAggregation": {
@@ -804,7 +800,7 @@
       "titleCn": "三星发布三阶段HBM路线图，终点是DRAM与计算芯片垂直集成的zHBM",
       "source": "华尔街见闻",
       "url": "https://wallstreetcn.com/articles/3780121",
-      "category": "中文综合媒体",
+      "category": "中文媒体",
       "contentType": "公众号",
       "publishedDate": "2026-08-24",
       "publishedAtMs": 1787539771000,
@@ -821,31 +817,37 @@
         "推理",
         "产品"
       ],
-      "imageUrl": "https://wpimg-wscn.awtmt.com/f3c234ea-d848-4630-9277-4cb22cec7470.png",
+      "imageUrl": "https://wpimg-wscn.awtmt.com/316466d4-9d7d-41e1-80d5-1a5e71ac6f4b.png",
       "mediaAssets": {
         "images": [
           {
             "url": "https://wpimg-wscn.awtmt.com/f3c234ea-d848-4630-9277-4cb22cec7470.png",
-            "alt": "原文数据图表",
-            "kind": "article-figure"
+            "alt": "HBM芯片堆叠结构示意",
+            "kind": "article-figure",
+            "afterHeading": "HBM是什么，瓶颈在哪里"
           },
           {
             "url": "https://wpimg-wscn.awtmt.com/10ba8e7e-f401-42d4-9d67-64b33c0d28fe.png",
-            "alt": "原文数据图表",
-            "kind": "article-figure"
+            "alt": "Base Die缩减面积与散热方案",
+            "kind": "article-figure",
+            "afterHeading": "第一阶段：为计算芯片“腾地方”"
           },
           {
             "url": "https://wpimg-wscn.awtmt.com/15f99383-7c31-4bf0-9284-42eb23d98c79.png",
-            "alt": "原文数据图表",
-            "kind": "article-figure"
+            "alt": "Base Die集成计算与扩展功能",
+            "kind": "article-figure",
+            "afterHeading": "第二阶段：B-die开始“长出”计算能力"
           },
           {
             "url": "https://wpimg-wscn.awtmt.com/f648af79-b4dc-4bfe-891d-da9f79a874af.png",
-            "alt": "原文数据图表",
-            "kind": "article-figure"
+            "alt": "四栈zHBM垂直堆叠XPU",
+            "kind": "article-figure",
+            "afterHeading": "第三阶段：zHBM——消灭中介层，DRAM直接压在计算芯片上"
           }
         ],
-        "videos": []
+        "videos": [],
+        "cover": "https://wpimg-wscn.awtmt.com/316466d4-9d7d-41e1-80d5-1a5e71ac6f4b.png",
+        "curatedBy": "llm"
       },
       "editorialStructure": "source",
       "eventAggregation": {
@@ -874,7 +876,7 @@
       "titleCn": "银河通用人形机器人完成全自主网球对打",
       "source": "AI科技评论 / 雷峰网",
       "url": "https://www.leiphone.com/category/ai/dtujryomwlykallz.html",
-      "category": "中文科技媒体",
+      "category": "中文媒体",
       "contentType": "公众号",
       "publishedDate": "2026-08-23",
       "publishedAtMs": 1787483940000,
@@ -891,17 +893,38 @@
         "硬件",
         "产品"
       ],
-      "imageUrl": "https://static.leiphone.com/uploads/new/images/20260823/6a8ad6c160464.png?imageMogr2/quality/90",
+      "imageUrl": "https://static.leiphone.com/uploads/new/images/20260823/6a8ad6c160464.png",
       "mediaAssets": {
         "images": [
           {
-            "url": "https://static.leiphone.com/uploads/new/images/20260823/6a8ad6c160464.png?imageMogr2/quality/90",
-            "alt": "银河通用人形机器人完成全自主网球对打",
-            "kind": "article-cover"
+            "url": "https://static.leiphone.com/uploads/new/images/20260823/6a8ad6c1ca74f.jpg",
+            "alt": "人形机器人与网球名将对打",
+            "kind": "article-figure",
+            "afterHeading": "大脑想怎么打，小脑负责打得漂亮"
+          },
+          {
+            "url": "https://static.leiphone.com/uploads/new/images/20260823/6a8ad6c23cee9.jpg",
+            "alt": "机器人训练网球动作",
+            "kind": "article-figure",
+            "afterHeading": "在不完美的人类数据里学习"
+          },
+          {
+            "url": "https://static.leiphone.com/uploads/new/images/20260823/6a8ad6c2b8339.jpg",
+            "alt": "机器人在虚拟环境中对练",
+            "kind": "article-figure",
+            "afterHeading": "在虚拟世界里，和千万个自己对练"
+          },
+          {
+            "url": "https://static.leiphone.com/uploads/new/images/20260823/6a8ad6c2da87f.jpg",
+            "alt": "人形机器人拓展应用场景",
+            "kind": "article-figure",
+            "afterHeading": "结语：摔倒了、站起来、往前走"
           }
         ],
         "videos": [],
-        "documents": []
+        "documents": [],
+        "cover": "https://static.leiphone.com/uploads/new/images/20260823/6a8ad6c160464.png",
+        "curatedBy": "llm"
       },
       "editorialStructure": "source",
       "eventAggregation": {
@@ -930,7 +953,7 @@
       "titleCn": "AI4S进入科研范式变革下半场，海淀发布科学智能创新集聚区",
       "source": "智东西",
       "url": "https://zhidx.com/p/587381.html",
-      "category": "中文科技媒体",
+      "category": "中文媒体",
       "contentType": "公众号",
       "publishedDate": "2026-08-22",
       "publishedAtMs": 1787400805000,
@@ -947,17 +970,26 @@
         "产品",
         "融资"
       ],
-      "imageUrl": "https://oss.zhidx.com/uploads/2026/08/6a89932087ab8_6a89932082890_6a89932082848_微信图片_2026-08-22_201505_282.png/_zdx",
+      "imageUrl": "https://oss.zhidx.com/uploads/2026/08/6a89932087ab8_6a89932082890_6a89932082848_微信图片_2026-08-22_201505_282.png",
       "mediaAssets": {
         "images": [
           {
-            "url": "https://oss.zhidx.com/uploads/2026/08/6a89932087ab8_6a89932082890_6a89932082848_微信图片_2026-08-22_201505_282.png/_zdx",
-            "alt": "AI4S进入科研范式变革下半场，海淀发布科学智能创新集聚区",
-            "kind": "article-cover"
+            "url": "https://oss.zhidx.com/uploads/2026/08/6a898d449d7fa_6a898d449a2e7_6a898d449a2a9_人.jpg",
+            "alt": "鄂维南推动AI4S理念",
+            "kind": "article-figure",
+            "afterHeading": "一、从8年前一个概念出发，AI4S已进入下半场"
+          },
+          {
+            "url": "https://oss.zhidx.com/uploads/2026/08/6a898da4a8660_6a898da4a3339_6a898da4a3303_集聚区.png",
+            "alt": "海淀科学智能创新集聚区",
+            "kind": "article-figure",
+            "afterHeading": "三、数据、实验瓶颈突显，政策开始进场"
           }
         ],
         "videos": [],
-        "documents": []
+        "documents": [],
+        "cover": "https://oss.zhidx.com/uploads/2026/08/6a89932087ab8_6a89932082890_6a89932082848_微信图片_2026-08-22_201505_282.png",
+        "curatedBy": "llm"
       },
       "editorialStructure": "source",
       "eventAggregation": {
@@ -986,7 +1018,7 @@
       "titleCn": "Anthropic组建自研芯片团队并多元锁定算力，押注降低对英伟达依赖",
       "source": "华尔街见闻",
       "url": "https://wallstreetcn.com/articles/3780053",
-      "category": "中文综合媒体",
+      "category": "中文媒体",
       "contentType": "公众号",
       "publishedDate": "2026-08-22",
       "publishedAtMs": 1787371581000,
@@ -1003,10 +1035,12 @@
         "融资",
         "产品"
       ],
-      "imageUrl": "",
+      "imageUrl": "https://wpimg-wscn.awtmt.com/content_default_17.jpg",
       "mediaAssets": {
         "images": [],
-        "videos": []
+        "videos": [],
+        "cover": "https://wpimg-wscn.awtmt.com/content_default_17.jpg",
+        "curatedBy": "llm"
       },
       "editorialStructure": "source",
       "eventAggregation": {
@@ -1035,7 +1069,7 @@
       "titleCn": "AI时代的核心政治经济学：机器创造的价值如何共享",
       "source": "虎嗅",
       "url": "https://www.huxiu.com/article/4885368.html",
-      "category": "中文科技媒体",
+      "category": "中文媒体",
       "contentType": "公众号",
       "publishedDate": "2026-08-24",
       "publishedAtMs": 1787534952000,
@@ -1052,10 +1086,19 @@
         "监管",
         "其他"
       ],
-      "imageUrl": "",
+      "imageUrl": "media/huxiu/recvtbiIXXtxEf-1.png",
       "mediaAssets": {
-        "images": [],
-        "videos": []
+        "images": [
+          {
+            "url": "media/huxiu/recvtbiIXXtxEf-1.png",
+            "alt": "AI蛋糕变大，分配者变少",
+            "kind": "article-figure",
+            "afterHeading": "二、现实困境：技术红利与大众收入的全球传导断点"
+          }
+        ],
+        "videos": [],
+        "cover": "https://img.huxiucdn.com/ai/ai-general-cover/202608/24/32969-prod-nb2ep-general-1-1787534882368.png?imageView2/1/w/788/h/444/|imageMogr2/strip/interlace/1/quality/85",
+        "curatedBy": "llm"
       },
       "editorialStructure": "source",
       "eventAggregation": {
@@ -1084,7 +1127,7 @@
       "titleCn": "OpenAI开源Codex Harness并推出Mac端iMessage控制功能等科技动态",
       "source": "果壳",
       "url": "https://www.guokr.com/article/469989",
-      "category": "中文综合媒体",
+      "category": "中文媒体",
       "contentType": "公众号",
       "publishedDate": "2026-08-21",
       "publishedAtMs": 1787325301853,
@@ -1101,16 +1144,25 @@
         "端侧",
         "开源"
       ],
-      "imageUrl": "https://1-im.guokr.com/AmRDJDzcF6DRheBSdzQOVIJiZ2NnSlU9VcSZyjORYDHkAAAAbAAAAFBO.png",
+      "imageUrl": "https://3-im.guokr.com/RnZRY0I0dVo5M2NsLUZnYVk4UWNoQi1KNlRXMGRvY3g4BAAA1wEAAEpQ.jpg?imageView2/1/w/555/h/242",
       "mediaAssets": {
         "images": [
           {
-            "url": "https://1-im.guokr.com/AmRDJDzcF6DRheBSdzQOVIJiZ2NnSlU9VcSZyjORYDHkAAAAbAAAAFBO.png",
-            "alt": "OpenAI开源Codex Harness并推出Mac端iMessage控制功能等科技动态",
-            "kind": "article-cover"
+            "url": "https://1-im.guokr.com/RnVnckZSLUlxd2Y0dkpoZnpKNHhEdDNsU3NieWRvY3j9AwAAqwEAAEpQ.jpg?imageView2/1/w/555/h/232",
+            "alt": "碳包裹单原子铜链示意图",
+            "kind": "article-figure",
+            "afterHeading": "关键细节"
+          },
+          {
+            "url": "https://3-im.guokr.com/Rm02QjkyX25ZLS1IeklSX1UzWWFGT3ZPeXdxMmRvY3g4BAAACgIAAEpQ.jpg?imageView2/1/w/555/h/268",
+            "alt": "铅-212医用核素应用示意",
+            "kind": "article-figure",
+            "afterHeading": "价值与影响"
           }
         ],
-        "videos": []
+        "videos": [],
+        "cover": "https://3-im.guokr.com/RnZRY0I0dVo5M2NsLUZnYVk4UWNoQi1KNlRXMGRvY3g4BAAA1wEAAEpQ.jpg?imageView2/1/w/555/h/242",
+        "curatedBy": "llm"
       },
       "editorialStructure": "",
       "eventAggregation": {
@@ -1152,7 +1204,7 @@
       "titleCn": "Hugging Face据报探索出售，潜在估值或超130亿美元",
       "source": "华尔街见闻",
       "url": "https://wallstreetcn.com/articles/3780119",
-      "category": "中文综合媒体",
+      "category": "中文媒体",
       "contentType": "公众号",
       "publishedDate": "2026-08-24",
       "publishedAtMs": 1787538002000,
@@ -1169,10 +1221,12 @@
         "开源",
         "融资"
       ],
-      "imageUrl": "",
+      "imageUrl": "https://wpimg-wscn.awtmt.com/67d17416-65c0-4325-8f51-1c531e0a0c36.jpeg",
       "mediaAssets": {
         "images": [],
-        "videos": []
+        "videos": [],
+        "cover": "https://wpimg-wscn.awtmt.com/67d17416-65c0-4325-8f51-1c531e0a0c36.jpeg",
+        "curatedBy": "llm"
       },
       "editorialStructure": "",
       "eventAggregation": {
@@ -1221,7 +1275,7 @@
       "titleCn": "企业AI落地最后一公里：FDE成为三方争夺的新岗位",
       "source": "华尔街见闻",
       "url": "https://wallstreetcn.com/articles/3780131",
-      "category": "中文综合媒体",
+      "category": "中文媒体",
       "contentType": "公众号",
       "publishedDate": "2026-08-24",
       "publishedAtMs": 1787540994000,
@@ -1237,10 +1291,12 @@
         "Agent",
         "产品"
       ],
-      "imageUrl": "",
+      "imageUrl": "https://wpimg-wscn.awtmt.com/content_default_14.jpg",
       "mediaAssets": {
         "images": [],
-        "videos": []
+        "videos": [],
+        "cover": "https://wpimg-wscn.awtmt.com/content_default_14.jpg",
+        "curatedBy": "llm"
       },
       "editorialStructure": "source",
       "eventAggregation": {
@@ -1269,7 +1325,7 @@
       "titleCn": "生成式AI提升作业表现，却可能削弱长期学习能力",
       "source": "虎嗅",
       "url": "https://www.huxiu.com/article/4885107.html",
-      "category": "中文科技媒体",
+      "category": "中文媒体",
       "contentType": "公众号",
       "publishedDate": "2026-08-22",
       "publishedAtMs": 1787371744000,
@@ -1286,10 +1342,37 @@
         "产品",
         "其他"
       ],
-      "imageUrl": "",
+      "imageUrl": "media/huxiu/recvsZXs8coUcF-1.png",
       "mediaAssets": {
-        "images": [],
-        "videos": []
+        "images": [
+          {
+            "url": "media/huxiu/recvsZXs8coUcF-1.png",
+            "alt": "作业提分与考试下滑",
+            "kind": "article-figure",
+            "afterHeading": "核心内容"
+          },
+          {
+            "url": "media/huxiu/recvsZXs8coUcF-2.png",
+            "alt": "AI使用率随模型发布跃升",
+            "kind": "article-figure",
+            "afterHeading": "关键细节"
+          },
+          {
+            "url": "media/huxiu/recvsZXs8coUcF-3.png",
+            "alt": "作业外包比例持续上升",
+            "kind": "article-figure",
+            "afterHeading": "局限与风险"
+          },
+          {
+            "url": "media/huxiu/recvsZXs8coUcF-4.png",
+            "alt": "成年人认知卸载案例",
+            "kind": "article-figure",
+            "afterHeading": "价值与影响"
+          }
+        ],
+        "videos": [],
+        "cover": "https://img.huxiucdn.com/ai/ai-general-cover/202608/22/32874-prod-nb2ep-general-1-1787371673916.png?imageView2/1/w/788/h/444/|imageMogr2/strip/interlace/1/quality/85",
+        "curatedBy": "llm"
       },
       "editorialStructure": "",
       "eventAggregation": {
@@ -1447,7 +1530,7 @@
       "titleCn": "Elseland：AI能否工业化生产精品游戏？",
       "source": "智东西",
       "url": "https://zhidx.com/p/586881.html",
-      "category": "中文科技媒体",
+      "category": "中文媒体",
       "contentType": "公众号",
       "publishedDate": "2026-08-21",
       "publishedAtMs": 1787311144000,
@@ -1468,13 +1551,34 @@
       "mediaAssets": {
         "images": [
           {
-            "url": "https://oss.zhidx.com/uploads/2026/08/6a86e4bc7240a_6a86e4bc6ec8b_6a86e4bc6ec4b_exec-e185cf06-c423-4596-8586-ab6825fed30e.png/_zdx",
-            "alt": "Elseland：AI能否工业化生产精品游戏？",
-            "kind": "article-cover"
+            "url": "https://oss.zhidx.com/uploads/2026/08/6a86d390dab8e_6a86d390d78f4_6a86d390d78c5_image-3.png",
+            "alt": "AI互动影游游戏画面",
+            "kind": "article-figure",
+            "afterHeading": "一、不一样的“互动影游”"
+          },
+          {
+            "url": "https://oss.zhidx.com/uploads/2026/08/6a86d23acf0a3_6a86d23acc2ae_6a86d23acc27e_image-1.png",
+            "alt": "糖果王国游戏场景",
+            "kind": "article-figure",
+            "afterHeading": "二、把所有游戏类型用AI重做一遍"
+          },
+          {
+            "url": "https://oss.zhidx.com/uploads/2026/08/6a86d82f803b2_6a86d82f7d106_6a86d82f7d0b7_微信图片_20260820183246.jpg",
+            "alt": "水豚牌馆游戏画面",
+            "kind": "article-figure",
+            "afterHeading": "二、把所有游戏类型用AI重做一遍"
+          },
+          {
+            "url": "https://oss.zhidx.com/uploads/2026/08/6a86d829dc84f_6a86d829d9b24_6a86d829d9af5_微信图片_20260820183239.jpg",
+            "alt": "AI生成消除游戏玩法",
+            "kind": "article-figure",
+            "afterHeading": "二、把所有游戏类型用AI重做一遍"
           }
         ],
         "videos": [],
-        "documents": []
+        "documents": [],
+        "cover": "https://oss.zhidx.com/uploads/2026/08/6a86e4bc7240a_6a86e4bc6ec8b_6a86e4bc6ec4b_exec-e185cf06-c423-4596-8586-ab6825fed30e.png/_zdx",
+        "curatedBy": "llm"
       },
       "editorialStructure": "source",
       "eventAggregation": {
@@ -1503,7 +1607,7 @@
       "titleCn": "AI修图误将巴西常见鸟变成“国家级新纪录”，暴露公民科学数据污染风险",
       "source": "果壳",
       "url": "https://www.guokr.com/article/469997",
-      "category": "中文综合媒体",
+      "category": "中文媒体",
       "contentType": "公众号",
       "publishedDate": "2026-08-22",
       "publishedAtMs": 1787404506155,
@@ -1520,16 +1624,37 @@
         "监管",
         "其他"
       ],
-      "imageUrl": "https://1-im.guokr.com/AmRDJDzcF6DRheBSdzQOVIJiZ2NnSlU9VcSZyjORYDHkAAAAbAAAAFBO.png",
+      "imageUrl": "https://3-im.guokr.com/Rmhza0w0MkJ2dHNVTTRlek55TXBZVjAyTlcxWmRvY3g4BAAA7AIAAEpQ.jpg?imageView2/1/w/555/h/384",
       "mediaAssets": {
         "images": [
           {
-            "url": "https://1-im.guokr.com/AmRDJDzcF6DRheBSdzQOVIJiZ2NnSlU9VcSZyjORYDHkAAAAbAAAAFBO.png",
-            "alt": "AI修图误将巴西常见鸟变成“国家级新纪录”，暴露公民科学数据污染风险",
-            "kind": "article-cover"
+            "url": "https://2-im.guokr.com/RmdudThwcVhtMlFMdVFndURRd2p0cVluSWxudmRvY3g4BAAA0AIAAEpQ.jpg?imageView2/1/w/555/h/370",
+            "alt": "AI凭空补出黑鸢头部",
+            "kind": "article-figure",
+            "afterHeading": "关键细节"
+          },
+          {
+            "url": "https://2-im.guokr.com/RnJmcWZGNm1NUDdCdDE4V1owX2lXbTMzRFNURGRvY3g4BAAAKgMAAEpQ.jpg?imageView2/1/w/555/h/416",
+            "alt": "黑鸢腹面与翅窗特征",
+            "kind": "article-figure",
+            "afterHeading": "关键细节"
+          },
+          {
+            "url": "https://2-im.guokr.com/RnVLNWxmLTdHYkhCSmxRY3lNSDBSQzJoWjItWGRvY3g4BAAAMQMAAEpQ.jpg?imageView2/1/w/555/h/419",
+            "alt": "AI误改鸟类虹膜颜色",
+            "kind": "article-figure",
+            "afterHeading": "局限与风险"
+          },
+          {
+            "url": "https://1-im.guokr.com/RnVJbjhNUnREOGloS0FYUHRQZ3lFNnhkM2J1ZGRvY3g4BAAA0AIAAEpQ.jpg?imageView2/1/w/555/h/370",
+            "alt": "AI把红色臀部画到腿上",
+            "kind": "article-figure",
+            "afterHeading": "局限与风险"
           }
         ],
-        "videos": []
+        "videos": [],
+        "cover": "https://3-im.guokr.com/Rmhza0w0MkJ2dHNVTTRlek55TXBZVjAyTlcxWmRvY3g4BAAA7AIAAEpQ.jpg?imageView2/1/w/555/h/384",
+        "curatedBy": "llm"
       },
       "editorialStructure": "",
       "eventAggregation": {
@@ -1558,7 +1683,7 @@
       "titleCn": "中国AI头部公司为何高度集中于清华五道口",
       "source": "虎嗅",
       "url": "https://www.huxiu.com/article/4885342.html",
-      "category": "中文科技媒体",
+      "category": "中文媒体",
       "contentType": "公众号",
       "publishedDate": "2026-08-24",
       "publishedAtMs": 1787530592000,
@@ -1575,10 +1700,37 @@
         "融资",
         "其他"
       ],
-      "imageUrl": "",
+      "imageUrl": "media/huxiu/recvtbiIXXkqcg-1.png",
       "mediaAssets": {
-        "images": [],
-        "videos": []
+        "images": [
+          {
+            "url": "media/huxiu/recvtbiIXXkqcg-1.png",
+            "alt": "唐杰与杨植麟师生关系",
+            "kind": "article-figure",
+            "afterHeading": "教授公司"
+          },
+          {
+            "url": "media/huxiu/recvtbiIXXkqcg-2.png",
+            "alt": "清华AI人才关系网络",
+            "kind": "article-figure",
+            "afterHeading": "圈子抄不走"
+          },
+          {
+            "url": "media/huxiu/recvtbiIXXkqcg-3.png",
+            "alt": "五道口高频同行碰面",
+            "kind": "article-figure",
+            "afterHeading": "圈子抄不走"
+          },
+          {
+            "url": "media/huxiu/recvtbiIXXkqcg-4.png",
+            "alt": "中国模型生态数据",
+            "kind": "article-figure",
+            "afterHeading": "默认值"
+          }
+        ],
+        "videos": [],
+        "cover": "https://img.huxiucdn.com/ai/ai-general-cover/202608/24/32961-prod-kl-general-1-1787530519444.png?imageView2/1/w/788/h/444/|imageMogr2/strip/interlace/1/quality/85",
+        "curatedBy": "llm"
       },
       "editorialStructure": "source",
       "eventAggregation": {
@@ -1607,7 +1759,7 @@
       "titleCn": "日本新增五项对华技术出口管制，瞄准材料与工艺优势",
       "source": "虎嗅",
       "url": "https://www.huxiu.com/article/4885105.html",
-      "category": "中文科技媒体",
+      "category": "中文媒体",
       "contentType": "公众号",
       "publishedDate": "2026-08-22",
       "publishedAtMs": 1787371617000,
@@ -1624,10 +1776,25 @@
         "端侧",
         "其他"
       ],
-      "imageUrl": "",
+      "imageUrl": "media/huxiu/recvsZXs8c326r-1.png",
       "mediaAssets": {
-        "images": [],
-        "videos": []
+        "images": [
+          {
+            "url": "media/huxiu/recvsZXs8c326r-1.png",
+            "alt": "日本经济产业省管制信息",
+            "kind": "article-figure",
+            "afterHeading": "官民对话：不准卖，更不准教"
+          },
+          {
+            "url": "media/huxiu/recvsZXs8c326r-2.png",
+            "alt": "日本新增五项管制技术",
+            "kind": "article-figure",
+            "afterHeading": "五大新增管制项目背后的“日本算盘”"
+          }
+        ],
+        "videos": [],
+        "cover": "https://img.huxiucdn.com/ai/ai-general-cover/202608/22/32872-prod-nb2ep-general-1-1787371545420.png?imageView2/1/w/788/h/444/|imageMogr2/strip/interlace/1/quality/85",
+        "curatedBy": "llm"
       },
       "editorialStructure": "source",
       "eventAggregation": {
@@ -1731,13 +1898,16 @@
       "mediaAssets": {
         "images": [
           {
-            "url": "https://lambda.ai/hubfs/build_and_buy_blog%20-%201600x860.png",
-            "alt": "构建与采购并行：聪明的 AI 团队为何两者兼用",
-            "kind": "article-cover"
+            "url": "https://lambda.ai/hs-fs/hubfs/data_chart.png?width=915&height=417&name=data_chart.png",
+            "alt": "自托管与 API 成本对比图",
+            "kind": "article-figure",
+            "afterHeading": "终于符合 CFO 效率标准的经济性 || The economics that finally match a CFO's efficiency bar"
           }
         ],
         "videos": [],
-        "documents": []
+        "documents": [],
+        "cover": "https://lambda.ai/hubfs/build_and_buy_blog%20-%201600x860.png",
+        "curatedBy": "llm"
       },
       "editorialStructure": "source",
       "eventAggregation": {
@@ -1820,7 +1990,7 @@
       "titleCn": "浙江人形携NAVIAI展示“一脑多机”多场景具身智能方案",
       "source": "AI科技评论 / 雷峰网",
       "url": "https://www.leiphone.com/category/industrynews/5pmgwjz7nfr6jvie.html",
-      "category": "中文科技媒体",
+      "category": "中文媒体",
       "contentType": "公众号",
       "publishedDate": "2026-08-23",
       "publishedAtMs": 1787477820000,
@@ -1841,13 +2011,16 @@
       "mediaAssets": {
         "images": [
           {
-            "url": "https://static.leiphone.com/uploads/new/images/20260823/6a8abec4056f9.jpg?imageView2/2/w/740",
-            "alt": "浙江人形携NAVIAI展示“一脑多机”多场景具身智能方案",
-            "kind": "article-cover"
+            "url": "https://static.leiphone.com/uploads/new/images/20260823/6a8abece813c5.jpg?imageView2/2/w/740",
+            "alt": "NAVIAI零售舱提供智能服务",
+            "kind": "article-figure",
+            "afterHeading": "关键细节"
           }
         ],
         "videos": [],
-        "documents": []
+        "documents": [],
+        "cover": "https://static.leiphone.com/uploads/new/images/20260823/6a8abec4056f9.jpg?imageView2/2/w/740",
+        "curatedBy": "llm"
       },
       "editorialStructure": "",
       "eventAggregation": {
@@ -1876,7 +2049,7 @@
       "titleCn": "国补后1996元起：雷鸟iO AI眼镜重34克，支持两天续航与18小时全天记忆",
       "source": "智东西",
       "url": "https://zhidx.com/p/587166.html",
-      "category": "中文科技媒体",
+      "category": "中文媒体",
       "contentType": "公众号",
       "publishedDate": "2026-08-21",
       "publishedAtMs": 1787307463000,
@@ -1893,17 +2066,32 @@
         "端侧",
         "产品"
       ],
-      "imageUrl": "https://oss.zhidx.com/uploads/2026/08/6a88165b9948a_6a88165b96295_6a88165b9625b_屏幕截图-2026-08-21-1710471.png/_zdx",
+      "imageUrl": "https://oss.zhidx.com/uploads/2026/08/6a87fe361840f_6a87fe3615323_6a87fe36152f4_屏幕截图-2026-08-21-150523.png",
       "mediaAssets": {
         "images": [
           {
-            "url": "https://oss.zhidx.com/uploads/2026/08/6a88165b9948a_6a88165b96295_6a88165b9625b_屏幕截图-2026-08-21-1710471.png/_zdx",
-            "alt": "国补后1996元起：雷鸟iO AI眼镜重34克，支持两天续航与18小时全天记忆",
-            "kind": "article-cover"
+            "url": "https://oss.zhidx.com/uploads/2026/08/6a87fe7f9265c_6a87fe7f8f88e_6a87fe7f8f857_屏幕截图-2026-08-21-151749.png",
+            "alt": "雷鸟iO眼镜外观与旋钮",
+            "kind": "article-figure",
+            "afterHeading": "一、重34克，日常场景续航两天，AI连续记录18小时"
+          },
+          {
+            "url": "https://oss.zhidx.com/uploads/2026/08/6a87fe17cf252_6a87fe17cc476_6a87fe17cc44a_屏幕截图-2026-08-21-145626.png",
+            "alt": "眼镜显示与续航参数",
+            "kind": "article-figure",
+            "afterHeading": "一、重34克，日常场景续航两天，AI连续记录18小时"
+          },
+          {
+            "url": "https://oss.zhidx.com/uploads/2026/08/6a87fe448171d_6a87fe4470d2d_6a87fe4470cf7_屏幕截图-2026-08-21-150812.png",
+            "alt": "AI全天智记与翻译功能",
+            "kind": "article-figure",
+            "afterHeading": "二、自动整理全天对话，支持提词和55种语言翻译"
           }
         ],
         "videos": [],
-        "documents": []
+        "documents": [],
+        "cover": "https://oss.zhidx.com/uploads/2026/08/6a87fe361840f_6a87fe3615323_6a87fe36152f4_屏幕截图-2026-08-21-150523.png",
+        "curatedBy": "llm"
       },
       "editorialStructure": "source",
       "eventAggregation": {
@@ -1932,7 +2120,7 @@
       "titleCn": "万兴科技发布面向TVC制作的AI画布工作台Filmora.TV",
       "source": "AI科技评论 / 雷峰网",
       "url": "https://www.leiphone.com/category/industrynews/ysrkuxqesqebpdn5.html",
-      "category": "中文科技媒体",
+      "category": "中文媒体",
       "contentType": "公众号",
       "publishedDate": "2026-08-24",
       "publishedAtMs": 1787514360000,
@@ -1952,13 +2140,16 @@
       "mediaAssets": {
         "images": [
           {
-            "url": "https://static.leiphone.com/uploads/new/images/20260824//6a8b4d526751a.jpg?imageMogr2/quality/90",
-            "alt": "万兴科技发布面向TVC制作的AI画布工作台Filmora.TV",
-            "kind": "article-cover"
+            "url": "https://static.leiphone.com/uploads/new/images/20260824//6a8b4d5268077.jpg?imageMogr2/quality/90",
+            "alt": "茶颜悦色冷香凝品牌视频",
+            "kind": "article-figure",
+            "afterHeading": "价值与影响"
           }
         ],
         "videos": [],
-        "documents": []
+        "documents": [],
+        "cover": "https://static.leiphone.com/uploads/new/images/20260824//6a8b4d526751a.jpg?imageMogr2/quality/90",
+        "curatedBy": "llm"
       },
       "editorialStructure": "",
       "eventAggregation": {
@@ -1987,7 +2178,7 @@
       "titleCn": "凯度发布幂境全隐嵌套系与AI智能体“小紫”，厨电竞争转向体验协同",
       "source": "AI科技评论 / 雷峰网",
       "url": "https://www.leiphone.com/category/smarthome/6sqrml2f02survr4.html",
-      "category": "中文科技媒体",
+      "category": "中文媒体",
       "contentType": "公众号",
       "publishedDate": "2026-08-23",
       "publishedAtMs": 1787495700000,
@@ -2008,13 +2199,22 @@
       "mediaAssets": {
         "images": [
           {
-            "url": "https://static.leiphone.com/uploads/new/images/20260823/6a8b0186efbf9.jpeg?imageView2/2/w/740",
-            "alt": "凯度发布幂境全隐嵌套系与AI智能体“小紫”，厨电竞争转向体验协同",
-            "kind": "article-cover"
+            "url": "https://static.leiphone.com/uploads/new/images/20260823/6a8b02052a280.jpeg?imageView2/2/w/740",
+            "alt": "凯度紫科技理念发布现场",
+            "kind": "article-figure",
+            "afterHeading": "“ 紫科技”vs“黑科技”：跳出参数物理极限"
+          },
+          {
+            "url": "https://static.leiphone.com/uploads/new/images/20260823/6a8b0186c18e0.jpeg?imageView2/2/w/740",
+            "alt": "AI智能体小紫现场演示",
+            "kind": "article-figure",
+            "afterHeading": "AI智能体“小紫”：从被动指令 到主动预判"
           }
         ],
         "videos": [],
-        "documents": []
+        "documents": [],
+        "cover": "https://static.leiphone.com/uploads/new/images/20260823/6a8b0186efbf9.jpeg?imageView2/2/w/740",
+        "curatedBy": "llm"
       },
       "editorialStructure": "source",
       "eventAggregation": {
@@ -2043,7 +2243,7 @@
       "titleCn": "超小体与短头犬种为何更易发生眼球脱出",
       "source": "果壳",
       "url": "https://www.guokr.com/article/470003",
-      "category": "中文综合媒体",
+      "category": "中文媒体",
       "contentType": "公众号",
       "publishedDate": "2026-08-23",
       "publishedAtMs": 1787476506604,
@@ -2058,16 +2258,31 @@
         "其他",
         "监管"
       ],
-      "imageUrl": "https://1-im.guokr.com/AmRDJDzcF6DRheBSdzQOVIJiZ2NnSlU9VcSZyjORYDHkAAAAbAAAAFBO.png",
+      "imageUrl": "https://1-im.guokr.com/RnRMTUxTMU1uRkVqZjc4TzdUdTdwWW03NEZqdmRvY3g4BAAAwQcAAEpQ.jpg?imageView2/1/w/555/h/1020",
       "mediaAssets": {
         "images": [
           {
-            "url": "https://1-im.guokr.com/AmRDJDzcF6DRheBSdzQOVIJiZ2NnSlU9VcSZyjORYDHkAAAAbAAAAFBO.png",
-            "alt": "超小体与短头犬种为何更易发生眼球脱出",
-            "kind": "article-cover"
+            "url": "https://2-im.guokr.com/RnVMRWlnOWc2VVRIY2RFZzFHNnFKeDJlZllxcWRvY3hXAwAAZgIAAEpQ.jpg?imageView2/1/w/555/h/398",
+            "alt": "超小体犬体形示例",
+            "kind": "article-figure",
+            "afterHeading": "核心内容"
+          },
+          {
+            "url": "https://2-im.guokr.com/RmhNcDRkZ0lETm5GN3FEMWRhaTdIUS1TSUdlNmRvY3jmAQAAAQIAAEpQ.jpg",
+            "alt": "犬眼球脱出治疗示意",
+            "kind": "article-figure",
+            "afterHeading": "关键细节"
+          },
+          {
+            "url": "https://2-im.guokr.com/RnZlSnZ3a3NRT0VLZ0VDMTlaZjVIYV9hd3NxNmRvY3g4BAAA8AMAAEpQ.jpg?imageView2/1/w/555/h/518",
+            "alt": "小型犬应使用胸背带",
+            "kind": "article-figure",
+            "afterHeading": "行动建议"
           }
         ],
-        "videos": []
+        "videos": [],
+        "cover": "https://1-im.guokr.com/RnRMTUxTMU1uRkVqZjc4TzdUdTdwWW03NEZqdmRvY3g4BAAAwQcAAEpQ.jpg?imageView2/1/w/555/h/1020",
+        "curatedBy": "llm"
       },
       "editorialStructure": "",
       "eventAggregation": {
@@ -2113,20 +2328,16 @@
       ],
       "imageUrl": "https://www.whitehouse.gov/wp-content/uploads/2025/03/WH47-Social-Share-Card.jpg",
       "mediaAssets": {
-        "images": [
-          {
-            "url": "https://www.whitehouse.gov/wp-content/uploads/2025/03/WH47-Social-Share-Card.jpg",
-            "alt": "特朗普内阁在全美宣传“美国优先”政绩",
-            "kind": "article-cover"
-          }
-        ],
+        "images": [],
         "videos": [],
         "documents": [],
         "policy": {
           "agency": "White House",
           "stage": "官方发布",
           "authority": "whitehouse.gov"
-        }
+        },
+        "cover": "https://www.whitehouse.gov/wp-content/uploads/2025/03/WH47-Social-Share-Card.jpg",
+        "curatedBy": "llm"
       },
       "editorialStructure": "",
       "eventAggregation": {

@@ -765,7 +765,7 @@
       "titleCn": "英伟达从卖GPU转向撮合土地、电力与机房",
       "source": "虎嗅",
       "url": "https://www.huxiu.com/article/4884751.html",
-      "category": "中文科技媒体",
+      "category": "中文媒体",
       "contentType": "公众号",
       "publishedDate": "2026-08-21",
       "publishedAtMs": 1787273119000,
@@ -782,10 +782,37 @@
         "融资",
         "其他"
       ],
-      "imageUrl": "",
+      "imageUrl": "media/huxiu/recvsTQVqf2miM-1.png",
       "mediaAssets": {
-        "images": [],
-        "videos": []
+        "images": [
+          {
+            "url": "media/huxiu/recvsTQVqf2miM-1.png",
+            "alt": "英伟达撮合GPU与数据中心",
+            "kind": "article-figure",
+            "afterHeading": "老黄当上AI圈的“红娘”"
+          },
+          {
+            "url": "media/huxiu/recvsTQVqf2miM-2.png",
+            "alt": "英伟达为OpenAI提供担保",
+            "kind": "article-figure",
+            "afterHeading": "老黄当上AI圈的“红娘”"
+          },
+          {
+            "url": "media/huxiu/recvsTQVqf2miM-3.png",
+            "alt": "北欧建设大型AI数据中心",
+            "kind": "article-figure",
+            "afterHeading": "为什么偏偏是北欧"
+          },
+          {
+            "url": "media/huxiu/recvsTQVqf2miM-4.png",
+            "alt": "AI公司需要完整算力系统",
+            "kind": "article-figure",
+            "afterHeading": "AI算力的下半场"
+          }
+        ],
+        "videos": [],
+        "cover": "https://img.huxiucdn.com/ai/ai-general-cover/202608/21/32755-prod-nb2ep-general-1-1787273043532.png?imageView2/1/w/788/h/444/|imageMogr2/strip/interlace/1/quality/85",
+        "curatedBy": "llm"
       },
       "editorialStructure": "source",
       "eventAggregation": {
@@ -814,7 +841,7 @@
       "titleCn": "Anthropic组建自研芯片团队并多元锁定算力，押注降低对英伟达依赖",
       "source": "华尔街见闻",
       "url": "https://wallstreetcn.com/articles/3780053",
-      "category": "中文综合媒体",
+      "category": "中文媒体",
       "contentType": "公众号",
       "publishedDate": "2026-08-22",
       "publishedAtMs": 1787371581000,
@@ -863,7 +890,7 @@
       "titleCn": "美光：AI正将存储芯片从周期商品变为战略基础设施",
       "source": "华尔街见闻",
       "url": "https://wallstreetcn.com/articles/3779960",
-      "category": "中文综合媒体",
+      "category": "中文媒体",
       "contentType": "公众号",
       "publishedDate": "2026-08-21",
       "publishedAtMs": 1787272970000,
@@ -878,10 +905,12 @@
         "AI",
         "硬件"
       ],
-      "imageUrl": "",
+      "imageUrl": "https://wpimg-wscn.awtmt.com/09b6a35f-aecd-4d62-b7d2-cda2d5d8572c.png",
       "mediaAssets": {
         "images": [],
-        "videos": []
+        "videos": [],
+        "cover": "https://wpimg-wscn.awtmt.com/09b6a35f-aecd-4d62-b7d2-cda2d5d8572c.png",
+        "curatedBy": "llm"
       },
       "editorialStructure": "",
       "eventAggregation": {
@@ -910,7 +939,7 @@
       "titleCn": "阿里多模态模型全面提速，能力与商业化进入第一梯队",
       "source": "智东西",
       "url": "https://zhidx.com/p/587115.html",
-      "category": "中文科技媒体",
+      "category": "中文媒体",
       "contentType": "公众号",
       "publishedDate": "2026-08-21",
       "publishedAtMs": 1787303157000,
@@ -926,17 +955,32 @@
         "开源",
         "产品"
       ],
-      "imageUrl": "https://oss.zhidx.com/uploads/2026/08/6a87d4920d5e6_6a87d49209f7b_6a87d49209f51_智东西头条头图模板-带阴影版.png/_zdx",
+      "imageUrl": "https://oss.zhidx.com/uploads/2026/08/6a87ce36ec944_6a87ce36e9e22_6a87ce36e9df1_图片1.png",
       "mediaAssets": {
         "images": [
           {
-            "url": "https://oss.zhidx.com/uploads/2026/08/6a87d4920d5e6_6a87d49209f7b_6a87d49209f51_智东西头条头图模板-带阴影版.png/_zdx",
-            "alt": "阿里多模态模型全面提速，能力与商业化进入第一梯队",
-            "kind": "article-cover"
+            "url": "https://oss.zhidx.com/uploads/2026/08/6a87ce42c6b4b_6a87ce42c36a4_6a87ce42c366e_图片3.png",
+            "alt": "阿里多模态模型能力版图",
+            "kind": "article-figure",
+            "afterHeading": "一、阿里AI不只有语言模型，多模态全面开花"
+          },
+          {
+            "url": "https://oss.zhidx.com/uploads/2026/08/6a87ce440532a_6a87ce440202e_6a87ce4401ff4_图片4.png",
+            "alt": "语音与视频模型持续升级",
+            "kind": "article-figure",
+            "afterHeading": "一、阿里AI不只有语言模型，多模态全面开花"
+          },
+          {
+            "url": "https://oss.zhidx.com/uploads/2026/08/6a87ce3ae97a6_6a87ce3ae6329_6a87ce3ae62f0_图片2.png",
+            "alt": "多模态驱动云业务增长",
+            "kind": "article-figure",
+            "afterHeading": "三、能力越补越齐，阿里多模态的价值开始显现"
           }
         ],
         "videos": [],
-        "documents": []
+        "documents": [],
+        "cover": "https://oss.zhidx.com/uploads/2026/08/6a87ce36ec944_6a87ce36e9e22_6a87ce36e9df1_图片1.png",
+        "curatedBy": "llm"
       },
       "editorialStructure": "source",
       "eventAggregation": {
@@ -1018,7 +1062,7 @@
       "titleCn": "OpenAI开源Codex Harness并推出Mac端iMessage控制功能等科技动态",
       "source": "果壳",
       "url": "https://www.guokr.com/article/469989",
-      "category": "中文综合媒体",
+      "category": "中文媒体",
       "contentType": "公众号",
       "publishedDate": "2026-08-21",
       "publishedAtMs": 1787325301853,
@@ -1035,16 +1079,19 @@
         "端侧",
         "开源"
       ],
-      "imageUrl": "https://1-im.guokr.com/AmRDJDzcF6DRheBSdzQOVIJiZ2NnSlU9VcSZyjORYDHkAAAAbAAAAFBO.png",
+      "imageUrl": "https://3-im.guokr.com/RnZRY0I0dVo5M2NsLUZnYVk4UWNoQi1KNlRXMGRvY3g4BAAA1wEAAEpQ.jpg?imageView2/1/w/555/h/242",
       "mediaAssets": {
         "images": [
           {
-            "url": "https://1-im.guokr.com/AmRDJDzcF6DRheBSdzQOVIJiZ2NnSlU9VcSZyjORYDHkAAAAbAAAAFBO.png",
-            "alt": "OpenAI开源Codex Harness并推出Mac端iMessage控制功能等科技动态",
-            "kind": "article-cover"
+            "url": "https://1-im.guokr.com/RnVnckZSLUlxd2Y0dkpoZnpKNHhEdDNsU3NieWRvY3j9AwAAqwEAAEpQ.jpg?imageView2/1/w/555/h/232",
+            "alt": "碳包裹单原子铜链示意图",
+            "kind": "article-figure",
+            "afterHeading": "关键细节"
           }
         ],
-        "videos": []
+        "videos": [],
+        "cover": "https://3-im.guokr.com/RnZRY0I0dVo5M2NsLUZnYVk4UWNoQi1KNlRXMGRvY3g4BAAA1wEAAEpQ.jpg?imageView2/1/w/555/h/242",
+        "curatedBy": "llm"
       },
       "editorialStructure": "",
       "eventAggregation": {
@@ -1086,7 +1133,7 @@
       "titleCn": "超维动力展示全球首个人形机器人自主乒乓球完整对局及全栈具身智能体系",
       "source": "AI科技评论 / 雷峰网",
       "url": "https://www.leiphone.com/category/robot/rlnc7woi4q7hymvj.html",
-      "category": "中文科技媒体",
+      "category": "中文媒体",
       "contentType": "公众号",
       "publishedDate": "2026-08-21",
       "publishedAtMs": 1787326020000,
@@ -1107,13 +1154,34 @@
       "mediaAssets": {
         "images": [
           {
-            "url": "https://static.leiphone.com/uploads/new/images/20260821//6a886c8f502c7.jpg?imageMogr2/quality/90",
-            "alt": "超维动力展示全球首个人形机器人自主乒乓球完整对局及全栈具身智能体系",
-            "kind": "article-cover"
+            "url": "https://static.leiphone.com/uploads/new/images/20260821//6a886c8f51a2a.jpg?imageMogr2/quality/90",
+            "alt": "人形机器人进行乒乓球对打",
+            "kind": "article-figure",
+            "afterHeading": "SMASH 2.0：全球首个自主完整对局，现场开放人机对打"
+          },
+          {
+            "url": "https://static.leiphone.com/uploads/new/images/20260821//6a886c8f53720.jpg?imageMogr2/quality/90",
+            "alt": "KAIBot高拟真人形机器人",
+            "kind": "article-figure",
+            "afterHeading": ""
+          },
+          {
+            "url": "https://static.leiphone.com/uploads/new/images/20260821//6a886c8f5479b.jpg?imageMogr2/quality/90",
+            "alt": "KAI Hand仿生灵巧手",
+            "kind": "article-figure",
+            "afterHeading": "KAI Hand：1:1复刻人手的精细操作能力"
+          },
+          {
+            "url": "https://static.leiphone.com/uploads/new/images/20260821//6a886c8f551a6.jpg?imageMogr2/quality/90",
+            "alt": "KAI Halo第一视角数采头环",
+            "kind": "article-figure",
+            "afterHeading": "KAI Halo：第一视角数采头环，打通数据采集全链路"
           }
         ],
         "videos": [],
-        "documents": []
+        "documents": [],
+        "cover": "https://static.leiphone.com/uploads/new/images/20260821//6a886c8f502c7.jpg?imageMogr2/quality/90",
+        "curatedBy": "llm"
       },
       "editorialStructure": "source",
       "eventAggregation": {
@@ -1142,7 +1210,7 @@
       "titleCn": "首例因AI聊天威胁被报警并定罪的案件",
       "source": "虎嗅",
       "url": "https://www.huxiu.com/article/4885096.html",
-      "category": "中文科技媒体",
+      "category": "中文媒体",
       "contentType": "公众号",
       "publishedDate": "2026-08-22",
       "publishedAtMs": 1787367840000,
@@ -1158,10 +1226,37 @@
         "监管",
         "其他"
       ],
-      "imageUrl": "",
+      "imageUrl": "media/huxiu/recvsZXs8cT4Lm-1.png",
       "mediaAssets": {
-        "images": [],
-        "videos": []
+        "images": [
+          {
+            "url": "media/huxiu/recvsZXs8cT4Lm-1.png",
+            "alt": "聊天中的暴力威胁示意",
+            "kind": "article-figure",
+            "afterHeading": "聊天框里的谋杀预谋"
+          },
+          {
+            "url": "media/huxiu/recvsZXs8cT4Lm-2.png",
+            "alt": "聊天记录与短信比对",
+            "kind": "article-figure",
+            "afterHeading": "从日志到法庭"
+          },
+          {
+            "url": "media/huxiu/recvsZXs8cT4Lm-3.png",
+            "alt": "AI聊天记录成为证据",
+            "kind": "article-figure",
+            "afterHeading": "从日志到法庭"
+          },
+          {
+            "url": "media/huxiu/recvsZXs8cT4Lm-4.png",
+            "alt": "AI隐私与报警义务冲突",
+            "kind": "article-figure",
+            "afterHeading": "一次Tarasoff式的结构困境"
+          }
+        ],
+        "videos": [],
+        "cover": "https://img.huxiucdn.com/ai/ai-general-cover/202608/22/32868-prod-db-general-1-1787367748712.png?imageView2/1/w/788/h/444/|imageMogr2/strip/interlace/1/quality/85",
+        "curatedBy": "llm"
       },
       "editorialStructure": "source",
       "eventAggregation": {
@@ -1190,7 +1285,7 @@
       "titleCn": "生成式AI提升作业表现，却可能削弱长期学习能力",
       "source": "虎嗅",
       "url": "https://www.huxiu.com/article/4885107.html",
-      "category": "中文科技媒体",
+      "category": "中文媒体",
       "contentType": "公众号",
       "publishedDate": "2026-08-22",
       "publishedAtMs": 1787371744000,
@@ -1207,10 +1302,37 @@
         "产品",
         "其他"
       ],
-      "imageUrl": "",
+      "imageUrl": "media/huxiu/recvsZXs8coUcF-1.png",
       "mediaAssets": {
-        "images": [],
-        "videos": []
+        "images": [
+          {
+            "url": "media/huxiu/recvsZXs8coUcF-1.png",
+            "alt": "AI使用与作业分数反差",
+            "kind": "article-figure",
+            "afterHeading": "核心内容"
+          },
+          {
+            "url": "media/huxiu/recvsZXs8coUcF-2.png",
+            "alt": "学生AI使用率持续上升",
+            "kind": "article-figure",
+            "afterHeading": "关键细节"
+          },
+          {
+            "url": "media/huxiu/recvsZXs8coUcF-3.png",
+            "alt": "作业外包比例随时间攀升",
+            "kind": "article-figure",
+            "afterHeading": "关键细节"
+          },
+          {
+            "url": "media/huxiu/recvsZXs8coUcF-4.png",
+            "alt": "AI辅助下医生检出率下降",
+            "kind": "article-figure",
+            "afterHeading": "价值与影响"
+          }
+        ],
+        "videos": [],
+        "cover": "https://img.huxiucdn.com/ai/ai-general-cover/202608/22/32874-prod-nb2ep-general-1-1787371673916.png?imageView2/1/w/788/h/444/|imageMogr2/strip/interlace/1/quality/85",
+        "curatedBy": "llm"
       },
       "editorialStructure": "",
       "eventAggregation": {
@@ -1239,7 +1361,7 @@
       "titleCn": "明略科技提出机器人“个体大脑+组织大脑”路径",
       "source": "AI科技评论 / 雷峰网",
       "url": "https://www.leiphone.com/category/industrynews/ddnm82qy8t8mqybk.html",
-      "category": "中文科技媒体",
+      "category": "中文媒体",
       "contentType": "公众号",
       "publishedDate": "2026-08-21",
       "publishedAtMs": 1787297160000,
@@ -1260,13 +1382,22 @@
       "mediaAssets": {
         "images": [
           {
-            "url": "https://static.leiphone.com/uploads/new/images/20260821/6a87fcc3a12a7.png?imageView2/2/w/740",
-            "alt": "明略科技提出机器人“个体大脑+组织大脑”路径",
-            "kind": "article-cover"
+            "url": "https://static.leiphone.com/uploads/new/images/20260821/6a87fcc62bd00.png?imageView2/2/w/740",
+            "alt": "明略与海康机器人合作分工",
+            "kind": "article-figure",
+            "afterHeading": "关键细节"
+          },
+          {
+            "url": "https://static.leiphone.com/uploads/new/images/20260821/6a87fcc9c9db9.png?imageView2/2/w/740",
+            "alt": "数字与具身智能的记忆体系",
+            "kind": "article-figure",
+            "afterHeading": "价值与影响"
           }
         ],
         "videos": [],
-        "documents": []
+        "documents": [],
+        "cover": "https://static.leiphone.com/uploads/new/images/20260821/6a87fcc3a12a7.png?imageView2/2/w/740",
+        "curatedBy": "llm"
       },
       "editorialStructure": "",
       "eventAggregation": {
@@ -1295,7 +1426,7 @@
       "titleCn": "DeepSeek上线实验性多模态视觉模型，单张图片最高约0.001152元",
       "source": "智东西",
       "url": "https://zhidx.com/p/587260.html",
-      "category": "中文科技媒体",
+      "category": "中文媒体",
       "contentType": "公众号",
       "publishedDate": "2026-08-21",
       "publishedAtMs": 1787306608000,
@@ -1311,17 +1442,32 @@
         "Agent",
         "产品"
       ],
-      "imageUrl": "https://oss.zhidx.com/uploads/2026/08/6a8821fb1d10e_6a8821fb12fcf_6a8821fb12f8d_69f1d40659cef_69f1d40654f07_69f1d40654ecd_图片3.png/_zdx",
+      "imageUrl": "https://oss.zhidx.com/uploads/2026/08/6a881b55aad89_6a881b55a8354_6a881b55a8317_微信图片_2026-08-21_173229_888.png",
       "mediaAssets": {
         "images": [
           {
-            "url": "https://oss.zhidx.com/uploads/2026/08/6a8821fb1d10e_6a8821fb12fcf_6a8821fb12f8d_69f1d40659cef_69f1d40654f07_69f1d40654ecd_图片3.png/_zdx",
-            "alt": "DeepSeek上线实验性多模态视觉模型，单张图片最高约0.001152元",
-            "kind": "article-cover"
+            "url": "https://oss.zhidx.com/uploads/2026/08/6a8820088e6aa_6a882008896d2_6a8820088969c_微信图片_20260821175256_740_43.png",
+            "alt": "多模态API调用与文件上传",
+            "kind": "article-figure",
+            "afterHeading": "关键细节"
+          },
+          {
+            "url": "https://oss.zhidx.com/uploads/2026/08/6a8820ae8d331_6a8820ae8653b_6a8820ae86501_640-8.gif",
+            "alt": "模型生成的视觉编程页面",
+            "kind": "article-figure",
+            "afterHeading": "价值与影响"
+          },
+          {
+            "url": "https://oss.zhidx.com/uploads/2026/08/6a882a8b494bc_6a882a8b46124_6a882a8b460f8_屏幕截图-2026-08-21-182857.png",
+            "alt": "DeepSeek Harness模型配置",
+            "kind": "article-figure",
+            "afterHeading": "价值与影响"
           }
         ],
         "videos": [],
-        "documents": []
+        "documents": [],
+        "cover": "https://oss.zhidx.com/uploads/2026/08/6a881b55aad89_6a881b55a8354_6a881b55a8317_微信图片_2026-08-21_173229_888.png",
+        "curatedBy": "llm"
       },
       "editorialStructure": "",
       "eventAggregation": {
@@ -1350,7 +1496,7 @@
       "titleCn": "Elseland：AI能否工业化生产精品游戏？",
       "source": "智东西",
       "url": "https://zhidx.com/p/586881.html",
-      "category": "中文科技媒体",
+      "category": "中文媒体",
       "contentType": "公众号",
       "publishedDate": "2026-08-21",
       "publishedAtMs": 1787311144000,
@@ -1371,13 +1517,34 @@
       "mediaAssets": {
         "images": [
           {
-            "url": "https://oss.zhidx.com/uploads/2026/08/6a86e4bc7240a_6a86e4bc6ec8b_6a86e4bc6ec4b_exec-e185cf06-c423-4596-8586-ab6825fed30e.png/_zdx",
-            "alt": "Elseland：AI能否工业化生产精品游戏？",
-            "kind": "article-cover"
+            "url": "https://oss.zhidx.com/uploads/2026/08/6a86d27b5bf67_6a86d27b31215_6a86d27b311db_地图截图.png",
+            "alt": "《回到风吹过的地方》地图",
+            "kind": "article-figure",
+            "afterHeading": "一、不一样的“互动影游”"
+          },
+          {
+            "url": "https://oss.zhidx.com/uploads/2026/08/6a86d390dab8e_6a86d390d78f4_6a86d390d78c5_image-3.png",
+            "alt": "互动影游查案场景",
+            "kind": "article-figure",
+            "afterHeading": "一、不一样的“互动影游”"
+          },
+          {
+            "url": "https://oss.zhidx.com/uploads/2026/08/6a86d23acf0a3_6a86d23acc2ae_6a86d23acc27e_image-1.png",
+            "alt": "糖果王国游戏场景",
+            "kind": "article-figure",
+            "afterHeading": "二、把所有游戏类型用AI重做一遍"
+          },
+          {
+            "url": "https://oss.zhidx.com/uploads/2026/08/6a86d82f803b2_6a86d82f7d106_6a86d82f7d0b7_微信图片_20260820183246.jpg",
+            "alt": "水豚牌馆游戏画面",
+            "kind": "article-figure",
+            "afterHeading": "二、把所有游戏类型用AI重做一遍"
           }
         ],
         "videos": [],
-        "documents": []
+        "documents": [],
+        "cover": "https://oss.zhidx.com/uploads/2026/08/6a86e4bc7240a_6a86e4bc6ec8b_6a86e4bc6ec4b_exec-e185cf06-c423-4596-8586-ab6825fed30e.png/_zdx",
+        "curatedBy": "llm"
       },
       "editorialStructure": "source",
       "eventAggregation": {
@@ -1406,7 +1573,7 @@
       "titleCn": "商汤开源 SenseNova U1.5 Lite：8B统一多模态模型支持超长指令与原生4K创作",
       "source": "AI科技评论 / 雷峰网",
       "url": "https://www.leiphone.com/category/industrynews/6snckuyytwv6ixlf.html",
-      "category": "中文科技媒体",
+      "category": "中文媒体",
       "contentType": "公众号",
       "publishedDate": "2026-08-21",
       "publishedAtMs": 1787315580000,
@@ -1427,13 +1594,22 @@
       "mediaAssets": {
         "images": [
           {
-            "url": "https://static.leiphone.com/uploads/new/images/20260821//6a88432c31535.jpg?imageMogr2/quality/90",
-            "alt": "商汤开源 SenseNova U1.5 Lite：8B统一多模态模型支持超长指令与原生4K创作",
-            "kind": "article-cover"
+            "url": "https://static.leiphone.com/uploads/new/images/20260821//6a88432c330db.jpg?imageMogr2/quality/90",
+            "alt": "高密度信息图生成示例",
+            "kind": "article-figure",
+            "afterHeading": "关键细节"
+          },
+          {
+            "url": "https://static.leiphone.com/uploads/new/images/20260821//6a88432c34003.jpg?imageMogr2/quality/90",
+            "alt": "复杂场景的高清艺术质感",
+            "kind": "article-figure",
+            "afterHeading": "关键细节"
           }
         ],
         "videos": [],
-        "documents": []
+        "documents": [],
+        "cover": "https://static.leiphone.com/uploads/new/images/20260821//6a88432c31535.jpg?imageMogr2/quality/90",
+        "curatedBy": "llm"
       },
       "editorialStructure": "",
       "eventAggregation": {
@@ -1462,7 +1638,7 @@
       "titleCn": "日本新增五项对华技术出口管制，瞄准材料与工艺优势",
       "source": "虎嗅",
       "url": "https://www.huxiu.com/article/4885105.html",
-      "category": "中文科技媒体",
+      "category": "中文媒体",
       "contentType": "公众号",
       "publishedDate": "2026-08-22",
       "publishedAtMs": 1787371617000,
@@ -1479,10 +1655,25 @@
         "端侧",
         "其他"
       ],
-      "imageUrl": "",
+      "imageUrl": "media/huxiu/recvsZXs8c326r-1.png",
       "mediaAssets": {
-        "images": [],
-        "videos": []
+        "images": [
+          {
+            "url": "media/huxiu/recvsZXs8c326r-1.png",
+            "alt": "日本技术出口管制官方页面",
+            "kind": "article-figure",
+            "afterHeading": "官民对话：不准卖，更不准教"
+          },
+          {
+            "url": "media/huxiu/recvsZXs8c326r-2.png",
+            "alt": "日本新增五项管制技术",
+            "kind": "article-figure",
+            "afterHeading": "五大新增管制项目背后的“日本算盘”"
+          }
+        ],
+        "videos": [],
+        "cover": "https://img.huxiucdn.com/ai/ai-general-cover/202608/22/32872-prod-nb2ep-general-1-1787371545420.png?imageView2/1/w/788/h/444/|imageMogr2/strip/interlace/1/quality/85",
+        "curatedBy": "llm"
       },
       "editorialStructure": "source",
       "eventAggregation": {
@@ -1511,7 +1702,7 @@
       "titleCn": "长存控股冲刺科创板：高增长背后的周期、资本与供应链风险",
       "source": "华尔街见闻",
       "url": "https://wallstreetcn.com/articles/3780054",
-      "category": "中文综合媒体",
+      "category": "中文媒体",
       "contentType": "公众号",
       "publishedDate": "2026-08-22",
       "publishedAtMs": 1787371435000,
@@ -1528,16 +1719,19 @@
         "融资",
         "产品"
       ],
-      "imageUrl": "https://wpimg-wscn.awtmt.com/6d539ef4-0345-4f7e-bae6-b1dfaf92a78a.png",
+      "imageUrl": "https://wpimg-wscn.awtmt.com/e213e241-e4d3-44e9-8897-f46d70059341.png",
       "mediaAssets": {
         "images": [
           {
             "url": "https://wpimg-wscn.awtmt.com/6d539ef4-0345-4f7e-bae6-b1dfaf92a78a.png",
-            "alt": "原文数据图表",
-            "kind": "article-figure"
+            "alt": "AI驱动存储供需变化",
+            "kind": "article-figure",
+            "afterHeading": "02 非均衡繁荣下的涨价红利"
           }
         ],
-        "videos": []
+        "videos": [],
+        "cover": "https://wpimg-wscn.awtmt.com/e213e241-e4d3-44e9-8897-f46d70059341.png",
+        "curatedBy": "llm"
       },
       "editorialStructure": "source",
       "eventAggregation": {
@@ -1637,7 +1831,7 @@
       "titleCn": "豆包接入特斯拉车机，MiniMax发布Design，交通运输部推进“人工智能+交通”",
       "source": "果壳",
       "url": "https://www.guokr.com/article/469968",
-      "category": "中文综合媒体",
+      "category": "中文媒体",
       "contentType": "公众号",
       "publishedDate": "2026-08-20",
       "publishedAtMs": 1787228124119,
@@ -1654,16 +1848,25 @@
         "产品",
         "监管"
       ],
-      "imageUrl": "https://1-im.guokr.com/AmRDJDzcF6DRheBSdzQOVIJiZ2NnSlU9VcSZyjORYDHkAAAAbAAAAFBO.png",
+      "imageUrl": "https://2-im.guokr.com/RnJQUkptaEVJYlBHQnVlN0xINnZhNjF5RWFGX2RvY3iTAwAAqgQAAEpQ.jpg?imageView2/1/w/555/h/724",
       "mediaAssets": {
         "images": [
           {
-            "url": "https://1-im.guokr.com/AmRDJDzcF6DRheBSdzQOVIJiZ2NnSlU9VcSZyjORYDHkAAAAbAAAAFBO.png",
-            "alt": "豆包接入特斯拉车机，MiniMax发布Design，交通运输部推进“人工智能+交通”",
-            "kind": "article-cover"
+            "url": "https://2-im.guokr.com/RmpQYWVXcUpvTzM2elJmS0I3c2hKUWl5c0VHZ2RvY3i8AgAAfgEAAEpQ.jpg?imageView2/1/w/555/h/302",
+            "alt": "银河系外球状星团恒星流",
+            "kind": "article-figure",
+            "afterHeading": "关键细节"
+          },
+          {
+            "url": "https://1-im.guokr.com/RmpZWm5ISjdyWjVDdm8wU1FvaFVNQWoyQ3ROWWRvY3iAAgAAFgIAAEdJ.gif?imageView2/1/w/555/h/463",
+            "alt": "iPSC心肌细胞疗法研究",
+            "kind": "article-figure",
+            "afterHeading": "价值与影响"
           }
         ],
-        "videos": []
+        "videos": [],
+        "cover": "https://2-im.guokr.com/RnJQUkptaEVJYlBHQnVlN0xINnZhNjF5RWFGX2RvY3iTAwAAqgQAAEpQ.jpg?imageView2/1/w/555/h/724",
+        "curatedBy": "llm"
       },
       "editorialStructure": "",
       "eventAggregation": {
@@ -1754,7 +1957,7 @@
       "titleCn": "魔法原子以三大场景推动具身智能规模化落地",
       "source": "AI科技评论 / 雷峰网",
       "url": "https://www.leiphone.com/category/robot/dcljjxt8jddt4pjs.html",
-      "category": "中文科技媒体",
+      "category": "中文媒体",
       "contentType": "公众号",
       "publishedDate": "2026-08-22",
       "publishedAtMs": 1787328420000,
@@ -1774,13 +1977,28 @@
       "mediaAssets": {
         "images": [
           {
-            "url": "https://static.leiphone.com/uploads/new/images/20260822//6a8876aebe6d7.jpg?imageMogr2/quality/90",
-            "alt": "魔法原子以三大场景推动具身智能规模化落地",
-            "kind": "article-cover"
+            "url": "https://static.leiphone.com/uploads/new/images/20260822//6a8876aebedd1.jpg?imageMogr2/quality/90",
+            "alt": "具身智能机器人亮相WRC",
+            "kind": "article-figure",
+            "afterHeading": "行业前瞻：具身智能产业落地的规模化时代已经到来"
+          },
+          {
+            "url": "https://static.leiphone.com/uploads/new/images/20260822//6a8876aec200e.jpg?imageMogr2/quality/90",
+            "alt": "联盟与国际认证机构签约",
+            "kind": "article-figure",
+            "afterHeading": "标准制定：江苏标准与全球标准加速互认，打造产业走向世界的通行证"
+          },
+          {
+            "url": "https://static.leiphone.com/uploads/new/images/20260822//6a8876aec2717.jpg?imageMogr2/quality/90",
+            "alt": "具身智能产业论坛现场",
+            "kind": "article-figure",
+            "afterHeading": "落地场景：告别“秀肌肉”，具身智能技术场景落地实景"
           }
         ],
         "videos": [],
-        "documents": []
+        "documents": [],
+        "cover": "https://static.leiphone.com/uploads/new/images/20260822//6a8876aebe6d7.jpg?imageMogr2/quality/90",
+        "curatedBy": "llm"
       },
       "editorialStructure": "source",
       "eventAggregation": {
@@ -1809,7 +2027,7 @@
       "titleCn": "国补后1996元起：雷鸟iO AI眼镜重34克，支持两天续航与18小时全天记忆",
       "source": "智东西",
       "url": "https://zhidx.com/p/587166.html",
-      "category": "中文科技媒体",
+      "category": "中文媒体",
       "contentType": "公众号",
       "publishedDate": "2026-08-21",
       "publishedAtMs": 1787307463000,
@@ -1826,17 +2044,32 @@
         "端侧",
         "产品"
       ],
-      "imageUrl": "https://oss.zhidx.com/uploads/2026/08/6a88165b9948a_6a88165b96295_6a88165b9625b_屏幕截图-2026-08-21-1710471.png/_zdx",
+      "imageUrl": "https://oss.zhidx.com/uploads/2026/08/6a87fe361840f_6a87fe3615323_6a87fe36152f4_屏幕截图-2026-08-21-150523.png",
       "mediaAssets": {
         "images": [
           {
-            "url": "https://oss.zhidx.com/uploads/2026/08/6a88165b9948a_6a88165b96295_6a88165b9625b_屏幕截图-2026-08-21-1710471.png/_zdx",
-            "alt": "国补后1996元起：雷鸟iO AI眼镜重34克，支持两天续航与18小时全天记忆",
-            "kind": "article-cover"
+            "url": "https://oss.zhidx.com/uploads/2026/08/6a87fe7f9265c_6a87fe7f8f88e_6a87fe7f8f857_屏幕截图-2026-08-21-151749.png",
+            "alt": "雷鸟iO轻量化镜框设计",
+            "kind": "article-figure",
+            "afterHeading": "一、重34克，日常场景续航两天，AI连续记录18小时"
+          },
+          {
+            "url": "https://oss.zhidx.com/uploads/2026/08/6a87fe17cf252_6a87fe17cc476_6a87fe17cc44a_屏幕截图-2026-08-21-145626.png",
+            "alt": "单绿色显示与续航参数",
+            "kind": "article-figure",
+            "afterHeading": "一、重34克，日常场景续航两天，AI连续记录18小时"
+          },
+          {
+            "url": "https://oss.zhidx.com/uploads/2026/08/6a87fe448171d_6a87fe4470d2d_6a87fe4470cf7_屏幕截图-2026-08-21-150812.png",
+            "alt": "AI问答、提词与翻译功能",
+            "kind": "article-figure",
+            "afterHeading": "二、自动整理全天对话，支持提词和55种语言翻译"
           }
         ],
         "videos": [],
-        "documents": []
+        "documents": [],
+        "cover": "https://oss.zhidx.com/uploads/2026/08/6a87fe361840f_6a87fe3615323_6a87fe36152f4_屏幕截图-2026-08-21-150523.png",
+        "curatedBy": "llm"
       },
       "editorialStructure": "source",
       "eventAggregation": {
@@ -2066,20 +2299,16 @@
       ],
       "imageUrl": "https://www.whitehouse.gov/wp-content/uploads/2025/03/WH47-Social-Share-Card.jpg",
       "mediaAssets": {
-        "images": [
-          {
-            "url": "https://www.whitehouse.gov/wp-content/uploads/2025/03/WH47-Social-Share-Card.jpg",
-            "alt": "特朗普内阁在全美宣传“美国优先”政绩",
-            "kind": "article-cover"
-          }
-        ],
+        "images": [],
         "videos": [],
         "documents": [],
         "policy": {
           "agency": "White House",
           "stage": "官方发布",
           "authority": "whitehouse.gov"
-        }
+        },
+        "cover": "https://www.whitehouse.gov/wp-content/uploads/2025/03/WH47-Social-Share-Card.jpg",
+        "curatedBy": "llm"
       },
       "editorialStructure": "",
       "eventAggregation": {

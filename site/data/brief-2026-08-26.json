@@ -712,15 +712,11 @@
       ],
       "imageUrl": "https://lambda.ai/hubfs/AgentFlow_blog%20-%201600x860.png",
       "mediaAssets": {
-        "images": [
-          {
-            "url": "https://lambda.ai/hubfs/AgentFlow_blog%20-%201600x860.png",
-            "alt": "AgentFlow：让智能体工作流能够学习",
-            "kind": "article-cover"
-          }
-        ],
+        "images": [],
         "videos": [],
-        "documents": []
+        "documents": [],
+        "cover": "https://lambda.ai/hubfs/AgentFlow_blog%20-%201600x860.png",
+        "curatedBy": "llm"
       },
       "editorialStructure": "source",
       "eventAggregation": {
@@ -749,7 +745,7 @@
       "titleCn": "a16z：AI正将创新从工程瓶颈推向资本瓶颈",
       "source": "华尔街见闻",
       "url": "https://wallstreetcn.com/articles/3780308",
-      "category": "中文综合媒体",
+      "category": "中文媒体",
       "contentType": "公众号",
       "publishedDate": "2026-08-26",
       "publishedAtMs": 1787711596000,
@@ -766,16 +762,19 @@
         "融资",
         "端侧"
       ],
-      "imageUrl": "https://wpimg-wscn.awtmt.com/bef0d140-a1b8-4516-a2a8-6cc25986256b.png",
+      "imageUrl": "https://wpimg-wscn.awtmt.com/d9654a5f-605d-4c5f-b5ac-76173673e3c2.png",
       "mediaAssets": {
         "images": [
           {
             "url": "https://wpimg-wscn.awtmt.com/bef0d140-a1b8-4516-a2a8-6cc25986256b.png",
-            "alt": "原文数据图表",
-            "kind": "article-figure"
+            "alt": "AI能力边界仍难以预测",
+            "kind": "article-figure",
+            "afterHeading": "200亿砸进去，没人知道会出来什么"
           }
         ],
-        "videos": []
+        "videos": [],
+        "cover": "https://wpimg-wscn.awtmt.com/d9654a5f-605d-4c5f-b5ac-76173673e3c2.png",
+        "curatedBy": "llm"
       },
       "editorialStructure": "source",
       "eventAggregation": {
@@ -804,7 +803,7 @@
       "titleCn": "小米发布玄戒三芯，构建人车家全生态算力基座",
       "source": "AI科技评论 / 雷峰网",
       "url": "https://www.leiphone.com/category/chips/pcfxrvfrvthcfsml.html",
-      "category": "中文科技媒体",
+      "category": "中文媒体",
       "contentType": "公众号",
       "publishedDate": "2026-08-26",
       "publishedAtMs": 1787708400000,
@@ -853,7 +852,7 @@
       "titleCn": "苹果发布2nm M6与四Die M5 Ultra，强化本地AI与桌面工作站定位",
       "source": "华尔街见闻",
       "url": "https://wallstreetcn.com/articles/3780311",
-      "category": "中文综合媒体",
+      "category": "中文媒体",
       "contentType": "公众号",
       "publishedDate": "2026-08-26",
       "publishedAtMs": 1787710866000,
@@ -870,41 +869,37 @@
         "端侧",
         "产品"
       ],
-      "imageUrl": "https://mmbiz-qpic.wscn.net/sz_mmbiz_png/A6fTew8FFGGsK5BSmC5KQ0p1lxibG0tBfnFl8DjNEk0zy4oxjFnNPTNm72lSV6YnH4n6AcrG8ibtelVJ1FbMnXwAYcTf1sqzeFKg4XjrjJW24/640?wx_fmt=png&from=appmsg",
+      "imageUrl": "https://wpimg-wscn.awtmt.com/5055c9a0-ef97-4453-975e-d1adcedd71c8.png",
       "mediaAssets": {
         "images": [
           {
-            "url": "https://mmbiz-qpic.wscn.net/sz_mmbiz_png/A6fTew8FFGGsK5BSmC5KQ0p1lxibG0tBfnFl8DjNEk0zy4oxjFnNPTNm72lSV6YnH4n6AcrG8ibtelVJ1FbMnXwAYcTf1sqzeFKg4XjrjJW24/640?wx_fmt=png&from=appmsg",
-            "alt": "原文数据图表",
-            "kind": "article-figure"
-          },
-          {
-            "url": "https://mmbiz-qpic.wscn.net/sz_mmbiz_png/A6fTew8FFGEojjRuicr4yiaFpVLsiaH9n38cNp4fricfmFacDMFbKnrwVjrvkewhlrFQy0ZpJR1FIKyibepYf7v06qUQsKUic3BiaoMRSZ5L0FJ55E/640?wx_fmt=png&from=appmsg",
-            "alt": "原文数据图表",
-            "kind": "article-figure"
-          },
-          {
-            "url": "https://mmbiz-qpic.wscn.net/mmbiz_jpg/A6fTew8FFGEBFQ80wdNPaRnjGPVicK5DlVCIAJamYfxrxZibSxAzXIUCXyMwSiaicpbDKic7FOkUEOCic3ic0eY7IWAiaE1Kv5DymbibjmytDdq8ZqtI/640?wx_fmt=jpeg&from=appmsg",
-            "alt": "原文数据图表",
-            "kind": "article-figure"
-          },
-          {
             "url": "https://mmbiz-qpic.wscn.net/mmbiz_png/A6fTew8FFGE0RpwgufmL7lJHngVR7lpAgh4DJmTruBiats4H1nwdPBosVeVQFRCfiaEgr8GpCicWmAAeT3kScicfOqiaFK1KIaWfhfWx5VDyV8A8/640?wx_fmt=png&from=appmsg",
-            "alt": "原文数据图表",
-            "kind": "article-figure"
+            "alt": "M6芯片架构与核心参数",
+            "kind": "article-figure",
+            "afterHeading": "2nm首秀，苹果先把M6狠狠干上了AI！"
           },
           {
             "url": "https://mmbiz-qpic.wscn.net/mmbiz_png/A6fTew8FFGHej4oTNKRCficxp8iavAEYIpDUp4a6jlDxq2UQhk7F3CVticicyO0ia4MH0J7hz4NNQYVIS00L6VajeoNsx7AaNPemfGZQUyFxd6SA/640?wx_fmt=png&from=appmsg",
-            "alt": "原文数据图表",
-            "kind": "article-figure"
+            "alt": "M6与前代Mac mini性能对比",
+            "kind": "article-figure",
+            "afterHeading": "2nm首秀，苹果先把M6狠狠干上了AI！"
           },
           {
-            "url": "https://mmbiz-qpic.wscn.net/sz_mmbiz_png/A6fTew8FFGHy3LRtvzJDasUticm5LVgIWo2u7ib2LrFMMIndBwwRaTiakRa6t6eJFQNFYJKnEMPtnjvlg8grtBs7icDa5XyHoU7ncaKnOBfaDb4/640?wx_fmt=png&from=appmsg",
-            "alt": "原文数据图表",
-            "kind": "article-figure"
+            "url": "https://mmbiz-qpic.wscn.net/mmbiz_png/A6fTew8FFGE10R5lujP8nn0PQ8mBY6zWcwsDJqoibMvyqvxjXKS5t3ervuhgiaiamQSXatWHcJsmjcO60mbbicqiaNfltllQreaRVpn3MZL0MsmE/640?wx_fmt=png&from=appmsg",
+            "alt": "M5 Ultra四Die架构示意",
+            "kind": "article-figure",
+            "afterHeading": "苹果首次四Die：M5 Ultra直接用桌面机猛堆AI算力"
+          },
+          {
+            "url": "https://mmbiz-qpic.wscn.net/mmbiz_jpg/A6fTew8FFGEAkO7cr873pYZ6Tiaom6ibyTiaSWowyoR77kekDvBoc7UStnUNziaaEErakZfBkbWnoENnLRhZPXicBNnUfIyrcJHvaRod20g3PQP0/640?wx_fmt=jpeg&from=appmsg",
+            "alt": "高内存Mac供货与需求升温",
+            "kind": "article-figure",
+            "afterHeading": "AI把Mac买涨价了，也快把高内存Mac买断货了"
           }
         ],
-        "videos": []
+        "videos": [],
+        "cover": "https://wpimg-wscn.awtmt.com/5055c9a0-ef97-4453-975e-d1adcedd71c8.png",
+        "curatedBy": "llm"
       },
       "editorialStructure": "source",
       "eventAggregation": {
@@ -946,7 +941,7 @@
       "titleCn": "北京为何成为科学智能的“中国主场”？——2026科学智能大会观察",
       "source": "智东西",
       "url": "https://zhidx.com/p/587981.html",
-      "category": "中文科技媒体",
+      "category": "中文媒体",
       "contentType": "公众号",
       "publishedDate": "2026-08-25",
       "publishedAtMs": 1787663666000,
@@ -963,17 +958,32 @@
         "产品",
         "其他"
       ],
-      "imageUrl": "https://oss.zhidx.com/uploads/2026/08/6a8d757f03d9a_6a8d757f00455_6a8d757f00429_头图.jpg/_zdx",
+      "imageUrl": "https://oss.zhidx.com/uploads/2026/08/6a8d757f03d9a_6a8d757f00455_6a8d757f00429_头图.jpg",
       "mediaAssets": {
         "images": [
           {
-            "url": "https://oss.zhidx.com/uploads/2026/08/6a8d757f03d9a_6a8d757f00455_6a8d757f00429_头图.jpg/_zdx",
-            "alt": "北京为何成为科学智能的“中国主场”？——2026科学智能大会观察",
-            "kind": "article-cover"
+            "url": "https://oss.zhidx.com/uploads/2026/08/6a8d757fabbe4_6a8d757fa82e6_6a8d757fa8280_座无虚席.jpg",
+            "alt": "科学智能大会会场座无虚席",
+            "kind": "article-figure",
+            "afterHeading": "基础：北京AI4S的“学术厚度”从何而来？ || 一、基础：北京AI4S的“学术厚度”从何而来？"
+          },
+          {
+            "url": "https://oss.zhidx.com/uploads/2026/08/6a8d75e20dc2a_6a8d75e20a8f2_6a8d75e20a8ba_图片-2.png",
+            "alt": "青年学者交流现场",
+            "kind": "article-figure",
+            "afterHeading": "基础：北京AI4S的“学术厚度”从何而来？ || 一、基础：北京AI4S的“学术厚度”从何而来？"
+          },
+          {
+            "url": "https://oss.zhidx.com/uploads/2026/08/6a8d95ce40038_6a8d95ce3cbea_6a8d95ce3cbb3_政策.jpg",
+            "alt": "北京科学智能政策发布",
+            "kind": "article-figure",
+            "afterHeading": "政策：北京如何为AI4S构建制度“护航体系”？ || 三、政策：北京如何为AI4S构建制度“护航体系”？"
           }
         ],
         "videos": [],
-        "documents": []
+        "documents": [],
+        "cover": "https://oss.zhidx.com/uploads/2026/08/6a8d757f03d9a_6a8d757f00455_6a8d757f00429_头图.jpg",
+        "curatedBy": "llm"
       },
       "editorialStructure": "source",
       "eventAggregation": {
@@ -1087,15 +1097,11 @@
       ],
       "imageUrl": "https://techcrunch.com/wp-content/uploads/2025/09/GettyImages-640351099.jpg?resize=1200,849",
       "mediaAssets": {
-        "images": [
-          {
-            "url": "https://techcrunch.com/wp-content/uploads/2025/09/GettyImages-640351099.jpg?resize=1200,849",
-            "alt": "机器人初创公司 Generalist 据称获 30 亿美元估值",
-            "kind": "article-cover"
-          }
-        ],
+        "images": [],
         "videos": [],
-        "documents": []
+        "documents": [],
+        "cover": "https://techcrunch.com/wp-content/uploads/2025/09/GettyImages-640351099.jpg?resize=1200,849",
+        "curatedBy": "llm"
       },
       "editorialStructure": "",
       "eventAggregation": {
@@ -1245,7 +1251,7 @@
       "titleCn": "天工Omni以“捂脸跑”夺得人形机器人400米冠军",
       "source": "果壳",
       "url": "https://www.guokr.com/article/470026",
-      "category": "中文综合媒体",
+      "category": "中文媒体",
       "contentType": "公众号",
       "publishedDate": "2026-08-25",
       "publishedAtMs": 1787660105860,
@@ -1260,16 +1266,37 @@
         "硬件",
         "其他"
       ],
-      "imageUrl": "https://1-im.guokr.com/AmRDJDzcF6DRheBSdzQOVIJiZ2NnSlU9VcSZyjORYDHkAAAAbAAAAFBO.png",
+      "imageUrl": "https://3-im.guokr.com/RmlPTVlFcWxSZlRDclVqUzV4QUNfNjZiV1o4bGRvY3iuAwAA6AAAAEpQ.jpg?imageView2/1/w/555/h/136",
       "mediaAssets": {
         "images": [
           {
-            "url": "https://1-im.guokr.com/AmRDJDzcF6DRheBSdzQOVIJiZ2NnSlU9VcSZyjORYDHkAAAAbAAAAFBO.png",
-            "alt": "天工Omni以“捂脸跑”夺得人形机器人400米冠军",
-            "kind": "article-cover"
+            "url": "https://1-im.guokr.com/RnFGbHg1TGJCSVl5TmVVc3hRSV9kRkNDZWcyNGRvY3g4BAAA9QIAAEpQ.jpg?imageView2/1/w/555/h/389",
+            "alt": "天工Omni捂脸跑夺冠",
+            "kind": "article-figure",
+            "afterHeading": "核心内容"
+          },
+          {
+            "url": "https://1-im.guokr.com/RnI4WTQxR0Q3NVBjU0c2SlJ5M0tTVHpvSjlwQmRvY3iMAwAAbgEAAEpQ.jpg?imageView2/1/w/555/h/223",
+            "alt": "人类跑步的四种手臂姿势",
+            "kind": "article-figure",
+            "afterHeading": "关键细节"
+          },
+          {
+            "url": "https://3-im.guokr.com/RmtjSy1SaWI5WlZ2UlBNdnRtcy1wUkRVZUpOUmRvY3iEAwAA_AIAAEpQ.jpg?imageView2/1/w/555/h/471",
+            "alt": "摆臂抵消身体旋转示意",
+            "kind": "article-figure",
+            "afterHeading": "价值与影响"
+          },
+          {
+            "url": "https://3-im.guokr.com/RmdEQXFaVU1WRE5KVlRyclQ5RGM1cFYxd0FNSGRvY3iAAgAAaAEAAEdJ.gif?imageView2/1/w/555/h/312",
+            "alt": "机器人通过仿真迭代跑姿",
+            "kind": "article-figure",
+            "afterHeading": "局限与风险"
           }
         ],
-        "videos": []
+        "videos": [],
+        "cover": "https://3-im.guokr.com/RmlPTVlFcWxSZlRDclVqUzV4QUNfNjZiV1o4bGRvY3iuAwAA6AAAAEpQ.jpg?imageView2/1/w/555/h/136",
+        "curatedBy": "llm"
       },
       "editorialStructure": "",
       "eventAggregation": {
@@ -1317,15 +1344,11 @@
       ],
       "imageUrl": "https://techcrunch.com/wp-content/uploads/2026/08/Ringg-Founder-Kali-CV-Siddharth-Tripathi-Utkarsh-Shukla.jpg?resize=1200,675",
       "mediaAssets": {
-        "images": [
-          {
-            "url": "https://techcrunch.com/wp-content/uploads/2026/08/Ringg-Founder-Kali-CV-Siddharth-Tripathi-Utkarsh-Shukla.jpg?resize=1200,675",
-            "alt": "印度语音 AI 初创公司 Ringg 获 Peak XV 追加 1000 万美元融资",
-            "kind": "article-cover"
-          }
-        ],
+        "images": [],
         "videos": [],
-        "documents": []
+        "documents": [],
+        "cover": "https://techcrunch.com/wp-content/uploads/2026/08/Ringg-Founder-Kali-CV-Siddharth-Tripathi-Utkarsh-Shukla.jpg?resize=1200,675",
+        "curatedBy": "llm"
       },
       "editorialStructure": "",
       "eventAggregation": {
@@ -1427,15 +1450,11 @@
       ],
       "imageUrl": "https://techcrunch.com/wp-content/uploads/2024/10/unnamed-2.png?w=1152",
       "mediaAssets": {
-        "images": [
-          {
-            "url": "https://techcrunch.com/wp-content/uploads/2024/10/unnamed-2.png?w=1152",
-            "alt": "Stability AI获7600万美元B轮融资，累计融资达2.32亿美元",
-            "kind": "article-cover"
-          }
-        ],
+        "images": [],
         "videos": [],
-        "documents": []
+        "documents": [],
+        "cover": "https://techcrunch.com/wp-content/uploads/2024/10/unnamed-2.png?w=1152",
+        "curatedBy": "llm"
       },
       "editorialStructure": "",
       "eventAggregation": {
@@ -1464,7 +1483,7 @@
       "titleCn": "Oura拟IPO募资30亿美元，估值或超160亿美元",
       "source": "智东西",
       "url": "https://zhidx.com/p/587822.html",
-      "category": "中文科技媒体",
+      "category": "中文媒体",
       "contentType": "公众号",
       "publishedDate": "2026-08-25",
       "publishedAtMs": 1787662993000,
@@ -1485,13 +1504,22 @@
       "mediaAssets": {
         "images": [
           {
-            "url": "https://oss.zhidx.com/uploads/2026/08/6a8d1d002edab_6a8d1d0025f6c_6a8d1d0025f41_头图.png/_zdx",
-            "alt": "Oura拟IPO募资30亿美元，估值或超160亿美元",
-            "kind": "article-cover"
+            "url": "https://oss.zhidx.com/uploads/2026/08/6a8d1b1b18d8b_6a8d1b1b15b97_6a8d1b1b15b5d_屏幕截图-2026-08-25-123222.png",
+            "alt": "Oura Ring 4智能戒指",
+            "kind": "article-figure",
+            "afterHeading": "关键细节"
+          },
+          {
+            "url": "https://oss.zhidx.com/uploads/2026/05/6a0fa61aaa2c2_6a0fa61aa6ff2_6a0fa61aa6fb0_屏幕截图-2026-05-22-084039.png",
+            "alt": "Oura Ring 5产品展示",
+            "kind": "article-figure",
+            "afterHeading": "关键细节"
           }
         ],
         "videos": [],
-        "documents": []
+        "documents": [],
+        "cover": "https://oss.zhidx.com/uploads/2026/08/6a8d1d002edab_6a8d1d0025f6c_6a8d1d0025f41_头图.png/_zdx",
+        "curatedBy": "llm"
       },
       "editorialStructure": "",
       "eventAggregation": {

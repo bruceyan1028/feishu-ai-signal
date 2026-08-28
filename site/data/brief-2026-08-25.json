@@ -814,7 +814,7 @@
       "titleCn": "三星发布三阶段HBM路线图，终点是DRAM与计算芯片垂直集成的zHBM",
       "source": "华尔街见闻",
       "url": "https://wallstreetcn.com/articles/3780121",
-      "category": "中文综合媒体",
+      "category": "中文媒体",
       "contentType": "公众号",
       "publishedDate": "2026-08-24",
       "publishedAtMs": 1787539771000,
@@ -831,31 +831,37 @@
         "推理",
         "产品"
       ],
-      "imageUrl": "https://wpimg-wscn.awtmt.com/f3c234ea-d848-4630-9277-4cb22cec7470.png",
+      "imageUrl": "https://wpimg-wscn.awtmt.com/316466d4-9d7d-41e1-80d5-1a5e71ac6f4b.png",
       "mediaAssets": {
         "images": [
           {
             "url": "https://wpimg-wscn.awtmt.com/f3c234ea-d848-4630-9277-4cb22cec7470.png",
-            "alt": "原文数据图表",
-            "kind": "article-figure"
+            "alt": "HBM堆叠结构与芯片分工",
+            "kind": "article-figure",
+            "afterHeading": "HBM是什么，瓶颈在哪里"
           },
           {
             "url": "https://wpimg-wscn.awtmt.com/10ba8e7e-f401-42d4-9d67-64b33c0d28fe.png",
-            "alt": "原文数据图表",
-            "kind": "article-figure"
+            "alt": "第一阶段优化Base Die",
+            "kind": "article-figure",
+            "afterHeading": "第一阶段：为计算芯片“腾地方”"
           },
           {
             "url": "https://wpimg-wscn.awtmt.com/15f99383-7c31-4bf0-9284-42eb23d98c79.png",
-            "alt": "原文数据图表",
-            "kind": "article-figure"
+            "alt": "第二阶段扩展内存与计算功能",
+            "kind": "article-figure",
+            "afterHeading": "第二阶段：B-die开始“长出”计算能力"
           },
           {
             "url": "https://wpimg-wscn.awtmt.com/f648af79-b4dc-4bfe-891d-da9f79a874af.png",
-            "alt": "原文数据图表",
-            "kind": "article-figure"
+            "alt": "zHBM将DRAM垂直堆叠到XPU",
+            "kind": "article-figure",
+            "afterHeading": "第三阶段：zHBM——消灭中介层，DRAM直接压在计算芯片上"
           }
         ],
-        "videos": []
+        "videos": [],
+        "cover": "https://wpimg-wscn.awtmt.com/316466d4-9d7d-41e1-80d5-1a5e71ac6f4b.png",
+        "curatedBy": "llm"
       },
       "editorialStructure": "source",
       "eventAggregation": {
@@ -884,7 +890,7 @@
       "titleCn": "手机LPDDR5X进入英伟达机柜后为何比HBM更贵",
       "source": "AI科技评论 / 雷峰网",
       "url": "https://www.leiphone.com/category/chips/zqmxniybkgdphojl.html",
-      "category": "中文科技媒体",
+      "category": "中文媒体",
       "contentType": "公众号",
       "publishedDate": "2026-08-24",
       "publishedAtMs": 1787560860000,
@@ -901,17 +907,32 @@
         "推理",
         "产品"
       ],
-      "imageUrl": "https://static.leiphone.com/uploads/new/images/20260824/6a8c03590b4aa.png?imageMogr2/quality/90",
+      "imageUrl": "https://static.leiphone.com/uploads/new/images/20260824/6a8c03590b4aa.png",
       "mediaAssets": {
         "images": [
           {
-            "url": "https://static.leiphone.com/uploads/new/images/20260824/6a8c03590b4aa.png?imageMogr2/quality/90",
-            "alt": "手机LPDDR5X进入英伟达机柜后为何比HBM更贵",
-            "kind": "article-cover"
+            "url": "https://static.leiphone.com/uploads/new/images/20260824/6a8c03593d6ce.jpg",
+            "alt": "LPDDR5X服务器应用示意",
+            "kind": "article-figure",
+            "afterHeading": "核心内容"
+          },
+          {
+            "url": "https://static.leiphone.com/uploads/new/images/20260824/6a8c03596effa.jpg",
+            "alt": "SOCAMM模块结构示意",
+            "kind": "article-figure",
+            "afterHeading": "关键细节"
+          },
+          {
+            "url": "https://static.leiphone.com/uploads/new/images/20260824/6a8c0359d14e1.png",
+            "alt": "AI服务器内存扩张示意",
+            "kind": "article-figure",
+            "afterHeading": "价值与影响"
           }
         ],
         "videos": [],
-        "documents": []
+        "documents": [],
+        "cover": "https://static.leiphone.com/uploads/new/images/20260824/6a8c03590b4aa.png",
+        "curatedBy": "llm"
       },
       "editorialStructure": "",
       "eventAggregation": {
@@ -940,7 +961,7 @@
       "titleCn": "生数科技提出通用世界模型五级发展路线",
       "source": "AI科技评论 / 雷峰网",
       "url": "https://www.leiphone.com/category/industrynews/lzwcqyvi2s6jsir3.html",
-      "category": "中文科技媒体",
+      "category": "中文媒体",
       "contentType": "公众号",
       "publishedDate": "2026-08-24",
       "publishedAtMs": 1787566140000,
@@ -961,13 +982,28 @@
       "mediaAssets": {
         "images": [
           {
-            "url": "https://static.leiphone.com/uploads/new/images/20260824//6a8c17dc5c04e.jpg?imageMogr2/quality/90",
-            "alt": "生数科技提出通用世界模型五级发展路线",
-            "kind": "article-cover"
+            "url": "https://static.leiphone.com/uploads/new/images/20260824//6a8c17dc5d58b.jpg?imageMogr2/quality/90",
+            "alt": "通用世界模型闭环架构",
+            "kind": "article-figure",
+            "afterHeading": "核心内容"
+          },
+          {
+            "url": "https://static.leiphone.com/uploads/new/images/20260824//6a8c17dc5de36.jpg?imageMogr2/quality/90",
+            "alt": "世界模型数据金字塔",
+            "kind": "article-figure",
+            "afterHeading": "关键细节"
+          },
+          {
+            "url": "https://static.leiphone.com/uploads/new/images/20260824//6a8c17dc5ee00.jpg?imageMogr2/quality/90",
+            "alt": "通用世界模型五级路线",
+            "kind": "article-figure",
+            "afterHeading": "核心内容"
           }
         ],
         "videos": [],
-        "documents": []
+        "documents": [],
+        "cover": "https://static.leiphone.com/uploads/new/images/20260824//6a8c17dc5c04e.jpg?imageMogr2/quality/90",
+        "curatedBy": "llm"
       },
       "editorialStructure": "",
       "eventAggregation": {
@@ -1015,14 +1051,10 @@
       ],
       "imageUrl": "https://cdn.modelscope.cn/social-thumbnails/models/ornith-ai/ornith-1.5-35b-a3b-gguf.png",
       "mediaAssets": {
-        "images": [
-          {
-            "url": "https://cdn.modelscope.cn/social-thumbnails/models/ornith-ai/ornith-1.5-35b-a3b-gguf.png",
-            "alt": "Ornith-1.5-35B-A3B：面向自我改进的混合专家模型",
-            "kind": "article-cover"
-          }
-        ],
-        "videos": []
+        "images": [],
+        "videos": [],
+        "cover": "https://cdn.modelscope.cn/social-thumbnails/models/ornith-ai/ornith-1.5-35b-a3b-gguf.png",
+        "curatedBy": "llm"
       },
       "editorialStructure": "",
       "eventAggregation": {
@@ -1051,7 +1083,7 @@
       "titleCn": "企业AI落地最后一公里：FDE成为三方争夺的新岗位",
       "source": "华尔街见闻",
       "url": "https://wallstreetcn.com/articles/3780131",
-      "category": "中文综合媒体",
+      "category": "中文媒体",
       "contentType": "公众号",
       "publishedDate": "2026-08-24",
       "publishedAtMs": 1787540994000,
@@ -1067,10 +1099,12 @@
         "Agent",
         "产品"
       ],
-      "imageUrl": "",
+      "imageUrl": "https://wpimg-wscn.awtmt.com/content_default_14.jpg",
       "mediaAssets": {
         "images": [],
-        "videos": []
+        "videos": [],
+        "cover": "https://wpimg-wscn.awtmt.com/content_default_14.jpg",
+        "curatedBy": "llm"
       },
       "editorialStructure": "source",
       "eventAggregation": {
@@ -1099,7 +1133,7 @@
       "titleCn": "卫星移动数据业务全面上线；机器人打破人类跑步世界纪录；三台风同时活跃",
       "source": "果壳",
       "url": "https://www.guokr.com/article/470013",
-      "category": "中文综合媒体",
+      "category": "中文媒体",
       "contentType": "公众号",
       "publishedDate": "2026-08-24",
       "publishedAtMs": 1787570104606,
@@ -1116,16 +1150,25 @@
         "Agent",
         "产品"
       ],
-      "imageUrl": "https://1-im.guokr.com/AmRDJDzcF6DRheBSdzQOVIJiZ2NnSlU9VcSZyjORYDHkAAAAbAAAAFBO.png",
+      "imageUrl": "https://3-im.guokr.com/RnNKXy1hbjVZZUF5NGhTbGtIY3dYTVF5d2tlSmRvY3gwAgAA0gIAAEpQ.jpg?imageView2/1/w/555/h/715",
       "mediaAssets": {
         "images": [
           {
-            "url": "https://1-im.guokr.com/AmRDJDzcF6DRheBSdzQOVIJiZ2NnSlU9VcSZyjORYDHkAAAAbAAAAFBO.png",
-            "alt": "卫星移动数据业务全面上线；机器人打破人类跑步世界纪录；三台风同时活跃",
-            "kind": "article-cover"
+            "url": "https://2-im.guokr.com/Rmdtbk4wTll0ZEpUUlhIdW9JTUhXa3c0UXdmWGRvY3iUAgAAuAEAAEpQ.jpg?imageView2/1/w/555/h/370",
+            "alt": "12英寸晶圆量产产品",
+            "kind": "article-figure",
+            "afterHeading": "关键细节"
+          },
+          {
+            "url": "https://3-im.guokr.com/RnEzTDlyR21LdFNSRjdCOTRONUh6SE1NS1VZdmRvY3jdAgAALAEAAEpQ.jpg?imageView2/1/w/555/h/227",
+            "alt": "S301绕黑洞高速运行",
+            "kind": "article-figure",
+            "afterHeading": "核心内容"
           }
         ],
-        "videos": []
+        "videos": [],
+        "cover": "https://3-im.guokr.com/RnNKXy1hbjVZZUF5NGhTbGtIY3dYTVF5d2tlSmRvY3gwAgAA0gIAAEpQ.jpg?imageView2/1/w/555/h/715",
+        "curatedBy": "llm"
       },
       "editorialStructure": "",
       "eventAggregation": {
@@ -1154,7 +1197,7 @@
       "titleCn": "燧原科技启动科创板发行，拟募资60亿元推进AI芯片研发与商业化",
       "source": "AI科技评论 / 雷峰网",
       "url": "https://www.leiphone.com/category/chips/p9z2fexxmv41ngv9.html",
-      "category": "中文科技媒体",
+      "category": "中文媒体",
       "contentType": "公众号",
       "publishedDate": "2026-08-24",
       "publishedAtMs": 1787574420000,
@@ -1203,7 +1246,7 @@
       "titleCn": "京东以“机器人之家”保障第二届世界人形机器人运动会",
       "source": "AI科技评论 / 雷峰网",
       "url": "https://www.leiphone.com/category/industrynews/cxggoqq1ysj7mcfe.html",
-      "category": "中文科技媒体",
+      "category": "中文媒体",
       "contentType": "公众号",
       "publishedDate": "2026-08-24",
       "publishedAtMs": 1787567460000,
@@ -1224,13 +1267,28 @@
       "mediaAssets": {
         "images": [
           {
-            "url": "https://static.leiphone.com/uploads/new/images/20260824/6a8c1d3a2ad2f.png?imageView2/2/w/740",
-            "alt": "京东以“机器人之家”保障第二届世界人形机器人运动会",
-            "kind": "article-cover"
+            "url": "https://static.leiphone.com/uploads/new/images/20260824/6a8c1d3d2e654.png?imageView2/2/w/740",
+            "alt": "机器人之家存储与充电区域",
+            "kind": "article-figure",
+            "afterHeading": "关键细节"
+          },
+          {
+            "url": "https://static.leiphone.com/uploads/new/images/20260824/6a8c1d3fa8de3.png?imageView2/2/w/740",
+            "alt": "机器人和电池扫码管理",
+            "kind": "article-figure",
+            "afterHeading": "关键细节"
+          },
+          {
+            "url": "https://static.leiphone.com/uploads/new/images/20260824/6a8c1d424a58e.png?imageView2/2/w/740",
+            "alt": "京东机器人产业战略布局",
+            "kind": "article-figure",
+            "afterHeading": "价值与影响"
           }
         ],
         "videos": [],
-        "documents": []
+        "documents": [],
+        "cover": "https://static.leiphone.com/uploads/new/images/20260824/6a8c1d3a2ad2f.png?imageView2/2/w/740",
+        "curatedBy": "llm"
       },
       "editorialStructure": "",
       "eventAggregation": {
@@ -1259,7 +1317,7 @@
       "titleCn": "Arm：机器人规模化落地的关键在系统级泛化与自适应",
       "source": "智东西",
       "url": "https://zhidx.com/p/587731.html",
-      "category": "中文科技媒体",
+      "category": "中文媒体",
       "contentType": "公众号",
       "publishedDate": "2026-08-24",
       "publishedAtMs": 1787583631000,
@@ -1276,17 +1334,32 @@
         "端侧",
         "产品"
       ],
-      "imageUrl": "https://oss.zhidx.com/uploads/2026/08/6a8c68da18672_6a8c68da156da_6a8c68da156ae_4557c3c07ceabc1f29274472a68152.jpg/_zdx",
+      "imageUrl": "https://oss.zhidx.com/uploads/2026/08/6a8c690402d13_6a8c6903f392d_6a8c6903f38fa_Arm-Pecora.jpg",
       "mediaAssets": {
         "images": [
           {
-            "url": "https://oss.zhidx.com/uploads/2026/08/6a8c68da18672_6a8c68da156da_6a8c68da156ae_4557c3c07ceabc1f29274472a68152.jpg/_zdx",
-            "alt": "Arm：机器人规模化落地的关键在系统级泛化与自适应",
-            "kind": "article-cover"
+            "url": "https://oss.zhidx.com/uploads/2026/08/6a8c66f08b5c0_6a8c66f087e68_6a8c66f087e02_截屏2026-08-24-23.42.45.png",
+            "alt": "机器人泛化能力演进阶段",
+            "kind": "article-figure",
+            "afterHeading": "一、泛化能力是行业核心突破口"
+          },
+          {
+            "url": "https://oss.zhidx.com/uploads/2026/08/6a8c66c6d87cd_6a8c66c6bf270_6a8c66c6bf20e_截屏2026-08-24-23.42.52.png",
+            "alt": "人形机器人适应多样任务",
+            "kind": "article-figure",
+            "afterHeading": "一、泛化能力是行业核心突破口"
+          },
+          {
+            "url": "https://oss.zhidx.com/uploads/2026/08/6a8c6728b3032_6a8c6728a272c_6a8c6728a26e7_截屏2026-08-24-23.43.11.png",
+            "alt": "泛化能力分层释放商业价值",
+            "kind": "article-figure",
+            "afterHeading": "三、泛化能力将分层实现商业价值，扩大可覆盖用例范围"
           }
         ],
         "videos": [],
-        "documents": []
+        "documents": [],
+        "cover": "https://oss.zhidx.com/uploads/2026/08/6a8c690402d13_6a8c6903f392d_6a8c6903f38fa_Arm-Pecora.jpg",
+        "curatedBy": "llm"
       },
       "editorialStructure": "source",
       "eventAggregation": {
@@ -1369,7 +1442,7 @@
       "titleCn": "韶音发布OpenFit 2 AI开放式耳机，聚焦专业沟通转录总结",
       "source": "智东西",
       "url": "https://zhidx.com/p/586468.html",
-      "category": "中文科技媒体",
+      "category": "中文媒体",
       "contentType": "公众号",
       "publishedDate": "2026-08-24",
       "publishedAtMs": 1787571214000,
@@ -1386,17 +1459,38 @@
         "硬件",
         "产品"
       ],
-      "imageUrl": "https://oss.zhidx.com/uploads/2026/08/6a85a5cbbd501_6a85a5cbb9d39_6a85a5cbb9cfa_未标题-12.png/_zdx",
+      "imageUrl": "https://oss.zhidx.com/uploads/2026/08/6a85a30e8baa7_6a85a30e88815_6a85a30e887d0_图片2.png",
       "mediaAssets": {
         "images": [
           {
-            "url": "https://oss.zhidx.com/uploads/2026/08/6a85a5cbbd501_6a85a5cbb9d39_6a85a5cbb9cfa_未标题-12.png/_zdx",
-            "alt": "韶音发布OpenFit 2 AI开放式耳机，聚焦专业沟通转录总结",
-            "kind": "article-cover"
+            "url": "https://oss.zhidx.com/uploads/2026/08/6a85a3a535538_6a85a3a5325cc_6a85a3a5325a0_图片4.png",
+            "alt": "OpenFit 2 AI翻译功能展示",
+            "kind": "article-figure",
+            "afterHeading": "二、拒绝“追风式”套用，联合行业巨头深度调优，海量技术创新支撑"
+          },
+          {
+            "url": "https://oss.zhidx.com/uploads/2026/08/6a85a45b933d8_6a85a45b8b7aa_6a85a45b8b777_图片6.png",
+            "alt": "多人对话转录场景示意",
+            "kind": "article-figure",
+            "afterHeading": "二、拒绝“追风式”套用，联合行业巨头深度调优，海量技术创新支撑"
+          },
+          {
+            "url": "https://oss.zhidx.com/uploads/2026/08/6a85a4ab91009_6a85a4ab8e01c_6a85a4ab8dfd7_图片7.png",
+            "alt": "专业场景语音调优体系",
+            "kind": "article-figure",
+            "afterHeading": "二、拒绝“追风式”套用，联合行业巨头深度调优，海量技术创新支撑"
+          },
+          {
+            "url": "https://oss.zhidx.com/uploads/2026/08/6a85a504293db_6a85a50412f20_6a85a50412ef3_ScreenShot_2026-08-19_204338_552.png",
+            "alt": "用户对开放式耳机的需求",
+            "kind": "article-figure",
+            "afterHeading": "三、做AI耳机并不是因为AI火，而是因为用户真的需要"
           }
         ],
         "videos": [],
-        "documents": []
+        "documents": [],
+        "cover": "https://oss.zhidx.com/uploads/2026/08/6a85a30e8baa7_6a85a30e88815_6a85a30e887d0_图片2.png",
+        "curatedBy": "llm"
       },
       "editorialStructure": "source",
       "eventAggregation": {
@@ -1438,7 +1532,7 @@
       "titleCn": "2026年科学探索奖揭晓：50位青年科学家获奖，AI科研原创性与评审规范受关注",
       "source": "智东西",
       "url": "https://zhidx.com/p/587498.html",
-      "category": "中文科技媒体",
+      "category": "中文媒体",
       "contentType": "公众号",
       "publishedDate": "2026-08-24",
       "publishedAtMs": 1787563041000,
@@ -1454,17 +1548,32 @@
         "监管",
         "其他"
       ],
-      "imageUrl": "https://oss.zhidx.com/uploads/2026/08/6a8c0c0520d5c_6a8c0c051dd30_6a8c0c051dcfc_屏幕截图-2026-08-24-1715531.png/_zdx",
+      "imageUrl": "https://oss.zhidx.com/uploads/2026/08/6a8c058b7cb9b_6a8c058b79d2b_6a8c058b79ceb_屏幕截图-2026-08-24-164812.png",
       "mediaAssets": {
         "images": [
           {
-            "url": "https://oss.zhidx.com/uploads/2026/08/6a8c0c0520d5c_6a8c0c051dd30_6a8c0c051dcfc_屏幕截图-2026-08-24-1715531.png/_zdx",
-            "alt": "2026年科学探索奖揭晓：50位青年科学家获奖，AI科研原创性与评审规范受关注",
-            "kind": "article-cover"
+            "url": "https://oss.zhidx.com/uploads/2026/08/6a8c0607dd15c_6a8c0607d9f5d_6a8c0607d9f2c_屏幕截图-2026-08-24-165101.png",
+            "alt": "获奖人年龄与性别概况",
+            "kind": "article-figure",
+            "afterHeading": "关键细节"
+          },
+          {
+            "url": "https://oss.zhidx.com/uploads/2026/08/6a8c05b607746_6a8c05b6045d2_6a8c05b6045a0_屏幕截图-2026-08-24-164934.png",
+            "alt": "科学探索奖评审交流现场",
+            "kind": "article-figure",
+            "afterHeading": "核心内容"
+          },
+          {
+            "url": "https://oss.zhidx.com/uploads/2026/08/6a8c057dbcaf7_6a8c057db9152_6a8c057db9117_屏幕截图-2026-08-24-164727.png",
+            "alt": "原创性评审与监督机制",
+            "kind": "article-figure",
+            "afterHeading": "局限与风险"
           }
         ],
         "videos": [],
-        "documents": []
+        "documents": [],
+        "cover": "https://oss.zhidx.com/uploads/2026/08/6a8c058b7cb9b_6a8c058b79d2b_6a8c058b79ceb_屏幕截图-2026-08-24-164812.png",
+        "curatedBy": "llm"
       },
       "editorialStructure": "",
       "eventAggregation": {
@@ -1560,15 +1669,11 @@
       ],
       "imageUrl": "https://techcrunch.com/wp-content/uploads/2025/06/GettyImages-2217852528.jpg?resize=1200,800",
       "mediaAssets": {
-        "images": [
-          {
-            "url": "https://techcrunch.com/wp-content/uploads/2025/06/GettyImages-2217852528.jpg?resize=1200,800",
-            "alt": "特朗普在SpaceX创纪录IPO两周后买入至多5万美元股票",
-            "kind": "article-cover"
-          }
-        ],
+        "images": [],
         "videos": [],
-        "documents": []
+        "documents": [],
+        "cover": "https://techcrunch.com/wp-content/uploads/2025/06/GettyImages-2217852528.jpg?resize=1200,800",
+        "curatedBy": "llm"
       },
       "editorialStructure": "",
       "eventAggregation": {
@@ -1941,20 +2046,16 @@
       ],
       "imageUrl": "https://www.whitehouse.gov/wp-content/uploads/2025/03/WH47-Social-Share-Card.jpg",
       "mediaAssets": {
-        "images": [
-          {
-            "url": "https://www.whitehouse.gov/wp-content/uploads/2025/03/WH47-Social-Share-Card.jpg",
-            "alt": "特朗普内阁在全美宣传“美国优先”政绩",
-            "kind": "article-cover"
-          }
-        ],
+        "images": [],
         "videos": [],
         "documents": [],
         "policy": {
           "agency": "White House",
           "stage": "官方发布",
           "authority": "whitehouse.gov"
-        }
+        },
+        "cover": "https://www.whitehouse.gov/wp-content/uploads/2025/03/WH47-Social-Share-Card.jpg",
+        "curatedBy": "llm"
       },
       "editorialStructure": "",
       "eventAggregation": {
