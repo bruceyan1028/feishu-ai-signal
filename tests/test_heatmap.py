@@ -105,6 +105,7 @@ class AggregateTest(unittest.TestCase):
 class PublishIntegrationTest(unittest.TestCase):
     def test_heatmap_survives_site_rebuild(self):
         self.assertIn("heatmap.json", publish._PERSISTENT_DATA_GLOBS)
+        self.assertIn("heatmap-trends.json", publish._PERSISTENT_DATA_GLOBS)
 
 
 class FrontendContractTest(unittest.TestCase):
@@ -114,6 +115,8 @@ class FrontendContractTest(unittest.TestCase):
         self.assertIn("function feedNavHtml", template)
         self.assertIn("setHeatmapSource", template)
         self.assertIn("pickHeatmapCell", template)
+        self.assertIn("data/heatmap-trends.json", template)
+        self.assertIn("function applyHeatPayload", template)
         self.assertIn("Google Trends", template)
         self.assertIn("🔥", template)
         self.assertIn("❄️", template)

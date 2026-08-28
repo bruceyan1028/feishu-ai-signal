@@ -69,11 +69,13 @@ TICKERS: tuple[tuple[str, str, str], ...] = (
     ("usAAPL", "美股", "apple.com"),
     ("usORCL", "美股", "oracle.com"),
     ("usTSLA", "美股", "tesla.com"),
+    ("usSPCX", "美股", "spacex.com"),
     ("usPLTR", "美股", "palantir.com"),
     ("usCRWV", "美股", "coreweave.com"),
     ("usSMCI", "美股", "supermicro.com"),
     ("usSNOW", "美股", "snowflake.com"),
     ("sh688256", "A股", "cambricon.com"),
+    ("sh688836", "A股", "unitree.com"),
     ("sh688041", "A股", ""),
     ("sh688795", "A股", ""),
     ("sh688802", "A股", ""),
@@ -113,7 +115,7 @@ def display_quote_name(raw: str) -> str:
         return "Snowflake"
     if re.match(r"(?i)^minimax", name):
         return "MiniMax"
-    name = re.sub(r"-U$", "", name)
+    name = re.sub(r"-[UW]$", "", name)
     name = re.sub(r"\s+Inc\.?$", "", name, flags=re.I)
     return name
 

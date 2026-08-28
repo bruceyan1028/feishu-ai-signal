@@ -1,4 +1,5 @@
 import json
+import re
 import tempfile
 import unittest
 from pathlib import Path
@@ -48,6 +49,7 @@ class ParseQuotesTest(unittest.TestCase):
         self.assertEqual(dashboard.display_quote_name("摩尔线程-U"), "摩尔线程")
         self.assertEqual(dashboard.display_quote_name("沐曦股份-U"), "沐曦股份")
         self.assertEqual(dashboard.display_quote_name("MINIMAX-W"), "MiniMax")
+        self.assertEqual(dashboard.display_quote_name("宇树科技-W"), "宇树科技")
         self.assertEqual(
             dashboard.quote_url("usMETA", "meta.com"),
             "https://www.nasdaq.com/market-activity/stocks/meta",
@@ -128,7 +130,9 @@ class FetchMarketTest(unittest.TestCase):
         self.assertGreaterEqual(len(cn), 8)
         self.assertGreater(len(dashboard.TICKERS), 12)
         self.assertIn("usNVDA", codes)
+        self.assertIn("usSPCX", codes)
         self.assertIn("sh688256", codes)
+        self.assertIn("sh688836", codes)
         self.assertIn("hk02513", codes)
 
 
@@ -266,6 +270,16 @@ class FrontendContractTest(unittest.TestCase):
         # 条款要求署名；标题本身链回官网，不再单独做底栏
         self.assertIn("artificialanalysis.ai", template)
         self.assertNotIn("腾讯财经", template)
+        self.assertIn("qt.gtimg.cn/q=", template)
+        self.assertIn("function fetchLiveMarket", template)
+        self.assertIn("function refreshLiveMarket", template)
+        self.assertIn("const MARKET_TICKERS", template)
+
+    def test_live_quote_tickers_match_the_pipeline(self):
+        template = Path("index.html").read_text(encoding="utf-8")
+        block = template.split("const MARKET_TICKERS = [")[1].split("];")[0]
+        codes = re.findall(r"\['([^']+)'", block)
+        self.assertEqual(codes, [code for code, _, _ in dashboard.TICKERS])
 
     def test_model_board_logos_use_official_colors(self):
         logos = Path("site/data/logos")

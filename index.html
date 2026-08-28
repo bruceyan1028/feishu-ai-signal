@@ -8,7 +8,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&family=Noto+Serif+SC:wght@600;700&family=Source+Serif+4:opsz,wght@8..60,600;700&display=swap" rel="stylesheet">
 <style>
   /* ============================================================
-     浅色红黑主题 — 所有视觉色集中在此 :root。
+     浅色蓝黑主题 — 所有视觉色集中在此 :root。
      改配色 = 只改这里(刷新即看)。accent 换色由 --ds-accent 派生。
      ============================================================ */
   :root {
@@ -37,8 +37,8 @@
     --ds-text-3: #6f685e;
     --ds-on-dark: #faf7f0;         /* 深色块上的浅字 */
 
-    /* 强调:红 */
-    --ds-accent: #c22f2a;
+    /* 强调:蓝 */
+    --ds-accent: #2458b5;
     --ds-accent-soft: color-mix(in srgb, var(--ds-accent) 10%, transparent);
     --ds-accent-border: color-mix(in srgb, var(--ds-accent) 45%, transparent);
     --ds-accent-glow: transparent;                                   /* 浅色去辉光 */
@@ -69,7 +69,7 @@
   }
   body { margin: 0; background: var(--ds-canvas); color: var(--ds-text); font-family: "Geist", "PingFang SC", "Microsoft YaHei", sans-serif; }
   a { color: var(--ds-text); text-decoration: none; }
-  a:hover { color: var(--accent-bright, #c22f2a); }
+  a:hover { color: var(--accent-bright, #2458b5); }
   ::selection { background: color-mix(in srgb, var(--ds-accent) 22%, transparent); }
   ::-webkit-scrollbar { width: 11px; height: 11px; }
   ::-webkit-scrollbar-track { background: transparent; }
@@ -205,7 +205,7 @@
   /* --- 辩论气泡 --- */
   .debate-post { animation: slideRight .3s ease both; }
   .send-btn:hover { filter: brightness(1.12); }
-  .chip-btn:hover { border-color: var(--accent-border, rgba(194,47,42,.4)) !important; color: var(--ds-text) !important; }
+  .chip-btn:hover { border-color: var(--accent-border, rgba(36,88,181,.4)) !important; color: var(--ds-text) !important; }
   .cmt-row:hover { background: rgba(22,19,15,.03); }
   .like-btn:hover { border-color: var(--accent-border) !important; color: var(--accent-bright) !important; }
   .strategy-map { padding:22px 0 0; background:#fff; border:1.5px solid var(--ds-ink-line); overflow-x:auto; color: var(--ds-text); }
@@ -524,10 +524,11 @@ let briefMeta = {
 // 看板是当期快照,由 src/dashboard.py 落成静态 JSON;两块各自带 error,一块挂了另一块照常显示
 let dashboard = { generatedAt:'', leaderboard:null, market:null };
 let dashboardStatus = { loading:true, error:'' };
-let heatmap = { days:[], topics:[], labels:{}, matrix:{raw:[],normalized:[]}, items:{}, itemIndex:{}, trend:{}, source:'google-trends', sources:{} };
+let heatmap = { days:[], topics:[], labels:{}, matrix:{raw:[],normalized:[]}, items:{}, itemIndex:{}, trend:{}, source:'google-trends', sources:{}, error:'' };
 let heatmapStatus = { loading:false, error:'', demo:true };
+let heatmapPayload = null;
 
-// 前端演示：Google Trends 兴趣指数 + X 热搜讨论量。真实采集接上后同一份结构替换即可。
+// 前端演示：文件缺失时回退。真实采集由 src/trends.py 写成 data/heatmap-trends.json。
 const HEAT_TOPIC_LABELS = {
   agent:'智能体', reasoning:'推理', multimodal:'多模态', 'open-source-model':'开源模型',
   'rag-search':'RAG / 检索', infra:'算力基建', embodied:'具身智能',
@@ -603,12 +604,34 @@ function applyHeatDemo(source){
     itemIndex: packed.itemIndex,
     trend: packed.trend,
     source: src,
+    error: '',
     sources: {
       'google-trends': { name:'Google Trends', url:'https://trends.google.com' },
       x: { name:'X Trending', url:'https://x.com/explore' },
     },
   };
   heatmapStatus = { loading:false, error:'', demo:true };
+}
+
+function applyHeatPayload(payload, source){
+  const src = source === 'x' ? 'x' : 'google-trends';
+  const block = (payload && payload[src]) || {};
+  heatmap = {
+    days: payload.days || [],
+    topics: payload.topics || HEAT_TOPIC_KEYS.slice(),
+    labels: payload.labels || { ...HEAT_TOPIC_LABELS },
+    matrix: block.matrix || { raw:[], normalized:[] },
+    items: block.items || {},
+    itemIndex: block.itemIndex || {},
+    trend: block.trend || {},
+    source: src,
+    error: block.error || '',
+    sources: {
+      'google-trends': { name:'Google Trends', url:'https://trends.google.com' },
+      x: { name:'X Trending', url:'https://x.com/explore' },
+    },
+  };
+  heatmapStatus = { loading:false, error:'', demo:false };
 }
 
 applyHeatDemo('google-trends');
@@ -1043,6 +1066,96 @@ async function loadTimeline(){
   }
   render();
 }
+// 标的名单与 src/dashboard.py TICKERS 对齐。行情走腾讯 qt.gtimg.cn（CORS *），
+// 打开页面现拉；日报 JSON 只当接口挂了时的后备。
+const MARKET_TICKERS = [
+  ['usNVDA','美股','nvidia.com'],['usAMD','美股','amd.com'],['usAVGO','美股','broadcom.com'],
+  ['usTSM','美股','tsmc.com'],['usMU','美股','micron.com'],['usARM','美股','arm.com'],
+  ['usMRVL','美股','marvell.com'],['usMSFT','美股','microsoft.com'],['usGOOGL','美股','google.com'],
+  ['usAMZN','美股','amazon.com'],['usMETA','美股','meta.com'],['usAAPL','美股','apple.com'],
+  ['usORCL','美股','oracle.com'],['usTSLA','美股','tesla.com'],['usSPCX','美股','spacex.com'],['usPLTR','美股','palantir.com'],
+  ['usCRWV','美股','coreweave.com'],['usSMCI','美股','supermicro.com'],['usSNOW','美股','snowflake.com'],
+  ['sh688256','A股','cambricon.com'],['sh688836','A股','unitree.com'],['sh688041','A股',''],['sh688795','A股',''],['sh688802','A股',''],
+  ['sh688981','A股',''],['sz300308','A股','innolight.com'],['sz300502','A股','eoptolink.com'],
+  ['sz000977','A股','inspur.com'],['sh601138','A股','fii-foxconn.com'],['sz002230','A股','iflytek.com'],
+  ['sh688111','A股',''],['sz300418','A股',''],['sh601360','A股','360.cn'],
+  ['hk02513','港股','z.ai'],['hk00100','港股','minimaxi.com'],['hk06082','港股',''],['hk09903','港股',''],
+];
+const QUOTE_Q = { NAME:1, SYMBOL:2, PRICE:3, PREV:4, OPEN:5, STAMP:30, PCT:32, HIGH:33, LOW:34, CAP:45 };
+
+function parseGtimgQuotes(text){
+  const markets = Object.fromEntries(MARKET_TICKERS.map(([code, market]) => [code, market]));
+  const logos = Object.fromEntries(MARKET_TICKERS.map(([code, , domain]) => [code, domain]));
+  const order = Object.fromEntries(MARKET_TICKERS.map(([code], i) => [code, i]));
+  const rows = [];
+  const re = /v_(\w+)="([^"]*)"/g;
+  let match;
+  while((match = re.exec(text))){
+    const code = match[1];
+    const parts = match[2].split('~');
+    if(parts.length <= QUOTE_Q.CAP) continue;
+    const price = Number(parts[QUOTE_Q.PRICE]);
+    const prev = Number(parts[QUOTE_Q.PREV]);
+    if(!price) continue;
+    let change = Number.isFinite(prev) ? price - prev : null;
+    let pct = Number(parts[QUOTE_Q.PCT]);
+    if(!Number.isFinite(pct) && change !== null && prev) pct = change / prev * 100;
+    const prefix = code.slice(0, 2);
+    rows.push({
+      code,
+      market: markets[code] || '',
+      name: parts[QUOTE_Q.NAME] || '',
+      symbol: String(parts[QUOTE_Q.SYMBOL] || '').split('.')[0],
+      logoDomain: logos[code] || '',
+      url: '',
+      currency: prefix === 'us' ? 'USD' : prefix === 'hk' ? 'HKD' : 'CNY',
+      price,
+      change,
+      changePct: Number.isFinite(pct) ? pct : null,
+      open: Number(parts[QUOTE_Q.OPEN]) || null,
+      high: Number(parts[QUOTE_Q.HIGH]) || null,
+      low: Number(parts[QUOTE_Q.LOW]) || null,
+      prevClose: Number.isFinite(prev) ? prev : null,
+      marketCap: Number(parts[QUOTE_Q.CAP]) || null,
+      quotedAt: parts[QUOTE_Q.STAMP] || '',
+    });
+  }
+  rows.sort((a, b) => (order[a.code] ?? 999) - (order[b.code] ?? 999));
+  return rows;
+}
+
+async function fetchLiveMarket(){
+  const url = 'https://qt.gtimg.cn/q=' + MARKET_TICKERS.map(item => item[0]).join(',');
+  const response = await fetch(url, { cache: 'no-store' });
+  if(!response.ok) throw new Error('HTTP ' + response.status);
+  const buffer = await response.arrayBuffer();
+  let text = '';
+  for(const enc of ['gbk', 'gb18030', 'utf-8']){
+    try {
+      text = new TextDecoder(enc).decode(buffer);
+      if(text.includes('v_')) break;
+    } catch(e) {}
+  }
+  const quotes = parseGtimgQuotes(text);
+  if(!quotes.length) throw new Error('empty quotes');
+  const stamp = new Intl.DateTimeFormat('sv-SE', {
+    timeZone: 'Asia/Shanghai', year:'numeric', month:'2-digit', day:'2-digit',
+    hour:'2-digit', minute:'2-digit', second:'2-digit',
+  }).format(new Date()).replace(' ', 'T') + '+08:00';
+  return { sourceUrl: 'https://stockapp.finance.qq.com/', updatedAt: stamp, error: '', live: true, quotes };
+}
+
+async function refreshLiveMarket(){
+  try {
+    const market = await fetchLiveMarket();
+    dashboard.market = market;
+    if(!dashboardStatus.error) dashboardStatus.loading = false;
+    render();
+  } catch(error) {
+    // 实时接口挂了就继续用日报快照，不要把已经画出来的行情抹掉
+  }
+}
+
 async function loadDashboard(){
   dashboardStatus={loading:true,error:''};
   try {
@@ -1060,9 +1173,24 @@ async function loadDashboard(){
     dashboardStatus={loading:false,error:String(error.message||error)};
   }
   render();
+  refreshLiveMarket();
+}
+if(!window._quoteTimer){
+  window._quoteTimer = setInterval(() => { if(!document.hidden) refreshLiveMarket(); }, 60000);
+  document.addEventListener('visibilitychange', () => { if(!document.hidden) refreshLiveMarket(); });
 }
 async function loadHeatmap(){
-  applyHeatDemo(state.heatmapSource);
+  heatmapStatus = { loading:true, error:'', demo:heatmapStatus.demo };
+  try {
+    const response = await fetch('data/heatmap-trends.json', { cache:'no-store' });
+    if(!response.ok) throw new Error(`HTTP ${response.status}`);
+    heatmapPayload = await response.json();
+    applyHeatPayload(heatmapPayload, state.heatmapSource);
+  } catch(error) {
+    heatmapPayload = null;
+    applyHeatDemo(state.heatmapSource);
+    heatmapStatus = { loading:false, error:String(error.message||error), demo:true };
+  }
   render();
 }
 const App = {
@@ -1241,7 +1369,8 @@ const App = {
   setHeatmapSource(source){
     state.heatmapSource = source === 'x' ? 'x' : 'google-trends';
     state.heatmapPick = null;
-    applyHeatDemo(state.heatmapSource);
+    if(heatmapPayload) applyHeatPayload(heatmapPayload, state.heatmapSource);
+    else applyHeatDemo(state.heatmapSource);
     render();
   },
   pickHeatmapCell(topic, day, evt){
@@ -1752,7 +1881,7 @@ function dataRailHtml(A){
     if(raw==='Meta Platforms' || /^Meta\s+Platform/i.test(raw)) return 'Meta';
     if(raw==='Snowflake Inc.' || /^Snowflake/i.test(raw)) return 'Snowflake';
     if(/^MINIMAX/i.test(raw)) return 'MiniMax';
-    return raw.replace(/-U$/, '').replace(/\s+Inc\.?$/i, '');
+    return raw.replace(/-[UW]$/, '').replace(/\s+Inc\.?$/i, '');
   };
   const quoteHref = q => {
     const code = String(q.code || '');
@@ -1788,7 +1917,12 @@ function dataRailHtml(A){
     return `<div style="display: grid; grid-template-columns: 1fr 1fr; min-width: 0;">${quoteGroup('美股', us)}${quoteGroup('中资', cn)}</div>`;
   });
 
-  const stamp = b => (b && b.updatedAt ? b.updatedAt.slice(5,16).replace('T',' ') : '');
+  const stamp = b => {
+    if(!b) return '—';
+    const clock = b.updatedAt ? b.updatedAt.slice(11,16) : '';
+    if(b.live) return clock ? `实时 ${clock}` : '实时';
+    return b.updatedAt ? b.updatedAt.slice(5,16).replace('T',' ') : '—';
+  };
 
   return `
   <aside class="feed-data">
@@ -1811,7 +1945,7 @@ function heatmapHtml(A){
   const topicIdx = {};
   (heatmap.topics || []).forEach((t,i)=>{ topicIdx[t]=i; });
 
-  const heatStops = [[255,255,255],[255,176,168],[194,47,42],[110,12,14]];
+  const heatStops = [[255,255,255],[176,204,242],[43,99,196],[14,36,96]];
   const heatMix = (v)=>{
     const t = Math.max(0, Math.min(1, Number(v)||0));
     const n = heatStops.length - 1;
@@ -1827,8 +1961,14 @@ function heatmapHtml(A){
   };
   const globalPeak = Math.max(1, ...rawM.flat().map(Number));
 
+  const todayIso = new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Shanghai' }).format(new Date());
   const dayHead = days.map(d=>{
-    const short = d === '今天' ? '今' : String(d).replace(/^0/,'').replace(/^.*-/, '');
+    const isToday = d === '今天' || d === todayIso;
+    let short = '今';
+    if(!isToday){
+      const m = String(d).match(/(?:^|-)(\d{1,2})$/);
+      short = m ? String(Number(m[1])) : String(d);
+    }
     return `<th scope="col" title="${esc(d)}">${esc(short)}</th>`;
   }).join('');
 
@@ -1874,12 +2014,17 @@ function heatmapHtml(A){
   }
 
   const legend = heatStops.map((_, i) => `<i style="background:${heatColor(i / (heatStops.length - 1))}"></i>`).join('');
-
-  const body = days.length ? `
+  const srcError = heatmap.error || '';
+  const hasValues = rawM.flat().some(v => Number(v));
+  const toggle = `
     <div class="heat-toggle" role="group" aria-label="热搜来源">
       <button type="button" class="${src==='google-trends'?'on':''}" onclick="App.setHeatmapSource('google-trends')">Google</button>
       <button type="button" class="${src==='x'?'on':''}" onclick="App.setHeatmapSource('x')">X</button>
-    </div>
+    </div>`;
+  const status = srcError
+    ? `<p class="heat-status">${hasValues ? esc(srcError) : `暂无数据：${esc(srcError)}`}</p>`
+    : '';
+  const grid = days.length && (hasValues || !srcError) ? `
     <div class="heat-legend"><span>低</span>${legend}<span>高</span><span style="margin-left:auto;">近 7 日</span></div>
     <div class="heat-scroll" onscroll="App.hideHeatTip()">
       <table class="heat-table">
@@ -1888,7 +2033,8 @@ function heatmapHtml(A){
       </table>
     </div>
     ${panel}
-    <div id="heatTip" class="heat-tip" hidden></div>` : `<p class="heat-status">暂无热度数据</p>`;
+    <div id="heatTip" class="heat-tip" hidden></div>` : '';
+  const body = `${toggle}${status}${grid || (!srcError ? `<p class="heat-status">暂无热度数据</p>` : '')}`;
 
   return `
     <section style="position: relative; background: #0a0a0a; border: 1.5px solid var(--ds-ink-line); box-shadow: 5px 5px 0 rgba(22,19,15,.10); overflow: hidden;">
@@ -1951,7 +2097,7 @@ function briefHtml(A){
     const firstRef = (b.refs && b.refs[0]) || 0;
     const s = firstRef ? signals.find(x => x.rank === firstRef) : null;
     const imgUrl = s ? topicImageUrl(s) : '';
-    const tp = s ? topicFor(s) : { t: 'AI', bg: '#111', color: '#c22f2a' };
+    const tp = s ? topicFor(s) : { t: 'AI', bg: '#111', color: '#2458b5' };
     const click = firstRef ? `onclick="App.openDetail(${firstRef})" style="cursor:pointer;"` : '';
     return `
     <article class="personal-card" ${click}>

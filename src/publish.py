@@ -37,7 +37,7 @@ _IMAGE_EXTENSIONS = {
     "image/gif": ".gif",
 }
 # 日报重建会清空 site/，周报、战略时间线和看板快照必须单独保留，直到下一期覆盖。
-_PERSISTENT_DATA_GLOBS = ("weekly-*.json", "timeline-latest.json", "dashboard-latest.json", "heatmap.json")
+_PERSISTENT_DATA_GLOBS = ("weekly-*.json", "timeline-latest.json", "dashboard-latest.json", "heatmap.json", "heatmap-trends.json")
 
 
 def stash_persistent_site_data(site: Path) -> dict[str, bytes]:
