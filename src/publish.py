@@ -36,8 +36,15 @@ _IMAGE_EXTENSIONS = {
     "image/webp": ".webp",
     "image/gif": ".gif",
 }
-# 日报重建会清空 site/，周报、战略时间线和看板快照必须单独保留，直到下一期覆盖。
-_PERSISTENT_DATA_GLOBS = ("weekly-*.json", "timeline-latest.json", "dashboard-latest.json", "heatmap.json", "heatmap-trends.json")
+# 日报重建会清空 site/，周报、战略时间线、看板快照和厂商 logo 必须单独保留。
+_PERSISTENT_DATA_GLOBS = (
+    "weekly-*.json",
+    "timeline-latest.json",
+    "dashboard-latest.json",
+    "heatmap.json",
+    "heatmap-trends.json",
+    "logos/*",
+)
 
 
 def stash_persistent_site_data(site: Path) -> dict[str, bytes]:
@@ -47,7 +54,8 @@ def stash_persistent_site_data(site: Path) -> dict[str, bytes]:
         return kept
     for pattern in _PERSISTENT_DATA_GLOBS:
         for path in data_dir.glob(pattern):
-            kept[path.name] = path.read_bytes()
+            if path.is_file():
+                kept[str(path.relative_to(data_dir))] = path.read_bytes()
     return kept
 
 
@@ -58,6 +66,7 @@ def restore_persistent_site_data(site: Path, kept: dict[str, bytes]) -> None:
     data_dir.mkdir(parents=True, exist_ok=True)
     for name, content in kept.items():
         dest = data_dir / name
+        dest.parent.mkdir(parents=True, exist_ok=True)
         if not dest.exists():
             dest.write_bytes(content)
 

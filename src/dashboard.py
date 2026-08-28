@@ -72,7 +72,6 @@ TICKERS: tuple[tuple[str, str, str], ...] = (
     ("usSPCX", "美股", "spacex.com"),
     ("usPLTR", "美股", "palantir.com"),
     ("usCRWV", "美股", "coreweave.com"),
-    ("usSMCI", "美股", "supermicro.com"),
     ("usSNOW", "美股", "snowflake.com"),
     ("sh688256", "A股", "cambricon.com"),
     ("sh688836", "A股", "unitree.com"),

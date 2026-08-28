@@ -613,6 +613,14 @@ function applyHeatDemo(source){
   heatmapStatus = { loading:false, error:'', demo:true };
 }
 
+function heatSourceUsable(payload, source){
+  const src = source === 'x' ? 'x' : 'google-trends';
+  const block = (payload && payload[src]) || {};
+  if(block.error) return false;
+  const raw = (block.matrix && block.matrix.raw) || [];
+  return raw.some(row => Array.isArray(row) && row.some(v => Number(v) > 0));
+}
+
 function applyHeatPayload(payload, source){
   const src = source === 'x' ? 'x' : 'google-trends';
   const block = (payload && payload[src]) || {};
@@ -1074,7 +1082,7 @@ const MARKET_TICKERS = [
   ['usMRVL','美股','marvell.com'],['usMSFT','美股','microsoft.com'],['usGOOGL','美股','google.com'],
   ['usAMZN','美股','amazon.com'],['usMETA','美股','meta.com'],['usAAPL','美股','apple.com'],
   ['usORCL','美股','oracle.com'],['usTSLA','美股','tesla.com'],['usSPCX','美股','spacex.com'],['usPLTR','美股','palantir.com'],
-  ['usCRWV','美股','coreweave.com'],['usSMCI','美股','supermicro.com'],['usSNOW','美股','snowflake.com'],
+  ['usCRWV','美股','coreweave.com'],['usSNOW','美股','snowflake.com'],
   ['sh688256','A股','cambricon.com'],['sh688836','A股','unitree.com'],['sh688041','A股',''],['sh688795','A股',''],['sh688802','A股',''],
   ['sh688981','A股',''],['sz300308','A股','innolight.com'],['sz300502','A股','eoptolink.com'],
   ['sz000977','A股','inspur.com'],['sh601138','A股','fii-foxconn.com'],['sz002230','A股','iflytek.com'],
@@ -1184,12 +1192,13 @@ async function loadHeatmap(){
   try {
     const response = await fetch('data/heatmap-trends.json', { cache:'no-store' });
     if(!response.ok) throw new Error(`HTTP ${response.status}`);
-    heatmapPayload = await response.json();
+    const payload = await response.json();
+    if(!heatSourceUsable(payload, state.heatmapSource)) throw new Error('empty heatmap');
+    heatmapPayload = payload;
     applyHeatPayload(heatmapPayload, state.heatmapSource);
   } catch(error) {
     heatmapPayload = null;
     applyHeatDemo(state.heatmapSource);
-    heatmapStatus = { loading:false, error:String(error.message||error), demo:true };
   }
   render();
 }
@@ -1369,7 +1378,7 @@ const App = {
   setHeatmapSource(source){
     state.heatmapSource = source === 'x' ? 'x' : 'google-trends';
     state.heatmapPick = null;
-    if(heatmapPayload) applyHeatPayload(heatmapPayload, state.heatmapSource);
+    if(heatSourceUsable(heatmapPayload, state.heatmapSource)) applyHeatPayload(heatmapPayload, state.heatmapSource);
     else applyHeatDemo(state.heatmapSource);
     render();
   },
@@ -1869,7 +1878,7 @@ function dataRailHtml(A){
         <span style="position: relative; display: flex; align-items: center; gap: 8px; min-width: 0; height: 26px; padding: 0 8px; overflow: hidden; background: rgba(255,255,255,.05);">
           <span style="position: absolute; left: 0; top: 0; bottom: 0; width: ${fillWidth(m.intelligence)}%; background: linear-gradient(90deg, color-mix(in srgb, ${A.accent} 78%, transparent), color-mix(in srgb, ${A.accent} 26%, transparent));"></span>
           <span style="position: relative; min-width: 0; font-size: 12.5px; font-weight: 650; color: ${TXT}; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${esc(m.name)}</span>
-          <span style="position: relative; margin-left: auto; font-family: ${mono}; font-size: 11.5px; font-weight: 700; color: ${TXT}; font-variant-numeric: tabular-nums;">${num(m.intelligence,1)}</span>
+          <span title="智能指数 ${num(m.intelligence,1)}" style="position: relative; margin-left: auto; font-family: ${mono}; font-size: 11.5px; font-weight: 700; color: ${TXT}; font-variant-numeric: tabular-nums;">${num(m.intelligence,1)}</span>
         </span>
       </div>`).join('')}</div>`;
   });
@@ -1923,11 +1932,16 @@ function dataRailHtml(A){
     if(b.live) return clock ? `实时 ${clock}` : '实时';
     return b.updatedAt ? b.updatedAt.slice(5,16).replace('T',' ') : '—';
   };
+  const aaStamp = (() => {
+    const metric = (lb && lb.metric) || '智能指数';
+    const when = stamp(lb);
+    return when && when !== '—' ? `${metric} · ${when}` : metric;
+  })();
 
   return `
   <aside class="feed-data">
     ${heatmapHtml(A)}
-    ${board('Artificial Analysis', stamp(lb), arenaBody, (lb&&lb.sourceUrl)||'https://artificialanalysis.ai/')}
+    ${board('Artificial Analysis', aaStamp, arenaBody, (lb&&lb.sourceUrl)||'https://artificialanalysis.ai/')}
     ${board('AI 概念股', stamp(mk), marketBody)}
   </aside>`;
 }
