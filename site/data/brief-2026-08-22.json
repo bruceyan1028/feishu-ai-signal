@@ -787,27 +787,21 @@
         "images": [
           {
             "url": "media/huxiu/recvsTQVqf2miM-1.png",
-            "alt": "英伟达撮合GPU与数据中心",
-            "kind": "article-figure",
-            "afterHeading": "老黄当上AI圈的“红娘”"
-          },
-          {
-            "url": "media/huxiu/recvsTQVqf2miM-2.png",
             "alt": "英伟达为OpenAI提供担保",
             "kind": "article-figure",
             "afterHeading": "老黄当上AI圈的“红娘”"
           },
           {
-            "url": "media/huxiu/recvsTQVqf2miM-3.png",
-            "alt": "北欧建设大型AI数据中心",
-            "kind": "article-figure",
-            "afterHeading": "为什么偏偏是北欧"
-          },
-          {
-            "url": "media/huxiu/recvsTQVqf2miM-4.png",
-            "alt": "AI公司需要完整算力系统",
+            "url": "media/huxiu/recvsTQVqf2miM-2.png",
+            "alt": "LPS构成AI基础设施",
             "kind": "article-figure",
             "afterHeading": "AI算力的下半场"
+          },
+          {
+            "url": "media/huxiu/recvsTQVqf2miM-3.png",
+            "alt": "芬兰建设大型AI工厂",
+            "kind": "article-figure",
+            "afterHeading": "为什么偏偏是北欧"
           }
         ],
         "videos": [],
@@ -858,10 +852,12 @@
         "融资",
         "产品"
       ],
-      "imageUrl": "",
+      "imageUrl": "https://wpimg-wscn.awtmt.com/content_default_17.jpg",
       "mediaAssets": {
         "images": [],
-        "videos": []
+        "videos": [],
+        "cover": "https://wpimg-wscn.awtmt.com/content_default_17.jpg",
+        "curatedBy": "llm"
       },
       "editorialStructure": "source",
       "eventAggregation": {
@@ -960,19 +956,19 @@
         "images": [
           {
             "url": "https://oss.zhidx.com/uploads/2026/08/6a87ce42c6b4b_6a87ce42c36a4_6a87ce42c366e_图片3.png",
-            "alt": "阿里多模态模型能力版图",
+            "alt": "阿里图像与语音模型迭代",
             "kind": "article-figure",
             "afterHeading": "一、阿里AI不只有语言模型，多模态全面开花"
           },
           {
             "url": "https://oss.zhidx.com/uploads/2026/08/6a87ce440532a_6a87ce440202e_6a87ce4401ff4_图片4.png",
-            "alt": "语音与视频模型持续升级",
+            "alt": "阿里视频音乐模型持续更新",
             "kind": "article-figure",
             "afterHeading": "一、阿里AI不只有语言模型，多模态全面开花"
           },
           {
             "url": "https://oss.zhidx.com/uploads/2026/08/6a87ce3ae97a6_6a87ce3ae6329_6a87ce3ae62f0_图片2.png",
-            "alt": "多模态驱动云业务增长",
+            "alt": "阿里AI全栈底座支撑商业化",
             "kind": "article-figure",
             "afterHeading": "三、能力越补越齐，阿里多模态的价值开始显现"
           }
@@ -1079,18 +1075,24 @@
         "端侧",
         "开源"
       ],
-      "imageUrl": "https://3-im.guokr.com/RnZRY0I0dVo5M2NsLUZnYVk4UWNoQi1KNlRXMGRvY3g4BAAA1wEAAEpQ.jpg?imageView2/1/w/555/h/242",
+      "imageUrl": "https://1-im.guokr.com/RnVnckZSLUlxd2Y0dkpoZnpKNHhEdDNsU3NieWRvY3j9AwAAqwEAAEpQ.jpg?imageView2/1/w/555/h/232",
       "mediaAssets": {
         "images": [
           {
-            "url": "https://1-im.guokr.com/RnVnckZSLUlxd2Y0dkpoZnpKNHhEdDNsU3NieWRvY3j9AwAAqwEAAEpQ.jpg?imageView2/1/w/555/h/232",
-            "alt": "碳包裹单原子铜链示意图",
+            "url": "https://3-im.guokr.com/RnZRY0I0dVo5M2NsLUZnYVk4UWNoQi1KNlRXMGRvY3g4BAAA1wEAAEpQ.jpg?imageView2/1/w/555/h/242",
+            "alt": "GUI智能体操作界面",
             "kind": "article-figure",
-            "afterHeading": "关键细节"
+            "afterHeading": "核心内容"
+          },
+          {
+            "url": "https://3-im.guokr.com/Rm02QjkyX25ZLS1IeklSX1UzWWFGT3ZPeXdxMmRvY3g4BAAACgIAAEpQ.jpg?imageView2/1/w/555/h/268",
+            "alt": "医用铅-212治疗示意",
+            "kind": "article-figure",
+            "afterHeading": "价值与影响"
           }
         ],
         "videos": [],
-        "cover": "https://3-im.guokr.com/RnZRY0I0dVo5M2NsLUZnYVk4UWNoQi1KNlRXMGRvY3g4BAAA1wEAAEpQ.jpg?imageView2/1/w/555/h/242",
+        "cover": "https://1-im.guokr.com/RnVnckZSLUlxd2Y0dkpoZnpKNHhEdDNsU3NieWRvY3j9AwAAqwEAAEpQ.jpg?imageView2/1/w/555/h/232",
         "curatedBy": "llm"
       },
       "editorialStructure": "",
@@ -1154,16 +1156,16 @@
       "mediaAssets": {
         "images": [
           {
-            "url": "https://static.leiphone.com/uploads/new/images/20260821//6a886c8f51a2a.jpg?imageMogr2/quality/90",
+            "url": "https://static.leiphone.com/uploads/new/images/20260821//6a886c8f52b69.jpg?imageMogr2/quality/90",
             "alt": "人形机器人进行乒乓球对打",
             "kind": "article-figure",
             "afterHeading": "SMASH 2.0：全球首个自主完整对局，现场开放人机对打"
           },
           {
             "url": "https://static.leiphone.com/uploads/new/images/20260821//6a886c8f53720.jpg?imageMogr2/quality/90",
-            "alt": "KAIBot高拟真人形机器人",
+            "alt": "KAIBot在展台与观众互动",
             "kind": "article-figure",
-            "afterHeading": ""
+            "afterHeading": "KAI世界模型：机器人的“⼤脑”"
           },
           {
             "url": "https://static.leiphone.com/uploads/new/images/20260821//6a886c8f5479b.jpg?imageMogr2/quality/90",
@@ -1173,7 +1175,7 @@
           },
           {
             "url": "https://static.leiphone.com/uploads/new/images/20260821//6a886c8f551a6.jpg?imageMogr2/quality/90",
-            "alt": "KAI Halo第一视角数采头环",
+            "alt": "KAI Halo第一视角采集头环",
             "kind": "article-figure",
             "afterHeading": "KAI Halo：第一视角数采头环，打通数据采集全链路"
           }
@@ -1231,25 +1233,25 @@
         "images": [
           {
             "url": "media/huxiu/recvsZXs8cT4Lm-1.png",
-            "alt": "聊天中的暴力威胁示意",
+            "alt": "聊天中的具体威胁内容",
             "kind": "article-figure",
             "afterHeading": "聊天框里的谋杀预谋"
           },
           {
             "url": "media/huxiu/recvsZXs8cT4Lm-2.png",
-            "alt": "聊天记录与短信比对",
+            "alt": "聊天日志推动案件侦办",
             "kind": "article-figure",
             "afterHeading": "从日志到法庭"
           },
           {
             "url": "media/huxiu/recvsZXs8cT4Lm-3.png",
-            "alt": "AI聊天记录成为证据",
+            "alt": "OpenAI安全上报机制",
             "kind": "article-figure",
             "afterHeading": "从日志到法庭"
           },
           {
             "url": "media/huxiu/recvsZXs8cT4Lm-4.png",
-            "alt": "AI隐私与报警义务冲突",
+            "alt": "保密与警告义务之争",
             "kind": "article-figure",
             "afterHeading": "一次Tarasoff式的结构困境"
           }
@@ -1307,27 +1309,27 @@
         "images": [
           {
             "url": "media/huxiu/recvsZXs8coUcF-1.png",
-            "alt": "AI使用与作业分数反差",
+            "alt": "AI让作业分上涨考试分下跌",
             "kind": "article-figure",
             "afterHeading": "核心内容"
           },
           {
-            "url": "media/huxiu/recvsZXs8coUcF-2.png",
-            "alt": "学生AI使用率持续上升",
-            "kind": "article-figure",
-            "afterHeading": "关键细节"
-          },
-          {
             "url": "media/huxiu/recvsZXs8coUcF-3.png",
-            "alt": "作业外包比例随时间攀升",
+            "alt": "AI使用越久作业外包越多",
             "kind": "article-figure",
             "afterHeading": "关键细节"
           },
           {
             "url": "media/huxiu/recvsZXs8coUcF-4.png",
-            "alt": "AI辅助下医生检出率下降",
+            "alt": "成年人也出现认知卸载",
             "kind": "article-figure",
             "afterHeading": "价值与影响"
+          },
+          {
+            "url": "media/huxiu/recvsZXs8coUcF-4.png",
+            "alt": "过度依赖AI削弱独立判断",
+            "kind": "article-figure",
+            "afterHeading": "局限与风险"
           }
         ],
         "videos": [],
@@ -1383,15 +1385,15 @@
         "images": [
           {
             "url": "https://static.leiphone.com/uploads/new/images/20260821/6a87fcc62bd00.png?imageView2/2/w/740",
-            "alt": "明略与海康机器人合作分工",
+            "alt": "明略与海康机器人合作布局",
             "kind": "article-figure",
             "afterHeading": "关键细节"
           },
           {
             "url": "https://static.leiphone.com/uploads/new/images/20260821/6a87fcc9c9db9.png?imageView2/2/w/740",
-            "alt": "数字与具身智能的记忆体系",
+            "alt": "具身智能的多层记忆体系",
             "kind": "article-figure",
-            "afterHeading": "价值与影响"
+            "afterHeading": "核心内容"
           }
         ],
         "videos": [],
@@ -1446,20 +1448,26 @@
       "mediaAssets": {
         "images": [
           {
+            "url": "https://oss.zhidx.com/uploads/2026/08/6a881e675c713_6a881e67595f8_6a881e67595cc_图片1.png",
+            "alt": "多模态模型能力展示",
+            "kind": "article-figure",
+            "afterHeading": "核心内容"
+          },
+          {
             "url": "https://oss.zhidx.com/uploads/2026/08/6a8820088e6aa_6a882008896d2_6a8820088969c_微信图片_20260821175256_740_43.png",
-            "alt": "多模态API调用与文件上传",
+            "alt": "API调用与文件接口",
             "kind": "article-figure",
             "afterHeading": "关键细节"
           },
           {
             "url": "https://oss.zhidx.com/uploads/2026/08/6a8820ae8d331_6a8820ae8653b_6a8820ae86501_640-8.gif",
-            "alt": "模型生成的视觉编程页面",
+            "alt": "视觉编程效果演示",
             "kind": "article-figure",
             "afterHeading": "价值与影响"
           },
           {
             "url": "https://oss.zhidx.com/uploads/2026/08/6a882a8b494bc_6a882a8b46124_6a882a8b460f8_屏幕截图-2026-08-21-182857.png",
-            "alt": "DeepSeek Harness模型配置",
+            "alt": "Harness多模态配置界面",
             "kind": "article-figure",
             "afterHeading": "价值与影响"
           }
@@ -1517,14 +1525,14 @@
       "mediaAssets": {
         "images": [
           {
-            "url": "https://oss.zhidx.com/uploads/2026/08/6a86d27b5bf67_6a86d27b31215_6a86d27b311db_地图截图.png",
-            "alt": "《回到风吹过的地方》地图",
+            "url": "https://oss.zhidx.com/uploads/2026/08/6a86d390dab8e_6a86d390d78f4_6a86d390d78c5_image-3.png",
+            "alt": "AI互动影游游戏画面",
             "kind": "article-figure",
             "afterHeading": "一、不一样的“互动影游”"
           },
           {
-            "url": "https://oss.zhidx.com/uploads/2026/08/6a86d390dab8e_6a86d390d78f4_6a86d390d78c5_image-3.png",
-            "alt": "互动影游查案场景",
+            "url": "https://oss.zhidx.com/uploads/2026/08/6a87aabfc5e24_6a87aabfc27f7_6a87aabfc279e_converted-16.gif",
+            "alt": "老鼠追猫小游戏场景",
             "kind": "article-figure",
             "afterHeading": "一、不一样的“互动影游”"
           },
@@ -1594,14 +1602,26 @@
       "mediaAssets": {
         "images": [
           {
-            "url": "https://static.leiphone.com/uploads/new/images/20260821//6a88432c330db.jpg?imageMogr2/quality/90",
-            "alt": "高密度信息图生成示例",
+            "url": "https://static.leiphone.com/uploads/new/images/20260821//6a88432c33857.jpg?imageMogr2/quality/90",
+            "alt": "瑞士旅行攻略手绘地图",
+            "kind": "article-figure",
+            "afterHeading": "核心内容"
+          },
+          {
+            "url": "https://static.leiphone.com/uploads/new/images/20260821//6a88432c33d46.jpg?imageMogr2/quality/90",
+            "alt": "滑板主题高密度信息图",
+            "kind": "article-figure",
+            "afterHeading": "核心内容"
+          },
+          {
+            "url": "https://static.leiphone.com/uploads/new/images/20260821//6a88432c34003.jpg?imageMogr2/quality/90",
+            "alt": "超现实书本船只效果图",
             "kind": "article-figure",
             "afterHeading": "关键细节"
           },
           {
-            "url": "https://static.leiphone.com/uploads/new/images/20260821//6a88432c34003.jpg?imageMogr2/quality/90",
-            "alt": "复杂场景的高清艺术质感",
+            "url": "https://static.leiphone.com/uploads/new/images/20260821//6a88432c3425c.jpg?imageMogr2/quality/90",
+            "alt": "工人群像工笔水彩画",
             "kind": "article-figure",
             "afterHeading": "关键细节"
           }
@@ -1660,13 +1680,13 @@
         "images": [
           {
             "url": "media/huxiu/recvsZXs8c326r-1.png",
-            "alt": "日本技术出口管制官方页面",
+            "alt": "日本技术出口管制机制",
             "kind": "article-figure",
             "afterHeading": "官民对话：不准卖，更不准教"
           },
           {
             "url": "media/huxiu/recvsZXs8c326r-2.png",
-            "alt": "日本新增五项管制技术",
+            "alt": "五项新增管制技术",
             "kind": "article-figure",
             "afterHeading": "五大新增管制项目背后的“日本算盘”"
           }
@@ -1724,7 +1744,7 @@
         "images": [
           {
             "url": "https://wpimg-wscn.awtmt.com/6d539ef4-0345-4f7e-bae6-b1dfaf92a78a.png",
-            "alt": "AI驱动存储供需变化",
+            "alt": "存储芯片供需结构变化",
             "kind": "article-figure",
             "afterHeading": "02 非均衡繁荣下的涨价红利"
           }
@@ -1856,12 +1876,6 @@
             "alt": "银河系外球状星团恒星流",
             "kind": "article-figure",
             "afterHeading": "关键细节"
-          },
-          {
-            "url": "https://1-im.guokr.com/RmpZWm5ISjdyWjVDdm8wU1FvaFVNQWoyQ3ROWWRvY3iAAgAAFgIAAEdJ.gif?imageView2/1/w/555/h/463",
-            "alt": "iPSC心肌细胞疗法研究",
-            "kind": "article-figure",
-            "afterHeading": "价值与影响"
           }
         ],
         "videos": [],
@@ -1984,13 +1998,13 @@
           },
           {
             "url": "https://static.leiphone.com/uploads/new/images/20260822//6a8876aec200e.jpg?imageMogr2/quality/90",
-            "alt": "联盟与国际认证机构签约",
+            "alt": "江苏联盟与认证机构签约",
             "kind": "article-figure",
             "afterHeading": "标准制定：江苏标准与全球标准加速互认，打造产业走向世界的通行证"
           },
           {
             "url": "https://static.leiphone.com/uploads/new/images/20260822//6a8876aec2717.jpg?imageMogr2/quality/90",
-            "alt": "具身智能产业论坛现场",
+            "alt": "具身智能机器人应用场景",
             "kind": "article-figure",
             "afterHeading": "落地场景：告别“秀肌肉”，具身智能技术场景落地实景"
           }
@@ -2049,19 +2063,19 @@
         "images": [
           {
             "url": "https://oss.zhidx.com/uploads/2026/08/6a87fe7f9265c_6a87fe7f8f88e_6a87fe7f8f857_屏幕截图-2026-08-21-151749.png",
-            "alt": "雷鸟iO轻量化镜框设计",
+            "alt": "雷鸟iO眼镜轻量化设计",
             "kind": "article-figure",
             "afterHeading": "一、重34克，日常场景续航两天，AI连续记录18小时"
           },
           {
             "url": "https://oss.zhidx.com/uploads/2026/08/6a87fe17cf252_6a87fe17cc476_6a87fe17cc44a_屏幕截图-2026-08-21-145626.png",
-            "alt": "单绿色显示与续航参数",
+            "alt": "雷鸟iO显示与续航参数",
             "kind": "article-figure",
             "afterHeading": "一、重34克，日常场景续航两天，AI连续记录18小时"
           },
           {
             "url": "https://oss.zhidx.com/uploads/2026/08/6a87fe448171d_6a87fe4470d2d_6a87fe4470cf7_屏幕截图-2026-08-21-150812.png",
-            "alt": "AI问答、提词与翻译功能",
+            "alt": "雷鸟iO全天智记功能",
             "kind": "article-figure",
             "afterHeading": "二、自动整理全天对话，支持提词和55种语言翻译"
           }

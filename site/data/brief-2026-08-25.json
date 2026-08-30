@@ -772,20 +772,16 @@
       ],
       "imageUrl": "https://www.whitehouse.gov/wp-content/uploads/2025/03/WH47-Presidential-Actions-Social-Share-Card.jpg",
       "mediaAssets": {
-        "images": [
-          {
-            "url": "https://www.whitehouse.gov/wp-content/uploads/2025/03/WH47-Presidential-Actions-Social-Share-Card.jpg",
-            "alt": "国家太空运输政策备忘录",
-            "kind": "article-cover"
-          }
-        ],
+        "images": [],
         "videos": [],
         "documents": [],
         "policy": {
           "agency": "White House / OMB",
           "stage": "总统备忘录",
           "authority": "whitehouse.gov"
-        }
+        },
+        "cover": "https://www.whitehouse.gov/wp-content/uploads/2025/03/WH47-Presidential-Actions-Social-Share-Card.jpg",
+        "curatedBy": "llm"
       },
       "editorialStructure": "",
       "eventAggregation": {
@@ -836,7 +832,7 @@
         "images": [
           {
             "url": "https://wpimg-wscn.awtmt.com/f3c234ea-d848-4630-9277-4cb22cec7470.png",
-            "alt": "HBM堆叠结构与芯片分工",
+            "alt": "HBM由C-die与B-die组成",
             "kind": "article-figure",
             "afterHeading": "HBM是什么，瓶颈在哪里"
           },
@@ -848,13 +844,13 @@
           },
           {
             "url": "https://wpimg-wscn.awtmt.com/15f99383-7c31-4bf0-9284-42eb23d98c79.png",
-            "alt": "第二阶段扩展内存与计算功能",
+            "alt": "Base Die集成内存与计算功能",
             "kind": "article-figure",
             "afterHeading": "第二阶段：B-die开始“长出”计算能力"
           },
           {
             "url": "https://wpimg-wscn.awtmt.com/f648af79-b4dc-4bfe-891d-da9f79a874af.png",
-            "alt": "zHBM将DRAM垂直堆叠到XPU",
+            "alt": "zHBM将DRAM垂直堆叠在XPU上",
             "kind": "article-figure",
             "afterHeading": "第三阶段：zHBM——消灭中介层，DRAM直接压在计算芯片上"
           }
@@ -912,19 +908,19 @@
         "images": [
           {
             "url": "https://static.leiphone.com/uploads/new/images/20260824/6a8c03593d6ce.jpg",
-            "alt": "LPDDR5X服务器应用示意",
+            "alt": "LPDDR5X进入英伟达机柜",
             "kind": "article-figure",
             "afterHeading": "核心内容"
           },
           {
             "url": "https://static.leiphone.com/uploads/new/images/20260824/6a8c03596effa.jpg",
-            "alt": "SOCAMM模块结构示意",
+            "alt": "SOCAMM2模块化内存设计",
             "kind": "article-figure",
             "afterHeading": "关键细节"
           },
           {
             "url": "https://static.leiphone.com/uploads/new/images/20260824/6a8c0359d14e1.png",
-            "alt": "AI服务器内存扩张示意",
+            "alt": "内存成为AI扩张约束",
             "kind": "article-figure",
             "afterHeading": "价值与影响"
           }
@@ -1099,12 +1095,10 @@
         "Agent",
         "产品"
       ],
-      "imageUrl": "https://wpimg-wscn.awtmt.com/content_default_14.jpg",
+      "imageUrl": "",
       "mediaAssets": {
         "images": [],
-        "videos": [],
-        "cover": "https://wpimg-wscn.awtmt.com/content_default_14.jpg",
-        "curatedBy": "llm"
+        "videos": []
       },
       "editorialStructure": "source",
       "eventAggregation": {
@@ -1155,13 +1149,13 @@
         "images": [
           {
             "url": "https://2-im.guokr.com/Rmdtbk4wTll0ZEpUUlhIdW9JTUhXa3c0UXdmWGRvY3iUAgAAuAEAAEpQ.jpg?imageView2/1/w/555/h/370",
-            "alt": "12英寸晶圆量产产品",
+            "alt": "12英寸晶圆芯片",
             "kind": "article-figure",
             "afterHeading": "关键细节"
           },
           {
             "url": "https://3-im.guokr.com/RnEzTDlyR21LdFNSRjdCOTRONUh6SE1NS1VZdmRvY3jdAgAALAEAAEpQ.jpg?imageView2/1/w/555/h/227",
-            "alt": "S301绕黑洞高速运行",
+            "alt": "高速恒星绕黑洞运行",
             "kind": "article-figure",
             "afterHeading": "核心内容"
           }
@@ -1270,17 +1264,17 @@
             "url": "https://static.leiphone.com/uploads/new/images/20260824/6a8c1d3d2e654.png?imageView2/2/w/740",
             "alt": "机器人之家存储与充电区域",
             "kind": "article-figure",
-            "afterHeading": "关键细节"
+            "afterHeading": "核心内容"
           },
           {
             "url": "https://static.leiphone.com/uploads/new/images/20260824/6a8c1d3fa8de3.png?imageView2/2/w/740",
-            "alt": "机器人和电池扫码管理",
+            "alt": "机器人数字化登记管理",
             "kind": "article-figure",
             "afterHeading": "关键细节"
           },
           {
             "url": "https://static.leiphone.com/uploads/new/images/20260824/6a8c1d424a58e.png?imageView2/2/w/740",
-            "alt": "京东机器人产业战略布局",
+            "alt": "京东机器人服务基地规划",
             "kind": "article-figure",
             "afterHeading": "价值与影响"
           }
@@ -1345,7 +1339,7 @@
           },
           {
             "url": "https://oss.zhidx.com/uploads/2026/08/6a8c66c6d87cd_6a8c66c6bf270_6a8c66c6bf20e_截屏2026-08-24-23.42.52.png",
-            "alt": "人形机器人适应多样任务",
+            "alt": "人形机器人迈向多场景适应",
             "kind": "article-figure",
             "afterHeading": "一、泛化能力是行业核心突破口"
           },
@@ -1463,26 +1457,26 @@
       "mediaAssets": {
         "images": [
           {
-            "url": "https://oss.zhidx.com/uploads/2026/08/6a85a3a535538_6a85a3a5325cc_6a85a3a5325a0_图片4.png",
-            "alt": "OpenFit 2 AI翻译功能展示",
+            "url": "https://oss.zhidx.com/uploads/2026/08/6a85a3ef53538_6a85a3ef4eb7f_6a85a3ef4eb49_ScreenShot_2026-08-19_203901_119.png",
+            "alt": "OpenFit 2 AI转录界面",
             "kind": "article-figure",
-            "afterHeading": "二、拒绝“追风式”套用，联合行业巨头深度调优，海量技术创新支撑"
+            "afterHeading": "一、为什么说“开放式是AI耳机最佳形态”？我真的戴着它出差一整天"
           },
           {
-            "url": "https://oss.zhidx.com/uploads/2026/08/6a85a45b933d8_6a85a45b8b7aa_6a85a45b8b777_图片6.png",
-            "alt": "多人对话转录场景示意",
+            "url": "https://oss.zhidx.com/uploads/2026/08/6a85a3a535538_6a85a3a5325cc_6a85a3a5325a0_图片4.png",
+            "alt": "多语种翻译功能界面",
             "kind": "article-figure",
-            "afterHeading": "二、拒绝“追风式”套用，联合行业巨头深度调优，海量技术创新支撑"
+            "afterHeading": "一、为什么说“开放式是AI耳机最佳形态”？我真的戴着它出差一整天"
           },
           {
             "url": "https://oss.zhidx.com/uploads/2026/08/6a85a4ab91009_6a85a4ab8e01c_6a85a4ab8dfd7_图片7.png",
-            "alt": "专业场景语音调优体系",
+            "alt": "专业场景语料调优示意",
             "kind": "article-figure",
             "afterHeading": "二、拒绝“追风式”套用，联合行业巨头深度调优，海量技术创新支撑"
           },
           {
             "url": "https://oss.zhidx.com/uploads/2026/08/6a85a504293db_6a85a50412f20_6a85a50412ef3_ScreenShot_2026-08-19_204338_552.png",
-            "alt": "用户对开放式耳机的需求",
+            "alt": "开放式耳机用户使用场景",
             "kind": "article-figure",
             "afterHeading": "三、做AI耳机并不是因为AI火，而是因为用户真的需要"
           }
@@ -1548,7 +1542,7 @@
         "监管",
         "其他"
       ],
-      "imageUrl": "https://oss.zhidx.com/uploads/2026/08/6a8c058b7cb9b_6a8c058b79d2b_6a8c058b79ceb_屏幕截图-2026-08-24-164812.png",
+      "imageUrl": "https://oss.zhidx.com/uploads/2026/08/6a8c0c0520d5c_6a8c0c051dd30_6a8c0c051dcfc_屏幕截图-2026-08-24-1715531.png",
       "mediaAssets": {
         "images": [
           {
@@ -1559,20 +1553,20 @@
           },
           {
             "url": "https://oss.zhidx.com/uploads/2026/08/6a8c05b607746_6a8c05b6045d2_6a8c05b6045a0_屏幕截图-2026-08-24-164934.png",
-            "alt": "科学探索奖评审交流现场",
+            "alt": "邓力谈AI与科研原创性",
             "kind": "article-figure",
-            "afterHeading": "核心内容"
+            "afterHeading": "价值与影响"
           },
           {
             "url": "https://oss.zhidx.com/uploads/2026/08/6a8c057dbcaf7_6a8c057db9152_6a8c057db9117_屏幕截图-2026-08-24-164727.png",
-            "alt": "原创性评审与监督机制",
+            "alt": "王志珍介绍评审监督机制",
             "kind": "article-figure",
             "afterHeading": "局限与风险"
           }
         ],
         "videos": [],
         "documents": [],
-        "cover": "https://oss.zhidx.com/uploads/2026/08/6a8c058b7cb9b_6a8c058b79d2b_6a8c058b79ceb_屏幕截图-2026-08-24-164812.png",
+        "cover": "https://oss.zhidx.com/uploads/2026/08/6a8c0c0520d5c_6a8c0c051dd30_6a8c0c051dcfc_屏幕截图-2026-08-24-1715531.png",
         "curatedBy": "llm"
       },
       "editorialStructure": "",

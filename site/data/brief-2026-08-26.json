@@ -767,7 +767,7 @@
         "images": [
           {
             "url": "https://wpimg-wscn.awtmt.com/bef0d140-a1b8-4516-a2a8-6cc25986256b.png",
-            "alt": "AI能力边界仍难以预测",
+            "alt": "AI能力边界仍难预测",
             "kind": "article-figure",
             "afterHeading": "200亿砸进去，没人知道会出来什么"
           }
@@ -880,7 +880,7 @@
           },
           {
             "url": "https://mmbiz-qpic.wscn.net/mmbiz_png/A6fTew8FFGHej4oTNKRCficxp8iavAEYIpDUp4a6jlDxq2UQhk7F3CVticicyO0ia4MH0J7hz4NNQYVIS00L6VajeoNsx7AaNPemfGZQUyFxd6SA/640?wx_fmt=png&from=appmsg",
-            "alt": "M6与前代Mac mini性能对比",
+            "alt": "M6本地AI性能对比",
             "kind": "article-figure",
             "afterHeading": "2nm首秀，苹果先把M6狠狠干上了AI！"
           },
@@ -891,8 +891,8 @@
             "afterHeading": "苹果首次四Die：M5 Ultra直接用桌面机猛堆AI算力"
           },
           {
-            "url": "https://mmbiz-qpic.wscn.net/mmbiz_jpg/A6fTew8FFGEAkO7cr873pYZ6Tiaom6ibyTiaSWowyoR77kekDvBoc7UStnUNziaaEErakZfBkbWnoENnLRhZPXicBNnUfIyrcJHvaRod20g3PQP0/640?wx_fmt=jpeg&from=appmsg",
-            "alt": "高内存Mac供货与需求升温",
+            "url": "https://mmbiz-qpic.wscn.net/mmbiz_jpg/A6fTew8FFGEBFQ80wdNPaRnjGPVicK5DlVCIAJamYfxrxZibSxAzXIUCXyMwSiaicpbDKic7FOkUEOCic3ic0eY7IWAiaE1Kv5DymbibjmytDdq8ZqtI/640?wx_fmt=jpeg&from=appmsg",
+            "alt": "高内存Mac供货与需求变化",
             "kind": "article-figure",
             "afterHeading": "AI把Mac买涨价了，也快把高内存Mac买断货了"
           }
@@ -958,31 +958,37 @@
         "产品",
         "其他"
       ],
-      "imageUrl": "https://oss.zhidx.com/uploads/2026/08/6a8d757f03d9a_6a8d757f00455_6a8d757f00429_头图.jpg",
+      "imageUrl": "https://oss.zhidx.com/uploads/2026/08/6a8d757fabbe4_6a8d757fa82e6_6a8d757fa8280_座无虚席.jpg",
       "mediaAssets": {
         "images": [
           {
-            "url": "https://oss.zhidx.com/uploads/2026/08/6a8d757fabbe4_6a8d757fa82e6_6a8d757fa8280_座无虚席.jpg",
-            "alt": "科学智能大会会场座无虚席",
+            "url": "https://oss.zhidx.com/uploads/2026/08/6a8d75e20dc2a_6a8d75e20a8f2_6a8d75e20a8ba_图片-2.png",
+            "alt": "AI4S人才之夜交流现场",
             "kind": "article-figure",
             "afterHeading": "基础：北京AI4S的“学术厚度”从何而来？ || 一、基础：北京AI4S的“学术厚度”从何而来？"
           },
           {
-            "url": "https://oss.zhidx.com/uploads/2026/08/6a8d75e20dc2a_6a8d75e20a8f2_6a8d75e20a8ba_图片-2.png",
-            "alt": "青年学者交流现场",
+            "url": "https://oss.zhidx.com/uploads/2026/08/6a8d784286162_6a8d7842803bc_6a8d78428038c_AX00217_副本.jpg",
+            "alt": "科学智能大会现场展示",
             "kind": "article-figure",
-            "afterHeading": "基础：北京AI4S的“学术厚度”从何而来？ || 一、基础：北京AI4S的“学术厚度”从何而来？"
+            "afterHeading": "应用层：自主实验室与标杆场景 || 应用层：自主实验室与标杆场景"
           },
           {
             "url": "https://oss.zhidx.com/uploads/2026/08/6a8d95ce40038_6a8d95ce3cbea_6a8d95ce3cbb3_政策.jpg",
             "alt": "北京科学智能政策发布",
             "kind": "article-figure",
             "afterHeading": "政策：北京如何为AI4S构建制度“护航体系”？ || 三、政策：北京如何为AI4S构建制度“护航体系”？"
+          },
+          {
+            "url": "https://oss.zhidx.com/uploads/2026/08/6a8d784364d3c_6a8d784361b1d_6a8d784361af2_AX00228_副本.jpg",
+            "alt": "科学智能创新集聚区",
+            "kind": "article-figure",
+            "afterHeading": "政策：北京如何为AI4S构建制度“护航体系”？ || 三、政策：北京如何为AI4S构建制度“护航体系”？"
           }
         ],
         "videos": [],
         "documents": [],
-        "cover": "https://oss.zhidx.com/uploads/2026/08/6a8d757f03d9a_6a8d757f00455_6a8d757f00429_头图.jpg",
+        "cover": "https://oss.zhidx.com/uploads/2026/08/6a8d757fabbe4_6a8d757fa82e6_6a8d757fa8280_座无虚席.jpg",
         "curatedBy": "llm"
       },
       "editorialStructure": "source",
@@ -1266,18 +1272,18 @@
         "硬件",
         "其他"
       ],
-      "imageUrl": "https://3-im.guokr.com/RmlPTVlFcWxSZlRDclVqUzV4QUNfNjZiV1o4bGRvY3iuAwAA6AAAAEpQ.jpg?imageView2/1/w/555/h/136",
+      "imageUrl": "https://1-im.guokr.com/RnFGbHg1TGJCSVl5TmVVc3hRSV9kRkNDZWcyNGRvY3g4BAAA9QIAAEpQ.jpg?imageView2/1/w/555/h/389",
       "mediaAssets": {
         "images": [
           {
-            "url": "https://1-im.guokr.com/RnFGbHg1TGJCSVl5TmVVc3hRSV9kRkNDZWcyNGRvY3g4BAAA9QIAAEpQ.jpg?imageView2/1/w/555/h/389",
-            "alt": "天工Omni捂脸跑夺冠",
+            "url": "https://1-im.guokr.com/RnI4WTQxR0Q3NVBjU0c2SlJ5M0tTVHpvSjlwQmRvY3iMAwAAbgEAAEpQ.jpg?imageView2/1/w/555/h/223",
+            "alt": "跑步实验的四种手臂姿势",
             "kind": "article-figure",
-            "afterHeading": "核心内容"
+            "afterHeading": "关键细节"
           },
           {
-            "url": "https://1-im.guokr.com/RnI4WTQxR0Q3NVBjU0c2SlJ5M0tTVHpvSjlwQmRvY3iMAwAAbgEAAEpQ.jpg?imageView2/1/w/555/h/223",
-            "alt": "人类跑步的四种手臂姿势",
+            "url": "https://3-im.guokr.com/RnZxdmlxZmxZTjRUdlVYVXJWLVRaS3BibnJoLWRvY3jeAQAAXwEAAEpQ.jpg",
+            "alt": "不同摆臂姿势的代谢成本",
             "kind": "article-figure",
             "afterHeading": "关键细节"
           },
@@ -1285,17 +1291,17 @@
             "url": "https://3-im.guokr.com/RmtjSy1SaWI5WlZ2UlBNdnRtcy1wUkRVZUpOUmRvY3iEAwAA_AIAAEpQ.jpg?imageView2/1/w/555/h/471",
             "alt": "摆臂抵消身体旋转示意",
             "kind": "article-figure",
-            "afterHeading": "价值与影响"
+            "afterHeading": "关键细节"
           },
           {
             "url": "https://3-im.guokr.com/RmdEQXFaVU1WRE5KVlRyclQ5RGM1cFYxd0FNSGRvY3iAAgAAaAEAAEdJ.gif?imageView2/1/w/555/h/312",
-            "alt": "机器人通过仿真迭代跑姿",
+            "alt": "机器人捂脸跑姿态",
             "kind": "article-figure",
             "afterHeading": "局限与风险"
           }
         ],
         "videos": [],
-        "cover": "https://3-im.guokr.com/RmlPTVlFcWxSZlRDclVqUzV4QUNfNjZiV1o4bGRvY3iuAwAA6AAAAEpQ.jpg?imageView2/1/w/555/h/136",
+        "cover": "https://1-im.guokr.com/RnFGbHg1TGJCSVl5TmVVc3hRSV9kRkNDZWcyNGRvY3g4BAAA9QIAAEpQ.jpg?imageView2/1/w/555/h/389",
         "curatedBy": "llm"
       },
       "editorialStructure": "",
@@ -1511,7 +1517,7 @@
           },
           {
             "url": "https://oss.zhidx.com/uploads/2026/05/6a0fa61aaa2c2_6a0fa61aa6ff2_6a0fa61aa6fb0_屏幕截图-2026-05-22-084039.png",
-            "alt": "Oura Ring 5产品展示",
+            "alt": "Oura智能戒指产品迭代",
             "kind": "article-figure",
             "afterHeading": "关键细节"
           }

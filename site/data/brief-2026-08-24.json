@@ -822,25 +822,25 @@
         "images": [
           {
             "url": "https://wpimg-wscn.awtmt.com/f3c234ea-d848-4630-9277-4cb22cec7470.png",
-            "alt": "HBM芯片堆叠结构示意",
+            "alt": "HBM堆叠结构与芯片分工",
             "kind": "article-figure",
             "afterHeading": "HBM是什么，瓶颈在哪里"
           },
           {
             "url": "https://wpimg-wscn.awtmt.com/10ba8e7e-f401-42d4-9d67-64b33c0d28fe.png",
-            "alt": "Base Die缩减面积与散热方案",
+            "alt": "先进工艺缩小Base Die面积",
             "kind": "article-figure",
             "afterHeading": "第一阶段：为计算芯片“腾地方”"
           },
           {
             "url": "https://wpimg-wscn.awtmt.com/15f99383-7c31-4bf0-9284-42eb23d98c79.png",
-            "alt": "Base Die集成计算与扩展功能",
+            "alt": "Base Die集成扩展与计算单元",
             "kind": "article-figure",
             "afterHeading": "第二阶段：B-die开始“长出”计算能力"
           },
           {
             "url": "https://wpimg-wscn.awtmt.com/f648af79-b4dc-4bfe-891d-da9f79a874af.png",
-            "alt": "四栈zHBM垂直堆叠XPU",
+            "alt": "zHBM将DRAM垂直堆叠于XPU",
             "kind": "article-figure",
             "afterHeading": "第三阶段：zHBM——消灭中介层，DRAM直接压在计算芯片上"
           }
@@ -898,25 +898,19 @@
         "images": [
           {
             "url": "https://static.leiphone.com/uploads/new/images/20260823/6a8ad6c1ca74f.jpg",
-            "alt": "人形机器人与网球名将对打",
+            "alt": "机器人与网球名将对打",
             "kind": "article-figure",
             "afterHeading": "大脑想怎么打，小脑负责打得漂亮"
           },
           {
             "url": "https://static.leiphone.com/uploads/new/images/20260823/6a8ad6c23cee9.jpg",
-            "alt": "机器人训练网球动作",
+            "alt": "机器人学习拟人化击球",
             "kind": "article-figure",
             "afterHeading": "在不完美的人类数据里学习"
           },
           {
-            "url": "https://static.leiphone.com/uploads/new/images/20260823/6a8ad6c2b8339.jpg",
-            "alt": "机器人在虚拟环境中对练",
-            "kind": "article-figure",
-            "afterHeading": "在虚拟世界里，和千万个自己对练"
-          },
-          {
             "url": "https://static.leiphone.com/uploads/new/images/20260823/6a8ad6c2da87f.jpg",
-            "alt": "人形机器人拓展应用场景",
+            "alt": "具身智能走向真实应用",
             "kind": "article-figure",
             "afterHeading": "结语：摔倒了、站起来、往前走"
           }
@@ -1035,12 +1029,10 @@
         "融资",
         "产品"
       ],
-      "imageUrl": "https://wpimg-wscn.awtmt.com/content_default_17.jpg",
+      "imageUrl": "",
       "mediaAssets": {
         "images": [],
-        "videos": [],
-        "cover": "https://wpimg-wscn.awtmt.com/content_default_17.jpg",
-        "curatedBy": "llm"
+        "videos": []
       },
       "editorialStructure": "source",
       "eventAggregation": {
@@ -1091,7 +1083,7 @@
         "images": [
           {
             "url": "media/huxiu/recvtbiIXXtxEf-1.png",
-            "alt": "AI蛋糕变大，分配者变少",
+            "alt": "AI做大蛋糕，分蛋糕者减少",
             "kind": "article-figure",
             "afterHeading": "二、现实困境：技术红利与大众收入的全球传导断点"
           }
@@ -1148,16 +1140,16 @@
       "mediaAssets": {
         "images": [
           {
+            "url": "https://3-im.guokr.com/RnZRY0I0dVo5M2NsLUZnYVk4UWNoQi1KNlRXMGRvY3g4BAAA1wEAAEpQ.jpg?imageView2/1/w/555/h/242",
+            "alt": "GUI智能体相关界面",
+            "kind": "article-figure",
+            "afterHeading": "核心内容"
+          },
+          {
             "url": "https://1-im.guokr.com/RnVnckZSLUlxd2Y0dkpoZnpKNHhEdDNsU3NieWRvY3j9AwAAqwEAAEpQ.jpg?imageView2/1/w/555/h/232",
             "alt": "碳包裹单原子铜链示意图",
             "kind": "article-figure",
             "afterHeading": "关键细节"
-          },
-          {
-            "url": "https://3-im.guokr.com/Rm02QjkyX25ZLS1IeklSX1UzWWFGT3ZPeXdxMmRvY3g4BAAACgIAAEpQ.jpg?imageView2/1/w/555/h/268",
-            "alt": "铅-212医用核素应用示意",
-            "kind": "article-figure",
-            "afterHeading": "价值与影响"
           }
         ],
         "videos": [],
@@ -1347,25 +1339,25 @@
         "images": [
           {
             "url": "media/huxiu/recvsZXs8coUcF-1.png",
-            "alt": "作业提分与考试下滑",
+            "alt": "AI使用与考试成绩对比",
             "kind": "article-figure",
             "afterHeading": "核心内容"
           },
           {
             "url": "media/huxiu/recvsZXs8coUcF-2.png",
-            "alt": "AI使用率随模型发布跃升",
+            "alt": "AI学生采用率逐年上升",
             "kind": "article-figure",
             "afterHeading": "关键细节"
           },
           {
             "url": "media/huxiu/recvsZXs8coUcF-3.png",
-            "alt": "作业外包比例持续上升",
+            "alt": "作业外包比例随时间攀升",
             "kind": "article-figure",
-            "afterHeading": "局限与风险"
+            "afterHeading": "关键细节"
           },
           {
             "url": "media/huxiu/recvsZXs8coUcF-4.png",
-            "alt": "成年人认知卸载案例",
+            "alt": "成年人也出现认知卸载",
             "kind": "article-figure",
             "afterHeading": "价值与影响"
           }
@@ -1552,7 +1544,13 @@
         "images": [
           {
             "url": "https://oss.zhidx.com/uploads/2026/08/6a86d390dab8e_6a86d390d78f4_6a86d390d78c5_image-3.png",
-            "alt": "AI互动影游游戏画面",
+            "alt": "《回到风吹过的地方》游戏画面",
+            "kind": "article-figure",
+            "afterHeading": "一、不一样的“互动影游”"
+          },
+          {
+            "url": "https://oss.zhidx.com/uploads/2026/08/6a86d3a0ae1e9_6a86d3a0ab514_6a86d3a0ab4cd_截屏2026-08-19-12.09.54-1.png",
+            "alt": "《魂天·彼岸》悬疑游戏画面",
             "kind": "article-figure",
             "afterHeading": "一、不一样的“互动影游”"
           },
@@ -1565,12 +1563,6 @@
           {
             "url": "https://oss.zhidx.com/uploads/2026/08/6a86d82f803b2_6a86d82f7d106_6a86d82f7d0b7_微信图片_20260820183246.jpg",
             "alt": "水豚牌馆游戏画面",
-            "kind": "article-figure",
-            "afterHeading": "二、把所有游戏类型用AI重做一遍"
-          },
-          {
-            "url": "https://oss.zhidx.com/uploads/2026/08/6a86d829dc84f_6a86d829d9b24_6a86d829d9af5_微信图片_20260820183239.jpg",
-            "alt": "AI生成消除游戏玩法",
             "kind": "article-figure",
             "afterHeading": "二、把所有游戏类型用AI重做一遍"
           }
@@ -1634,20 +1626,14 @@
             "afterHeading": "关键细节"
           },
           {
-            "url": "https://2-im.guokr.com/RnJmcWZGNm1NUDdCdDE4V1owX2lXbTMzRFNURGRvY3g4BAAAKgMAAEpQ.jpg?imageView2/1/w/555/h/416",
-            "alt": "黑鸢腹面与翅窗特征",
+            "url": "https://2-im.guokr.com/RnVLNWxmLTdHYkhCSmxRY3lNSDBSQzJoWjItWGRvY3g4BAAAMQMAAEpQ.jpg?imageView2/1/w/555/h/419",
+            "alt": "AI为鸟眼添加错误虹膜",
             "kind": "article-figure",
             "afterHeading": "关键细节"
           },
           {
-            "url": "https://2-im.guokr.com/RnVLNWxmLTdHYkhCSmxRY3lNSDBSQzJoWjItWGRvY3g4BAAAMQMAAEpQ.jpg?imageView2/1/w/555/h/419",
-            "alt": "AI误改鸟类虹膜颜色",
-            "kind": "article-figure",
-            "afterHeading": "局限与风险"
-          },
-          {
             "url": "https://1-im.guokr.com/RnVJbjhNUnREOGloS0FYUHRQZ3lFNnhkM2J1ZGRvY3g4BAAA0AIAAEpQ.jpg?imageView2/1/w/555/h/370",
-            "alt": "AI把红色臀部画到腿上",
+            "alt": "修图后鸟类红臀边界错位",
             "kind": "article-figure",
             "afterHeading": "局限与风险"
           }
@@ -1705,25 +1691,25 @@
         "images": [
           {
             "url": "media/huxiu/recvtbiIXXkqcg-1.png",
-            "alt": "唐杰与杨植麟师生关系",
+            "alt": "创新集群降低交易成本",
             "kind": "article-figure",
-            "afterHeading": "教授公司"
+            "afterHeading": "集群的科斯定理"
           },
           {
             "url": "media/huxiu/recvtbiIXXkqcg-2.png",
-            "alt": "清华AI人才关系网络",
+            "alt": "五道口高频偶遇同行",
             "kind": "article-figure",
             "afterHeading": "圈子抄不走"
           },
           {
             "url": "media/huxiu/recvtbiIXXkqcg-3.png",
-            "alt": "五道口高频同行碰面",
+            "alt": "中国模型通过开源抢占生态",
             "kind": "article-figure",
-            "afterHeading": "圈子抄不走"
+            "afterHeading": "默认值"
           },
           {
             "url": "media/huxiu/recvtbiIXXkqcg-4.png",
-            "alt": "中国模型生态数据",
+            "alt": "中国模型全球使用量增长",
             "kind": "article-figure",
             "afterHeading": "默认值"
           }
@@ -1781,13 +1767,13 @@
         "images": [
           {
             "url": "media/huxiu/recvsZXs8c326r-1.png",
-            "alt": "日本经济产业省管制信息",
+            "alt": "日本技术出口管制公告",
             "kind": "article-figure",
             "afterHeading": "官民对话：不准卖，更不准教"
           },
           {
             "url": "media/huxiu/recvsZXs8c326r-2.png",
-            "alt": "日本新增五项管制技术",
+            "alt": "五项新增管制技术",
             "kind": "article-figure",
             "afterHeading": "五大新增管制项目背后的“日本算盘”"
           }
@@ -1899,7 +1885,7 @@
         "images": [
           {
             "url": "https://lambda.ai/hs-fs/hubfs/data_chart.png?width=915&height=417&name=data_chart.png",
-            "alt": "自托管与 API 成本对比图",
+            "alt": "开放模型与 API 成本对比",
             "kind": "article-figure",
             "afterHeading": "终于符合 CFO 效率标准的经济性 || The economics that finally match a CFO's efficiency bar"
           }
@@ -2012,7 +1998,7 @@
         "images": [
           {
             "url": "https://static.leiphone.com/uploads/new/images/20260823/6a8abece813c5.jpg?imageView2/2/w/740",
-            "alt": "NAVIAI零售舱提供智能服务",
+            "alt": "NAVIAI零售舱服务演示",
             "kind": "article-figure",
             "afterHeading": "关键细节"
           }
@@ -2071,7 +2057,7 @@
         "images": [
           {
             "url": "https://oss.zhidx.com/uploads/2026/08/6a87fe7f9265c_6a87fe7f8f88e_6a87fe7f8f857_屏幕截图-2026-08-21-151749.png",
-            "alt": "雷鸟iO眼镜外观与旋钮",
+            "alt": "雷鸟iO眼镜轻量化设计",
             "kind": "article-figure",
             "afterHeading": "一、重34克，日常场景续航两天，AI连续记录18小时"
           },
@@ -2083,7 +2069,7 @@
           },
           {
             "url": "https://oss.zhidx.com/uploads/2026/08/6a87fe448171d_6a87fe4470d2d_6a87fe4470cf7_屏幕截图-2026-08-21-150812.png",
-            "alt": "AI全天智记与翻译功能",
+            "alt": "AI全天智记功能示意",
             "kind": "article-figure",
             "afterHeading": "二、自动整理全天对话，支持提词和55种语言翻译"
           }
@@ -2143,7 +2129,7 @@
             "url": "https://static.leiphone.com/uploads/new/images/20260824//6a8b4d5268077.jpg?imageMogr2/quality/90",
             "alt": "茶颜悦色冷香凝品牌视频",
             "kind": "article-figure",
-            "afterHeading": "价值与影响"
+            "afterHeading": "关键细节"
           }
         ],
         "videos": [],
@@ -2200,7 +2186,7 @@
         "images": [
           {
             "url": "https://static.leiphone.com/uploads/new/images/20260823/6a8b02052a280.jpeg?imageView2/2/w/740",
-            "alt": "凯度紫科技理念发布现场",
+            "alt": "凯度发布紫科技理念",
             "kind": "article-figure",
             "afterHeading": "“ 紫科技”vs“黑科技”：跳出参数物理极限"
           },
@@ -2258,30 +2244,36 @@
         "其他",
         "监管"
       ],
-      "imageUrl": "https://1-im.guokr.com/RnRMTUxTMU1uRkVqZjc4TzdUdTdwWW03NEZqdmRvY3g4BAAAwQcAAEpQ.jpg?imageView2/1/w/555/h/1020",
+      "imageUrl": "https://3-im.guokr.com/Rm91NU1FbHZnTWMzcUZwekFUMWtDQ19HSUw0OGRvY3hXAwAAZgIAAEpQ.jpg?imageView2/1/w/555/h/398",
       "mediaAssets": {
         "images": [
           {
-            "url": "https://2-im.guokr.com/RnVMRWlnOWc2VVRIY2RFZzFHNnFKeDJlZllxcWRvY3hXAwAAZgIAAEpQ.jpg?imageView2/1/w/555/h/398",
-            "alt": "超小体犬体形示例",
+            "url": "https://3-im.guokr.com/RmswcklROXZaTnNSSXVjRkVHYmJXSzBaeEszQWRvY3iRAgAAHAIAAEpQ.jpg?imageView2/1/w/555/h/456",
+            "alt": "超小体犬选育过程",
+            "kind": "article-figure",
+            "afterHeading": "关键细节"
+          },
+          {
+            "url": "https://1-im.guokr.com/RnRMTUxTMU1uRkVqZjc4TzdUdTdwWW03NEZqdmRvY3g4BAAAwQcAAEpQ.jpg?imageView2/1/w/555/h/1020",
+            "alt": "短头犬眼球脱出",
             "kind": "article-figure",
             "afterHeading": "核心内容"
           },
           {
             "url": "https://2-im.guokr.com/RmhNcDRkZ0lETm5GN3FEMWRhaTdIUS1TSUdlNmRvY3jmAQAAAQIAAEpQ.jpg",
-            "alt": "犬眼球脱出治疗示意",
+            "alt": "眼球脱出手术复位",
             "kind": "article-figure",
-            "afterHeading": "关键细节"
+            "afterHeading": "行动建议"
           },
           {
             "url": "https://2-im.guokr.com/RnZlSnZ3a3NRT0VLZ0VDMTlaZjVIYV9hd3NxNmRvY3g4BAAA8AMAAEpQ.jpg?imageView2/1/w/555/h/518",
-            "alt": "小型犬应使用胸背带",
+            "alt": "避免牵拉犬只颈部",
             "kind": "article-figure",
             "afterHeading": "行动建议"
           }
         ],
         "videos": [],
-        "cover": "https://1-im.guokr.com/RnRMTUxTMU1uRkVqZjc4TzdUdTdwWW03NEZqdmRvY3g4BAAAwQcAAEpQ.jpg?imageView2/1/w/555/h/1020",
+        "cover": "https://3-im.guokr.com/Rm91NU1FbHZnTWMzcUZwekFUMWtDQ19HSUw0OGRvY3hXAwAAZgIAAEpQ.jpg?imageView2/1/w/555/h/398",
         "curatedBy": "llm"
       },
       "editorialStructure": "",

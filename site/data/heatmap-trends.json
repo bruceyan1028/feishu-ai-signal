@@ -1,0 +1,484 @@
+{
+  "generatedAt": "2026-08-28T12:15:45+08:00",
+  "days": [
+    "2026-08-22",
+    "2026-08-23",
+    "2026-08-24",
+    "2026-08-25",
+    "2026-08-26",
+    "2026-08-27",
+    "2026-08-28"
+  ],
+  "topics": [
+    "agent",
+    "reasoning",
+    "multimodal",
+    "open-source-model",
+    "rag-search",
+    "infra",
+    "embodied",
+    "safety-policy",
+    "product",
+    "funding"
+  ],
+  "labels": {
+    "agent": "智能体",
+    "reasoning": "推理",
+    "multimodal": "多模态",
+    "open-source-model": "开源模型",
+    "rag-search": "RAG / 检索",
+    "infra": "算力基建",
+    "embodied": "具身智能",
+    "safety-policy": "安全监管",
+    "product": "应用产品",
+    "funding": "融资并购"
+  },
+  "queries": {
+    "agent": {
+      "g": "AI agent MCP",
+      "x": "(\"AI agent\" OR MCP OR #AIAgents) -is:retweet"
+    },
+    "reasoning": {
+      "g": "test time compute",
+      "x": "(\"test-time compute\" OR #Reasoning) -is:retweet"
+    },
+    "multimodal": {
+      "g": "image video generation AI",
+      "x": "(\"image generation\" OR \"video generation\" OR #Multimodal) -is:retweet"
+    },
+    "open-source-model": {
+      "g": "open source LLM",
+      "x": "(\"open source LLM\" OR #OpenSourceAI) -is:retweet"
+    },
+    "rag-search": {
+      "g": "RAG retrieval augmented",
+      "x": "(RAG OR \"retrieval augmented\" OR #RAG) -is:retweet"
+    },
+    "infra": {
+      "g": "AI chips inference GPU",
+      "x": "(\"AI chips\" OR inference OR #AIInfra) -is:retweet"
+    },
+    "embodied": {
+      "g": "humanoid robot AI",
+      "x": "(\"humanoid robot\" OR #EmbodiedAI) -is:retweet"
+    },
+    "safety-policy": {
+      "g": "AI regulation safety",
+      "x": "(\"AI regulation\" OR #AISafety) -is:retweet"
+    },
+    "product": {
+      "g": "ChatGPT Copilot product",
+      "x": "(ChatGPT OR Copilot OR #AIProduct) -is:retweet"
+    },
+    "funding": {
+      "g": "AI startup funding",
+      "x": "(\"AI startup\" OR \"AI funding\" OR #AIFunding) -is:retweet"
+    }
+  },
+  "google-trends": {
+    "error": "The request failed: Google returned a response with code 400",
+    "matrix": {
+      "raw": [
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      ],
+      "normalized": [
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      ]
+    },
+    "trend": {
+      "agent": 1.0,
+      "reasoning": 1.0,
+      "multimodal": 1.0,
+      "open-source-model": 1.0,
+      "rag-search": 1.0,
+      "infra": 1.0,
+      "embodied": 1.0,
+      "safety-policy": 1.0,
+      "product": 1.0,
+      "funding": 1.0
+    },
+    "items": {},
+    "itemIndex": {}
+  },
+  "x": {
+    "error": "agent: X API 返回 402 Payment Required：请在 Developer Console 购买 credits，并确认当前 App 有可用余额",
+    "matrix": {
+      "raw": [
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      ],
+      "normalized": [
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      ]
+    },
+    "trend": {
+      "agent": 1.0,
+      "reasoning": 1.0,
+      "multimodal": 1.0,
+      "open-source-model": 1.0,
+      "rag-search": 1.0,
+      "infra": 1.0,
+      "embodied": 1.0,
+      "safety-policy": 1.0,
+      "product": 1.0,
+      "funding": 1.0
+    },
+    "items": {},
+    "itemIndex": {}
+  }
+}
