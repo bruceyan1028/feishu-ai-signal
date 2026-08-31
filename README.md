@@ -501,7 +501,7 @@ python -m src.sources_api    # http://127.0.0.1:8787 ，只绑回环
 | `weekly-report.yml` | 周一 UTC 03:30 | 周报 + 部署 + 推送 |
 | `pages-preview.yml` | 推送 `site/**` 或 `index.html` | 只部署当前仓库里的 `site/` |
 | `ingest.yml` | 仅手动 | 单独采集 |
-| `social-ingest.yml` | 每 2 小时 | X；采集器内部再限 P0/P1 间隔 |
+| `social-ingest.yml` | 仅手动（未启用定时） | X 筛选已落地；缺 API credits，先不跑 |
 | `podcast-ingest.yml` | 每天 | 播客，装 ffmpeg，超时更长 |
 
 Runner 目录一般在本机 `~/actions-runner-feishu-ai-signal/`。可用 `./run.sh` 或 LaunchAgent `svc.sh`。Runner **offline** 时日报会一直 queued。访问 Google/YouTube 若 IPv6 黑洞，`src.main` 的 Media 可能长时间 `SYN_SENT`；本机补跑可用：

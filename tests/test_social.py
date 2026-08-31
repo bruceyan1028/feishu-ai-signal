@@ -98,7 +98,7 @@ class SocialSourceTest(unittest.TestCase):
             {"data": [_item(post_id="11")], "meta": {"next_token": "next"}},
             {"data": [_item(post_id="12")], "meta": {}},
         ]
-        posts, _ = social._timeline("1", bearer="token", since_id="10")
+        posts, *_ = social._timeline("1", bearer="token", since_id="10")
         self.assertEqual([post["id"] for post in posts], ["11", "12"])
         self.assertEqual(api_get.call_args_list[0].kwargs["params"]["since_id"], "10")
         self.assertEqual(api_get.call_args_list[1].kwargs["params"]["pagination_token"], "next")
@@ -193,6 +193,79 @@ class SocialSourceTest(unittest.TestCase):
         kept, stats = social.filter_social_items(items, classifier=lambda _: True)
         self.assertEqual(len(kept), 2)
         self.assertEqual(stats["daily_cap"], 2)
+
+    def test_quote_with_thin_comment_is_dropped_long_comment_reaches_llm(self) -> None:
+        thin = _item(post_id="11", text="This.", refs=[{"type": "quoted", "id": "1"}])
+        long = _item(
+            post_id="12",
+            text=(
+                "This launch changes the pricing floor: the new 7B weights are "
+                "open and the $0.2/m token cut is real for inference teams."
+            ),
+            refs=[{"type": "quoted", "id": "2"}],
+        )
+        items = social._build_account_items(
+            [thin, long],
+            {},
+            feed=_feed(),
+            username="openai",
+            profile={"followers": 100},
+            referenced_by_id={
+                "2": {"id": "2", "text": "We shipped a model today."},
+            },
+        )
+        kept, stats = social.filter_social_items(items, classifier=lambda _: True)
+        self.assertEqual(stats.get("quote_thin"), 1)
+        self.assertEqual(len(kept), 1)
+        self.assertEqual(kept[0]["metrics"]["post_id"], "12")
+        self.assertEqual(kept[0]["metrics"]["gate"], "direct")
+
+    def test_casual_model_talk_cannot_skip_fact_gate(self) -> None:
+        post = _item(post_id="21", text="This model is so good, crazy times to be in AI.")
+        items = social._build_account_items(
+            [post], {}, feed=_feed(), username="openai", profile={"followers": 1000000}
+        )
+        kept, stats = social.filter_social_items(items, classifier=lambda _: False)
+        self.assertEqual(kept, [])
+        self.assertEqual(stats.get("direct", 0), 0)
+        self.assertEqual(stats.get("llm_reject"), 1)
+
+    def test_media_short_caption_reaches_fact_gate(self) -> None:
+        post = _item(post_id="31", text="shipped")
+        items = social._build_account_items(
+            [post],
+            {
+                "m1": {
+                    "media_key": "m1",
+                    "type": "photo",
+                    "url": "https://pbs.twimg.com/media/example.jpg",
+                }
+            },
+            feed=_feed(),
+            username="openai",
+            profile={"followers": 100},
+        )
+        # attachments must be on the post for media to attach
+        self.assertEqual(items[0]["metrics"]["has_media"], False)
+        post["attachments"] = {"media_keys": ["m1"]}
+        items = social._build_account_items(
+            [post],
+            {
+                "m1": {
+                    "media_key": "m1",
+                    "type": "photo",
+                    "url": "https://pbs.twimg.com/media/example.jpg",
+                }
+            },
+            feed=_feed(),
+            username="openai",
+            profile={"followers": 100},
+        )
+        self.assertTrue(items[0]["metrics"]["has_media"])
+        kept, stats = social.filter_social_items(items, classifier=lambda _: True)
+        self.assertEqual(stats.get("short", 0), 0)
+        self.assertEqual(len(kept), 1)
+        self.assertEqual(kept[0]["metrics"]["gate"], "llm")
 
     def test_seed_contains_ten_p0_pilot_accounts(self) -> None:
         seed = json.loads(

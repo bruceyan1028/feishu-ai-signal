@@ -20,11 +20,12 @@ from . import config, report
 log = logging.getLogger(__name__)
 _API = "https://api.x.com/2"
 _SESSION = requests.Session()
-_STRONG_RE = re.compile(
-    r"\b(announce|announcing|introduc(?:e|ing)|launch|release[sd]?|now available|"
-    r"open[- ]source|api|pricing|price|model|weights?|security|vulnerabilit|"
-    r"license|benchmark|paper|research|acqui|funding)\b|"
-    r"(发布|上线|推出|开源|模型|权重|接口|价格|安全|漏洞|许可|论文|研究|融资|收购)",
+# 事件词：必须是「发生了一件事」，单独提 model/api/paper 不够。
+_EVENT_RE = re.compile(
+    r"\b(announce|announcing|introduc(?:e|ing)|launch(?:ed|ing)?|release[sd]?|"
+    r"now available|open[- ]source|weights?|pric(?:e|ing)|vulnerabilit|"
+    r"license|benchmark|acqui(?:re[sd]?|sition)|funding|raised)\b|"
+    r"(发布|上线|推出|开源|权重|定价|降价|漏洞|许可|融资|收购)",
     re.I,
 )
 _TECH_RE = re.compile(
@@ -39,9 +40,24 @@ _NOISE_RE = re.compile(
     r"(抽奖|招聘|加入我们|生日快乐|早上好|立即报名|最后机会|不见不散)",
     re.I,
 )
+_QUOTE_BOILERPLATE_RE = re.compile(
+    r"^(this\.?|this is (?:huge|big|wild|insane)|lol|lmao|agree[d]?|exactly|"
+    r"so true|wow|yes\.?|这个|同意|哈哈+|太强了|牛+|赞+)$",
+    re.I,
+)
 _URL_RE = re.compile(r"https?://\S+", re.I)
+_MENTION_RE = re.compile(r"@\w+")
+_HASHTAG_RE = re.compile(r"#\S+")
 _NUMBER_RE = re.compile(r"(?<!\w)\d+(?:\.\d+)?%?|[$￥¥]\s*\d+", re.I)
 _CODE_RE = re.compile(r"(github\.com|huggingface\.co|arxiv\.org|doi\.org)", re.I)
+_ARTICLE_URL_RE = re.compile(
+    r"(?:x|twitter)\.com/(?:i/article/|[^/]+/article/)|/i/premium/articles?/",
+    re.I,
+)
+_TWEET_FIELDS = (
+    "id,text,author_id,created_at,conversation_id,referenced_tweets,"
+    "public_metrics,entities,attachments,edit_history_tweet_ids,lang,note_tweet"
+)
 
 
 @dataclass
@@ -71,7 +87,9 @@ def _api_get(path: str, *, bearer: str, params: dict[str, Any]) -> dict[str, Any
         raise RuntimeError("X API 返回 401 Unauthorized：X_BEARER_TOKEN 无效或已被重新生成")
     if response.status_code == 403:
         raise RuntimeError("X API 返回 403 Forbidden：当前 App 无权访问该端点")
-    response.raise_for_status()
+    if response.status_code >= 400:
+        detail = (response.text or "")[:300]
+        raise RuntimeError(f"X API {response.status_code}: {detail or response.reason}")
     payload = response.json()
     errors = payload.get("errors") or []
     if errors and not payload.get("data"):
@@ -140,39 +158,73 @@ def _timeline(
     since_id: str = "",
     lookback_hours: int = 168,
     max_pages: int = 20,
-) -> tuple[list[dict[str, Any]], dict[str, dict[str, Any]]]:
+) -> tuple[list[dict[str, Any]], dict[str, dict[str, Any]], dict[str, dict[str, Any]]]:
     posts: list[dict[str, Any]] = []
     media: dict[str, dict[str, Any]] = {}
+    referenced: dict[str, dict[str, Any]] = {}
     token = ""
+    start_time = (
+        datetime.now(timezone.utc) - timedelta(hours=max(1, lookback_hours))
+    ).strftime("%Y-%m-%dT%H:%M:%SZ")
+    tweet_fields = _TWEET_FIELDS
+    use_start_time = not since_id
     for _ in range(max_pages):
         params: dict[str, Any] = {
             "max_results": 100,
-            "tweet.fields": (
-                "id,text,author_id,created_at,conversation_id,referenced_tweets,"
-                "public_metrics,entities,attachments,edit_history_tweet_ids,lang"
-            ),
-            "expansions": "attachments.media_keys",
+            "tweet.fields": tweet_fields,
+            "expansions": "attachments.media_keys,referenced_tweets.id",
             "media.fields": "media_key,type,url,preview_image_url,width,height,duration_ms,public_metrics",
+            "exclude": "retweets",
         }
         if since_id:
             params["since_id"] = since_id
-        else:
-            params["start_time"] = (
-                datetime.now(timezone.utc) - timedelta(hours=max(1, lookback_hours))
-            ).isoformat().replace("+00:00", "Z")
+        elif use_start_time:
+            params["start_time"] = start_time
         if token:
             params["pagination_token"] = token
-        payload = _api_get(f"users/{user_id}/tweets", bearer=bearer, params=params)
+        try:
+            payload = _api_get(f"users/{user_id}/tweets", bearer=bearer, params=params)
+        except RuntimeError as exc:
+            if token:
+                raise
+            if "note_tweet" in tweet_fields:
+                tweet_fields = tweet_fields.replace(",note_tweet", "")
+                log.warning("X timeline 不支持 note_tweet，已降级：%s", exc)
+                continue
+            if use_start_time:
+                use_start_time = False
+                log.warning("X timeline start_time 被拒，改走本地时间窗：%s", exc)
+                continue
+            raise
         posts.extend(payload.get("data") or [])
-        for obj in (payload.get("includes") or {}).get("media") or []:
+        includes = payload.get("includes") or {}
+        for obj in includes.get("media") or []:
             key = str(obj.get("media_key") or "")
             if key:
                 media[key] = obj
+        for obj in includes.get("tweets") or []:
+            key = str(obj.get("id") or "")
+            if key:
+                referenced[key] = obj
         meta = payload.get("meta") or {}
         token = str(meta.get("next_token") or "")
         if not token:
             break
-    return posts, media
+    if lookback_hours:
+        cutoff = datetime.now(timezone.utc) - timedelta(hours=max(1, lookback_hours))
+        filtered = []
+        for post in posts:
+            try:
+                created = datetime.fromisoformat(
+                    str(post.get("created_at") or "").replace("Z", "+00:00")
+                )
+            except ValueError:
+                filtered.append(post)
+                continue
+            if created >= cutoff:
+                filtered.append(post)
+        posts = filtered
+    return posts, media, referenced
 
 
 def _reference_types(post: dict[str, Any]) -> set[str]:
@@ -181,6 +233,58 @@ def _reference_types(post: dict[str, Any]) -> set[str]:
         for ref in post.get("referenced_tweets") or []
         if ref.get("type")
     }
+
+
+def _post_full_text(post: dict[str, Any]) -> str:
+    note = post.get("note_tweet") if isinstance(post.get("note_tweet"), dict) else {}
+    return str((note or {}).get("text") or post.get("text") or "").strip()
+
+
+def _clean_own_text(text: str) -> str:
+    cleaned = _URL_RE.sub(" ", text)
+    cleaned = _MENTION_RE.sub(" ", cleaned)
+    cleaned = _HASHTAG_RE.sub(" ", cleaned)
+    cleaned = re.sub(r"^RT\s+", " ", cleaned)
+    return re.sub(r"\s+", " ", cleaned).strip()
+
+
+def _article_cards(posts: list[dict[str, Any]]) -> list[str]:
+    cards: list[str] = []
+    seen: set[str] = set()
+    for post in posts:
+        for url in (post.get("entities") or {}).get("urls") or []:
+            expanded = str(
+                url.get("expanded_url") or url.get("unwound_url") or url.get("url") or ""
+            )
+            title = str(url.get("title") or "").strip()
+            desc = str(url.get("description") or "").strip()
+            if not (_ARTICLE_URL_RE.search(expanded) or (title and desc)):
+                continue
+            key = expanded or title
+            if not key or key in seen:
+                continue
+            seen.add(key)
+            chunk = " ".join(part for part in (title, desc, expanded) if part)
+            if chunk:
+                cards.append(chunk)
+    return cards
+
+
+def _referenced_texts(
+    posts: list[dict[str, Any]], referenced_by_id: dict[str, dict[str, Any]]
+) -> list[str]:
+    texts: list[str] = []
+    seen: set[str] = set()
+    for post in posts:
+        for ref in post.get("referenced_tweets") or []:
+            ref_id = str(ref.get("id") or "")
+            if not ref_id or ref_id in seen:
+                continue
+            seen.add(ref_id)
+            text = _post_full_text(referenced_by_id.get(ref_id) or {})
+            if text:
+                texts.append(text)
+    return texts
 
 
 def _media_assets(
@@ -223,7 +327,9 @@ def _build_account_items(
     feed: dict[str, Any],
     username: str,
     profile: dict[str, Any],
+    referenced_by_id: dict[str, dict[str, Any]] | None = None,
 ) -> list[dict[str, Any]]:
+    referenced_by_id = referenced_by_id or {}
     groups: dict[str, list[dict[str, Any]]] = defaultdict(list)
     for post in posts:
         conversation = str(post.get("conversation_id") or post.get("id") or "")
@@ -237,13 +343,22 @@ def _build_account_items(
             thread_posts[0],
         )
         refs = set().union(*(_reference_types(post) for post in thread_posts))
-        texts = [str(post.get("text") or "").strip() for post in thread_posts]
+        texts = [_post_full_text(post) for post in thread_posts]
         texts = [text for text in texts if text]
-        if not texts:
+        cards = _article_cards(thread_posts)
+        image_url, assets = _media_assets(thread_posts, media_by_key)
+        has_media = bool(assets.get("images") or assets.get("videos"))
+        if not texts and not cards and not has_media:
             continue
-        body = "\n\n---\n\n".join(texts)
-        compact = re.sub(r"\s+", " ", texts[0]).strip()
+        body_parts = list(texts)
+        if cards:
+            body_parts.extend(cards)
+        body = "\n\n---\n\n".join(body_parts)
+        first = texts[0] if texts else (cards[0] if cards else "")
+        compact = re.sub(r"\s+", " ", first).strip()
         title = compact[:117] + ("..." if len(compact) > 117 else "")
+        if not title and has_media:
+            title = f"X media post {root.get('id') or ''}".strip()
         post_id = str(root.get("id") or "")
         edit_history = [str(value) for value in root.get("edit_history_tweet_ids") or [] if value]
         canonical_id = edit_history[0] if edit_history else post_id
@@ -255,7 +370,13 @@ def _build_account_items(
         quotes = sum(int(item.get("quote_count") or 0) for item in public)
         bookmarks = sum(int(item.get("bookmark_count") or 0) for item in public)
         engagement = likes + 2 * replies + 2 * reposts + 2 * quotes + bookmarks
-        image_url, assets = _media_assets(thread_posts, media_by_key)
+        is_retweet = "retweeted" in refs
+        is_quote = "quoted" in refs
+        # 纯转发没有本人增量；引用转述只计自己写的字。
+        own_source = "" if is_retweet and not is_quote else "\n".join(texts)
+        own_text = _clean_own_text(own_source)
+        quoted_texts = _referenced_texts(thread_posts, referenced_by_id) if is_quote else []
+        quoted_text = _clean_own_text("\n".join(quoted_texts))
         item_feed = dict(feed)
         item_feed["name"] = f"X · @{username}"
         item_feed["x_post_id"] = canonical_id
@@ -281,11 +402,17 @@ def _build_account_items(
                     "quotes": quotes,
                     "bookmarks": bookmarks,
                     "engagement": engagement,
-                    "is_retweet": "retweeted" in refs,
+                    "is_retweet": is_retweet,
                     "is_reply": "replied_to" in refs,
-                    "is_quote": "quoted" in refs,
+                    "is_quote": is_quote,
                     "thread_count": len(thread_posts),
                     "edit_history_tweet_ids": edit_history,
+                    "own_text": own_text,
+                    "own_chars": len(own_text),
+                    "quoted_text": quoted_text,
+                    "quoted_chars": len(quoted_text),
+                    "has_article": bool(cards) or any(len(_post_full_text(post)) > 280 for post in thread_posts),
+                    "has_media": has_media,
                 },
                 "feed": item_feed,
             }
@@ -300,7 +427,7 @@ def _fetch_account(
     *,
     bearer: str,
 ) -> tuple[list[dict[str, Any]], str, int]:
-    posts, media = _timeline(
+    posts, media, referenced = _timeline(
         str(profile["user_id"]),
         bearer=bearer,
         since_id=str(profile.get("since_id") or ""),
@@ -309,7 +436,12 @@ def _fetch_account(
     )
     max_seen = max((str(post.get("id") or "") for post in posts), key=lambda x: int(x or 0), default="")
     return _build_account_items(
-        posts, media, feed=feed, username=username, profile=profile
+        posts,
+        media,
+        feed=feed,
+        username=username,
+        profile=profile,
+        referenced_by_id=referenced,
     ), max_seen, len(posts)
 
 
@@ -330,7 +462,7 @@ def fetch_social_sources(
         resolved = _resolve_accounts(_account_names(feed), state, bearer=bearer)
         result.cursor_states[source_id] = state
         tiers = feed.get("account_tiers") or {}
-        poll_hours = (feed.get("social_params") or {}).get("poll_hours") or {"P0": 2, "P1": 4}
+        poll_hours = (feed.get("social_params") or {}).get("poll_hours") or {"P0": 24, "P1": 24}
         now_ms = int(datetime.now(timezone.utc).timestamp() * 1000)
         for username, profile in resolved.items():
             tier = str(tiers.get(username) or feed.get("priority") or "P1").upper()
@@ -386,6 +518,50 @@ def _novelty_score(text: str, recent_texts: list[str]) -> int:
     return 0
 
 
+def _item_text(item: dict[str, Any]) -> str:
+    return f"{item.get('title') or ''}\n{item.get('body') or ''}"
+
+
+def _has_hard_evidence(item: dict[str, Any]) -> bool:
+    """可核验证据：代码/论文链、数字、长线程、X 文章。有图/任意 URL 不算。"""
+    metrics = item.get("metrics") or {}
+    text = _item_text(item)
+    if _CODE_RE.search(text):
+        return True
+    if _NUMBER_RE.search(text):
+        return True
+    if int(metrics.get("thread_count") or 0) >= 3:
+        return True
+    return bool(metrics.get("has_article"))
+
+
+def _has_media(item: dict[str, Any]) -> bool:
+    metrics = item.get("metrics") or {}
+    assets = item.get("media_assets") or {}
+    return bool(
+        metrics.get("has_media")
+        or item.get("image_url")
+        or assets.get("images")
+        or assets.get("videos")
+    )
+
+
+def _annotate_gates(item: dict[str, Any]) -> None:
+    metrics = item.setdefault("metrics", {})
+    text = _item_text(item)
+    metrics["has_event"] = bool(_EVENT_RE.search(text))
+    metrics["has_hard_evidence"] = _has_hard_evidence(item)
+    metrics["has_media"] = _has_media(item)
+    metrics["event_and_evidence"] = bool(metrics["has_event"] and metrics["has_hard_evidence"])
+    metrics["strong_signal"] = bool(metrics["has_event"])
+
+
+def _quote_too_similar(own_text: str, quoted_text: str) -> bool:
+    if not own_text or not quoted_text or len(own_text) < 20:
+        return False
+    return SequenceMatcher(None, own_text.lower()[:800], quoted_text.lower()[:800]).ratio() >= 0.85
+
+
 def score_item(
     item: dict[str, Any],
     *,
@@ -398,14 +574,14 @@ def score_item(
     tiers = feed.get("account_tiers") or {}
     tier = str(tiers.get(account) or feed.get("priority") or "P1").upper()
     account_score = 20 if tier == "P0" else 12 if tier == "P1" else 6
-    text = f"{item.get('title') or ''}\n{item.get('body') or ''}"
-    intent = 25 if _STRONG_RE.search(text) else 18 if _TECH_RE.search(text) else 8
+    text = _item_text(item)
+    _annotate_gates(item)
+    intent = 25 if metrics.get("has_event") else 18 if _TECH_RE.search(text) else 8
     evidence = 0
-    evidence += 8 if _URL_RE.search(text) else 0
-    evidence += 6 if _CODE_RE.search(text) else 0
-    evidence += 4 if _NUMBER_RE.search(text) else 0
-    evidence += 4 if (item.get("image_url") or (item.get("media_assets") or {}).get("videos")) else 0
-    evidence += 4 if int(metrics.get("thread_count") or 0) > 1 else 0
+    evidence += 8 if _CODE_RE.search(text) else 0
+    evidence += 6 if _NUMBER_RE.search(text) else 0
+    evidence += 4 if metrics.get("has_article") else 0
+    evidence += 4 if int(metrics.get("thread_count") or 0) >= 3 else 0
     evidence = min(20, evidence)
     novelty = _novelty_score(text, recent_texts or [])
     engagement = float(metrics.get("engagement") or 0)
@@ -426,7 +602,6 @@ def score_item(
     metrics.update(
         {
             "account_tier": tier,
-            "strong_signal": bool(_STRONG_RE.search(text)),
             "social_score": max(0, min(100, score)),
         }
     )
@@ -435,40 +610,90 @@ def score_item(
 
 def _hard_filter(item: dict[str, Any], params: dict[str, Any]) -> tuple[bool, str]:
     metrics = item.get("metrics") or {}
-    text = f"{item.get('title') or ''}\n{item.get('body') or ''}".strip()
-    if metrics.get("is_retweet"):
+    _annotate_gates(item)
+    own_text = str(metrics.get("own_text") or _clean_own_text(str(item.get("body") or "")))
+    own_chars = int(metrics.get("own_chars") or len(own_text))
+    if metrics.get("is_retweet") and not metrics.get("is_quote"):
         return False, "retweet"
+    if metrics.get("is_quote"):
+        drop_chars = int(params.get("quote_drop_own_chars") or 20)
+        if own_chars < drop_chars or _QUOTE_BOILERPLATE_RE.match(own_text):
+            return False, "quote_thin"
+        if _quote_too_similar(own_text, str(metrics.get("quoted_text") or "")):
+            return False, "quote_thin"
     if params.get("exclude_replies", True) and metrics.get("is_reply") and int(
         metrics.get("thread_count") or 1
     ) <= 1:
         return False, "reply"
-    strong = bool(_STRONG_RE.search(text))
-    has_evidence = bool(
-        _URL_RE.search(text)
-        or item.get("image_url")
-        or (item.get("media_assets") or {}).get("videos")
-        or int(metrics.get("thread_count") or 0) > 1
-    )
-    if _NOISE_RE.search(text) and not strong and not has_evidence:
+    if _NOISE_RE.search(_item_text(item)) and not metrics.get("has_event"):
         return False, "noise"
     min_chars = int(params.get("min_content_chars") or 30)
-    if len(str(item.get("body") or "").strip()) < min_chars and not has_evidence:
+    # 图/视频/X 文章豁免字数闸，交给事实闸；纯短闲聊丢掉。
+    if (
+        own_chars < min_chars
+        and not metrics.get("has_media")
+        and not metrics.get("has_article")
+        and not metrics.get("has_hard_evidence")
+    ):
         return False, "short"
     return True, ""
 
 
 def _default_llm_classifier(item: dict[str, Any]) -> bool:
     metrics = item.get("metrics") or {}
+    quoted = str(metrics.get("quoted_text") or "").strip()
+    quoted_block = f"\n被引用原文：{quoted[:800]}" if quoted else ""
     prompt = f"""判断下面的 X 帖子是否构成值得进入 AI 行业简报的“新信号”。
-只依据帖子内容；互动高不能单独成为通过理由。观点帖必须含新事实、数据、依据或明确行动信息。
+只依据帖子内容；互动高、账号大、配了图都不能单独成为通过理由。
+
+keep=true 当且仅当能抽出一条可核验的新事实，例如：
+产品/模型发布或能力变更、开源、价格、论文、融资并购、正式文档/功能上线。
+引用或转发官方帖也可以 keep=true，只要本人有增量说明，且能抽出上述事实。
+
+keep=false：闲聊、心情、站队、求互动/报名/招聘、纯使用心得、没有新事实的短评转发。
+core_fact 必须是完整陈述句；抽不出就留空，且 keep=false。
 只输出严格 JSON：
 {{"keep": true, "event_type": "", "core_fact": "", "evidence": "", "relation": "", "confidence": 0, "reject_reason": ""}}
 
 账号：@{metrics.get("account")}
-帖子：{item.get("body")}
+帖子：{item.get("body")}{quoted_block}
 """
     raw = report._llm_json(prompt)
-    return bool(raw.get("keep")) and int(raw.get("confidence") or 0) >= 60
+    fact = str(raw.get("core_fact") or "").strip()
+    confidence = int(raw.get("confidence") or 0)
+    metrics["llm_core_fact"] = fact
+    metrics["llm_event_type"] = str(raw.get("event_type") or "")
+    metrics["llm_confidence"] = confidence
+    # A 策略只看是否抽出了可核验事实。keep/confidence 经常和事实不一致，不作为否决。
+    if len(fact) < 16:
+        return False
+    return not _NOISE_RE.search(fact)
+
+
+def _resolve_classifier(
+    params: dict[str, Any],
+    classifier: Callable[[dict[str, Any]], bool] | None,
+) -> tuple[Callable[[dict[str, Any]], bool] | None, str]:
+    if not params.get("enable_llm_filter", True):
+        return None, "llm_disabled"
+    if classifier is not None:
+        return classifier, ""
+    if config.LLM_API_KEY:
+        return _default_llm_classifier, ""
+    return None, "llm_unavailable"
+
+
+def _apply_llm_gate(
+    item: dict[str, Any],
+    decide: Callable[[dict[str, Any]], bool],
+) -> str:
+    try:
+        if decide(item):
+            return "llm_keep"
+    except Exception as exc:  # noqa: BLE001
+        log.warning("X 事实闸智能精筛失败，按精确率优先丢弃：%s", exc)
+        return "llm_error"
+    return "llm_reject"
 
 
 def filter_social_items(
@@ -477,53 +702,57 @@ def filter_social_items(
     recent_texts: list[str] | None = None,
     existing_account_counts: dict[str, int] | None = None,
     classifier: Callable[[dict[str, Any]], bool] | None = None,
+    skip_daily_cap: bool = False,
 ) -> tuple[list[dict[str, Any]], dict[str, int]]:
-    """硬过滤 → 规则评分 → 临界区 LLM → 账号日配额。"""
+    """硬过滤 → 事件∧证据直接过 / 其余走事实闸 LLM → 账号日配额。"""
     recent_texts = recent_texts or []
     counts = Counter(existing_account_counts or {})
     stats: Counter[str] = Counter(raw=len(items))
     candidates: list[dict[str, Any]] = []
+    pending_llm: list[dict[str, Any]] = []
+    shared_decide: Callable[[dict[str, Any]], bool] | None = None
     for item in items:
         feed = item.get("feed") or {}
         params = feed.get("social_params") or {}
         keep, reason = _hard_filter(item, params)
         if not keep:
+            (item.get("metrics") or {})["drop_reason"] = reason
             stats[reason] += 1
             continue
         account = str((item.get("metrics") or {}).get("account") or "").lower()
         baselines = params.get("engagement_baselines") or {}
-        score = score_item(
+        score_item(
             item,
             recent_texts=recent_texts,
             engagement_baseline=baselines.get(account),
         )
-        direct = int(params.get("direct_score") or 70)
-        borderline = int(params.get("borderline_score") or 45)
-        if score >= direct:
+        metrics = item.get("metrics") or {}
+        if metrics.get("event_and_evidence"):
+            metrics["gate"] = "direct"
             stats["direct"] += 1
-        elif score >= borderline:
-            if not params.get("enable_llm_filter", True):
-                stats["llm_disabled"] += 1
-                continue
-            decide = classifier
-            if decide is None and config.LLM_API_KEY:
-                decide = _default_llm_classifier
-            if decide is None:
-                stats["llm_unavailable"] += 1
-                continue
-            try:
-                if not decide(item):
-                    stats["llm_reject"] += 1
-                    continue
-            except Exception as exc:  # noqa: BLE001
-                log.warning("X 临界帖子智能精筛失败，按精确率优先丢弃：%s", exc)
-                stats["llm_error"] += 1
-                continue
-            stats["llm_keep"] += 1
-        else:
-            stats["low_score"] += 1
+            candidates.append(item)
             continue
-        candidates.append(item)
+        decide, missing = _resolve_classifier(params, classifier)
+        if decide is None:
+            (item.get("metrics") or {})["drop_reason"] = missing
+            stats[missing] += 1
+            continue
+        shared_decide = decide
+        pending_llm.append(item)
+    if pending_llm and shared_decide is not None:
+        workers = min(4, len(pending_llm))
+        if workers == 1:
+            outcomes = [_apply_llm_gate(item, shared_decide) for item in pending_llm]
+        else:
+            with ThreadPoolExecutor(max_workers=workers) as executor:
+                outcomes = list(executor.map(lambda item: _apply_llm_gate(item, shared_decide), pending_llm))
+        for item, reason in zip(pending_llm, outcomes):
+            stats[reason] += 1
+            if reason == "llm_keep":
+                (item.get("metrics") or {})["gate"] = "llm"
+                candidates.append(item)
+            else:
+                (item.get("metrics") or {})["drop_reason"] = reason
     candidates.sort(
         key=lambda item: (
             int((item.get("metrics") or {}).get("social_score") or 0),
@@ -533,6 +762,9 @@ def filter_social_items(
     )
     kept = []
     for item in candidates:
+        if skip_daily_cap:
+            kept.append(item)
+            continue
         metrics = item.get("metrics") or {}
         account = str(metrics.get("account") or "").lower()
         feed = item.get("feed") or {}
@@ -540,12 +772,50 @@ def filter_social_items(
         tier = str(metrics.get("account_tier") or "P1")
         cap = int((params.get("daily_caps") or {}).get(tier) or (5 if tier == "P0" else 2))
         if counts[account] >= cap:
+            (item.get("metrics") or {})["drop_reason"] = "daily_cap"
             stats["daily_cap"] += 1
             continue
         counts[account] += 1
         kept.append(item)
     stats["kept"] = len(kept)
     return kept, dict(stats)
+
+
+def preview_account(
+    username: str,
+    *,
+    lookback_hours: int = 2160,
+    bearer: str | None = None,
+    classifier: Callable[[dict[str, Any]], bool] | None = None,
+) -> tuple[list[dict[str, Any]], dict[str, int], SocialFetchBatch]:
+    """只读回放一个账号：不读飞书、不写 cursor、不套日配额。"""
+    handle = username.lstrip("@").lower()
+    feed = {
+        "id": "social-preview",
+        "name": f"X · @{handle}",
+        "fetch_method": "Social",
+        "source_type": "社交媒体",
+        "priority": "P0",
+        "lookback_hours": lookback_hours,
+        "accounts": [handle],
+        "account_tiers": {handle: "P0"},
+        "cursor_state": {},
+        "extra_config": {"max_pages": 32},
+        "social_params": {
+            "min_content_chars": 30,
+            "enable_llm_filter": True,
+            "exclude_replies": True,
+            "quote_min_own_chars": 80,
+            "quote_drop_own_chars": 20,
+        },
+    }
+    batch = fetch_social_sources([feed], bearer=bearer)
+    kept, funnel = filter_social_items(
+        batch.items,
+        classifier=classifier,
+        skip_daily_cap=True,
+    )
+    return kept, funnel, batch
 
 
 def recent_context(

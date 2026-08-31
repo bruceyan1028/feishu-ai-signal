@@ -1,7 +1,7 @@
 name: X Social Signal Ingest
 
 on:
-  # X 信息源暂时关闭：仅保留手动入口，避免定时任务和每日主流水线采集。
+  # X 筛选策略已落地，但账户尚无 API credits：不挂 schedule，也不进日报默认采集。
   workflow_dispatch: {}
 
 concurrency:
