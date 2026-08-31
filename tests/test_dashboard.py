@@ -224,7 +224,8 @@ class FetchLeaderboardTest(unittest.TestCase):
         self.assertEqual(len(dashboard.fetch_leaderboard(limit=3)["models"]), 3)
 
     @patch.dict("os.environ", {"ARTIFICIAL_ANALYSIS_API_KEY": ""}, clear=False)
-    def test_missing_key_is_reported_not_raised(self):
+    @patch("src.dashboard.fetch_size_buckets", return_value=[])
+    def test_missing_key_is_reported_not_raised(self, _mock_buckets: MagicMock):
         board = dashboard.fetch_leaderboard()
         self.assertEqual(board["models"], [])
         self.assertIn("ARTIFICIAL_ANALYSIS_API_KEY", board["error"])
@@ -235,6 +236,131 @@ class FetchLeaderboardTest(unittest.TestCase):
         board = dashboard.fetch_leaderboard()
         self.assertEqual(board["models"], [])
         self.assertIn("429", board["error"])
+
+
+def _size_page(*charts: tuple[str, str, list[tuple[str, str, float]]]) -> str:
+    """按 AA 分档页的样子拼 ld+json：每张图一份 schema.org Dataset。"""
+    blocks = []
+    for name, field, rows in charts:
+        data = [
+            {"label": label, field: value, "detailsUrl": f"/models/{slug}"}
+            for label, slug, value in rows
+        ]
+        blocks.append(
+            '<script type="application/ld+json">'
+            + json.dumps(
+                {"@context": "https://schema.org", "@type": "Dataset", "name": name, "data": data}
+            )
+            + "</script>"
+        )
+    return "<html><head>" + "".join(blocks) + "</head><body>图表在客户端渲染</body></html>"
+
+
+class SizeBucketTest(unittest.TestCase):
+    """分档榜（4B–40B / ≤4B）：接口不给参数规模和开源标记，只能读 AA 的分档页。"""
+
+    PAGE = _size_page(
+        (
+            "Intelligence",
+            "artificialAnalysisIntelligenceIndex",
+            [
+                ("Granite 4.2 3B", "granite-4-2-3b", 14.276448872352),
+                ("Qwen3.5 2B", "qwen3-5-2b", 7.4),
+                ("G9v3-3B", "g9v3-3b", 16.1802541415755),
+                ("Qwen3.5 2B (Non-reasoning)", "qwen3-5-2b-non-reasoning", 5.3),
+            ],
+        ),
+        # 同一页里智能指数会内联两份 Dataset，字段名不同、数值一致，不能重复计数
+        (
+            "Artificial Analysis Intelligence Index",
+            "intelligenceIndex",
+            [
+                ("Granite 4.2 3B", "granite-4-2-3b", 14.276448872352),
+                ("G9v3-3B", "g9v3-3b", 16.1802541415755),
+            ],
+        ),
+        (
+            "Total Parameters",
+            "totalParameters",
+            [
+                ("Granite 4.2 3B", "granite-4-2-3b", 3),
+                ("Qwen3.5 2B", "qwen3-5-2b", 2.27),
+                ("G9v3-3B", "g9v3-3b", 3),
+            ],
+        ),
+        # 榜里没有智能指数的图不该带出多余的行
+        ("Context Window", "contextWindowTokens", [("Qwen3.5 0.8B", "qwen3-5-0-8b", 262144)]),
+    )
+
+    def test_parses_intelligence_ranking_and_params(self):
+        rows = dashboard.parse_size_page(self.PAGE)
+        self.assertEqual(
+            [row["label"] for row in rows],
+            ["G9v3-3B", "Granite 4.2 3B", "Qwen3.5 2B", "Qwen3.5 2B (Non-reasoning)"],
+        )
+        self.assertEqual(rows[0]["intelligence"], 16.2)
+        self.assertEqual(rows[0]["slug"], "g9v3-3b")
+        self.assertEqual(rows[1]["params"], 3.0)
+        # 只有上下文那张图的模型没有指数，不能混进榜
+        self.assertNotIn("qwen3-5-0-8b", [row["slug"] for row in rows])
+        # 缺参数规模的行留 None，不能拿 0 冒充
+        self.assertIsNone(rows[3]["params"])
+
+    def test_page_without_datasets_is_reported_not_silently_empty(self):
+        self.assertEqual(dashboard.parse_size_page("<html><body>没有图</body></html>"), [])
+
+    @patch("src.dashboard.requests.get")
+    def test_bucket_borrows_creators_from_the_api_for_logos(self, mock_get: MagicMock):
+        mock_get.return_value = MagicMock(status_code=200, text=self.PAGE)
+        bucket = dashboard.fetch_size_bucket(
+            "tiny", "微型", "≤4B", "https://artificialanalysis.ai/models/open-source/tiny",
+            {"g9v3-3b": "AI9Stars", "qwen3-5-2b": "Alibaba"},
+        )
+        self.assertEqual(bucket["error"], "")
+        self.assertEqual(bucket["key"], "tiny")
+        self.assertEqual(bucket["note"], "≤4B")
+        self.assertEqual([m["rank"] for m in bucket["models"]], [1, 2, 3, 4])
+        self.assertEqual(bucket["models"][2]["logoDomain"], "qwen.ai")
+        self.assertEqual(bucket["models"][2]["url"], "https://artificialanalysis.ai/models/qwen3-5-2b")
+        # 接口认不出的厂商留空，前端回退字标；缺创作者也不该让这一档失败
+        self.assertEqual(bucket["models"][1]["creator"], "")
+        self.assertTrue(bucket["updatedAt"])
+
+    @patch("src.dashboard.requests.get")
+    def test_bucket_keeps_aa_ordering_and_splits_the_variant_tag(self, mock_get: MagicMock):
+        """分档页把同一模型的档位并列展示，这里照搬；档位标记单独拆出来排小字。"""
+        mock_get.return_value = MagicMock(status_code=200, text=self.PAGE)
+        rows = dashboard.fetch_size_bucket("tiny", "微型", "≤4B", "u", {})["models"]
+        tagged = rows[3]
+        self.assertEqual(tagged["label"], "Qwen3.5 2B (Non-reasoning)")
+        self.assertEqual(tagged["name"], "Qwen3.5 2B")
+        self.assertEqual(tagged["tag"], "Non-reasoning")
+        self.assertEqual(rows[0]["tag"], "")
+
+    def test_variant_tag_leaves_names_that_are_all_parens_alone(self):
+        self.assertEqual(dashboard._variant_tag("Qwen3.8 27B (xhigh)"), "xhigh")
+        self.assertEqual(dashboard._variant_tag("GLM-5.3"), "")
+        self.assertEqual(dashboard._variant_tag("Qwen3.8 (Preview) 2.4T"), "")
+
+    @patch("src.dashboard.requests.get")
+    def test_structure_change_surfaces_as_error_not_empty_board(self, mock_get: MagicMock):
+        mock_get.return_value = MagicMock(status_code=200, text="<html><body>改版了</body></html>")
+        bucket = dashboard.fetch_size_bucket("small", "小模型", "4B–40B", "u", {})
+        self.assertEqual(bucket["models"], [])
+        self.assertIn("智能指数", bucket["error"])
+
+    @patch("src.dashboard.requests.get", side_effect=RuntimeError("403"))
+    def test_page_failure_degrades_to_error_field(self, _mock_get: MagicMock):
+        bucket = dashboard.fetch_size_bucket("small", "小模型", "4B–40B", "u", {})
+        self.assertEqual(bucket["models"], [])
+        self.assertIn("403", bucket["error"])
+
+    def test_configured_pages_cover_both_open_source_size_tiers(self):
+        keys = [key for key, _, _, _ in dashboard.AA_SIZE_PAGES]
+        urls = [url for _, _, _, url in dashboard.AA_SIZE_PAGES]
+        self.assertEqual(keys, ["small", "tiny"])
+        self.assertIn("https://artificialanalysis.ai/models/open-source/small", urls)
+        self.assertIn("https://artificialanalysis.ai/models/open-source/tiny", urls)
 
 
 class WritePayloadTest(unittest.TestCase):
@@ -257,6 +383,54 @@ class WritePayloadTest(unittest.TestCase):
         merged = dashboard.keep_last_good(incoming, previous)
         self.assertEqual(merged["leaderboard"]["models"][0]["name"], "Claude Opus 5")
         self.assertEqual(merged["market"]["quotes"][0]["name"], "英伟达")
+
+    def test_keep_last_good_falls_back_per_size_bucket(self):
+        """小模型页挂了不该把微型页也换成旧数据，反之亦然。"""
+        previous = {
+            "leaderboard": {
+                "error": "",
+                "models": [{"name": "旧总榜"}],
+                "buckets": [
+                    {"key": "small", "error": "", "models": [{"name": "旧小模型"}]},
+                    {"key": "tiny", "error": "", "models": [{"name": "旧微型"}]},
+                ],
+            }
+        }
+        incoming = {
+            "leaderboard": {
+                "error": "",
+                "models": [{"name": "新总榜"}],
+                "buckets": [
+                    {"key": "small", "error": "403", "models": []},
+                    {"key": "tiny", "error": "", "models": [{"name": "新微型"}]},
+                ],
+            }
+        }
+        buckets = dashboard.keep_last_good(incoming, previous)["leaderboard"]["buckets"]
+        self.assertEqual(buckets[0]["models"][0]["name"], "旧小模型")
+        self.assertEqual(buckets[1]["models"][0]["name"], "新微型")
+
+    def test_fresh_buckets_survive_an_overall_board_fallback(self):
+        """总榜靠旧快照顶上时，这轮拉到的分档不能跟着被换回旧的。"""
+        previous = {
+            "leaderboard": {
+                "error": "",
+                "models": [{"name": "旧总榜"}],
+                "buckets": [{"key": "tiny", "error": "", "models": [{"name": "旧微型"}]}],
+            }
+        }
+        incoming = {
+            "leaderboard": {
+                "error": "429",
+                "models": [],
+                "buckets": [{"key": "tiny", "error": "", "models": [{"name": "新微型"}]}],
+            }
+        }
+        merged = dashboard.keep_last_good(incoming, previous)["leaderboard"]
+        self.assertEqual(merged["models"][0]["name"], "旧总榜")
+        self.assertEqual(merged["buckets"][0]["models"][0]["name"], "新微型")
+        # 回退不能改到旧快照本身，否则同一轮里后续再读会拿到被污染的数据
+        self.assertEqual(previous["leaderboard"]["buckets"][0]["models"][0]["name"], "旧微型")
 
     @patch.dict("os.environ", {"ARTIFICIAL_ANALYSIS_API_KEY": "k"}, clear=False)
     @patch("src.dashboard.fetch_market")
@@ -329,6 +503,16 @@ class FrontendContractTest(unittest.TestCase):
         self.assertIn("function refreshLiveMarket", template)
         self.assertIn("const MARKET_TICKERS", template)
 
+    def test_model_board_switches_between_overall_and_size_tiers(self):
+        template = Path("index.html").read_text(encoding="utf-8")
+        self.assertIn("App.setLeaderboardTab", template)
+        self.assertIn("leaderboardTab: 'overall'", template)
+        self.assertIn("class=\"aa-tabs\"", template)
+        # 档位区间由后端给，前端不再硬编码 4B–40B / ≤4B 这类阈值
+        for note in ("4B–40B", "≤4B"):
+            self.assertIn(note, Path("src/dashboard.py").read_text(encoding="utf-8"))
+            self.assertNotIn(note, template)
+
     def test_live_quote_tickers_match_the_pipeline(self):
         template = Path("index.html").read_text(encoding="utf-8")
         block = template.split("const MARKET_TICKERS = [")[1].split("];")[0]
@@ -345,11 +529,37 @@ class FrontendContractTest(unittest.TestCase):
         self.assertNotIn("#10A37F", openai)
         self.assertIn('fill="#000000"', anthropic)
         self.assertNotIn("#D4A27F", anthropic)
-        self.assertIn("#615CED", qwen)
+        # 千问官网（chat.qwen.ai 的 qwen-logo.svg）是蓝色风车，不是早先那版紫色三角
+        self.assertIn("#082DFF", qwen)
+        self.assertNotIn("#615CED", qwen)
+        self.assertNotIn("#7A6CF0", qwen)
         self.assertIn("#191919", zai)
         template = Path("index.html").read_text(encoding="utf-8")
         self.assertIn("data/logos/qwen.svg", template)
         self.assertNotIn("alibabadotcom.svg", template)
+
+    def test_board_vendors_all_have_a_local_official_logo(self):
+        """Google 的 favicon 代理会返回错东西（ibm.com 给的是占位机器人图），
+        所以 `_CREATOR_DOMAINS` 里能出现在榜上的域名必须在仓库里备一份官网原文件。
+        """
+        template = Path("index.html").read_text(encoding="utf-8")
+        mapped = {}
+        for marker in ("const LOGO_ASSET = {", "const LOGO_BY_CREATOR = {"):
+            block = template.split(marker)[1].split("};")[0]
+            mapped.update(re.findall(r"'([^']+)':\s*'data/logos/([^?']+)", block))
+        for key, filename in mapped.items():
+            with self.subTest(vendor=key):
+                self.assertTrue(
+                    (Path("site/data/logos") / filename).is_file(),
+                    f"{key} 指向的 {filename} 不在仓库里",
+                )
+        for key in ("qwen.ai", "moonshot.cn", "ibm.com", "openbmb.cn", "liquid.ai"):
+            self.assertIn(key, mapped)
+        # 没有域名的实验室按厂商名兜住，不许编一个解析不了的域名当 key
+        self.assertIn("AI9Stars", mapped)
+        self.assertEqual(dashboard._creator_domain("AI9Stars"), "")
+        # 手绘近似图已被官方文件取代，别再回来
+        self.assertFalse((Path("site/data/logos") / "moonshot.svg").exists())
 
     def test_masthead_drops_title_and_intro(self):
         template = Path("index.html").read_text(encoding="utf-8")

@@ -15,6 +15,10 @@
 得进客户端代码且响应要缓存，所以只能在流水线里取、落成静态 JSON。按其条款，页面上
 必须署名并链回 artificialanalysis.ai。
 
+总榜之外还有两张按参数规模分档的开源榜（4B–40B、≤4B）。接口既不给参数规模也不给
+开源标记，分不出这两档，只能读 AA 站上对应的分档页面；页面里每张图都内联一份
+schema.org Dataset，比解析 Next.js 的流式载荷稳定得多。
+
 行情用腾讯免费行情接口：A 股 / 美股 / 港股同一套字段，无需鉴权。返回 GBK 编码的
 `v_<code>="a~b~c~..."`，字段按位取，各市场前 35 位布局一致。
 """
@@ -37,10 +41,26 @@ CN_TZ = timezone(timedelta(hours=8))
 ROOT = Path(__file__).resolve().parent.parent
 DEFAULT_OUTPUT = ROOT / "site" / "data" / "dashboard-latest.json"
 
-AA_ENDPOINT = "https://artificialanalysis.ai/api/v2/data/llms/models"
-AA_ATTRIBUTION = "https://artificialanalysis.ai/"
+AA_SITE = "https://artificialanalysis.ai"
+AA_ENDPOINT = f"{AA_SITE}/api/v2/data/llms/models"
+AA_ATTRIBUTION = f"{AA_SITE}/"
 LEADERBOARD_LIMIT = 12
 HTTP_TIMEOUT = 20
+
+# 按参数规模分档的开源榜。key 前端用来记住选中页，note 是档位区间。
+AA_SIZE_PAGES: tuple[tuple[str, str, str, str], ...] = (
+    ("small", "小模型", "4B–40B", f"{AA_SITE}/models/open-source/small"),
+    ("tiny", "微型", "≤4B", f"{AA_SITE}/models/open-source/tiny"),
+)
+
+# 同一页里智能指数会内联两份 Dataset，字段名不同、数值一致，命中哪份都行。
+_INTELLIGENCE_FIELDS = ("artificialAnalysisIntelligenceIndex", "intelligenceIndex")
+_PARAM_FIELDS = ("totalParameters", "activeParams")
+_LD_JSON_RE = re.compile(
+    r'<script[^>]+type="application/ld\+json"[^>]*>(.*?)</script>', re.S | re.I
+)
+# 分档页是网页而非接口，带上项目标识便于对方在日志里认出这点访问量。
+_PAGE_HEADERS = {"User-Agent": "feishu-ai-signal (+https://artificialanalysis.ai)"}
 
 QUOTE_ENDPOINT = "https://qt.gtimg.cn/q="
 _QUOTE_RE = re.compile(r'v_(\w+)="([^"]*)"')
@@ -164,6 +184,10 @@ _CREATOR_DOMAINS: tuple[tuple[str, str], ...] = (
     ("minimax", "minimaxi.com"),
     ("bytedance", "bytedance.com"),
     ("stepfun", "stepfun.com"),
+    ("openbmb", "openbmb.cn"),
+    ("modelbest", "modelbest.cn"),
+    # 南北阁没有独立官网，模型发在 Hugging Face；nanbeige.com 是他们指向该组织的域名
+    ("nanbeige", "nanbeige.com"),
     ("xiaomi", "mi.com"),
     ("baidu", "baidu.com"),
     ("tencent", "tencent.com"),
@@ -266,36 +290,39 @@ def _base_model_name(name: str) -> str:
     return _VARIANT_SUFFIX_RE.sub("", name).strip() or name.strip()
 
 
-def fetch_leaderboard(limit: int = LEADERBOARD_LIMIT) -> dict[str, Any]:
-    """按智能指数取前 N。缺指数的模型直接丢掉：没有排序依据的行放进榜里只会误导。
+def _variant_tag(name: str) -> str:
+    """取出档位后缀里的字，供窄栏用小字单独排一段，不挤占模型名的位置。"""
+    match = _VARIANT_SUFFIX_RE.search(name or "")
+    if not match or not _VARIANT_SUFFIX_RE.sub("", name).strip():
+        return ""
+    return match.group(0).strip()[1:-1].strip()
 
-    同一模型的不同推理档位在接口里是并列的独立条目，直接取前 N 会被 Claude Opus 5
-    的四个档位占满，看不出到底几家在竞争。按模型去重，每个只留分最高的那一档。
-    """
-    board: dict[str, Any] = {
-        "source": "Artificial Analysis",
-        "sourceUrl": AA_ATTRIBUTION,
-        "metric": "智能指数",
-        "updatedAt": "",
-        "error": "",
-        "models": [],
-    }
+
+def fetch_aa_models() -> tuple[list[dict[str, Any]], str]:
+    """拉 AA 全量模型接口，返回 (行, 错误)。总榜和分档榜共用这一次请求。"""
     api_key = os.environ.get("ARTIFICIAL_ANALYSIS_API_KEY", "").strip()
     if not api_key:
-        board["error"] = "未配置 ARTIFICIAL_ANALYSIS_API_KEY"
         log.warning("跳过模型榜单：缺少 ARTIFICIAL_ANALYSIS_API_KEY")
-        return board
+        return [], "未配置 ARTIFICIAL_ANALYSIS_API_KEY"
     try:
         response = requests.get(
             AA_ENDPOINT, headers={"x-api-key": api_key}, timeout=HTTP_TIMEOUT
         )
         response.raise_for_status()
-        data = response.json().get("data") or []
+        return response.json().get("data") or [], ""
     except Exception as exc:  # noqa: BLE001 - 榜单挂了不该拖垮整轮发布
-        board["error"] = str(exc)
         log.warning("模型榜单获取失败：%s", exc)
-        return board
+        return [], str(exc)
 
+
+def rank_models(
+    data: list[dict[str, Any]], limit: int = LEADERBOARD_LIMIT
+) -> list[dict[str, Any]]:
+    """按智能指数取前 N。缺指数的模型直接丢掉：没有排序依据的行放进榜里只会误导。
+
+    同一模型的不同推理档位在接口里是并列的独立条目，直接取前 N 会被 Claude Opus 5
+    的四个档位占满，看不出到底几家在竞争。按模型去重，每个只留分最高的那一档。
+    """
     scored = [
         item
         for item in data
@@ -317,12 +344,165 @@ def fetch_leaderboard(limit: int = LEADERBOARD_LIMIT) -> dict[str, Any]:
             best[key] = item
         if len(best) >= limit:
             break
-    board["models"] = [
-        _model_row(item, rank) for rank, item in enumerate(best.values(), 1)
-    ]
-    board["updatedAt"] = _now_iso()
-    log.info("模型榜单 %d 条（候选 %d，评分 %d）", len(board["models"]), len(data), len(scored))
+    log.info("模型榜单 %d 条（候选 %d，评分 %d）", len(best), len(data), len(scored))
+    return [_model_row(item, rank) for rank, item in enumerate(best.values(), 1)]
+
+
+def fetch_leaderboard(limit: int = LEADERBOARD_LIMIT) -> dict[str, Any]:
+    """总榜 + 按参数规模分档的两张开源榜。"""
+    board: dict[str, Any] = {
+        "source": "Artificial Analysis",
+        "sourceUrl": AA_ATTRIBUTION,
+        "metric": "智能指数",
+        "updatedAt": "",
+        "error": "",
+        "models": [],
+        "buckets": [],
+    }
+    data, board["error"] = fetch_aa_models()
+    board["models"] = rank_models(data, limit)
+    if board["models"]:
+        board["updatedAt"] = _now_iso()
+    # 分档榜自己读页面，接口挂了照样有数据，只是认不出厂商、logo 退成字标。
+    board["buckets"] = fetch_size_buckets(data, limit)
     return board
+
+
+# --- 分档开源榜（4B–40B / ≤4B） ---
+
+
+def _slug_of(details_url: Any) -> str:
+    return str(details_url or "").rstrip("/").rsplit("/", 1)[-1]
+
+
+def _ld_json_datasets(html: str) -> list[dict[str, Any]]:
+    out: list[dict[str, Any]] = []
+    for block in _LD_JSON_RE.findall(html):
+        try:
+            obj = json.loads(block)
+        except json.JSONDecodeError:
+            continue
+        if isinstance(obj, dict) and obj.get("@type") == "Dataset":
+            out.append(obj)
+    return out
+
+
+def _dataset_field(row: dict[str, Any], fields: tuple[str, ...]) -> float | None:
+    for field in fields:
+        if field in row:
+            return _num(row[field])
+    return None
+
+
+def parse_size_page(html: str) -> list[dict[str, Any]]:
+    """从分档页解析智能指数榜，按指数降序。
+
+    页面每张图都内联一份 schema.org Dataset；智能指数那张给分数，参数规模那张给
+    模型大小，两者按 detailsUrl 里的 slug 对齐。
+    """
+    datasets = _ld_json_datasets(html)
+    params: dict[str, float] = {}
+    for dataset in datasets:
+        for row in dataset.get("data") or []:
+            value = _dataset_field(row, _PARAM_FIELDS)
+            slug = _slug_of(row.get("detailsUrl"))
+            if slug and value is not None:
+                params.setdefault(slug, value)
+
+    rows: dict[str, dict[str, Any]] = {}
+    for dataset in datasets:
+        for row in dataset.get("data") or []:
+            score = _dataset_field(row, _INTELLIGENCE_FIELDS)
+            slug = _slug_of(row.get("detailsUrl"))
+            label = str(row.get("label") or "").strip()
+            if score is None or not slug or not label:
+                continue
+            rows.setdefault(
+                slug,
+                {
+                    "slug": slug,
+                    "label": label,
+                    "intelligence": _round(score, 1),
+                    "params": _round(params.get(slug), 2),
+                },
+            )
+    return sorted(rows.values(), key=lambda row: row["intelligence"], reverse=True)
+
+
+def _bucket_row(
+    row: dict[str, Any], rank: int, creators: dict[str, str]
+) -> dict[str, Any]:
+    creator = creators.get(row["slug"], "")
+    label = row["label"]
+    return {
+        "rank": rank,
+        "slug": row["slug"],
+        "label": label,
+        # 档位后缀单独拆出来：4 行都叫 Qwen3.8 27B 时，靠这一段才分得清是哪一档
+        "name": _base_model_name(label),
+        "tag": _variant_tag(label),
+        "creator": creator,
+        "logoDomain": _creator_domain(creator),
+        "intelligence": row["intelligence"],
+        "params": row["params"],
+        "url": f"{AA_SITE}/models/{row['slug']}",
+    }
+
+
+def fetch_size_bucket(
+    key: str,
+    label: str,
+    note: str,
+    url: str,
+    creators: dict[str, str],
+    limit: int = LEADERBOARD_LIMIT,
+) -> dict[str, Any]:
+    """抓一张分档页。这里照搬页面的排序和条目名，不再按模型去重——分档榜的用处
+    正是复现那一页，AA 把 Qwen3.8 27B 的四个档位并列展示，我们也并列。
+    """
+    bucket: dict[str, Any] = {
+        "key": key,
+        "label": label,
+        "note": note,
+        "sourceUrl": url,
+        "updatedAt": "",
+        "error": "",
+        "models": [],
+    }
+    try:
+        response = requests.get(url, headers=_PAGE_HEADERS, timeout=HTTP_TIMEOUT)
+        response.raise_for_status()
+        rows = parse_size_page(response.text)
+    except Exception as exc:  # noqa: BLE001 - 一档挂了不影响另一档和总榜
+        bucket["error"] = str(exc)
+        log.warning("分档榜 %s 获取失败：%s", key, exc)
+        return bucket
+    if not rows:
+        # 页面结构变了要能看出来，否则只会表现为「这一档突然空了」
+        bucket["error"] = "分档页未给出智能指数数据"
+        log.warning("分档榜 %s 未解析出模型，页面结构可能已变", key)
+        return bucket
+    bucket["models"] = [
+        _bucket_row(row, rank, creators) for rank, row in enumerate(rows[:limit], 1)
+    ]
+    bucket["updatedAt"] = _now_iso()
+    log.info("分档榜 %s（%s）%d 条", key, note, len(bucket["models"]))
+    return bucket
+
+
+def fetch_size_buckets(
+    data: list[dict[str, Any]], limit: int = LEADERBOARD_LIMIT
+) -> list[dict[str, Any]]:
+    """两张分档榜。厂商名从接口按 slug 借一份，只为取 logo。"""
+    creators = {
+        item["slug"]: (item.get("model_creator") or {}).get("name") or ""
+        for item in data or []
+        if item.get("slug")
+    }
+    return [
+        fetch_size_bucket(key, label, note, url, creators, limit)
+        for key, label, note, url in AA_SIZE_PAGES
+    ]
 
 
 # --- AI 概念股行情 ---
@@ -445,6 +625,27 @@ def _board_has_rows(board: dict[str, Any] | None, key: str) -> bool:
     return bool(rows)
 
 
+def keep_last_good_buckets(
+    incoming: list[dict[str, Any]], previous: list[dict[str, Any]]
+) -> list[dict[str, Any]]:
+    """分档榜逐档回退：小模型页挂了不该把微型页也换成旧数据。"""
+    if not incoming:
+        return previous
+    old = {bucket.get("key"): bucket for bucket in previous}
+    kept = []
+    for bucket in incoming:
+        stale = old.get(bucket.get("key"))
+        if (
+            bucket.get("error")
+            and not _board_has_rows(bucket, "models")
+            and _board_has_rows(stale, "models")
+        ):
+            kept.append(stale)
+        else:
+            kept.append(bucket)
+    return kept
+
+
 def keep_last_good(
     payload: dict[str, Any], previous: dict[str, Any] | None
 ) -> dict[str, Any]:
@@ -458,6 +659,13 @@ def keep_last_good(
         if incoming.get("error") and not _board_has_rows(incoming, rows_key):
             if _board_has_rows(old, rows_key):
                 merged[board_key] = old
+    # 分档榜和总榜各自成败，上面整块换成旧榜时也要把这次拉到的分档接回去
+    buckets = keep_last_good_buckets(
+        (payload.get("leaderboard") or {}).get("buckets") or [],
+        (previous.get("leaderboard") or {}).get("buckets") or [],
+    )
+    if buckets and isinstance(merged.get("leaderboard"), dict):
+        merged["leaderboard"] = {**merged["leaderboard"], "buckets": buckets}
     return merged
 
 

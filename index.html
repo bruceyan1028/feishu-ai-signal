@@ -111,6 +111,11 @@
   .quote-row { display: grid; grid-template-columns: minmax(0,1fr) auto; gap: 6px; align-items: baseline; padding: 5px 8px; border-bottom: 1px solid rgba(255,255,255,.05); text-decoration: none; color: inherit; }
   .quote-row:hover { background: #fff; }
   .quote-row:hover .quote-name { color: #16130f; }
+  .aa-tabs { display: flex; border: 1px solid rgba(255,255,255,.12); margin: 8px 14px; }
+  .aa-tabs button { flex: 1; height: 26px; min-width: 0; padding: 0 3px; border: none; background: transparent; color: #8f887a; font-size: 11px; font-weight: 650; white-space: nowrap; cursor: pointer; }
+  .aa-tabs button + button { border-left: 1px solid rgba(255,255,255,.12); }
+  .aa-tabs button.on { background: var(--ds-accent); color: #fff; }
+  .aa-tag { position: relative; flex: 0 1 auto; max-width: 52%; font-size: 9.5px; font-weight: 600; color: rgba(250,247,240,.62); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .heat-toggle { display: flex; border: 1px solid rgba(255,255,255,.12); margin: 0 14px 8px; }
   .heat-toggle button { flex: 1; height: 26px; border: none; background: transparent; color: #8f887a; font-size: 11px; font-weight: 650; cursor: pointer; }
   .heat-toggle button + button { border-left: 1px solid rgba(255,255,255,.12); }
@@ -373,6 +378,7 @@ const state = {
   sortKey: 'impact',
   heatmapSource: 'google-trends',
   heatmapPick: null,
+  leaderboardTab: 'overall',
   pointsShift: 0,
   pointsPaused: false,
   showScoreBars: true,
@@ -1410,6 +1416,10 @@ const App = {
     else applyHeatDemo(state.heatmapSource);
     render();
   },
+  setLeaderboardTab(key){
+    state.leaderboardTab = key;
+    render();
+  },
   openHeatNews(topic, evt){
     if(evt) evt.preventDefault();
     const url = heatNewsUrl(topic);
@@ -1848,19 +1858,33 @@ function dataRailHtml(A){
   const pctColor = p => (p===null || p===undefined) ? DIM : (p>0 ? UP : p<0 ? DOWN : TXT);
 
   // 外网 favicon 在国内经常打不开，已知厂商用仓库里的 SVG；其余再试 Google，最后才露字标。
+  // Google 那条兜底还会返回错东西——ibm.com 给的是 Adobe CMS 的占位机器人图，
+  // 所以榜上出得来的厂商一律在这里备一份官网原文件，别指望第三方代理。
   const LOGO_ASSET = {
-    'anthropic.com': 'data/logos/anthropic.svg?v=3',
-    'openai.com': 'data/logos/openai.svg?v=3',
-    'x.ai': 'data/logos/x.svg?v=3',
-    'meta.com': 'data/logos/meta.svg?v=3',
-    'google.com': 'data/logos/google.svg?v=3',
-    'nvidia.com': 'data/logos/nvidia.svg?v=3',
-    'qwen.ai': 'data/logos/qwen.svg?v=3',
-    'moonshot.cn': 'data/logos/moonshot.svg?v=3',
-    'z.ai': 'data/logos/zai.svg?v=3',
+    'anthropic.com': 'data/logos/anthropic.svg?v=4',
+    'openai.com': 'data/logos/openai.svg?v=4',
+    'x.ai': 'data/logos/x.svg?v=4',
+    'meta.com': 'data/logos/meta.svg?v=4',
+    'google.com': 'data/logos/google.svg?v=4',
+    'nvidia.com': 'data/logos/nvidia.svg?v=4',
+    'qwen.ai': 'data/logos/qwen.svg?v=4',
+    'moonshot.cn': 'data/logos/kimi.svg?v=4',
+    'z.ai': 'data/logos/zai.svg?v=4',
+    'ibm.com': 'data/logos/ibm.svg?v=4',
+    'microsoft.com': 'data/logos/microsoft.svg?v=4',
+    'mistral.ai': 'data/logos/mistral.svg?v=4',
+    'liquid.ai': 'data/logos/liquid.svg?v=4',
+    'openbmb.cn': 'data/logos/openbmb.svg?v=4',
+    // 南北阁只发了位图 logo（自家 HF 仓库的 figures/nbg.png），没有矢量原件
+    'nanbeige.com': 'data/logos/nanbeige.png?v=4',
+  };
+  // 只在 GitHub / HF 发模型、连域名都没有的实验室，按厂商名认 logo——
+  // 与其编一个注定解析不了的域名当 key，不如承认这里没有域名。
+  const LOGO_BY_CREATOR = {
+    'AI9Stars': 'data/logos/ai9stars.svg?v=4',
   };
   const logoChip = (domain, fallback, size) => {
-    const local = LOGO_ASSET[domain] || '';
+    const local = LOGO_ASSET[domain] || LOGO_BY_CREATOR[fallback] || '';
     const src = local || (domain ? `https://www.google.com/s2/favicons?sz=128&domain=${esc(domain)}` : '');
     const letters = esc(String(fallback||'?').slice(0,2));
     const inner = src
@@ -1881,7 +1905,7 @@ function dataRailHtml(A){
     return build();
   };
 
-  const board = (title, time, body, titleHref) => `
+  const board = (title, time, body, titleHref, nav) => `
     <section style="position: relative; background: #0a0a0a; border: 1.5px solid var(--ds-ink-line); box-shadow: 5px 5px 0 rgba(22,19,15,.10); overflow: hidden;">
       <div style="height: 3px; background: ${A.accent};"></div>
       <div style="display: flex; align-items: center; gap: 8px; padding: 11px 14px; border-bottom: 1px solid ${LINE};">
@@ -1891,12 +1915,27 @@ function dataRailHtml(A){
           : `<span style="font-size: 13.5px; font-weight: 700; color: ${TXT};">${esc(title)}</span>`}
         <span style="margin-left: auto; font-family: ${mono}; font-size: 9px; letter-spacing: .08em; color: ${DIM};">${esc(time || '—')}</span>
       </div>
+      ${nav || ''}
       ${body}
     </section>`;
 
   const lb = dashboard.leaderboard;
-  const models = (lb && lb.models) || [];
-  const arenaBody = boardBody(lb, '榜单', models, () => {
+  // 总榜之外还有两张按参数规模分档的开源榜。同一块看板切页而不是并排三块:
+  // 三块占满整条右栏,行情和热力图就被挤到首屏之外了。
+  const aaPages = [{ key: 'overall', label: '综合', hint: '全部模型 · 智能指数', board: lb }]
+    .concat(((lb && lb.buckets) || []).map(b => ({
+      key: b.key,
+      label: b.note || b.label,
+      hint: `${b.label} · ${b.note} 开源模型`,
+      board: b,
+    })));
+  const aaPage = aaPages.find(p => p.key === state.leaderboardTab) || aaPages[0];
+  const aaBoard = aaPage.board;
+  const models = (aaBoard && aaBoard.models) || [];
+  // 参数规模只在分档榜里有,当成 hover 补充信息:窄栏再加一列数字就没法扫了
+  const paramText = v => (v===null || v===undefined || v==='') ? '' : `${Number(v).toFixed(2).replace(/\.?0+$/,'')}B`;
+
+  const arenaBody = boardBody(aaBoard, aaPage.key==='overall' ? '榜单' : `${aaPage.label}榜单`, models, () => {
     // 智能指数不占独立一列，直接当模型名的背景填色：一根条 + 一行字用同一块地方，
     // 窄栏里省下的就是名字能完整显示的那几十像素。
     // 填色按可见区间（末位→榜首）铺开，用 0 或 100 做基准时前 12 名只差几分，
@@ -1904,17 +1943,25 @@ function dataRailHtml(A){
     const scores = models.map(m => m.intelligence || 0);
     const hi = Math.max(...scores), lo = Math.min(...scores);
     const fillWidth = v => hi > lo ? 8 + 92 * ((v || 0) - lo) / (hi - lo) : 100;
+    const params = m => paramText(m.params);
     return `<div>${models.map(m => `
       <div style="display: grid; grid-template-columns: 20px 22px minmax(0,1fr); gap: 8px; align-items: center; padding: 5px 14px; border-bottom: 1px solid rgba(255,255,255,.05);">
         <span style="font-family: ${mono}; font-size: 11px; font-weight: 700; color: ${m.rank<=3 ? A.accent : DIM};">${String(m.rank).padStart(2,'0')}</span>
         ${logoChip(m.logoDomain, m.creator, 22)}
-        <span style="position: relative; display: flex; align-items: center; gap: 8px; min-width: 0; height: 26px; padding: 0 8px; overflow: hidden; background: rgba(255,255,255,.05);">
+        <span style="position: relative; display: flex; align-items: center; gap: 6px; min-width: 0; height: 26px; padding: 0 8px; overflow: hidden; background: rgba(255,255,255,.05);">
           <span style="position: absolute; left: 0; top: 0; bottom: 0; width: ${fillWidth(m.intelligence)}%; background: linear-gradient(90deg, color-mix(in srgb, ${A.accent} 78%, transparent), color-mix(in srgb, ${A.accent} 26%, transparent));"></span>
-          <span style="position: relative; min-width: 0; font-size: 12.5px; font-weight: 650; color: ${TXT}; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${esc(m.name)}</span>
-          <span title="智能指数 ${num(m.intelligence,1)}" style="position: relative; margin-left: auto; font-family: ${mono}; font-size: 11.5px; font-weight: 700; color: ${TXT}; font-variant-numeric: tabular-nums;">${num(m.intelligence,1)}</span>
+          <span title="${esc(m.label || m.name)}" style="position: relative; min-width: 0; font-size: 12.5px; font-weight: 650; color: ${TXT}; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${esc(m.name)}</span>
+          ${m.tag ? `<span class="aa-tag" title="${esc(m.label || m.name)}">${esc(m.tag)}</span>` : ''}
+          <span title="智能指数 ${num(m.intelligence,1)}${params(m) ? ` · ${params(m)} 参数` : ''}" style="position: relative; margin-left: auto; font-family: ${mono}; font-size: 11.5px; font-weight: 700; color: ${TXT}; font-variant-numeric: tabular-nums;">${num(m.intelligence,1)}</span>
         </span>
       </div>`).join('')}</div>`;
   });
+
+  // 老快照没有 buckets,只有一页时不显示切页条
+  const aaNav = aaPages.length > 1 ? `
+    <nav class="aa-tabs" aria-label="模型分档">
+      ${aaPages.map(p => `<button type="button" class="${p.key===aaPage.key?'on':''}" title="${esc(p.hint)}" onclick="App.setLeaderboardTab('${esc(p.key)}')">${esc(p.label)}</button>`).join('')}
+    </nav>` : '';
 
   const mk = dashboard.market;
   const quotes = (mk && mk.quotes) || [];
@@ -1967,14 +2014,14 @@ function dataRailHtml(A){
   };
   const aaStamp = (() => {
     const metric = (lb && lb.metric) || '智能指数';
-    const when = stamp(lb);
+    const when = stamp(aaBoard);
     return when && when !== '—' ? `${metric} · ${when}` : metric;
   })();
 
   return `
   <aside class="feed-data">
     ${heatmapHtml(A)}
-    ${board('Artificial Analysis', aaStamp, arenaBody, (lb&&lb.sourceUrl)||'https://artificialanalysis.ai/')}
+    ${board('Artificial Analysis', aaStamp, arenaBody, (aaBoard&&aaBoard.sourceUrl)||'https://artificialanalysis.ai/', aaNav)}
     ${board('AI 概念股', stamp(mk), marketBody)}
   </aside>`;
 }
