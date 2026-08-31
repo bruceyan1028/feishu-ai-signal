@@ -140,7 +140,12 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add -A site
+          # 产物是 build 那一刻 checkout 的代码生成的，跑完可能已经过了几十分钟。
+          # 这里原先是 `git add -A site`：期间只要有人往 site/ 里加了东西（新 logo、
+          # 改前端），整目录 -A 就会把「产物里没有」当成「应该删掉」，静默回退甚至删文件。
+          # 简报和媒体是滚动窗口，仍要 -A 才能把移出窗口的那几天清掉；而 logos 是人工
+          # 维护的资源、index.html 由 pages-preview 从根模板复制，都不该由产物决定存亡。
+          git add -A -- site ':!site/data/logos' ':!site/index.html'
           if git diff --cached --quiet; then
             echo "站点数据无变化，跳过提交"
           else

@@ -464,6 +464,22 @@ class PublishIntegrationTest(unittest.TestCase):
         self.assertIn("python -m src.publish", text)
         self.assertNotIn("python -m src.dashboard", text)
 
+    def test_workflow_commit_back_never_deletes_hand_maintained_site_files(self):
+        """产物是 build 那一刻 checkout 的代码生成的，跑完可能已过几十分钟。
+
+        整目录 `git add -A site` 会把「产物里没有」当成「应该删掉」，把期间新增的
+        logo 和前端改动静默回退——榜单 logo 正是这样差点被删掉一批。
+        """
+        text = Path(".github/workflows/daily-brief.yml").read_text(encoding="utf-8")
+        adds = [line.strip() for line in text.splitlines() if line.strip().startswith("git add")]
+        self.assertEqual(len(adds), 1, f"回写步骤的 git add 不止一处：{adds}")
+        add = adds[0]
+        self.assertNotEqual(add, "git add -A site")
+        self.assertIn(":!site/data/logos", add)
+        self.assertIn(":!site/index.html", add)
+        # 简报和媒体是滚动窗口，仍要 -A 才能把移出窗口的那几天清掉
+        self.assertIn("-A -- site", add)
+
     @patch("src.dashboard.refresh_into")
     def test_publish_refreshes_dashboard_after_rebuild(self, mock_refresh: MagicMock):
         mock_refresh.return_value = Path("site/data/dashboard-latest.json")
