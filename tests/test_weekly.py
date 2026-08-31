@@ -274,12 +274,13 @@ class WeeklyReportTest(unittest.TestCase):
         self.assertEqual(fields["条目记录ID"], "r1")
         self.assertEqual(fields["状态"], "待纳入")
 
+    @patch("src.notify.wait_until_public_json")
     @patch("src.notify.feishu.update_record")
     @patch("src.notify.feishu.send_interactive_message", return_value="message-1")
     @patch("src.notify.feishu.read_all_records_with_ids")
     @patch("src.notify.feishu.get_tenant_access_token", return_value="token")
     def test_weekly_send_is_recorded_per_week(
-        self, _token, read_records, _send, update_record
+        self, _token, read_records, _send, update_record, _wait
     ):
         read_records.return_value = [
             {
@@ -304,12 +305,13 @@ class WeeklyReportTest(unittest.TestCase):
         self.assertEqual(result["messageIds"], {"ou_1": "message-1"})
         self.assertEqual(update_record.call_args.args[3]["发送状态"], "已发送")
 
+    @patch("src.notify.wait_until_public_json")
     @patch("src.notify.feishu.update_record")
     @patch("src.notify.feishu.send_interactive_message", return_value="group-message")
     @patch("src.notify.feishu.read_all_records_with_ids")
     @patch("src.notify.feishu.get_tenant_access_token", return_value="token")
     def test_weekly_send_prefers_group_chat(
-        self, _token, read_records, send_message, update_record
+        self, _token, read_records, send_message, update_record, _wait
     ):
         read_records.return_value = [
             {

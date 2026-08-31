@@ -989,6 +989,51 @@ class DeliveryTests(unittest.TestCase):
             "公众号",
         )
 
+    @patch("src.notify.requests.get")
+    def test_wait_until_public_json_accepts_matching_payload(self, get) -> None:
+        get.return_value.json.return_value = {"date": "2026-07-13"}
+        get.return_value.raise_for_status.return_value = None
+        notify.wait_until_public_json(
+            "https://example.com/data/brief-2026-07-13.json",
+            "date",
+            "2026-07-13",
+            attempts=1,
+        )
+        get.assert_called_once()
+
+    @patch("src.notify.time.sleep")
+    @patch("src.notify.requests.get")
+    def test_wait_until_public_json_rejects_stale_or_missing(self, get, sleep) -> None:
+        stale = MagicMock()
+        stale.json.return_value = {"date": "2026-07-12"}
+        stale.raise_for_status.return_value = None
+        get.return_value = stale
+        with self.assertRaisesRegex(RuntimeError, "拒绝发卡片"):
+            notify.wait_until_public_json(
+                "https://example.com/data/brief-2026-07-13.json",
+                "date",
+                "2026-07-13",
+                attempts=2,
+                delay_s=0,
+            )
+        self.assertEqual(get.call_count, 2)
+        sleep.assert_called_once()
+
+    @patch("src.notify.wait_until_public_json", side_effect=RuntimeError("公网尚未发布"))
+    @patch("src.notify.feishu.update_record")
+    @patch("src.notify.feishu.send_interactive_message")
+    @patch("src.notify.feishu.get_tenant_access_token", return_value="token")
+    @patch("src.notify.feishu.read_all_records_with_ids")
+    def test_does_not_send_card_when_pages_not_live(
+        self, read_records, _token, send_message, _update, _wait
+    ) -> None:
+        read_records.return_value = [
+            {"record_id": "brief1", "fields": {"简报ID": "2026-07-13", "发送状态": "待发送"}}
+        ]
+        with self.assertRaisesRegex(RuntimeError, "公网尚未发布"):
+            notify.send_many(self.sample_brief(), "https://example.com", ["ou_test"])
+        send_message.assert_not_called()
+
     @patch("src.notify.feishu.send_interactive_message")
     @patch("src.notify.feishu.get_tenant_access_token", return_value="token")
     @patch("src.notify.feishu.read_all_records_with_ids")
@@ -1003,12 +1048,13 @@ class DeliveryTests(unittest.TestCase):
         self.assertTrue(result["skipped"])
         send_message.assert_not_called()
 
+    @patch("src.notify.wait_until_public_json")
     @patch("src.notify.feishu.update_record")
     @patch("src.notify.feishu.send_interactive_message", side_effect=["msg1", "msg2"])
     @patch("src.notify.feishu.get_tenant_access_token", return_value="token")
     @patch("src.notify.feishu.read_all_records_with_ids")
     def test_brief_can_send_to_multiple_recipients(
-        self, read_records, _token, send_message, update_record
+        self, read_records, _token, send_message, update_record, _wait
     ) -> None:
         read_records.return_value = [
             {"record_id": "brief1", "fields": {"简报ID": "2026-07-13", "发送状态": "待发送"}}
@@ -1020,6 +1066,7 @@ class DeliveryTests(unittest.TestCase):
         self.assertEqual(send_message.call_count, 2)
         update_record.assert_called_once()
 
+    @patch("src.notify.wait_until_public_json")
     @patch("src.notify.feishu.update_record")
     @patch(
         "src.notify.feishu.send_interactive_message",
@@ -1028,7 +1075,7 @@ class DeliveryTests(unittest.TestCase):
     @patch("src.notify.feishu.get_tenant_access_token", return_value="token")
     @patch("src.notify.feishu.read_all_records_with_ids")
     def test_daily_delivery_report_uses_names_without_open_ids(
-        self, read_records, _token, send_message, _update_record
+        self, read_records, _token, send_message, _update_record, _wait
     ) -> None:
         read_records.return_value = [
             {"record_id": "brief1", "fields": {"简报ID": "2026-07-13", "发送状态": "待发送"}}
@@ -1055,6 +1102,7 @@ class DeliveryTests(unittest.TestCase):
         self.assertIn("guojiexin：发送成功", report_text)
         self.assertNotIn("ou_one", json.dumps(report_card, ensure_ascii=False))
 
+    @patch("src.notify.wait_until_public_json")
     @patch("src.notify.feishu.update_record")
     @patch(
         "src.notify.feishu.send_interactive_message",
@@ -1063,7 +1111,7 @@ class DeliveryTests(unittest.TestCase):
     @patch("src.notify.feishu.get_tenant_access_token", return_value="token")
     @patch("src.notify.feishu.read_all_records_with_ids")
     def test_one_bad_recipient_does_not_block_the_others(
-        self, read_records, _token, send_message, update_record
+        self, read_records, _token, send_message, update_record, _wait
     ) -> None:
         read_records.return_value = [
             {"record_id": "brief1", "fields": {"简报ID": "2026-07-13", "发送状态": "待发送"}}
@@ -1077,12 +1125,13 @@ class DeliveryTests(unittest.TestCase):
         self.assertEqual(update_record.call_args[0][3]["发送状态"], "已发送")
         self.assertNotIn("ou_bad", update_record.call_args[0][3]["消息ID"])
 
+    @patch("src.notify.wait_until_public_json")
     @patch("src.notify.feishu.update_record")
     @patch("src.notify.feishu.send_interactive_message", side_effect=RuntimeError("boom"))
     @patch("src.notify.feishu.get_tenant_access_token", return_value="token")
     @patch("src.notify.feishu.read_all_records_with_ids")
     def test_all_recipients_failing_marks_brief_failed(
-        self, read_records, _token, _send_message, update_record
+        self, read_records, _token, _send_message, update_record, _wait
     ) -> None:
         read_records.return_value = [
             {"record_id": "brief1", "fields": {"简报ID": "2026-07-13", "发送状态": "待发送"}}
@@ -1101,12 +1150,13 @@ class DeliveryTests(unittest.TestCase):
             [("open_id", "ou_one")],
         )
 
+    @patch("src.notify.wait_until_public_json")
     @patch("src.notify.feishu.update_record")
     @patch("src.notify.feishu.send_interactive_message", side_effect=["group-msg"])
     @patch("src.notify.feishu.get_tenant_access_token", return_value="token")
     @patch("src.notify.feishu.read_all_records_with_ids")
     def test_brief_sends_to_group_instead_of_people(
-        self, read_records, _token, send_message, update_record
+        self, read_records, _token, send_message, update_record, _wait
     ) -> None:
         read_records.return_value = [
             {"record_id": "brief1", "fields": {"简报ID": "2026-07-13", "发送状态": "待发送"}}

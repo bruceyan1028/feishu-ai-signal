@@ -4,10 +4,13 @@ from __future__ import annotations
 import argparse
 import json
 import logging
+import time
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 from urllib.parse import urlencode
+
+import requests
 
 from . import config, daily, feishu, publish
 
@@ -45,6 +48,47 @@ DEFAULT_THEME = ("grey-100", "grey")
 
 def detail_url(base_url: str, day: str) -> str:
     return f"{base_url.rstrip('/')}/?{urlencode({'date': day})}"
+
+
+def public_daily_json_url(base_url: str, day: str) -> str:
+    return f"{base_url.rstrip('/')}/data/brief-{day}.json"
+
+
+def public_weekly_json_url(base_url: str, week_id: str) -> str:
+    return f"{base_url.rstrip('/')}/data/weekly-{week_id}.json"
+
+
+def wait_until_public_json(
+    url: str,
+    field: str,
+    expected: str,
+    *,
+    attempts: int = 12,
+    delay_s: float = 5.0,
+) -> None:
+    """卡片链接指向公网站。Pages 未上线当日 JSON 时拒绝发送，避免群里点开是旧简报。"""
+    last_error = "未请求"
+    for attempt in range(1, attempts + 1):
+        try:
+            response = requests.get(
+                url,
+                params={"t": int(time.time() * 1000)},
+                headers={"Cache-Control": "no-cache", "Pragma": "no-cache"},
+                timeout=15,
+            )
+            response.raise_for_status()
+            payload = response.json()
+            actual = str(payload.get(field) or "")
+            if actual == expected:
+                log.info("公网页简报已就绪 %s", url)
+                return
+            last_error = f"{field}={actual!r}，期望 {expected}"
+        except Exception as exc:  # noqa: BLE001 - 要汇总每次探测原因
+            last_error = str(exc)
+        log.warning("公网简报未就绪（%d/%d）：%s", attempt, attempts, last_error)
+        if attempt < attempts:
+            time.sleep(delay_s)
+    raise RuntimeError(f"公网尚未发布可打开的简报，拒绝发卡片：{url}（{last_error}）")
 
 
 def weekly_detail_url(base_url: str, week_id: str) -> str:
@@ -371,6 +415,11 @@ def send_many(
             "detailUrl": detail_url(base_url, str(brief["date"])),
         }
     url = detail_url(base_url, str(brief["date"]))
+    wait_until_public_json(
+        public_daily_json_url(base_url, str(brief["date"])),
+        "date",
+        str(brief["date"]),
+    )
     try:
         card = build_card(brief, url)
     except Exception:
@@ -454,6 +503,7 @@ def send_weekly_many(
             "messageIds": str(daily.scalar(fields.get("消息ID")) or ""),
             "detailUrl": url,
         }
+    wait_until_public_json(public_weekly_json_url(base_url, week_id), "weekId", week_id)
     card = build_weekly_card(brief, url)
     message_ids, failures = _send_card_to_targets(token, card, targets)
     if not message_ids:

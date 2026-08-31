@@ -128,4 +128,5 @@ jobs:
         env:
           PUBLIC_BASE_URL: ${{ steps.deployment.outputs.page_url }}
           FORCE_FLAG: ${{ inputs.force_send && '--force' || '' }}
+        # notify 会轮询公网 weekly-Wxx.json，确认 Pages 已是本周周报才发卡片
         run: python -m src.notify --input site/data/weekly-latest.json $FORCE_FLAG

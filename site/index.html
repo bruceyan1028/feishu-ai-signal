@@ -122,7 +122,10 @@
   .heat-table thead th { font-family: "Geist Mono", ui-monospace, Menlo, monospace; font-size: 9px; font-weight: 600; color: #8f887a; padding: 0 1px 5px; text-align: center; }
   .heat-table tbody th { position: sticky; left: 0; z-index: 1; background: #0a0a0a; text-align: left; font-weight: 600; padding: 0 8px 0 4px; white-space: nowrap; color: #faf7f0; }
   .heat-table td { padding: 0; }
-  .heat-topic { font-size: 11.5px; }
+  .heat-mark { flex: none; font-size: 12px; line-height: 1; margin-right: 4px; }
+  .heat-news { display: inline-flex; align-items: baseline; max-width: 118px; color: inherit; text-decoration: none; cursor: pointer; }
+  .heat-news:hover .heat-topic { text-decoration: underline; }
+  .heat-topic { font-size: 11.5px; max-width: 78px; display: inline-block; overflow: hidden; text-overflow: ellipsis; vertical-align: bottom; }
   .heat-badge { margin-left: 3px; font-size: 10px; }
   .heat-cell { width: 24px; height: 20px; border: 1px solid rgba(22,19,15,.16); padding: 0; cursor: pointer; font-family: "Geist Mono", ui-monospace, Menlo, monospace; font-size: 8px; font-weight: 700; }
   .heat-cell.is-on { outline: 2px solid var(--ds-accent); outline-offset: -2px; }
@@ -524,7 +527,7 @@ let briefMeta = {
 // 看板是当期快照,由 src/dashboard.py 落成静态 JSON;两块各自带 error,一块挂了另一块照常显示
 let dashboard = { generatedAt:'', leaderboard:null, market:null };
 let dashboardStatus = { loading:true, error:'' };
-let heatmap = { days:[], topics:[], labels:{}, matrix:{raw:[],normalized:[]}, items:{}, itemIndex:{}, trend:{}, source:'google-trends', sources:{}, error:'' };
+let heatmap = { days:[], topics:[], labels:{}, marks:{}, scopes:{}, breakouts:[], plotGeo:{}, geos:{}, matrix:{raw:[],normalized:[]}, items:{}, itemIndex:{}, trend:{}, source:'google-trends', sources:{}, error:'' };
 let heatmapStatus = { loading:false, error:'', demo:true };
 let heatmapPayload = null;
 
@@ -535,17 +538,18 @@ const HEAT_TOPIC_LABELS = {
   'safety-policy':'安全监管', product:'应用产品', funding:'融资并购',
 };
 const HEAT_TOPIC_KEYS = Object.keys(HEAT_TOPIC_LABELS);
+const HEAT_GEO_NAMES = { US:'美国', GB:'英国', IN:'印度', DE:'德国', JP:'日本', AU:'澳大利亚', CA:'加拿大' };
 const HEAT_QUERIES = {
-  agent: { g:'AI agent MCP', x:'#AIAgents' },
-  reasoning: { g:'test time compute', x:'#Reasoning' },
-  multimodal: { g:'image video generation AI', x:'#Multimodal' },
+  agent: { g:'AI agent', x:'#AIAgents' },
+  reasoning: { g:'reasoning model', x:'#Reasoning' },
+  multimodal: { g:'image generation', x:'#Multimodal' },
   'open-source-model': { g:'open source LLM', x:'#OpenSourceAI' },
-  'rag-search': { g:'RAG retrieval augmented', x:'#RAG' },
-  infra: { g:'AI chips inference GPU', x:'#AIInfra' },
-  embodied: { g:'humanoid robot AI', x:'#EmbodiedAI' },
-  'safety-policy': { g:'AI regulation safety', x:'#AISafety' },
-  product: { g:'ChatGPT Copilot product', x:'#AIProduct' },
-  funding: { g:'AI startup funding', x:'#AIFunding' },
+  'rag-search': { g:'RAG', x:'#RAG' },
+  infra: { g:'AI chips', x:'#AIInfra' },
+  embodied: { g:'humanoid robot', x:'#EmbodiedAI' },
+  'safety-policy': { g:'AI regulation', x:'#AISafety' },
+  product: { g:'ChatGPT', x:'#AIProduct' },
+  funding: { g:'AI startup', x:'#AIFunding' },
 };
 const HEAT_G_RAW = {
   agent:[42,48,55,61,70,78,88], reasoning:[30,32,28,40,44,50,52], multimodal:[36,40,38,41,47,49,58],
@@ -605,6 +609,11 @@ function applyHeatDemo(source){
     trend: packed.trend,
     source: src,
     error: '',
+    marks: Object.fromEntries(HEAT_TOPIC_KEYS.map(t => [t, '🌐'])),
+    scopes: Object.fromEntries(HEAT_TOPIC_KEYS.map(t => [t, 'global'])),
+    breakouts: [],
+    plotGeo: {},
+    geos: {},
     sources: {
       'google-trends': { name:'Google Trends', url:'https://trends.google.com' },
       x: { name:'X Trending', url:'https://x.com/explore' },
@@ -614,11 +623,12 @@ function applyHeatDemo(source){
 }
 
 function heatSourceUsable(payload, source){
+  if(!payload || !(payload.topics || []).length) return false;
   const src = source === 'x' ? 'x' : 'google-trends';
-  const block = (payload && payload[src]) || {};
-  if(block.error) return false;
+  const block = payload[src] || {};
   const raw = (block.matrix && block.matrix.raw) || [];
-  return raw.some(row => Array.isArray(row) && row.some(v => Number(v) > 0));
+  if(raw.some(row => Array.isArray(row) && row.some(v => Number(v) > 0))) return true;
+  return (payload.topics || []).length > 0;
 }
 
 function applyHeatPayload(payload, source){
@@ -634,12 +644,30 @@ function applyHeatPayload(payload, source){
     trend: block.trend || {},
     source: src,
     error: block.error || '',
+    marks: payload.marks || {},
+    scopes: payload.scopes || {},
+    breakouts: (payload.selection && payload.selection.breakouts) || payload.breakouts || [],
+    plotGeo: (payload.selection && payload.selection.plot_geo) || {},
+    geos: (payload.selection && payload.selection.geos) || {},
     sources: {
       'google-trends': { name:'Google Trends', url:'https://trends.google.com' },
       x: { name:'X Trending', url:'https://x.com/explore' },
     },
   };
   heatmapStatus = { loading:false, error:'', demo:false };
+}
+
+function heatNewsQuery(topic){
+  const label = (heatmap.labels && heatmap.labels[topic]) || topic;
+  const scope = (heatmap.scopes && heatmap.scopes[topic]) || 'global';
+  const geo = String((heatmap.plotGeo && heatmap.plotGeo[topic]) || ((heatmap.geos && heatmap.geos[topic]) || [])[0] || '').toUpperCase();
+  const place = HEAT_GEO_NAMES[geo] || '';
+  if(scope === 'country' && place) return `${label}在${place}这两天有什么新闻吗`;
+  return `${label}这两天有什么新闻吗`;
+}
+
+function heatNewsUrl(topic){
+  return 'https://www.google.com/search?hl=zh-CN&q=' + encodeURIComponent(heatNewsQuery(topic));
 }
 
 applyHeatDemo('google-trends');
@@ -1382,6 +1410,11 @@ const App = {
     else applyHeatDemo(state.heatmapSource);
     render();
   },
+  openHeatNews(topic, evt){
+    if(evt) evt.preventDefault();
+    const url = heatNewsUrl(topic);
+    if(url) window.open(url, '_blank');
+  },
   pickHeatmapCell(topic, day, evt){
     if(evt) evt.stopPropagation();
     App.hideHeatTip();
@@ -1989,7 +2022,10 @@ function heatmapHtml(A){
   const rows = ordered.map(topic=>{
     const i = topicIdx[topic];
     const tr = Number(trends[topic]||0);
-    const badge = tr > 1.5 ? '🔥' : (tr < 0.5 ? '❄️' : '');
+    const breakouts = heatmap.breakouts || [];
+    const hasBreakouts = Array.isArray(breakouts) && breakouts.length;
+    const isBreakout = hasBreakouts && breakouts.includes(topic);
+    const badge = isBreakout ? '🔥' : (!hasBreakouts && tr > 1.5 ? '🔥' : (tr < 0.5 ? '❄️' : ''));
     const cells = days.map((day, j)=>{
       const raw = (rawM[i] && rawM[i][j]) || 0;
       const norm = (normM[i] && normM[i][j]) || 0;
@@ -2003,8 +2039,13 @@ function heatmapHtml(A){
         onmouseleave="App.hideHeatTip()"
         onclick="App.pickHeatmapCell(${tArg},${dArg},event)"></button></td>`;
     }).join('');
+    const mark = (heatmap.marks && heatmap.marks[topic]) || '🌐';
+    const scope = (heatmap.scopes && heatmap.scopes[topic]) || (mark==='🌐'?'global':'country');
+    const markTitle = scope==='country' ? '上榜国家近 7 日' : '全球近 7 日';
+    const newsQ = heatNewsQuery(topic);
+    const newsUrl = heatNewsUrl(topic);
     return `<tr>
-      <th scope="row"><span class="heat-topic">${esc(labels[topic]||topic)}</span>${badge?`<span class="heat-badge" title="今日 / 近6日均 ${tr.toFixed(2)}">${badge}</span>`:''}</th>
+      <th scope="row"><a class="heat-news" href="${esc(newsUrl)}" target="_blank" rel="noopener noreferrer" title="Google 搜索：${esc(newsQ)}"><span class="heat-mark">${mark}</span><span class="heat-topic">${esc(labels[topic]||topic)}</span></a>${badge?`<span class="heat-badge" title="${isBreakout?'破线入选 · ':''}今日 / 近6日均 ${tr.toFixed(2)}">${badge}</span>`:''}</th>
       ${cells}
     </tr>`;
   }).join('');
@@ -2056,6 +2097,7 @@ function heatmapHtml(A){
       <div style="display: flex; align-items: center; gap: 8px; padding: 11px 14px; border-bottom: 1px solid ${LINE};">
         <span style="width: 6px; height: 6px; background: ${A.accent}; transform: rotate(45deg); flex: none;"></span>
         <span style="font-size: 13.5px; font-weight: 700; color: ${TXT};">话题热度</span>
+        <span style="font-size: 10px; color: ${DIM};">${heatmapStatus.demo ? '演示' : 'Google 热搜 · AI'}</span>
         <span style="margin-left: auto; font-family: 'Geist Mono', ui-monospace, Menlo, monospace; font-size: 9px; letter-spacing: .14em; color: ${DIM};">TOPIC HEAT</span>
       </div>
       ${body}

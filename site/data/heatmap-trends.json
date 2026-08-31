@@ -1,323 +1,409 @@
 {
-  "generatedAt": "2026-08-28T12:15:45+08:00",
+  "generatedAt": "2026-08-31T12:16:48+08:00",
   "days": [
-    "2026-08-22",
-    "2026-08-23",
-    "2026-08-24",
     "2026-08-25",
     "2026-08-26",
     "2026-08-27",
-    "2026-08-28"
+    "2026-08-28",
+    "2026-08-29",
+    "2026-08-30",
+    "2026-08-31"
   ],
   "topics": [
-    "agent",
-    "reasoning",
-    "multimodal",
-    "open-source-model",
-    "rag-search",
-    "infra",
-    "embodied",
-    "safety-policy",
-    "product",
-    "funding"
+    "dlss5",
+    "openai",
+    "cursor",
+    "anthropic",
+    "agent-ai",
+    "claude-code"
   ],
   "labels": {
-    "agent": "智能体",
-    "reasoning": "推理",
-    "multimodal": "多模态",
-    "open-source-model": "开源模型",
-    "rag-search": "RAG / 检索",
-    "infra": "算力基建",
-    "embodied": "具身智能",
-    "safety-policy": "安全监管",
-    "product": "应用产品",
-    "funding": "融资并购"
+    "dlss5": "dlss5",
+    "openai": "openai",
+    "cursor": "cursor",
+    "anthropic": "anthropic",
+    "agent-ai": "agent ai",
+    "claude-code": "claude code"
   },
   "queries": {
-    "agent": {
-      "g": "AI agent MCP",
-      "x": "(\"AI agent\" OR MCP OR #AIAgents) -is:retweet"
+    "dlss5": {
+      "g": "dlss5",
+      "x": "\"dlss5\" -is:retweet"
     },
-    "reasoning": {
-      "g": "test time compute",
-      "x": "(\"test-time compute\" OR #Reasoning) -is:retweet"
+    "openai": {
+      "g": "openai",
+      "x": "\"openai\" -is:retweet"
     },
-    "multimodal": {
-      "g": "image video generation AI",
-      "x": "(\"image generation\" OR \"video generation\" OR #Multimodal) -is:retweet"
+    "cursor": {
+      "g": "cursor",
+      "x": "\"cursor\" -is:retweet"
     },
-    "open-source-model": {
-      "g": "open source LLM",
-      "x": "(\"open source LLM\" OR #OpenSourceAI) -is:retweet"
+    "anthropic": {
+      "g": "anthropic",
+      "x": "\"anthropic\" -is:retweet"
     },
-    "rag-search": {
-      "g": "RAG retrieval augmented",
-      "x": "(RAG OR \"retrieval augmented\" OR #RAG) -is:retweet"
+    "agent-ai": {
+      "g": "agent ai",
+      "x": "\"agent ai\" -is:retweet"
     },
-    "infra": {
-      "g": "AI chips inference GPU",
-      "x": "(\"AI chips\" OR inference OR #AIInfra) -is:retweet"
-    },
-    "embodied": {
-      "g": "humanoid robot AI",
-      "x": "(\"humanoid robot\" OR #EmbodiedAI) -is:retweet"
-    },
-    "safety-policy": {
-      "g": "AI regulation safety",
-      "x": "(\"AI regulation\" OR #AISafety) -is:retweet"
-    },
-    "product": {
-      "g": "ChatGPT Copilot product",
-      "x": "(ChatGPT OR Copilot OR #AIProduct) -is:retweet"
-    },
-    "funding": {
-      "g": "AI startup funding",
-      "x": "(\"AI startup\" OR \"AI funding\" OR #AIFunding) -is:retweet"
+    "claude-code": {
+      "g": "claude code",
+      "x": "\"claude code\" -is:retweet"
     }
   },
+  "scopes": {
+    "dlss5": "global",
+    "openai": "country",
+    "cursor": "global",
+    "anthropic": "global",
+    "agent-ai": "global",
+    "claude-code": "global"
+  },
+  "marks": {
+    "dlss5": "🌐",
+    "openai": "🇯🇵",
+    "cursor": "🌐",
+    "anthropic": "🌐",
+    "agent-ai": "🌐",
+    "claude-code": "🌐"
+  },
+  "breakouts": [
+    "dlss5",
+    "openai"
+  ],
+  "selection": {
+    "method": "google-trending-ai",
+    "volumes": {
+      "dlss5": 500,
+      "openai": 1000,
+      "cursor": 1000,
+      "anthropic": 500,
+      "agent-ai": 200,
+      "claude-code": 100
+    },
+    "geos": {
+      "dlss5": [
+        "JP"
+      ],
+      "openai": [
+        "JP"
+      ],
+      "cursor": [
+        "DE",
+        "JP"
+      ],
+      "anthropic": [
+        "IN"
+      ],
+      "agent-ai": [
+        "US"
+      ],
+      "claude-code": [
+        "US"
+      ]
+    },
+    "plot_geo": {
+      "dlss5": "",
+      "openai": "JP",
+      "cursor": "",
+      "anthropic": "",
+      "agent-ai": "",
+      "claude-code": ""
+    },
+    "breakouts": [
+      "dlss5",
+      "openai"
+    ]
+  },
   "google-trends": {
-    "error": "The request failed: Google returned a response with code 400",
+    "error": "",
     "matrix": {
       "raw": [
         [
           0.0,
           0.0,
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          0.0
+          1.0,
+          22.0,
+          57.0,
+          82.0,
+          100.0
         ],
         [
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          0.0
+          76.0,
+          74.0,
+          76.0,
+          76.0,
+          51.0,
+          48.0,
+          100.0
         ],
         [
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          0.0
+          89.0,
+          92.0,
+          91.0,
+          86.0,
+          100.0,
+          78.0,
+          94.0
         ],
         [
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          0.0
+          91.0,
+          96.0,
+          96.0,
+          100.0,
+          67.0,
+          62.0,
+          86.0
         ],
         [
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          0.0
+          90.0,
+          96.0,
+          96.0,
+          93.0,
+          75.0,
+          70.0,
+          100.0
         ],
         [
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          0.0
-        ],
-        [
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          0.0
-        ],
-        [
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          0.0
-        ],
-        [
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          0.0
-        ],
-        [
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          0.0
+          98.0,
+          98.0,
+          90.0,
+          92.0,
+          69.0,
+          66.0,
+          88.0
         ]
       ],
       "normalized": [
         [
           0.0,
           0.0,
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          0.0
+          0.01,
+          0.22,
+          0.57,
+          0.82,
+          1.0
         ],
         [
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          0.0
+          0.76,
+          0.74,
+          0.76,
+          0.76,
+          0.51,
+          0.48,
+          1.0
         ],
         [
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          0.0
+          0.89,
+          0.92,
+          0.91,
+          0.86,
+          1.0,
+          0.78,
+          0.94
         ],
         [
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          0.0
+          0.91,
+          0.96,
+          0.96,
+          1.0,
+          0.67,
+          0.62,
+          0.86
         ],
         [
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          0.0
+          0.9,
+          0.96,
+          0.96,
+          0.93,
+          0.75,
+          0.7,
+          1.0
         ],
         [
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          0.0
-        ],
-        [
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          0.0
-        ],
-        [
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          0.0
-        ],
-        [
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          0.0
-        ],
-        [
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          0.0
+          1.0,
+          1.0,
+          0.9184,
+          0.9388,
+          0.7041,
+          0.6735,
+          0.898
         ]
       ]
     },
     "trend": {
-      "agent": 1.0,
-      "reasoning": 1.0,
-      "multimodal": 1.0,
-      "open-source-model": 1.0,
-      "rag-search": 1.0,
-      "infra": 1.0,
-      "embodied": 1.0,
-      "safety-policy": 1.0,
-      "product": 1.0,
-      "funding": 1.0
+      "dlss5": 3.704,
+      "openai": 1.496,
+      "cursor": 1.052,
+      "anthropic": 1.008,
+      "agent-ai": 1.154,
+      "claude-code": 1.029
     },
-    "items": {},
-    "itemIndex": {}
+    "items": {
+      "dlss5|2026-08-25": [
+        "g-dlss5"
+      ],
+      "dlss5|2026-08-26": [
+        "g-dlss5"
+      ],
+      "dlss5|2026-08-27": [
+        "g-dlss5"
+      ],
+      "dlss5|2026-08-28": [
+        "g-dlss5"
+      ],
+      "dlss5|2026-08-29": [
+        "g-dlss5"
+      ],
+      "dlss5|2026-08-30": [
+        "g-dlss5"
+      ],
+      "dlss5|2026-08-31": [
+        "g-dlss5"
+      ],
+      "openai|2026-08-25": [
+        "g-openai"
+      ],
+      "openai|2026-08-26": [
+        "g-openai"
+      ],
+      "openai|2026-08-27": [
+        "g-openai"
+      ],
+      "openai|2026-08-28": [
+        "g-openai"
+      ],
+      "openai|2026-08-29": [
+        "g-openai"
+      ],
+      "openai|2026-08-30": [
+        "g-openai"
+      ],
+      "openai|2026-08-31": [
+        "g-openai"
+      ],
+      "cursor|2026-08-25": [
+        "g-cursor"
+      ],
+      "cursor|2026-08-26": [
+        "g-cursor"
+      ],
+      "cursor|2026-08-27": [
+        "g-cursor"
+      ],
+      "cursor|2026-08-28": [
+        "g-cursor"
+      ],
+      "cursor|2026-08-29": [
+        "g-cursor"
+      ],
+      "cursor|2026-08-30": [
+        "g-cursor"
+      ],
+      "cursor|2026-08-31": [
+        "g-cursor"
+      ],
+      "anthropic|2026-08-25": [
+        "g-anthropic"
+      ],
+      "anthropic|2026-08-26": [
+        "g-anthropic"
+      ],
+      "anthropic|2026-08-27": [
+        "g-anthropic"
+      ],
+      "anthropic|2026-08-28": [
+        "g-anthropic"
+      ],
+      "anthropic|2026-08-29": [
+        "g-anthropic"
+      ],
+      "anthropic|2026-08-30": [
+        "g-anthropic"
+      ],
+      "anthropic|2026-08-31": [
+        "g-anthropic"
+      ],
+      "agent-ai|2026-08-25": [
+        "g-agent-ai"
+      ],
+      "agent-ai|2026-08-26": [
+        "g-agent-ai"
+      ],
+      "agent-ai|2026-08-27": [
+        "g-agent-ai"
+      ],
+      "agent-ai|2026-08-28": [
+        "g-agent-ai"
+      ],
+      "agent-ai|2026-08-29": [
+        "g-agent-ai"
+      ],
+      "agent-ai|2026-08-30": [
+        "g-agent-ai"
+      ],
+      "agent-ai|2026-08-31": [
+        "g-agent-ai"
+      ],
+      "claude-code|2026-08-25": [
+        "g-claude-code"
+      ],
+      "claude-code|2026-08-26": [
+        "g-claude-code"
+      ],
+      "claude-code|2026-08-27": [
+        "g-claude-code"
+      ],
+      "claude-code|2026-08-28": [
+        "g-claude-code"
+      ],
+      "claude-code|2026-08-29": [
+        "g-claude-code"
+      ],
+      "claude-code|2026-08-30": [
+        "g-claude-code"
+      ],
+      "claude-code|2026-08-31": [
+        "g-claude-code"
+      ]
+    },
+    "itemIndex": {
+      "g-dlss5": {
+        "title": "Google Trends · dlss5",
+        "source": "Google Trends",
+        "url": "https://trends.google.com/trends/explore?date=now%207-d&q=dlss5"
+      },
+      "g-openai": {
+        "title": "Google Trends · openai",
+        "source": "Google Trends",
+        "url": "https://trends.google.com/trends/explore?date=now%207-d&q=openai&geo=JP"
+      },
+      "g-cursor": {
+        "title": "Google Trends · cursor",
+        "source": "Google Trends",
+        "url": "https://trends.google.com/trends/explore?date=now%207-d&q=cursor"
+      },
+      "g-anthropic": {
+        "title": "Google Trends · anthropic",
+        "source": "Google Trends",
+        "url": "https://trends.google.com/trends/explore?date=now%207-d&q=anthropic"
+      },
+      "g-agent-ai": {
+        "title": "Google Trends · agent ai",
+        "source": "Google Trends",
+        "url": "https://trends.google.com/trends/explore?date=now%207-d&q=agent%20ai"
+      },
+      "g-claude-code": {
+        "title": "Google Trends · claude code",
+        "source": "Google Trends",
+        "url": "https://trends.google.com/trends/explore?date=now%207-d&q=claude%20code"
+      }
+    }
   },
   "x": {
-    "error": "agent: X API 返回 402 Payment Required：请在 Developer Console 购买 credits，并确认当前 App 有可用余额",
+    "error": "未配置 X_BEARER_TOKEN",
     "matrix": {
       "raw": [
-        [
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          0.0
-        ],
-        [
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          0.0
-        ],
-        [
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          0.0
-        ],
-        [
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          0.0
-        ],
         [
           0.0,
           0.0,
@@ -427,56 +513,16 @@
           0.0,
           0.0,
           0.0
-        ],
-        [
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          0.0
-        ],
-        [
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          0.0
-        ],
-        [
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          0.0
-        ],
-        [
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          0.0
         ]
       ]
     },
     "trend": {
-      "agent": 1.0,
-      "reasoning": 1.0,
-      "multimodal": 1.0,
-      "open-source-model": 1.0,
-      "rag-search": 1.0,
-      "infra": 1.0,
-      "embodied": 1.0,
-      "safety-policy": 1.0,
-      "product": 1.0,
-      "funding": 1.0
+      "dlss5": 1.0,
+      "openai": 1.0,
+      "cursor": 1.0,
+      "anthropic": 1.0,
+      "agent-ai": 1.0,
+      "claude-code": 1.0
     },
     "items": {},
     "itemIndex": {}

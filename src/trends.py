@@ -1,16 +1,10 @@
-"""首页话题热力图：Google Trends 兴趣指数 + X 近 7 日讨论量。
+"""首页话题热力图：从 Google 热搜榜筛 AI 词，再补近 7 日兴趣 / X 讨论量。
 
-和 `heatmap.py` 那份「简报条目 × ISO 周」不是同一种量。这边是右栏 Google | X
-切换吃的 7 日快照，落成 `site/data/heatmap-trends.json`。两源各自捕获异常，
-一块挂了另一块照常写；失败时尽量沿用上一份快照里重叠的日期列。
+行不再是编辑预设赛道，而是当天多地区 `trending_now` 里命中 AI 规则的词。
+每个词单独拉一条 0–100 曲线（不和超级热词同框）。X 用同一组词数推文。
+热搜接口或兴趣指数失败时，尽量沿用上一份快照里同 id 的日期列。
 
     python -m src.trends --output site/data/heatmap-trends.json
-
-Google 走 unofficial pytrends：单次最多 5 词，分数相对当次请求。用锚点词
-`artificial intelligence` 把各批缩到同一标尺，格子颜色才能跨话题比。
-GitHub Actions 出口经常被 Trends 拒，失败不让 CI 红。
-
-X 走 `tweets/counts/recent`，和白名单时间线不是同一条产品、也不共用权限。
 """
 from __future__ import annotations
 
@@ -18,10 +12,12 @@ import argparse
 import json
 import logging
 import os
+import re
 import time
+from dataclasses import dataclass
 from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
-from typing import Any, Callable
+from typing import Any, Callable, Iterable
 from urllib.parse import quote
 
 log = logging.getLogger(__name__)
@@ -32,12 +28,44 @@ DEFAULT_OUTPUT = ROOT / "site" / "data" / "heatmap-trends.json"
 RAW_DIR = ROOT / "data" / "trends"
 
 WINDOW_DAYS = 7
-ANCHOR = "artificial intelligence"
-BATCH_SIZE = 4  # 4 话题 + 锚点 = Trends 上限 5
-GOOGLE_TZ = -480  # 北京 UTC+8，pytrends 用「西经分钟」
+GOOGLE_TZ = -480
+GOOGLE_RANGE_DAYS = 8
+RELATED_MIN_PEAK = 1.0
 RETRY_SLEEP = 2.0
-BATCH_SLEEP = 2.0
+TOPIC_SLEEP = 0.8
+GOOGLE_REQUEST_DELAY = 1.5
+MAX_TOPICS = 10
+MIN_ROWS = 4
+RATIO_MIN = 1.5
+RATIO_RELAXED = 1.3
+RATIO_LAYERS: tuple[dict[str, Any], ...] = (
+    {"skip_yesterday": False, "threshold": RATIO_MIN},
+    {"skip_yesterday": True, "threshold": RATIO_MIN},
+    {"skip_yesterday": False, "threshold": RATIO_RELAXED},
+    {"skip_yesterday": True, "threshold": RATIO_RELAXED},
+)
+TREND_HOURS = 48
+TREND_GEOS = ("US", "GB", "IN", "DE", "JP", "AU", "CA")
 
+# 只认明确的 AI 产品/概念，不把整个 Technology 类（iPhone、PS）算进来。
+AI_RE = re.compile(
+    r"(?i)(?<![a-z])("
+    r"ai|a\.i\.|artificial intelligence|generative ai|physical ai|"
+    r"chatgpt|gpt-?\d+|claude code|claude ai|claude opus|claude sonnet|"
+    r"gemini|grok|"
+    r"openai|anthropic|deepseek|copilot|perplexity|midjourney|sora|"
+    r"llm|large language|llama|qwen|mistral|"
+    r"ai agent|agent ai|agentic|claude code|"
+    r"cursor|dlss|nvidia|"
+    r"人工智能|大模型|智能体|フィジカルai"
+    r")(?![a-z])"
+)
+DENY_RE = re.compile(
+    r"(?i)iphone|ipad|android|playstation|xbox|nintendo|pokemon|"
+    r"honor robot phone|premier league|cricket|football|soccer"
+)
+
+# 单测 / 演示回退用的旧赛道，正式采集不再走这里。
 TOPICS: tuple[str, ...] = (
     "agent",
     "reasoning",
@@ -63,23 +91,48 @@ TOPIC_LABELS = {
     "funding": "融资并购",
 }
 QUERIES: dict[str, dict[str, str]] = {
-    "agent": {"g": "AI agent MCP", "x": '("AI agent" OR MCP OR #AIAgents) -is:retweet'},
-    "reasoning": {"g": "test time compute", "x": '("test-time compute" OR #Reasoning) -is:retweet'},
+    "agent": {"g": "AI agent", "x": '("AI agent" OR MCP OR #AIAgents) -is:retweet'},
+    "reasoning": {"g": "reasoning model", "x": '("test-time compute" OR #Reasoning) -is:retweet'},
     "multimodal": {
-        "g": "image video generation AI",
+        "g": "image generation",
         "x": '("image generation" OR "video generation" OR #Multimodal) -is:retweet',
     },
     "open-source-model": {"g": "open source LLM", "x": '("open source LLM" OR #OpenSourceAI) -is:retweet'},
-    "rag-search": {"g": "RAG retrieval augmented", "x": '(RAG OR "retrieval augmented" OR #RAG) -is:retweet'},
-    "infra": {"g": "AI chips inference GPU", "x": '("AI chips" OR inference OR #AIInfra) -is:retweet'},
-    "embodied": {"g": "humanoid robot AI", "x": '("humanoid robot" OR #EmbodiedAI) -is:retweet'},
-    "safety-policy": {"g": "AI regulation safety", "x": '("AI regulation" OR #AISafety) -is:retweet'},
-    "product": {"g": "ChatGPT Copilot product", "x": '(ChatGPT OR Copilot OR #AIProduct) -is:retweet'},
-    "funding": {"g": "AI startup funding", "x": '("AI startup" OR "AI funding" OR #AIFunding) -is:retweet'},
+    "rag-search": {"g": "RAG", "x": '(RAG OR "retrieval augmented" OR #RAG) -is:retweet'},
+    "infra": {"g": "AI chips", "x": '("AI chips" OR inference OR #AIInfra) -is:retweet'},
+    "embodied": {"g": "humanoid robot", "x": '("humanoid robot" OR #EmbodiedAI) -is:retweet'},
+    "safety-policy": {"g": "AI regulation", "x": '("AI regulation" OR #AISafety) -is:retweet'},
+    "product": {"g": "ChatGPT", "x": '(ChatGPT OR Copilot OR #AIProduct) -is:retweet'},
+    "funding": {"g": "AI startup", "x": '("AI startup" OR "AI funding" OR #AIFunding) -is:retweet'},
 }
 
 BatchFn = Callable[[list[str]], tuple[list[str], dict[str, list[float]], dict[str, list[str]]]]
 CountsFn = Callable[[str, str], dict[str, Any]]
+TrendingFn = Callable[[str], Iterable[Any]]
+
+
+@dataclass
+class TopicSpec:
+    id: str
+    label: str
+    query_g: str
+    query_x: str
+    volume: int = 0
+    geos: tuple[str, ...] = ()
+    scope: str = "global"
+    geo: str = ""
+    mark: str = "🌐"
+    breakout: bool = False
+
+    def as_query(self) -> dict[str, str]:
+        return {"g": self.query_g, "x": self.query_x}
+
+
+def editorial_specs() -> list[TopicSpec]:
+    return [
+        TopicSpec(id=key, label=TOPIC_LABELS[key], query_g=spec["g"], query_x=spec["x"])
+        for key, spec in QUERIES.items()
+    ]
 
 
 def day_labels(today: date | None = None) -> list[str]:
@@ -99,23 +152,173 @@ def normalize_rows(raw: list[list[float]]) -> list[list[float]]:
     return out
 
 
-def trend_ratios(raw: list[list[float]]) -> dict[str, float]:
-    trend: dict[str, float] = {}
-    for topic, row in zip(TOPICS, raw):
-        prior = row[:-1]
-        prior_mean = sum(prior) / len(prior) if prior else 0.0
-        last = row[-1] if row else 0.0
-        trend[topic] = round(last / prior_mean, 3) if prior_mean else 1.0
-    return trend
+def row_ratio(row: list[float], *, skip_yesterday: bool = False) -> float:
+    last = row[-1] if row else 0.0
+    prior = row[:-2] if skip_yesterday and len(row) >= 3 else row[:-1]
+    prior_mean = sum(prior) / len(prior) if prior else 0.0
+    if prior_mean:
+        return round(last / prior_mean, 3)
+    return 2.0 if last > 0 else 1.0
 
 
-def empty_source(days: list[str], *, error: str = "") -> dict[str, Any]:
+def passes_ratio_layer(row: list[float], *, skip_yesterday: bool, threshold: float) -> bool:
+    return max(row or [0.0]) > 0 and row_ratio(row, skip_yesterday=skip_yesterday) >= threshold
+
+
+def passes_any_layer(row: list[float], layers: tuple[dict[str, Any], ...] = RATIO_LAYERS) -> bool:
+    return any(
+        passes_ratio_layer(row, skip_yesterday=bool(layer["skip_yesterday"]), threshold=float(layer["threshold"]))
+        for layer in layers
+    )
+
+
+def trend_ratios(raw: list[list[float]], topics: list[str]) -> dict[str, float]:
+    return {topic: row_ratio(row) for topic, row in zip(topics, raw)}
+
+
+def flag_emoji(cc: str) -> str:
+    letters = (cc or "").strip().upper()
+    if len(letters) != 2 or not letters.isalpha():
+        return "🌐"
+    return "".join(chr(0x1F1E6 + ord(ch) - 65) for ch in letters)
+
+
+def scoped_spec(spec: TopicSpec, *, scope: str, geo: str = "", breakout: bool = False) -> TopicSpec:
+    mark = "🌐" if scope == "global" else flag_emoji(geo)
+    return TopicSpec(
+        id=spec.id,
+        label=spec.label,
+        query_g=spec.query_g,
+        query_x=spec.query_x,
+        volume=spec.volume,
+        geos=spec.geos,
+        scope=scope,
+        geo=geo if scope == "country" else "",
+        mark=mark,
+        breakout=breakout,
+    )
+
+
+def _layer_hits(
+    candidates: list[TopicSpec],
+    series_for: Callable[[TopicSpec], tuple[list[float], str, str] | None],
+    *,
+    used: set[str],
+    skip_yesterday: bool,
+    threshold: float,
+) -> list[tuple[float, TopicSpec, list[float]]]:
+    hits: list[tuple[float, TopicSpec, list[float]]] = []
+    for spec in candidates:
+        if spec.id in used:
+            continue
+        found = series_for(spec)
+        if not found:
+            continue
+        row, scope, geo = found
+        row = list(row or [])
+        if not passes_ratio_layer(row, skip_yesterday=skip_yesterday, threshold=threshold):
+            continue
+        hits.append(
+            (
+                row_ratio(row, skip_yesterday=skip_yesterday),
+                scoped_spec(spec, scope=scope, geo=geo, breakout=True),
+                row,
+            )
+        )
+    hits.sort(key=lambda item: (-item[0], -item[1].volume))
+    return hits
+
+
+def pick_scoped_rows(
+    candidates: list[TopicSpec],
+    global_series: dict[str, list[float]],
+    country_series: dict[str, tuple[str, list[float]]] | None = None,
+    *,
+    layers: tuple[dict[str, Any], ...] = RATIO_LAYERS,
+    min_rows: int = MIN_ROWS,
+    max_rows: int = MAX_TOPICS,
+    fill_hot: bool = True,
+) -> list[tuple[TopicSpec, list[float]]]:
+    picked: list[tuple[TopicSpec, list[float]]] = []
+    used: set[str] = set()
+
+    def take(hits: list[tuple[float, TopicSpec, list[float]]]) -> None:
+        for _ratio, spec, row in hits:
+            if spec.id in used or len(picked) >= max_rows:
+                return
+            picked.append((spec, row))
+            used.add(spec.id)
+
+    def global_of(spec: TopicSpec) -> tuple[list[float], str, str] | None:
+        row = global_series.get(spec.id)
+        if row is None:
+            return None
+        return list(row), "global", ""
+
+    def country_of(spec: TopicSpec) -> tuple[list[float], str, str] | None:
+        if not country_series or spec.id not in country_series:
+            return None
+        geo, row = country_series[spec.id]
+        return list(row), "country", geo
+
+    for layer in layers:
+        take(
+            _layer_hits(
+                candidates,
+                global_of,
+                used=used,
+                skip_yesterday=bool(layer["skip_yesterday"]),
+                threshold=float(layer["threshold"]),
+            )
+        )
+        if len(picked) >= min_rows:
+            return picked[:max_rows]
+    if country_series:
+        for layer in layers:
+            take(
+                _layer_hits(
+                    candidates,
+                    country_of,
+                    used=used,
+                    skip_yesterday=bool(layer["skip_yesterday"]),
+                    threshold=float(layer["threshold"]),
+                )
+            )
+            if len(picked) >= min_rows:
+                return picked[:max_rows]
+    if len(picked) >= min_rows or not fill_hot:
+        return picked[:max_rows]
+    leftovers = [spec for spec in candidates if spec.id not in used]
+    leftovers.sort(key=lambda spec: (-spec.volume, spec.label.lower()))
+    for spec in leftovers:
+        if len(picked) >= max_rows:
+            break
+        row = global_series.get(spec.id)
+        if row is None:
+            continue
+        picked.append((scoped_spec(spec, scope="global", breakout=False), list(row)))
+        used.add(spec.id)
+    if country_series and len(picked) < min_rows:
+        for spec in leftovers:
+            if spec.id in used or len(picked) >= max_rows:
+                continue
+            found = country_series.get(spec.id)
+            if not found:
+                continue
+            geo, row = found
+            picked.append((scoped_spec(spec, scope="country", geo=geo, breakout=False), list(row)))
+            used.add(spec.id)
+    return picked[:max_rows]
+
+
+def empty_source(days: list[str], *, topics: list[str] | None = None, error: str = "") -> dict[str, Any]:
+    ids = list(topics if topics is not None else TOPICS)
     cols = len(days) or WINDOW_DAYS
-    raw = [[0.0 for _ in range(cols)] for _ in TOPICS]
+    raw = [[0.0 for _ in range(cols)] for _ in ids]
     return {
         "error": error,
         "matrix": {"raw": raw, "normalized": normalize_rows(raw)},
-        "trend": {topic: 1.0 for topic in TOPICS},
+        "trend": {topic: 1.0 for topic in ids},
         "items": {},
         "itemIndex": {},
     }
@@ -126,28 +329,22 @@ def _align_series(dates: list[str], values: list[float], days: list[str]) -> lis
     return [lookup.get(day, 0.0) for day in days]
 
 
-def _scale_to_anchor(
-    reference: list[float], batch_anchor: list[float], series: list[float]
-) -> list[float]:
-    out: list[float] = []
-    for ref, anchor, value in zip(reference, batch_anchor, series):
-        if anchor > 0:
-            out.append(round(value * (ref / anchor), 2))
-        else:
-            out.append(round(value, 2))
-    return out
-
-
-def _google_explore_url(query: str) -> str:
-    return f"https://trends.google.com/trends/explore?date=now%207-d&q={quote(query)}"
+def _google_explore_url(query: str, geo: str = "") -> str:
+    extra = f"&geo={quote(geo)}" if geo else ""
+    return f"https://trends.google.com/trends/explore?date=now%207-d&q={quote(query)}{extra}"
 
 
 def _x_search_url(query: str) -> str:
     return f"https://x.com/search?q={quote(query)}&src=typed_query&f=live"
 
 
+def _x_query(keyword: str) -> str:
+    return f'"{keyword}" -is:retweet'
+
+
 def _source_links(
     days: list[str],
+    specs: list[TopicSpec],
     *,
     kind: str,
     related: dict[str, list[str]] | None = None,
@@ -155,28 +352,28 @@ def _source_links(
     items: dict[str, list[str]] = {}
     index: dict[str, dict[str, str]] = {}
     related = related or {}
-    for topic in TOPICS:
-        query = QUERIES[topic]
+    for spec in specs:
         is_google = kind == "g"
-        ident = f"{kind}-{topic}"
+        ident = f"{kind}-{spec.id}"
+        query = spec.query_g if is_google else spec.query_x
         index[ident] = {
-            "title": f"{'Google Trends' if is_google else 'X 热搜'} · {query['g' if is_google else 'x']}",
+            "title": f"{'Google Trends' if is_google else 'X 热搜'} · {query}",
             "source": "Google Trends" if is_google else "X",
-            "url": _google_explore_url(query["g"]) if is_google else _x_search_url(query["x"]),
+            "url": _google_explore_url(spec.query_g, spec.geo) if is_google else _x_search_url(spec.query_x),
         }
         extras: list[str] = []
         if is_google:
-            for rank, phrase in enumerate(related.get(topic, [])[:5], start=1):
+            for rank, phrase in enumerate(related.get(spec.id, [])[:5], start=1):
                 extra_id = f"{ident}-q{rank}"
                 extras.append(extra_id)
                 index[extra_id] = {
                     "title": phrase,
                     "source": "Google Trends",
-                    "url": _google_explore_url(phrase),
+                    "url": _google_explore_url(phrase, spec.geo),
                 }
         last = days[-1] if days else ""
         for day in days:
-            key = f"{topic}|{day}"
+            key = f"{spec.id}|{day}"
             ids = [ident]
             if day == last:
                 ids.extend(extras)
@@ -187,16 +384,18 @@ def _source_links(
 def _finish_source(
     days: list[str],
     raw: list[list[float]],
+    specs: list[TopicSpec],
     *,
     kind: str,
     error: str = "",
     related: dict[str, list[str]] | None = None,
 ) -> dict[str, Any]:
-    items, index = _source_links(days, kind=kind, related=related)
+    topics = [spec.id for spec in specs]
+    items, index = _source_links(days, specs, kind=kind, related=related)
     return {
         "error": error,
         "matrix": {"raw": raw, "normalized": normalize_rows(raw)},
-        "trend": trend_ratios(raw),
+        "trend": trend_ratios(raw, topics),
         "items": items,
         "itemIndex": index,
     }
@@ -214,52 +413,292 @@ def write_raw(kind: str, payload: Any) -> None:
         log.warning("写 %s 原始响应失败：%s", kind, exc)
 
 
-def _pytrends_batch(keywords: list[str]) -> tuple[list[str], dict[str, list[float]], dict[str, list[str]]]:
-    from pytrends.request import TrendReq
+def google_timeframe(today: date | None = None) -> str:
+    today = today or datetime.now(CN_TZ).date()
+    start = today - timedelta(days=GOOGLE_RANGE_DAYS)
+    return f"{start.isoformat()} {today.isoformat()}"
 
-    req = TrendReq(hl="en-US", tz=GOOGLE_TZ)
-    req.build_payload(list(keywords), timeframe="today 7-d", geo="")
-    frame = req.interest_over_time()
-    if frame is None or getattr(frame, "empty", True):
-        raise RuntimeError("Google Trends 未返回 interest_over_time")
-    if "isPartial" in frame.columns:
-        frame = frame.drop(columns=["isPartial"])
-    dates = []
-    for idx in frame.index:
+
+def _dates_from_index(index: Any) -> list[str]:
+    dates: list[str] = []
+    for idx in index:
         if hasattr(idx, "date"):
             dates.append(idx.date().isoformat())
         else:
             dates.append(str(idx)[:10])
+    return dates
+
+
+def _rising_phrases(blob: Any) -> list[str]:
+    if not isinstance(blob, dict):
+        return []
+    rising = blob.get("rising")
+    if rising is None or getattr(rising, "empty", True):
+        return []
+    column = "query" if "query" in rising.columns else rising.columns[0]
+    return [str(value) for value in rising[column].tolist() if str(value).strip()][:5]
+
+
+def _series_from_frame(frame: Any, keywords: list[str]) -> tuple[list[str], dict[str, list[float]]]:
+    if frame is None or getattr(frame, "empty", True):
+        raise RuntimeError("Google Trends 未返回 interest_over_time")
+    if "isPartial" in getattr(frame, "columns", []):
+        frame = frame.drop(columns=["isPartial"])
+    dates = _dates_from_index(frame.index)
     series: dict[str, list[float]] = {}
     for keyword in keywords:
         if keyword in frame.columns:
             series[keyword] = [float(value) for value in frame[keyword].fillna(0).tolist()]
         else:
             series[keyword] = [0.0] * len(dates)
-    related: dict[str, list[str]] = {}
-    try:
-        payload = req.related_queries() or {}
-    except Exception as exc:  # noqa: BLE001 - 配图链接失败不影响指数
-        log.warning("Google Trends related_queries 失败：%s", exc)
-        payload = {}
-    for keyword, blob in payload.items():
-        if not isinstance(blob, dict):
+    return dates, series
+
+
+def _canonical(keyword: str) -> str:
+    return re.sub(r"[^a-z0-9\u3040-\u30ff\u4e00-\u9fff]+", "", keyword.lower())
+
+
+def is_latin_keyword(keyword: str) -> bool:
+    text = (keyword or "").strip()
+    return bool(text and re.fullmatch(r"[A-Za-z][A-Za-z0-9 +./\-']*", text))
+
+
+def is_ai_trend(keyword: str, related: Iterable[str] | None = None) -> bool:
+    if not is_latin_keyword(keyword):
+        return False
+    blob = " ".join([keyword, *list(related or [])]).strip()
+    if not blob or DENY_RE.search(blob):
+        return False
+    if re.fullmatch(r"(?i)claude", keyword.strip()):
+        return True
+    return bool(AI_RE.search(blob))
+
+
+def _too_similar(left: str, right: str) -> bool:
+    a, b = _canonical(left), _canonical(right)
+    if not a or not b:
+        return False
+    return a == b or a in b or b in a
+
+
+def _norm_keyword(keyword: str) -> str:
+    return re.sub(r"\s+", " ", keyword).strip().lower()
+
+
+def _topic_id(keyword: str, used: set[str]) -> str:
+    base = re.sub(r"[^\w]+", "-", keyword.lower(), flags=re.UNICODE)
+    base = re.sub(r"^-+|-+$", "", base)[:40] or "topic"
+    ident = base
+    suffix = 2
+    while ident in used:
+        ident = f"{base}-{suffix}"
+        suffix += 1
+    used.add(ident)
+    return ident
+
+
+def _item_field(item: Any, name: str, default: Any = None) -> Any:
+    if isinstance(item, dict):
+        return item.get(name, default)
+    return getattr(item, name, default)
+
+
+def merge_trending_hits(rows: Iterable[dict[str, Any]]) -> list[dict[str, Any]]:
+    merged: dict[str, dict[str, Any]] = {}
+    for row in rows:
+        keyword = str(row.get("keyword") or "").strip()
+        if not keyword:
             continue
-        rising = blob.get("rising")
-        phrases: list[str] = []
-        if rising is not None and getattr(rising, "empty", True) is False:
-            column = "query" if "query" in rising.columns else rising.columns[0]
-            phrases = [str(value) for value in rising[column].tolist() if str(value).strip()][:5]
-        if phrases:
-            related[keyword] = phrases
-    return dates, series, related
+        key = _norm_keyword(keyword)
+        current = merged.get(key)
+        geos = list(row.get("geos") or [])
+        related = [str(item) for item in (row.get("related") or []) if str(item).strip()]
+        volume = int(row.get("volume") or 0)
+        if current is None:
+            merged[key] = {
+                "keyword": keyword,
+                "volume": volume,
+                "geos": geos,
+                "related": related,
+            }
+            continue
+        if volume > int(current["volume"] or 0):
+            current["keyword"] = keyword
+            current["volume"] = volume
+        current["geos"] = list(dict.fromkeys([*current["geos"], *geos]))
+        current["related"] = list(dict.fromkeys([*current["related"], *related]))
+    return sorted(merged.values(), key=lambda item: (-int(item["volume"] or 0), item["keyword"]))
 
 
-def _call_batch(batch_fn: BatchFn, keywords: list[str], *, retries: int, sleep_fn: Callable[[float], Any]) -> tuple[list[str], dict[str, list[float]], dict[str, list[str]]]:
+def select_ai_topics(hits: Iterable[dict[str, Any]], *, limit: int = MAX_TOPICS) -> list[TopicSpec]:
+    picked: list[TopicSpec] = []
+    used: set[str] = set()
+    for hit in merge_trending_hits(hits):
+        keyword = str(hit.get("keyword") or "").strip()
+        related = [str(item) for item in (hit.get("related") or []) if str(item).strip()]
+        if not is_ai_trend(keyword, related):
+            continue
+        if any(_too_similar(keyword, spec.label) for spec in picked):
+            continue
+        ident = _topic_id(keyword, used)
+        picked.append(
+            TopicSpec(
+                id=ident,
+                label=keyword,
+                query_g=keyword,
+                query_x=_x_query(keyword),
+                volume=int(hit.get("volume") or 0),
+                geos=tuple(hit.get("geos") or ()),
+            )
+        )
+        if len(picked) >= limit:
+            break
+    return picked
+
+
+def _default_trending(geo: str, hours: int) -> list[Any]:
+    from trendspy import Trends
+
+    client = Trends(language="en", tzs=GOOGLE_TZ, request_delay=GOOGLE_REQUEST_DELAY, max_retries=2)
+    return list(client.trending_now(geo=geo, hours=hours) or [])
+
+
+def fetch_trending_hits(
+    *,
+    geos: tuple[str, ...] = TREND_GEOS,
+    hours: int = TREND_HOURS,
+    trending_fn: TrendingFn | None = None,
+) -> list[dict[str, Any]]:
+    worker = trending_fn or (lambda geo: _default_trending(geo, hours))
+    rows: list[dict[str, Any]] = []
+    for geo in geos:
+        try:
+            items = list(worker(geo) or [])
+        except Exception as exc:  # noqa: BLE001 - 单地区失败继续
+            log.warning("Google 热搜 %s 失败：%s", geo, exc)
+            continue
+        for item in items:
+            keyword = str(_item_field(item, "keyword") or "").strip()
+            if not keyword:
+                continue
+            related = _item_field(item, "trend_keywords") or []
+            rows.append(
+                {
+                    "keyword": keyword,
+                    "volume": int(_item_field(item, "volume") or 0),
+                    "geos": [geo],
+                    "related": [str(item) for item in related if str(item).strip()],
+                }
+            )
+    merged = merge_trending_hits(rows)
+    write_raw("trending", {"geos": list(geos), "hits": merged})
+    return merged
+
+
+def select_trending_ai(
+    *,
+    geos: tuple[str, ...] = TREND_GEOS,
+    hours: int = TREND_HOURS,
+    trending_fn: TrendingFn | None = None,
+    limit: int = MAX_TOPICS,
+) -> list[TopicSpec]:
+    hits = fetch_trending_hits(geos=geos, hours=hours, trending_fn=trending_fn)
+    picked = select_ai_topics(hits, limit=limit)
+    log.info("热搜筛出 %d 个 AI 话题：%s", len(picked), ", ".join(spec.label for spec in picked) or "无")
+    return picked
+
+
+def specs_from_payload(payload: dict[str, Any] | None) -> list[TopicSpec]:
+    if not payload:
+        return []
+    topics = list(payload.get("topics") or [])
+    labels = payload.get("labels") or {}
+    queries = payload.get("queries") or {}
+    scopes = payload.get("scopes") or {}
+    marks = payload.get("marks") or {}
+    volumes = ((payload.get("selection") or {}).get("volumes") or {})
+    plot_geo = ((payload.get("selection") or {}).get("plot_geo") or {})
+    listing = ((payload.get("selection") or {}).get("geos") or {})
+    breakouts = set((payload.get("selection") or {}).get("breakouts") or payload.get("breakouts") or [])
+    out: list[TopicSpec] = []
+    for topic in topics:
+        query = queries.get(topic) or {}
+        label = str(labels.get(topic) or topic)
+        scope = str(scopes.get(topic) or "global")
+        geo = str(plot_geo.get(topic) or "")
+        geos = tuple(listing.get(topic) or ((geo,) if geo else ()))
+        out.append(
+            TopicSpec(
+                id=str(topic),
+                label=label,
+                query_g=str(query.get("g") or label),
+                query_x=str(query.get("x") or _x_query(label)),
+                volume=int(volumes.get(topic) or 0),
+                geos=geos,
+                scope=scope,
+                geo=geo,
+                mark=str(marks.get(topic) or ("🌐" if scope == "global" else flag_emoji(geo))),
+                breakout=str(topic) in breakouts,
+            )
+        )
+    return out
+
+
+def _make_google_batch() -> BatchFn:
+    from trendspy import Trends
+
+    client = Trends(language="en", tzs=GOOGLE_TZ, request_delay=GOOGLE_REQUEST_DELAY, max_retries=3)
+    timeframe = google_timeframe()
+    related_ok = True
+
+    def batch(
+        keywords: list[str], geo: str = ""
+    ) -> tuple[list[str], dict[str, list[float]], dict[str, list[str]]]:
+        nonlocal related_ok
+        frame = client.interest_over_time(list(keywords), timeframe=timeframe, geo=geo or "")
+        dates, series = _series_from_frame(frame, keywords)
+        related: dict[str, list[str]] = {}
+        if not related_ok:
+            return dates, series, related
+        for keyword in keywords:
+            peak = max(series.get(keyword) or [0.0])
+            if peak <= RELATED_MIN_PEAK:
+                continue
+            try:
+                blob = client.related_queries(keyword, timeframe=timeframe, geo=geo or "")
+            except Exception as exc:  # noqa: BLE001 - 配图链接失败不影响指数
+                log.warning("Google Trends related_queries 失败：%s", exc)
+                related_ok = False
+                break
+            phrases = _rising_phrases(blob)
+            if phrases:
+                related[keyword] = phrases
+        return dates, series, related
+
+    return batch
+
+
+def _invoke_batch(
+    batch_fn: BatchFn, keywords: list[str], geo: str = ""
+) -> tuple[list[str], dict[str, list[float]], dict[str, list[str]]]:
+    try:
+        return batch_fn(keywords, geo)  # type: ignore[misc]
+    except TypeError:
+        return batch_fn(keywords)
+
+
+def _call_batch(
+    batch_fn: BatchFn,
+    keywords: list[str],
+    *,
+    geo: str = "",
+    retries: int,
+    sleep_fn: Callable[[float], Any],
+) -> tuple[list[str], dict[str, list[float]], dict[str, list[str]]]:
     last_exc: Exception | None = None
     for attempt in range(retries):
         try:
-            return batch_fn(keywords)
+            return _invoke_batch(batch_fn, keywords, geo)
         except Exception as exc:  # noqa: BLE001 - 重试后再写成 error
             last_exc = exc
             log.warning("Google Trends 第 %d/%d 次失败：%s", attempt + 1, retries, exc)
@@ -268,45 +707,95 @@ def _call_batch(batch_fn: BatchFn, keywords: list[str], *, retries: int, sleep_f
     raise RuntimeError(str(last_exc) if last_exc else "Google Trends 失败") from last_exc
 
 
+def _one_series(
+    worker: BatchFn,
+    spec: TopicSpec,
+    days: list[str],
+    *,
+    geo: str,
+    retries: int,
+    sleep_fn: Callable[[float], Any],
+) -> tuple[list[float], dict[str, list[str]], dict[str, Any]]:
+    dates, series, related = _call_batch(
+        worker, [spec.query_g], geo=geo, retries=retries, sleep_fn=sleep_fn
+    )
+    aligned = [round(value, 2) for value in _align_series(dates, series.get(spec.query_g) or [], days)]
+    related_map: dict[str, list[str]] = {}
+    if max(aligned or [0.0]) > RELATED_MIN_PEAK:
+        phrases = related.get(spec.query_g) or related.get(spec.id) or []
+        if phrases:
+            related_map[spec.id] = phrases
+    dump = {"keywords": [spec.query_g], "geo": geo, "dates": dates, "series": series, "related": related}
+    return aligned, related_map, dump
+
+
 def fetch_google(
     days: list[str],
     *,
+    topics: list[TopicSpec] | None = None,
     batch_fn: BatchFn | None = None,
     sleep_fn: Callable[[float], Any] = time.sleep,
     retries: int = 3,
+    breakout: bool = False,
 ) -> dict[str, Any]:
-    worker = batch_fn or _pytrends_batch
+    specs = list(topics) if topics is not None else editorial_specs()
+    if not specs:
+        return empty_source(days, topics=[], error="热搜里今天没有筛出 AI 话题")
+    worker = batch_fn if batch_fn is not None else _make_google_batch()
     raw_dump: list[dict[str, Any]] = []
-    by_topic: dict[str, list[float]] = {}
     related_by_topic: dict[str, list[str]] = {}
-    reference_anchor: list[float] | None = None
-    topics = list(TOPICS)
+    chosen: list[TopicSpec] = list(specs)
+    rows: list[list[float]] = []
     try:
-        for start in range(0, len(topics), BATCH_SIZE):
-            chunk = topics[start : start + BATCH_SIZE]
-            keywords = [ANCHOR, *[QUERIES[topic]["g"] for topic in chunk]]
-            dates, series, related = _call_batch(worker, keywords, retries=retries, sleep_fn=sleep_fn)
-            raw_dump.append({"keywords": keywords, "dates": dates, "series": series, "related": related})
-            anchor = _align_series(dates, series.get(ANCHOR) or [], days)
-            if reference_anchor is None:
-                reference_anchor = anchor
-            for topic in chunk:
-                query = QUERIES[topic]["g"]
-                aligned = _align_series(dates, series.get(query) or [], days)
-                by_topic[topic] = _scale_to_anchor(reference_anchor, anchor, aligned)
-                phrases = related.get(query) or related.get(topic) or []
-                if phrases:
-                    related_by_topic[topic] = phrases
-            if start + BATCH_SIZE < len(topics):
-                sleep_fn(BATCH_SLEEP)
+        global_series: dict[str, list[float]] = {}
+        for index, spec in enumerate(specs):
+            aligned, related, dump = _one_series(
+                worker, spec, days, geo="", retries=retries, sleep_fn=sleep_fn
+            )
+            raw_dump.append(dump)
+            global_series[spec.id] = aligned
+            related_by_topic.update(related)
+            if index + 1 < len(specs):
+                sleep_fn(TOPIC_SLEEP)
+        if breakout:
+            picked = pick_scoped_rows(specs, global_series, fill_hot=False)
+            leftovers = [spec for spec in specs if spec.id not in {item[0].id for item in picked}]
+            country_series: dict[str, tuple[str, list[float]]] = {}
+            if len(picked) < MIN_ROWS:
+                for spec in leftovers:
+                    for geo in spec.geos:
+                        aligned, related, dump = _one_series(
+                            worker, spec, days, geo=geo, retries=retries, sleep_fn=sleep_fn
+                        )
+                        raw_dump.append(dump)
+                        related_by_topic.update(related)
+                        if passes_any_layer(aligned):
+                            country_series[spec.id] = (geo, aligned)
+                            break
+                        sleep_fn(TOPIC_SLEEP)
+            picked = pick_scoped_rows(specs, global_series, country_series)
+            if not picked:
+                empty = empty_source(days, topics=[], error="近 7 日没有足够的破线话题")
+                empty["_chosen"] = []
+                return empty
+            chosen = [spec for spec, _row in picked]
+            rows = [row for _spec, row in picked]
+        else:
+            rows = [global_series.get(spec.id, [0.0] * len(days)) for spec in chosen]
     except Exception as exc:  # noqa: BLE001 - 与看板一样，失败写成 error
         log.warning("Google Trends 获取失败：%s", exc)
-        return empty_source(days, error=str(exc))
+        return empty_source(days, topics=[spec.id for spec in specs], error=str(exc))
 
     write_raw("google", raw_dump)
-    raw = [by_topic.get(topic, [0.0] * len(days)) for topic in TOPICS]
-    log.info("Google Trends %d 话题 × %d 日", len(TOPICS), len(days))
-    return _finish_source(days, raw, kind="g", related=related_by_topic)
+    log.info(
+        "Google Trends %d 话题 × %d 日（%s）",
+        len(chosen),
+        len(days),
+        "破线" if breakout else "全量",
+    )
+    block = _finish_source(days, rows, chosen, kind="g", related=related_by_topic)
+    block["_chosen"] = chosen
+    return block
 
 
 def _x_counts_get(query: str, start_time: str, *, bearer: str) -> dict[str, Any]:
@@ -347,13 +836,17 @@ def _bucket_counts(payload: dict[str, Any], days: list[str]) -> list[float]:
 def fetch_x(
     days: list[str],
     *,
+    topics: list[TopicSpec] | None = None,
     bearer: str | None = None,
     api_get: CountsFn | None = None,
     sleep_fn: Callable[[float], Any] = time.sleep,
 ) -> dict[str, Any]:
+    specs = list(topics) if topics is not None else editorial_specs()
     token = (os.environ.get("X_BEARER_TOKEN") or "").strip() if bearer is None else bearer.strip()
     if not token:
-        return empty_source(days, error="未配置 X_BEARER_TOKEN")
+        return empty_source(days, topics=[spec.id for spec in specs], error="未配置 X_BEARER_TOKEN")
+    if not specs:
+        return empty_source(days, topics=[], error="热搜里今天没有筛出 AI 话题")
 
     first = date.fromisoformat(days[0])
     start_time = datetime(first.year, first.month, first.day, tzinfo=CN_TZ).astimezone(timezone.utc)
@@ -372,26 +865,27 @@ def fetch_x(
     raw_rows: list[list[float]] = []
     errors: list[str] = []
     dump: list[dict[str, Any]] = []
-    for index, topic in enumerate(TOPICS):
-        query = QUERIES[topic]["x"]
+    for index, spec in enumerate(specs):
         try:
-            payload = getter(query, start_iso)
-            dump.append({"topic": topic, "query": query, "payload": payload})
+            payload = getter(spec.query_x, start_iso)
+            dump.append({"topic": spec.id, "query": spec.query_x, "payload": payload})
             raw_rows.append(_bucket_counts(payload, days))
         except Exception as exc:  # noqa: BLE001 - 单话题失败记下来，不全盘放弃
-            log.warning("X counts %s 失败：%s", topic, exc)
-            errors.append(f"{topic}: {exc}")
+            log.warning("X counts %s 失败：%s", spec.id, exc)
+            errors.append(f"{spec.id}: {exc}")
             raw_rows.append([0.0] * len(days))
-        if index + 1 < len(TOPICS):
+        if index + 1 < len(specs):
             sleep_fn(0.3)
 
     write_raw("x", dump)
-    if len(errors) == len(TOPICS):
-        return empty_source(days, error=errors[0] if errors else "X counts 全部失败")
+    if len(errors) == len(specs):
+        return empty_source(
+            days, topics=[spec.id for spec in specs], error=errors[0] if errors else "X counts 全部失败"
+        )
     if errors:
         log.warning("X counts 部分失败：%s", "；".join(errors))
-    log.info("X counts %d 话题 × %d 日", len(TOPICS), len(days))
-    return _finish_source(days, raw_rows, kind="x")
+    log.info("X counts %d 话题 × %d 日", len(specs), len(days))
+    return _finish_source(days, raw_rows, specs, kind="x")
 
 
 def _has_values(block: dict[str, Any] | None) -> bool:
@@ -402,7 +896,12 @@ def _has_values(block: dict[str, Any] | None) -> bool:
 
 
 def reindex_source(
-    block: dict[str, Any], old_days: list[str], new_days: list[str], *, kind: str
+    block: dict[str, Any],
+    old_days: list[str],
+    new_days: list[str],
+    specs: list[TopicSpec],
+    *,
+    kind: str,
 ) -> dict[str, Any]:
     old_index = {day: i for i, day in enumerate(old_days)}
     raw_in = ((block.get("matrix") or {}).get("raw")) or []
@@ -414,17 +913,10 @@ def reindex_source(
                 for day in new_days
             ]
         )
-    while len(raw) < len(TOPICS):
+    while len(raw) < len(specs):
         raw.append([0.0] * len(new_days))
-    raw = raw[: len(TOPICS)]
-    items, catalog = _source_links(new_days, kind=kind)
-    return {
-        "error": "",
-        "matrix": {"raw": raw, "normalized": normalize_rows(raw)},
-        "trend": trend_ratios(raw),
-        "items": items,
-        "itemIndex": catalog,
-    }
+    raw = raw[: len(specs)]
+    return _finish_source(days=new_days, raw=raw, specs=specs, kind=kind, error="")
 
 
 def coalesce(
@@ -433,13 +925,14 @@ def coalesce(
     *,
     old_days: list[str],
     new_days: list[str],
+    specs: list[TopicSpec],
     kind: str,
 ) -> dict[str, Any]:
     if not fresh.get("error"):
         return fresh
     if not previous or not _has_values(previous):
         return fresh
-    merged = reindex_source(previous, old_days, new_days, kind=kind)
+    merged = reindex_source(previous, old_days, new_days, specs, kind=kind)
     merged["error"] = str(fresh.get("error") or "")
     return merged
 
@@ -456,27 +949,75 @@ def load_previous(path: Path | str) -> dict[str, Any] | None:
     return payload if isinstance(payload, dict) else None
 
 
+def _payload_topics(specs: list[TopicSpec]) -> tuple[list[str], dict[str, str], dict[str, dict[str, str]]]:
+    return (
+        [spec.id for spec in specs],
+        {spec.id: spec.label for spec in specs},
+        {spec.id: spec.as_query() for spec in specs},
+    )
+
+
 def build_payload(
     *,
     today: date | None = None,
     previous: dict[str, Any] | None = None,
+    topics: list[TopicSpec] | None = None,
+    select_fn: Callable[[], list[TopicSpec]] | None = None,
     google_fn: Callable[[list[str]], dict[str, Any]] | None = None,
     x_fn: Callable[[list[str]], dict[str, Any]] | None = None,
 ) -> dict[str, Any]:
     days = day_labels(today)
     old_days = list((previous or {}).get("days") or [])
-    google = (google_fn or fetch_google)(days)
-    x_block = (x_fn or fetch_x)(days)
-    google = coalesce(
-        google, (previous or {}).get("google-trends"), old_days=old_days, new_days=days, kind="g"
-    )
-    x_block = coalesce(x_block, (previous or {}).get("x"), old_days=old_days, new_days=days, kind="x")
+    if topics is not None:
+        specs = list(topics)
+    else:
+        picker = select_fn or select_trending_ai
+        try:
+            specs = list(picker() or [])
+        except Exception as exc:  # noqa: BLE001 - 榜单失败再看昨天
+            log.warning("热搜筛选失败：%s", exc)
+            specs = []
+        if not specs:
+            specs = specs_from_payload(previous)
+    if google_fn is None:
+        google = fetch_google(days, topics=specs, breakout=True)
+        if "_chosen" in google:
+            specs = list(google.pop("_chosen") or [])
+    else:
+        google = google_fn(days)
+        google.pop("_chosen", None)
+    topic_ids, labels, queries = _payload_topics(specs)
+    breakouts = [spec.id for spec in specs if spec.breakout]
+    x_block = (x_fn or (lambda days_arg: fetch_x(days_arg, topics=specs)))(days)
+    same_ids = topic_ids == list((previous or {}).get("topics") or [])
+    if same_ids:
+        google = coalesce(
+            google,
+            (previous or {}).get("google-trends"),
+            old_days=old_days,
+            new_days=days,
+            specs=specs,
+            kind="g",
+        )
+        x_block = coalesce(
+            x_block, (previous or {}).get("x"), old_days=old_days, new_days=days, specs=specs, kind="x"
+        )
     return {
         "generatedAt": _now_iso(),
         "days": days,
-        "topics": list(TOPICS),
-        "labels": dict(TOPIC_LABELS),
-        "queries": {key: dict(value) for key, value in QUERIES.items()},
+        "topics": topic_ids,
+        "labels": labels,
+        "queries": queries,
+        "scopes": {spec.id: spec.scope for spec in specs},
+        "marks": {spec.id: spec.mark for spec in specs},
+        "breakouts": breakouts,
+        "selection": {
+            "method": "google-trending-ai",
+            "volumes": {spec.id: spec.volume for spec in specs},
+            "geos": {spec.id: list(spec.geos) for spec in specs},
+            "plot_geo": {spec.id: spec.geo for spec in specs},
+            "breakouts": breakouts,
+        },
         "google-trends": google,
         "x": x_block,
     }
@@ -490,7 +1031,7 @@ def write_payload(payload: dict[str, Any], output: Path | str) -> Path:
 
 
 def run(argv: list[str] | None = None) -> int:
-    parser = argparse.ArgumentParser(description="生成 Google / X 话题热力图 JSON")
+    parser = argparse.ArgumentParser(description="从 Google 热搜筛 AI 话题并生成热力图 JSON")
     parser.add_argument("--output", default=str(DEFAULT_OUTPUT))
     args = parser.parse_args(argv)
     previous = load_previous(args.output)
