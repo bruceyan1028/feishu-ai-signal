@@ -1,0 +1,21 @@
+---
+description: 每日简报必须先部署 Pages，再发飞书群卡片
+alwaysApply: true
+---
+
+# 每日推送顺序
+
+群卡片上的「查看完整网页简报」指向 GitHub Pages，不是本机 `site/`。Pages 未上线当日数据时发卡片，群里点开就是旧简报或空白。
+
+## 顺序
+
+1. 采集 `src.main` → 生成 `src.daily` → `src.publish`（会重拉 AA 智能指数与行情快照）
+2. 提交并推送 `site/`（或走 `daily-brief.yml` 的 deploy-send）
+3. 确认公网 `data/brief-YYYY-MM-DD.json` 的 `date` 已是当天
+4. 再 `python -m src.notify`
+
+## 禁止
+
+- 本机 `publish` 完立刻 `notify`
+- Pages 仍是旧日期就发卡片
+- 为发卡片绕过 `src.notify` 的公网就绪检查

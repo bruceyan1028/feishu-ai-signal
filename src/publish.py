@@ -472,6 +472,14 @@ def build_site(
     return site
 
 
+def refresh_side_boards(site: Path | str) -> Path:
+    """日报发布后立刻重拉 AA 智能指数与行情，避免本机只跑 publish 时沿用旧快照。"""
+    from . import dashboard
+
+    output = Path(site) / "data" / "dashboard-latest.json"
+    return dashboard.refresh_into(output)
+
+
 def export_weekly(
     payload: dict[str, Any], site_dir: Path | str = ROOT / "site"
 ) -> Path:
@@ -523,6 +531,7 @@ def run() -> int:
         briefs = [current, *[item for item in briefs if item["date"] != current["date"]]][:7]
     curate_web_media(briefs)
     site = build_site(briefs, args.site_dir, params=params)
+    refresh_side_boards(site)
     print(site)
     return 0
 

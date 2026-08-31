@@ -245,10 +245,62 @@ class WritePayloadTest(unittest.TestCase):
             written = json.loads(output.read_text(encoding="utf-8"))
             self.assertEqual(written["market"]["quotes"][0]["name"], "寒武纪")
 
+    def test_keep_last_good_retains_old_board_when_new_fetch_fails(self):
+        previous = {
+            "leaderboard": {"error": "", "models": [{"name": "Claude Opus 5"}]},
+            "market": {"error": "", "quotes": [{"name": "寒武纪"}]},
+        }
+        incoming = {
+            "leaderboard": {"error": "429", "models": []},
+            "market": {"error": "", "quotes": [{"name": "英伟达"}]},
+        }
+        merged = dashboard.keep_last_good(incoming, previous)
+        self.assertEqual(merged["leaderboard"]["models"][0]["name"], "Claude Opus 5")
+        self.assertEqual(merged["market"]["quotes"][0]["name"], "英伟达")
+
+    @patch.dict("os.environ", {"ARTIFICIAL_ANALYSIS_API_KEY": "k"}, clear=False)
+    @patch("src.dashboard.fetch_market")
+    @patch("src.dashboard.fetch_leaderboard")
+    def test_refresh_into_overwrites_stale_snapshot(
+        self, mock_board: MagicMock, mock_market: MagicMock
+    ):
+        mock_board.return_value = {"error": "", "models": [{"name": "GPT-5.6 Sol"}]}
+        mock_market.return_value = {"error": "", "quotes": [{"name": "英伟达"}]}
+        with tempfile.TemporaryDirectory() as temp:
+            output = Path(temp) / "dashboard-latest.json"
+            output.write_text(
+                json.dumps(
+                    {
+                        "leaderboard": {
+                            "updatedAt": "2026-08-28T12:15:30+08:00",
+                            "models": [{"name": "旧模型"}],
+                        }
+                    }
+                ),
+                encoding="utf-8",
+            )
+            dashboard.refresh_into(output)
+            written = json.loads(output.read_text(encoding="utf-8"))
+            self.assertEqual(written["leaderboard"]["models"][0]["name"], "GPT-5.6 Sol")
+
 
 class PublishIntegrationTest(unittest.TestCase):
+    def test_daily_workflow_does_not_fetch_dashboard_twice(self):
+        text = Path(".github/workflows/daily-brief.yml").read_text(encoding="utf-8")
+        self.assertIn("python -m src.publish", text)
+        self.assertNotIn("python -m src.dashboard", text)
+
+    @patch("src.dashboard.refresh_into")
+    def test_publish_refreshes_dashboard_after_rebuild(self, mock_refresh: MagicMock):
+        mock_refresh.return_value = Path("site/data/dashboard-latest.json")
+        with tempfile.TemporaryDirectory() as temp:
+            site = Path(temp)
+            (site / "data").mkdir()
+            publish.refresh_side_boards(site)
+            mock_refresh.assert_called_once_with(site / "data" / "dashboard-latest.json")
+
     def test_dashboard_survives_site_rebuild(self):
-        """日报重建会清空 site/，看板由独立步骤生成，被清掉就要等到明天才回来。"""
+        """日报重建会清空 site/，旧看板必须先暂存；publish 随后会重拉，失败则沿用这份。"""
         self.assertIn("dashboard-latest.json", publish._PERSISTENT_DATA_GLOBS)
         with tempfile.TemporaryDirectory() as temp:
             data = Path(temp) / "data"

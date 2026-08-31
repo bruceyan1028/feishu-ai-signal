@@ -315,7 +315,7 @@ python -m src.health --days 30
 
 ### 数据看板
 
-`python -m src.dashboard`。首页右栏的两块「状态量」：读者想边翻当天的事件，边扫一眼模型排名和资金面。不进条目表、不打分、不去重，只有一份当期快照，写 `site/data/dashboard-latest.json`。
+`src.publish` 结束时会重拉，也可单独跑 `python -m src.dashboard`。首页右栏的两块「状态量」：读者想边翻当天的事件，边扫一眼模型排名和资金面。不进条目表、不打分、不去重，只有一份当期快照，写 `site/data/dashboard-latest.json`。流水线不再单独跑一次，避免同一天打两次 AA。
 
 | 看板 | 来源 | 鉴权 | 取值 |
 | --- | --- | --- | --- |
@@ -329,7 +329,7 @@ python -m src.health --days 30
 - 深色终端风：纯黑底白字，涨红跌绿跟中文财经惯例。榜单只出模型名不出厂商名（logo 已经把归属说清楚了，再补一遍文字只是把行撑宽）。
 - 侧栏只有 300px 出头。吞吐、单价、当日区间、市值这些**需要横向对比才有意义的列，在窄栏里直接不渲染**——挤成三号字既比不出差距也没人看，要这些数字的人会点进数据源。
 - 智能指数也不占独立一列：填进模型名那一格的背景，长度按**可见区间**（末位→榜首）铺开，绝对值叠在字右边。一根条 + 一行字用同一块地方，名字也能完整显示。用 0 或 100 做基准时前 12 名只差几分，所有行会填成一样长。
-- `dashboard-latest.json` 在 `publish._PERSISTENT_DATA_GLOBS` 里：日报重建会清空 `site/`，被清掉就要等到明天才回来。
+- `dashboard-latest.json` 在 `publish._PERSISTENT_DATA_GLOBS` 里：日报重建会清空 `site/`，先暂存旧快照再重拉 AA 与行情；新拉失败则沿用昨天的，避免首页空白。
 
 ### 话题热力图
 
@@ -409,6 +409,8 @@ python -m src.sources_api    # http://127.0.0.1:8787 ，只绑回环
 
 `python -m src.notify --input site/data/brief-latest.json`
 
+**先部署 Pages，再发卡片。** 群里点的是公网站；本机 `site/` 写好不等于别人打得开。`notify` 会请求 `{PUBLIC_BASE_URL}/data/brief-YYYY-MM-DD.json`，确认 `date` 对上才发送，否则拒绝。
+
 - 接收群：`FEISHU_RECIPIENT_CHAT_IDS`（逗号分隔，优先）。配置后不再逐人私聊
 - 接收人回退：`FEISHU_RECIPIENT_OPEN_IDS`（仅未配置群聊时使用），名称 `FEISHU_RECIPIENT_NAMES` 按序对应
 - 查群：把机器人拉进群后 `python -m tools.list_bot_chats`
@@ -486,7 +488,7 @@ python -m src.sources_api    # http://127.0.0.1:8787 ，只绑回环
 
 | 工作流 | 触发 | 做什么 |
 | --- | --- | --- |
-| `daily-brief.yml` | 每天 UTC 02:45（北京 10:45），可手动 | 测试 → `main` → `daily` → `publish` → `timeline` → `dashboard` → 话题打标/热力图 → 回写 `site/` → Pages → `notify` |
+| `daily-brief.yml` | 每天 UTC 02:45（北京 10:45），可手动 | 测试 → `main` → `daily` → `publish`（含看板重拉） → `timeline` → 话题打标/热力图 → 回写 `site/` → Pages → `notify` |
 | `weekly-report.yml` | 周一 UTC 03:30 | 周报 + 部署 + 推送 |
 | `pages-preview.yml` | 推送 `site/**` 或 `index.html` | 只部署当前仓库里的 `site/` |
 | `ingest.yml` | 仅手动 | 单独采集 |
@@ -556,10 +558,10 @@ python -m src.main
 python -m src.daily --output output/daily-brief.json
 python -m src.publish --input output/daily-brief.json
 python -m src.timeline --output site/data/timeline-latest.json
-python -m src.dashboard --output site/data/dashboard-latest.json
+# publish 已重拉 dashboard-latest.json；也可单独再跑 python -m src.dashboard
 python -m src.aggregate --seed-mock   # 预览热力图；有 tagged 数据后改跑不带 --seed-mock
-python -m src.sources_api          # 推荐：站点 + 实时参数表
-# 或：python -m http.server 4173 --directory site
+# 提交并推送 site/，等 pages-preview 部署成功、公网 brief-YYYY-MM-DD.json 可访问
+# 不要在 Pages 上线前发卡片：群里点开的是公网站
 python -m src.notify --input site/data/brief-latest.json
 ```
 

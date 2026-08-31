@@ -5,9 +5,10 @@
 
     python -m src.dashboard --output site/data/dashboard-latest.json
 
-两个来源相互独立，任一挂掉不影响另一块，也不会让 CI 步骤失败——看板缺数据顶多少
-一屏，把整轮日报拖挂就得不偿失。失败原因写进 payload 的 error 字段，页面照实显示
-「暂无数据」而不是留白，否则线上停更了没人看得出来。
+日报 `src.publish` 结束时会调一次；流水线不再单独跑。两个来源相互独立，任一挂掉
+不影响另一块，也不会让发布失败——看板缺数据顶多少一屏，把整轮日报拖挂就得不偿失。
+失败原因写进 payload 的 error 字段，页面照实显示「暂无数据」而不是留白，否则线上
+停更了没人看得出来。
 
 榜单用 Artificial Analysis 免费 API：它按统一口径重测所有模型（智能指数、吞吐、
 单价），比各家自报的跑分可比。需要 `ARTIFICIAL_ANALYSIS_API_KEY`，官方要求 key 不
@@ -193,6 +194,25 @@ def _creator_domain(name: str) -> str:
         if needle in key:
             return domain
     return ""
+
+
+def _load_dotenv() -> None:
+    """本机 `python -m src.dashboard` 不经过 bootstrap，需要自己把 .env 灌进环境。
+
+    已在环境里的变量不覆盖：CI 用 GitHub Secrets，本机已 export 的优先。
+    """
+    env_path = ROOT / ".env"
+    if not env_path.is_file():
+        return
+    for line in env_path.read_text(encoding="utf-8").splitlines():
+        line = line.strip()
+        if not line or line.startswith("#") or "=" not in line:
+            continue
+        key, _, val = line.partition("=")
+        key = key.strip()
+        val = val.strip().strip('"').strip("'")
+        if key and key not in os.environ:
+            os.environ[key] = val
 
 
 def _now_iso() -> str:
@@ -418,13 +438,49 @@ def write_payload(payload: dict[str, Any], output: Path | str) -> Path:
     return path
 
 
+def _board_has_rows(board: dict[str, Any] | None, key: str) -> bool:
+    if not board:
+        return False
+    rows = board.get(key) or []
+    return bool(rows)
+
+
+def keep_last_good(
+    payload: dict[str, Any], previous: dict[str, Any] | None
+) -> dict[str, Any]:
+    """新拉失败时留下昨天的榜/行情，避免发布把可用快照写成「暂无数据」。"""
+    if not previous:
+        return payload
+    merged = dict(payload)
+    for board_key, rows_key in (("leaderboard", "models"), ("market", "quotes")):
+        incoming = payload.get(board_key) or {}
+        old = previous.get(board_key) or {}
+        if incoming.get("error") and not _board_has_rows(incoming, rows_key):
+            if _board_has_rows(old, rows_key):
+                merged[board_key] = old
+    return merged
+
+
+def refresh_into(output: Path | str) -> Path:
+    """拉当期榜单与行情并落盘；一侧失败则沿用该侧旧数据。"""
+    _load_dotenv()
+    path = Path(output)
+    previous = None
+    if path.is_file():
+        try:
+            previous = json.loads(path.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError) as exc:
+            log.warning("无法读取旧看板 %s：%s", path, exc)
+    payload = keep_last_good(build_payload(), previous)
+    return write_payload(payload, path)
+
+
 def run(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="生成首页数据看板 JSON")
     parser.add_argument("--output", default=str(DEFAULT_OUTPUT))
     args = parser.parse_args(argv)
 
-    payload = build_payload()
-    path = write_payload(payload, args.output)
+    path = refresh_into(args.output)
     log.info("看板数据已写入 %s", path)
     return 0
 
