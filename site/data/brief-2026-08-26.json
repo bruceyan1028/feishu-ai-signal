@@ -261,26 +261,6 @@
       "mediaAssets": {
         "images": [
           {
-            "url": "media/papers/recvtna5VI3LUX-p10-f1.png",
-            "alt": "PDF 第 10 页图表：Table 1 Benchmarking results on MMEB-v2. Baseline results are taken from the official MMEB leaderboard. †Closed- source leaderboard submission without publicly released model weights or a public inference endpoint. ⋆Proprietary commercial model with an undisclosed parameter count. CLS: classification; QA: question answering; Ret: retrieval; GD: visual grounding; V-Ret: video retrieval; M-Ret: moment retrieval.",
-            "kind": "pdf-page"
-          },
-          {
-            "url": "media/papers/recvtna5VI3LUX-p11-f2.png",
-            "alt": "PDF 第 11 页图表：Table 2 Evaluation results on MMEB-v3. V3-All averages all 190 tasks, comprising the 78 MMEB-v2 tasks, 53 Text tasks, 47 Agent tasks, 11 Audio tasks, and MCMR [10]. Following the evaluation protocol defined in the MMEB-v3 paper [15], Text results are reported using NDCG@5. Unsupported tasks are assigned a score of zero. RR: reasoning retrieval; IF: instruction following; LC: long-context retrieval; MC: multi-condition retrieval; GR: general retrieval.",
-            "kind": "pdf-page"
-          },
-          {
-            "url": "media/papers/recvtna5VI3LUX-p11-f3.png",
-            "alt": "PDF 第 11 页图表：Table 3 Cross-modal retrieval results on 12 public benchmarks. AVG denotes the average across the 12 datasets. †Proprietary commercial model with an undisclosed parameter count.",
-            "kind": "pdf-page"
-          },
-          {
-            "url": "media/papers/recvtna5VI3LUX-p12-f4.png",
-            "alt": "PDF 第 12 页图表：Table 4 Evaluation results on the in-house benchmark. AVG denotes the average over all 26 tasks. Cross-DM denotes cross-domain content matching; Article Rel. denotes article relevance; Video Rel. denotes video relevance.",
-            "kind": "pdf-page"
-          },
-          {
             "url": "https://arxiv.org/html/2608.24053v1/figs/mrl-performance-trend.png",
             "alt": "Figure 3 : MRL analysis of WeMM-Embedding-2B on MMEB-v2. Left: Performance retained on the image, video, and visual-document subsets across embedding dimensions. Right: Performance retained for classification (CLS), question answering (QA), and retrieval (RET), each averaged over the corresponding image and video tasks."
           }
@@ -767,7 +747,7 @@
         "images": [
           {
             "url": "https://wpimg-wscn.awtmt.com/bef0d140-a1b8-4516-a2a8-6cc25986256b.png",
-            "alt": "200亿美元投入与模型能力未知",
+            "alt": "资本投入与AI能力边界",
             "kind": "article-figure",
             "afterHeading": "200亿砸进去，没人知道会出来什么"
           }
@@ -873,8 +853,14 @@
       "mediaAssets": {
         "images": [
           {
+            "url": "https://mmbiz-qpic.wscn.net/mmbiz_png/A6fTew8FFGE0RpwgufmL7lJHngVR7lpAgh4DJmTruBiats4H1nwdPBosVeVQFRCfiaEgr8GpCicWmAAeT3kScicfOqiaFK1KIaWfhfWx5VDyV8A8/640?wx_fmt=png&from=appmsg",
+            "alt": "M6芯片架构与核心规格",
+            "kind": "article-figure",
+            "afterHeading": "2nm首秀，苹果先把M6狠狠干上了AI！"
+          },
+          {
             "url": "https://mmbiz-qpic.wscn.net/mmbiz_png/A6fTew8FFGHej4oTNKRCficxp8iavAEYIpDUp4a6jlDxq2UQhk7F3CVticicyO0ia4MH0J7hz4NNQYVIS00L6VajeoNsx7AaNPemfGZQUyFxd6SA/640?wx_fmt=png&from=appmsg",
-            "alt": "M6与前代AI性能对比",
+            "alt": "M6本地AI性能对比",
             "kind": "article-figure",
             "afterHeading": "2nm首秀，苹果先把M6狠狠干上了AI！"
           },
@@ -885,7 +871,7 @@
             "afterHeading": "苹果首次四Die：M5 Ultra直接用桌面机猛堆AI算力"
           },
           {
-            "url": "https://mmbiz-qpic.wscn.net/mmbiz_jpg/A6fTew8FFGEAkO7cr873pYZ6Tiaom6ibyTiaSWowyoR77kekDvBoc7UStnUNziaaEErakZfBkbWnoENnLRhZPXicBNnUfIyrcJHvaRod20g3PQP0/640?wx_fmt=jpeg&from=appmsg",
+            "url": "https://mmbiz-qpic.wscn.net/mmbiz_jpg/A6fTew8FFGEBFQ80wdNPaRnjGPVicK5DlVCIAJamYfxrxZibSxAzXIUCXyMwSiaicpbDKic7FOkUEOCic3ic0eY7IWAiaE1Kv5DymbibjmytDdq8ZqtI/640?wx_fmt=jpeg&from=appmsg",
             "alt": "高内存Mac供货紧张",
             "kind": "article-figure",
             "afterHeading": "AI把Mac买涨价了，也快把高内存Mac买断货了"
@@ -957,13 +943,25 @@
         "images": [
           {
             "url": "https://oss.zhidx.com/uploads/2026/08/6a8d75e20dc2a_6a8d75e20a8f2_6a8d75e20a8ba_图片-2.png",
-            "alt": "青年科研学者交流现场",
+            "alt": "AI4S青年学者交流现场",
             "kind": "article-figure",
             "afterHeading": "基础：北京AI4S的“学术厚度”从何而来？ || 一、基础：北京AI4S的“学术厚度”从何而来？"
           },
           {
+            "url": "https://oss.zhidx.com/uploads/2026/08/6a8d784286162_6a8d7842803bc_6a8d78428038c_AX00217_副本.jpg",
+            "alt": "科学智能大会展区现场",
+            "kind": "article-figure",
+            "afterHeading": "模型层：科学大模型的“北京矩阵” || 模型层：科学大模型的“北京矩阵”"
+          },
+          {
             "url": "https://oss.zhidx.com/uploads/2026/08/6a8d95ce40038_6a8d95ce3cbea_6a8d95ce3cbb3_政策.jpg",
-            "alt": "北京AI4S政策体系",
+            "alt": "北京AI4S政策体系展示",
+            "kind": "article-figure",
+            "afterHeading": "政策：北京如何为AI4S构建制度“护航体系”？ || 三、政策：北京如何为AI4S构建制度“护航体系”？"
+          },
+          {
+            "url": "https://oss.zhidx.com/uploads/2026/08/6a8d784364d3c_6a8d784361b1d_6a8d784361af2_AX00228_副本.jpg",
+            "alt": "科学智能创新集聚区规划",
             "kind": "article-figure",
             "afterHeading": "政策：北京如何为AI4S构建制度“护航体系”？ || 三、政策：北京如何为AI4S构建制度“护航体系”？"
           }
@@ -1254,36 +1252,36 @@
         "硬件",
         "其他"
       ],
-      "imageUrl": "https://3-im.guokr.com/RmdEQXFaVU1WRE5KVlRyclQ5RGM1cFYxd0FNSGRvY3iAAgAAaAEAAEdJ.gif?imageView2/1/w/555/h/312",
+      "imageUrl": "https://1-im.guokr.com/RnFGbHg1TGJCSVl5TmVVc3hRSV9kRkNDZWcyNGRvY3g4BAAA9QIAAEpQ.jpg?imageView2/1/w/555/h/389",
       "mediaAssets": {
         "images": [
           {
-            "url": "https://1-im.guokr.com/RnFGbHg1TGJCSVl5TmVVc3hRSV9kRkNDZWcyNGRvY3g4BAAA9QIAAEpQ.jpg?imageView2/1/w/555/h/389",
-            "alt": "人形机器人赛场奔跑",
+            "url": "https://1-im.guokr.com/RnI4WTQxR0Q3NVBjU0c2SlJ5M0tTVHpvSjlwQmRvY3iMAwAAbgEAAEpQ.jpg?imageView2/1/w/555/h/223",
+            "alt": "四种跑步手臂姿势",
             "kind": "article-figure",
-            "afterHeading": "核心内容"
+            "afterHeading": "关键细节"
           },
           {
-            "url": "https://1-im.guokr.com/RnI4WTQxR0Q3NVBjU0c2SlJ5M0tTVHpvSjlwQmRvY3iMAwAAbgEAAEpQ.jpg?imageView2/1/w/555/h/223",
-            "alt": "跑步实验的四种手臂姿势",
+            "url": "https://3-im.guokr.com/RnZxdmlxZmxZTjRUdlVYVXJWLVRaS3BibnJoLWRvY3jeAQAAXwEAAEpQ.jpg",
+            "alt": "不同姿势的代谢功率",
             "kind": "article-figure",
             "afterHeading": "关键细节"
           },
           {
             "url": "https://3-im.guokr.com/RmtjSy1SaWI5WlZ2UlBNdnRtcy1wUkRVZUpOUmRvY3iEAwAA_AIAAEpQ.jpg?imageView2/1/w/555/h/471",
-            "alt": "摆臂抵消身体旋转示意",
+            "alt": "摆臂抵消身体旋转",
             "kind": "article-figure",
-            "afterHeading": "关键细节"
+            "afterHeading": "核心内容"
           },
           {
-            "url": "https://1-im.guokr.com/RnRiQ256M0RBOWh6LVgxR0p0QXdMOUFiVWZ6eWRvY3hnAQAAbgEAAEpQ.jpg",
-            "alt": "正常摆臂时旋转幅度最小",
+            "url": "https://3-im.guokr.com/RmdEQXFaVU1WRE5KVlRyclQ5RGM1cFYxd0FNSGRvY3iAAgAAaAEAAEdJ.gif?imageView2/1/w/555/h/312",
+            "alt": "机器人捂脸跑姿势",
             "kind": "article-figure",
             "afterHeading": "价值与影响"
           }
         ],
         "videos": [],
-        "cover": "https://3-im.guokr.com/RmdEQXFaVU1WRE5KVlRyclQ5RGM1cFYxd0FNSGRvY3iAAgAAaAEAAEdJ.gif?imageView2/1/w/555/h/312",
+        "cover": "https://1-im.guokr.com/RnFGbHg1TGJCSVl5TmVVc3hRSV9kRkNDZWcyNGRvY3g4BAAA9QIAAEpQ.jpg?imageView2/1/w/555/h/389",
         "curatedBy": "llm"
       },
       "editorialStructure": "",
@@ -1332,11 +1330,15 @@
       ],
       "imageUrl": "https://techcrunch.com/wp-content/uploads/2026/08/Ringg-Founder-Kali-CV-Siddharth-Tripathi-Utkarsh-Shukla.jpg?resize=1200,675",
       "mediaAssets": {
-        "images": [],
+        "images": [
+          {
+            "url": "https://techcrunch.com/wp-content/uploads/2026/08/Ringg-Founder-Kali-CV-Siddharth-Tripathi-Utkarsh-Shukla.jpg?resize=1200,675",
+            "alt": "印度语音 AI 初创公司 Ringg 获 Peak XV 追加 1000 万美元融资",
+            "kind": "article-cover"
+          }
+        ],
         "videos": [],
-        "documents": [],
-        "cover": "https://techcrunch.com/wp-content/uploads/2026/08/Ringg-Founder-Kali-CV-Siddharth-Tripathi-Utkarsh-Shukla.jpg?resize=1200,675",
-        "curatedBy": "llm"
+        "documents": []
       },
       "editorialStructure": "",
       "eventAggregation": {

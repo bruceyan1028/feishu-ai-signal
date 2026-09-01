@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-01T12:20:59+08:00",
+  "generatedAt": "2026-09-01T16:33:45+08:00",
   "days": [
     "2026-08-26",
     "2026-08-27",
@@ -10,21 +10,25 @@
     "2026-09-01"
   ],
   "topics": [
-    "dlss5",
+    "public-opposition-to-ai-data-centers",
+    "dlss-5",
     "chatgpt-down",
-    "business",
-    "anthropic"
+    "business"
   ],
   "labels": {
-    "dlss5": "dlss5",
+    "public-opposition-to-ai-data-centers": "public opposition to ai data centers",
+    "dlss-5": "dlss 5",
     "chatgpt-down": "chatgpt down",
-    "business": "business",
-    "anthropic": "anthropic"
+    "business": "business"
   },
   "queries": {
-    "dlss5": {
-      "g": "dlss5",
-      "x": "\"dlss5\" -is:retweet"
+    "public-opposition-to-ai-data-centers": {
+      "g": "public opposition to ai data centers",
+      "x": "\"public opposition to ai data centers\" -is:retweet"
+    },
+    "dlss-5": {
+      "g": "dlss 5",
+      "x": "\"dlss 5\" -is:retweet"
     },
     "chatgpt-down": {
       "g": "chatgpt down",
@@ -33,66 +37,60 @@
     "business": {
       "g": "business",
       "x": "\"business\" -is:retweet"
-    },
-    "anthropic": {
-      "g": "anthropic",
-      "x": "\"anthropic\" -is:retweet"
     }
   },
   "scopes": {
-    "dlss5": "global",
+    "public-opposition-to-ai-data-centers": "global",
+    "dlss-5": "global",
     "chatgpt-down": "global",
-    "business": "global",
-    "anthropic": "country"
+    "business": "global"
   },
   "marks": {
-    "dlss5": "🌐",
+    "public-opposition-to-ai-data-centers": "🌐",
+    "dlss-5": "🌐",
     "chatgpt-down": "🌐",
-    "business": "🌐",
-    "anthropic": "🇯🇵"
+    "business": "🌐"
   },
   "breakouts": [
-    "dlss5",
+    "public-opposition-to-ai-data-centers",
+    "dlss-5",
     "chatgpt-down",
-    "business",
-    "anthropic"
+    "business"
   ],
   "selection": {
     "method": "google-trending-ai",
     "volumes": {
-      "dlss5": 500,
+      "public-opposition-to-ai-data-centers": 2000,
+      "dlss-5": 200,
       "chatgpt-down": 5000,
-      "business": 10000,
-      "anthropic": 500
+      "business": 10000
     },
     "geos": {
-      "dlss5": [
-        "JP"
+      "public-opposition-to-ai-data-centers": [
+        "US"
+      ],
+      "dlss-5": [
+        "DE"
       ],
       "chatgpt-down": [
         "US",
         "DE"
       ],
       "business": [
-        "US",
-        "CA"
-      ],
-      "anthropic": [
-        "IN",
-        "JP"
+        "US"
       ]
     },
     "plot_geo": {
-      "dlss5": "",
+      "public-opposition-to-ai-data-centers": "",
+      "dlss-5": "",
       "chatgpt-down": "",
-      "business": "",
-      "anthropic": "JP"
+      "business": ""
     },
     "breakouts": [
-      "dlss5",
+      "public-opposition-to-ai-data-centers",
+      "dlss-5",
       "chatgpt-down",
-      "business",
-      "anthropic"
+      "business"
     ]
   },
   "google-trends": {
@@ -101,107 +99,128 @@
       "raw": [
         [
           0.0,
-          1.0,
-          20.0,
-          53.0,
-          81.0,
-          81.0,
-          100.0
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          100.0,
+          58.0
         ],
         [
-          16.0,
+          1.0,
+          3.0,
+          31.0,
+          78.0,
+          100.0,
+          96.0,
+          95.0
+        ],
+        [
+          17.0,
           22.0,
           15.0,
           13.0,
-          16.0,
+          15.0,
           100.0,
-          45.0
+          32.0
         ],
         [
-          84.0,
-          81.0,
-          72.0,
-          63.0,
-          66.0,
-          80.0,
-          100.0
-        ],
-        [
+          86.0,
+          85.0,
+          76.0,
+          65.0,
           68.0,
-          64.0,
-          71.0,
-          43.0,
-          43.0,
-          99.0,
+          82.0,
           100.0
         ]
       ],
       "normalized": [
         [
           0.0,
-          0.01,
-          0.2,
-          0.53,
-          0.81,
-          0.81,
-          1.0
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          1.0,
+          0.58
         ],
         [
-          0.16,
+          0.01,
+          0.03,
+          0.31,
+          0.78,
+          1.0,
+          0.96,
+          0.95
+        ],
+        [
+          0.17,
           0.22,
           0.15,
           0.13,
-          0.16,
+          0.15,
           1.0,
-          0.45
+          0.32
         ],
         [
-          0.84,
-          0.81,
-          0.72,
-          0.63,
-          0.66,
-          0.8,
-          1.0
-        ],
-        [
+          0.86,
+          0.85,
+          0.76,
+          0.65,
           0.68,
-          0.64,
-          0.71,
-          0.43,
-          0.43,
-          0.99,
+          0.82,
           1.0
         ]
       ]
     },
     "trend": {
-      "dlss5": 2.542,
-      "chatgpt-down": 1.484,
-      "business": 1.345,
-      "anthropic": 1.546
+      "public-opposition-to-ai-data-centers": 3.48,
+      "dlss-5": 1.845,
+      "chatgpt-down": 1.055,
+      "business": 1.299
     },
     "items": {
-      "dlss5|2026-08-26": [
-        "g-dlss5"
+      "public-opposition-to-ai-data-centers|2026-08-26": [
+        "g-public-opposition-to-ai-data-centers"
       ],
-      "dlss5|2026-08-27": [
-        "g-dlss5"
+      "public-opposition-to-ai-data-centers|2026-08-27": [
+        "g-public-opposition-to-ai-data-centers"
       ],
-      "dlss5|2026-08-28": [
-        "g-dlss5"
+      "public-opposition-to-ai-data-centers|2026-08-28": [
+        "g-public-opposition-to-ai-data-centers"
       ],
-      "dlss5|2026-08-29": [
-        "g-dlss5"
+      "public-opposition-to-ai-data-centers|2026-08-29": [
+        "g-public-opposition-to-ai-data-centers"
       ],
-      "dlss5|2026-08-30": [
-        "g-dlss5"
+      "public-opposition-to-ai-data-centers|2026-08-30": [
+        "g-public-opposition-to-ai-data-centers"
       ],
-      "dlss5|2026-08-31": [
-        "g-dlss5"
+      "public-opposition-to-ai-data-centers|2026-08-31": [
+        "g-public-opposition-to-ai-data-centers"
       ],
-      "dlss5|2026-09-01": [
-        "g-dlss5"
+      "public-opposition-to-ai-data-centers|2026-09-01": [
+        "g-public-opposition-to-ai-data-centers"
+      ],
+      "dlss-5|2026-08-26": [
+        "g-dlss-5"
+      ],
+      "dlss-5|2026-08-27": [
+        "g-dlss-5"
+      ],
+      "dlss-5|2026-08-28": [
+        "g-dlss-5"
+      ],
+      "dlss-5|2026-08-29": [
+        "g-dlss-5"
+      ],
+      "dlss-5|2026-08-30": [
+        "g-dlss-5"
+      ],
+      "dlss-5|2026-08-31": [
+        "g-dlss-5"
+      ],
+      "dlss-5|2026-09-01": [
+        "g-dlss-5"
       ],
       "chatgpt-down|2026-08-26": [
         "g-chatgpt-down"
@@ -244,34 +263,18 @@
       ],
       "business|2026-09-01": [
         "g-business"
-      ],
-      "anthropic|2026-08-26": [
-        "g-anthropic"
-      ],
-      "anthropic|2026-08-27": [
-        "g-anthropic"
-      ],
-      "anthropic|2026-08-28": [
-        "g-anthropic"
-      ],
-      "anthropic|2026-08-29": [
-        "g-anthropic"
-      ],
-      "anthropic|2026-08-30": [
-        "g-anthropic"
-      ],
-      "anthropic|2026-08-31": [
-        "g-anthropic"
-      ],
-      "anthropic|2026-09-01": [
-        "g-anthropic"
       ]
     },
     "itemIndex": {
-      "g-dlss5": {
-        "title": "Google Trends · dlss5",
+      "g-public-opposition-to-ai-data-centers": {
+        "title": "Google Trends · public opposition to ai data centers",
         "source": "Google Trends",
-        "url": "https://trends.google.com/trends/explore?date=now%207-d&q=dlss5"
+        "url": "https://trends.google.com/trends/explore?date=now%207-d&q=public%20opposition%20to%20ai%20data%20centers"
+      },
+      "g-dlss-5": {
+        "title": "Google Trends · dlss 5",
+        "source": "Google Trends",
+        "url": "https://trends.google.com/trends/explore?date=now%207-d&q=dlss%205"
       },
       "g-chatgpt-down": {
         "title": "Google Trends · chatgpt down",
@@ -282,16 +285,11 @@
         "title": "Google Trends · business",
         "source": "Google Trends",
         "url": "https://trends.google.com/trends/explore?date=now%207-d&q=business"
-      },
-      "g-anthropic": {
-        "title": "Google Trends · anthropic",
-        "source": "Google Trends",
-        "url": "https://trends.google.com/trends/explore?date=now%207-d&q=anthropic&geo=JP"
       }
     }
   },
   "x": {
-    "error": "dlss5: X API 返回 402 Payment Required：请在 Developer Console 购买 credits，并确认当前 App 有可用余额",
+    "error": "未配置 X_BEARER_TOKEN",
     "matrix": {
       "raw": [
         [
@@ -371,10 +369,10 @@
       ]
     },
     "trend": {
-      "dlss5": 1.0,
+      "public-opposition-to-ai-data-centers": 1.0,
+      "dlss-5": 1.0,
       "chatgpt-down": 1.0,
-      "business": 1.0,
-      "anthropic": 1.0
+      "business": 1.0
     },
     "items": {},
     "itemIndex": {}

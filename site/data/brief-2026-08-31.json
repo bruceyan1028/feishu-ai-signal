@@ -75,26 +75,6 @@
       "mediaAssets": {
         "images": [
           {
-            "url": "media/papers/recvtna5VI3LUX-p10-f1.png",
-            "alt": "PDF 第 10 页图表：Table 1 Benchmarking results on MMEB-v2. Baseline results are taken from the official MMEB leaderboard. †Closed- source leaderboard submission without publicly released model weights or a public inference endpoint. ⋆Proprietary commercial model with an undisclosed parameter count. CLS: classification; QA: question answering; Ret: retrieval; GD: visual grounding; V-Ret: video retrieval; M-Ret: moment retrieval.",
-            "kind": "pdf-page"
-          },
-          {
-            "url": "media/papers/recvtna5VI3LUX-p11-f2.png",
-            "alt": "PDF 第 11 页图表：Table 2 Evaluation results on MMEB-v3. V3-All averages all 190 tasks, comprising the 78 MMEB-v2 tasks, 53 Text tasks, 47 Agent tasks, 11 Audio tasks, and MCMR [10]. Following the evaluation protocol defined in the MMEB-v3 paper [15], Text results are reported using NDCG@5. Unsupported tasks are assigned a score of zero. RR: reasoning retrieval; IF: instruction following; LC: long-context retrieval; MC: multi-condition retrieval; GR: general retrieval.",
-            "kind": "pdf-page"
-          },
-          {
-            "url": "media/papers/recvtna5VI3LUX-p11-f3.png",
-            "alt": "PDF 第 11 页图表：Table 3 Cross-modal retrieval results on 12 public benchmarks. AVG denotes the average across the 12 datasets. †Proprietary commercial model with an undisclosed parameter count.",
-            "kind": "pdf-page"
-          },
-          {
-            "url": "media/papers/recvtna5VI3LUX-p12-f4.png",
-            "alt": "PDF 第 12 页图表：Table 4 Evaluation results on the in-house benchmark. AVG denotes the average over all 26 tasks. Cross-DM denotes cross-domain content matching; Article Rel. denotes article relevance; Video Rel. denotes video relevance.",
-            "kind": "pdf-page"
-          },
-          {
             "url": "https://arxiv.org/html/2608.24053v1/figs/mrl-performance-trend.png",
             "alt": "Figure 3 : MRL analysis of WeMM-Embedding-2B on MMEB-v2. Left: Performance retained on the image, video, and visual-document subsets across embedding dimensions. Right: Performance retained for classification (CLS), question answering (QA), and retrieval (RET), each averaged over the corresponding image and video tasks."
           }
@@ -195,26 +175,6 @@
       "imageUrl": "https://arxiv.org/html/2608.27456v1/HKCase.png",
       "mediaAssets": {
         "images": [
-          {
-            "url": "media/papers/recvtQ0liVoITN-p9-f1.png",
-            "alt": "PDF 第 9 页图表：Table 1: Answer accuracy and pedestrian-network adherence compare recognition, orientation, and active exploration question answering across the evaluated MLLM agents. Overall is the instance- count-weighted average across the three task types.",
-            "kind": "pdf-page"
-          },
-          {
-            "url": "media/papers/recvtQ0liVoITN-p13-f2.png",
-            "alt": "PDF 第 13 页图表：Figure 10: Example of GPT-5.5 crossing the road toward the goal direction before becoming blocked by a central obstacle and being unable to continue.",
-            "kind": "pdf-page"
-          },
-          {
-            "url": "media/papers/recvtQ0liVoITN-p13-f3.png",
-            "alt": "PDF 第 13 页图表：Table 3: Local question-answering accuracy and short-navigation success compare robustness across different daytime and weather conditions.",
-            "kind": "pdf-page"
-          },
-          {
-            "url": "media/papers/recvtQ0liVoITN-p14-f4.png",
-            "alt": "PDF 第 14 页图表：Table 4: Dynamic-environment results, where SR is the goal-reaching rate, PNA is the fraction of action time spent on the pedestrian network, SPR is the safe progress rate, which represents the fraction of road-closure episodes that respect the closure, and PCR is the pedestrian-collision rate.",
-            "kind": "pdf-page"
-          },
           {
             "url": "https://arxiv.org/html/2608.27456v1/HKCase.png",
             "alt": "Figure 2: Dynamic simulation components of U r b a n Ground . The same urban environment can be rendered under different times of day and weather conditions, while a georeferenced pedestrian network supports animated pedestrian populations."

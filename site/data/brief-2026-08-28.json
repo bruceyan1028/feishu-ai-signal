@@ -74,26 +74,6 @@
       "mediaAssets": {
         "images": [
           {
-            "url": "media/papers/recvtna5VI3LUX-p10-f1.png",
-            "alt": "PDF 第 10 页图表：Table 1 Benchmarking results on MMEB-v2. Baseline results are taken from the official MMEB leaderboard. †Closed- source leaderboard submission without publicly released model weights or a public inference endpoint. ⋆Proprietary commercial model with an undisclosed parameter count. CLS: classification; QA: question answering; Ret: retrieval; GD: visual grounding; V-Ret: video retrieval; M-Ret: moment retrieval.",
-            "kind": "pdf-page"
-          },
-          {
-            "url": "media/papers/recvtna5VI3LUX-p11-f2.png",
-            "alt": "PDF 第 11 页图表：Table 2 Evaluation results on MMEB-v3. V3-All averages all 190 tasks, comprising the 78 MMEB-v2 tasks, 53 Text tasks, 47 Agent tasks, 11 Audio tasks, and MCMR [10]. Following the evaluation protocol defined in the MMEB-v3 paper [15], Text results are reported using NDCG@5. Unsupported tasks are assigned a score of zero. RR: reasoning retrieval; IF: instruction following; LC: long-context retrieval; MC: multi-condition retrieval; GR: general retrieval.",
-            "kind": "pdf-page"
-          },
-          {
-            "url": "media/papers/recvtna5VI3LUX-p11-f3.png",
-            "alt": "PDF 第 11 页图表：Table 3 Cross-modal retrieval results on 12 public benchmarks. AVG denotes the average across the 12 datasets. †Proprietary commercial model with an undisclosed parameter count.",
-            "kind": "pdf-page"
-          },
-          {
-            "url": "media/papers/recvtna5VI3LUX-p12-f4.png",
-            "alt": "PDF 第 12 页图表：Table 4 Evaluation results on the in-house benchmark. AVG denotes the average over all 26 tasks. Cross-DM denotes cross-domain content matching; Article Rel. denotes article relevance; Video Rel. denotes video relevance.",
-            "kind": "pdf-page"
-          },
-          {
             "url": "https://arxiv.org/html/2608.24053v1/figs/mrl-performance-trend.png",
             "alt": "Figure 3 : MRL analysis of WeMM-Embedding-2B on MMEB-v2. Left: Performance retained on the image, video, and visual-document subsets across embedding dimensions. Right: Performance retained for classification (CLS), question answering (QA), and retrieval (RET), each averaged over the corresponding image and video tasks."
           }
@@ -1575,15 +1555,11 @@
       ],
       "imageUrl": "https://techcrunch.com/wp-content/uploads/2025/12/495cdfd5deaad915a1ad58ab35edcbaa84b90c4ce9b7ded356c5ad1b61884800.png?w=668",
       "mediaAssets": {
-        "images": [
-          {
-            "url": "https://techcrunch.com/wp-content/uploads/2025/12/495cdfd5deaad915a1ad58ab35edcbaa84b90c4ce9b7ded356c5ad1b61884800.png?w=668",
-            "alt": "Barret Zoph离开OpenAI后加入Google担任研究副总裁",
-            "kind": "article-cover"
-          }
-        ],
+        "images": [],
         "videos": [],
-        "documents": []
+        "documents": [],
+        "cover": "https://techcrunch.com/wp-content/uploads/2025/12/495cdfd5deaad915a1ad58ab35edcbaa84b90c4ce9b7ded356c5ad1b61884800.png?w=668",
+        "curatedBy": "llm"
       },
       "editorialStructure": "",
       "eventAggregation": {
