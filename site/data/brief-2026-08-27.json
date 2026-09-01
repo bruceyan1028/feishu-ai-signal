@@ -732,13 +732,13 @@
           },
           {
             "url": "https://wpimg-wscn.awtmt.com/391e49b2-92ce-4e3f-be8c-8896e7e07cb6.png",
-            "alt": "混合注意力架构示意",
+            "alt": "GLM-5.3-Flash架构对比",
             "kind": "article-figure",
             "afterHeading": "架构创新：激活参数和层数近乎减半 || 架构创新：激活参数和层数近乎减半"
           },
           {
             "url": "https://wpimg-wscn.awtmt.com/d0dba9d5-7bec-4b63-8206-ca593294b79d.png",
-            "alt": "模型价格对比",
+            "alt": "模型定价对比",
             "kind": "article-figure",
             "afterHeading": "涨价潮中的低价突围 || 涨价潮中的低价突围"
           }
@@ -1039,12 +1039,37 @@
         "Agent",
         "产品"
       ],
-      "imageUrl": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/gemini-3.5-audio-transcribe_fleu.width-1000.format-webp.webp",
+      "imageUrl": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/gemini_3-5_transcribe.width-1300.jpg",
       "mediaAssets": {
-        "images": [],
+        "images": [
+          {
+            "url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/gemini-3.5-audio-transcribe_fleu.width-1000.format-webp.webp",
+            "alt": "流式语音识别准确率图表",
+            "kind": "article-figure",
+            "afterHeading": "获得更精准、更智能的转录 || Get more precise and intelligent transcription"
+          },
+          {
+            "url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/gemini-3-5-transcribe__testimoni.width-1000.format-webp.webp",
+            "alt": "vivo 使用反馈",
+            "kind": "article-figure",
+            "afterHeading": "阅读早期评价 || Read the early reviews"
+          },
+          {
+            "url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/gemini-3-5-transcribe__testimoni.width-1000.format-webp_OHGdRn0.webp",
+            "alt": "IntelliTek 使用反馈",
+            "kind": "article-figure",
+            "afterHeading": "阅读早期评价 || Read the early reviews"
+          },
+          {
+            "url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/gemini-3-5-transcribe__testimoni.width-1000.format-webp_ylQCpNT.webp",
+            "alt": "Lingopal 使用反馈",
+            "kind": "article-figure",
+            "afterHeading": "阅读早期评价 || Read the early reviews"
+          }
+        ],
         "videos": [],
         "documents": [],
-        "cover": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/gemini-3.5-audio-transcribe_fleu.width-1000.format-webp.webp",
+        "cover": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/gemini_3-5_transcribe.width-1300.jpg",
         "curatedBy": "llm"
       },
       "editorialStructure": "source",
@@ -1143,7 +1168,14 @@
       ],
       "imageUrl": "https://techcrunch.com/wp-content/uploads/2026/08/GettyImages-2255991416.jpg?resize=1200,795",
       "mediaAssets": {
-        "images": [],
+        "images": [
+          {
+            "url": "https://techcrunch.com/wp-content/uploads/2026/05/ai-agents-GettyImages-2229880232.jpg?w=668",
+            "alt": "连接应用与设备的 AI 助手",
+            "kind": "article-figure",
+            "afterHeading": "核心内容"
+          }
+        ],
         "videos": [],
         "documents": [],
         "cover": "https://techcrunch.com/wp-content/uploads/2026/08/GettyImages-2255991416.jpg?resize=1200,795",
@@ -1382,7 +1414,7 @@
         "images": [
           {
             "url": "https://wpimg-wscn.awtmt.com/a541e499-9914-47c4-9527-fe20818509ff.png",
-            "alt": "CrowdStrike二季度财务指标",
+            "alt": "CrowdStrike二季度财务指标超预期",
             "kind": "article-figure",
             "afterHeading": "核心财务指标全面击败预期，ARR凸显高用户黏性 || 核心财务指标全线击败预期，ARR凸显高用户黏性"
           }
@@ -1440,25 +1472,19 @@
         "images": [
           {
             "url": "https://wpimg-wscn.awtmt.com/a082a190-3db4-4890-aba5-3b45edde28a7.png",
-            "alt": "电子行业利润增长图",
-            "kind": "article-figure",
-            "afterHeading": "1—7月份，以算力芯片、存储芯片为代表的集成电路行业利润同比增长18.5倍"
-          },
-          {
-            "url": "https://wpimg-wscn.awtmt.com/b02ac670-071b-4478-9b7f-4d20ed38016d.png",
-            "alt": "主要行业利润增速对比",
+            "alt": "集成电路行业利润大幅增长",
             "kind": "article-figure",
             "afterHeading": "1—7月份，以算力芯片、存储芯片为代表的集成电路行业利润同比增长18.5倍"
           },
           {
             "url": "https://wpimg-wscn.awtmt.com/6b2deb0a-83ae-4084-b4aa-3a036dfd6876.png",
-            "alt": "工业企业营业收入与利润率",
+            "alt": "工业企业营业收入增长6.5%",
             "kind": "article-figure",
             "afterHeading": "1—7月份规模以上工业企业实现营业收入同比增长6.5%"
           },
           {
             "url": "https://wpimg-wscn.awtmt.com/18dbab9c-77f5-442b-b969-e5ef269e20af.png",
-            "alt": "不同类型企业利润增长",
+            "alt": "制造业利润增长18.8%",
             "kind": "article-figure",
             "afterHeading": "1—7月份制造业实现利润总额增长18.8%"
           }
@@ -1516,25 +1542,25 @@
         "images": [
           {
             "url": "media/huxiu/recvtsKfefJO0w-1.png",
-            "alt": "模拟退火示意图",
+            "alt": "模拟退火寻找全局最优",
             "kind": "article-figure",
             "afterHeading": "混乱不是bug，是feature"
           },
           {
             "url": "media/huxiu/recvtsKfefJO0w-2.png",
-            "alt": "中国开源模型应用数据",
+            "alt": "中国开源模型下载量增长",
             "kind": "article-figure",
             "afterHeading": "1,AI的前沿和地基"
           },
           {
             "url": "media/huxiu/recvtsKfefJO0w-3.png",
-            "alt": "中国创新药授权数据",
+            "alt": "中国创新药研发与授权数据",
             "kind": "article-figure",
             "afterHeading": "2,创新药"
           },
           {
             "url": "media/huxiu/recvtsKfefJO0w-4.png",
-            "alt": "凸性与核聚变投资逻辑",
+            "alt": "失败驱动高回报创新",
             "kind": "article-figure",
             "afterHeading": "3，航天：五次失败"
           }

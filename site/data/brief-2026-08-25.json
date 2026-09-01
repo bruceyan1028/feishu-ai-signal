@@ -832,25 +832,25 @@
         "images": [
           {
             "url": "https://wpimg-wscn.awtmt.com/f3c234ea-d848-4630-9277-4cb22cec7470.png",
-            "alt": "HBM由C-die与B-die组成",
+            "alt": "HBM由C-die与B-die堆叠而成",
             "kind": "article-figure",
             "afterHeading": "HBM是什么，瓶颈在哪里"
           },
           {
             "url": "https://wpimg-wscn.awtmt.com/10ba8e7e-f401-42d4-9d67-64b33c0d28fe.png",
-            "alt": "第一阶段优化Base Die",
+            "alt": "先进工艺为XPU释放芯片面积",
             "kind": "article-figure",
             "afterHeading": "第一阶段：为计算芯片“腾地方”"
           },
           {
             "url": "https://wpimg-wscn.awtmt.com/15f99383-7c31-4bf0-9284-42eb23d98c79.png",
-            "alt": "Base Die集成内存与计算功能",
+            "alt": "B-die集成内存扩展与处理单元",
             "kind": "article-figure",
             "afterHeading": "第二阶段：B-die开始“长出”计算能力"
           },
           {
             "url": "https://wpimg-wscn.awtmt.com/f648af79-b4dc-4bfe-891d-da9f79a874af.png",
-            "alt": "zHBM将DRAM垂直堆叠在XPU上",
+            "alt": "四栈zHBM垂直堆叠在XPU上",
             "kind": "article-figure",
             "afterHeading": "第三阶段：zHBM——消灭中介层，DRAM直接压在计算芯片上"
           }
@@ -908,19 +908,19 @@
         "images": [
           {
             "url": "https://static.leiphone.com/uploads/new/images/20260824/6a8c03593d6ce.jpg",
-            "alt": "LPDDR5X进入英伟达机柜",
+            "alt": "LPDDR5X与HBM成本对比",
             "kind": "article-figure",
             "afterHeading": "核心内容"
           },
           {
             "url": "https://static.leiphone.com/uploads/new/images/20260824/6a8c03596effa.jpg",
-            "alt": "SOCAMM2模块化内存设计",
+            "alt": "SOCAMM模块结构示意",
             "kind": "article-figure",
             "afterHeading": "关键细节"
           },
           {
             "url": "https://static.leiphone.com/uploads/new/images/20260824/6a8c0359d14e1.png",
-            "alt": "内存成为AI扩张约束",
+            "alt": "AI机架内存扩张示意",
             "kind": "article-figure",
             "afterHeading": "价值与影响"
           }
@@ -979,19 +979,19 @@
         "images": [
           {
             "url": "https://static.leiphone.com/uploads/new/images/20260824//6a8c17dc5d58b.jpg?imageMogr2/quality/90",
-            "alt": "通用世界模型闭环架构",
+            "alt": "朱军介绍通用世界模型",
             "kind": "article-figure",
             "afterHeading": "核心内容"
           },
           {
             "url": "https://static.leiphone.com/uploads/new/images/20260824//6a8c17dc5de36.jpg?imageMogr2/quality/90",
-            "alt": "世界模型数据金字塔",
+            "alt": "通用世界模型数据金字塔",
             "kind": "article-figure",
             "afterHeading": "关键细节"
           },
           {
             "url": "https://static.leiphone.com/uploads/new/images/20260824//6a8c17dc5ee00.jpg?imageMogr2/quality/90",
-            "alt": "通用世界模型五级路线",
+            "alt": "通用世界模型五级路线图",
             "kind": "article-figure",
             "afterHeading": "核心内容"
           }
@@ -1144,24 +1144,24 @@
         "Agent",
         "产品"
       ],
-      "imageUrl": "https://3-im.guokr.com/RnNKXy1hbjVZZUF5NGhTbGtIY3dYTVF5d2tlSmRvY3gwAgAA0gIAAEpQ.jpg?imageView2/1/w/555/h/715",
+      "imageUrl": "https://2-im.guokr.com/Rmdtbk4wTll0ZEpUUlhIdW9JTUhXa3c0UXdmWGRvY3iUAgAAuAEAAEpQ.jpg?imageView2/1/w/555/h/370",
       "mediaAssets": {
         "images": [
-          {
-            "url": "https://2-im.guokr.com/Rmdtbk4wTll0ZEpUUlhIdW9JTUhXa3c0UXdmWGRvY3iUAgAAuAEAAEpQ.jpg?imageView2/1/w/555/h/370",
-            "alt": "12英寸晶圆芯片",
-            "kind": "article-figure",
-            "afterHeading": "关键细节"
-          },
           {
             "url": "https://3-im.guokr.com/RnEzTDlyR21LdFNSRjdCOTRONUh6SE1NS1VZdmRvY3jdAgAALAEAAEpQ.jpg?imageView2/1/w/555/h/227",
             "alt": "高速恒星绕黑洞运行",
             "kind": "article-figure",
             "afterHeading": "核心内容"
+          },
+          {
+            "url": "https://3-im.guokr.com/RnNKXy1hbjVZZUF5NGhTbGtIY3dYTVF5d2tlSmRvY3gwAgAA0gIAAEpQ.jpg?imageView2/1/w/555/h/715",
+            "alt": "AI智能体生成量子代码",
+            "kind": "article-figure",
+            "afterHeading": "价值与影响"
           }
         ],
         "videos": [],
-        "cover": "https://3-im.guokr.com/RnNKXy1hbjVZZUF5NGhTbGtIY3dYTVF5d2tlSmRvY3gwAgAA0gIAAEpQ.jpg?imageView2/1/w/555/h/715",
+        "cover": "https://2-im.guokr.com/Rmdtbk4wTll0ZEpUUlhIdW9JTUhXa3c0UXdmWGRvY3iUAgAAuAEAAEpQ.jpg?imageView2/1/w/555/h/370",
         "curatedBy": "llm"
       },
       "editorialStructure": "",
@@ -1264,17 +1264,17 @@
             "url": "https://static.leiphone.com/uploads/new/images/20260824/6a8c1d3d2e654.png?imageView2/2/w/740",
             "alt": "机器人之家存储与充电区域",
             "kind": "article-figure",
-            "afterHeading": "核心内容"
+            "afterHeading": "关键细节"
           },
           {
             "url": "https://static.leiphone.com/uploads/new/images/20260824/6a8c1d3fa8de3.png?imageView2/2/w/740",
-            "alt": "机器人数字化登记管理",
+            "alt": "机器人数字化扫码管理",
             "kind": "article-figure",
             "afterHeading": "关键细节"
           },
           {
             "url": "https://static.leiphone.com/uploads/new/images/20260824/6a8c1d424a58e.png?imageView2/2/w/740",
-            "alt": "京东机器人服务基地规划",
+            "alt": "京东机器人产业战略布局",
             "kind": "article-figure",
             "afterHeading": "价值与影响"
           }
@@ -1339,7 +1339,7 @@
           },
           {
             "url": "https://oss.zhidx.com/uploads/2026/08/6a8c66c6d87cd_6a8c66c6bf270_6a8c66c6bf20e_截屏2026-08-24-23.42.52.png",
-            "alt": "人形机器人迈向多场景适应",
+            "alt": "人形机器人具备泛化潜力",
             "kind": "article-figure",
             "afterHeading": "一、泛化能力是行业核心突破口"
           },
@@ -1458,25 +1458,25 @@
         "images": [
           {
             "url": "https://oss.zhidx.com/uploads/2026/08/6a85a3ef53538_6a85a3ef4eb7f_6a85a3ef4eb49_ScreenShot_2026-08-19_203901_119.png",
-            "alt": "OpenFit 2 AI转录界面",
+            "alt": "AI耳机转录效果展示",
             "kind": "article-figure",
             "afterHeading": "一、为什么说“开放式是AI耳机最佳形态”？我真的戴着它出差一整天"
           },
           {
-            "url": "https://oss.zhidx.com/uploads/2026/08/6a85a3a535538_6a85a3a5325cc_6a85a3a5325a0_图片4.png",
-            "alt": "多语种翻译功能界面",
+            "url": "https://oss.zhidx.com/uploads/2026/08/6a85a45b933d8_6a85a45b8b7aa_6a85a45b8b777_图片6.png",
+            "alt": "多人对话录音技术示意",
             "kind": "article-figure",
             "afterHeading": "一、为什么说“开放式是AI耳机最佳形态”？我真的戴着它出差一整天"
           },
           {
             "url": "https://oss.zhidx.com/uploads/2026/08/6a85a4ab91009_6a85a4ab8e01c_6a85a4ab8dfd7_图片7.png",
-            "alt": "专业场景语料调优示意",
+            "alt": "专业场景语料调优流程",
             "kind": "article-figure",
             "afterHeading": "二、拒绝“追风式”套用，联合行业巨头深度调优，海量技术创新支撑"
           },
           {
             "url": "https://oss.zhidx.com/uploads/2026/08/6a85a504293db_6a85a50412f20_6a85a50412ef3_ScreenShot_2026-08-19_204338_552.png",
-            "alt": "开放式耳机用户使用场景",
+            "alt": "开放式耳机用户需求场景",
             "kind": "article-figure",
             "afterHeading": "三、做AI耳机并不是因为AI火，而是因为用户真的需要"
           }
@@ -1553,13 +1553,13 @@
           },
           {
             "url": "https://oss.zhidx.com/uploads/2026/08/6a8c05b607746_6a8c05b6045d2_6a8c05b6045a0_屏幕截图-2026-08-24-164934.png",
-            "alt": "邓力谈AI与科研原创性",
+            "alt": "专家讨论AI与科研原创性",
             "kind": "article-figure",
-            "afterHeading": "价值与影响"
+            "afterHeading": "核心内容"
           },
           {
             "url": "https://oss.zhidx.com/uploads/2026/08/6a8c057dbcaf7_6a8c057db9152_6a8c057db9117_屏幕截图-2026-08-24-164727.png",
-            "alt": "王志珍介绍评审监督机制",
+            "alt": "专家介绍评审监督机制",
             "kind": "article-figure",
             "afterHeading": "局限与风险"
           }
@@ -1663,7 +1663,14 @@
       ],
       "imageUrl": "https://techcrunch.com/wp-content/uploads/2025/06/GettyImages-2217852528.jpg?resize=1200,800",
       "mediaAssets": {
-        "images": [],
+        "images": [
+          {
+            "url": "https://techcrunch.com/wp-content/uploads/2026/05/20260511_Wet_Dress_Actual_2_259bcb3ae9.jpg?w=501",
+            "alt": "SpaceX星舰发射台",
+            "kind": "article-figure",
+            "afterHeading": "价值与影响"
+          }
+        ],
         "videos": [],
         "documents": [],
         "cover": "https://techcrunch.com/wp-content/uploads/2025/06/GettyImages-2217852528.jpg?resize=1200,800",

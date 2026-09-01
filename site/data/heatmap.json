@@ -3,7 +3,8 @@
     "2026-W32",
     "2026-W33",
     "2026-W34",
-    "2026-W35"
+    "2026-W35",
+    "2026-W36"
   ],
   "topics": [
     "agent",
@@ -37,135 +38,157 @@
         1,
         3,
         6,
-        9
-      ],
-      [
-        0,
-        2,
-        3,
-        4
-      ],
-      [
-        0,
-        2,
-        0,
+        13,
         3
       ],
       [
         0,
-        0,
-        3,
-        2
-      ],
-      [
-        0,
-        0,
         2,
-        0
-      ],
-      [
-        5,
-        5,
-        6,
-        5
-      ],
-      [
-        0,
-        0,
-        0,
-        3
-      ],
-      [
-        2,
-        0,
-        0,
-        0
-      ],
-      [
-        4,
         3,
-        4,
-        5
-      ],
-      [
         8,
-        6,
-        3,
+        0
+      ],
+      [
+        0,
+        2,
+        0,
+        8,
         1
       ],
       [
         0,
         0,
+        3,
+        4,
+        1
+      ],
+      [
         0,
-        0
+        0,
+        2,
+        0,
+        2
+      ],
+      [
+        5,
+        5,
+        6,
+        6,
+        3
+      ],
+      [
+        0,
+        0,
+        0,
+        3,
+        1
+      ],
+      [
+        2,
+        0,
+        0,
+        0,
+        1
+      ],
+      [
+        4,
+        3,
+        4,
+        5,
+        6
+      ],
+      [
+        8,
+        6,
+        3,
+        1,
+        3
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        2
       ]
     ],
     "normalized": [
       [
-        0.1111,
-        0.3333,
-        0.6667,
-        1.0
+        0.0769,
+        0.2308,
+        0.4615,
+        1.0,
+        0.2308
       ],
       [
         0.0,
-        0.5,
+        0.25,
+        0.375,
+        1.0,
+        0.0
+      ],
+      [
+        0.0,
+        0.25,
+        0.0,
+        1.0,
+        0.125
+      ],
+      [
+        0.0,
+        0.0,
         0.75,
-        1.0
+        1.0,
+        0.25
       ],
       [
         0.0,
+        0.0,
+        1.0,
+        0.0,
+        1.0
+      ],
+      [
+        0.8333,
+        0.8333,
+        1.0,
+        1.0,
+        0.5
+      ],
+      [
+        0.0,
+        0.0,
+        0.0,
+        1.0,
+        0.3333
+      ],
+      [
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.5
+      ],
+      [
         0.6667,
-        0.0,
-        1.0
-      ],
-      [
-        0.0,
-        0.0,
-        1.0,
-        0.6667
-      ],
-      [
-        0.0,
-        0.0,
-        1.0,
-        0.0
-      ],
-      [
+        0.5,
+        0.6667,
         0.8333,
-        0.8333,
-        1.0,
-        0.8333
-      ],
-      [
-        0.0,
-        0.0,
-        0.0,
-        1.0
-      ],
-      [
-        1.0,
-        0.0,
-        0.0,
-        0.0
-      ],
-      [
-        0.8,
-        0.6,
-        0.8,
         1.0
       ],
       [
         1.0,
         0.75,
         0.375,
-        0.125
+        0.125,
+        0.375
       ],
       [
         0.0,
         0.0,
         0.0,
-        0.0
+        0.0,
+        1.0
       ]
     ]
   },
@@ -278,7 +301,11 @@
       "mock-2026-08-26-090",
       "mock-2026-08-26-089",
       "mock-2026-08-26-091",
-      "mock-2026-08-26-092"
+      "mock-2026-08-26-092",
+      "recvtRBLIkCm0k",
+      "recvtKTMDQs1rG",
+      "recvtQ0liVfrG7",
+      "recvtsKfefHo1n"
     ],
     "agent|2026-W35": [
       "mock-2026-08-26-085",
@@ -289,12 +316,21 @@
       "mock-2026-08-26-086",
       "mock-2026-08-26-080",
       "mock-2026-08-26-081",
-      "mock-2026-08-26-082"
+      "mock-2026-08-26-082",
+      "recvtRBLIkCm0k",
+      "recvtQ0liVoITN",
+      "recvtQ0liV6Ouh",
+      "recvtRBLIk5nUk"
     ],
     "multimodal|2026-W35": [
       "mock-2026-08-26-097",
       "mock-2026-08-26-098",
-      "mock-2026-08-26-096"
+      "mock-2026-08-26-096",
+      "recvtQ0liVoITN",
+      "recvtRBLIk5nUk",
+      "recvtsKfefME5S",
+      "recvtsKfefHo1n",
+      "recvtsKfefhHYc"
     ],
     "embodied|2026-W35": [
       "mock-2026-08-26-095",
@@ -303,14 +339,17 @@
     ],
     "open-source-model|2026-W35": [
       "mock-2026-08-26-099",
-      "mock-2026-08-26-100"
+      "mock-2026-08-26-100",
+      "recvtQ0liVfrG7",
+      "recvtsKfefhHYc"
     ],
     "infra|2026-W35": [
       "mock-2026-08-26-077",
       "mock-2026-08-26-075",
       "mock-2026-08-26-078",
       "mock-2026-08-26-079",
-      "mock-2026-08-26-076"
+      "mock-2026-08-26-076",
+      "recvtsKfefME5S"
     ],
     "funding|2026-W35": [
       "mock-2026-08-26-069"
@@ -321,6 +360,49 @@
       "mock-2026-08-26-073",
       "mock-2026-08-26-070",
       "mock-2026-08-26-074"
+    ],
+    "agent|2026-W36": [
+      "recvtW9WBRQfy8",
+      "recvtW9WBR3XWX",
+      "recvtW9WBRTlZl"
+    ],
+    "infra|2026-W36": [
+      "recvtW9WBRPQmp",
+      "recvtW9WBRSx2a",
+      "recvtW9WBRJBmR"
+    ],
+    "funding|2026-W36": [
+      "recvtW9WBRSx2a",
+      "recvtW9WBRM7x8",
+      "recvtW9WBREO6t"
+    ],
+    "product|2026-W36": [
+      "recvtW9WBR1mmJ",
+      "recvtW9WBRk15s",
+      "recvtW9WBREO6t",
+      "recvtW9WBRhlku",
+      "recvtW9WBRR7YE",
+      "recvtW9WBRxml8"
+    ],
+    "other|2026-W36": [
+      "recvtW9WBRRLop",
+      "recvtW9WBRRUDf"
+    ],
+    "multimodal|2026-W36": [
+      "recvtW9WBRobE2"
+    ],
+    "open-source-model|2026-W36": [
+      "recvtW9WBRobE2"
+    ],
+    "embodied|2026-W36": [
+      "recvtW9WBR72ie"
+    ],
+    "rag-search|2026-W36": [
+      "recvtW9WBRXxbq",
+      "recvtW9WBRxml8"
+    ],
+    "safety-policy|2026-W36": [
+      "recvtW9WBRShl3"
     ]
   },
   "itemIndex": {
@@ -823,20 +905,160 @@
       "title": "办公套件把助手默开放进付费档（74）",
       "source": "华尔街见闻",
       "url": "https://example.com/ai/mock-2026-08-26-074"
+    },
+    "recvtRBLIkCm0k": {
+      "title": "Code as Worlds：通过智能体发现可执行世界表示实现物理推理",
+      "source": "PwC Trending",
+      "url": "https://huggingface.co/papers/2608.27549"
+    },
+    "recvtQ0liVoITN": {
+      "title": "UrbanGround：从局部感知到真实尺度城市空间智能",
+      "source": "HF Papers Trending",
+      "url": "https://huggingface.co/papers/2608.27456"
+    },
+    "recvtQ0liV6Ouh": {
+      "title": "JIT-Agent：通过即时演化扩展智能体 Harness 能力",
+      "source": "HF Papers Trending",
+      "url": "https://huggingface.co/papers/2608.25593"
+    },
+    "recvtRBLIk5nUk": {
+      "title": "代码世界模型：以编码智能体作为世界大脑",
+      "source": "PwC Trending",
+      "url": "https://huggingface.co/papers/2608.25927"
+    },
+    "recvtW9WBRQfy8": {
+      "title": "Hermes Agent v0.21.0：桌面多智能体 Bot Mode 与持续记忆能力发布",
+      "source": "GitHub Trending",
+      "url": "https://github.com/nousresearch/hermes-agent/releases/tag/v2026.8.31"
+    },
+    "recvtW9WBRPQmp": {
+      "title": "英伟达是AI供应链的“中央银行”：黄仁勋护城河究竟有多深",
+      "source": "华尔街见闻",
+      "url": "https://wallstreetcn.com/articles/3780789"
+    },
+    "recvtW9WBRSx2a": {
+      "title": "英伟达向联发科投资35亿美元，借定制芯片扩展AI基础设施生态",
+      "source": "TechCrunch AI",
+      "url": "https://techcrunch.com/2026/08/31/nvidias-3-5b-mediatek-bet-reveals-its-plan-for-tackling-big-techs-ai-chip-buildout"
+    },
+    "recvtW9WBRM7x8": {
+      "title": "库克卸任苹果CEO，特努斯接棒开启新阶段",
+      "source": "智东西",
+      "url": "https://zhidx.com/p/589491.html"
+    },
+    "recvtW9WBRJBmR": {
+      "title": "Anthropic签署350亿美元云计算协议，扩充NVIDIA与Google芯片算力布局",
+      "source": "品玩 / 硅星人",
+      "url": "https://www.pingwest.com/w/316958"
+    },
+    "recvtsKfefME5S": {
+      "title": "GLM-5.3-Flash-BF16：原生多模态与高效混合架构模型",
+      "source": "智谱 ModelScope 官方模型",
+      "url": "https://www.modelscope.cn/models/zhipuai/glm-5.3-flash-bf16"
+    },
+    "recvtKTMDQs1rG": {
+      "title": "GLM-5.3：后训练驱动的代码与网络安全能力提升",
+      "source": "ModelScope 首页新模型",
+      "url": "https://www.modelscope.cn/models/zhipuai/glm-5.3"
+    },
+    "recvtW9WBR1mmJ": {
+      "title": "智谱披露年底ARR指引24亿美元，API涨价后调用量仍增长40倍",
+      "source": "华尔街见闻",
+      "url": "https://wallstreetcn.com/articles/3780798"
+    },
+    "recvtW9WBR3XWX": {
+      "title": "吴恩达：Agent时代，代码不再是神圣资产",
+      "source": "虎嗅",
+      "url": "https://www.huxiu.com/article/4887479.html"
+    },
+    "recvtQ0liVfrG7": {
+      "title": "GLM-5.3：后训练驱动的开源权重编码与长程任务模型",
+      "source": "智谱 ModelScope 官方模型",
+      "url": "https://www.modelscope.cn/models/zhipuai/glm-5.3-bf16"
+    },
+    "recvtW9WBRRLop": {
+      "title": "马斯克预言2027年底AI将超越人类数字任务，个人应对冲智力贬值",
+      "source": "虎嗅",
+      "url": "https://www.huxiu.com/article/4887473.html"
+    },
+    "recvtsKfefHo1n": {
+      "title": "OpenCompass v0.5.4 发布：强化多模态、多轮推理与基准覆盖",
+      "source": "OpenCompass Releases",
+      "url": "https://github.com/open-compass/opencompass/releases/tag/0.5.4"
+    },
+    "recvtsKfefhHYc": {
+      "title": "Zing-0.5：高效实时交互世界模型",
+      "source": "ModelScope 首页新模型",
+      "url": "https://www.modelscope.cn/models/seedleap/zing-0.5"
+    },
+    "recvtW9WBRobE2": {
+      "title": "DeepSeek-V4-Flash-Vision-Exp：实验性多模态模型",
+      "source": "ModelScope 首页新模型",
+      "url": "https://www.modelscope.cn/models/deepseek-ai/deepseek-v4-flash-vision-exp"
+    },
+    "recvtW9WBR72ie": {
+      "title": "觅蜂姚卯青：具身数据竞争将向头部企业收敛",
+      "source": "华尔街见闻",
+      "url": "https://wallstreetcn.com/articles/3780793"
+    },
+    "recvtW9WBRk15s": {
+      "title": "ChatGPT广告业务年化收入运行率达10亿美元并开启全球扩张",
+      "source": "OpenAI News",
+      "url": "https://openai.com/index/expanding-access-to-ai-with-chatgpt-ads"
+    },
+    "recvtW9WBRXxbq": {
+      "title": "Firecrawl v2.11.267：面向规模化网页搜索、抓取与交互的上下文 API",
+      "source": "GitHub Trending",
+      "url": "https://github.com/firecrawl/firecrawl/releases/tag/v2.11.267"
+    },
+    "recvtW9WBRShl3": {
+      "title": "苹果称前员工将机密电路图用于 OpenAI，并指控销毁证据",
+      "source": "TechCrunch AI",
+      "url": "https://techcrunch.com/2026/08/31/apple-shares-shocking-evidence-against-former-employee-accused-of-stealing-company-data-for-openai"
+    },
+    "recvtW9WBREO6t": {
+      "title": "本地 AI 文件搜索公司 Clipto 获 1500 万美元融资，投后估值 2.5 亿美元",
+      "source": "TechCrunch AI",
+      "url": "https://techcrunch.com/2026/08/31/three-year-old-ai-media-search-startup-clipto-hits-a-250m-valuation"
+    },
+    "recvtW9WBRhlku": {
+      "title": "千问升级学习功能，强化教材辅导与过程引导",
+      "source": "品玩 / 硅星人",
+      "url": "https://www.pingwest.com/w/316963"
+    },
+    "recvtW9WBRRUDf": {
+      "title": "世界500强格局重排：中国规模跃升，日本下滑，中美竞争转向技术与利润",
+      "source": "虎嗅",
+      "url": "https://www.huxiu.com/article/4887492.html"
+    },
+    "recvtW9WBRTlZl": {
+      "title": "Langflow 1.11.6：修复 MCP 变量与 stdio 头部处理问题",
+      "source": "GitHub Trending",
+      "url": "https://github.com/langflow-ai/langflow/releases/tag/v1.11.6"
+    },
+    "recvtW9WBRR7YE": {
+      "title": "Open WebUI v0.11.3：增强无障碍体验并修复聊天分支加载问题",
+      "source": "GitHub Trending",
+      "url": "https://github.com/open-webui/open-webui/releases/tag/v0.11.3"
+    },
+    "recvtW9WBRxml8": {
+      "title": "Polimill建设日本下一代公共AI基础设施",
+      "source": "OpenAI News",
+      "url": "https://openai.com/index/polimill"
     }
   },
   "trend": {
-    "agent": 3.75,
-    "reasoning": 3.5,
-    "multimodal": 1.5,
-    "open-source-model": 2.0,
-    "rag-search": 2.0,
-    "infra": 1.1,
+    "agent": 2.4,
+    "reasoning": 2.4,
+    "multimodal": 6.75,
+    "open-source-model": 2.5,
+    "rag-search": 1.5,
+    "infra": 0.844,
     "embodied": 2.0,
-    "safety-policy": 0.0,
-    "product": 1.286,
-    "funding": 0.286,
-    "other": 1.0
+    "safety-policy": 0.75,
+    "product": 1.5,
+    "funding": 0.353,
+    "other": 2.0
   },
-  "window_end": "2026-W35"
+  "window_end": "2026-W36"
 }
