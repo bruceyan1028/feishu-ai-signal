@@ -23,9 +23,40 @@ _DEFAULT_KEYWORD_RE = re.compile(config.DEFAULT_KEYWORD, re.I)
 _TAG_RE = re.compile(r"<[^>]*>")
 _WS_RE = re.compile(r"\s+")
 
+# Anthropic / Meta AI Blog 等只给「Aug 27, 2026」这种纯日期，parse_date_ms 会落成当天
+# 00:00 UTC，比真实发布时间最多偏早近 24h。日更流水线按一个采集周期补宽限，
+# 抵消这个系统性高估；有时分秒的时间戳不扩窗，避免把真旧文放进来。
+DATE_ONLY_LOOKBACK_GRACE_HOURS = 24
+_MONTHS = (
+    r"jan(?:uary)?|feb(?:ruary)?|mar(?:ch)?|apr(?:il)?|may|jun(?:e)?|jul(?:y)?|"
+    r"aug(?:ust)?|sep(?:t(?:ember)?)?|oct(?:ober)?|nov(?:ember)?|dec(?:ember)?"
+)
+_DATE_ONLY_RE = re.compile(
+    rf"^(?:"
+    rf"\d{{4}}\s*[-/年.]\s*\d{{1,2}}\s*[-/月.]\s*\d{{1,2}}\s*日?"
+    rf"|(?:{_MONTHS})\.?\s+\d{{1,2}}(?:st|nd|rd|th)?,?\s+\d{{4}}"
+    rf"|\d{{1,2}}\s+(?:{_MONTHS})\.?,?\s+\d{{4}}"
+    rf")\s*$",
+    re.I,
+)
+
 
 def now_ms() -> int:
     return int(datetime.now(timezone.utc).timestamp() * 1000)
+
+
+def is_date_only_published(raw: Any) -> bool:
+    """发布时间是否只有日期、没有时分秒。"""
+    text = str(raw or "").strip()
+    return bool(text) and bool(_DATE_ONLY_RE.match(text))
+
+
+def effective_lookback_ms(lookback_hours: int, published_raw: Any = None) -> int:
+    """实际生效的时间窗毫秒数；纯日期发布时间额外放宽一个采集周期。"""
+    hours = max(1, int(lookback_hours))
+    if is_date_only_published(published_raw):
+        hours += DATE_ONLY_LOOKBACK_GRACE_HOURS
+    return hours * 3600000
 
 
 def normalize_url(url: Any) -> str:
@@ -269,7 +300,6 @@ def process_and_clean(
 
         # lookback_window 配了就按配置；没配才回落到默认（不再强制抬到 168h）
         lookback_hours = int(feed.get("lookback_hours") or config.MIN_LOOKBACK_HOURS)
-        lookback_ms = lookback_hours * 3600000
         keyword_re = _safe_regex(feed.get("keyword_regex"))
         title_exclude_re = _safe_regex(feed.get("title_exclude_regex")) if feed.get(
             "title_exclude_regex"
@@ -283,7 +313,10 @@ def process_and_clean(
         url = normalize_url(item.get("url"))
         title = strip_html(item.get("title"))
         body_text = strip_html_body(item.get("body"))
-        published_ms = parse_date_ms(item.get("published_raw"))
+        published_raw = item.get("published_raw")
+        published_ms = parse_date_ms(published_raw)
+        # 纯日期会落成当天 00:00，比真实发布时间偏早；effective_lookback_ms 补一天宽限。
+        lookback_ms = effective_lookback_ms(lookback_hours, published_raw)
         duplicate_key = build_dedup_key(url, title, feed)
         combined = f"{title} {body_text}"
 

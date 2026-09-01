@@ -108,14 +108,15 @@ def diagnose_clean(
             continue
 
         lookback_hours = int(feed.get("lookback_hours") or config.MIN_LOOKBACK_HOURS)
-        lookback_ms = lookback_hours * 3600000
         keyword_re = _safe_regex(feed.get("keyword_regex"))
         min_chars = feed.get("min_content_chars") or 100
 
         url = process.normalize_url(item.get("url"))
         title = process.strip_html(item.get("title"))
         body_text = process.strip_html(item.get("body"))
-        published_ms = process.parse_date_ms(item.get("published_raw"))
+        published_raw = item.get("published_raw")
+        published_ms = process.parse_date_ms(published_raw)
+        lookback_ms = process.effective_lookback_ms(lookback_hours, published_raw)
         duplicate_key = process.build_dedup_key(url, title, feed)
         combined = f"{title} {body_text}"
 
