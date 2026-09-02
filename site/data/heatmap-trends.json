@@ -1,98 +1,100 @@
 {
-  "generatedAt": "2026-09-01T12:20:59+08:00",
+  "generatedAt": "2026-09-02T11:56:19+08:00",
   "days": [
-    "2026-08-26",
     "2026-08-27",
     "2026-08-28",
     "2026-08-29",
     "2026-08-30",
     "2026-08-31",
-    "2026-09-01"
+    "2026-09-01",
+    "2026-09-02"
   ],
   "topics": [
-    "dlss5",
-    "chatgpt-down",
-    "business",
-    "anthropic"
+    "fable-5-1",
+    "artificial-intelligence-news",
+    "dlss-5",
+    "employee"
   ],
   "labels": {
-    "dlss5": "dlss5",
-    "chatgpt-down": "chatgpt down",
-    "business": "business",
-    "anthropic": "anthropic"
+    "fable-5-1": "fable 5.1",
+    "artificial-intelligence-news": "artificial intelligence news",
+    "dlss-5": "dlss 5",
+    "employee": "employee"
   },
   "queries": {
-    "dlss5": {
-      "g": "dlss5",
-      "x": "\"dlss5\" -is:retweet"
+    "fable-5-1": {
+      "g": "fable 5.1",
+      "x": "\"fable 5.1\" -is:retweet"
     },
-    "chatgpt-down": {
-      "g": "chatgpt down",
-      "x": "\"chatgpt down\" -is:retweet"
+    "artificial-intelligence-news": {
+      "g": "artificial intelligence news",
+      "x": "\"artificial intelligence news\" -is:retweet"
     },
-    "business": {
-      "g": "business",
-      "x": "\"business\" -is:retweet"
+    "dlss-5": {
+      "g": "dlss 5",
+      "x": "\"dlss 5\" -is:retweet"
     },
-    "anthropic": {
-      "g": "anthropic",
-      "x": "\"anthropic\" -is:retweet"
+    "employee": {
+      "g": "employee",
+      "x": "\"employee\" -is:retweet"
     }
   },
   "scopes": {
-    "dlss5": "global",
-    "chatgpt-down": "global",
-    "business": "global",
-    "anthropic": "country"
+    "fable-5-1": "global",
+    "artificial-intelligence-news": "global",
+    "dlss-5": "global",
+    "employee": "global"
   },
   "marks": {
-    "dlss5": "🌐",
-    "chatgpt-down": "🌐",
-    "business": "🌐",
-    "anthropic": "🇯🇵"
+    "fable-5-1": "🌐",
+    "artificial-intelligence-news": "🌐",
+    "dlss-5": "🌐",
+    "employee": "🌐"
   },
   "breakouts": [
-    "dlss5",
-    "chatgpt-down",
-    "business",
-    "anthropic"
+    "fable-5-1",
+    "artificial-intelligence-news",
+    "dlss-5",
+    "employee"
   ],
   "selection": {
     "method": "google-trending-ai",
     "volumes": {
-      "dlss5": 500,
-      "chatgpt-down": 5000,
-      "business": 10000,
-      "anthropic": 500
+      "fable-5-1": 10000,
+      "artificial-intelligence-news": 1000,
+      "dlss-5": 100,
+      "employee": 10000
     },
     "geos": {
-      "dlss5": [
-        "JP"
-      ],
-      "chatgpt-down": [
+      "fable-5-1": [
         "US",
-        "DE"
-      ],
-      "business": [
-        "US",
+        "GB",
+        "IN",
         "CA"
       ],
-      "anthropic": [
-        "IN",
-        "JP"
+      "artificial-intelligence-news": [
+        "US",
+        "IN"
+      ],
+      "dlss-5": [
+        "GB"
+      ],
+      "employee": [
+        "US",
+        "CA"
       ]
     },
     "plot_geo": {
-      "dlss5": "",
-      "chatgpt-down": "",
-      "business": "",
-      "anthropic": "JP"
+      "fable-5-1": "",
+      "artificial-intelligence-news": "",
+      "dlss-5": "",
+      "employee": ""
     },
     "breakouts": [
-      "dlss5",
-      "chatgpt-down",
-      "business",
-      "anthropic"
+      "fable-5-1",
+      "artificial-intelligence-news",
+      "dlss-5",
+      "employee"
     ]
   },
   "google-trends": {
@@ -100,198 +102,198 @@
     "matrix": {
       "raw": [
         [
-          0.0,
+          2.0,
+          2.0,
           1.0,
-          20.0,
-          53.0,
-          81.0,
-          81.0,
+          1.0,
+          1.0,
+          37.0,
           100.0
         ],
         [
-          16.0,
-          22.0,
-          15.0,
-          13.0,
-          16.0,
-          100.0,
-          45.0
+          30.0,
+          31.0,
+          27.0,
+          26.0,
+          47.0,
+          54.0,
+          100.0
         ],
         [
+          2.0,
+          29.0,
+          65.0,
           84.0,
           81.0,
-          72.0,
-          63.0,
-          66.0,
-          80.0,
+          86.0,
           100.0
         ],
         [
-          68.0,
-          64.0,
           71.0,
-          43.0,
-          43.0,
-          99.0,
+          62.0,
+          46.0,
+          49.0,
+          69.0,
+          74.0,
           100.0
         ]
       ],
       "normalized": [
         [
-          0.0,
+          0.02,
+          0.02,
           0.01,
-          0.2,
-          0.53,
-          0.81,
-          0.81,
+          0.01,
+          0.01,
+          0.37,
           1.0
         ],
         [
-          0.16,
-          0.22,
-          0.15,
-          0.13,
-          0.16,
-          1.0,
-          0.45
+          0.3,
+          0.31,
+          0.27,
+          0.26,
+          0.47,
+          0.54,
+          1.0
         ],
         [
+          0.02,
+          0.29,
+          0.65,
           0.84,
           0.81,
-          0.72,
-          0.63,
-          0.66,
-          0.8,
+          0.86,
           1.0
         ],
         [
-          0.68,
-          0.64,
           0.71,
-          0.43,
-          0.43,
-          0.99,
+          0.62,
+          0.46,
+          0.49,
+          0.69,
+          0.74,
           1.0
         ]
       ]
     },
     "trend": {
-      "dlss5": 2.542,
-      "chatgpt-down": 1.484,
-      "business": 1.345,
-      "anthropic": 1.546
+      "fable-5-1": 13.636,
+      "artificial-intelligence-news": 2.791,
+      "dlss-5": 1.729,
+      "employee": 1.617
     },
     "items": {
-      "dlss5|2026-08-26": [
-        "g-dlss5"
+      "fable-5-1|2026-08-27": [
+        "g-fable-5-1"
       ],
-      "dlss5|2026-08-27": [
-        "g-dlss5"
+      "fable-5-1|2026-08-28": [
+        "g-fable-5-1"
       ],
-      "dlss5|2026-08-28": [
-        "g-dlss5"
+      "fable-5-1|2026-08-29": [
+        "g-fable-5-1"
       ],
-      "dlss5|2026-08-29": [
-        "g-dlss5"
+      "fable-5-1|2026-08-30": [
+        "g-fable-5-1"
       ],
-      "dlss5|2026-08-30": [
-        "g-dlss5"
+      "fable-5-1|2026-08-31": [
+        "g-fable-5-1"
       ],
-      "dlss5|2026-08-31": [
-        "g-dlss5"
+      "fable-5-1|2026-09-01": [
+        "g-fable-5-1"
       ],
-      "dlss5|2026-09-01": [
-        "g-dlss5"
+      "fable-5-1|2026-09-02": [
+        "g-fable-5-1"
       ],
-      "chatgpt-down|2026-08-26": [
-        "g-chatgpt-down"
+      "artificial-intelligence-news|2026-08-27": [
+        "g-artificial-intelligence-news"
       ],
-      "chatgpt-down|2026-08-27": [
-        "g-chatgpt-down"
+      "artificial-intelligence-news|2026-08-28": [
+        "g-artificial-intelligence-news"
       ],
-      "chatgpt-down|2026-08-28": [
-        "g-chatgpt-down"
+      "artificial-intelligence-news|2026-08-29": [
+        "g-artificial-intelligence-news"
       ],
-      "chatgpt-down|2026-08-29": [
-        "g-chatgpt-down"
+      "artificial-intelligence-news|2026-08-30": [
+        "g-artificial-intelligence-news"
       ],
-      "chatgpt-down|2026-08-30": [
-        "g-chatgpt-down"
+      "artificial-intelligence-news|2026-08-31": [
+        "g-artificial-intelligence-news"
       ],
-      "chatgpt-down|2026-08-31": [
-        "g-chatgpt-down"
+      "artificial-intelligence-news|2026-09-01": [
+        "g-artificial-intelligence-news"
       ],
-      "chatgpt-down|2026-09-01": [
-        "g-chatgpt-down"
+      "artificial-intelligence-news|2026-09-02": [
+        "g-artificial-intelligence-news"
       ],
-      "business|2026-08-26": [
-        "g-business"
+      "dlss-5|2026-08-27": [
+        "g-dlss-5"
       ],
-      "business|2026-08-27": [
-        "g-business"
+      "dlss-5|2026-08-28": [
+        "g-dlss-5"
       ],
-      "business|2026-08-28": [
-        "g-business"
+      "dlss-5|2026-08-29": [
+        "g-dlss-5"
       ],
-      "business|2026-08-29": [
-        "g-business"
+      "dlss-5|2026-08-30": [
+        "g-dlss-5"
       ],
-      "business|2026-08-30": [
-        "g-business"
+      "dlss-5|2026-08-31": [
+        "g-dlss-5"
       ],
-      "business|2026-08-31": [
-        "g-business"
+      "dlss-5|2026-09-01": [
+        "g-dlss-5"
       ],
-      "business|2026-09-01": [
-        "g-business"
+      "dlss-5|2026-09-02": [
+        "g-dlss-5"
       ],
-      "anthropic|2026-08-26": [
-        "g-anthropic"
+      "employee|2026-08-27": [
+        "g-employee"
       ],
-      "anthropic|2026-08-27": [
-        "g-anthropic"
+      "employee|2026-08-28": [
+        "g-employee"
       ],
-      "anthropic|2026-08-28": [
-        "g-anthropic"
+      "employee|2026-08-29": [
+        "g-employee"
       ],
-      "anthropic|2026-08-29": [
-        "g-anthropic"
+      "employee|2026-08-30": [
+        "g-employee"
       ],
-      "anthropic|2026-08-30": [
-        "g-anthropic"
+      "employee|2026-08-31": [
+        "g-employee"
       ],
-      "anthropic|2026-08-31": [
-        "g-anthropic"
+      "employee|2026-09-01": [
+        "g-employee"
       ],
-      "anthropic|2026-09-01": [
-        "g-anthropic"
+      "employee|2026-09-02": [
+        "g-employee"
       ]
     },
     "itemIndex": {
-      "g-dlss5": {
-        "title": "Google Trends · dlss5",
+      "g-fable-5-1": {
+        "title": "Google Trends · fable 5.1",
         "source": "Google Trends",
-        "url": "https://trends.google.com/trends/explore?date=now%207-d&q=dlss5"
+        "url": "https://trends.google.com/trends/explore?date=now%207-d&q=fable%205.1"
       },
-      "g-chatgpt-down": {
-        "title": "Google Trends · chatgpt down",
+      "g-artificial-intelligence-news": {
+        "title": "Google Trends · artificial intelligence news",
         "source": "Google Trends",
-        "url": "https://trends.google.com/trends/explore?date=now%207-d&q=chatgpt%20down"
+        "url": "https://trends.google.com/trends/explore?date=now%207-d&q=artificial%20intelligence%20news"
       },
-      "g-business": {
-        "title": "Google Trends · business",
+      "g-dlss-5": {
+        "title": "Google Trends · dlss 5",
         "source": "Google Trends",
-        "url": "https://trends.google.com/trends/explore?date=now%207-d&q=business"
+        "url": "https://trends.google.com/trends/explore?date=now%207-d&q=dlss%205"
       },
-      "g-anthropic": {
-        "title": "Google Trends · anthropic",
+      "g-employee": {
+        "title": "Google Trends · employee",
         "source": "Google Trends",
-        "url": "https://trends.google.com/trends/explore?date=now%207-d&q=anthropic&geo=JP"
+        "url": "https://trends.google.com/trends/explore?date=now%207-d&q=employee"
       }
     }
   },
   "x": {
-    "error": "dlss5: X API 返回 402 Payment Required：请在 Developer Console 购买 credits，并确认当前 App 有可用余额",
+    "error": "fable-5-1: X API 返回 402 Payment Required：请在 Developer Console 购买 credits，并确认当前 App 有可用余额",
     "matrix": {
       "raw": [
         [
@@ -371,10 +373,10 @@
       ]
     },
     "trend": {
-      "dlss5": 1.0,
-      "chatgpt-down": 1.0,
-      "business": 1.0,
-      "anthropic": 1.0
+      "fable-5-1": 1.0,
+      "artificial-intelligence-news": 1.0,
+      "dlss-5": 1.0,
+      "employee": 1.0
     },
     "items": {},
     "itemIndex": {}

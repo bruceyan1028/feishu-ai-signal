@@ -38,113 +38,113 @@
         1,
         3,
         6,
-        13,
-        3
+        14,
+        13
       ],
       [
         0,
         2,
         3,
-        8,
-        0
-      ],
-      [
-        0,
-        2,
-        0,
-        8,
-        1
-      ],
-      [
-        0,
-        0,
-        3,
-        4,
-        1
-      ],
-      [
-        0,
-        0,
-        2,
-        0,
+        10,
         2
       ],
       [
+        0,
+        2,
+        0,
+        9,
+        5
+      ],
+      [
+        0,
+        0,
+        3,
         5,
-        5,
-        6,
-        6,
         3
       ],
       [
         0,
         0,
+        2,
         0,
-        3,
-        1
+        4
+      ],
+      [
+        5,
+        5,
+        6,
+        6,
+        6
+      ],
+      [
+        0,
+        0,
+        0,
+        4,
+        2
       ],
       [
         2,
         0,
         0,
         0,
-        1
+        4
       ],
       [
         4,
         3,
         4,
         5,
-        6
+        11
       ],
       [
         8,
         6,
         3,
         1,
-        3
+        6
       ],
       [
         0,
         0,
         0,
         0,
-        2
+        3
       ]
     ],
     "normalized": [
       [
-        0.0769,
-        0.2308,
-        0.4615,
+        0.0714,
+        0.2143,
+        0.4286,
         1.0,
-        0.2308
+        0.9286
       ],
       [
         0.0,
-        0.25,
-        0.375,
+        0.2,
+        0.3,
         1.0,
-        0.0
+        0.2
       ],
       [
         0.0,
-        0.25,
+        0.2222,
         0.0,
         1.0,
-        0.125
-      ],
-      [
-        0.0,
-        0.0,
-        0.75,
-        1.0,
-        0.25
+        0.5556
       ],
       [
         0.0,
         0.0,
+        0.6,
         1.0,
+        0.6
+      ],
+      [
+        0.0,
+        0.0,
+        0.5,
         0.0,
         1.0
       ],
@@ -153,27 +153,27 @@
         0.8333,
         1.0,
         1.0,
-        0.5
+        1.0
       ],
       [
         0.0,
         0.0,
         0.0,
         1.0,
-        0.3333
-      ],
-      [
-        1.0,
-        0.0,
-        0.0,
-        0.0,
         0.5
       ],
       [
-        0.6667,
         0.5,
-        0.6667,
-        0.8333,
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      [
+        0.3636,
+        0.2727,
+        0.3636,
+        0.4545,
         1.0
       ],
       [
@@ -181,7 +181,7 @@
         0.75,
         0.375,
         0.125,
-        0.375
+        0.75
       ],
       [
         0.0,
@@ -335,7 +335,8 @@
     "embodied|2026-W35": [
       "mock-2026-08-26-095",
       "mock-2026-08-26-094",
-      "mock-2026-08-26-093"
+      "mock-2026-08-26-093",
+      "recvtQ0liVoITN"
     ],
     "open-source-model|2026-W35": [
       "mock-2026-08-26-099",
@@ -364,17 +365,33 @@
     "agent|2026-W36": [
       "recvtW9WBRQfy8",
       "recvtW9WBR3XWX",
-      "recvtW9WBRTlZl"
+      "recvtW9WBRTlZl",
+      "recvu1S4qSNYhe",
+      "recvu1S4qSn1iE",
+      "recvu1S4qSACdN",
+      "recvu1S4qSG0Uk",
+      "recvu1S4qSjozQ",
+      "recvu1S4qSt8uO",
+      "recvu1S4qSMoUD",
+      "recvu1S4qSodM7",
+      "recvu1S4qSaEII",
+      "recvu1S4qSULKN"
     ],
     "infra|2026-W36": [
       "recvtW9WBRPQmp",
       "recvtW9WBRSx2a",
-      "recvtW9WBRJBmR"
+      "recvtW9WBRJBmR",
+      "recvu1S4qSf98L",
+      "recvu1S4qSmOoN",
+      "recvu1S4qSULKN"
     ],
     "funding|2026-W36": [
       "recvtW9WBRSx2a",
       "recvtW9WBRM7x8",
-      "recvtW9WBREO6t"
+      "recvtW9WBREO6t",
+      "recvu1S4qSU3oT",
+      "recvu1S4qSu0cd",
+      "recvu1S4qSTlad"
     ],
     "product|2026-W36": [
       "recvtW9WBR1mmJ",
@@ -382,27 +399,47 @@
       "recvtW9WBREO6t",
       "recvtW9WBRhlku",
       "recvtW9WBRR7YE",
-      "recvtW9WBRxml8"
+      "recvtW9WBRxml8",
+      "recvu1S4qSodM7",
+      "recvu1S4qSTlad",
+      "recvu1S4qSaEII",
+      "recvu1S4qScLJq",
+      "recvu1S4qSH6pR"
     ],
     "other|2026-W36": [
       "recvtW9WBRRLop",
-      "recvtW9WBRRUDf"
+      "recvtW9WBRRUDf",
+      "recvu1S4qSNMVZ"
     ],
     "multimodal|2026-W36": [
-      "recvtW9WBRobE2"
+      "recvtW9WBRobE2",
+      "recvtXfcLk9dFN",
+      "recvu1S4qSMFXB",
+      "recvu1S4qSACdN"
     ],
     "open-source-model|2026-W36": [
-      "recvtW9WBRobE2"
+      "recvtW9WBRobE2",
+      "recvu1S4qSmOoN"
     ],
     "embodied|2026-W36": [
-      "recvtW9WBR72ie"
+      "recvtW9WBR72ie",
+      "recvu1S4qSMFXB"
     ],
     "rag-search|2026-W36": [
       "recvtW9WBRXxbq",
-      "recvtW9WBRxml8"
+      "recvtW9WBRxml8",
+      "recvu1S4qSt8uO",
+      "recvu1S4qScLJq"
     ],
     "safety-policy|2026-W36": [
-      "recvtW9WBRShl3"
+      "recvtW9WBRShl3",
+      "recvu1S4qSNYhe",
+      "recvu1S4qSUSHY",
+      "recvu1S4qS1YSz"
+    ],
+    "reasoning|2026-W36": [
+      "recvu1S4qSbYtM",
+      "recvu1S4qSkYcr"
     ]
   },
   "itemIndex": {
@@ -1045,19 +1082,139 @@
       "title": "Polimill建设日本下一代公共AI基础设施",
       "source": "OpenAI News",
       "url": "https://openai.com/index/polimill"
+    },
+    "recvu1S4qSbYtM": {
+      "title": "PaperGym：以评分标准为中心的研究计划生成演化框架",
+      "source": "HF Papers Trending",
+      "url": "https://huggingface.co/papers/2608.31119"
+    },
+    "recvtXfcLk9dFN": {
+      "title": "DreamX-Creator：面向2K分辨率的原生音视频生成",
+      "source": "PwC Trending",
+      "url": "https://huggingface.co/papers/2608.31106"
+    },
+    "recvu1S4qSNYhe": {
+      "title": "英伟达与CrowdStrike推进智能体网络安全体系",
+      "source": "NVIDIA Blog",
+      "url": "https://blogs.nvidia.com/blog/nvidia-crowdstrike-fal-con-2026"
+    },
+    "recvu1S4qSMFXB": {
+      "title": "World Labs发布Atlas：可控生成、三维重建与时空模拟的统一世界模型",
+      "source": "智东西",
+      "url": "https://zhidx.com/p/589823.html"
+    },
+    "recvu1S4qSn1iE": {
+      "title": "Anthropic发布Fable 5.1与Mythos 5.1，强化长时Agent与科研能力",
+      "source": "虎嗅",
+      "url": "https://www.huxiu.com/article/4887799.html"
+    },
+    "recvu1S4qSACdN": {
+      "title": "Google 推出 Gemini 智能体视频理解能力",
+      "source": "Google DeepMind Blog",
+      "url": "https://deepmind.google/blog/introducing-agentic-video-in-gemini"
+    },
+    "recvu1S4qSf98L": {
+      "title": "MLCommons发布MLPerf Storage v3.0基准测试结果",
+      "source": "MLCommons / MLPerf",
+      "url": "https://mlcommons.org/2026/09/mlperf-storage-v3-0-results"
+    },
+    "recvu1S4qSUSHY": {
+      "title": "欧盟将ChatGPT列为超大型在线搜索引擎，五角大楼接入ChatGPT与Grok",
+      "source": "果壳",
+      "url": "https://www.guokr.com/article/470091"
+    },
+    "recvu1S4qSU3oT": {
+      "title": "大疆系人才外溢引爆硬件创业融资潮",
+      "source": "虎嗅",
+      "url": "https://www.huxiu.com/article/4887805.html"
+    },
+    "recvu1S4qSNMVZ": {
+      "title": "数据中心扩张未带动白领就业，德州应届生失业率走高",
+      "source": "华尔街见闻",
+      "url": "https://wallstreetcn.com/articles/3780865"
+    },
+    "recvu1S4qSG0Uk": {
+      "title": "LangChain 1.4.0a3：新增 MCP 服务器适配与人工介入能力",
+      "source": "GitHub Trending",
+      "url": "https://github.com/langchain-ai/langchain/releases/tag/langchain%3d%3d1.4.0a3"
+    },
+    "recvu1S4qSjozQ": {
+      "title": "Hermes Agent更新Pantheon版本，强化多Agent群聊协作",
+      "source": "智东西",
+      "url": "https://zhidx.com/p/589678.html"
+    },
+    "recvu1S4qSt8uO": {
+      "title": "Firecrawl v2.11.278：面向 AI Agent 的可交互网页数据 API",
+      "source": "GitHub Trending",
+      "url": "https://github.com/firecrawl/firecrawl/releases/tag/v2.11.278"
+    },
+    "recvu1S4qSMoUD": {
+      "title": "Gemini CLI v0.58.0：开源终端 AI Agent 更新",
+      "source": "GitHub Trending",
+      "url": "https://github.com/google-gemini/gemini-cli/releases/tag/v0.58.0"
+    },
+    "recvu1S4qSodM7": {
+      "title": "Google Cloud本月AI公告：聚焦企业Agent、行业模型与成本控制",
+      "source": "Google Cloud AI Blog",
+      "url": "https://cloud.google.com/blog/products/ai-machine-learning/what-google-cloud-announced-in-ai-this-month"
+    },
+    "recvu1S4qSu0cd": {
+      "title": "AfterQuery据报估值达32亿美元，成Y Combinator最快独角兽",
+      "source": "TechCrunch AI",
+      "url": "https://techcrunch.com/2026/09/01/afterquery-reportedly-becomes-y-combinators-fastest-ever-unicorn-now-valued-at-3-2b"
+    },
+    "recvu1S4qS1YSz": {
+      "title": "通往 Astra：关键能力与前沿安全防护",
+      "source": "OpenAI News",
+      "url": "https://openai.com/index/path-to-astra"
+    },
+    "recvu1S4qSTlad": {
+      "title": "Sequoia孵化的Empirik获2100万美元融资，预测基础设施故障",
+      "source": "TechCrunch AI",
+      "url": "https://techcrunch.com/2026/09/01/sequoia-incubated-empirik-launches-with-21m-to-predict-outages-before-they-happen"
+    },
+    "recvu1S4qSmOoN": {
+      "title": "Ollama v0.33.3 发布：改进 GGUF 默认参数并更新 MLX 与 llama.cpp",
+      "source": "GitHub Trending",
+      "url": "https://github.com/ollama/ollama/releases/tag/v0.33.3-rc0"
+    },
+    "recvu1S4qSkYcr": {
+      "title": "Anthropic发布Claude Fable 5.1，主打复杂长程任务与科研能力",
+      "source": "Anthropic YouTube",
+      "url": "https://www.youtube.com/watch?v=rof2nv_kjom"
+    },
+    "recvu1S4qSaEII": {
+      "title": "AI 原生公司如何将工作流转化为运营能力",
+      "source": "OpenAI News",
+      "url": "https://openai.com/index/ai-native-company-workflows"
+    },
+    "recvu1S4qScLJq": {
+      "title": "医疗机构现可将电子健康记录等行业数据连接至 ChatGPT",
+      "source": "OpenAI News",
+      "url": "https://openai.com/index/chatgpt-connects-health-records-and-healthcare-sources"
+    },
+    "recvu1S4qSULKN": {
+      "title": "Tokenomics 101：理解令牌及其对 AI 工厂投资回报的意义",
+      "source": "NVIDIA YouTube",
+      "url": "https://www.youtube.com/watch?v=mkbeppfaemu"
+    },
+    "recvu1S4qSH6pR": {
+      "title": "NVIDIA与CrowdStrike推出基于Nemotron的SafeMind智能网络防御方案",
+      "source": "NVIDIA YouTube",
+      "url": "https://www.youtube.com/watch?v=mknmrefvcp4"
     }
   },
   "trend": {
-    "agent": 2.4,
-    "reasoning": 2.4,
-    "multimodal": 6.75,
-    "open-source-model": 2.5,
-    "rag-search": 1.5,
-    "infra": 0.844,
+    "agent": 4.05,
+    "reasoning": 3.6,
+    "multimodal": 10.5,
+    "open-source-model": 4.0,
+    "rag-search": 3.0,
+    "infra": 1.125,
     "embodied": 2.0,
-    "safety-policy": 0.75,
-    "product": 1.5,
-    "funding": 0.353,
+    "safety-policy": 3.0,
+    "product": 2.182,
+    "funding": 0.618,
     "other": 2.0
   },
   "window_end": "2026-W36"

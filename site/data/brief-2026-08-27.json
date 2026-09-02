@@ -83,26 +83,6 @@
       "mediaAssets": {
         "images": [
           {
-            "url": "media/papers/recvtna5VI3LUX-p10-f1.png",
-            "alt": "PDF 第 10 页图表：Table 1 Benchmarking results on MMEB-v2. Baseline results are taken from the official MMEB leaderboard. †Closed- source leaderboard submission without publicly released model weights or a public inference endpoint. ⋆Proprietary commercial model with an undisclosed parameter count. CLS: classification; QA: question answering; Ret: retrieval; GD: visual grounding; V-Ret: video retrieval; M-Ret: moment retrieval.",
-            "kind": "pdf-page"
-          },
-          {
-            "url": "media/papers/recvtna5VI3LUX-p11-f2.png",
-            "alt": "PDF 第 11 页图表：Table 2 Evaluation results on MMEB-v3. V3-All averages all 190 tasks, comprising the 78 MMEB-v2 tasks, 53 Text tasks, 47 Agent tasks, 11 Audio tasks, and MCMR [10]. Following the evaluation protocol defined in the MMEB-v3 paper [15], Text results are reported using NDCG@5. Unsupported tasks are assigned a score of zero. RR: reasoning retrieval; IF: instruction following; LC: long-context retrieval; MC: multi-condition retrieval; GR: general retrieval.",
-            "kind": "pdf-page"
-          },
-          {
-            "url": "media/papers/recvtna5VI3LUX-p11-f3.png",
-            "alt": "PDF 第 11 页图表：Table 3 Cross-modal retrieval results on 12 public benchmarks. AVG denotes the average across the 12 datasets. †Proprietary commercial model with an undisclosed parameter count.",
-            "kind": "pdf-page"
-          },
-          {
-            "url": "media/papers/recvtna5VI3LUX-p12-f4.png",
-            "alt": "PDF 第 12 页图表：Table 4 Evaluation results on the in-house benchmark. AVG denotes the average over all 26 tasks. Cross-DM denotes cross-domain content matching; Article Rel. denotes article relevance; Video Rel. denotes video relevance.",
-            "kind": "pdf-page"
-          },
-          {
             "url": "https://arxiv.org/html/2608.24053v1/figs/mrl-performance-trend.png",
             "alt": "Figure 3 : MRL analysis of WeMM-Embedding-2B on MMEB-v2. Left: Performance retained on the image, video, and visual-document subsets across embedding dimensions. Right: Performance retained for classification (CLS), question answering (QA), and retrieval (RET), each averaged over the corresponding image and video tasks."
           }
@@ -203,26 +183,6 @@
       "imageUrl": "https://arxiv.org/html/2608.23283v2/TRACES_framework_figure.png",
       "mediaAssets": {
         "images": [
-          {
-            "url": "media/papers/recvtna5VI8ErK-p20-f1.png",
-            "alt": "PDF 第 20 页图表：Table 3: Performance on professional work, finance, and business simulation benchmarks. Bold in- dicates the best reported result in each benchmark column. Apodex results are grouped below the horizontal rule. All GDPVal entries report win rate; all external-model GDPVal results shown here are our reproductions under the Apodex harness. The Claude Opus 5 APEX-Agents result is likewise reproduced internally. YC-Bench (He et al., 2025) reports mean final net worth in USD; external YC- Bench results are taken from its official leaderboard. The DeepSeek V4 entries on FrontierFinance are internally",
-            "kind": "pdf-page"
-          },
-          {
-            "url": "media/papers/recvtna5VI8ErK-p21-f2.png",
-            "alt": "PDF 第 21 页图表：Table 4: Performance on scientific-research, general-reasoning, and deep-search benchmarks. Bold indicates the best reported result in each benchmark column. Apodex results are grouped below the horizontal rule. DeepSearchQA reports F1, and BioMysteryBench uses the Human-difficult subset.",
-            "kind": "pdf-page"
-          },
-          {
-            "url": "media/papers/recvtna5VI8ErK-p22-f3.png",
-            "alt": "PDF 第 22 页图表：Table 5: Model-scale-efficient agentic performance of Apodex mini models (35B parameters). Models are grouped by availability; Apodex results appear below the final rule. Dashes denote unavailable matched results. Bold indicates the best result in each benchmark column among the selected compari- son rows.",
-            "kind": "pdf-page"
-          },
-          {
-            "url": "media/papers/recvtna5VI8ErK-p24-f4.png",
-            "alt": "PDF 第 24 页图表：Table 6: Mathematical reasoning results on competition-level proof tasks. IMO 2025, IMO 2026, and USAMO 2026 are scored under the MathArena protocol.",
-            "kind": "pdf-page"
-          },
           {
             "url": "https://arxiv.org/html/2608.23283v2/TRACES_framework_figure.png",
             "alt": "Figure 5: The HDS6 capability taxonomy and process-grading pipeline. The six capability groups contain four rubric items each; an integrity gate is applied independently of the weighted rubric."
@@ -384,26 +344,6 @@
       "imageUrl": "https://arxiv.org/html/2608.24876v1/assets/motivation.png",
       "mediaAssets": {
         "images": [
-          {
-            "url": "media/papers/recvtsKfefMy1S-p1-f1.png",
-            "alt": "PDF 第 1 页图表：Figure 1 | Recuris improves task success from 3B open-weight models to frontier models. Performance across (i) task success (%), (ii) task success by episode length, and (iii) six long-horizon failure modes, each rescaled so the agent alone = 100, where a bar at 20 is an 80% reduction.",
-            "kind": "pdf-page"
-          },
-          {
-            "url": "media/papers/recvtsKfefMy1S-p11-f2.png",
-            "alt": "PDF 第 11 页图表：Table 1 presents the main results: four benchmarks under two adaptation regimes, with each model evaluated with and without Recuris. Recuris improves task success in 35 of the 37 completed model–benchmark pairs. The largest gains appear on 𝜏2-Retail and SkillFlow, where Recuris improves the deployment model by 23.3 and 16.8 points, reaching 81.4% and 51.4%, both with intervals excluding zero. The gain belongs to memory that revises itself rather than to memory as such: a Skill Memory held fixed adds nothing an interval separates from zero, which we take up in section 3.3.2. The gains are also ",
-            "kind": "pdf-page"
-          },
-          {
-            "url": "media/papers/recvtsKfefMy1S-p12-f3.png",
-            "alt": "PDF 第 12 页图表：Table 1 | Recuris improves task success where the task family has shared structure, and its value does not follow model scale. Cells are avg@4 task success (%); higher is better. Each model contributes a pair of rows, the benchmark’s own reference agent alone and that same agent with Recuris (grey). Bold marks the better of each pair; the subscript is Δ, shaded by the size of the gain; † marks a paired task-clustered bootstrap 95% CI excluding zero. Agents, models and protocol are given in section 3.1. – not evaluated on that benchmark.",
-            "kind": "pdf-page"
-          },
-          {
-            "url": "media/papers/recvtsKfefMy1S-p24-f4.png",
-            "alt": "PDF 第 24 页图表：Table 8 | Terminal-Bench 2.1, decomposed: the attempt budget carries the headline, and the memory terms are read at a matched budget. Every configuration stops at its first success. Solved counts tasks solved within budget at one rollout per attempt. Δ and 𝑝compare each row with the row above it on the same tasks, 𝑝from McNemar’s exact test; the last column names what that comparison isolates.",
-            "kind": "pdf-page"
-          },
           {
             "url": "https://arxiv.org/html/2608.24876v1/assets/motivation.png",
             "alt": "Figure 2 : Two shifts separate Recuris from prior memory-based agent harnesses. How memory is used (left): prior harnesses retrieve against a growing chat history and lose track of unresolved goals. Recuris retrieves at execution events, and a checker turns the environment’s response into a verified state update rather than trusting the dialogue. How memory evolves (right): prior harnesses rewrite the whole memory from one task outcome. Recuris reads the structured trajectory, attributes each failure to a component, patches exactly the components implicated, and admits the result only through a validation gate on held-out tasks."
@@ -578,16 +518,6 @@
       "mediaAssets": {
         "images": [
           {
-            "url": "media/papers/recvthcdYqAH36-p16-f1.png",
-            "alt": "PDF 第 16 页图表：Figure 6 : Overview of Task Organization. Goal Decomposition translates a high-level objective into explicit subtasks, exposes their dependencies for scheduling, and refines the remaining task graph using intermediate execution results. Workflow Optimization compiles semantic subgoals into executable workflows, searches and optimizes alternative control flows, and adapts execution in response to runtime feedback. These mechanisms specify what work must be accomplished, how it should be operationalized, and how the work structure evolves during execution.",
-            "kind": "pdf-page"
-          },
-          {
-            "url": "media/papers/recvthcdYqAH36-p30-f2.png",
-            "alt": "PDF 第 30 页图表：Table 2 : Representative open-source projects and engineering systems across Model, Individual, and System Intelligence. Li- braries are grouped by their primary engineering target rather than exclusive functionality. Focus summarizes the main engineering concerns exposed by each system.",
-            "kind": "pdf-page"
-          },
-          {
             "url": "https://arxiv.org/html/2608.21156v1/trend.png",
             "alt": "Figure 1 : Overview From Model Intelligence to System Intelligence. Prompt and Context Engineering elicit and condition the access of foundation models to realize model intelligence. Harness and Loop Engineering extend and orchestrate agentic capabilities to enable Individual Intelligence. Graph Engineering builds on the foundation of individual agents through Task Organization, Agent Coordination, and Runtime State Management, empowering System Intelligence."
           },
@@ -726,7 +656,7 @@
         "images": [
           {
             "url": "https://wpimg-wscn.awtmt.com/a1b49692-dfaa-445b-abb0-14b16fff2229.png",
-            "alt": "国产芯片集群推理架构",
+            "alt": "国产芯片推理集群架构",
             "kind": "article-figure",
             "afterHeading": "10万张国产卡：从测试到生产 || 10万张国产卡：从测试到生产"
           },
@@ -738,7 +668,7 @@
           },
           {
             "url": "https://wpimg-wscn.awtmt.com/d0dba9d5-7bec-4b63-8206-ca593294b79d.png",
-            "alt": "模型定价对比",
+            "alt": "模型价格对比图",
             "kind": "article-figure",
             "afterHeading": "涨价潮中的低价突围 || 涨价潮中的低价突围"
           }
@@ -1050,19 +980,19 @@
           },
           {
             "url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/gemini-3-5-transcribe__testimoni.width-1000.format-webp.webp",
-            "alt": "vivo 使用反馈",
+            "alt": "vivo 对智能转录的评价",
             "kind": "article-figure",
             "afterHeading": "阅读早期评价 || Read the early reviews"
           },
           {
             "url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/gemini-3-5-transcribe__testimoni.width-1000.format-webp_OHGdRn0.webp",
-            "alt": "IntelliTek 使用反馈",
+            "alt": "IntelliTek 对模型的评价",
             "kind": "article-figure",
             "afterHeading": "阅读早期评价 || Read the early reviews"
           },
           {
             "url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/gemini-3-5-transcribe__testimoni.width-1000.format-webp_ylQCpNT.webp",
-            "alt": "Lingopal 使用反馈",
+            "alt": "Lingopal 对模型的评价",
             "kind": "article-figure",
             "afterHeading": "阅读早期评价 || Read the early reviews"
           }
@@ -1168,14 +1098,7 @@
       ],
       "imageUrl": "https://techcrunch.com/wp-content/uploads/2026/08/GettyImages-2255991416.jpg?resize=1200,795",
       "mediaAssets": {
-        "images": [
-          {
-            "url": "https://techcrunch.com/wp-content/uploads/2026/05/ai-agents-GettyImages-2229880232.jpg?w=668",
-            "alt": "连接应用与设备的 AI 助手",
-            "kind": "article-figure",
-            "afterHeading": "核心内容"
-          }
-        ],
+        "images": [],
         "videos": [],
         "documents": [],
         "cover": "https://techcrunch.com/wp-content/uploads/2026/08/GettyImages-2255991416.jpg?resize=1200,795",
@@ -1414,7 +1337,7 @@
         "images": [
           {
             "url": "https://wpimg-wscn.awtmt.com/a541e499-9914-47c4-9527-fe20818509ff.png",
-            "alt": "CrowdStrike二季度财务指标超预期",
+            "alt": "季度营收、EPS与ARR均超预期",
             "kind": "article-figure",
             "afterHeading": "核心财务指标全面击败预期，ARR凸显高用户黏性 || 核心财务指标全线击败预期，ARR凸显高用户黏性"
           }
@@ -1472,19 +1395,25 @@
         "images": [
           {
             "url": "https://wpimg-wscn.awtmt.com/a082a190-3db4-4890-aba5-3b45edde28a7.png",
-            "alt": "集成电路行业利润大幅增长",
+            "alt": "电子行业利润增速图",
             "kind": "article-figure",
             "afterHeading": "1—7月份，以算力芯片、存储芯片为代表的集成电路行业利润同比增长18.5倍"
           },
           {
-            "url": "https://wpimg-wscn.awtmt.com/6b2deb0a-83ae-4084-b4aa-3a036dfd6876.png",
-            "alt": "工业企业营业收入增长6.5%",
+            "url": "https://wpimg-wscn.awtmt.com/b02ac670-071b-4478-9b7f-4d20ed38016d.png",
+            "alt": "主要行业利润增速对比",
+            "kind": "article-figure",
+            "afterHeading": "1—7月份，以算力芯片、存储芯片为代表的集成电路行业利润同比增长18.5倍"
+          },
+          {
+            "url": "https://wpimg-wscn.awtmt.com/8cfdc7d1-e79e-4fd7-b02b-7dbdcf0e6d74.png",
+            "alt": "工业企业营收与利润率",
             "kind": "article-figure",
             "afterHeading": "1—7月份规模以上工业企业实现营业收入同比增长6.5%"
           },
           {
             "url": "https://wpimg-wscn.awtmt.com/18dbab9c-77f5-442b-b969-e5ef269e20af.png",
-            "alt": "制造业利润增长18.8%",
+            "alt": "不同类型企业利润增速",
             "kind": "article-figure",
             "afterHeading": "1—7月份制造业实现利润总额增长18.8%"
           }
@@ -1542,25 +1471,25 @@
         "images": [
           {
             "url": "media/huxiu/recvtsKfefJO0w-1.png",
-            "alt": "模拟退火寻找全局最优",
+            "alt": "模拟退火示意图",
             "kind": "article-figure",
             "afterHeading": "混乱不是bug，是feature"
           },
           {
             "url": "media/huxiu/recvtsKfefJO0w-2.png",
-            "alt": "中国开源模型下载量增长",
+            "alt": "中国开源模型下载数据",
             "kind": "article-figure",
             "afterHeading": "1,AI的前沿和地基"
           },
           {
             "url": "media/huxiu/recvtsKfefJO0w-3.png",
-            "alt": "中国创新药研发与授权数据",
+            "alt": "中国创新药授权数据",
             "kind": "article-figure",
             "afterHeading": "2,创新药"
           },
           {
             "url": "media/huxiu/recvtsKfefJO0w-4.png",
-            "alt": "失败驱动高回报创新",
+            "alt": "核聚变项目与凸性逻辑",
             "kind": "article-figure",
             "afterHeading": "3，航天：五次失败"
           }

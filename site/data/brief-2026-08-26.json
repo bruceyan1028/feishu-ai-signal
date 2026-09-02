@@ -82,28 +82,7 @@
       ],
       "imageUrl": "",
       "mediaAssets": {
-        "images": [
-          {
-            "url": "media/papers/recvtbiIXXJJlT-p2-f1.png",
-            "alt": "PDF 第 2 页图表：Figure 1 Pass@1 comparison of coding agents on SWE-bench Science.",
-            "kind": "pdf-page"
-          },
-          {
-            "url": "media/papers/recvtbiIXXJJlT-p3-f2.png",
-            "alt": "PDF 第 3 页图表：Table 1 Comparison of coding-agent benchmarks for science. SWE-bench Science covers 20 scientific domains.",
-            "kind": "pdf-page"
-          },
-          {
-            "url": "media/papers/recvtbiIXXJJlT-p9-f3.png",
-            "alt": "PDF 第 9 页图表：Table 2 Main experimental results. Scores are task-level means over the common 119 tasks. The best value in each column is bold and underlined; ties are retained.",
-            "kind": "pdf-page"
-          },
-          {
-            "url": "media/papers/recvtbiIXXJJlT-p9-f4.png",
-            "alt": "PDF 第 9 页图表：Table 2 shows that no single model leads every metric. DeepSeek-V4-Pro achieves the best public score and performs best on Engineering-integration tasks. GPT-5.6-sol leads the private score, Fail2Pass, and Pass2Pass, indicating that it is the strongest at both repairing failed private tests and preserving tests that already pass. Claude-Opus-5 achieves the best overall Pass@1 and leads on both Issue-driven and Expert-exploratory tasks. Even frontier models achieve Pass@1 scores below 50%, underscoring the challenge of SWE-bench Science.",
-            "kind": "pdf-page"
-          }
-        ],
+        "images": [],
         "videos": []
       },
       "editorialStructure": "",
@@ -261,26 +240,6 @@
       "mediaAssets": {
         "images": [
           {
-            "url": "media/papers/recvtna5VI3LUX-p10-f1.png",
-            "alt": "PDF 第 10 页图表：Table 1 Benchmarking results on MMEB-v2. Baseline results are taken from the official MMEB leaderboard. †Closed- source leaderboard submission without publicly released model weights or a public inference endpoint. ⋆Proprietary commercial model with an undisclosed parameter count. CLS: classification; QA: question answering; Ret: retrieval; GD: visual grounding; V-Ret: video retrieval; M-Ret: moment retrieval.",
-            "kind": "pdf-page"
-          },
-          {
-            "url": "media/papers/recvtna5VI3LUX-p11-f2.png",
-            "alt": "PDF 第 11 页图表：Table 2 Evaluation results on MMEB-v3. V3-All averages all 190 tasks, comprising the 78 MMEB-v2 tasks, 53 Text tasks, 47 Agent tasks, 11 Audio tasks, and MCMR [10]. Following the evaluation protocol defined in the MMEB-v3 paper [15], Text results are reported using NDCG@5. Unsupported tasks are assigned a score of zero. RR: reasoning retrieval; IF: instruction following; LC: long-context retrieval; MC: multi-condition retrieval; GR: general retrieval.",
-            "kind": "pdf-page"
-          },
-          {
-            "url": "media/papers/recvtna5VI3LUX-p11-f3.png",
-            "alt": "PDF 第 11 页图表：Table 3 Cross-modal retrieval results on 12 public benchmarks. AVG denotes the average across the 12 datasets. †Proprietary commercial model with an undisclosed parameter count.",
-            "kind": "pdf-page"
-          },
-          {
-            "url": "media/papers/recvtna5VI3LUX-p12-f4.png",
-            "alt": "PDF 第 12 页图表：Table 4 Evaluation results on the in-house benchmark. AVG denotes the average over all 26 tasks. Cross-DM denotes cross-domain content matching; Article Rel. denotes article relevance; Video Rel. denotes video relevance.",
-            "kind": "pdf-page"
-          },
-          {
             "url": "https://arxiv.org/html/2608.24053v1/figs/mrl-performance-trend.png",
             "alt": "Figure 3 : MRL analysis of WeMM-Embedding-2B on MMEB-v2. Left: Performance retained on the image, video, and visual-document subsets across embedding dimensions. Right: Performance retained for classification (CLS), question answering (QA), and retrieval (RET), each averaged over the corresponding image and video tasks."
           }
@@ -381,26 +340,6 @@
       "imageUrl": "https://arxiv.org/html/2608.20336v1/teaser.png",
       "mediaAssets": {
         "images": [
-          {
-            "url": "media/papers/recvtbiIXXsrrZ-p8-f1.png",
-            "alt": "PDF 第 8 页图表：Table 1: Quantitative comparison on our 5–10-person benchmark. All models are scored on the same 210 examples, and the identity similarities are averaged over the three face encoders of the main protocol. Coverage is the fraction of references whose best-matching generated face reaches a similarity of 0.20, and Dup the fraction that collapse onto a face already claimed by another identity. , , and mark the first-, second-, and third-best results; for Copy-Paste only the three methods with the highest Sim(Ref) are ranked, since lower similarity means less copying naturally.",
-            "kind": "pdf-page"
-          },
-          {
-            "url": "media/papers/recvtbiIXXsrrZ-p18-f2.png",
-            "alt": "PDF 第 18 页图表：Table 3: Dispersion of the main comparison. Per-example means on the 210 benchmark examples with their standard errors. The last column is the single-encoder ArcFace similarity to the references used in Section 4.2.",
-            "kind": "pdf-page"
-          },
-          {
-            "url": "media/papers/recvtbiIXXsrrZ-p18-f3.png",
-            "alt": "PDF 第 18 页图表：Table 1 reports means over 210 examples. To show how precisely those means are determined, Table 3 recomputes them per example and gives the standard error for WithEveryone and the three strongest baselines. The identity margins discussed in Section 4.2 are large relative to this dispersion, while the two near-ties are not, and paired comparisons on the common examples confirm both readings. Our Sim(Tgt) advantage over GPT-Image 2 is +0.038 with a 20,000-sample bootstrap interval of [+0.027, +0.048], a Wilcoxon p of 3.8×10−11, and a higher score on 73% of examples. Our CLIP-I margin over Nano ",
-            "kind": "pdf-page"
-          },
-          {
-            "url": "media/papers/recvtbiIXXsrrZ-p21-f4.png",
-            "alt": "PDF 第 21 页图表：Figure 12: High-resolution training. We compare the Full model trained at 1K and 2K while evaluating both at 1K. The horizontal references in (a) show the final 2K benchmark scores from a different evaluation pipeline.",
-            "kind": "pdf-page"
-          },
           {
             "url": "https://arxiv.org/html/2608.20336v1/teaser.png",
             "alt": "Figure 1: Overview of WithEveryone. WithEveryone generates coherent group images from five to ten reference identities. A single model reasons about which references participate, plans identity–layout bindings, person regions, and poses, and generates the image conditioned on that plan, so identity and composition are decided in one context rather than by separate modules."
@@ -566,16 +505,6 @@
       "imageUrl": "https://arxiv.org/html/2608.21156v1/trend.png",
       "mediaAssets": {
         "images": [
-          {
-            "url": "media/papers/recvthcdYqAH36-p16-f1.png",
-            "alt": "PDF 第 16 页图表：Figure 6 : Overview of Task Organization. Goal Decomposition translates a high-level objective into explicit subtasks, exposes their dependencies for scheduling, and refines the remaining task graph using intermediate execution results. Workflow Optimization compiles semantic subgoals into executable workflows, searches and optimizes alternative control flows, and adapts execution in response to runtime feedback. These mechanisms specify what work must be accomplished, how it should be operationalized, and how the work structure evolves during execution.",
-            "kind": "pdf-page"
-          },
-          {
-            "url": "media/papers/recvthcdYqAH36-p30-f2.png",
-            "alt": "PDF 第 30 页图表：Table 2 : Representative open-source projects and engineering systems across Model, Individual, and System Intelligence. Li- braries are grouped by their primary engineering target rather than exclusive functionality. Focus summarizes the main engineering concerns exposed by each system.",
-            "kind": "pdf-page"
-          },
           {
             "url": "https://arxiv.org/html/2608.21156v1/trend.png",
             "alt": "Figure 1 : Overview From Model Intelligence to System Intelligence. Prompt and Context Engineering elicit and condition the access of foundation models to realize model intelligence. Harness and Loop Engineering extend and orchestrate agentic capabilities to enable Individual Intelligence. Graph Engineering builds on the foundation of individual agents through Task Organization, Agent Coordination, and Runtime State Management, empowering System Intelligence."
@@ -767,7 +696,7 @@
         "images": [
           {
             "url": "https://wpimg-wscn.awtmt.com/bef0d140-a1b8-4516-a2a8-6cc25986256b.png",
-            "alt": "200亿美元投入与模型能力未知",
+            "alt": "资本驱动AI能力探索",
             "kind": "article-figure",
             "afterHeading": "200亿砸进去，没人知道会出来什么"
           }
@@ -873,8 +802,14 @@
       "mediaAssets": {
         "images": [
           {
+            "url": "https://mmbiz-qpic.wscn.net/mmbiz_png/A6fTew8FFGE0RpwgufmL7lJHngVR7lpAgh4DJmTruBiats4H1nwdPBosVeVQFRCfiaEgr8GpCicWmAAeT3kScicfOqiaFK1KIaWfhfWx5VDyV8A8/640?wx_fmt=png&from=appmsg",
+            "alt": "M6芯片规格与AI架构",
+            "kind": "article-figure",
+            "afterHeading": "2nm首秀，苹果先把M6狠狠干上了AI！"
+          },
+          {
             "url": "https://mmbiz-qpic.wscn.net/mmbiz_png/A6fTew8FFGHej4oTNKRCficxp8iavAEYIpDUp4a6jlDxq2UQhk7F3CVticicyO0ia4MH0J7hz4NNQYVIS00L6VajeoNsx7AaNPemfGZQUyFxd6SA/640?wx_fmt=png&from=appmsg",
-            "alt": "M6与前代AI性能对比",
+            "alt": "M6与前代性能对比",
             "kind": "article-figure",
             "afterHeading": "2nm首秀，苹果先把M6狠狠干上了AI！"
           },
@@ -885,8 +820,8 @@
             "afterHeading": "苹果首次四Die：M5 Ultra直接用桌面机猛堆AI算力"
           },
           {
-            "url": "https://mmbiz-qpic.wscn.net/mmbiz_jpg/A6fTew8FFGEAkO7cr873pYZ6Tiaom6ibyTiaSWowyoR77kekDvBoc7UStnUNziaaEErakZfBkbWnoENnLRhZPXicBNnUfIyrcJHvaRod20g3PQP0/640?wx_fmt=jpeg&from=appmsg",
-            "alt": "高内存Mac供货紧张",
+            "url": "https://mmbiz-qpic.wscn.net/mmbiz_jpg/A6fTew8FFGEBFQ80wdNPaRnjGPVicK5DlVCIAJamYfxrxZibSxAzXIUCXyMwSiaicpbDKic7FOkUEOCic3ic0eY7IWAiaE1Kv5DymbibjmytDdq8ZqtI/640?wx_fmt=jpeg&from=appmsg",
+            "alt": "高内存Mac供货延期",
             "kind": "article-figure",
             "afterHeading": "AI把Mac买涨价了，也快把高内存Mac买断货了"
           }
@@ -957,13 +892,25 @@
         "images": [
           {
             "url": "https://oss.zhidx.com/uploads/2026/08/6a8d75e20dc2a_6a8d75e20a8f2_6a8d75e20a8ba_图片-2.png",
-            "alt": "青年科研学者交流现场",
+            "alt": "AI4S青年学者交流现场",
             "kind": "article-figure",
             "afterHeading": "基础：北京AI4S的“学术厚度”从何而来？ || 一、基础：北京AI4S的“学术厚度”从何而来？"
           },
           {
+            "url": "https://oss.zhidx.com/uploads/2026/08/6a8d784286162_6a8d7842803bc_6a8d78428038c_AX00217_副本.jpg",
+            "alt": "科学智能大会展区现场",
+            "kind": "article-figure",
+            "afterHeading": "数据层：从“数据孤岛”到“语料基建” || 数据层：从“数据孤岛”到“语料基建”"
+          },
+          {
+            "url": "https://oss.zhidx.com/uploads/2026/08/6a8d784364d3c_6a8d784361b1d_6a8d784361af2_AX00228_副本.jpg",
+            "alt": "科学智能创新集聚区规划",
+            "kind": "article-figure",
+            "afterHeading": "应用层：自主实验室与标杆场景 || 应用层：自主实验室与标杆场景"
+          },
+          {
             "url": "https://oss.zhidx.com/uploads/2026/08/6a8d95ce40038_6a8d95ce3cbea_6a8d95ce3cbb3_政策.jpg",
-            "alt": "北京AI4S政策体系",
+            "alt": "北京AI4S政策发布现场",
             "kind": "article-figure",
             "afterHeading": "政策：北京如何为AI4S构建制度“护航体系”？ || 三、政策：北京如何为AI4S构建制度“护航体系”？"
           }
@@ -1254,36 +1201,36 @@
         "硬件",
         "其他"
       ],
-      "imageUrl": "https://3-im.guokr.com/RmdEQXFaVU1WRE5KVlRyclQ5RGM1cFYxd0FNSGRvY3iAAgAAaAEAAEdJ.gif?imageView2/1/w/555/h/312",
+      "imageUrl": "https://3-im.guokr.com/RmlPTVlFcWxSZlRDclVqUzV4QUNfNjZiV1o4bGRvY3iuAwAA6AAAAEpQ.jpg?imageView2/1/w/555/h/136",
       "mediaAssets": {
         "images": [
           {
             "url": "https://1-im.guokr.com/RnFGbHg1TGJCSVl5TmVVc3hRSV9kRkNDZWcyNGRvY3g4BAAA9QIAAEpQ.jpg?imageView2/1/w/555/h/389",
-            "alt": "人形机器人赛场奔跑",
+            "alt": "人类400米跑步姿势",
             "kind": "article-figure",
             "afterHeading": "核心内容"
           },
           {
             "url": "https://1-im.guokr.com/RnI4WTQxR0Q3NVBjU0c2SlJ5M0tTVHpvSjlwQmRvY3iMAwAAbgEAAEpQ.jpg?imageView2/1/w/555/h/223",
-            "alt": "跑步实验的四种手臂姿势",
+            "alt": "四种手臂姿势对比",
             "kind": "article-figure",
             "afterHeading": "关键细节"
           },
           {
             "url": "https://3-im.guokr.com/RmtjSy1SaWI5WlZ2UlBNdnRtcy1wUkRVZUpOUmRvY3iEAwAA_AIAAEpQ.jpg?imageView2/1/w/555/h/471",
-            "alt": "摆臂抵消身体旋转示意",
+            "alt": "摆臂抵消身体旋转",
             "kind": "article-figure",
             "afterHeading": "关键细节"
           },
           {
-            "url": "https://1-im.guokr.com/RnRiQ256M0RBOWh6LVgxR0p0QXdMOUFiVWZ6eWRvY3hnAQAAbgEAAEpQ.jpg",
-            "alt": "正常摆臂时旋转幅度最小",
+            "url": "https://3-im.guokr.com/RmdEQXFaVU1WRE5KVlRyclQ5RGM1cFYxd0FNSGRvY3iAAgAAaAEAAEdJ.gif?imageView2/1/w/555/h/312",
+            "alt": "机器人捂脸跑姿势",
             "kind": "article-figure",
-            "afterHeading": "价值与影响"
+            "afterHeading": "局限与风险"
           }
         ],
         "videos": [],
-        "cover": "https://3-im.guokr.com/RmdEQXFaVU1WRE5KVlRyclQ5RGM1cFYxd0FNSGRvY3iAAgAAaAEAAEdJ.gif?imageView2/1/w/555/h/312",
+        "cover": "https://3-im.guokr.com/RmlPTVlFcWxSZlRDclVqUzV4QUNfNjZiV1o4bGRvY3iuAwAA6AAAAEpQ.jpg?imageView2/1/w/555/h/136",
         "curatedBy": "llm"
       },
       "editorialStructure": "",
