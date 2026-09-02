@@ -1,6 +1,6 @@
 flowchart TB
   IN[("飞书 信号条目表 全量读回 daily.py:1012")]
-  IN --> TW["第 6 节日报端时间窗：min(168h, 源窗) · 未来 >2d 排除 · 白宫源 AI 复判"]
+  IN --> TW["第 6 节日报端时间窗：min(168h, 源窗) · 未来 >2d 排除"]
   TW --> SORT1["候选池排序 :561（升序元组）<br/>① priority P0=0 < P1=1 < P2=2 < 其它=3<br/>② −有效质量分（arXiv × ARXIV_QUALITY_WEIGHT=0.7）<br/>③ −发布时间"]
   SORT1 --> P0["p0_limit = max(0, 30 − min(DAILY_MIN_NON_P0=8, 非P0可用数)) :571<br/>→ P0 最多占 22，为 P1/P2 硬留 8 席"]
   P0 --> GATES{"逐条 7 道配额闸 :590-603（任一超限 continue）<br/>论文 ≤ DAILY_MAX_PAPERS=4（按 content_type=论文）<br/>视频 ≤ DAILY_MAX_VIDEOS=4 · 播客 ≤ DAILY_MAX_PODCASTS=2 · Github热榜 ≤ DAILY_MAX_GITHUB=5<br/>arXiv ≤ MAX_ARXIV_ITEMS=10（按 source_id/URL，与论文是两套计数）<br/>每源 ≤ DAILY_MAX_PER_SOURCE=4 · P0 ≤ p0_limit<br/>文章/公众号 无配额，填满剩余"}

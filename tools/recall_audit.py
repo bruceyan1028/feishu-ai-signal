@@ -49,7 +49,6 @@ REASON_LABELS = {
     "min_chars": "正文过短(类型规则)",
     "keyword_regex": "未命中关键词",
     "keyword_exclude": "命中排除关键词",
-    "not_ai_policy": "非 AI 政策",
     "min_signal_score": "本地信号分不足",
     "min_quality_score": "富集后质量分不足",
     "typed_filter": "类型规则其他",

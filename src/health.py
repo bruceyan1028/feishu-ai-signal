@@ -37,7 +37,6 @@ FUNNEL_STAGES = (
     "missing_or_invalid_date",
     "lookback",
     "keyword_regex",
-    "not_ai_policy",
     "min_signal_score",
     "typed_filter",
     "dup_round",

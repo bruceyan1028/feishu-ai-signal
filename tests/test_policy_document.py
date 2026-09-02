@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import json
 import unittest
-from datetime import datetime, timezone
 from pathlib import Path
 from tempfile import TemporaryDirectory
 from unittest.mock import patch
@@ -206,25 +205,20 @@ class PolicyDocumentTest(unittest.TestCase):
             all("science and technology" not in (feed.get("keyword_regex") or "") for feed in feeds.values())
         )
 
-    def test_whitehouse_drops_non_ai_space_policy(self) -> None:
-        feed = {
-            "id": "whitehouse-tech-actions",
-            "name": "White House 科技总统行动",
-            "url": "https://www.whitehouse.gov/presidential-actions/feed/",
-            "category": "政策监管地缘",
-            "tier": "L1 一级官方",
-            "fetch_method": "RSS",
-            "source_type": "纯网页",
-            "lookback_hours": 720,
-            "keyword_regex": (
-                r"(science and technology|research and development|\bR&D\b|"
-                r"advanced manufacturing|artificial intelligence|\bAI\b)"
-            ),
-            "keyword_min_hits": 2,
-            "title_exclude_regex": "(trade agenda|tariffs?)",
-            "dedup_key": "normalize(url)",
-        }
-        raw = {
+    def test_whitehouse_keyword_config_filters_non_ai_policy(self) -> None:
+        """泛科技备忘录由种子里的 AI 关键词配置挡下，无需源级硬编码特判。"""
+        seed = json.loads(
+            (Path(__file__).parents[1] / "src" / "seed_default.json").read_text(
+                encoding="utf-8"
+            )
+        )
+        records = [{"fields": row} for row in seed["一级参数"]]
+        feed = next(
+            f
+            for f in sources.map_feed_sources(records)
+            if f["id"] == "whitehouse-tech-actions"
+        )
+        space = {
             "title": "The National Space Transportation Policy",
             "url": "https://www.whitehouse.gov/presidential-actions/2026/08/21/the-national-space-transportation-policy/",
             "body": (
@@ -235,54 +229,23 @@ class PolicyDocumentTest(unittest.TestCase):
             "published_raw": "Thu, 21 Aug 2026 01:00:00 +0000",
             "feed": feed,
         }
+        ai_order = {
+            "title": "Promoting Advanced Artificial Intelligence Innovation",
+            "url": "https://www.whitehouse.gov/presidential-actions/2026/08/21/promoting-ai-innovation/",
+            "body": (
+                "This executive order advances AI safety and AI governance, "
+                "directing agencies to evaluate foundation models and large "
+                "language models used across the federal government."
+            ),
+            "published_raw": "Thu, 21 Aug 2026 01:00:00 +0000",
+            "feed": feed,
+        }
         with patch("src.process.now_ms", return_value=1787284800000):
-            cleaned = process.process_and_clean([raw])
-        self.assertEqual(cleaned, [])
-
-    def test_whitehouse_keeps_ai_executive_order(self) -> None:
-        self.assertTrue(
-            process.is_ai_policy_text(
-                "Promoting Advanced Artificial Intelligence Innovation",
-                "This order advances AI security.",
-            )
+            cleaned = process.process_and_clean([space, ai_order])
+        self.assertEqual(
+            [row["url"] for row in cleaned],
+            [process.normalize_url(ai_order["url"])],
         )
-        self.assertFalse(
-            process.is_ai_policy_text(
-                "The National Space Transportation Policy",
-                "Expand launch capacity with science and technology R&D.",
-            )
-        )
-
-    def test_daily_skips_ingested_non_ai_whitehouse(self) -> None:
-        now = datetime(2026, 8, 21, 12, tzinfo=timezone.utc)
-        stamp = int(now.timestamp() * 1000)
-        selected = daily.select_candidates(
-            [
-                {
-                    "record_id": "space",
-                    "fields": {
-                        "source_id": "whitehouse-tech-actions",
-                        "标题": "国家太空运输政策备忘录",
-                        "原文": "Expand U.S. space launch, spectrum, and R&D infrastructure.",
-                        "发布时间": stamp,
-                    },
-                },
-                {
-                    "record_id": "ai",
-                    "fields": {
-                        "source_id": "whitehouse-tech-actions",
-                        "标题": "Promoting Advanced Artificial Intelligence Innovation",
-                        "原文": "This executive order advances AI safety and AI governance.",
-                        "发布时间": stamp,
-                    },
-                },
-            ],
-            {"whitehouse-tech-actions": "P0"},
-            {"whitehouse-tech-actions"},
-            now=now,
-            limit=10,
-        )
-        self.assertEqual([item["record_id"] for item in selected], ["ai"])
 
 
 if __name__ == "__main__":

@@ -11,7 +11,7 @@ flowchart TB
   KEEP1 & AXC --> NEW["new_items"]
   NEW --> E1["播客 enrich_podcast_items podcast.py:757<br/>时长闸 14400s · 转写降级链 · 分层摘要"]
   E1 --> E2["论文 paper_fulltext.enrich_item :475（仅有 paper_metrics_json 的条目）<br/>canonical_pdf_url → fetch_pdf(%PDF 魔数) → PyMuPDF 抽章节(≤4500字/节, 总≤26000) + 图表说明≤24 + 视觉页 top4<br/>失败 → full_text.source=abstract"]
-  E2 --> E3["政策 policy_document.enrich_items :251<br/>条件：extra.document_pdf_enrich 且 whitehouse-tech-*<br/>每条 ≤ max_document_pdfs(默认 2, clamp 1-4) · PDF ≤24MB · 正文 ≤8000 字 · 证据块置于正文之前"]
+  E2 --> E3["政策 policy_document.enrich_items :251<br/>条件：extra.document_pdf_enrich<br/>每条 ≤ max_document_pdfs(默认 2, clamp 1-4) · PDF ≤24MB · 正文 ≤8000 字 · 证据块置于正文之前"]
   E3 --> E4["RSS 正文回源 rss.backfill_full_text :1204<br/>候选：raw_content < 600 字 · http(s) · 非 Media/Social/Podcast · 非 arxiv<br/>不够 min_content_chars 的优先 → 取前 FULLTEXT_MAX_FETCH=40 · 6 线程"]
   E4 --> E4a["直连 requests.get 12s 无重试 · 截 1.5MB<br/>parse_article_html（article/main 打分 → 去噪 → html_to_text → 裁样板）"]
   E4a --> E4b{"正文 ≥ 600 字？"}

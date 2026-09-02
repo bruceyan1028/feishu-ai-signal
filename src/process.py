@@ -226,27 +226,6 @@ def _podcast_keyword_ok(keyword_re: re.Pattern[str], title: str, body: str, min_
     return len(keyword_re.findall(intro)) >= max(3, min_hits)
 
 
-# 白宫源原先用「科技 / R&D / 先进制造」当关键词，航天运输、关税类备忘录也会入库。
-# 采集和简报都要再卡一层：正文或标题必须明确涉及 AI/ML/模型。
-_AI_POLICY_RE = re.compile(
-    r"(?:artificial intelligence|\bA\.I\.\b|\bmachine learning\b|"
-    r"\bfoundation models?\b|\blarge language models?\b|\bLLMs?\b|"
-    r"generative AI|AI safety|AI governance|Genesis Mission|"
-    r"\bAI\b)",
-    re.I,
-)
-
-
-def is_whitehouse_source(source_id: str) -> bool:
-    return str(source_id or "").lower().startswith("whitehouse-tech-")
-
-
-def is_ai_policy_text(*parts: Any) -> bool:
-    """判断白宫政策是否真的在谈 AI，而不是泛科技或航天产业备忘录。"""
-    text = "\n".join(str(part or "") for part in parts)
-    return bool(_AI_POLICY_RE.search(text))
-
-
 def process_and_clean(
     raw_items: list[dict[str, Any]],
     type_configs: dict[str, dict[str, Any]] | None = None,
@@ -359,10 +338,6 @@ def process_and_clean(
             if not keyword_ok:
                 drop(feed_id, "keyword_regex")
                 continue
-        if is_whitehouse_source(feed_id) and not is_ai_policy_text(title, body_text):
-            drop(feed_id, "not_ai_policy")
-            continue
-
         metrics = dict(item.get("metrics") or {})
         type_cfg = type_configs.get(feed_id)
         is_paper = sources.is_paper_source(

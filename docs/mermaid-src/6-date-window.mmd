@@ -37,9 +37,7 @@ flowchart LR
     Y3["cutoff = now(UTC) − effective_hours · future_limit = now + 2 天"]
     Y4{"发布时间 < cutoff 或 > future_limit？"}
     Y4 -->|是| Y5["排除"]
-    Y4 -->|否| Y6{"白宫源且非 AI 政策文本？"}
-    Y6 -->|是| Y5
-    Y6 -->|否| Y7["进入候选池（第 8 节）"]
+    Y4 -->|否| Y7["进入候选池（第 8 节）"]
     Y1 --> Y2 --> Y3 --> Y4
   end
   SRC --> PARSE

@@ -15,9 +15,7 @@ flowchart TB
   G5b -->|是| D5["丢 lookback<br/>（若其余条件都能过，计入 drop_stats 回写飞书「时间窗过滤」）"]
   G5b -->|否| G7{"⑥ 关键词 :363<br/>fetch_method ∈ {Bridge, Social} → 跳过<br/>Podcast：标题命中 或 正文前 1600 字命中 ≥ max(3, min_hits)<br/>其余：标题命中即过；否则正文命中 ≥ keyword_min_hits(默认 1)<br/>正则 = feed.keyword_regex 或 DEFAULT_KEYWORD（ai|llm|agent|model|gpt|claude|gemini|…）"}
   G7 -->|未命中| D7["丢 keyword_regex"]
-  G7 -->|命中/跳过| G8{"⑦ source_id 以 whitehouse-tech- 开头<br/>且标题+正文不含 _AI_POLICY_RE？:372"}
-  G8 -->|是| D8["丢 not_ai_policy"]
-  G8 -->|否| G9{"是论文源？<br/>sources.is_paper_source :378"}
+  G7 -->|命中/跳过| G9{"⑦ 是论文源？<br/>sources.is_paper_source :378"}
   G9 -->|是| PM["infer_paper_metrics typed_config.py:90<br/>基准 50 · 代码链接 +15 · 正文≥800 +5 / <200 −10<br/>sota +12 · benchmark +8 · 开源 +10 · 顶会 +15 · lecture notes −45 · retracted −50 · clamp 0-100"]
   PM --> G9b{"⑧ signal_score < min_signal_score？<br/>arxiv-* 默认 55 · 顶刊源不套"}
   G9b -->|是| D9["丢 min_signal_score"]
@@ -33,5 +31,5 @@ flowchart TB
   classDef drop fill:#fde8e6,stroke:#b42318,color:#7a1610;
   classDef soft fill:#fff3e0,stroke:#a06600,color:#5c3a00;
   classDef keep fill:#e8f5ec,stroke:#1f7a45;
-  class D1,D2,D3,D4,D5,D7,D8,D9,D10,D11 drop;
+  class D1,D2,D3,D4,D5,D7,D9,D10,D11 drop;
   class KEPT keep;

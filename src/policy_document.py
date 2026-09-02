@@ -183,9 +183,7 @@ def write_visual_images(
 def is_policy_document_item(item: dict[str, Any]) -> bool:
     feed = item.get("feed") or {}
     extra = feed.get("extra_config") or {}
-    return bool(extra.get("document_pdf_enrich")) and str(item.get("source_id") or "").startswith(
-        "whitehouse-tech-"
-    )
+    return bool(extra.get("document_pdf_enrich"))
 
 
 def enrich_item(item: dict[str, Any]) -> int:

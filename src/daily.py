@@ -534,12 +534,6 @@ def select_candidates(
         cutoff_ms = int((now - timedelta(hours=effective_hours)).timestamp() * 1000)
         if stamp < cutoff_ms or stamp > future_limit_ms:
             continue
-        if process.is_whitehouse_source(source_id) and not process.is_ai_policy_text(
-            scalar(fields.get("标题")),
-            scalar(fields.get("原文")),
-            scalar(fields.get("中文摘要")),
-        ):
-            continue
         candidates.append(
             {
                 "record_id": record.get("record_id"),

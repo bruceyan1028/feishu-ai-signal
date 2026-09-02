@@ -322,9 +322,7 @@ flowchart TB
   G5b -->|是| D5["丢 lookback<br/>（若其余条件都能过，计入 drop_stats 回写飞书「时间窗过滤」）"]
   G5b -->|否| G7{"⑥ 关键词 :363<br/>fetch_method ∈ {Bridge, Social} → 跳过<br/>Podcast：标题命中 或 正文前 1600 字命中 ≥ max(3, min_hits)<br/>其余：标题命中即过；否则正文命中 ≥ keyword_min_hits(默认 1)<br/>正则 = feed.keyword_regex 或 DEFAULT_KEYWORD（ai|llm|agent|model|gpt|claude|gemini|…）"}
   G7 -->|未命中| D7["丢 keyword_regex"]
-  G7 -->|命中/跳过| G8{"⑦ source_id 以 whitehouse-tech- 开头<br/>且标题+正文不含 _AI_POLICY_RE？:372"}
-  G8 -->|是| D8["丢 not_ai_policy"]
-  G8 -->|否| G9{"是论文源？<br/>sources.is_paper_source :378"}
+  G7 -->|命中/跳过| G9{"⑦ 是论文源？<br/>sources.is_paper_source :378"}
   G9 -->|是| PM["infer_paper_metrics typed_config.py:90<br/>基准 50 · 代码链接 +15 · 正文≥800 +5 / &lt;200 −10<br/>sota +12 · benchmark +8 · 开源 +10 · 顶会 +15 · lecture notes −45 · retracted −50 · clamp 0-100"]
   PM --> G9b{"⑧ signal_score &lt; min_signal_score？<br/>arxiv-* 默认 55 · 顶刊源不套"}
   G9b -->|是| D9["丢 min_signal_score"]
@@ -340,7 +338,7 @@ flowchart TB
   classDef drop fill:#fde8e6,stroke:#b42318,color:#7a1610;
   classDef soft fill:#fff3e0,stroke:#a06600,color:#5c3a00;
   classDef keep fill:#e8f5ec,stroke:#1f7a45;
-  class D1,D2,D3,D4,D5,D7,D8,D9,D10,D11 drop;
+  class D1,D2,D3,D4,D5,D7,D9,D10,D11 drop;
   class KEPT keep;
 </pre>
   </div>
@@ -391,9 +389,7 @@ flowchart LR
     Y3["cutoff = now(UTC) − effective_hours · future_limit = now + 2 天"]
     Y4{"发布时间 &lt; cutoff 或 &gt; future_limit？"}
     Y4 -->|是| Y5["排除"]
-    Y4 -->|否| Y6{"白宫源且非 AI 政策文本？"}
-    Y6 -->|是| Y5
-    Y6 -->|否| Y7["进入候选池（第 8 节）"]
+    Y4 -->|否| Y7["进入候选池（第 8 节）"]
     Y1 --> Y2 --> Y3 --> Y4
   end
   SRC --> PARSE
@@ -425,7 +421,7 @@ flowchart TB
   KEEP1 & AXC --> NEW["new_items"]
   NEW --> E1["播客 enrich_podcast_items podcast.py:757<br/>时长闸 14400s · 转写降级链 · 分层摘要"]
   E1 --> E2["论文 paper_fulltext.enrich_item :475（仅有 paper_metrics_json 的条目）<br/>canonical_pdf_url → fetch_pdf(%PDF 魔数) → PyMuPDF 抽章节(≤4500字/节, 总≤26000) + 图表说明≤24 + 视觉页 top4<br/>失败 → full_text.source=abstract"]
-  E2 --> E3["政策 policy_document.enrich_items :251<br/>条件：extra.document_pdf_enrich 且 whitehouse-tech-*<br/>每条 ≤ max_document_pdfs(默认 2, clamp 1-4) · PDF ≤24MB · 正文 ≤8000 字 · 证据块置于正文之前"]
+  E2 --> E3["政策 policy_document.enrich_items :251<br/>条件：extra.document_pdf_enrich<br/>每条 ≤ max_document_pdfs(默认 2, clamp 1-4) · PDF ≤24MB · 正文 ≤8000 字 · 证据块置于正文之前"]
   E3 --> E4["RSS 正文回源 rss.backfill_full_text :1204<br/>候选：raw_content &lt; 600 字 · http(s) · 非 Media/Social/Podcast · 非 arxiv<br/>不够 min_content_chars 的优先 → 取前 FULLTEXT_MAX_FETCH=40 · 6 线程"]
   E4 --> E4a["直连 requests.get 12s 无重试 · 截 1.5MB<br/>parse_article_html（article/main 打分 → 去噪 → html_to_text → 裁样板）"]
   E4a --> E4b{"正文 ≥ 600 字？"}
@@ -460,7 +456,7 @@ flowchart TB
 <pre class="mermaid">
 flowchart TB
   IN[("飞书 信号条目表 全量读回 daily.py:1012")]
-  IN --> TW["第 6 节日报端时间窗：min(168h, 源窗) · 未来 &gt;2d 排除 · 白宫源 AI 复判"]
+  IN --> TW["第 6 节日报端时间窗：min(168h, 源窗) · 未来 &gt;2d 排除"]
   TW --> SORT1["候选池排序 :561（升序元组）<br/>① priority P0=0 &lt; P1=1 &lt; P2=2 &lt; 其它=3<br/>② −有效质量分（arXiv × ARXIV_QUALITY_WEIGHT=0.7）<br/>③ −发布时间"]
   SORT1 --> P0["p0_limit = max(0, 30 − min(DAILY_MIN_NON_P0=8, 非P0可用数)) :571<br/>→ P0 最多占 22，为 P1/P2 硬留 8 席"]
   P0 --> GATES{"逐条 7 道配额闸 :590-603（任一超限 continue）<br/>论文 ≤ DAILY_MAX_PAPERS=4（按 content_type=论文）<br/>视频 ≤ DAILY_MAX_VIDEOS=4 · 播客 ≤ DAILY_MAX_PODCASTS=2 · Github热榜 ≤ DAILY_MAX_GITHUB=5<br/>arXiv ≤ MAX_ARXIV_ITEMS=10（按 source_id/URL，与论文是两套计数）<br/>每源 ≤ DAILY_MAX_PER_SOURCE=4 · P0 ≤ p0_limit<br/>文章/公众号 无配额，填满剩余"}
