@@ -1515,15 +1515,11 @@
       ],
       "imageUrl": "https://techcrunch.com/wp-content/uploads/2025/12/495cdfd5deaad915a1ad58ab35edcbaa84b90c4ce9b7ded356c5ad1b61884800.png?w=668",
       "mediaAssets": {
-        "images": [
-          {
-            "url": "https://techcrunch.com/wp-content/uploads/2025/12/495cdfd5deaad915a1ad58ab35edcbaa84b90c4ce9b7ded356c5ad1b61884800.png?w=668",
-            "alt": "Barret Zoph离开OpenAI后加入Google担任研究副总裁",
-            "kind": "article-cover"
-          }
-        ],
+        "images": [],
         "videos": [],
-        "documents": []
+        "documents": [],
+        "cover": "https://techcrunch.com/wp-content/uploads/2025/12/495cdfd5deaad915a1ad58ab35edcbaa84b90c4ce9b7ded356c5ad1b61884800.png?w=668",
+        "curatedBy": "llm"
       },
       "editorialStructure": "",
       "eventAggregation": {
