@@ -1,0 +1,65 @@
+flowchart LR
+  subgraph CFG["① 配置层 · 飞书多维表格（seed_default.json 只是镜像）"]
+    direction TB
+    P1["一级参数表 FEISHU_PARAM_TABLE_ID<br/>source_id · endpoint · fetch_method · status<br/>lookback_window · keyword_regex · min_content_chars<br/>dedup_key · extra_config(JSON) · priority · tier · 来源类型"]
+    P2["二级参数表 ×5（按 source_id 关联）<br/>paper / wechat / video / social / github"]
+  end
+  subgraph ROUTE["② 路由 sources.py"]
+    R{"status == active<br/>且 fetch_method ?"}
+  end
+  subgraph FETCH["③ 抓取器（只产 RawItem，不做过滤）"]
+    direction TB
+    F1["RSS · rss.py:1336<br/>串行 · 全量 feed"]
+    F2["Scrape · scrape.py:2037<br/>Jina/直连 · 每源 8 条"]
+    F3["Media · video.py:192<br/>YouTube API · 每源 10"]
+    F4["Podcast · podcast.py:209<br/>RSS+音频 · 每源 10"]
+    F5["Social · social.py:448<br/>X API · since_id 增量"]
+    F0["Bridge / Manual / API<br/>无 mapper，不采集"]
+  end
+  subgraph CLEAN["④ 统一清洗漏斗 process.py:255"]
+    C["10 级漏斗（顺序固定）<br/>每源上限80 → 标题/URL → 标题黑名单<br/>→ 日期解析 → 时间窗<br/>→ 关键词 → 论文信号分/富集 → 类型化过滤 → 轮内去重"]
+  end
+  subgraph DEDUP["⑤ 跨轮去重 + 昂贵富集 main.py:246-274"]
+    direction TB
+    D1["读飞书全量「去重键」<br/>filter_new_items（无 TTL）"]
+    D2["arXiv 按质量分↓时间↓ 截 MAX_ARXIV_ITEMS=10"]
+    D3["只对新条目：播客转写 / 论文 PDF / 政策 PDF / RSS 正文回源(40条)"]
+    D4["drop_too_short 统一判正文长度（Social 除外）"]
+  end
+  subgraph STORE["⑥ 存储"]
+    direction TB
+    S1[("飞书 信号条目表<br/>batch_create 100/批")]
+    S2["output/health/dt=*.jsonl<br/>分源漏斗计数"]
+    S3["一级参数表回写<br/>条目数/时间窗过滤/查重过滤"]
+  end
+  subgraph DAILY["⑦ 日报 daily.py:1005（独立进程，10:45 北京时间）"]
+    direction TB
+    Y1["select_candidates<br/>再过一次时间窗 min(168h, 源窗) + 7 道配额 → 30"]
+    Y2["collapse_for_brief<br/>标题相似≥0.85 或实体锚点 → 同事件折叠"]
+    Y3["LLM analyze_signal 逐条<br/>impact / novelty / actionability / 摘要"]
+    Y4["排序(质量分, impact, novelty, actionability) + 至少1视频 → 30"]
+    Y5["LLM 综述：导语 2 句 + 核心要点 3-6 条<br/>要点标题 = 被引用信号原标题"]
+  end
+  subgraph OUT["⑧ 发布/推送"]
+    direction TB
+    O1["publish → site/data/brief-{date}.json"]
+    O2["GitHub Pages 部署"]
+    O3["notify：Pages 就绪门禁 12×5s<br/>→ 飞书卡片（4 组×3 条 ≤ 8）"]
+  end
+  P1 --> R
+  P2 -. 按 source_id 附着 .-> R
+  R -->|RSS| F1
+  R -->|Scrape| F2
+  R -->|Media| F3
+  R -->|Podcast| F4
+  R -->|Social| F5
+  R -.-> F0
+  F1 & F2 & F3 & F4 & F5 --> C
+  C --> D1 --> D2 --> D3 --> D4 --> S1
+  C -. 计数 .-> S2
+  C -. 计数 .-> S3
+  S1 ==> Y1 --> Y2 --> Y3 --> Y4 --> Y5 --> O1 --> O2 --> O3
+  classDef store fill:#e8f5ec,stroke:#1f7a45;
+  classDef dead fill:#f5f5f5,stroke:#999,stroke-dasharray:4 3,color:#777;
+  class S1,S2,S3,O1,O2 store;
+  class F0 dead;

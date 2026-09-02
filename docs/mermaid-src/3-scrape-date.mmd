@@ -1,0 +1,45 @@
+flowchart TB
+  IN["scrape feeds · engine=auto · scrape.py:2037"]
+  IN --> PROBE{"probe_jina()<br/>r.jina.ai/example.com 可用？<br/>scrape.py:93"}
+  PROBE -->|是| JINA["engine=jina<br/>GET r.jina.ai/{url}<br/>x-engine:browser · x-timeout:20 · x-with-links-summary<br/>retry 4×5s · scrape.py:1905"]
+  PROBE -->|否| DIRECT["engine=direct（整批降级）<br/>requests.get UA=AI-Signal/1.0 · timeout 30s · 无重试<br/>scrape.py:106"]
+  JINA --> FD{"单源 force_direct？<br/>HF/PwC 论文源恒 true 或 extra.force_direct<br/>scrape.py:558"}
+  FD -->|是| DIRECT
+  FD -->|否| LIST
+  DIRECT --> LIST["列表页 GET · ThreadPool(JINA_CONCURRENCY=3) · scrape.py:2106"]
+  LIST --> LEMPTY{"列表页为空？"}
+  LEMPTY -->|是| E1["stats.error=list_empty_or_failed · 本源 0 条"]
+  LEMPTY -->|否| SPLIT{"_extract_links_for_feed 分流<br/>scrape.py:1704"}
+
+  SPLIT -->|HF Papers / PwC| SP1["_extract_hf_pwc_paper_links :637<br/>SSR props publishedAt · 热度门槛 recent_days 7 / min_upvotes 0<br/>高热(upvotes≥100 或 24h stars≥100 且 ≤30 天) → heat_keep=true"]
+  SPLIT -->|list_parser=anthropic_news| SP2["_extract_anthropic_news_links :1716<br/>卡片 time 标签 · 返回空则回落通用"]
+  SPLIT -->|list_parser=zhipu_news| SP3["_extract_zhipu_news_links :1759<br/>p 标签 2026/08/27"]
+  SPLIT -->|JSON API 源| SP4["ModelScope :731 / 字节 Seed :864 / GitHub Search :1073<br/>各自窗口 recent_days 14 / 30 / release 30 天<br/>GitHub 条目 heat_keep 恒 true"]
+  SPLIT -->|通用| GEN{"use_jina？"}
+  GEN -->|是| LMD["_extract_links（markdown）:1934<br/>先删图片链接 · [title](url) 正则"]
+  GEN -->|否| LHTML["_extract_links_html :1798<br/>href 正则 · urljoin · 剥 fragment"]
+
+  LMD & LHTML --> FILT["链接过滤链（顺序即淘汰优先级） scrape.py:1810-1833<br/>① _SOCIAL：twitter/x/linkedin/facebook/youtube/instagram · mailto/tel · 静态资源后缀<br/>② 同域约束：_host(url) ≠ _host(feed.url) 丢<br/>③ 空路径 或 等于列表页自身<br/>④ 仅 jina：_NAV 锚文本（read more/home/blog/news/about/…）<br/>⑤ _link_depth_ok :249<br/>⑥ _path_allowed :215<br/>⑦ 同页 URL 去重"]
+  FILT --> DEPTH["_link_depth_ok 规则<br/>strict = 列表页不是站点根 且 未配 link_path_include<br/>strict：路径必须挂在列表页前缀下<br/>非 strict：段数≥2 或 含数字 通过；<br/>否则需 extra.allow_shallow_html 且路径匹配 .html/news/blog/press/post/article"]
+  FILT --> PATHR["_path_allowed 规则<br/>① 内置黑名单 /footer /login /search /cdn-cgi /wp-admin /assets/ /fonts/ …<br/>② extra.link_path_exclude（正则失败降级子串）<br/>③ extra.link_path_include 配了即白名单，不命中丢"]
+  DEPTH & PATHR --> DA["阶段 A 日期（每条链接） scrape.py:1836-1846<br/>A1 _published_date_from_url :294<br/>正则 (20\d\d)[-/_]?(\d\d)[-/_]?(\d\d) 后接 / 或 . 或结尾 · 非法月日返回空<br/>A2 _date_near_anchor :310（A1 未命中时）<br/>锚点左 160 / 右 480 字符，右边界被下一个锚点截断<br/>认 Aug. 27, 2026 · 2026-08-27 · 2026年8月27日 · 27 Aug 2026"]
+  DA --> SORT["排序 _cand_recency_key :322 · reverse=True<br/>(1, epoch_ms, url)  有可解析日期者优先，时间倒序<br/>(0, YYYYMMDD 或 YYYY0000, path)  仅 URL 含日期/年份<br/>(0, 0, path)  全无日期 → 路径字典序"]
+  SORT --> CUT["★ 主截断 cand[:max_articles]<br/>extra.max_articles 或 DEFAULT_MAX_ARTICLES=8 · scrape.py:1848 / 1982"]
+  SP1 & SP2 & SP3 & SP4 --> CUT
+  CUT --> NOLINK{"抽到链接？"}
+  NOLINK -->|否| E2["stats.error=no_links_extracted"]
+  NOLINK -->|是| ART["正文页 GET · ThreadPool(3) · scrape.py:2123-2144<br/>请求次数 = 链接数（≤8），Jina 无日期时每条最多 +1 次直连补日期"]
+
+  ART --> ENG{"engine"}
+  ENG -->|jina 且非 force_direct| BJ["阶段 B-jina _build_item :1985<br/>① link.published_raw（阶段 A 结果）<br/>② markdown 首部 'Published Time:' 行 :439<br/>③ 都没有 → _fetch_direct_published_date 直连 20s 跑 HTML cascade :444<br/>④ _published_date_from_url 兜底 :2002"]
+  ENG -->|direct| BD["阶段 B-direct _build_item_direct :1877<br/>① link.published_raw<br/>② extract_published_date_html(html, url)"]
+  BJ & BD --> CASC["extract_published_date_html 六级 cascade scrape.py:377-436（首个命中即返回）<br/>1 meta property/name ∈ _PUBLISHED_KEYS<br/>  article:published_time · datePublished · date_published · publishedAt · publishDate · pubdate · _createdAt<br/>2 SSR / JSON-LD 键值 #quot;KEY#quot; 冒号后允许空白 #quot;value#quot;（值长 8-80，允许转义）<br/>3 time 标签 datetime 属性<br/>4 h1 后 5000 字符内 'Month D, YYYY • N minute read'（Meta AI Blog 专用）<br/>5 前 20000 字符内 (published|posted|发布日期|发布时间) + 日期<br/>6 URL 路径日期兜底<br/>✗ 明确不用 dateModified / _updatedAt · ✗ 无 sitemap · ✗ 无 Last-Modified"]
+  CASC --> BODY["正文抽取 limit=15000<br/>direct：rss.parse_article_html :1137 → _pick_content_chunk(article/main 打分，最优 < 整页×0.4 退回整页) → 去 nav/header/footer → html_to_text → 裁样板<br/>jina：rss.parse_jina_markdown :1112<br/>标题：页面 title（剥 'Paper page - '）· extra.article_title_from_h1 → h1"]
+  BODY --> SHORT{"direct 且正文 < 40 字？"}
+  SHORT -->|是| E3["article_fail · 该链接丢弃（jina 路径不做此检查）"]
+  SHORT -->|否| RAW["RawItem{title,url,body,published_raw,heat_keep,media_assets,feed}"]
+  RAW --> NEXT["→ 第 5 节 统一清洗漏斗"]
+  classDef drop fill:#fde8e6,stroke:#b42318,color:#7a1610;
+  classDef cut fill:#fff3e0,stroke:#a06600,color:#5c3a00;
+  class E1,E2,E3 drop;
+  class CUT,SORT cut;

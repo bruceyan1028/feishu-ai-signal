@@ -1,0 +1,36 @@
+flowchart TB
+  IN["cleaned rows（第 5 节输出）"]
+  IN --> EX["feishu.read_existing_dedup_keys :85<br/>分页 500/页 · 最多 50 页（25000 条）· 返回 set"]
+  EX --> FN{"filter_new_items main.py:46<br/>duplicate_key ∈ existing 或 seen_this_run？"}
+  FN -->|是| D1["跳过（跨轮重复）"]
+  FN -->|否| AX{"_is_arxiv？"}
+  AX -->|否| KEEP1["非 arXiv 全留 · 保持原序"]
+  AX -->|是| AXS["arXiv 子集 sort(−quality_score, −published_ms)"]
+  AXS --> AXC["★ 截 MAX_ARXIV_ITEMS=10 · main.py:71"]
+  AXC --> D2["超出部分丢"]
+  KEEP1 & AXC --> NEW["new_items"]
+  NEW --> E1["播客 enrich_podcast_items podcast.py:757<br/>时长闸 14400s · 转写降级链 · 分层摘要"]
+  E1 --> E2["论文 paper_fulltext.enrich_item :475（仅有 paper_metrics_json 的条目）<br/>canonical_pdf_url → fetch_pdf(%PDF 魔数) → PyMuPDF 抽章节(≤4500字/节, 总≤26000) + 图表说明≤24 + 视觉页 top4<br/>失败 → full_text.source=abstract"]
+  E2 --> E3["政策 policy_document.enrich_items :251<br/>条件：extra.document_pdf_enrich 且 whitehouse-tech-*<br/>每条 ≤ max_document_pdfs(默认 2, clamp 1-4) · PDF ≤24MB · 正文 ≤8000 字 · 证据块置于正文之前"]
+  E3 --> E4["RSS 正文回源 rss.backfill_full_text :1204<br/>候选：raw_content < 600 字 · http(s) · 非 Media/Social/Podcast · 非 arxiv<br/>不够 min_content_chars 的优先 → 取前 FULLTEXT_MAX_FETCH=40 · 6 线程"]
+  E4 --> E4a["直连 requests.get 12s 无重试 · 截 1.5MB<br/>parse_article_html（article/main 打分 → 去噪 → html_to_text → 裁样板）"]
+  E4a --> E4b{"正文 ≥ 600 字？"}
+  E4b -->|否| E4c["Jina 兜底 r.jina.ai · 60s · retry 4×5s → parse_jina_markdown"]
+  E4b -->|是| E4d
+  E4c --> E4d{"新文本 > max(旧×2, 600)？"}
+  E4d -->|是| E4e["替换 raw_content（截 15000）· 补图 images[0]"]
+  E4d -->|否| E4f["保留旧正文"]
+  E4e & E4f --> E5{"process.drop_too_short<br/>len(title + raw_content) < min_content_chars？<br/>Social 不判（抓取层已按自己规则筛过）· 其余全部判，含 Media/Podcast/arXiv"}
+  E5 -->|是| D3["丢 min_content_chars（记入漏斗，并从 cleaned 里去掉）"]
+  E5 -->|否| W1["feishu.sync_param_collect_stats :983<br/>回写一级参数表：通过/最近采集时间/条目数/时间窗过滤/查重过滤"]
+  W1 --> W2["health.write_records → output/health/dt=YYYY-MM-DD.jsonl<br/>分源 × 13 阶段计数（追加）"]
+  W2 --> Z{"new_items 为空？"}
+  Z -->|是| Z1["只落 Social 游标后返回"]
+  Z -->|否| W3["process.format_for_feishu :527 → feishu.batch_create_records（100/批）<br/>固定列：标题·链接·来源·来源类型·路由来源·分类·层级·发布时间·采集时间·原文·主题·去重键·source_id<br/>状态=待分析 · 影响分/新颖度/可行动性=0 · 条件列：媒体资源/质量分/录用会议/社区热度/论文指标/社媒指标/播客指标"]
+  W3 --> W4["update_social_cursor_states · 可选 Dify webhook"]
+  classDef drop fill:#fde8e6,stroke:#b42318,color:#7a1610;
+  classDef cut fill:#fff3e0,stroke:#a06600,color:#5c3a00;
+  classDef store fill:#e8f5ec,stroke:#1f7a45;
+  class D1,D2,D3 drop;
+  class AXC cut;
+  class W1,W2,W3 store;

@@ -720,7 +720,6 @@ def enrich_podcast_item(item: dict[str, Any]) -> str:
                 / 3,
                 1,
             )
-            item["needs_fulltext"] = False
             return "official_description"
     if len(transcript) < 200:
         raise RuntimeError("逐字稿过短")
@@ -750,7 +749,6 @@ def enrich_podcast_item(item: dict[str, Any]) -> str:
         / 3,
         1,
     )
-    item["needs_fulltext"] = False
     return transcript_source
 
 

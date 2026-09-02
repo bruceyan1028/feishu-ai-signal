@@ -134,32 +134,6 @@ def read_detail(record_id: str) -> dict[str, Any]:
     return source_view.build_detail(record)
 
 
-def sync_source_table_status(token: str, name: str, status: str) -> None:
-    """把参数表状态同步到信号源表的「自动化状态」，避免两表漂移。
-
-    信号源表是人工清单，不影响采集，同步失败不该让开关操作整体失败。
-    """
-    table_id = getattr(config, "FEISHU_SOURCE_TABLE_ID", "")
-    if not table_id or not name:
-        return
-    label = source_view.STATUS_LABELS.get(status)
-    if not label:
-        return
-    try:
-        for record in feishu.read_all_records_with_ids(token, table_id):
-            fields = record.get("fields") or {}
-            if str(sources.cell(fields.get("名称")) or "").strip() != name.strip():
-                continue
-            if str(sources.cell(fields.get("自动化状态")) or "").strip() == label:
-                return
-            feishu.update_record(
-                token, table_id, str(record.get("record_id") or ""), {"自动化状态": label}
-            )
-            return
-    except feishu.FeishuError:
-        return
-
-
 def apply_patch(record_id: str, body: dict[str, Any]) -> dict[str, Any]:
     # 只改状态/优先级时不必读全表，快捷开关要保持原来的响应速度。
     needs_current = any(key in body for key in source_view.CONFIG_KEYS)
@@ -190,14 +164,7 @@ def apply_patch(record_id: str, body: dict[str, Any]) -> dict[str, Any]:
             fields["status"] = source_view.STATUS_EXPERIMENTAL
             demoted = True
 
-    updated = feishu.update_record(token, config.FEISHU_PARAM_TABLE_ID, record_id, fields)
-    if "status" in fields:
-        name = str(
-            (current.get("name") or "")
-            or sources.cell((updated.get("fields") or {}).get("name"))
-            or ""
-        )
-        sync_source_table_status(token, name, str(fields["status"]))
+    feishu.update_record(token, config.FEISHU_PARAM_TABLE_ID, record_id, fields)
 
     result: dict[str, Any] = {"ok": True, "changed": changed, "demoted": demoted}
     if rule_changed:

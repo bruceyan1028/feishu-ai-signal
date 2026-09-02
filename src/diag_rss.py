@@ -17,12 +17,11 @@ logging.basicConfig(
 log = logging.getLogger("diag_rss")
 
 DEFAULT_SOURCE_IDS = ("whitehouse-tech-releases", "whitehouse-tech-actions")
-SOURCE_NAMES = ("White House 科技政策发布", "White House 科技总统行动")
 SEED_PATH = Path(__file__).with_name("seed_default.json")
 
 
 def sync_whitehouse_configs(token: str, status: str) -> dict[str, int]:
-    """从种子幂等同步 White House 两个源到一级参数和信号源表。"""
+    """从种子幂等同步 White House 两个源到一级参数。"""
     if status not in {"experimental", "active"}:
         raise ValueError(f"unsupported status: {status}")
     bundle = json.loads(SEED_PATH.read_text(encoding="utf-8"))
@@ -31,37 +30,27 @@ def sync_whitehouse_configs(token: str, status: str) -> dict[str, int]:
         for row in bundle.get("一级参数") or []
         if str(row.get("source_id") or "") in DEFAULT_SOURCE_IDS
     ]
-    catalog_rows = [
-        dict(row)
-        for row in bundle.get("信号源表") or []
-        if str(row.get("名称") or "") in SOURCE_NAMES
-    ]
     for row in param_rows:
         row["status"] = status
-    for row in catalog_rows:
-        row["自动化状态"] = "已接入" if status == "active" else "待测"
 
-    result: dict[str, int] = {}
-    for table_id, key, rows, label in (
-        (config.FEISHU_PARAM_TABLE_ID, "source_id", param_rows, "param"),
-        (config.FEISHU_SOURCE_TABLE_ID, "名称", catalog_rows, "catalog"),
-    ):
-        existing = {
-            str(sources.cell((record.get("fields") or {}).get(key)) or ""): record
-            for record in feishu.read_all_records_with_ids(token, table_id, [key])
+    table_id, key = config.FEISHU_PARAM_TABLE_ID, "source_id"
+    existing = {
+        str(sources.cell((record.get("fields") or {}).get(key)) or ""): record
+        for record in feishu.read_all_records_with_ids(token, table_id, [key])
+    }
+    updates = [
+        {
+            "record_id": existing[str(row[key])]["record_id"],
+            "fields": row,
         }
-        updates = [
-            {
-                "record_id": existing[str(row[key])]["record_id"],
-                "fields": row,
-            }
-            for row in rows
-            if str(row[key]) in existing
-        ]
-        creates = [row for row in rows if str(row[key]) not in existing]
-        result[f"{label}_updated"] = feishu.batch_update_records(token, table_id, updates)
-        result[f"{label}_created"] = feishu.batch_create_table_records(token, table_id, creates)
-    return result
+        for row in param_rows
+        if str(row[key]) in existing
+    ]
+    creates = [row for row in param_rows if str(row[key]) not in existing]
+    return {
+        "param_updated": feishu.batch_update_records(token, table_id, updates),
+        "param_created": feishu.batch_create_table_records(token, table_id, creates),
+    }
 
 
 def run(
@@ -94,7 +83,7 @@ def run(
     new_items = main.filter_new_items(cleaned, existing)
     policy_stats = policy_document.enrich_items(new_items)
     rss.backfill_full_text(new_items)
-    new_items = main._drop_still_too_short(new_items)
+    new_items, _ = process.drop_too_short(new_items)
 
     created = 0
     if write and new_items:

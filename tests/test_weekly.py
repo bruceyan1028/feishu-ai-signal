@@ -236,6 +236,57 @@ class WeeklyReportTest(unittest.TestCase):
         self.assertNotIn("**1. 一**", rendered)
         self.assertIn("查看完整 AI 周报", rendered)
 
+    def test_weekly_card_shares_the_daily_card_visual_system(self):
+        """周报曾停在蓝色 header + 大段 markdown 的旧方案，日报早已改成居中色块目录。
+
+        两张卡片发到同一个群，视觉必须是同一套。
+        """
+        brief = {
+            "title": "AI Signal 自动周报 · 2026-W34",
+            "headline": "本周主线",
+            "thesis": "本周综述",
+            "metrics": [{"label": "信号总数", "value": "2"}],
+            "topSignals": ["r2"],
+            "signals": [
+                {
+                    "recordId": "r2",
+                    "titleCn": "二",
+                    "source": "B",
+                    "contentType": "论文",
+                    "url": "https://example.com/a",
+                }
+            ],
+        }
+        card = notify.build_weekly_card(brief, "https://example.com/?week=2026-W34")
+        # 标题为了居中放进正文，不能再有 header 色条
+        self.assertNotIn("header", card)
+        bands = [e for e in card["elements"] if e.get("tag") == "column_set"]
+        self.assertEqual(
+            [b["background_style"] for b in bands],
+            ["red-100", notify.WEEKLY_FOCUS_THEME[0]],
+        )
+        self.assertEqual(
+            bands[0]["columns"][0]["elements"][0]["text_align"], "center"
+        )
+        rendered = json.dumps(card, ensure_ascii=False)
+        # 焦点条目复用日报的标题 + 灰字来源，而不是自己拼 markdown
+        self.assertIn("**[二](https://example.com/a)**", rendered)
+        self.assertIn("B · 论文", rendered)
+        self.assertNotIn("lark_md", rendered)
+
+    def test_weekly_card_truncates_the_long_thesis(self):
+        """真实综述有四五百字，整段贴进卡片就是当初重做日报卡要改掉的问题。"""
+        brief = {"title": "周报", "thesis": "势" * 400, "signals": [], "topSignals": []}
+        card = notify.build_weekly_card(brief, "https://example.com/")
+        prose = [
+            e["content"]
+            for e in card["elements"]
+            if e.get("tag") == "markdown" and "势" in e.get("content", "")
+        ]
+        self.assertEqual(len(prose), 1)
+        self.assertLessEqual(len(prose[0]), 161)
+        self.assertTrue(prose[0].endswith("…"))
+
     def test_weekly_detail_url_opens_task_report(self):
         url = notify.weekly_detail_url("https://example.com/", "2026-W34")
         self.assertEqual(

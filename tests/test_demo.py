@@ -35,10 +35,6 @@ class PipelineTests(unittest.TestCase):
         feeds = sources.map_feed_sources(records)
         self.assertEqual(feeds[0]["source_type"], "论文")
         self.assertTrue(sources.is_paper_source(source_id="jmlr", entity_type="paper"))
-        self.assertEqual(
-            sources.catalog_signal_format("Hugging Face Papers Trending"),
-            "论文",
-        )
 
     def test_scrape_diag_mapping_includes_b_class(self) -> None:
         records = [

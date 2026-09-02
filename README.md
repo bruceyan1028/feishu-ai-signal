@@ -51,7 +51,7 @@ site/（GitHub Pages） + 飞书消息卡片
 
 1. **采集配置只认飞书一级参数表**，不认 `src/seed_default.json`。种子只是 bootstrap / 回滚快照。改源之前不要扫仓库 JSON 当现行配置。
 2. **唯一维护的飞书 Base** 是当前 `.env` / GitHub Secrets 里的那套（wiki 与本地 Cursor 规则会写明 `app_token`）。历史 Base 已废弃，不要读、不要写、不要拿来对比。
-3. `status`：`active` 正式流水线会跑；`experimental` 只给诊断；`paused` 不跑。改 endpoint / `fetch_method` / 抽取规则后先标 `experimental`，验收再改 `active`。参数表与信号源表状态必须对齐。
+3. `status`：`active` 正式流水线会跑；`experimental` 只给诊断；`paused` 不跑。改 endpoint / `fetch_method` / 抽取规则后先标 `experimental`，验收再改 `active`。一级参数是唯一的源状态。
 4. 每次采集结束必须调用 `feishu.sync_param_collect_stats(...)` 回写：最近采集时间、条目数、查重过滤、时间窗过滤。该函数在入库 > 0 时会勾「通过」。人工验收场景不要另写一套漏字段回写。
 5. 改飞书源配置或二级参数后：`python -m tools.export_seed` 刷新 `src/seed_default.json`，再和代码一起提交。条目表、每日简报是产物，不导出。
 6. **公开站不带筛选规则**。`keyword_regex`、`min_content_chars`、`dedup_key`、`extra_config` 不得出现在 `site/data/sources.json`。
@@ -66,7 +66,7 @@ site/（GitHub Pages） + 飞书消息卡片
 | 路径 | 作用 |
 | --- | --- |
 | `src/` | 全部业务逻辑。入口都是 `python -m src.<模块>` |
-| `src/seed_default.json` | 信号源表 + 一级参数 + 五张二级参数的快照 |
+| `src/seed_default.json` | 一级参数 + 五张二级参数的快照 |
 | `src/bootstrap.py` | 在空 Base 里幂等建表、可选灌种子 |
 | `src/heatmap.py` / `tag_topics.py` / `aggregate.py` | 话题打标与「话题 × 周」热力图 |
 | `data/items/` `data/tagged/` | 每日条目 JSONL 与打标结果；热力图的输入 |
@@ -86,7 +86,6 @@ site/（GitHub Pages） + 飞书消息卡片
 | --- | --- | --- |
 | 飞书一级参数表 | `main` / `daily` / `diag_*` / `sources_api` | **是。采集与简报白名单都读它** |
 | 飞书二级参数表 | `typed_config.load_typed_configs` | 是。论文/公众号/视频/社媒/GitHub 的类型规则 |
-| 飞书信号源表 | 人工目录 + 配置台同步「自动化状态」 | 否。不能当 ingest 配置；名称常和参数表对不齐 |
 | `src/seed_default.json` | `bootstrap`、无飞书时的预览 | 否。可能落后于飞书 |
 | `site/data/brief-*.json` | 公开站今日简报 | 产物 |
 | `site/data/sources.json` | 公开站信号源页（只读快照） | 展示用，规则字段已剥掉 |
@@ -106,7 +105,6 @@ site/（GitHub Pages） + 飞书消息卡片
 
 | 表 | 环境变量 | 主键 | 用途 |
 | --- | --- | --- | --- |
-| 信号源表 | `FEISHU_SOURCE_TABLE_ID` | 名称 | 人工目录：分类、层级、主要看什么、自动化状态 |
 | 一级参数 | `FEISHU_PARAM_TABLE_ID` | `source_id` | **ingest 配置 + 采集统计** |
 | 二级参数-论文 | `FEISHU_PAPER_CONFIG_TABLE_ID` | `source_id` | 录用/热度/摘要门槛等 |
 | 二级参数-公众号 | `FEISHU_WECHAT_CONFIG_TABLE_ID` | `source_id` | 账号白名单、软广、字数 |
@@ -153,7 +151,7 @@ site/（GitHub Pages） + 飞书消息卡片
 
 ## 源状态与验收
 
-| 参数表 `status` | 信号源表 | 正式流水线 |
+| 参数表 `status` | 配置台显示 | 正式流水线 |
 | --- | --- | --- |
 | `active` | 已接入 | 会跑 |
 | `experimental` | 待测 | 默认不跑，诊断可跑 |
@@ -376,7 +374,7 @@ python -m src.aggregate
 | `?page=` | 内容 | 数据 |
 | --- | --- | --- |
 | 默认 / `brief` | 左栏话题热力图 / 信息流 / 右栏数据看板 | `data/brief-latest.json` 或 `brief-{date}.json`；看板读 `dashboard-latest.json`；热力图读 `heatmap.json` |
-| `sources` | 信号源表 | `data/sources.json`；本机优先 `/api/sources` |
+| `sources` | 信号源清单 | `data/sources.json`；本机优先 `/api/sources` |
 | `tasks` | 周报 / 动向追踪 | `weekly-*.json`、`timeline-latest.json` |
 
 本机 `localhost` / `127.0.0.1` 会被当成配置台主机，去打 `/api/sources`。若只开了 `python -m http.server`，接口 404，会退回静态快照。
@@ -398,14 +396,14 @@ python -m src.aggregate
 python -m src.sources_api    # http://127.0.0.1:8787 ，只绑回环
 ```
 
-同时托管 `site/` 和 API：`/api/sources`、周报待纳入、追踪对象。写回一级参数（状态、优先级、新建、删除），并同步信号源表自动化状态。新源一律 `experimental`。
+同时托管 `site/` 和 API：`/api/sources`、周报待纳入、追踪对象。写回一级参数（状态、优先级、新建、删除）。新源一律 `experimental`。
 
-`GET /api/sources/{recordId}/detail` 返回完整采集配置（`keyword_regex`、`min_content_chars`、`extra_config`、时间窗等），信号源表每行的「配置」按钮据此就地编辑，不必再开飞书多维表格。这些规则字段**只走这个按需接口**，不进 `build_payload`——那份载荷会被 `publish` 导出成公开站点的 `sources.json`。静态快照结构上就装不下一个实时接口的数据，所以不靠「记得别把字段加进那个 builder」来保证不泄露。
+`GET /api/sources/{recordId}/detail` 返回完整采集配置（`keyword_regex`、`min_content_chars`、`extra_config`、时间窗等），信号源页每行的「配置」按钮据此就地编辑，不必再开飞书多维表格。这些规则字段**只走这个按需接口**，不进 `build_payload`——那份载荷会被 `publish` 导出成公开站点的 `sources.json`。静态快照结构上就装不下一个实时接口的数据，所以不靠「记得别把字段加进那个 builder」来保证不泄露。
 
 `PATCH /api/sources/{recordId}` 的约定：
 
 - 从严校验。`process._safe_regex` 对坏正则、`sources.parse_lookback_hours` 对认不出的时间窗写法都会静默回落成默认值，这类错误在漏斗里跟「正常过滤」一模一样，所以拒在写入前。
-- 改了 `source_view.RULE_FIELDS`（endpoint / fetch_method / 来源类型 / 时间窗 / 正文门槛 / 去重键 / keyword_regex / extra_config）中任一字段 → 自动退回 `experimental` 并同步信号源表；显式传 `status` 的请求以调用方为准。只改名称、备注、层级、维度不降级。
+- 改了 `source_view.RULE_FIELDS`（endpoint / fetch_method / 来源类型 / 时间窗 / 正文门槛 / 去重键 / keyword_regex / extra_config）中任一字段 → 自动退回 `experimental`；显式传 `status` 的请求以调用方为准。只改名称、备注、层级、维度不降级。
 - 规则字段变了 → 自动跑 `tools.export_seed` 刷新种子，避免飞书与仓库快照漂移。
 - 提交值与当前值相同的字段不写回；`extra_config` 的空格与键序差异不算改动，否则每次保存都会无故降级一个正在跑的源。
 - 带非 localhost `Origin` 的写请求返回 403。这个服务持有飞书凭据，只绑回环挡不住浏览器里其他页面发来的跨站写请求。
@@ -600,17 +598,16 @@ python -m tools.export_seed
 接入新源建议：
 
 1. 在一级参数加行，`status=experimental`，配 endpoint、`fetch_method`、关键词、`lookback_window`、`extra_config`
-2. 信号源表同步「待测」
-3. `diag_*` 看列表 → 链接 → 正文 → 清洗漏斗
-4. 确认后再 `active` / 「已接入」
-5. `export_seed` 并提交
+2. `diag_*` 看列表 → 链接 → 正文 → 清洗漏斗
+3. 确认后再改 `active`
+4. `export_seed` 并提交
 
 ---
 
 ## 常见改动清单
 
 **加一个官网新闻源（Scrape）**  
-一级参数 + 信号源表 → 专用 `list_parser`（若通用抽链会按 URL 排序截断）→ 诊断 → active → export_seed。参考 `anthropic-news`。
+一级参数加行 → 专用 `list_parser`（若通用抽链会按 URL 排序截断）→ 诊断 → active → export_seed。参考 `anthropic-news`。
 
 **白宫又进了非 AI 政策**  
 不要放宽 `science and technology`。改 `process.is_ai_policy_text` / 种子里的 `keyword_regex` 与 `title_exclude_regex`，并写回飞书两行 `whitehouse-tech-*`。已发布简报 JSON 要改站点数据才会从网页消失。

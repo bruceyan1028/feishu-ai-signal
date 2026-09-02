@@ -99,11 +99,6 @@ def strip_html_body(text: Any) -> str:
     return scrape.html_to_text(str(text or ""))
 
 
-def _can_backfill_fulltext(url: str) -> bool:
-    """能否回源补全正文：arXiv 的摘要本身就是正文，不走补全。"""
-    return url.startswith(("http://", "https://")) and "arxiv.org/" not in url
-
-
 def build_dedup_key(url: str, title: str, feed: dict[str, Any]) -> str:
     strategy = feed.get("dedup_key") or "normalize(url)"
     if feed.get("fetch_method") == "Podcast" or "podcast_guid" in strategy:
@@ -258,7 +253,9 @@ def process_and_clean(
     drop_stats: dict[str, int] | None = None,
     funnel_out: Any = None,
 ) -> list[dict[str, Any]]:
-    """对应 Process and Clean：时间窗/关键词/最小长度过滤 + 本轮去重。
+    """对应 Process and Clean：时间窗/关键词过滤 + 本轮去重。
+
+    正文长度不在这里判，见 drop_too_short：它要等回源补全之后才有意义。
 
     type_configs：source_id -> {entity_type, params}，来自类型化筛选配置表；
     命中的源在通用过滤后再走对应类型的分支过滤。
@@ -351,15 +348,8 @@ def process_and_clean(
             ):
                 drop_stats[feed_id] = drop_stats.get(feed_id, 0) + 1
             continue
-        # 摘要型 RSS（OpenAI / DeepMind 等官方源）只给一两百字，用它判长度会把整源判死。
-        # 这类条目先放行并标记，等去重后回源抓到全文，再由调用方按最终正文复判。
-        needs_fulltext = len(combined) < min_chars and feed.get("fetch_method") not in {
-            "Media",
-            "Social",
-        }
-        if needs_fulltext and not _can_backfill_fulltext(url):
-            drop(feed_id, "min_content_chars")
-            continue
+        # 正文长度不在这里判：摘要型 RSS（OpenAI / DeepMind）feed 里只有一两百字，
+        # 要等跨轮去重后回源补全，再由 drop_too_short 按最终正文统一判一次。
         if not skip_keyword:
             keyword_ok = (
                 _podcast_keyword_ok(keyword_re, title, body_text, kw_min_hits)
@@ -499,7 +489,6 @@ def process_and_clean(
             "topics": infer_topics(title, body_text),
             "duplicate_key": duplicate_key,
             "quality_score": float(quality_fields.get("quality_score") or 0),
-            "needs_fulltext": needs_fulltext,
             "min_content_chars": min_chars,
             # 采集后处理所需的内部字段；format_for_feishu 不会直接写入。
             "feed": feed,
@@ -517,6 +506,36 @@ def process_and_clean(
         {k: v for k, v in funnel.most_common() if k not in {"raw", "kept"}},
     )
     return result
+
+
+def drop_too_short(
+    items: list[dict[str, Any]], funnel_out: Any = None
+) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
+    """回源补全之后统一判正文长度，返回 (保留, 丢弃)。
+
+    Social 不判：推文在抓取层已按自己的规则筛过，带图或带硬证据的短推文是有意保留的。
+    传 funnel_out 时把淘汰记到 min_content_chars，并把清洗阶段已计的 kept 回退。
+    """
+    kept: list[dict[str, Any]] = []
+    dropped: list[dict[str, Any]] = []
+    for item in items:
+        if item.get("fetch_method") == "Social":
+            kept.append(item)
+            continue
+        combined = f"{item.get('title') or ''} {item.get('raw_content') or ''}"
+        if len(combined) < int(item.get("min_content_chars") or 0):
+            dropped.append(item)
+            if funnel_out is not None:
+                sid = str(item.get("source_id") or "")
+                funnel_out.bump(sid, "min_content_chars")
+                funnel_out.bump(sid, "kept", -1)
+            continue
+        kept.append(item)
+    if dropped:
+        log.info("补全后仍过短丢弃 %d 条", len(dropped))
+    return kept, dropped
+
+
 def _to_link(url: str, title: str) -> dict[str, str] | None:
     link = str(url or "").strip()
     if not link:

@@ -7,6 +7,7 @@ import logging
 import requests
 
 from . import (
+    capture_spec,
     config,
     feishu,
     health,
@@ -71,28 +72,16 @@ def filter_new_items(cleaned: list[dict], existing: set[str]) -> list[dict]:
     return non_arxiv + arxiv_items[: config.MAX_ARXIV_ITEMS]
 
 
-def _drop_still_too_short(items: list[dict]) -> list[dict]:
-    """复判内容长度：清洗阶段放行的摘要型条目，补全后仍太短就丢掉。"""
-    kept, dropped = [], 0
-    for item in items:
-        if item.get("needs_fulltext") and len(str(item.get("raw_content") or "")) < int(
-            item.get("min_content_chars") or 0
-        ):
-            dropped += 1
-            continue
-        kept.append(item)
-    if dropped:
-        log.info("补全后仍过短丢弃 %d 条", dropped)
-    return kept
-
-
 def _prepare_scrape_sources(
     *, feishu_records: list[dict], type_configs: dict
 ) -> list[dict]:
     """筛出正式 Scrape 源并补齐抽取所需的类型/榜单参数。"""
     feeds = sources.map_scrape_sources(feishu_records)
+    specs = capture_spec.load()
     for feed in feeds:
-        cfg = type_configs.get(feed.get("id") or "") or {}
+        sid = feed.get("id") or ""
+        feed["_capture_specs"] = specs
+        cfg = type_configs.get(sid) or {}
         if cfg.get("entity_type"):
             feed["source_type"] = sources.infer_signal_format(
                 feed.get("id") or "",
@@ -131,12 +120,9 @@ def run(methods: set[str] | None = None) -> int:
         log.warning("补齐社媒配置字段失败: %s", exc)
     try:
         feishu.ensure_source_type_field(token, config.FEISHU_PARAM_TABLE_ID)
-        feishu.ensure_source_type_field(token, config.FEISHU_SOURCE_TABLE_ID)
         feishu.ensure_select_option(token, config.FEISHU_PARAM_TABLE_ID, "fetch_method", "Social")
-        feishu.ensure_select_option(token, config.FEISHU_SOURCE_TABLE_ID, "获取方式", "Social")
         feishu.ensure_select_option(token, config.FEISHU_ENTRY_TABLE_ID, "路由来源", "Social")
         feishu.ensure_select_option(token, config.FEISHU_PARAM_TABLE_ID, "fetch_method", "Podcast")
-        feishu.ensure_select_option(token, config.FEISHU_SOURCE_TABLE_ID, "获取方式", "Podcast")
         feishu.ensure_select_option(token, config.FEISHU_ENTRY_TABLE_ID, "路由来源", "Podcast")
     except feishu.FeishuError as exc:
         log.warning("补齐来源类型/采集方式字段失败: %s", exc)
@@ -271,7 +257,12 @@ def run(methods: set[str] | None = None) -> int:
         )
     # 只对确定入库的普通条目回源补全正文：RSS 常常只给一段摘要。
     rss.backfill_full_text(new_items)
-    new_items = _drop_still_too_short(new_items)
+    # 正文长度统一在这里判（清洗阶段不判）。丢掉的也要从 cleaned 里去掉，
+    # 否则回写统计和健康记录会把它们算成「被跨轮去重掉的」。
+    new_items, too_short = process.drop_too_short(new_items, funnel)
+    if too_short:
+        gone = {id(item) for item in too_short}
+        cleaned = [item for item in cleaned if id(item) not in gone]
 
     arxiv_in = sum(
         1

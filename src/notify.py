@@ -213,10 +213,15 @@ def build_card(brief: dict[str, Any], url: str) -> dict[str, Any]:
     return {"config": {"wide_screen_mode": True}, "elements": elements}
 
 
+WEEKLY_FOCUS_THEME = ("purple-100", "purple")
+
+
 def build_weekly_card(brief: dict[str, Any], url: str) -> dict[str, Any]:
-    metric_text = " · ".join(
-        f"{item.get('label')} {item.get('value')}" for item in brief.get("metrics") or []
-    )
+    """和日报卡片同一套视觉：居中色块标题 + 色块分区 + 可点标题与灰字来源。
+
+    周报比日报多一段本周判断（headline / thesis / metrics），这段留在标题色块下面；
+    焦点条目复用日报的 `_signal_blocks`，摘要和解读一并交给网页，卡片只当目录。
+    """
     by_id = {
         str(signal.get("recordId") or ""): signal
         for signal in brief.get("signals") or []
@@ -225,58 +230,56 @@ def build_weekly_card(brief: dict[str, Any], url: str) -> dict[str, Any]:
         by_id[record_id]
         for record_id in brief.get("topSignals") or []
         if record_id in by_id
-    ][:3]
-    elements: list[dict[str, Any]] = [
-        {
-            "tag": "div",
-            "text": {
-                "tag": "lark_md",
-                "content": (
-                    f"**{brief.get('headline', '')}**\n\n{brief.get('thesis', '')}\n\n"
-                    f"{metric_text}"
-                ).strip(),
-            },
-        },
-        {"tag": "hr"},
-    ]
-    for index, signal in enumerate(top, 1):
+    ][:MAX_ITEMS_PER_GROUP]
+
+    title = str(brief.get("title") or "AI Signal 自动周报")
+    elements: list[dict[str, Any]] = [_band("red-100", "red", title, size="heading")]
+
+    headline = _short(brief.get("headline"), 60)
+    if headline:
+        elements.append({"tag": "markdown", "content": f"**{headline}**"})
+    # 综述动辄四五百字，整段贴进卡片就是当初要改掉的「手机上滑很久」。留个引子，正文回网页。
+    thesis = _short(brief.get("thesis"), 160)
+    if thesis:
+        elements.append({"tag": "markdown", "content": thesis})
+    metric_text = " · ".join(
+        f"{item.get('label')} {item.get('value')}"
+        for item in brief.get("metrics") or []
+        if item.get("label")
+    )
+    if metric_text:
         elements.append(
             {
-                "tag": "div",
-                "text": {
-                    "tag": "lark_md",
-                    "content": (
-                        f"**{index}. {signal.get('titleCn') or signal.get('title', '')}**\n"
-                        + (f"{signal.get('source')}\n" if signal.get("source") else "")
-                        + f"{signal.get('summary', '')}"
-                    ),
-                },
+                "tag": "markdown",
+                "text_size": "notation",
+                "content": f"<font color='grey'>{metric_text}</font>",
             }
         )
-    elements.append(
-        {
-            "tag": "action",
-            "actions": [
-                {
-                    "tag": "button",
-                    "type": "primary",
-                    "text": {"tag": "plain_text", "content": "查看完整 AI 周报"},
-                    "url": url,
-                }
-            ],
-        }
-    )
-    return {
-        "config": {"wide_screen_mode": True},
-        "header": {
-            "template": "blue",
-            "title": {
-                "tag": "plain_text",
-                "content": str(brief.get("title") or "AI Signal 自动周报"),
+
+    if top:
+        background, font = WEEKLY_FOCUS_THEME
+        elements.append(_band(background, font, "📌 本周焦点", size="normal"))
+        for signal in top:
+            elements.extend(_signal_blocks(signal))
+
+    elements.extend(
+        [
+            {"tag": "hr"},
+            {
+                "tag": "action",
+                "actions": [
+                    {
+                        "tag": "button",
+                        "type": "primary",
+                        "text": {"tag": "plain_text", "content": "查看完整 AI 周报"},
+                        "url": url,
+                    }
+                ],
             },
-        },
-        "elements": elements,
-    }
+        ]
+    )
+    # 标题为了居中必须放进正文，因此和日报一样不设 header
+    return {"config": {"wide_screen_mode": True}, "elements": elements}
 
 
 def _brief_record(token: str, table_id: str, day: str) -> dict[str, Any] | None:

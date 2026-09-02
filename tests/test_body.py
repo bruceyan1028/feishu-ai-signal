@@ -54,6 +54,79 @@ class PublishedDateTest(unittest.TestCase):
             "2026-06-30T01:26:47Z",
         )
 
+    def test_extracts_formatted_jsonld_date_published(self):
+        """格式化 JSON-LD 冒号后有空格；旧正则只认紧凑写法会整级失效。"""
+        html = """
+        <script type="application/ld+json">
+        {
+          "@type": "BlogPosting",
+          "datePublished": "2026-02-26T11:21:27.797Z",
+          "dateModified": "2026-02-25T15:00:00.000Z"
+        }
+        </script>
+        """
+        self.assertEqual(
+            scrape.extract_published_date_html(html),
+            "2026-02-26T11:21:27.797Z",
+        )
+
+    def test_extracts_formatted_ssr_pubdate(self):
+        """品玩等站 SSR 里是 pubDate: \"…\"（冒号后空格 + 大小写混用）。"""
+        html = '<script>window.__DATA__ = {"pubDate": "2026-08-31T07:54:53.000Z"}</script>'
+        self.assertEqual(
+            scrape.extract_published_date_html(html),
+            "2026-08-31T07:54:53.000Z",
+        )
+
+    def test_compact_json_date_still_works(self):
+        html = '{"datePublished":"2026-03-01T00:00:00Z"}'
+        self.assertEqual(
+            scrape.extract_published_date_html(html),
+            "2026-03-01T00:00:00Z",
+        )
+
+    def test_url_path_date_as_fallback(self):
+        """HTML 抽不到时，用路径 /YYYY-MM-DD/ 兜底（财新等）。"""
+        url = "https://www.caixin.com/2026-08-28/102123456.html"
+        self.assertEqual(scrape._published_date_from_url(url), "2026-08-28")
+        self.assertEqual(
+            scrape.extract_published_date_html("<html><body>乱码页</body></html>", url),
+            "2026-08-28",
+        )
+
+    def test_url_path_date_slash_separated(self):
+        self.assertEqual(
+            scrape._published_date_from_url("https://example.com/blog/2026/03/15/post"),
+            "2026-03-15",
+        )
+
+    def test_url_path_date_rejects_invalid_calendar(self):
+        self.assertEqual(
+            scrape._published_date_from_url("https://example.com/2026-13-40/x.html"),
+            "",
+        )
+
+    def test_url_path_date_does_not_override_meta(self):
+        html = '<meta property="article:published_time" content="2026-01-02T00:00:00Z">'
+        url = "https://example.com/2026-08-28/post.html"
+        self.assertEqual(
+            scrape.extract_published_date_html(html, url),
+            "2026-01-02T00:00:00Z",
+        )
+
+    def test_link_recency_prefers_fuller_path_date(self):
+        older = "https://ex.com/2026-01-01/a"
+        newer = "https://ex.com/2026-08-28/z"
+        year_only = "https://ex.com/2025/post-alpha"
+        self.assertGreater(
+            scrape._link_recency_key(newer),
+            scrape._link_recency_key(older),
+        )
+        self.assertGreater(
+            scrape._link_recency_key(older),
+            scrape._link_recency_key(year_only),
+        )
+
     def test_does_not_treat_modified_time_as_published(self):
         html = '<meta property="article:modified_time" content="2026-07-27T08:00:00Z">'
         self.assertEqual(scrape.extract_published_date_html(html), "")
@@ -176,6 +249,79 @@ class ScrapeParagraphTest(unittest.TestCase):
         )
         self.assertEqual(links[0]["title"], "How Claude's text watermark works")
         self.assertEqual(links[0]["published_raw"], "Aug 14, 2026")
+
+    def test_link_path_include_relaxes_list_prefix_depth(self):
+        """聚合列表页（/latest）链到其它栏目时，白名单应放行，不再要求 /latest/ 前缀。"""
+        html = """
+        <a href="/latest">Latest</a>
+        <a href="/about">About</a>
+        <a href="/publications/gpu-pricing-2026">GPU Pricing</a>
+        <a href="/gradient-updates/chip-costs">Chip Costs</a>
+        <a href="/data-insights/h100-fleet">H100 Fleet</a>
+        <a href="/topics/compute">Topics</a>
+        """
+        feed = {
+            "id": "epoch-compute",
+            "url": "https://epoch.ai/latest",
+            "max_articles": 8,
+            "extra_config": {
+                "link_path_include": "/gradient-updates/|/publications/|/data-insights/",
+            },
+        }
+        links = scrape._extract_links_html(html, feed)
+        urls = [item["url"] for item in links]
+        self.assertEqual(
+            urls,
+            [
+                "https://epoch.ai/publications/gpu-pricing-2026",
+                "https://epoch.ai/gradient-updates/chip-costs",
+                "https://epoch.ai/data-insights/h100-fleet",
+            ],
+        )
+
+    def test_list_neighbor_date_fills_published_raw(self):
+        """列表卡片邻近日期写入 published_raw，并按日期而非字母序截断。"""
+        html = """
+        <article>
+          <img alt="old"/>
+          Newsletter Jul. 22, 2026
+          <a href="/gradient-updates/old-post">Old Post</a>
+          summary of old post.
+        </article>
+        <article>
+          <img alt="new"/>
+          Newsletter Aug. 27, 2026
+          <a href="/gradient-updates/new-post">New Post</a>
+          summary of new post.
+        </article>
+        <article>
+          Report Aug. 24, 2026
+          <a href="/publications/mid-report">Mid Report</a>
+        </article>
+        """
+        feed = {
+            "id": "epoch-compute",
+            "url": "https://epoch.ai/latest",
+            "max_articles": 2,
+            "extra_config": {
+                "link_path_include": "/gradient-updates/|/publications/",
+            },
+        }
+        links = scrape._extract_links_html(html, feed)
+        self.assertEqual(
+            [item["url"].rsplit("/", 1)[-1] for item in links],
+            ["new-post", "mid-report"],
+        )
+        self.assertEqual(links[0]["published_raw"], "Aug. 27, 2026")
+        self.assertEqual(links[1]["published_raw"], "Aug. 24, 2026")
+
+    def test_url_date_wins_over_neighbor_date(self):
+        html = """
+        <a href="/2026-01-01/post.html">Post</a> Aug. 27, 2026
+        """
+        feed = {"id": "caixin", "url": "https://www.caixin.com/", "max_articles": 4}
+        links = scrape._extract_links_html(html, feed)
+        self.assertEqual(links[0]["published_raw"], "2026-01-01")
 
     def test_zhipu_article_h1_overrides_generic_page_title(self):
         html = """

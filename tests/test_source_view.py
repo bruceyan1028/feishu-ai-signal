@@ -1,23 +1,7 @@
 import contextlib
 import unittest
 
-from src import config, source_view, sources_api
-
-
-@contextlib.contextmanager
-def _patched(rows, calls):
-    """替掉信号源表的读写，记录 update_record 调用。"""
-    feishu = sources_api.feishu
-    originals = (feishu.read_all_records_with_ids, feishu.update_record)
-    table_id = config.FEISHU_SOURCE_TABLE_ID
-    feishu.read_all_records_with_ids = lambda _token, _table: rows
-    feishu.update_record = lambda _t, _table, rid, fields: calls.append((rid, fields))
-    config.FEISHU_SOURCE_TABLE_ID = "tbl_source"
-    try:
-        yield
-    finally:
-        feishu.read_all_records_with_ids, feishu.update_record = originals
-        config.FEISHU_SOURCE_TABLE_ID = table_id
+from src import source_view, sources_api
 
 
 def record(record_id: str, **fields):
@@ -239,34 +223,6 @@ class SourcesApiTest(unittest.TestCase):
             with self.assertRaises(sources_api.ApiError):
                 sources_api._patch_fields({"status": bad})
 
-    def test_status_sync_writes_matching_source_table_row(self):
-        calls = []
-        rows = [
-            {"record_id": "s1", "fields": {"名称": "别的源", "自动化状态": "已接入"}},
-            {"record_id": "s2", "fields": {"名称": "Demo", "自动化状态": "已接入"}},
-        ]
-        with _patched(rows, calls):
-            sources_api.sync_source_table_status("tok", "Demo", "paused")
-        self.assertEqual(calls, [("s2", {"自动化状态": "已暂停"})])
-
-    def test_status_sync_skips_when_already_aligned(self):
-        calls = []
-        rows = [{"record_id": "s2", "fields": {"名称": "Demo", "自动化状态": "已暂停"}}]
-        with _patched(rows, calls):
-            sources_api.sync_source_table_status("tok", "Demo", "paused")
-        self.assertEqual(calls, [])
-
-    def test_status_sync_swallows_feishu_errors(self):
-        # 信号源表只是人工清单，同步失败不该让开关操作整体失败
-        def boom(_token, _table):
-            raise sources_api.feishu.FeishuError("boom")
-
-        calls = []
-        with _patched([], calls):
-            sources_api.feishu.read_all_records_with_ids = boom
-            sources_api.sync_source_table_status("tok", "Demo", "paused")
-        self.assertEqual(calls, [])
-
     def test_patch_rejects_body_without_known_fields(self):
         for body in ({}, {"nope": 1}):
             with self.assertRaises(sources_api.ApiError):
@@ -310,7 +266,6 @@ def _patched_param_table(rec, updates, seed_runs):
         feishu.read_param_records,
         feishu.update_record,
         sources_api.export_seed_snapshot,
-        sources_api.sync_source_table_status,
     )
     feishu.get_tenant_access_token = lambda: "tok"
     feishu.read_param_records = lambda _token: [rec]
@@ -323,7 +278,6 @@ def _patched_param_table(rec, updates, seed_runs):
         seed_runs.append(1),
         {"ok": True, "message": "stub"},
     )[-1]
-    sources_api.sync_source_table_status = lambda *_a, **_kw: None
     try:
         yield
     finally:
@@ -332,7 +286,6 @@ def _patched_param_table(rec, updates, seed_runs):
             feishu.read_param_records,
             feishu.update_record,
             sources_api.export_seed_snapshot,
-            sources_api.sync_source_table_status,
         ) = originals
 
 

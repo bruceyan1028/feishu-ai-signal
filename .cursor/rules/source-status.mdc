@@ -5,7 +5,7 @@ alwaysApply: true
 
 # 源状态（status）约定
 
-适用于参数表 `status` 字段，以及信号源表 `自动化状态` 的对齐。
+适用于参数表 `status` 字段。它是唯一的源状态，没有第二张表需要对齐。
 
 ## 取值
 
@@ -15,7 +15,7 @@ alwaysApply: true
 | `experimental` | 待测：配置了但未验收，或上次诊断失败/无有效产出 | 默认不跑 |
 | `paused` | 明确停用（坏站、重复源、暂不收录） | 不跑 |
 
-信号源表对齐：`active`→`已接入`，`experimental`→`待测`，`paused`→`已暂停`。
+配置台 UI 上分别显示为「已接入」/「待测」/「已暂停」。
 
 ## 何时标 active
 
@@ -33,7 +33,6 @@ alwaysApply: true
 ## 操作要求
 
 - 改源配置（endpoint、`fetch_method`、抽取规则）后：先标 `experimental`，验收通过再改 `active`
-- 同步改参数表与信号源表，避免两表状态漂移
 - 不要把「配置存在」当成「已验证」
 
 ## 采集收尾必填（参数表）
@@ -54,7 +53,7 @@ alwaysApply: true
 `src/seed_default.json` 的内容快照。只改飞书不回写，别人部署出来的库会缺配置，
 表被改坏时也没有可回滚的版本。
 
-改动信号源表 / 一级参数 / 任一二级参数表之后（改字段、加源、调阈值都算）：
+改动一级参数 / 任一二级参数表之后（改字段、加源、调阈值都算）：
 
 ```bash
 python -m tools.export_seed   # 刷新 src/seed_default.json

@@ -36,12 +36,13 @@ FUNNEL_STAGES = (
     "title_exclude_regex",
     "missing_or_invalid_date",
     "lookback",
-    "min_content_chars",
     "keyword_regex",
     "not_ai_policy",
     "min_signal_score",
     "typed_filter",
     "dup_round",
+    # 回源补全之后才判，见 process.drop_too_short；放在 dup_round 后面是它真实的顺序
+    "min_content_chars",
     "kept",
 )
 

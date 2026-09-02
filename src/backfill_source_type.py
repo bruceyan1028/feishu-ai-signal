@@ -1,4 +1,4 @@
-"""为「信号源表」「参数表」「条目表」对齐并回填「来源类型」。
+"""为「参数表」「条目表」对齐并回填「来源类型」。
 
 用法：
   python -m src.backfill_source_type
@@ -36,19 +36,6 @@ def _param_format(
         entity_type=entity,
         explicit_type=None,
     )
-
-
-def _catalog_format(fields: dict) -> str:
-    name = str(sources.cell(fields.get("名称")) or "")
-    endpoint = ""
-    link = fields.get("链接")
-    if isinstance(link, dict):
-        endpoint = str(link.get("link") or link.get("text") or "")
-    else:
-        endpoint = str(sources.cell(link) or "")
-    fetch_method = str(sources.cell(fields.get("获取方式")) or "")
-    # 回填时按名称重算，纠正首轮误标（如「其他」）
-    return sources.catalog_signal_format(name, endpoint=endpoint, fetch_method=fetch_method)
 
 
 def align_entry_source_type(token: str) -> dict[str, int]:
@@ -98,14 +85,9 @@ def run(*, entry_only: bool = False) -> dict[str, int]:
 
     if not entry_only:
         feishu.ensure_source_type_field(token, config.FEISHU_PARAM_TABLE_ID)
-        feishu.ensure_source_type_field(token, config.FEISHU_SOURCE_TABLE_ID)
-        # 参数表/信号源表选项也强制对齐为标准 7 项
-        for tid, label in (
-            (config.FEISHU_PARAM_TABLE_ID, "参数表"),
-            (config.FEISHU_SOURCE_TABLE_ID, "信号源表"),
-        ):
-            info = feishu.align_source_type_field_options(token, tid)
-            log.info("%s选项对齐: %s", label, info)
+        # 参数表选项也强制对齐为标准 7 项
+        info = feishu.align_source_type_field_options(token, config.FEISHU_PARAM_TABLE_ID)
+        log.info("参数表选项对齐: %s", info)
 
         type_configs = tcfg.load_typed_configs(token)
         paper_ids = {
@@ -134,23 +116,6 @@ def run(*, entry_only: bool = False) -> dict[str, int]:
         n_param = feishu.batch_update_records(token, config.FEISHU_PARAM_TABLE_ID, param_updates)
         log.info("参数表回填 %d/%d：%s", n_param, len(param_records), dict(param_counts))
         result["param_updated"] = n_param
-
-        # --- 信号源表 ---
-        catalog_records = feishu.list_table_records(token, config.FEISHU_SOURCE_TABLE_ID)
-        catalog_updates: list[dict] = []
-        catalog_counts: Counter[str] = Counter()
-        for rec in catalog_records:
-            fields = rec.get("fields") or {}
-            fmt = _catalog_format(fields)
-            catalog_counts[fmt] += 1
-            current = sources.normalize_signal_format(sources.cell(fields.get("来源类型")))
-            if current == fmt:
-                continue
-            catalog_updates.append({"record_id": rec["record_id"], "fields": {"来源类型": fmt}})
-
-        n_catalog = feishu.batch_update_records(token, config.FEISHU_SOURCE_TABLE_ID, catalog_updates)
-        log.info("信号源表回填 %d/%d：%s", n_catalog, len(catalog_records), dict(catalog_counts))
-        result["catalog_updated"] = n_catalog
 
     result.update(align_entry_source_type(token))
     return result

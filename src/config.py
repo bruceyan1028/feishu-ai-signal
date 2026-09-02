@@ -25,7 +25,6 @@ FEISHU_APP_SECRET = _env("FEISHU_APP_SECRET")
 # 不设默认值：漏配时必须显式报错，否则会静默跑到别人的 base 上
 FEISHU_BASE_ID = _env("FEISHU_BASE_ID", "")
 FEISHU_PARAM_TABLE_ID = _env("FEISHU_PARAM_TABLE_ID", "")
-FEISHU_SOURCE_TABLE_ID = _env("FEISHU_SOURCE_TABLE_ID", "")
 FEISHU_ENTRY_TABLE_ID = _env("FEISHU_ENTRY_TABLE_ID", "")
 
 # 类型化筛选配置表：某个源出现在哪张表里就按该类型过滤（表内一源一行，主键 source_id）

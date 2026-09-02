@@ -1,0 +1,22 @@
+flowchart TB
+  IN["feed（RSS, active） · 串行逐源 rss.py:1345"]
+  IN --> GET["requests.get(bytes) rss.py:1295<br/>UA=Mozilla/5.0 (compatible; AI-Signal/1.0)<br/>Accept=rss/atom/xml · timeout=(10s 连接, 45s 读)<br/>无代理 · 无镜像 · 无并发"]
+  GET --> OK{"成功？"}
+  OK -->|"429/500/502/503/504<br/>网络异常 · 空响应体<br/>其它 4xx 也会重试"| RETRY["重试 HTTP_MAX_TRIES=4 次<br/>固定间隔 HTTP_WAIT_SECONDS=5s<br/>rss.py:1301-1333"]
+  RETRY -->|耗尽| E1["stats.error=fetch_failed:* · 本源 0 条"]
+  RETRY --> GET
+  OK -->|是| PARSE["feedparser.parse(bytes)"]
+  PARSE --> BOZO{"bozo 且无 entries？"}
+  BOZO -->|是| E2["unparseable_or_empty"]
+  BOZO -->|否| EMPTY{"entries 为空？"}
+  EMPTY -->|是| E3["feed_empty"]
+  EMPTY -->|否（bozo 但有 entries 也放行）| LOOP["逐 entry 构造 RawItem rss.py:1372-1388<br/>整份 feed 全收 · 保持 feed 原序"]
+  LOOP --> T["title = entry.title（含 HTML，未清洗）"]
+  LOOP --> U["url = entry.link 或 entry.id（未归一化）"]
+  LOOP --> B["body = _best_body rss.py:104<br/>content[0].value → summary → description<br/>经 strip_trailing_promo（只砍正文 60% 之后的推广块）"]
+  LOOP --> IMG["image_url = media_content → media_thumbnail → image/* enclosure → 正文首图<br/>media_assets: 图≤4 · YouTube≤1 · 同域 PDF≤8"]
+  LOOP --> DATE["published_raw = _published_raw rss.py:649<br/>① entry.published（feedparser 已归一 pubDate/dc:date）<br/>② entry.pubDate<br/>③ entry.updated —— 仅当 extra.allow_updated_as_published<br/>或 id ∈ {opencompass, nature-machine-intelligence, nature-computational-science}<br/>④ 否则 空串 → 将在漏斗被丢"]
+  T & U & B & IMG & DATE --> RAW["RawItem{title,url,body,image_url,media_assets,entry_tags,published_raw,is_html=True,feed}"]
+  RAW --> NEXT["→ 第 5 节 统一清洗漏斗"]
+  classDef drop fill:#fde8e6,stroke:#b42318,color:#7a1610;
+  class E1,E2,E3 drop;

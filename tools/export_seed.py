@@ -31,7 +31,6 @@ S = requests.Session()
 
 # 逻辑表名 -> 母版 table_id（默认取 config 里作者母版的 id）
 TABLES = {
-    "信号源表": config.FEISHU_SOURCE_TABLE_ID,
     "一级参数": config.FEISHU_PARAM_TABLE_ID,
     "二级参数-论文": config.FEISHU_PAPER_CONFIG_TABLE_ID,
     "二级参数-公众号": config.FEISHU_WECHAT_CONFIG_TABLE_ID,

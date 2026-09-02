@@ -18,7 +18,9 @@ from typing import Any
 
 import requests
 from tenacity import retry, stop_after_attempt, wait_fixed
+from urllib.parse import urljoin
 
+from . import capture_spec
 from . import config
 
 log = logging.getLogger(__name__)
@@ -247,8 +249,15 @@ def _list_prefix_path(list_path: str) -> str:
 
 
 def _link_depth_ok(path: str, feed: dict[str, Any], *, strict: bool, list_path: str) -> bool:
-    """默认深度启发式；allow_shallow_html=true 时允许 /blog.html 这类单段页面。"""
+    """默认深度启发式；allow_shallow_html=true 时允许 /blog.html 这类单段页面。
+
+    配置了 link_path_include 时关闭「必须挂在列表页路径前缀下」的严格约束：
+    聚合页（如 epoch.ai/latest）常链到 /publications/...、/gradient-updates/...，
+    白名单本身已限定可采路径。
+    """
     extra = _feed_extra(feed)
+    if strict and _as_str_list(extra.get("link_path_include")):
+        strict = False
     if strict:
         prefix = _list_prefix_path(list_path)
         if not (path + "/").startswith(prefix + "/"):
@@ -268,12 +277,73 @@ def _link_depth_ok(path: str, feed: dict[str, Any], *, strict: bool, list_path: 
     return False
 
 
-def _link_recency_key(url: str) -> tuple[int, str]:
-    """优先带年份路径的较新链接（目录列表常按字母序把旧稿排前）。"""
+# 路径里的首发日：/2026-08-28/、/2026/08/28/、/20260828.html 等。
+_URL_DATE_RE = re.compile(r"/(20\d{2})[-/_]?(\d{2})[-/_]?(\d{2})(?:/|$|\.)")
+
+_LIST_NEAR_MONTHS = (
+    r"jan(?:uary)?|feb(?:ruary)?|mar(?:ch)?|apr(?:il)?|may|jun(?:e)?|jul(?:y)?|"
+    r"aug(?:ust)?|sep(?:t(?:ember)?)?|oct(?:ober)?|nov(?:ember)?|dec(?:ember)?"
+)
+# 列表卡片邻近日期（Epoch「Aug. 27, 2026」、中文「2026-08-27」等）。
+_LIST_NEAR_DATE_RE = re.compile(
+    rf"(?:{_LIST_NEAR_MONTHS})\.?\s+\d{{1,2}}(?:st|nd|rd|th)?,?\s+20\d{{2}}"
+    rf"|20\d{{2}}\s*[-/年.]\s*\d{{1,2}}\s*[-/月.]\s*\d{{1,2}}\s*日?"
+    rf"|\d{{1,2}}\s+(?:{_LIST_NEAR_MONTHS})\.?,?\s+20\d{{2}}",
+    re.I,
+)
+
+
+def _published_date_from_url(url: str) -> str:
+    """从 URL 路径抽出 YYYY-MM-DD；非法月日返回空。仅作 HTML 元数据失败时的兜底。"""
     path = _path_of(url)
+    if not path.startswith("/"):
+        path = "/" + path
+    match = _URL_DATE_RE.search(path)
+    if not match:
+        return ""
+    year, month, day = (int(match.group(1)), int(match.group(2)), int(match.group(3)))
+    try:
+        datetime(year, month, day)
+    except ValueError:
+        return ""
+    return f"{year:04d}-{month:02d}-{day:02d}"
+
+
+def _date_near_anchor(html: str, start: int, end: int, next_start: int | None) -> str:
+    """从列表锚点邻近卡片文本抽日期；窗口截止到下一候选锚点，降低串卡风险。"""
+    left = max(0, start - 160)
+    right = end + 480
+    if next_start is not None:
+        right = min(right, next_start)
+    right = max(right, end)
+    text = _html_to_text(html[left:right])
+    match = _LIST_NEAR_DATE_RE.search(text)
+    return match.group(0).strip() if match else ""
+
+
+def _cand_recency_key(item: dict[str, Any]) -> tuple[int, int, str]:
+    """排序：有 published_raw 的优先，再按时间戳/路径启发式。"""
+    raw = str(item.get("published_raw") or "").strip()
+    url = str(item.get("url") or "")
+    if raw:
+        from . import process  # 延迟导入，避免与 process→sources 环
+
+        ms = process.parse_date_ms(raw)
+        if ms is not None:
+            return (1, ms, url)
+    ymd, path = _link_recency_key(url)
+    return (0, ymd, path)
+
+
+def _link_recency_key(url: str) -> tuple[int, str]:
+    """优先按路径完整日期（YYYYMMDD）排序；仅有年份时用 YYYY0000，避免被字母序挤掉新稿。"""
+    path = _path_of(url)
+    dated = _published_date_from_url(url)
+    if dated:
+        return (int(dated.replace("-", "")), path)
     years = [int(y) for y in re.findall(r"(?:^|/)(20\d{2})(?:/|-|_)", path)]
     year = max(years) if years else 0
-    return (year, path)
+    return (year * 10000, path)
 
 
 def _parse_iso_ms(raw: Any) -> int | None:
@@ -306,58 +376,66 @@ _HEADER_DATE_WITH_READ_TIME_RE = re.compile(
 )
 
 
-def extract_published_date_html(html: str) -> str:
-    """从原始页面提取首发日期；明确不使用 dateModified/_updatedAt。"""
+def extract_published_date_html(html: str, url: str = "") -> str:
+    """从原始页面提取首发日期；明确不使用 dateModified/_updatedAt。
+
+    页面元数据全部失败时，若 URL 路径含 /YYYY-MM-DD/ 等形式则作兜底
+    （财新等站 charset 乱码时 HTML 级常抽不到，但路径日期仍可靠）。
+    """
     body = unescape(str(html or ""))
-    if not body:
-        return ""
-    keys = "|".join(re.escape(key) for key in _PUBLISHED_KEYS)
-    meta_patterns = [
-        rf"""<meta\b[^>]*(?:property|name)=["'](?:{keys})["'][^>]*content=["']([^"']+)["']""",
-        rf"""<meta\b[^>]*content=["']([^"']+)["'][^>]*(?:property|name)=["'](?:{keys})["']""",
-    ]
-    for pattern in meta_patterns:
-        match = re.search(pattern, body, re.I)
-        if match:
-            return match.group(1).strip()
+    if body:
+        keys = "|".join(re.escape(key) for key in _PUBLISHED_KEYS)
+        meta_patterns = [
+            rf"""<meta\b[^>]*(?:property|name)=["'](?:{keys})["'][^>]*content=["']([^"']+)["']""",
+            rf"""<meta\b[^>]*content=["']([^"']+)["'][^>]*(?:property|name)=["'](?:{keys})["']""",
+        ]
+        for pattern in meta_patterns:
+            match = re.search(pattern, body, re.I)
+            if match:
+                return match.group(1).strip()
 
-    # Next.js/Sanity 等常把文章对象放在转义后的脚本字符串中。
-    json_match = re.search(
-        rf"""(?:{keys})\\?["']?\s*:\\?["']([^"'\\<]{{8,80}})""",
-        body,
-        re.I,
-    )
-    if json_match:
-        return json_match.group(1).strip()
+        # Next.js/Sanity 等常把文章对象放在转义后的脚本字符串中。
+        # 冒号后必须允许空白：格式化 JSON-LD/SSR 的常态写法是 "datePublished": "2026-…"，
+        # 只匹配紧凑的 "key":"value" 会让整级对格式化输出全部失效（mit-ai-risk / pingwest）。
+        json_match = re.search(
+            rf"""(?:{keys})\\?["']?\s*:\s*\\?["']([^"'\\<]{{8,80}})""",
+            body,
+            re.I,
+        )
+        if json_match:
+            return json_match.group(1).strip()
 
-    time_match = re.search(
-        r"""<time\b[^>]*datetime=["']([^"']+)["'][^>]*>""",
-        body,
-        re.I,
-    )
-    if time_match:
-        return time_match.group(1).strip()
+        time_match = re.search(
+            r"""<time\b[^>]*datetime=["']([^"']+)["'][^>]*>""",
+            body,
+            re.I,
+        )
+        if time_match:
+            return time_match.group(1).strip()
 
-    # Meta AI Blog 的首发日期没有 Published 标签，而是紧跟文章 h1，以
-    # “April 8, 2026 • 8 minute read” 展示。只在标题后的有限 header 区域
-    # 接受这种强结构，避免把导航、推荐卡或正文提到的任意日期当成首发时间。
-    title_match = re.search(r"(?is)<h1\b[^>]*>.*?</h1\s*>", body)
-    if title_match:
-        header_text = _html_to_text(body[title_match.start() : title_match.end() + 5000])
-        header_date = _HEADER_DATE_WITH_READ_TIME_RE.search(header_text)
-        if header_date:
-            return header_date.group(1).strip()
+        # Meta AI Blog 的首发日期没有 Published 标签，而是紧跟文章 h1，以
+        # “April 8, 2026 • 8 minute read” 展示。只在标题后的有限 header 区域
+        # 接受这种强结构，避免把导航、推荐卡或正文提到的任意日期当成首发时间。
+        title_match = re.search(r"(?is)<h1\b[^>]*>.*?</h1\s*>", body)
+        if title_match:
+            header_text = _html_to_text(body[title_match.start() : title_match.end() + 5000])
+            header_date = _HEADER_DATE_WITH_READ_TIME_RE.search(header_text)
+            if header_date:
+                return header_date.group(1).strip()
 
-    # 只接受带“发布”语义的可见日期，避免误取版权年份或正文中的其它日期。
-    visible = re.search(
-        r"""(?:published|posted|发布日期|发布时间)\s*(?:on|[:：])?\s*"""
-        r"""([A-Z][a-z]{2,8}\s+\d{1,2},\s+20\d{2}|"""
-        r"""\d{1,2}\s+[A-Z][a-z]{2,8}\s+20\d{2}|"""
-        r"""20\d{2}[-/.年]\d{1,2}[-/.月]\d{1,2}日?)""",
-        _html_to_text(body[:20000]),
-        re.I,
-    )
-    return visible.group(1).strip() if visible else ""
+        # 只接受带“发布”语义的可见日期，避免误取版权年份或正文中的其它日期。
+        visible = re.search(
+            r"""(?:published|posted|发布日期|发布时间)\s*(?:on|[:：])?\s*"""
+            r"""([A-Z][a-z]{2,8}\s+\d{1,2},\s+20\d{2}|"""
+            r"""\d{1,2}\s+[A-Z][a-z]{2,8}\s+20\d{2}|"""
+            r"""20\d{2}[-/.年]\d{1,2}[-/.月]\d{1,2}日?)""",
+            _html_to_text(body[:20000]),
+            re.I,
+        )
+        if visible:
+            return visible.group(1).strip()
+
+    return _published_date_from_url(url)
 
 
 def _published_date_from_jina(markdown: str) -> str:
@@ -376,7 +454,7 @@ def _fetch_direct_published_date(url: str) -> str:
         response.raise_for_status()
     except requests.RequestException:
         return ""
-    return extract_published_date_html(response.text)
+    return extract_published_date_html(response.text, url)
 
 
 def _age_days(published_ms: int | None, *, now_ms: int | None = None) -> float | None:
@@ -1626,6 +1704,12 @@ def _is_anthropic_news_feed(feed: dict[str, Any]) -> bool:
 
 
 def _extract_links_for_feed(page: str, feed: dict[str, Any], *, use_jina: bool) -> list[dict[str, Any]]:
+    spec = capture_spec.spec_for(str(feed.get("id") or ""), feed.get("_capture_specs") or {})
+    if spec and spec.get("route", {}).get("list"):
+        links = _extract_links_by_spec(page, feed, spec)
+        # spec 抽到就返回；抽不到视为 spec 失效，继续走硬编码/通用兜底，由收尾比对报警
+        if links:
+            return links
     if _is_hf_pwc_paper_feed(feed):
         return _extract_hf_pwc_paper_links(page, feed)
     if _is_anthropic_news_feed(feed):
@@ -1635,6 +1719,84 @@ def _extract_links_for_feed(page: str, feed: dict[str, Any], *, use_jina: bool) 
     if str(_feed_extra(feed).get("list_parser") or "").strip() == "zhipu_news":
         return _extract_zhipu_news_links(page, feed)
     return _extract_links(page, feed) if use_jina else _extract_links_html(page, feed)
+
+
+def _extract_links_by_spec(page: str, feed: dict[str, Any], spec: dict[str, Any]) -> list[dict[str, str]]:
+    """按 capture_spec 的 list selector 抽链。
+
+    只认 CSS 选择器；抽到的链接补上日期（spec 的 date 路线优先，否则回退通用）。
+    与通用分支共用 _cand_recency_key + max_n 截断，保证排序/截断语义一致。
+    """
+    route = spec.get("route") or {}
+    list_cfg = route.get("list") or {}
+    selector = (list_cfg or {}).get("selector")
+    if not selector:
+        return []
+    try:
+        from lxml import html as lh
+
+        doc = lh.fromstring(page)
+        anchors = doc.cssselect(selector)
+    except Exception:  # noqa: BLE001  cssselect 语法错/页面非 HTML，交给通用兜底
+        return []
+
+    max_n = int(feed.get("max_articles") or config.DEFAULT_MAX_ARTICLES)
+    cand: list[dict[str, str]] = []
+    seen: set[str] = set()
+    for anchor in anchors:
+        url = anchor.get("href") or ""
+        if not url:
+            continue
+        url = str(urljoin(feed.get("url") or "", url)).split("#")[0]
+        if url in seen:
+            continue
+        seen.add(url)
+        title = (anchor.get("title") or (html_to_text(anchor.text_content() or "") or "")).strip()
+        raw = ""
+        # 日期：spec 指定了 date.selector，优先在当前锚点或其容器里找
+        date_cfg = route.get("date") or {}
+        date_sel = (date_cfg or {}).get("selector")
+        if date_sel:
+            try:
+                for el in anchor.xpath(".//" + date_sel):
+                    raw = html_to_text(el.get("datetime") or el.text_content() or "")
+                    if raw:
+                        break
+            except Exception:  # noqa: BLE001
+                pass
+        item: dict[str, str] = {"url": url, "title": title}
+        if raw:
+            item["published_raw"] = raw
+        else:
+            url_date = _published_date_from_url(url)
+            if url_date:
+                item["published_raw"] = url_date
+        cand.append(item)
+    cand.sort(key=_cand_recency_key, reverse=True)
+    return cand[:max_n]
+
+
+def _fetch_spec_error(sid: str, feed: dict[str, Any], st: dict[str, Any], links) -> None:
+    """源级 spec 违约判定，写进 fetch_stats.error（不 raise）。
+
+    只覆盖「没有别的原因」的源：若已有 list_empty_or_failed / no_links_extracted
+    等更具体的错误，保留原错误，不把违约原因盖掉。
+    """
+    spec = capture_spec.spec_for(sid, feed.get("_capture_specs") or {})
+    if not spec:
+        return
+    expect = spec.get("expect") or {}
+    expect = expect if isinstance(expect, dict) else {}
+    min_links = expect.get("min_links")
+    if not min_links:
+        return
+    actual = int(st.get("links") or len(links or []))
+    if actual >= int(min_links):
+        return
+    if st.get("error"):
+        return
+    st["error"] = "spec_mismatch"
+    st["spec"] = {"expected": {"min_links": int(min_links)}, "actual": {"links": actual}}
 
 
 def _extract_anthropic_news_links(html: str, feed: dict[str, Any]) -> list[dict[str, str]]:
@@ -1729,7 +1891,8 @@ def _extract_links_html(html: str, feed: dict[str, Any]) -> list[dict[str, str]]
     strict = len(list_path) > 1
     max_n = int(feed.get("max_articles") or config.DEFAULT_MAX_ARTICLES)
     seen: set[str] = set()
-    cand: list[dict[str, str]] = []
+    # 先收齐候选锚点位置，再用「本锚点→下一候选」窗口抽邻近日期，避免串到邻卡。
+    hits: list[tuple[re.Match[str], str, str]] = []
     for m in _HREF_RE.finditer(html or ""):
         raw = m.group(1).strip()
         url = urljoin(src_url, raw)
@@ -1748,10 +1911,26 @@ def _extract_links_html(html: str, feed: dict[str, Any]) -> list[dict[str, str]]
         if url in seen:
             continue
         seen.add(url)
-        # 用路径末段当临时标题
-        title = segs[-1].replace("-", " ").replace("_", " ") if (segs := [s for s in path.split("/") if s]) else url
-        cand.append({"url": url, "title": title[:120]})
-    cand.sort(key=lambda x: _link_recency_key(x["url"]), reverse=True)
+        title = (
+            segs[-1].replace("-", " ").replace("_", " ")
+            if (segs := [s for s in path.split("/") if s])
+            else url
+        )
+        hits.append((m, url, title[:120]))
+
+    cand: list[dict[str, str]] = []
+    for index, (match, url, title) in enumerate(hits):
+        item: dict[str, str] = {"url": url, "title": title}
+        url_date = _published_date_from_url(url)
+        if url_date:
+            item["published_raw"] = url_date
+        else:
+            next_start = hits[index + 1][0].start() if index + 1 < len(hits) else None
+            near = _date_near_anchor(html or "", match.start(), match.end(), next_start)
+            if near:
+                item["published_raw"] = near
+        cand.append(item)
+    cand.sort(key=_cand_recency_key, reverse=True)
     return cand[:max_n]
 
 
@@ -1781,7 +1960,10 @@ def _build_item_direct(html: str, link: dict[str, Any], feed: dict[str, Any]) ->
         content = f"{content}\n\n{block}"
     if not title or not url or len(content) < 40:
         return None
-    published = str(link.get("published_raw") or "").strip() or extract_published_date_html(html)
+    published = (
+        str(link.get("published_raw") or "").strip()
+        or extract_published_date_html(html, url)
+    )
     item = {
         "title": title,
         "url": url,
@@ -1845,7 +2027,7 @@ def _extract_links(md: str, feed: dict[str, Any]) -> list[dict[str, str]]:
 
     md = _IMG_RE.sub("", md)
     seen: set[str] = set()
-    cand: list[dict[str, str]] = []
+    hits: list[tuple[re.Match[str], str, str]] = []
     for m in _LINK_RE.finditer(md):
         title = re.sub(r"\s+", " ", (m.group(1) or "")).strip()
         url = re.sub(r"[).,]+$", "", m.group(2).strip())
@@ -1868,8 +2050,21 @@ def _extract_links(md: str, feed: dict[str, Any]) -> list[dict[str, str]]:
         if key in seen:
             continue
         seen.add(key)
-        cand.append({"url": key, "title": title})
-    cand.sort(key=lambda x: _link_recency_key(x["url"]), reverse=True)
+        hits.append((m, key, title))
+
+    cand: list[dict[str, str]] = []
+    for index, (match, key, title) in enumerate(hits):
+        item: dict[str, str] = {"url": key, "title": title}
+        url_date = _published_date_from_url(key)
+        if url_date:
+            item["published_raw"] = url_date
+        else:
+            next_start = hits[index + 1][0].start() if index + 1 < len(hits) else None
+            near = _date_near_anchor(md, match.start(), match.end(), next_start)
+            if near:
+                item["published_raw"] = near
+        cand.append(item)
+    cand.sort(key=_cand_recency_key, reverse=True)
     return cand[:max_n]
 
 
@@ -1889,6 +2084,8 @@ def _build_item(article_md: str, link: dict[str, Any], feed: dict[str, Any]) -> 
     if not published:
         published = _published_date_from_jina(body)
     url = link.get("url") or ""
+    if not published:
+        published = _published_date_from_url(url)
     block = str(link.get("community_block") or "")
     # 与 RSS 的 Jina 兜底走同一套还原：只做 _strip_md 会把正文插图一并删掉，
     # 于是 Jina 引擎抓来的条目一张图都没有
@@ -2007,6 +2204,8 @@ def fetch_scrape_sources_with_stats(
         st["list_chars"] = len(page)
         links = _extract_links_for_feed(page, feed, use_jina=use_jina and not _feed_force_direct(feed))
         st["links"] = len(links)
+        # 源级 spec 违约：抽链数低于 spec.expect.min_links → 置 spec_mismatch
+        _fetch_spec_error(sid, feed, st, links)
         if not links:
             st["error"] = "no_links_extracted"
         for link in links:

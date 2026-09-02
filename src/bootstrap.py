@@ -5,8 +5,8 @@
   2. 新建一个多维表格（Base），从地址栏复制 base 的 app_token（形如 bascnXXXX / RuI1b...）。
   3. 把上面三样填进 .env 的 FEISHU_APP_ID / FEISHU_APP_SECRET / FEISHU_BASE_ID。
   4. 运行：  python -m src.bootstrap
-     脚本会在你的 base 里幂等创建 9 张表（信号源表 / 一级参数 / 条目表 / 每日简报 + 5 张二级参数表），
-     并默认写入与作者母版一致的信号源与参数配置（条目表除外）。
+     脚本会在你的 base 里幂等创建 8 张表（一级参数 / 条目表 / 每日简报 + 5 张二级参数表），
+     并默认写入与作者母版一致的源与参数配置（条目表除外）。
      并把每张表的 table_id 以「可直接粘进 .env」的形式打印出来。
   5. 把打印出的 FEISHU_*_TABLE_ID 复制进 .env，再填上 LLM_API_KEY / LLM_BASE_URL 即可跑流水线。
 
@@ -64,7 +64,6 @@ _PRIORITIES = ("P0", "P1", "P2")
 _TIERS = ("L1", "L2", "L3", "L4")
 _URGENCY = ("Pending", "高", "中", "低")
 _ENTRY_STATUS = ("待分析", "已分析")
-_AUTO_STATUS = ("已接入", "待测", "已暂停")
 
 
 def _f(name: str, ftype: int, options: tuple[str, ...] | None = None) -> dict[str, Any]:
@@ -76,20 +75,6 @@ def _f(name: str, ftype: int, options: tuple[str, ...] | None = None) -> dict[st
 
 
 # ⚠️ 下列表结构与作者线上 base 完全对齐（表名/字段/类型一致），便于他人建出同构的库。
-
-# 信号源表：人工维护的信号源清单（与一级参数的自动化状态对齐，见 source-status 规则）
-_SOURCE_FIELDS = [
-    _f("名称", TEXT),  # 主键
-    _f("分类", SELECT),
-    _f("层级", SELECT, _TIERS),
-    _f("优先级", SELECT, _PRIORITIES),
-    _f("获取方式", SELECT, _FETCH_METHODS),
-    _f("链接", URL),
-    _f("主要看什么", TEXT),
-    _f("自动化状态", SELECT, _AUTO_STATUS),
-    _f("备注", MULTI),
-    _f("来源类型", SELECT, feishu.SIGNAL_FORMAT_OPTIONS),
-]
 
 # 一级参数：源配置 + 采集统计回写字段（sources._base_feed 读取 & feishu 统计回写）
 _PARAM_FIELDS = [
@@ -238,7 +223,6 @@ _GITHUB_FIELDS = [
 # (env 变量名, 表名, 字段列表)。顺序即创建顺序；表名与作者线上 base 一致。
 def _table_specs() -> list[tuple[str, str, list[dict[str, Any]]]]:
     return [
-        ("FEISHU_SOURCE_TABLE_ID", "信号源表", _SOURCE_FIELDS),
         ("FEISHU_PARAM_TABLE_ID", "一级参数", _PARAM_FIELDS),
         ("FEISHU_ENTRY_TABLE_ID", "条目表", _ENTRY_FIELDS),
         ("FEISHU_PAPER_CONFIG_TABLE_ID", "二级参数-论文", _PAPER_FIELDS),
@@ -392,10 +376,8 @@ def run(seed: bool = True, dry_run: bool = False) -> dict[str, str]:
 
     # 已存在的选择字段不会被 _ensure_table 重建，单独补齐新增选项。
     feishu.ensure_select_option(token, name_to_id["一级参数"], "fetch_method", "Social")
-    feishu.ensure_select_option(token, name_to_id["信号源表"], "获取方式", "Social")
     feishu.ensure_select_option(token, name_to_id["条目表"], "路由来源", "Social")
     feishu.ensure_select_option(token, name_to_id["一级参数"], "fetch_method", "Podcast")
-    feishu.ensure_select_option(token, name_to_id["信号源表"], "获取方式", "Podcast")
     feishu.ensure_select_option(token, name_to_id["条目表"], "路由来源", "Podcast")
     feishu.ensure_select_option(token, name_to_id["条目表"], "主题", "端侧")
 
@@ -408,7 +390,6 @@ def run(seed: bool = True, dry_run: bool = False) -> dict[str, str]:
     print("=" * 68)
     print(f"FEISHU_BASE_ID={config.FEISHU_BASE_ID}")
     for env_var in (
-        "FEISHU_SOURCE_TABLE_ID",
         "FEISHU_PARAM_TABLE_ID",
         "FEISHU_ENTRY_TABLE_ID",
         "FEISHU_BRIEF_TABLE_ID",

@@ -1,10 +1,12 @@
-"""本地预览飞书每日卡片：把 notify.build_card 的真实 JSON 渲染成近似飞书样式的网页。
+"""本地预览飞书卡片：把 notify 真实构造的 JSON 渲染成近似飞书样式的网页。
 
 预览直接读生产代码的卡片结构，改 notify.py 后刷新即可，不会与线上样式漂移。
+按输入里的 weekId 自动分派日报卡 / 周报卡，和 notify.run 的判断一致。
 只写 output/，不连飞书、不发消息。
 
     python -m tools.preview_card
     python -m tools.preview_card --input site/data/brief-2026-08-22.json
+    python -m tools.preview_card --input site/data/weekly-latest.json
 """
 from __future__ import annotations
 
@@ -122,9 +124,13 @@ def build_html(card: dict[str, Any], brief: dict[str, Any]) -> str:
     head_html = f'<div class="card-head">{escape(title)}</div>' if title else ""
     body = "\n".join(_render(element) for element in card.get("elements") or [])
     raw = escape(json.dumps(card, ensure_ascii=False, indent=2))
+    weekly = bool(brief.get("weekId"))
+    kind = "周报卡片" if weekly else "每日卡片"
+    builder = "notify.build_weekly_card" if weekly else "notify.build_card"
+    stamp = str(brief.get("weekId") or brief.get("date") or "")
     return f"""<!DOCTYPE html>
 <html lang="zh-CN"><head><meta charset="utf-8">
-<title>飞书每日卡片预览 · {escape(str(brief.get('date') or ''))}</title>
+<title>飞书{escape(kind)}预览 · {escape(stamp)}</title>
 <style>
 :root {{ --ink:#1f2329; --meta:#8f959e; --line:#dee0e3; --brand:#245bdb; --red:#d83931; }}
 * {{ box-sizing:border-box; margin:0; padding:0; }}
@@ -157,8 +163,8 @@ a {{ color:var(--brand); text-decoration:none; }}
 pre {{ background:#1f2329; color:#c9d1d9; padding:16px; border-radius:8px; width:420px;
        font:11px/1.6 ui-monospace,Menlo,monospace; max-height:760px; overflow:auto; }}
 </style></head><body>
-<h1>飞书每日卡片 · 纯文字版</h1>
-<p class="lead">由 <code>notify.build_card</code> 的真实 JSON 渲染，改代码后重跑即可刷新。
+<h1>飞书{escape(kind)} · 纯文字版{f" · {escape(stamp)}" if stamp else ""}</h1>
+<p class="lead">由 <code>{escape(builder)}</code> 的真实 JSON 渲染，改代码后重跑即可刷新。
 窄卡模拟手机宽度，宽卡模拟电脑端 <code>wide_screen_mode</code>。</p>
 <div class="stage">
   <div class="chat"><h2>手机</h2>
@@ -178,7 +184,13 @@ def run() -> int:
     args = parser.parse_args()
 
     brief = json.loads(Path(args.input).read_text(encoding="utf-8"))
-    card = notify.build_card(brief, "https://example.github.io/feishu-ai-signal/?date=" + str(brief.get("date") or ""))
+    # 和 notify.run 一样按 weekId 分派，否则周报只能拿日报的构造函数硬渲染
+    base = "https://example.github.io/feishu-ai-signal"
+    week_id = str(brief.get("weekId") or "")
+    if week_id:
+        card = notify.build_weekly_card(brief, notify.weekly_detail_url(base, week_id))
+    else:
+        card = notify.build_card(brief, notify.detail_url(base, str(brief.get("date") or "")))
     OUT_DIR.mkdir(parents=True, exist_ok=True)
     page = OUT_DIR / "index.html"
     page.write_text(build_html(card, brief), encoding="utf-8")

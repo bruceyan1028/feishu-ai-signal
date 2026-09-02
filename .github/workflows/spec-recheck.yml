@@ -1,0 +1,75 @@
+name: spec-recheck
+
+# capture_spec 自动重筛：daily-brief 构建写完健康记录后，找出违背 spec 的源，
+# 对它们调 LLM 重生成 spec，并一律降为 experimental 交管理员验收。
+# 没有违约源时只跑一次确定性检查就退出，不花 LLM、不动飞书、不 commit。
+
+on:
+  schedule:
+    # UTC 04:05（北京 12:05），晚于 daily-brief（北京 10:45）的构建
+    - cron: "5 4 * * *"
+  workflow_dispatch:
+    inputs:
+      force_source:
+        description: "只重筛指定源（如 anthropic-news），留空则按健康记录自动找"
+        required: false
+        type: string
+      dry_run:
+        description: "只打印会做什么，不调 LLM、不改飞书"
+        required: false
+        type: boolean
+        default: false
+
+concurrency:
+  group: spec-recheck
+  cancel-in-progress: false
+
+jobs:
+  recheck:
+    # 与 daily-brief 同一台自建 Mac：健康记录只在它的 output/ 里，LLM 也只有它能连
+    runs-on: [self-hosted, macOS, ARM64, feishu-ai-signal]
+    timeout-minutes: 30
+    env:
+      FEISHU_APP_ID: ${{ secrets.FEISHU_APP_ID }}
+      FEISHU_APP_SECRET: ${{ secrets.FEISHU_APP_SECRET }}
+      FEISHU_BASE_ID: ${{ secrets.FEISHU_BASE_ID }}
+      FEISHU_PARAM_TABLE_ID: ${{ secrets.FEISHU_PARAM_TABLE_ID }}
+      FEISHU_ENTRY_TABLE_ID: ${{ secrets.FEISHU_ENTRY_TABLE_ID }}
+      LLM_API_KEY: ${{ secrets.LLM_API_KEY }}
+      LLM_BASE_URL: ${{ secrets.LLM_BASE_URL }}
+      LLM_MODEL: ${{ secrets.LLM_MODEL }}
+      JINA_API_KEY: ${{ secrets.JINA_API_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Use prebuilt local Python environment
+        run: |
+          test -x /Users/batlap/Projects/feishu-ai-signal/.venv/bin/python
+          echo "/Users/batlap/Projects/feishu-ai-signal/.venv/bin" >> "$GITHUB_PATH"
+
+      - name: Recheck violated sources (LLM only when violations exist)
+        run: |
+          args=()
+          if [ -n "${{ inputs.force_source }}" ]; then
+            args+=(--source "${{ inputs.force_source }}")
+          fi
+          if [ "${{ inputs.dry_run }}" = "true" ]; then
+            args+=(--dry-run)
+          fi
+          python -m src.spec_recheck "${args[@]}"
+
+      - name: Commit updated capture_specs if changed
+        run: |
+          if git diff --quiet -- src/capture_specs.json; then
+            echo "capture_specs.json 无变更"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add src/capture_specs.json
+          git commit -m "chore(spec): 自动重筛更新 capture_specs" \
+            -m "Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>"
+          git pull --rebase origin main
+          git push origin HEAD:main

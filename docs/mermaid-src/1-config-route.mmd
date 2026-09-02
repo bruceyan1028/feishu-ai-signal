@@ -1,0 +1,29 @@
+flowchart TB
+  REC["飞书一级参数表 一行记录<br/>feishu.read_param_records · main.py:144"]
+  REC --> ST{"status<br/>sources.py:319"}
+  ST -->|paused / experimental| SKIP1["跳过（诊断脚本可放行 experimental）"]
+  ST -->|active 或空| URL{"endpoint 为空？<br/>sources.py:133-139"}
+  URL -->|是，且为 RSS/Scrape/Podcast| SKIP2["整条跳过"]
+  URL -->|否| NORM["URL 归一：无 scheme 补 https:// ，quote(safe=':/?&=%+#')"]
+  NORM --> BASE["公共字段解析 _base_feed sources.py:283<br/>name→回落 source_id · tier 默认 L2 · priority 默认 P1<br/>category 别名归一(中文科技媒体→中文媒体)"]
+  BASE --> LB["lookback_window → lookback_hours · sources.py:116-130<br/>'NNh'→NN · 'NNd'→NN×24 · 含'每日'或'24h'→24 · 含'每周'→168 · 其余/空→168"]
+  LB --> KW["keyword_regex（空→config.DEFAULT_KEYWORD）<br/>extra_config.keyword_min_hits→默认1 · title_exclude_regex→默认空"]
+  KW --> EXTRA["extra_config JSON 解析 sources.py:142<br/>解析失败静默为 None"]
+  EXTRA --> DK["dedup_key 策略 默认 normalize(url)<br/>Podcast 强制 podcast_guid · Social 强制 x_post_id"]
+  DK --> FM{"fetch_method<br/>路由字段"}
+
+  FM -->|RSS| M_RSS["_map_feed_sources sources.py:310<br/>min_content_chars: 表值 → extra.min_abstract_chars → arxiv-* 200 / 其余 100"]
+  FM -->|Scrape| M_SCR["_map_scrape_sources sources.py:508<br/>min_content_chars 默认 100 · max_articles=extra 或 8<br/>b_class(snapshot/diff 榜单) 排除 · cohort 诊断分桶<br/>github-trending 注入 github_config"]
+  FM -->|Media| M_MED["map_media_sources sources.py:360<br/>需 extra.channel_id 或 url · min_content_chars 20<br/>max_items 10 clamp 1-50 · include_shorts/include_live 默认 false"]
+  FM -->|Podcast| M_POD["map_podcast_sources sources.py:385<br/>min_content_chars 1 · max_items 10 · fallback_urls"]
+  FM -->|Social| M_SOC["map_social_sources sources.py:419<br/>需 social 二级表 account_whitelist · min_content_chars 30<br/>cursor_state{since_id,last_fetched_ms} · max_pages 20"]
+  FM -->|Bridge / Manual / API| M_NONE["无 mapper · 不采集（seed 中 21 条占位）"]
+
+  M_RSS & M_SCR & M_MED & M_POD & M_SOC --> TYPED["二级参数附着 typed_config.load_typed_configs main.py:147<br/>同一 source_id 只在一张表生效（先读到的胜出）<br/>arxiv-* 隐式默认：min_signal_score 55 · min_quality_score 60 · require_community_heat true"]
+  TYPED --> SRCTYPE["source_type 推断 infer_signal_format sources.py:160<br/>显式「来源类型」→ typed entity_type → id/URL 启发式 → 兜底 纯网页<br/>⚠ RSS 在 main.py:151 会被再推断一次覆盖"]
+  SRCTYPE --> FEED["feed 对象 → 交给对应抓取器"]
+
+  classDef drop fill:#fde8e6,stroke:#b42318,color:#7a1610;
+  classDef dead fill:#f5f5f5,stroke:#999,stroke-dasharray:4 3,color:#777;
+  class SKIP1,SKIP2 drop;
+  class M_NONE dead;

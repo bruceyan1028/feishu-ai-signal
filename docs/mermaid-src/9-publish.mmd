@@ -1,0 +1,46 @@
+flowchart TB
+  subgraph BUILD["job build（daily-brief.yml:28-103）"]
+    direction TB
+    B1["unittest → python -m src.main（采集，第 1-7 节）"]
+    B2["python -m src.daily（第 8 节）→ output/daily-brief.json"]
+    B3["python -m src.publish --input output/daily-brief.json<br/>load_recent_briefs 7 天 状态=已发布 · _within_source_window 按源窗重验历史信号<br/>enrich_with_pool 0.85 补事件聚合 · curate_web_media 8 线程重整媒体<br/>rmtree site/（stash/restore 保住 weekly/timeline/dashboard/heatmap/logos）<br/>→ site/data/brief-{date}.json · brief-latest.json · sources.json"]
+    B4["timeline → heatmap-trends → tag_topics/aggregate（continue-on-error）"]
+    B5["upload-artifact generated-site（1 天）"]
+    B1 --> B2 --> B3 --> B4 --> B5
+  end
+  subgraph SEND["job deploy-send（:105-182）"]
+    direction TB
+    C1["checkout main → rm -rf site → download-artifact → commit site/ 回写 main"]
+    C2["deploy-pages → page_url 作为 PUBLIC_BASE_URL"]
+    C3["python -m src.notify --input site/data/brief-latest.json"]
+    C1 --> C2 --> C3
+  end
+  subgraph NOTIFY["notify.send_many :396"]
+    direction TB
+    N0{"简报表 发送状态 == 已发送 且非 --force？:414"}
+    N0 -->|是| N0a["skipped"]
+    N0 -->|否| N1{"wait_until_public_json :61<br/>轮询公网 data/brief-{day}.json 比对 date<br/>12 次 × 5s"}
+    N1 -->|超时不匹配| N1a["raise 拒发（避免群里点开是旧简报）"]
+    N1 -->|匹配| N2["build_card :173（纯目录）<br/>按 category 分组 · 组内条数降序取 MAX_GROUPS=4 · 每组 MAX_ITEMS_PER_GROUP=3 · 总 MAX_CARD_ITEMS=8<br/>每条两行：[titleCn 或 title 截 34 字](url) · source · contentType<br/>不放导语/要点/摘要/评分 · 按钮「查看完整网页简报」· note 今日入选 N 条"]
+    N2 --> N3["resolve_targets :296 群聊优先：有 chat_id 只发群，否则 open_id 列表"]
+    N3 --> N4["逐目标 send_interactive_message（HTTP 层 Retry 5 次 429/5xx；业务码非 0 直接 FeishuError）"]
+    N4 --> N5{"全部目标失败？"}
+    N5 -->|是| N5a["简报表 发送状态=失败 · raise"]
+    N5 -->|否| N6["回写 发送状态=已发送/发送时间/消息ID"]
+    N6 --> N7["send_delivery_report → FEISHU_DELIVERY_REPORT_OPEN_ID（✅/❌ 按名单；失败只 warn）"]
+  end
+  subgraph WEEKLY["周报 weekly.py（周一 UTC 03:30）"]
+    direction TB
+    K1["窗口 [today_cn − 6 天, today_cn] 左闭右开 · WEEKLY_LOOKBACK_DAYS=7"]
+    K2["候选：在窗内 ∧ source 仍 active ∧ 已分析 · 待纳入表 pending 三条全豁免"]
+    K3["collapse_for_brief 0.85 limit WEEKLY_SIGNAL_LIMIT=80 → 排序 (qualityScore, impact, novelty, actionability)"]
+    K4["确定性指标（程序算）+ LLM 综述 headline/thesis/areas/topSignals（refs 必须是有效 recordId）"]
+    K5["build_weekly_card：headline 60 字 · thesis 160 字 · 本周焦点 top3"]
+    K1 --> K2 --> K3 --> K4 --> K5
+  end
+  B5 --> C1
+  C3 --> N0
+  classDef drop fill:#fde8e6,stroke:#b42318,color:#7a1610;
+  classDef store fill:#e8f5ec,stroke:#1f7a45;
+  class N1a,N5a drop;
+  class B3,C2,N6 store;

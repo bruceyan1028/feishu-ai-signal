@@ -17,9 +17,17 @@ from urllib.parse import urljoin, urlsplit
 import feedparser
 import requests
 
+from . import config
 from . import sources
 
 log = logging.getLogger(__name__)
+
+_RSS_UA = "Mozilla/5.0 (compatible; AI-Signal/1.0)"
+_RSS_ACCEPT = (
+    "application/rss+xml, application/atom+xml, application/xml, text/xml;q=0.9, */*;q=0.8"
+)
+# connect / read：arxiv 等大 feed 偶发慢，读超时放宽；连接失败靠重试消化。
+_RSS_TIMEOUT = (10, 45)
 
 
 # 厂商博客常在正文末尾挂推广卡 / 订阅区 / WordPress 的「The post ... appeared first on」。
@@ -1204,8 +1212,12 @@ def backfill_full_text(items: list[dict[str, Any]]) -> int:
         # arXiv 的摘要就是合适的正文，抓 HTML 全文只会引入噪音
         and "arxiv.org/" not in str(item.get("url") or "")
     ]
-    # 摘要型源的条目补不到全文就会被长度门槛丢掉，名额优先给它们
-    candidates.sort(key=lambda item: not item.get("needs_fulltext"))
+    # 还不够源上 min_content_chars 的条目补不到全文就会被丢掉，名额优先给它们
+    def _below_threshold(item: dict[str, Any]) -> bool:
+        combined = f"{item.get('title') or ''} {item.get('raw_content') or ''}"
+        return len(combined) < int(item.get("min_content_chars") or 0)
+
+    candidates.sort(key=lambda item: not _below_threshold(item))
     targets = candidates[:FULLTEXT_MAX_FETCH]
     if not targets:
         return 0
@@ -1284,6 +1296,47 @@ def fetch_feed_sources(feeds: list[dict[str, Any]]) -> list[dict[str, Any]]:
     return items
 
 
+def _fetch_feed_parsed(url: str) -> Any:
+    """带 UA / 超时 / 重试拉取 feed 字节，再交给 feedparser。
+
+    不要用 feedparser.parse(url) 直连：它走 urllib、无超时也无重试，
+    arxiv 等站 Connection reset 时会被记成 entries=0 / feed_empty，掩盖真实网络故障。
+    """
+    last_error: Exception | None = None
+    tries = max(1, int(config.HTTP_MAX_TRIES))
+    wait = max(0, int(config.HTTP_WAIT_SECONDS))
+    for attempt in range(1, tries + 1):
+        try:
+            response = requests.get(
+                url,
+                headers={"User-Agent": _RSS_UA, "Accept": _RSS_ACCEPT},
+                timeout=_RSS_TIMEOUT,
+            )
+            if response.status_code in {429, 500, 502, 503, 504}:
+                raise requests.HTTPError(
+                    f"HTTP {response.status_code}",
+                    response=response,
+                )
+            response.raise_for_status()
+            body = response.content or b""
+            if not body.strip():
+                raise requests.RequestException("empty feed body")
+            return feedparser.parse(body)
+        except requests.RequestException as exc:
+            last_error = exc
+            log.warning(
+                "RSS 拉取失败 %s/%s %s: %s",
+                attempt,
+                tries,
+                url,
+                exc,
+            )
+            if attempt < tries and wait:
+                time.sleep(wait)
+    assert last_error is not None
+    raise last_error
+
+
 def fetch_feed_sources_with_stats(
     feeds: list[dict[str, Any]],
 ) -> tuple[list[dict[str, Any]], dict[str, dict[str, Any]]]:
@@ -1303,7 +1356,7 @@ def fetch_feed_sources_with_stats(
         )
         t0 = time.perf_counter()
         try:
-            parsed = feedparser.parse(url)
+            parsed = _fetch_feed_parsed(url)
         except Exception as exc:  # noqa: BLE001 - 与 n8n 容错行为一致
             log.warning("RSS 抓取失败 %s: %s", url, exc)
             st["error"] = f"fetch_failed: {type(exc).__name__}"

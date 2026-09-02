@@ -980,6 +980,64 @@ def update_param_collect_stats(
     return updated
 
 
+def param_record_ids(param_records: list[dict[str, Any]]) -> dict[str, str]:
+    """一级参数表 source_id -> record_id 映射（Scrape mapper 不带 record_id，写回时靠它）。"""
+    from . import sources as sources_mod
+
+    id_to_record: dict[str, str] = {}
+    for rec in param_records:
+        fields = rec.get("fields") or {}
+        sid = sources_mod.cell(fields.get("source_id"))
+        if sid:
+            id_to_record[str(sid).strip()] = str(rec.get("record_id") or "")
+    return id_to_record
+
+
+def demote_sources_to_experimental(
+    token: str,
+    param_records: list[dict[str, Any]],
+    source_ids: list[str] | set[str],
+    *,
+    note: str = "",
+) -> list[str]:
+    """把若干源 status 降为 experimental（待测），正式流水线次日起自动跳过。
+
+    与 sources_api 的「改了采集规则就退回待测」是同一约定：capture_spec 违约意味着
+    该源的抓取链路已不可信，必须重新验收。只降 active 源；已是 experimental/paused
+    的不动。返回实际降级的 source_id。note 非空时追加进「notes」列，方便管理员
+    在飞书上看到为什么被降。
+    """
+    from . import sources as sources_mod
+
+    id_to_record = param_record_ids(param_records)
+    status_by_id: dict[str, str] = {}
+    notes_by_id: dict[str, str] = {}
+    for rec in param_records:
+        fields = rec.get("fields") or {}
+        sid = str(sources_mod.cell(fields.get("source_id")) or "").strip()
+        if sid:
+            status_by_id[sid] = str(sources_mod.cell(fields.get("status")) or "active").strip().lower()
+            notes_by_id[sid] = str(sources_mod.cell(fields.get("notes")) or "")
+
+    demoted: list[str] = []
+    for sid in {str(s).strip() for s in source_ids if str(s).strip()}:
+        record_id = id_to_record.get(sid)
+        if not record_id:
+            log.warning("降级跳过：一级参数表里找不到 source_id=%s", sid)
+            continue
+        if status_by_id.get(sid, "active") != "active":
+            continue
+        fields: dict[str, Any] = {"status": "experimental"}
+        if note:
+            old = notes_by_id.get(sid, "").strip()
+            fields["notes"] = f"{old}\n{note}".strip() if old else note
+        update_record(token, config.FEISHU_PARAM_TABLE_ID, record_id, fields)
+        demoted.append(sid)
+    if demoted:
+        log.info("已把 %d 个源降为 experimental：%s", len(demoted), demoted)
+    return demoted
+
+
 def sync_param_collect_stats(
     token: str,
     param_records: list[dict[str, Any]],

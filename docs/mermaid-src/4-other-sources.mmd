@@ -1,0 +1,38 @@
+flowchart TB
+  subgraph V["Media · video.py（YouTube Data API v3，ThreadPool≤4）"]
+    direction TB
+    V1["channels → uploads 播放列表 → playlistItems → videos<br/>part=snippet,contentDetails,statistics,status · timeout 20s"]
+    V2["取前 max_items（默认 10，clamp 1-50） · 播放列表原序（最新在前）"]
+    V3{"过滤 video.py:132-142"}
+    V3 -->|privacyStatus ≠ public| VD1["丢"]
+    V3 -->|include_shorts=false 且 0<时长<60s| VD2["丢"]
+    V3 -->|include_live=false 且 liveBroadcastContent ≠ none| VD3["丢"]
+    V3 -->|通过| V4["published_raw = snippet.publishedAt<br/>热评 top5（commentThreads order=relevance）<br/>去重键 youtube:{video_id}"]
+    V1 --> V2 --> V3
+  end
+  subgraph P["Podcast · podcast.py（串行）"]
+    direction TB
+    P1["requests.get timeout=(15,90) + feedparser<br/>主 feed 失败 → extra.fallback_urls 逐个降级"]
+    P2["取前 max_items（默认 10，clamp 1-50） · 无排序"]
+    P3{"title / guid / audio_url 任一为空？"}
+    P3 -->|是| PD1["丢"]
+    P3 -->|否| P4["published_raw = entry.published 或 entry.updated<br/>去重键 podcast:{guid} · min_content_chars=1<br/>但漏斗仍走关键词（前 1600 字 ≥3 次）"]
+    P5["富集（跨轮去重后）podcast.py:675<br/>时长 > max_duration_sec 或 14400s → 丢<br/>转写降级链：RSS transcript → 节目页/JSON-LD/YouTube 字幕 → ASR(gpt-4o-transcribe, 1200s 分片) → 官方简介"]
+    P1 --> P2 --> P3
+    P4 -.-> P5
+  end
+  subgraph S["Social · social.py（X API v2，ThreadPool≤4）"]
+    direction TB
+    S1["每账号：poll_hours 默认 P0/P1=24h 未到不拉<br/>GET users/{id}/tweets max_results=100 exclude=retweets<br/>since_id 来自 cursor_state · max_pages 20<br/>首次无 cursor 下发 start_time=lookback(168h)，本地再按 created_at 切一刀"]
+    S2["按 conversation_id 合并线程，取 root · published_raw = root.created_at"]
+    S3["硬过滤 _hard_filter :611<br/>纯转发 · 引用转发本人增量 <20 字或相似≥0.85 · 非线程回复<br/>噪声词(招聘/抽奖/早安)且无事件词 · own_chars <30 且无图/无长文/无硬证据"]
+    S4{"事件词 ∧ 硬证据？<br/>_EVENT_RE 且 github/hf/arxiv/doi/数字/线程≥3"}
+    S4 -->|是| S5["gate=direct 直通"]
+    S4 -->|否| S6["LLM 事实闸 :642（4 线程）<br/>能否抽出 ≥16 字可核验 core_fact；异常按精确率优先丢"]
+    S5 & S6 --> S7["score_item :565 = 账号层级(20/12/6)+意图(25/18/8)+证据≤20+新颖度≤20(近7天语料)+互动速度≤15<br/>按 (social_score, published_raw) 降序"]
+    S7 --> S8["每账号日配额 daily_caps 默认 P0=5 / P1=2（东八区当天已入库计数）"]
+    S1 --> S2 --> S3 --> S4
+  end
+  V4 & P4 & S8 --> NEXT["→ 第 5 节 统一清洗漏斗（Social 跳过关键词）"]
+  classDef drop fill:#fde8e6,stroke:#b42318,color:#7a1610;
+  class VD1,VD2,VD3,PD1 drop;

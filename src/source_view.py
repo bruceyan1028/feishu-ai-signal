@@ -74,7 +74,7 @@ def normalize_status(raw: Any) -> str:
         return text
     if text in LABEL_TO_STATUS:
         return LABEL_TO_STATUS[text]
-    # 信号源表用中文状态，两张表允许短暂漂移，这里统一归一
+    # 配置台的开关传中文标签，这里统一归一成 status 码
     if text in {"已接入", "启用", "on"}:
         return STATUS_ACTIVE
     if text in {"待测", "测试中"}:

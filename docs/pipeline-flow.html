@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>AI Signal · 一条信息源的全链路流程图</title>
+<style>
+  :root { --ink:#16130f; --muted:#6b6b6b; --line:#e5e1da; --red:#b42318; --amber:#a06600; --green:#1f7a45; --blue:#2b6cb0; }
+  body { font-family: -apple-system, "PingFang SC", "Helvetica Neue", Arial, sans-serif; color: var(--ink); margin: 0; background:#fbfaf7; }
+  header { padding: 28px 40px 12px; border-bottom: 1px solid var(--line); background:#fff; }
+  header h1 { margin: 0 0 6px; font-size: 24px; }
+  header p { margin: 0; color: var(--muted); font-size: 14px; }
+  nav { padding: 10px 40px; background:#fff; border-bottom: 1px solid var(--line); font-size: 13px; position: sticky; top:0; z-index: 5; }
+  nav a { margin-right: 14px; color: var(--blue); text-decoration: none; }
+  main { padding: 20px 40px 60px; max-width: 1600px; }
+  section { margin: 34px 0; }
+  section h2 { font-size: 20px; margin: 0 0 6px; }
+  section .lead { color: var(--muted); font-size: 14px; margin: 0 0 12px; line-height: 1.6; }
+  .diagram { background:#fff; border:1px solid var(--line); border-radius: 8px; padding: 14px; overflow-x: auto; }
+  pre.mermaid { margin: 0; background: transparent; }
+  .legend { font-size: 13px; color: var(--muted); margin: 8px 0 0; }
+  .legend span { display:inline-block; margin-right: 14px; }
+  .legend i { display:inline-block; width: 12px; height: 12px; border-radius: 3px; vertical-align: -2px; margin-right: 4px; border:1px solid #999; }
+  table { border-collapse: collapse; width: 100%; font-size: 13px; background:#fff; }
+  th, td { border: 1px solid var(--line); padding: 6px 10px; text-align: left; vertical-align: top; }
+  th { background: #f3f0ea; }
+  code { font-family: "SF Mono", Menlo, monospace; font-size: 12px; background:#f3f0ea; padding: 1px 4px; border-radius: 3px; }
+  .notes li { margin: 6px 0; line-height: 1.6; font-size: 14px; }
+  .tag { display:inline-block; font-size: 11px; padding: 1px 6px; border-radius: 10px; background:#eee; color:#444; margin-left: 6px; vertical-align: middle; }
+</style>
+</head>
+<body>
+<header>
+  <h1>AI Signal · 一条信息源从「配置」到「飞书卡片」的全链路</h1>
+  <p>基于 <code>src/</code> 当前代码梳理（2026-09-02）。红色节点 = 条目被丢弃；橙色 = 截断/取舍点；绿色 = 落盘或写库；虚线框 = 可选/条件分支。文件:行号可直接在仓库里定位。</p>
+</header>
+<nav>
+  <a href="#s0">0 总览</a>
+  <a href="#s1">1 配置与路由</a>
+  <a href="#s2">2 RSS 抓取</a>
+  <a href="#s3">3 网页抓取 + 日期识别</a>
+  <a href="#s4">4 视频/播客/社媒</a>
+  <a href="#s5">5 统一清洗漏斗</a>
+  <a href="#s6">6 日期解析与时间窗</a>
+  <a href="#s7">7 跨轮去重·富集·入库</a>
+  <a href="#s8">8 日报选取与排序</a>
+  <a href="#s9">9 发布与推送</a>
+  <a href="#s10">10 参数速查</a>
+  <a href="#s11">11 易踩的坑</a>
+</nav>
+<main>
+
+<!-- ============================ 0 总览 ============================ -->
+<section id="s0">
+  <h2>0. 总览：八个阶段、两个进程、一张飞书表作为中间存储</h2>
+  <p class="lead">采集（<code>python -m src.main</code>）与日报（<code>python -m src.daily</code>）是两个独立进程，中间靠飞书「信号条目表」持久化。所有抓取器都只负责产出带 <code>published_raw</code> 的原始条目，时间窗、关键词、去重全部集中在一个统一漏斗 <code>process.process_and_clean</code> 里。</p>
+  <div class="diagram">
+<pre class="mermaid">
+flowchart LR
+  subgraph CFG["① 配置层 · 飞书多维表格（seed_default.json 只是镜像）"]
+    direction TB
+    P1["一级参数表 FEISHU_PARAM_TABLE_ID<br/>source_id · endpoint · fetch_method · status<br/>lookback_window · keyword_regex · min_content_chars<br/>dedup_key · extra_config(JSON) · priority · tier · 来源类型"]
+    P2["二级参数表 ×5（按 source_id 关联）<br/>paper / wechat / video / social / github"]
+  end
+  subgraph ROUTE["② 路由 sources.py"]
+    R{"status == active<br/>且 fetch_method ?"}
+  end
+  subgraph FETCH["③ 抓取器（只产 RawItem，不做过滤）"]
+    direction TB
+    F1["RSS · rss.py:1336<br/>串行 · 全量 feed"]
+    F2["Scrape · scrape.py:2037<br/>Jina/直连 · 每源 8 条"]
+    F3["Media · video.py:192<br/>YouTube API · 每源 10"]
+    F4["Podcast · podcast.py:209<br/>RSS+音频 · 每源 10"]
+    F5["Social · social.py:448<br/>X API · since_id 增量"]
+    F0["Bridge / Manual / API<br/>无 mapper，不采集"]
+  end
+  subgraph CLEAN["④ 统一清洗漏斗 process.py:255"]
+    C["10 级漏斗（顺序固定）<br/>每源上限80 → 标题/URL → 标题黑名单<br/>→ 日期解析 → 时间窗<br/>→ 关键词 → 论文信号分/富集 → 类型化过滤 → 轮内去重"]
+  end
+  subgraph DEDUP["⑤ 跨轮去重 + 昂贵富集 main.py:246-274"]
+    direction TB
+    D1["读飞书全量「去重键」<br/>filter_new_items（无 TTL）"]
+    D2["arXiv 按质量分↓时间↓ 截 MAX_ARXIV_ITEMS=10"]
+    D3["只对新条目：播客转写 / 论文 PDF / 政策 PDF / RSS 正文回源(40条)"]
+    D4["drop_too_short 统一判正文长度（Social 除外）"]
+  end
+  subgraph STORE["⑥ 存储"]
+    direction TB
+    S1[("飞书 信号条目表<br/>batch_create 100/批")]
+    S2["output/health/dt=*.jsonl<br/>分源漏斗计数"]
+    S3["一级参数表回写<br/>条目数/时间窗过滤/查重过滤"]
+  end
+  subgraph DAILY["⑦ 日报 daily.py:1005（独立进程，10:45 北京时间）"]
+    direction TB
+    Y1["select_candidates<br/>再过一次时间窗 min(168h, 源窗) + 7 道配额 → 30"]
+    Y2["collapse_for_brief<br/>标题相似≥0.85 或实体锚点 → 同事件折叠"]
+    Y3["LLM analyze_signal 逐条<br/>impact / novelty / actionability / 摘要"]
+    Y4["排序(质量分, impact, novelty, actionability) + 至少1视频 → 30"]
+    Y5["LLM 综述：导语 2 句 + 核心要点 3-6 条<br/>要点标题 = 被引用信号原标题"]
+  end
+  subgraph OUT["⑧ 发布/推送"]
+    direction TB
+    O1["publish → site/data/brief-{date}.json"]
+    O2["GitHub Pages 部署"]
+    O3["notify：Pages 就绪门禁 12×5s<br/>→ 飞书卡片（4 组×3 条 ≤ 8）"]
+  end
+  P1 --> R
+  P2 -. 按 source_id 附着 .-> R
+  R -->|RSS| F1
+  R -->|Scrape| F2
+  R -->|Media| F3
+  R -->|Podcast| F4
+  R -->|Social| F5
+  R -.-> F0
+  F1 & F2 & F3 & F4 & F5 --> C
+  C --> D1 --> D2 --> D3 --> D4 --> S1
+  C -. 计数 .-> S2
+  C -. 计数 .-> S3
+  S1 ==> Y1 --> Y2 --> Y3 --> Y4 --> Y5 --> O1 --> O2 --> O3
+  classDef store fill:#e8f5ec,stroke:#1f7a45;
+  classDef dead fill:#f5f5f5,stroke:#999,stroke-dasharray:4 3,color:#777;
+  class S1,S2,S3,O1,O2 store;
+  class F0 dead;
+</pre>
+  </div>
+</section>
+
+<!-- ============================ 1 配置与路由 ============================ -->
+<section id="s1">
+  <h2>1. 配置与路由：一条 source 记录如何变成 feed 对象</h2>
+  <p class="lead">解析入口 <code>sources._base_feed</code>（sources.py:283-307）。注意 <code>config_store.py</code>/<code>seed_default.json</code> 未接入 <code>main.py</code>，线上采集只读飞书。</p>
+  <div class="diagram">
+<pre class="mermaid">
+flowchart TB
+  REC["飞书一级参数表 一行记录<br/>feishu.read_param_records · main.py:144"]
+  REC --> ST{"status<br/>sources.py:319"}
+  ST -->|paused / experimental| SKIP1["跳过（诊断脚本可放行 experimental）"]
+  ST -->|active 或空| URL{"endpoint 为空？<br/>sources.py:133-139"}
+  URL -->|是，且为 RSS/Scrape/Podcast| SKIP2["整条跳过"]
+  URL -->|否| NORM["URL 归一：无 scheme 补 https:// ，quote(safe=':/?&=%+#')"]
+  NORM --> BASE["公共字段解析 _base_feed sources.py:283<br/>name→回落 source_id · tier 默认 L2 · priority 默认 P1<br/>category 别名归一(中文科技媒体→中文媒体)"]
+  BASE --> LB["lookback_window → lookback_hours · sources.py:116-130<br/>'NNh'→NN · 'NNd'→NN×24 · 含'每日'或'24h'→24 · 含'每周'→168 · 其余/空→168"]
+  LB --> KW["keyword_regex（空→config.DEFAULT_KEYWORD）<br/>extra_config.keyword_min_hits→默认1 · title_exclude_regex→默认空"]
+  KW --> EXTRA["extra_config JSON 解析 sources.py:142<br/>解析失败静默为 None"]
+  EXTRA --> DK["dedup_key 策略 默认 normalize(url)<br/>Podcast 强制 podcast_guid · Social 强制 x_post_id"]
+  DK --> FM{"fetch_method<br/>路由字段"}
+
+  FM -->|RSS| M_RSS["_map_feed_sources sources.py:310<br/>min_content_chars: 表值 → extra.min_abstract_chars → arxiv-* 200 / 其余 100"]
+  FM -->|Scrape| M_SCR["_map_scrape_sources sources.py:508<br/>min_content_chars 默认 100 · max_articles=extra 或 8<br/>b_class(snapshot/diff 榜单) 排除 · cohort 诊断分桶<br/>github-trending 注入 github_config"]
+  FM -->|Media| M_MED["map_media_sources sources.py:360<br/>需 extra.channel_id 或 url · min_content_chars 20<br/>max_items 10 clamp 1-50 · include_shorts/include_live 默认 false"]
+  FM -->|Podcast| M_POD["map_podcast_sources sources.py:385<br/>min_content_chars 1 · max_items 10 · fallback_urls"]
+  FM -->|Social| M_SOC["map_social_sources sources.py:419<br/>需 social 二级表 account_whitelist · min_content_chars 30<br/>cursor_state{since_id,last_fetched_ms} · max_pages 20"]
+  FM -->|Bridge / Manual / API| M_NONE["无 mapper · 不采集（seed 中 21 条占位）"]
+
+  M_RSS & M_SCR & M_MED & M_POD & M_SOC --> TYPED["二级参数附着 typed_config.load_typed_configs main.py:147<br/>同一 source_id 只在一张表生效（先读到的胜出）<br/>arxiv-* 隐式默认：min_signal_score 55 · min_quality_score 60 · require_community_heat true"]
+  TYPED --> SRCTYPE["source_type 推断 infer_signal_format sources.py:160<br/>显式「来源类型」→ typed entity_type → id/URL 启发式 → 兜底 纯网页<br/>⚠ RSS 在 main.py:151 会被再推断一次覆盖"]
+  SRCTYPE --> FEED["feed 对象 → 交给对应抓取器"]
+
+  classDef drop fill:#fde8e6,stroke:#b42318,color:#7a1610;
+  classDef dead fill:#f5f5f5,stroke:#999,stroke-dasharray:4 3,color:#777;
+  class SKIP1,SKIP2 drop;
+  class M_NONE dead;
+</pre>
+  </div>
+</section>
+
+<!-- ============================ 2 RSS ============================ -->
+<section id="s2">
+  <h2>2. RSS 抓取链路（rss.py）</h2>
+  <p class="lead">RSS 抓取阶段<strong>不排序、不截断、不过滤</strong>——整份 feed 原序全收，全部交给第 5 节的统一漏斗。唯一的"镜像/代理"是正文回源阶段的 Jina 兜底（见第 7 节）。</p>
+  <div class="diagram">
+<pre class="mermaid">
+flowchart TB
+  IN["feed（RSS, active） · 串行逐源 rss.py:1345"]
+  IN --> GET["requests.get(bytes) rss.py:1295<br/>UA=Mozilla/5.0 (compatible; AI-Signal/1.0)<br/>Accept=rss/atom/xml · timeout=(10s 连接, 45s 读)<br/>无代理 · 无镜像 · 无并发"]
+  GET --> OK{"成功？"}
+  OK -->|"429/500/502/503/504<br/>网络异常 · 空响应体<br/>其它 4xx 也会重试"| RETRY["重试 HTTP_MAX_TRIES=4 次<br/>固定间隔 HTTP_WAIT_SECONDS=5s<br/>rss.py:1301-1333"]
+  RETRY -->|耗尽| E1["stats.error=fetch_failed:* · 本源 0 条"]
+  RETRY --> GET
+  OK -->|是| PARSE["feedparser.parse(bytes)"]
+  PARSE --> BOZO{"bozo 且无 entries？"}
+  BOZO -->|是| E2["unparseable_or_empty"]
+  BOZO -->|否| EMPTY{"entries 为空？"}
+  EMPTY -->|是| E3["feed_empty"]
+  EMPTY -->|否（bozo 但有 entries 也放行）| LOOP["逐 entry 构造 RawItem rss.py:1372-1388<br/>整份 feed 全收 · 保持 feed 原序"]
+  LOOP --> T["title = entry.title（含 HTML，未清洗）"]
+  LOOP --> U["url = entry.link 或 entry.id（未归一化）"]
+  LOOP --> B["body = _best_body rss.py:104<br/>content[0].value → summary → description<br/>经 strip_trailing_promo（只砍正文 60% 之后的推广块）"]
+  LOOP --> IMG["image_url = media_content → media_thumbnail → image/* enclosure → 正文首图<br/>media_assets: 图≤4 · YouTube≤1 · 同域 PDF≤8"]
+  LOOP --> DATE["published_raw = _published_raw rss.py:649<br/>① entry.published（feedparser 已归一 pubDate/dc:date）<br/>② entry.pubDate<br/>③ entry.updated —— 仅当 extra.allow_updated_as_published<br/>或 id ∈ {opencompass, nature-machine-intelligence, nature-computational-science}<br/>④ 否则 空串 → 将在漏斗被丢"]
+  T & U & B & IMG & DATE --> RAW["RawItem{title,url,body,image_url,media_assets,entry_tags,published_raw,is_html=True,feed}"]
+  RAW --> NEXT["→ 第 5 节 统一清洗漏斗"]
+  classDef drop fill:#fde8e6,stroke:#b42318,color:#7a1610;
+  class E1,E2,E3 drop;
+</pre>
+  </div>
+</section>
+
+<!-- ============================ 3 Scrape ============================ -->
+<section id="s3">
+  <h2>3. 网页（Scrape）抓取链路 + 网站日期字段识别（scrape.py）</h2>
+  <p class="lead">这是最复杂的一条。日期分三个阶段注入，越早命中越优先：<strong>A 列表页</strong>（URL 路径日期 → 卡片邻近文本）、<strong>B 正文页</strong>（Jina "Published Time" 或 HTML 六级 cascade）、<strong>C 统一解析</strong>（process.parse_date_ms，见第 6 节）。<strong>主截断点</strong>在列表页排序后 <code>cand[:max_articles=8]</code>。没有 playwright、没有 sitemap、没有 HTTP Last-Modified、明确不用 dateModified。</p>
+  <div class="diagram">
+<pre class="mermaid">
+flowchart TB
+  IN["scrape feeds · engine=auto · scrape.py:2037"]
+  IN --> PROBE{"probe_jina()<br/>r.jina.ai/example.com 可用？<br/>scrape.py:93"}
+  PROBE -->|是| JINA["engine=jina<br/>GET r.jina.ai/{url}<br/>x-engine:browser · x-timeout:20 · x-with-links-summary<br/>retry 4×5s · scrape.py:1905"]
+  PROBE -->|否| DIRECT["engine=direct（整批降级）<br/>requests.get UA=AI-Signal/1.0 · timeout 30s · 无重试<br/>scrape.py:106"]
+  JINA --> FD{"单源 force_direct？<br/>HF/PwC 论文源恒 true 或 extra.force_direct<br/>scrape.py:558"}
+  FD -->|是| DIRECT
+  FD -->|否| LIST
+  DIRECT --> LIST["列表页 GET · ThreadPool(JINA_CONCURRENCY=3) · scrape.py:2106"]
+  LIST --> LEMPTY{"列表页为空？"}
+  LEMPTY -->|是| E1["stats.error=list_empty_or_failed · 本源 0 条"]
+  LEMPTY -->|否| SPLIT{"_extract_links_for_feed 分流<br/>scrape.py:1704"}
+
+  SPLIT -->|HF Papers / PwC| SP1["_extract_hf_pwc_paper_links :637<br/>SSR props publishedAt · 热度门槛 recent_days 7 / min_upvotes 0<br/>高热(upvotes≥100 或 24h stars≥100 且 ≤30 天) → heat_keep=true"]
+  SPLIT -->|list_parser=anthropic_news| SP2["_extract_anthropic_news_links :1716<br/>卡片 time 标签 · 返回空则回落通用"]
+  SPLIT -->|list_parser=zhipu_news| SP3["_extract_zhipu_news_links :1759<br/>p 标签 2026/08/27"]
+  SPLIT -->|JSON API 源| SP4["ModelScope :731 / 字节 Seed :864 / GitHub Search :1073<br/>各自窗口 recent_days 14 / 30 / release 30 天<br/>GitHub 条目 heat_keep 恒 true"]
+  SPLIT -->|通用| GEN{"use_jina？"}
+  GEN -->|是| LMD["_extract_links（markdown）:1934<br/>先删图片链接 · [title](url) 正则"]
+  GEN -->|否| LHTML["_extract_links_html :1798<br/>href 正则 · urljoin · 剥 fragment"]
+
+  LMD & LHTML --> FILT["链接过滤链（顺序即淘汰优先级） scrape.py:1810-1833<br/>① _SOCIAL：twitter/x/linkedin/facebook/youtube/instagram · mailto/tel · 静态资源后缀<br/>② 同域约束：_host(url) ≠ _host(feed.url) 丢<br/>③ 空路径 或 等于列表页自身<br/>④ 仅 jina：_NAV 锚文本（read more/home/blog/news/about/…）<br/>⑤ _link_depth_ok :249<br/>⑥ _path_allowed :215<br/>⑦ 同页 URL 去重"]
+  FILT --> DEPTH["_link_depth_ok 规则<br/>strict = 列表页不是站点根 且 未配 link_path_include<br/>strict：路径必须挂在列表页前缀下<br/>非 strict：段数≥2 或 含数字 通过；<br/>否则需 extra.allow_shallow_html 且路径匹配 .html/news/blog/press/post/article"]
+  FILT --> PATHR["_path_allowed 规则<br/>① 内置黑名单 /footer /login /search /cdn-cgi /wp-admin /assets/ /fonts/ …<br/>② extra.link_path_exclude（正则失败降级子串）<br/>③ extra.link_path_include 配了即白名单，不命中丢"]
+  DEPTH & PATHR --> DA["阶段 A 日期（每条链接） scrape.py:1836-1846<br/>A1 _published_date_from_url :294<br/>正则 (20\d\d)[-/_]?(\d\d)[-/_]?(\d\d) 后接 / 或 . 或结尾 · 非法月日返回空<br/>A2 _date_near_anchor :310（A1 未命中时）<br/>锚点左 160 / 右 480 字符，右边界被下一个锚点截断<br/>认 Aug. 27, 2026 · 2026-08-27 · 2026年8月27日 · 27 Aug 2026"]
+  DA --> SORT["排序 _cand_recency_key :322 · reverse=True<br/>(1, epoch_ms, url)  有可解析日期者优先，时间倒序<br/>(0, YYYYMMDD 或 YYYY0000, path)  仅 URL 含日期/年份<br/>(0, 0, path)  全无日期 → 路径字典序"]
+  SORT --> CUT["★ 主截断 cand[:max_articles]<br/>extra.max_articles 或 DEFAULT_MAX_ARTICLES=8 · scrape.py:1848 / 1982"]
+  SP1 & SP2 & SP3 & SP4 --> CUT
+  CUT --> NOLINK{"抽到链接？"}
+  NOLINK -->|否| E2["stats.error=no_links_extracted"]
+  NOLINK -->|是| ART["正文页 GET · ThreadPool(3) · scrape.py:2123-2144<br/>请求次数 = 链接数（≤8），Jina 无日期时每条最多 +1 次直连补日期"]
+
+  ART --> ENG{"engine"}
+  ENG -->|jina 且非 force_direct| BJ["阶段 B-jina _build_item :1985<br/>① link.published_raw（阶段 A 结果）<br/>② markdown 首部 'Published Time:' 行 :439<br/>③ 都没有 → _fetch_direct_published_date 直连 20s 跑 HTML cascade :444<br/>④ _published_date_from_url 兜底 :2002"]
+  ENG -->|direct| BD["阶段 B-direct _build_item_direct :1877<br/>① link.published_raw<br/>② extract_published_date_html(html, url)"]
+  BJ & BD --> CASC["extract_published_date_html 六级 cascade scrape.py:377-436（首个命中即返回）<br/>1 meta property/name ∈ _PUBLISHED_KEYS<br/>  article:published_time · datePublished · date_published · publishedAt · publishDate · pubdate · _createdAt<br/>2 SSR / JSON-LD 键值 #quot;KEY#quot; 冒号后允许空白 #quot;value#quot;（值长 8-80，允许转义）<br/>3 time 标签 datetime 属性<br/>4 h1 后 5000 字符内 'Month D, YYYY • N minute read'（Meta AI Blog 专用）<br/>5 前 20000 字符内 (published|posted|发布日期|发布时间) + 日期<br/>6 URL 路径日期兜底<br/>✗ 明确不用 dateModified / _updatedAt · ✗ 无 sitemap · ✗ 无 Last-Modified"]
+  CASC --> BODY["正文抽取 limit=15000<br/>direct：rss.parse_article_html :1137 → _pick_content_chunk(article/main 打分，最优 &lt; 整页×0.4 退回整页) → 去 nav/header/footer → html_to_text → 裁样板<br/>jina：rss.parse_jina_markdown :1112<br/>标题：页面 title（剥 'Paper page - '）· extra.article_title_from_h1 → h1"]
+  BODY --> SHORT{"direct 且正文 &lt; 40 字？"}
+  SHORT -->|是| E3["article_fail · 该链接丢弃（jina 路径不做此检查）"]
+  SHORT -->|否| RAW["RawItem{title,url,body,published_raw,heat_keep,media_assets,feed}"]
+  RAW --> NEXT["→ 第 5 节 统一清洗漏斗"]
+  classDef drop fill:#fde8e6,stroke:#b42318,color:#7a1610;
+  classDef cut fill:#fff3e0,stroke:#a06600,color:#5c3a00;
+  class E1,E2,E3 drop;
+  class CUT,SORT cut;
+</pre>
+  </div>
+  <p class="legend">列表页链接被淘汰的原因在 <code>tools/list_page_audit.py</code> 中固化为 <code>social_or_asset / cross_host / empty_path_or_self / nav_title / depth / path_filter / duplicate / truncated / kept</code>；离线日期路线体检见 <code>tools/date_route_probe.py</code>（命中率≥0.99 且无告警 → 置信度高；&lt;0.6 或不单调/矛盾/未来日期 → 低），运行时条目上<strong>不带</strong> route/置信度标记。</p>
+</section>
+
+<!-- ============================ 4 Media/Podcast/Social ============================ -->
+<section id="s4">
+  <h2>4. 视频 / 播客 / 社媒抓取链路（简版）</h2>
+  <p class="lead">三条链路各自只在抓取阶段做"结构性"过滤（非公开、Shorts、缺音频等），主题与时效过滤仍在第 5 节统一漏斗。Social 是唯一带 LLM 闸和日配额的通道，且默认不跑（需 <code>--method Social</code>）。</p>
+  <div class="diagram">
+<pre class="mermaid">
+flowchart TB
+  subgraph V["Media · video.py（YouTube Data API v3，ThreadPool≤4）"]
+    direction TB
+    V1["channels → uploads 播放列表 → playlistItems → videos<br/>part=snippet,contentDetails,statistics,status · timeout 20s"]
+    V2["取前 max_items（默认 10，clamp 1-50） · 播放列表原序（最新在前）"]
+    V3{"过滤 video.py:132-142"}
+    V3 -->|privacyStatus ≠ public| VD1["丢"]
+    V3 -->|include_shorts=false 且 0&lt;时长&lt;60s| VD2["丢"]
+    V3 -->|include_live=false 且 liveBroadcastContent ≠ none| VD3["丢"]
+    V3 -->|通过| V4["published_raw = snippet.publishedAt<br/>热评 top5（commentThreads order=relevance）<br/>去重键 youtube:{video_id}"]
+    V1 --> V2 --> V3
+  end
+  subgraph P["Podcast · podcast.py（串行）"]
+    direction TB
+    P1["requests.get timeout=(15,90) + feedparser<br/>主 feed 失败 → extra.fallback_urls 逐个降级"]
+    P2["取前 max_items（默认 10，clamp 1-50） · 无排序"]
+    P3{"title / guid / audio_url 任一为空？"}
+    P3 -->|是| PD1["丢"]
+    P3 -->|否| P4["published_raw = entry.published 或 entry.updated<br/>去重键 podcast:{guid} · min_content_chars=1<br/>但漏斗仍走关键词（前 1600 字 ≥3 次）"]
+    P5["富集（跨轮去重后）podcast.py:675<br/>时长 &gt; max_duration_sec 或 14400s → 丢<br/>转写降级链：RSS transcript → 节目页/JSON-LD/YouTube 字幕 → ASR(gpt-4o-transcribe, 1200s 分片) → 官方简介"]
+    P1 --> P2 --> P3
+    P4 -.-> P5
+  end
+  subgraph S["Social · social.py（X API v2，ThreadPool≤4）"]
+    direction TB
+    S1["每账号：poll_hours 默认 P0/P1=24h 未到不拉<br/>GET users/{id}/tweets max_results=100 exclude=retweets<br/>since_id 来自 cursor_state · max_pages 20<br/>首次无 cursor 下发 start_time=lookback(168h)，本地再按 created_at 切一刀"]
+    S2["按 conversation_id 合并线程，取 root · published_raw = root.created_at"]
+    S3["硬过滤 _hard_filter :611<br/>纯转发 · 引用转发本人增量 &lt;20 字或相似≥0.85 · 非线程回复<br/>噪声词(招聘/抽奖/早安)且无事件词 · own_chars &lt;30 且无图/无长文/无硬证据"]
+    S4{"事件词 ∧ 硬证据？<br/>_EVENT_RE 且 github/hf/arxiv/doi/数字/线程≥3"}
+    S4 -->|是| S5["gate=direct 直通"]
+    S4 -->|否| S6["LLM 事实闸 :642（4 线程）<br/>能否抽出 ≥16 字可核验 core_fact；异常按精确率优先丢"]
+    S5 & S6 --> S7["score_item :565 = 账号层级(20/12/6)+意图(25/18/8)+证据≤20+新颖度≤20(近7天语料)+互动速度≤15<br/>按 (social_score, published_raw) 降序"]
+    S7 --> S8["每账号日配额 daily_caps 默认 P0=5 / P1=2（东八区当天已入库计数）"]
+    S1 --> S2 --> S3 --> S4
+  end
+  V4 & P4 & S8 --> NEXT["→ 第 5 节 统一清洗漏斗（Social 跳过关键词）"]
+  classDef drop fill:#fde8e6,stroke:#b42318,color:#7a1610;
+  class VD1,VD2,VD3,PD1 drop;
+</pre>
+  </div>
+</section>
+
+<!-- ============================ 5 清洗漏斗 ============================ -->
+<section id="s5">
+  <h2>5. 统一清洗漏斗 process.process_and_clean（process.py:292-511）</h2>
+  <p class="lead">所有源的条目在这里按<strong>固定顺序</strong>过 10 道闸（正文长度不在这里判，统一放到第 7 节回源补全之后），命中即 <code>continue</code>，条目<strong>不留正文</strong>，只在 <code>output/health/</code> 留分源计数（阶段名与 <code>health.FUNNEL_STAGES</code> 一一对应）。输入保持抓取顺序，整个漏斗<strong>不排序</strong>。</p>
+  <div class="diagram">
+<pre class="mermaid">
+flowchart TB
+  RAW["raw · 各抓取器 RawItem 按输入顺序"]
+  RAW --> G1{"① per_feed_cap<br/>本源已保留 ≥ MAX_ITEMS_PER_FEED=80？<br/>process.py:296（计数只在最终保留时+1）"}
+  G1 -->|是| D1["丢 per_feed_cap"]
+  G1 -->|否| G2{"② strip_html(title) 或 normalize_url(url) 为空？<br/>:323"}
+  G2 -->|是| D2["丢 missing_title_url"]
+  G2 -->|否| G3{"③ 标题命中 title_exclude_regex？<br/>:326 · 默认空=不启用"}
+  G3 -->|是| D3["丢 title_exclude_regex"]
+  G3 -->|否| G4["④ parse_date_ms(published_raw) :74<br/>dateutil 宽松解析 · 无时区→按 UTC · 未来 &gt; now+2 天 → None"]
+  G4 --> G4b{"published_ms 为 None？"}
+  G4b -->|是| D4["丢 missing_or_invalid_date<br/>（明确禁止用采集时间冒充发布时间）"]
+  G4b -->|否| G5{"⑤ lookback :334<br/>heat_keep？"}
+  G5 -->|heat_keep=true| G6
+  G5 -->|否| G5b{"now − published_ms ≥ lookback_ms？<br/>lookback_hours = feed.lookback_hours 或 168<br/>纯日期(无时分秒) 再 +24h 宽限"}
+  G5b -->|是| D5["丢 lookback<br/>（若其余条件都能过，计入 drop_stats 回写飞书「时间窗过滤」）"]
+  G5b -->|否| G7{"⑥ 关键词 :363<br/>fetch_method ∈ {Bridge, Social} → 跳过<br/>Podcast：标题命中 或 正文前 1600 字命中 ≥ max(3, min_hits)<br/>其余：标题命中即过；否则正文命中 ≥ keyword_min_hits(默认 1)<br/>正则 = feed.keyword_regex 或 DEFAULT_KEYWORD（ai|llm|agent|model|gpt|claude|gemini|…）"}
+  G7 -->|未命中| D7["丢 keyword_regex"]
+  G7 -->|命中/跳过| G8{"⑦ source_id 以 whitehouse-tech- 开头<br/>且标题+正文不含 _AI_POLICY_RE？:372"}
+  G8 -->|是| D8["丢 not_ai_policy"]
+  G8 -->|否| G9{"是论文源？<br/>sources.is_paper_source :378"}
+  G9 -->|是| PM["infer_paper_metrics typed_config.py:90<br/>基准 50 · 代码链接 +15 · 正文≥800 +5 / &lt;200 −10<br/>sota +12 · benchmark +8 · 开源 +10 · 顶会 +15 · lecture notes −45 · retracted −50 · clamp 0-100"]
+  PM --> G9b{"⑧ signal_score &lt; min_signal_score？<br/>arxiv-* 默认 55 · 顶刊源不套"}
+  G9b -->|是| D9["丢 min_signal_score"]
+  G9b -->|否| PE["paper_enrich.enrich_paper（PAPER_ENRICH_ENABLED，CI 中关闭）<br/>export.arxiv.org 取录用/期刊 · huggingface.co/api/papers 取 upvotes/comments · 12s · 熔断 429×3/异常×5<br/>venue：黑名单 0 / 无录用 20 / 白名单 100 / 其它已录用 60<br/>community = 0.6·log(upvotes,500) + 0.4·log(comments,80)<br/>quality_score = 0.40·venue + 0.35·signal + 0.25·community（社区未知则按可用维归一）"]
+  PE --> G10
+  G9 -->|否| G10{"⑨ 类型化过滤 typed_config.apply_typed_filter :294<br/>（仅 source_id 命中二级表时）<br/>keyword_include 任一命中 · keyword_exclude 命中即丢 · min_chars<br/>venue_whitelist/blacklist · account/channel_whitelist<br/>数值钩子(仅 metrics 提供时)：min_impact_factor/min_read_count/min_views/min_followers/min_engagement/min_duration_sec/min_quality_score/min_community_heat<br/>布尔硬门：require_community_heat(缺失也丢，已录用豁免) · exclude_preprint · require_code · exclude_ad · exclude_retweets · require_acceptance"}
+  G10 -->|任一不过| D10["丢（阶段名 = 具体 reason）"]
+  G10 -->|通过| G11["⑩ build_dedup_key :107<br/>Podcast→podcast:{guid} · Social→x:{post_id} · Media→youtube:{id} · arxiv_id→arxiv:{id} · hash(model→release:{title}<br/>默认 normalize_url：去 fragment · 去 utm_*/ref 参数 · 去尾 / · 全小写"]
+  G11 --> G11b{"duplicate_key 本轮已出现？:467"}
+  G11b -->|是| D11["丢 dup_round"]
+  G11b -->|否| KEPT["kept → row :485<br/>title(已 strip) · url(已归一) · source · source_id · source_type · fetch_method · category · tier<br/>published_ms · collected_ms · raw_content=body[:15000] · image_url · media_assets · topics(≤5)<br/>duplicate_key · quality_score(普通文章恒 0) · min_content_chars · metrics"]
+  KEPT --> NEXT["→ 第 7 节 跨轮去重"]
+  classDef drop fill:#fde8e6,stroke:#b42318,color:#7a1610;
+  classDef soft fill:#fff3e0,stroke:#a06600,color:#5c3a00;
+  classDef keep fill:#e8f5ec,stroke:#1f7a45;
+  class D1,D2,D3,D4,D5,D7,D8,D9,D10,D11 drop;
+  class KEPT keep;
+</pre>
+  </div>
+</section>
+
+<!-- ============================ 6 日期与时间窗 ============================ -->
+<section id="s6">
+  <h2>6. 日期解析与时间窗：两道串联的 lookback</h2>
+  <p class="lead">采集端放行的条目，到日报端还要<strong>再过一次</strong>时间窗，而且日报端硬顶 7 天、基准时刻是日报运行时刻。两端都以「发布时间」为基准，采集时间从不参与过滤。</p>
+  <div class="diagram">
+<pre class="mermaid">
+flowchart LR
+  subgraph SRC["日期字符串来源（各抓取器）"]
+    direction TB
+    R1["RSS：published → pubDate → updated(白名单源) → 空"]
+    R2["Scrape：URL 路径 → 卡片邻近文本 → Published Time → HTML 六级 cascade → URL 兜底"]
+    R3["Media：snippet.publishedAt · Podcast：published/updated · Social：root.created_at"]
+  end
+  subgraph PARSE["process.parse_date_ms :74-87"]
+    direction TB
+    A1["dateutil.parser.parse(raw)"]
+    A2{"tzinfo 为 None？"}
+    A2 -->|是| A3["replace(tzinfo=UTC)（本地时间被当 UTC，最多 ±14h 偏差）"]
+    A2 -->|否| A4["按原偏移转 epoch ms"]
+    A3 & A4 --> A5{"&gt; now + 2 天？"}
+    A5 -->|是| A6["None → 丢 missing_or_invalid_date"]
+    A5 -->|否| A7["published_ms"]
+    A1 --> A2
+    A1 -.解析异常.-> A6
+  end
+  subgraph WIN1["采集端时间窗 process.py:301-353"]
+    direction TB
+    W1["lookback_hours = feed.lookback_hours 或 MIN_LOOKBACK_HOURS=168<br/>（源表 lookback_window：24h/7d/每日/每周）"]
+    W2{"is_date_only_published(raw)？<br/>_DATE_ONLY_RE：2026-08-27 · 2026年8月27日 · Aug 27, 2026 · 27 Aug 2026"}
+    W2 -->|是| W3["lookback_ms = (hours + 24) × 3.6e6"]
+    W2 -->|否| W4["lookback_ms = hours × 3.6e6"]
+    W3 & W4 --> W5{"heat_keep？"}
+    W5 -->|是| W7["跳过时间窗（仍写真实发布时间）"]
+    W5 -->|否| W6{"now − published_ms ≥ lookback_ms？"}
+    W6 -->|是| W8["丢 lookback"]
+    W6 -->|否| W9["通过 → 入库（第 7 节）"]
+    W1 --> W2
+  end
+  subgraph WIN2["日报端时间窗 daily.py:522-542（独立进程再算一次）"]
+    direction TB
+    Y1["source_hours = 一级参数表 lookback_window（现读），缺省 168"]
+    Y2["effective_hours = min(168, source_hours) ← 硬顶 7 天"]
+    Y3["cutoff = now(UTC) − effective_hours · future_limit = now + 2 天"]
+    Y4{"发布时间 &lt; cutoff 或 &gt; future_limit？"}
+    Y4 -->|是| Y5["排除"]
+    Y4 -->|否| Y6{"白宫源且非 AI 政策文本？"}
+    Y6 -->|是| Y5
+    Y6 -->|否| Y7["进入候选池（第 8 节）"]
+    Y1 --> Y2 --> Y3 --> Y4
+  end
+  SRC --> PARSE
+  A7 --> WIN1
+  W9 ==> |飞书条目表| WIN2
+  classDef drop fill:#fde8e6,stroke:#b42318,color:#7a1610;
+  class A6,W8,Y5 drop;
+</pre>
+  </div>
+  <p class="legend">时区说明：采集端全程 UTC；日报端 <code>CN_TZ(UTC+8)</code> 只用于日期标签与 <code>publishedDate</code> 展示，不参与窗口计算。历史"用采集时间冒充发布时间"的 Scrape 条目可用 <code>src/backfill_published_dates.py</code> 审计（|发布−采集| ≤3h 判为候选，回源重取日期，差 ≥6h 才改写，默认只审计不写）。</p>
+</section>
+
+<!-- ============================ 7 跨轮去重·富集·入库 ============================ -->
+<section id="s7">
+  <h2>7. 跨轮去重 → 昂贵富集 → 入库（main.py:246-347）</h2>
+  <p class="lead">增量靠飞书表远端「去重键」集合，<strong>没有本地 seen 文件、没有 TTL</strong>。所有昂贵富集（ASR、PDF、正文回源）都放在去重之后，只对确定入库的条目做。</p>
+  <div class="diagram">
+<pre class="mermaid">
+flowchart TB
+  IN["cleaned rows（第 5 节输出）"]
+  IN --> EX["feishu.read_existing_dedup_keys :85<br/>分页 500/页 · 最多 50 页（25000 条）· 返回 set"]
+  EX --> FN{"filter_new_items main.py:46<br/>duplicate_key ∈ existing 或 seen_this_run？"}
+  FN -->|是| D1["跳过（跨轮重复）"]
+  FN -->|否| AX{"_is_arxiv？"}
+  AX -->|否| KEEP1["非 arXiv 全留 · 保持原序"]
+  AX -->|是| AXS["arXiv 子集 sort(−quality_score, −published_ms)"]
+  AXS --> AXC["★ 截 MAX_ARXIV_ITEMS=10 · main.py:71"]
+  AXC --> D2["超出部分丢"]
+  KEEP1 & AXC --> NEW["new_items"]
+  NEW --> E1["播客 enrich_podcast_items podcast.py:757<br/>时长闸 14400s · 转写降级链 · 分层摘要"]
+  E1 --> E2["论文 paper_fulltext.enrich_item :475（仅有 paper_metrics_json 的条目）<br/>canonical_pdf_url → fetch_pdf(%PDF 魔数) → PyMuPDF 抽章节(≤4500字/节, 总≤26000) + 图表说明≤24 + 视觉页 top4<br/>失败 → full_text.source=abstract"]
+  E2 --> E3["政策 policy_document.enrich_items :251<br/>条件：extra.document_pdf_enrich 且 whitehouse-tech-*<br/>每条 ≤ max_document_pdfs(默认 2, clamp 1-4) · PDF ≤24MB · 正文 ≤8000 字 · 证据块置于正文之前"]
+  E3 --> E4["RSS 正文回源 rss.backfill_full_text :1204<br/>候选：raw_content &lt; 600 字 · http(s) · 非 Media/Social/Podcast · 非 arxiv<br/>不够 min_content_chars 的优先 → 取前 FULLTEXT_MAX_FETCH=40 · 6 线程"]
+  E4 --> E4a["直连 requests.get 12s 无重试 · 截 1.5MB<br/>parse_article_html（article/main 打分 → 去噪 → html_to_text → 裁样板）"]
+  E4a --> E4b{"正文 ≥ 600 字？"}
+  E4b -->|否| E4c["Jina 兜底 r.jina.ai · 60s · retry 4×5s → parse_jina_markdown"]
+  E4b -->|是| E4d
+  E4c --> E4d{"新文本 &gt; max(旧×2, 600)？"}
+  E4d -->|是| E4e["替换 raw_content（截 15000）· 补图 images[0]"]
+  E4d -->|否| E4f["保留旧正文"]
+  E4e & E4f --> E5{"process.drop_too_short<br/>len(title + raw_content) &lt; min_content_chars？<br/>Social 不判（抓取层已按自己规则筛过）· 其余全部判，含 Media/Podcast/arXiv"}
+  E5 -->|是| D3["丢 min_content_chars（记入漏斗，并从 cleaned 里去掉）"]
+  E5 -->|否| W1["feishu.sync_param_collect_stats :983<br/>回写一级参数表：通过/最近采集时间/条目数/时间窗过滤/查重过滤"]
+  W1 --> W2["health.write_records → output/health/dt=YYYY-MM-DD.jsonl<br/>分源 × 13 阶段计数（追加）"]
+  W2 --> Z{"new_items 为空？"}
+  Z -->|是| Z1["只落 Social 游标后返回"]
+  Z -->|否| W3["process.format_for_feishu :527 → feishu.batch_create_records（100/批）<br/>固定列：标题·链接·来源·来源类型·路由来源·分类·层级·发布时间·采集时间·原文·主题·去重键·source_id<br/>状态=待分析 · 影响分/新颖度/可行动性=0 · 条件列：媒体资源/质量分/录用会议/社区热度/论文指标/社媒指标/播客指标"]
+  W3 --> W4["update_social_cursor_states · 可选 Dify webhook"]
+  classDef drop fill:#fde8e6,stroke:#b42318,color:#7a1610;
+  classDef cut fill:#fff3e0,stroke:#a06600,color:#5c3a00;
+  classDef store fill:#e8f5ec,stroke:#1f7a45;
+  class D1,D2,D3 drop;
+  class AXC cut;
+  class W1,W2,W3 store;
+</pre>
+  </div>
+</section>
+
+<!-- ============================ 8 日报 ============================ -->
+<section id="s8">
+  <h2>8. 日报选取、聚类、评分、排序、数量取舍（daily.py + cluster.py）</h2>
+  <p class="lead">没有 embedding、没有 simhash：跨源去重靠「标题相似度（difflib）≥0.85 或 实体锚点匹配」。没有统一 score 公式：三处独立多级排序。普通文章 <code>quality_score</code> 恒为 0，而它是最终排序的第一关键字——这意味着论文/社媒条目会整体排在文章之前。</p>
+  <div class="diagram">
+<pre class="mermaid">
+flowchart TB
+  IN[("飞书 信号条目表 全量读回 daily.py:1012")]
+  IN --> TW["第 6 节日报端时间窗：min(168h, 源窗) · 未来 &gt;2d 排除 · 白宫源 AI 复判"]
+  TW --> SORT1["候选池排序 :561（升序元组）<br/>① priority P0=0 &lt; P1=1 &lt; P2=2 &lt; 其它=3<br/>② −有效质量分（arXiv × ARXIV_QUALITY_WEIGHT=0.7）<br/>③ −发布时间"]
+  SORT1 --> P0["p0_limit = max(0, 30 − min(DAILY_MIN_NON_P0=8, 非P0可用数)) :571<br/>→ P0 最多占 22，为 P1/P2 硬留 8 席"]
+  P0 --> GATES{"逐条 7 道配额闸 :590-603（任一超限 continue）<br/>论文 ≤ DAILY_MAX_PAPERS=4（按 content_type=论文）<br/>视频 ≤ DAILY_MAX_VIDEOS=4 · 播客 ≤ DAILY_MAX_PODCASTS=2 · Github热榜 ≤ DAILY_MAX_GITHUB=5<br/>arXiv ≤ MAX_ARXIV_ITEMS=10（按 source_id/URL，与论文是两套计数）<br/>每源 ≤ DAILY_MAX_PER_SOURCE=4 · P0 ≤ p0_limit<br/>文章/公众号 无配额，填满剩余"}
+  GATES --> CAND["★ candidates ≤ DAILY_CANDIDATE_LIMIT=30 :612<br/>0 条 → raise 本轮不发"]
+  CAND --> CL["collapse_for_brief cluster.py:290 · threshold 0.85 · limit 30<br/>贪心单遍：与各簇代表标题比 same_event，首个命中并入（代表不更新）"]
+  CL --> SE["same_event = title_similarity ≥ 0.85 或 entity_match<br/>title_similarity :34：normalize（小写·去标点·去 独家/详解/速递/刚刚/突发/重磅）→ 相等 1.0 → 短串≥16 被包含 0.92 → SequenceMatcher.ratio<br/>entity_match :89：共同 token ≥2 且 含实词(≥4字无数字) 且 含版本号(含数字非年份) 且 相邻二元组有交集 且 shared/union ≥ 0.55"]
+  SE --> REP["簇代表 prefer_score :160 降序<br/>tier L1=40/L2=25/L3=12/L4=5 + priority P0=30/P1=18/P2=8 + 官方/纯网页 +6 · 论文 −2<br/>同分：更早发布优先（首发）→ 正文更长优先<br/>其余成员 → primary.eventPeers（不丢，进详情页事件聚合四分组）"]
+  REP --> LLM["LLM analyze_signal 逐条 :1043（deepseek-chat 默认，temperature 0.3，JSON）<br/>impact / novelty / actionability 0-100 · 中文标题/摘要/深度解读/为何重要<br/>论文：final_quality = 0.6·base + 0.4·(rigor+novelty_paper+relevance)/3<br/>每 3 条批量回写飞书条目表"]
+  LLM --> FUSE{"analysis_failure_is_systemic :474<br/>失败 &gt; 尝试数/2？"}
+  FUSE -->|是| FUSE1["raise 本轮不发布（配额/鉴权/网关问题）"]
+  FUSE -->|否| SORT2["最终排序 :1167 全降序<br/>① _display_quality（arXiv ×0.7）<br/>② impact × w · ③ novelty × w · ④ actionability × w<br/>w：视频 0.9 · 播客 0.85 · 其余 1.0"]
+  SORT2 --> BAL["balance_output_signals :978<br/>target = min(DAILY_MIN_VIDEOS=1, 视频池, limit)<br/>top30 视频不足 → 从尾部等量替换非视频条目（不扩容）"]
+  BAL --> SIG["★ signals = 前 DAILY_SIGNAL_LIMIT=30"]
+  SIG --> AGG["attach_aggregations cluster.py:344<br/>事件聚合四分组：官方来源(primary 或 L1) / 交叉验证(论文/arxiv) / 相关报道(L2,L3) / 补充视角(其余)"]
+  AGG --> SYN["LLM 综述 :1262（一次调用，输入 [i] title — summary ×30）<br/>intro 2 句中文导语<br/>bullets 3-6 个 {title, text, refs}"]
+  SYN --> BUL["bullets 后处理 :1270-1283<br/>text 为空跳过 · refs 只留数字<br/>title 强制覆盖 = referenced_signal_title(首条被引用信号的原标题) :327<br/>取不到 → brief_bullet_title(text 首分隔符前 28 字)<br/>硬上限 6 条 · 全失败 → 取 signals[:3] 兜底"]
+  BUL --> OUT["payload{title='AI Signal 每日情报 · {day}', intro, bullets, signals}<br/>→ 飞书 每日简报表 upsert(简报ID=日期) · output/daily-brief.json"]
+  classDef drop fill:#fde8e6,stroke:#b42318,color:#7a1610;
+  classDef cut fill:#fff3e0,stroke:#a06600,color:#5c3a00;
+  classDef store fill:#e8f5ec,stroke:#1f7a45;
+  class FUSE1 drop;
+  class CAND,SIG,GATES,P0,BAL cut;
+  class OUT store;
+</pre>
+  </div>
+</section>
+
+<!-- ============================ 9 发布与推送 ============================ -->
+<section id="s9">
+  <h2>9. 发布与推送（publish.py · notify.py · weekly.py · CI）</h2>
+  <p class="lead">CI <code>daily-brief.yml</code> 每天 UTC 02:45（北京 10:45）跑 build（self-hosted mac）→ deploy-send（ubuntu）。飞书卡片是"目录"，网页才是"正文"；Pages 没上线当日 JSON 就宁可不发。</p>
+  <div class="diagram">
+<pre class="mermaid">
+flowchart TB
+  subgraph BUILD["job build（daily-brief.yml:28-103）"]
+    direction TB
+    B1["unittest → python -m src.main（采集，第 1-7 节）"]
+    B2["python -m src.daily（第 8 节）→ output/daily-brief.json"]
+    B3["python -m src.publish --input output/daily-brief.json<br/>load_recent_briefs 7 天 状态=已发布 · _within_source_window 按源窗重验历史信号<br/>enrich_with_pool 0.85 补事件聚合 · curate_web_media 8 线程重整媒体<br/>rmtree site/（stash/restore 保住 weekly/timeline/dashboard/heatmap/logos）<br/>→ site/data/brief-{date}.json · brief-latest.json · sources.json"]
+    B4["timeline → heatmap-trends → tag_topics/aggregate（continue-on-error）"]
+    B5["upload-artifact generated-site（1 天）"]
+    B1 --> B2 --> B3 --> B4 --> B5
+  end
+  subgraph SEND["job deploy-send（:105-182）"]
+    direction TB
+    C1["checkout main → rm -rf site → download-artifact → commit site/ 回写 main"]
+    C2["deploy-pages → page_url 作为 PUBLIC_BASE_URL"]
+    C3["python -m src.notify --input site/data/brief-latest.json"]
+    C1 --> C2 --> C3
+  end
+  subgraph NOTIFY["notify.send_many :396"]
+    direction TB
+    N0{"简报表 发送状态 == 已发送 且非 --force？:414"}
+    N0 -->|是| N0a["skipped"]
+    N0 -->|否| N1{"wait_until_public_json :61<br/>轮询公网 data/brief-{day}.json 比对 date<br/>12 次 × 5s"}
+    N1 -->|超时不匹配| N1a["raise 拒发（避免群里点开是旧简报）"]
+    N1 -->|匹配| N2["build_card :173（纯目录）<br/>按 category 分组 · 组内条数降序取 MAX_GROUPS=4 · 每组 MAX_ITEMS_PER_GROUP=3 · 总 MAX_CARD_ITEMS=8<br/>每条两行：[titleCn 或 title 截 34 字](url) · source · contentType<br/>不放导语/要点/摘要/评分 · 按钮「查看完整网页简报」· note 今日入选 N 条"]
+    N2 --> N3["resolve_targets :296 群聊优先：有 chat_id 只发群，否则 open_id 列表"]
+    N3 --> N4["逐目标 send_interactive_message（HTTP 层 Retry 5 次 429/5xx；业务码非 0 直接 FeishuError）"]
+    N4 --> N5{"全部目标失败？"}
+    N5 -->|是| N5a["简报表 发送状态=失败 · raise"]
+    N5 -->|否| N6["回写 发送状态=已发送/发送时间/消息ID"]
+    N6 --> N7["send_delivery_report → FEISHU_DELIVERY_REPORT_OPEN_ID（✅/❌ 按名单；失败只 warn）"]
+  end
+  subgraph WEEKLY["周报 weekly.py（周一 UTC 03:30）"]
+    direction TB
+    K1["窗口 [today_cn − 6 天, today_cn] 左闭右开 · WEEKLY_LOOKBACK_DAYS=7"]
+    K2["候选：在窗内 ∧ source 仍 active ∧ 已分析 · 待纳入表 pending 三条全豁免"]
+    K3["collapse_for_brief 0.85 limit WEEKLY_SIGNAL_LIMIT=80 → 排序 (qualityScore, impact, novelty, actionability)"]
+    K4["确定性指标（程序算）+ LLM 综述 headline/thesis/areas/topSignals（refs 必须是有效 recordId）"]
+    K5["build_weekly_card：headline 60 字 · thesis 160 字 · 本周焦点 top3"]
+    K1 --> K2 --> K3 --> K4 --> K5
+  end
+  B5 --> C1
+  C3 --> N0
+  classDef drop fill:#fde8e6,stroke:#b42318,color:#7a1610;
+  classDef store fill:#e8f5ec,stroke:#1f7a45;
+  class N1a,N5a drop;
+  class B3,C2,N6 store;
+</pre>
+  </div>
+</section>
+
+<!-- ============================ 10 参数速查 ============================ -->
+<section id="s10">
+  <h2>10. 相关筛选参数速查</h2>
+  <table>
+    <thead><tr><th>阶段</th><th>参数</th><th>默认值</th><th>位置</th><th>作用</th></tr></thead>
+    <tbody>
+      <tr><td rowspan="6">源级（一级参数表）</td><td><code>lookback_window</code></td><td>168h</td><td>sources.py:116</td><td>时间窗；24h/7d/每日/每周 写法</td></tr>
+      <tr><td><code>keyword_regex</code></td><td><code>DEFAULT_KEYWORD</code></td><td>config.py:188</td><td>标题命中免检，否则正文命中 ≥ <code>keyword_min_hits</code></td></tr>
+      <tr><td><code>min_content_chars</code></td><td>RSS 100 (arxiv 200) / Scrape 100 / Media 20 / Podcast 1 / Social 30</td><td>sources.py:337,380,411,472,544</td><td>标题+正文长度门槛；可回源则缓刑</td></tr>
+      <tr><td><code>dedup_key</code></td><td><code>normalize(url)</code></td><td>sources.py:302 / process.py:107</td><td>轮内与跨轮去重键策略</td></tr>
+      <tr><td><code>extra_config.max_articles</code></td><td>8</td><td>config.py:182</td><td>Scrape 每源列表页截断（RSS 不受限）</td></tr>
+      <tr><td><code>extra_config.title_exclude_regex / keyword_min_hits / link_path_include / link_path_exclude / allow_shallow_html / force_direct / list_parser / max_items / include_shorts / include_live / fallback_urls</code></td><td>见各节</td><td>sources.py / scrape.py / video.py / podcast.py</td><td>按类型的扩展参数</td></tr>
+      <tr><td rowspan="5">采集常量 config.py</td><td><code>MAX_ITEMS_PER_FEED</code></td><td>80</td><td>:159</td><td>清洗阶段每源保留上限</td></tr>
+      <tr><td><code>MAX_ARXIV_ITEMS</code></td><td>10</td><td>:160</td><td>每轮 arXiv 入库上限（按质量分↓）；日报候选池再限一次</td></tr>
+      <tr><td><code>ARXIV_MIN_SIGNAL_SCORE / PAPER_QUALITY_MIN_SCORE / ARXIV_REQUIRE_COMMUNITY_HEAT / ARXIV_QUALITY_WEIGHT</code></td><td>55 / 60 / true / 0.7</td><td>:161-171</td><td>arXiv 隐式门槛与降权</td></tr>
+      <tr><td><code>JINA_CONCURRENCY / JINA_TIMEOUT / HTTP_MAX_TRIES / HTTP_WAIT_SECONDS</code></td><td>3 / 60 / 4 / 5</td><td>:183-186</td><td>抓取并发、超时、重试</td></tr>
+      <tr><td><code>DATE_ONLY_LOOKBACK_GRACE_HOURS</code></td><td>24</td><td>process.py:29</td><td>纯日期条目时间窗宽限</td></tr>
+      <tr><td rowspan="4">富集</td><td><code>FULLTEXT_MIN_CHARS / FULLTEXT_MAX_FETCH</code></td><td>600 / 40</td><td>rss.py:634-635</td><td>正文回源触发阈值与名额</td></tr>
+      <tr><td><code>PAPER_ENRICH_ENABLED / PAPER_ENRICH_TIMEOUT</code></td><td>true（CI 设 0）/ 12s</td><td>config.py:172-178</td><td>论文录用/热度外网富集</td></tr>
+      <tr><td><code>PODCAST_MAX_DURATION_SECONDS / ASR_CHUNK_SECONDS / PODCAST_MAX_AUDIO_MB</code></td><td>14400 / 1200 / 500</td><td>config.py:111-116</td><td>播客转写限制</td></tr>
+      <tr><td><code>MAX_SECTION_CHARS / MAX_EVIDENCE_CHARS / MAX_VISUAL_PAGES</code></td><td>4500 / 26000 / 4</td><td>paper_fulltext.py:23-26</td><td>论文 PDF 证据上限</td></tr>
+      <tr><td rowspan="6">日报 config.py</td><td><code>DAILY_CANDIDATE_LIMIT / DAILY_SIGNAL_LIMIT</code></td><td>30 / 30</td><td>:119-120</td><td>候选池与出稿条数</td></tr>
+      <tr><td><code>DAILY_MAX_PAPERS / DAILY_MAX_VIDEOS / DAILY_MAX_PODCASTS / DAILY_MAX_GITHUB</code></td><td>4 / 4 / 2 / 5</td><td>:122-131</td><td>类型配额</td></tr>
+      <tr><td><code>DAILY_MAX_PER_SOURCE / DAILY_MIN_NON_P0</code></td><td>4 / 8</td><td>:133-136</td><td>每源上限；为非 P0 源保底席位</td></tr>
+      <tr><td><code>DAILY_MIN_VIDEOS / DAILY_VIDEO_WEIGHT / DAILY_PODCAST_WEIGHT</code></td><td>1 / 0.9 / 0.85</td><td>:124-129</td><td>至少一条视频；排序降权</td></tr>
+      <tr><td>聚类 <code>threshold</code></td><td>0.85（包含特例 0.92，短串 ≥16）</td><td>cluster.py:34-45,119</td><td>同事件判定</td></tr>
+      <tr><td>核心要点 bullets</td><td>3-6 条（硬上限 6，兜底 top3）</td><td>daily.py:1262-1293</td><td>标题 = 被引用信号原标题</td></tr>
+      <tr><td rowspan="3">推送</td><td><code>MAX_GROUPS / MAX_ITEMS_PER_GROUP / MAX_CARD_ITEMS</code></td><td>4 / 3 / 8</td><td>notify.py:20-22</td><td>卡片容量</td></tr>
+      <tr><td><code>wait_until_public_json</code></td><td>12 次 × 5s</td><td>notify.py:61</td><td>Pages 就绪门禁</td></tr>
+      <tr><td><code>WEEKLY_LOOKBACK_DAYS / WEEKLY_SIGNAL_LIMIT</code></td><td>7 / 80</td><td>config.py:137-138</td><td>周报窗口与条数</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ============================ 11 坑 ============================ -->
+<section id="s11">
+  <h2>11. 读图时容易误解的地方</h2>
+  <ul class="notes">
+    <li><strong>两道时间窗是串联的</strong>：采集端按源配置放行（默认 168h，纯日期 +24h），日报端再过一次 <code>min(168h, 源窗)</code>，且基准是日报运行时刻。</li>
+    <li><strong>跨源去重不在采集端</strong>：同一事件多个源、URL 不同的条目会并存在飞书表里，只在生成日报时被 <code>collapse_for_brief</code> 折叠，折叠掉的成员进入详情页"事件聚合"。</li>
+    <li><strong>缺日期即丢弃</strong>：任何链路都不会用采集时间冒充发布时间；未来 2 天以上的日期也当作无日期。</li>
+    <li><strong>Scrape 的主截断在列表页</strong>：先排序（有日期优先、时间倒序）再取 8 条，所以 <code>max_articles</code> 太小会遮住三周内的稿；<code>tools/date_pipeline_report.py</code> 盘点时临时抬到 60。</li>
+    <li><strong>arXiv 有两套计数</strong>：<code>MAX_ARXIV_ITEMS=10</code> 在采集端按 source_id/URL 截一次、日报候选池再限一次；<code>DAILY_MAX_PAPERS=4</code> 却按「来源类型=论文」判，判据不同。</li>
+    <li><strong>质量分主导最终排序</strong>：普通文章 <code>quality_score</code> 恒 0，论文/社媒 20-100，第一排序键会把后者整体顶到前面，<code>impact</code> 只在同质量分组内起作用。</li>
+    <li><strong>被过滤条目不留正文</strong>：只有 <code>output/health/</code> 里的计数；要看被丢内容要跑 <code>tools/recall_audit.py</code> 或 <code>tools/ab_pipeline.py</code>。</li>
+    <li><strong>config_store / seed_default.json 未接入线上</strong>：<code>main.py</code> 直连飞书读配置，改 seed 文件不会影响采集，只影响 <code>tools/</code> 与 <code>bootstrap --seed</code>。</li>
+    <li><strong>RSS 抓取串行且 404 也会重试满 4 次</strong>：<code>raise_for_status()</code> 抛出的 HTTPError 是 RequestException 子类，会进入重试循环。</li>
+    <li><strong>Social 默认不跑</strong>：<code>python -m src.main</code> 默认只跑 RSS/Scrape/Media；Podcast 与 Social 各有独立 workflow。</li>
+  </ul>
+</section>
+</main>
+<script type="module">
+  import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs";
+  mermaid.initialize({
+    startOnLoad: true,
+    securityLevel: "loose",
+    theme: "base",
+    maxTextSize: 400000,
+    flowchart: { htmlLabels: true, useMaxWidth: false, curve: "basis", nodeSpacing: 28, rankSpacing: 40 },
+    themeVariables: {
+      fontFamily: "-apple-system, PingFang SC, Helvetica Neue, Arial, sans-serif",
+      fontSize: "13px",
+      primaryColor: "#f7f5f0",
+      primaryBorderColor: "#8a8378",
+      primaryTextColor: "#16130f",
+      lineColor: "#6b6b6b",
+      clusterBkg: "#fbfaf7",
+      clusterBorder: "#cfc9bf"
+    }
+  });
+</script>
+</body>
+</html>

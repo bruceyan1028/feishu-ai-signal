@@ -1,0 +1,26 @@
+flowchart TB
+  IN[("飞书 信号条目表 全量读回 daily.py:1012")]
+  IN --> TW["第 6 节日报端时间窗：min(168h, 源窗) · 未来 >2d 排除 · 白宫源 AI 复判"]
+  TW --> SORT1["候选池排序 :561（升序元组）<br/>① priority P0=0 < P1=1 < P2=2 < 其它=3<br/>② −有效质量分（arXiv × ARXIV_QUALITY_WEIGHT=0.7）<br/>③ −发布时间"]
+  SORT1 --> P0["p0_limit = max(0, 30 − min(DAILY_MIN_NON_P0=8, 非P0可用数)) :571<br/>→ P0 最多占 22，为 P1/P2 硬留 8 席"]
+  P0 --> GATES{"逐条 7 道配额闸 :590-603（任一超限 continue）<br/>论文 ≤ DAILY_MAX_PAPERS=4（按 content_type=论文）<br/>视频 ≤ DAILY_MAX_VIDEOS=4 · 播客 ≤ DAILY_MAX_PODCASTS=2 · Github热榜 ≤ DAILY_MAX_GITHUB=5<br/>arXiv ≤ MAX_ARXIV_ITEMS=10（按 source_id/URL，与论文是两套计数）<br/>每源 ≤ DAILY_MAX_PER_SOURCE=4 · P0 ≤ p0_limit<br/>文章/公众号 无配额，填满剩余"}
+  GATES --> CAND["★ candidates ≤ DAILY_CANDIDATE_LIMIT=30 :612<br/>0 条 → raise 本轮不发"]
+  CAND --> CL["collapse_for_brief cluster.py:290 · threshold 0.85 · limit 30<br/>贪心单遍：与各簇代表标题比 same_event，首个命中并入（代表不更新）"]
+  CL --> SE["same_event = title_similarity ≥ 0.85 或 entity_match<br/>title_similarity :34：normalize（小写·去标点·去 独家/详解/速递/刚刚/突发/重磅）→ 相等 1.0 → 短串≥16 被包含 0.92 → SequenceMatcher.ratio<br/>entity_match :89：共同 token ≥2 且 含实词(≥4字无数字) 且 含版本号(含数字非年份) 且 相邻二元组有交集 且 shared/union ≥ 0.55"]
+  SE --> REP["簇代表 prefer_score :160 降序<br/>tier L1=40/L2=25/L3=12/L4=5 + priority P0=30/P1=18/P2=8 + 官方/纯网页 +6 · 论文 −2<br/>同分：更早发布优先（首发）→ 正文更长优先<br/>其余成员 → primary.eventPeers（不丢，进详情页事件聚合四分组）"]
+  REP --> LLM["LLM analyze_signal 逐条 :1043（deepseek-chat 默认，temperature 0.3，JSON）<br/>impact / novelty / actionability 0-100 · 中文标题/摘要/深度解读/为何重要<br/>论文：final_quality = 0.6·base + 0.4·(rigor+novelty_paper+relevance)/3<br/>每 3 条批量回写飞书条目表"]
+  LLM --> FUSE{"analysis_failure_is_systemic :474<br/>失败 > 尝试数/2？"}
+  FUSE -->|是| FUSE1["raise 本轮不发布（配额/鉴权/网关问题）"]
+  FUSE -->|否| SORT2["最终排序 :1167 全降序<br/>① _display_quality（arXiv ×0.7）<br/>② impact × w · ③ novelty × w · ④ actionability × w<br/>w：视频 0.9 · 播客 0.85 · 其余 1.0"]
+  SORT2 --> BAL["balance_output_signals :978<br/>target = min(DAILY_MIN_VIDEOS=1, 视频池, limit)<br/>top30 视频不足 → 从尾部等量替换非视频条目（不扩容）"]
+  BAL --> SIG["★ signals = 前 DAILY_SIGNAL_LIMIT=30"]
+  SIG --> AGG["attach_aggregations cluster.py:344<br/>事件聚合四分组：官方来源(primary 或 L1) / 交叉验证(论文/arxiv) / 相关报道(L2,L3) / 补充视角(其余)"]
+  AGG --> SYN["LLM 综述 :1262（一次调用，输入 [i] title — summary ×30）<br/>intro 2 句中文导语<br/>bullets 3-6 个 {title, text, refs}"]
+  SYN --> BUL["bullets 后处理 :1270-1283<br/>text 为空跳过 · refs 只留数字<br/>title 强制覆盖 = referenced_signal_title(首条被引用信号的原标题) :327<br/>取不到 → brief_bullet_title(text 首分隔符前 28 字)<br/>硬上限 6 条 · 全失败 → 取 signals[:3] 兜底"]
+  BUL --> OUT["payload{title='AI Signal 每日情报 · {day}', intro, bullets, signals}<br/>→ 飞书 每日简报表 upsert(简报ID=日期) · output/daily-brief.json"]
+  classDef drop fill:#fde8e6,stroke:#b42318,color:#7a1610;
+  classDef cut fill:#fff3e0,stroke:#a06600,color:#5c3a00;
+  classDef store fill:#e8f5ec,stroke:#1f7a45;
+  class FUSE1 drop;
+  class CAND,SIG,GATES,P0,BAL cut;
+  class OUT store;

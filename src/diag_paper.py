@@ -265,7 +265,6 @@ def run(write: bool, out_path: Path) -> dict[str, Any]:
         log.warning("论文配置字段: %s", exc)
     try:
         feishu.ensure_source_type_field(token, config.FEISHU_PARAM_TABLE_ID)
-        feishu.ensure_source_type_field(token, config.FEISHU_SOURCE_TABLE_ID)
     except feishu.FeishuError as exc:
         log.warning("来源类型字段: %s", exc)
 
