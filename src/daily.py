@@ -324,6 +324,22 @@ def brief_bullet_title(text: str, suggested: str = "") -> str:
     return text.strip()[:28]
 
 
+def referenced_signal_title(signals: list[dict[str, Any]], refs: list[int]) -> str:
+    """取首条引用信号自身的标题。
+
+    核心要点若另起一个二次总结的标题，同一条新闻在「全部信号」里会显示成另一个
+    说法，读者会以为是两条不同的新闻。
+    """
+    for ref in refs:
+        if not 1 <= ref <= len(signals):
+            continue
+        signal = signals[ref - 1]
+        title = str(signal.get("titleCn") or signal.get("title") or "").strip()
+        if title:
+            return title
+    return ""
+
+
 def scalar(value: Any) -> Any:
     if isinstance(value, list):
         if not value:
@@ -1254,11 +1270,13 @@ def generate(day: str | None = None) -> dict[str, Any]:
         text = str(item.get("text") or "").strip()
         if not text:
             continue
+        refs = [int(x) for x in item.get("refs") or [] if str(x).isdigit()]
         bullets.append(
             {
-                "title": brief_bullet_title(text, str(item.get("title") or "")),
+                "title": referenced_signal_title(signals, refs)
+                or brief_bullet_title(text, str(item.get("title") or "")),
                 "text": text,
-                "refs": [int(x) for x in item.get("refs") or [] if str(x).isdigit()],
+                "refs": refs,
             }
         )
         if len(bullets) == 6:
@@ -1266,7 +1284,8 @@ def generate(day: str | None = None) -> dict[str, Any]:
     if not bullets:
         bullets = [
             {
-                "title": brief_bullet_title(signal["summary"], signal["titleCn"]),
+                "title": referenced_signal_title(signals, [index])
+                or brief_bullet_title(signal["summary"]),
                 "text": signal["summary"],
                 "refs": [index],
             }

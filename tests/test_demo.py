@@ -848,6 +848,8 @@ class DeliveryTests(unittest.TestCase):
         self.assertIn("esc(briefMeta.title)", template)
         self.assertIn("pc-media", template)
         self.assertIn("pc-title", template)
+        # 核心要点卡片标题跟随被引用信号本身的标题，不做二次总结
+        self.assertIn("const cardTitle = (s && s.zhTitle) || b.title", template)
         self.assertIn("topicImageUrl(s)", template)
         self.assertIn("pointsTrack", template)
         self.assertIn("function bindPointsMarquee", template)
@@ -975,6 +977,25 @@ class DeliveryTests(unittest.TestCase):
         title = daily.brief_bullet_title("模型治理从原则走向工程，企业开始部署审计工具。", "要点1")
         self.assertEqual(title, "模型治理从原则走向工程")
         self.assertEqual(daily.brief_bullet_title("正文", "具体结论"), "具体结论")
+
+    def test_referenced_signal_title_prefers_original_headline(self) -> None:
+        signals = [
+            {"titleCn": "OpenAI 开放 o5 模型微调接口", "title": "OpenAI opens o5 fine-tuning"},
+            {"title": "Anthropic ships MCP registry"},
+            {"titleCn": "", "title": ""},
+        ]
+        self.assertEqual(
+            daily.referenced_signal_title(signals, [1, 2]),
+            "OpenAI 开放 o5 模型微调接口",
+        )
+        # 中文标题缺失时回退到原标题，跳过整条没有标题的信号
+        self.assertEqual(
+            daily.referenced_signal_title(signals, [2]),
+            "Anthropic ships MCP registry",
+        )
+        self.assertEqual(daily.referenced_signal_title(signals, [3, 2]), "Anthropic ships MCP registry")
+        self.assertEqual(daily.referenced_signal_title(signals, [0, 9]), "")
+        self.assertEqual(daily.referenced_signal_title(signals, []), "")
 
     def test_content_type_is_inferred_from_source(self) -> None:
         self.assertEqual(

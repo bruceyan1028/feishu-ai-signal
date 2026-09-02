@@ -2202,13 +2202,15 @@ function briefHtml(A){
     const imgUrl = s ? topicImageUrl(s) : '';
     const tp = s ? topicFor(s) : { t: 'AI', bg: '#111', color: '#2458b5' };
     const click = firstRef ? `onclick="App.openDetail(${firstRef})" style="cursor:pointer;"` : '';
+    // 标题直接用被引用信号自己的标题：二次总结的说法会和「全部信号」里的同一条对不上
+    const cardTitle = (s && s.zhTitle) || b.title || '';
     return `
     <article class="personal-card" ${click}>
       <div class="pc-media" style="background: linear-gradient(135deg, ${tp.bg}, #0b0b0e);">
         <span class="pc-fallback" style="color: ${tp.color};">${esc(tp.t || '')}</span>
-        ${imgUrl ? `<img src="${esc(imgUrl)}" alt="${esc(b.title || '')}" loading="lazy" onerror="this.remove()">` : ''}
+        ${imgUrl ? `<img src="${esc(imgUrl)}" alt="${esc(cardTitle)}" loading="lazy" onerror="this.remove()">` : ''}
       </div>
-      <h3 class="pc-title">${esc(b.title || '')}</h3>
+      <h3 class="pc-title">${esc(cardTitle)}</h3>
     </article>`;
   }).join('');
 
