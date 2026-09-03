@@ -83,6 +83,26 @@
       "mediaAssets": {
         "images": [
           {
+            "url": "media/papers/recvtRBLIkCm0k-p13-f1.png",
+            "alt": "PDF 第 13 页图表：Table 1 Quantitative physical reasoning results. We report MRA on the 2S, 2D, 3S, and 3D subsets and their macro-average on QuantiPhy-validation. The 4B and 9B variants produce direct answers, whereas the 27B reasoning variant is scored only on the answer emitted after its reasoning trace. Rows are grouped by model family, and Code-as-World-VL variants are highlighted in purple.",
+            "kind": "pdf-page"
+          },
+          {
+            "url": "media/papers/recvtRBLIkCm0k-p13-f2.png",
+            "alt": "PDF 第 13 页图表：Figure 9 Parameter scaling on QuantiPhy. Models with undisclosed parameter counts are grouped at the far right.",
+            "kind": "pdf-page"
+          },
+          {
+            "url": "media/papers/recvtRBLIkCm0k-p27-f3.png",
+            "alt": "PDF 第 27 页图表：Figure 11 Agentic discovery with the physics engine. Solid curves report performance over five iterative discovery rounds, while dashed gray lines mark Best-of-5 under the same five-evaluation budget. Higher is better for Visual Alignment, Object IoU, and Accuracy@2%D; lower is better for Traj-ADE and Velocity-ADE.",
+            "kind": "pdf-page"
+          },
+          {
+            "url": "media/papers/recvtRBLIkCm0k-p28-f4.png",
+            "alt": "PDF 第 28 页图表：Table 3 Pixel-level measurement evaluation. Referring-expression datasets evaluate object extent in images, while GOT-10K evaluates object extent and motion in video. Image-Space variants use only the first training phase; full Code-as-World-VL models additionally receive executable-world reinforcement learning.",
+            "kind": "pdf-page"
+          },
+          {
             "url": "https://arxiv.org/html/2608.27549v1/representation-wjl.png",
             "alt": "Figure 1 : Comparison among different physical world representations. Pixels preserve rich visual detail but lack explicit structure, leaving the underlying causes of observations ambiguous; 3D representations capture geometric structure but do not necessarily reveal physical mechanisms; and language provides compact semantic abstractions but lacks precision for continuous physical states. Code complements these representations by expressing the world as an abstract, quantitatively grounded, and executable representation."
           },
@@ -235,6 +255,26 @@
       "imageUrl": "https://arxiv.org/html/2608.27456v1/HKCase.png",
       "mediaAssets": {
         "images": [
+          {
+            "url": "media/papers/recvtQ0liVoITN-p9-f1.png",
+            "alt": "PDF 第 9 页图表：Table 1: Answer accuracy and pedestrian-network adherence compare recognition, orientation, and active exploration question answering across the evaluated MLLM agents. Overall is the instance- count-weighted average across the three task types.",
+            "kind": "pdf-page"
+          },
+          {
+            "url": "media/papers/recvtQ0liVoITN-p13-f2.png",
+            "alt": "PDF 第 13 页图表：Figure 10: Example of GPT-5.5 crossing the road toward the goal direction before becoming blocked by a central obstacle and being unable to continue.",
+            "kind": "pdf-page"
+          },
+          {
+            "url": "media/papers/recvtQ0liVoITN-p13-f3.png",
+            "alt": "PDF 第 13 页图表：Table 3: Local question-answering accuracy and short-navigation success compare robustness across different daytime and weather conditions.",
+            "kind": "pdf-page"
+          },
+          {
+            "url": "media/papers/recvtQ0liVoITN-p14-f4.png",
+            "alt": "PDF 第 14 页图表：Table 4: Dynamic-environment results, where SR is the goal-reaching rate, PNA is the fraction of action time spent on the pedestrian network, SPR is the safe progress rate, which represents the fraction of road-closure episodes that respect the closure, and PCR is the pedestrian-collision rate.",
+            "kind": "pdf-page"
+          },
           {
             "url": "https://arxiv.org/html/2608.27456v1/HKCase.png",
             "alt": "Figure 2: Dynamic simulation components of U r b a n Ground . The same urban environment can be rendered under different times of day and weather conditions, while a georeferenced pedestrian network supports animated pedestrian populations."
@@ -401,6 +441,26 @@
       "mediaAssets": {
         "images": [
           {
+            "url": "media/papers/recvtQ0liV6Ouh-p1-f1.png",
+            "alt": "PDF 第 1 页图表：Figure 1: Leaderboard across four representative agent benchmarks. JIT-Agent-generated harnesses consis- tently improve the underlying backbone agents across deep research, daily work, planning, and workspace tasks, demonstrating that just-in-time harness synthesis provides gains beyond model scaling alone.",
+            "kind": "pdf-page"
+          },
+          {
+            "url": "media/papers/recvtQ0liV6Ouh-p8-f2.png",
+            "alt": "PDF 第 8 页图表：Figure 3: Training pipeline of JIT-Agent. Stage I learns task-conditioned harness customization. Stage II converts failed harnesses and execution diagnostics into bounded repair trajectories. Stage III performs online evolution by comparing candidate harnesses against the incumbent bank, optimizing decoupled reward, latency, and cost advantages, and retaining frontier-improving designs.",
+            "kind": "pdf-page"
+          },
+          {
+            "url": "media/papers/recvtQ0liV6Ouh-p12-f3.png",
+            "alt": "PDF 第 12 页图表：Table 3 compares JIT-generated harnesses with vanilla agentic backbones and frontier model baselines. We report three deep research benchmarks, two daily work benchmarks, two planning benchmarks, and two workspace benchmarks.",
+            "kind": "pdf-page"
+          },
+          {
+            "url": "media/papers/recvtQ0liV6Ouh-p13-f4.png",
+            "alt": "PDF 第 13 页图表：Table 3: Main results across nine agentic benchmarks. Rows prefixed by JIT-Agent use the same backbone as their vanilla counterpart but replace its default scaffold with a JIT-generated harness. Scores are reported on a 0–100 scale; higher is better. Top-1, Top-2, and Top-3 results in each column are highlighted in soft green, yellow-green, and yellow, respectively; Top-1 is also bolded. Missing evaluations are denoted by “—”.",
+            "kind": "pdf-page"
+          },
+          {
             "url": "https://arxiv.org/html/2608.25593v1/four_benchmark_leaderboard.png",
             "alt": "Figure 1 : Leaderboard across four representative agent benchmarks. JIT-Agent-generated harnesses consistently improve the underlying backbone agents across deep research, daily work, planning, and workspace tasks, demonstrating that just-in-time harness synthesis provides gains beyond model scaling alone."
           },
@@ -533,6 +593,26 @@
       "imageUrl": "https://arxiv.org/html/2608.25927v1/figures/teaser.png",
       "mediaAssets": {
         "images": [
+          {
+            "url": "media/papers/recvtRBLIk5nUk-p1-f1.png",
+            "alt": "PDF 第 1 页图表：Fig. 1. Overview of Code World Model: Left: a coding agent updates state via executable code; Middle: a lightweight compiler renders a coarse proxy video; Right: a video model generates high-fidelity observations from the proxy and text. This figure is AI-generated for illustration purposes.",
+            "kind": "pdf-page"
+          },
+          {
+            "url": "media/papers/recvtRBLIk5nUk-p3-f2.png",
+            "alt": "PDF 第 3 页图表：Fig. 2. Pipeline of the proposed Code World Model. The coding agent serves as the brain of the world model, translating interaction intent into code that updates the world state. The updated world state is compiled into a proxy and paired with a text prompt to condition the video model, which generates the corresponding visual observations. Generated observations and state feedback then support subsequent interaction and world evolution.",
+            "kind": "pdf-page"
+          },
+          {
+            "url": "media/papers/recvtRBLIk5nUk-p9-f3.png",
+            "alt": "PDF 第 9 页图表：Fig. 3. Paired data construction. Each adjacent RGB–proxy pair is aligned at the same frame. (a) For game data, code reads structured runtime annotations to automatically produce pixel-wise, instance-level proxy annotations and preserve identity across frames. Note that, to ensure that the coding agent can easily reproduce the proxy at inference time, we exclude skeletal pose, detailed 3D models, and other representations that are difficult for coding agents to construct and maintain. Because extraction and compilation are code-based, a coding agent can easily add or revise the retained annota",
+            "kind": "pdf-page"
+          },
+          {
+            "url": "media/papers/recvtRBLIk5nUk-p10-f4.png",
+            "alt": "PDF 第 10 页图表：Fig. 4. Visual quality results. Each case contains six temporally ordered frames, with frame-aligned proxies in the upper row and generated RGB observations in the lower row; the corresponding text prompt appears below each pair. Despite using only five hours of GTA V gameplay for fine-tuning, our method exhibits strong generalization across diverse characters, environments, motions, and camera trajectories, preserving rich visual detail while following the spatiotemporal structure specified by the proxy.",
+            "kind": "pdf-page"
+          },
           {
             "url": "https://arxiv.org/html/2608.25927v1/figures/teaser.png",
             "alt": "Fig. 1 : Overview of Code World Model : Left: a coding agent updates state via executable code; Middle: a lightweight compiler renders a coarse proxy video; Right: a video model generates high-fidelity observations from the proxy and text. This figure is AI-generated for illustration purposes."

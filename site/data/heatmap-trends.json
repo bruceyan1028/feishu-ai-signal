@@ -1,27 +1,31 @@
 {
-  "generatedAt": "2026-09-02T11:56:19+08:00",
+  "generatedAt": "2026-09-03T11:15:18+08:00",
   "days": [
-    "2026-08-27",
     "2026-08-28",
     "2026-08-29",
     "2026-08-30",
     "2026-08-31",
     "2026-09-01",
-    "2026-09-02"
+    "2026-09-02",
+    "2026-09-03"
   ],
   "topics": [
+    "gemini-3-8-flash",
     "fable-5-1",
     "artificial-intelligence-news",
-    "dlss-5",
-    "employee"
+    "classroom"
   ],
   "labels": {
+    "gemini-3-8-flash": "gemini 3.8 flash",
     "fable-5-1": "fable 5.1",
     "artificial-intelligence-news": "artificial intelligence news",
-    "dlss-5": "dlss 5",
-    "employee": "employee"
+    "classroom": "classroom"
   },
   "queries": {
+    "gemini-3-8-flash": {
+      "g": "gemini 3.8 flash",
+      "x": "\"gemini 3.8 flash\" -is:retweet"
+    },
     "fable-5-1": {
       "g": "fable 5.1",
       "x": "\"fable 5.1\" -is:retweet"
@@ -30,71 +34,72 @@
       "g": "artificial intelligence news",
       "x": "\"artificial intelligence news\" -is:retweet"
     },
-    "dlss-5": {
-      "g": "dlss 5",
-      "x": "\"dlss 5\" -is:retweet"
-    },
-    "employee": {
-      "g": "employee",
-      "x": "\"employee\" -is:retweet"
+    "classroom": {
+      "g": "classroom",
+      "x": "\"classroom\" -is:retweet"
     }
   },
   "scopes": {
+    "gemini-3-8-flash": "global",
     "fable-5-1": "global",
     "artificial-intelligence-news": "global",
-    "dlss-5": "global",
-    "employee": "global"
+    "classroom": "global"
   },
   "marks": {
+    "gemini-3-8-flash": "🌐",
     "fable-5-1": "🌐",
     "artificial-intelligence-news": "🌐",
-    "dlss-5": "🌐",
-    "employee": "🌐"
+    "classroom": "🌐"
   },
   "breakouts": [
+    "gemini-3-8-flash",
     "fable-5-1",
     "artificial-intelligence-news",
-    "dlss-5",
-    "employee"
+    "classroom"
   ],
   "selection": {
     "method": "google-trending-ai",
     "volumes": {
+      "gemini-3-8-flash": 2000,
       "fable-5-1": 10000,
-      "artificial-intelligence-news": 1000,
-      "dlss-5": 100,
-      "employee": 10000
+      "artificial-intelligence-news": 2000,
+      "classroom": 5000
     },
     "geos": {
+      "gemini-3-8-flash": [
+        "US",
+        "JP"
+      ],
       "fable-5-1": [
         "US",
         "GB",
         "IN",
+        "DE",
+        "JP",
+        "AU",
         "CA"
       ],
       "artificial-intelligence-news": [
         "US",
         "IN"
       ],
-      "dlss-5": [
-        "GB"
-      ],
-      "employee": [
-        "US",
-        "CA"
+      "classroom": [
+        "GB",
+        "JP",
+        "AU"
       ]
     },
     "plot_geo": {
+      "gemini-3-8-flash": "",
       "fable-5-1": "",
       "artificial-intelligence-news": "",
-      "dlss-5": "",
-      "employee": ""
+      "classroom": ""
     },
     "breakouts": [
+      "gemini-3-8-flash",
       "fable-5-1",
       "artificial-intelligence-news",
-      "dlss-5",
-      "employee"
+      "classroom"
     ]
   },
   "google-trends": {
@@ -102,90 +107,108 @@
     "matrix": {
       "raw": [
         [
-          2.0,
-          2.0,
           1.0,
           1.0,
           1.0,
-          37.0,
+          1.0,
+          3.0,
+          41.0,
           100.0
         ],
         [
-          30.0,
-          31.0,
-          27.0,
-          26.0,
-          47.0,
-          54.0,
-          100.0
-        ],
-        [
+          3.0,
           2.0,
-          29.0,
-          65.0,
-          84.0,
-          81.0,
-          86.0,
-          100.0
+          1.0,
+          2.0,
+          66.0,
+          100.0,
+          63.0
         ],
         [
-          71.0,
+          40.0,
+          36.0,
+          34.0,
           62.0,
-          46.0,
-          49.0,
+          73.0,
+          93.0,
+          100.0
+        ],
+        [
           69.0,
-          74.0,
+          34.0,
+          36.0,
+          77.0,
+          85.0,
+          92.0,
           100.0
         ]
       ],
       "normalized": [
         [
-          0.02,
-          0.02,
           0.01,
           0.01,
           0.01,
-          0.37,
+          0.01,
+          0.03,
+          0.41,
           1.0
         ],
         [
-          0.3,
-          0.31,
-          0.27,
-          0.26,
-          0.47,
-          0.54,
-          1.0
-        ],
-        [
+          0.03,
           0.02,
-          0.29,
-          0.65,
-          0.84,
-          0.81,
-          0.86,
-          1.0
+          0.01,
+          0.02,
+          0.66,
+          1.0,
+          0.63
         ],
         [
-          0.71,
+          0.4,
+          0.36,
+          0.34,
           0.62,
-          0.46,
-          0.49,
+          0.73,
+          0.93,
+          1.0
+        ],
+        [
           0.69,
-          0.74,
+          0.34,
+          0.36,
+          0.77,
+          0.85,
+          0.92,
           1.0
         ]
       ]
     },
     "trend": {
-      "fable-5-1": 13.636,
-      "artificial-intelligence-news": 2.791,
-      "dlss-5": 1.729,
-      "employee": 1.617
+      "gemini-3-8-flash": 12.5,
+      "fable-5-1": 2.172,
+      "artificial-intelligence-news": 1.775,
+      "classroom": 1.527
     },
     "items": {
-      "fable-5-1|2026-08-27": [
-        "g-fable-5-1"
+      "gemini-3-8-flash|2026-08-28": [
+        "g-gemini-3-8-flash"
+      ],
+      "gemini-3-8-flash|2026-08-29": [
+        "g-gemini-3-8-flash"
+      ],
+      "gemini-3-8-flash|2026-08-30": [
+        "g-gemini-3-8-flash"
+      ],
+      "gemini-3-8-flash|2026-08-31": [
+        "g-gemini-3-8-flash"
+      ],
+      "gemini-3-8-flash|2026-09-01": [
+        "g-gemini-3-8-flash"
+      ],
+      "gemini-3-8-flash|2026-09-02": [
+        "g-gemini-3-8-flash"
+      ],
+      "gemini-3-8-flash|2026-09-03": [
+        "g-gemini-3-8-flash"
       ],
       "fable-5-1|2026-08-28": [
         "g-fable-5-1"
@@ -205,8 +228,13 @@
       "fable-5-1|2026-09-02": [
         "g-fable-5-1"
       ],
-      "artificial-intelligence-news|2026-08-27": [
-        "g-artificial-intelligence-news"
+      "fable-5-1|2026-09-03": [
+        "g-fable-5-1",
+        "g-fable-5-1-q1",
+        "g-fable-5-1-q2",
+        "g-fable-5-1-q3",
+        "g-fable-5-1-q4",
+        "g-fable-5-1-q5"
       ],
       "artificial-intelligence-news|2026-08-28": [
         "g-artificial-intelligence-news"
@@ -226,74 +254,111 @@
       "artificial-intelligence-news|2026-09-02": [
         "g-artificial-intelligence-news"
       ],
-      "dlss-5|2026-08-27": [
-        "g-dlss-5"
+      "artificial-intelligence-news|2026-09-03": [
+        "g-artificial-intelligence-news"
       ],
-      "dlss-5|2026-08-28": [
-        "g-dlss-5"
+      "classroom|2026-08-28": [
+        "g-classroom"
       ],
-      "dlss-5|2026-08-29": [
-        "g-dlss-5"
+      "classroom|2026-08-29": [
+        "g-classroom"
       ],
-      "dlss-5|2026-08-30": [
-        "g-dlss-5"
+      "classroom|2026-08-30": [
+        "g-classroom"
       ],
-      "dlss-5|2026-08-31": [
-        "g-dlss-5"
+      "classroom|2026-08-31": [
+        "g-classroom"
       ],
-      "dlss-5|2026-09-01": [
-        "g-dlss-5"
+      "classroom|2026-09-01": [
+        "g-classroom"
       ],
-      "dlss-5|2026-09-02": [
-        "g-dlss-5"
+      "classroom|2026-09-02": [
+        "g-classroom"
       ],
-      "employee|2026-08-27": [
-        "g-employee"
-      ],
-      "employee|2026-08-28": [
-        "g-employee"
-      ],
-      "employee|2026-08-29": [
-        "g-employee"
-      ],
-      "employee|2026-08-30": [
-        "g-employee"
-      ],
-      "employee|2026-08-31": [
-        "g-employee"
-      ],
-      "employee|2026-09-01": [
-        "g-employee"
-      ],
-      "employee|2026-09-02": [
-        "g-employee"
+      "classroom|2026-09-03": [
+        "g-classroom",
+        "g-classroom-q1",
+        "g-classroom-q2",
+        "g-classroom-q3",
+        "g-classroom-q4",
+        "g-classroom-q5"
       ]
     },
     "itemIndex": {
+      "g-gemini-3-8-flash": {
+        "title": "Google Trends · gemini 3.8 flash",
+        "source": "Google Trends",
+        "url": "https://trends.google.com/trends/explore?date=now%207-d&q=gemini%203.8%20flash"
+      },
       "g-fable-5-1": {
         "title": "Google Trends · fable 5.1",
         "source": "Google Trends",
         "url": "https://trends.google.com/trends/explore?date=now%207-d&q=fable%205.1"
+      },
+      "g-fable-5-1-q1": {
+        "title": "claude pricing",
+        "source": "Google Trends",
+        "url": "https://trends.google.com/trends/explore?date=now%207-d&q=claude%20pricing"
+      },
+      "g-fable-5-1-q2": {
+        "title": "artificial analysis",
+        "source": "Google Trends",
+        "url": "https://trends.google.com/trends/explore?date=now%207-d&q=artificial%20analysis"
+      },
+      "g-fable-5-1-q3": {
+        "title": "claude desktop",
+        "source": "Google Trends",
+        "url": "https://trends.google.com/trends/explore?date=now%207-d&q=claude%20desktop"
+      },
+      "g-fable-5-1-q4": {
+        "title": "fable 5.1 reviews",
+        "source": "Google Trends",
+        "url": "https://trends.google.com/trends/explore?date=now%207-d&q=fable%205.1%20reviews"
+      },
+      "g-fable-5-1-q5": {
+        "title": "update claude code",
+        "source": "Google Trends",
+        "url": "https://trends.google.com/trends/explore?date=now%207-d&q=update%20claude%20code"
       },
       "g-artificial-intelligence-news": {
         "title": "Google Trends · artificial intelligence news",
         "source": "Google Trends",
         "url": "https://trends.google.com/trends/explore?date=now%207-d&q=artificial%20intelligence%20news"
       },
-      "g-dlss-5": {
-        "title": "Google Trends · dlss 5",
+      "g-classroom": {
+        "title": "Google Trends · classroom",
         "source": "Google Trends",
-        "url": "https://trends.google.com/trends/explore?date=now%207-d&q=dlss%205"
+        "url": "https://trends.google.com/trends/explore?date=now%207-d&q=classroom"
       },
-      "g-employee": {
-        "title": "Google Trends · employee",
+      "g-classroom-q1": {
+        "title": "khan academy ai classroom research",
         "source": "Google Trends",
-        "url": "https://trends.google.com/trends/explore?date=now%207-d&q=employee"
+        "url": "https://trends.google.com/trends/explore?date=now%207-d&q=khan%20academy%20ai%20classroom%20research"
+      },
+      "g-classroom-q2": {
+        "title": "arbor",
+        "source": "Google Trends",
+        "url": "https://trends.google.com/trends/explore?date=now%207-d&q=arbor"
+      },
+      "g-classroom-q3": {
+        "title": "mymcps classroom",
+        "source": "Google Trends",
+        "url": "https://trends.google.com/trends/explore?date=now%207-d&q=mymcps%20classroom"
+      },
+      "g-classroom-q4": {
+        "title": "classroom accedi",
+        "source": "Google Trends",
+        "url": "https://trends.google.com/trends/explore?date=now%207-d&q=classroom%20accedi"
+      },
+      "g-classroom-q5": {
+        "title": "khan academy",
+        "source": "Google Trends",
+        "url": "https://trends.google.com/trends/explore?date=now%207-d&q=khan%20academy"
       }
     }
   },
   "x": {
-    "error": "fable-5-1: X API 返回 402 Payment Required：请在 Developer Console 购买 credits，并确认当前 App 有可用余额",
+    "error": "gemini-3-8-flash: X API 返回 402 Payment Required：请在 Developer Console 购买 credits，并确认当前 App 有可用余额",
     "matrix": {
       "raw": [
         [
@@ -373,10 +438,10 @@
       ]
     },
     "trend": {
+      "gemini-3-8-flash": 1.0,
       "fable-5-1": 1.0,
       "artificial-intelligence-news": 1.0,
-      "dlss-5": 1.0,
-      "employee": 1.0
+      "classroom": 1.0
     },
     "items": {},
     "itemIndex": {}

@@ -39,120 +39,120 @@
         3,
         6,
         14,
-        13
+        21
       ],
       [
         0,
         2,
         3,
-        10,
-        2
+        12,
+        8
       ],
       [
         0,
         2,
         0,
         9,
-        5
+        9
       ],
       [
         0,
         0,
         3,
-        5,
-        3
+        7,
+        4
       ],
       [
         0,
         0,
         2,
         0,
-        4
-      ],
-      [
-        5,
-        5,
-        6,
-        6,
         6
       ],
       [
+        5,
+        5,
+        6,
+        6,
+        10
+      ],
+      [
         0,
         0,
         0,
         4,
-        2
+        3
       ],
       [
         2,
         0,
         0,
         0,
-        4
+        7
       ],
       [
         4,
         3,
         4,
         5,
-        11
+        15
       ],
       [
         8,
         6,
         3,
         1,
-        6
+        9
       ],
       [
         0,
         0,
         0,
         0,
-        3
+        5
       ]
     ],
     "normalized": [
       [
-        0.0714,
-        0.2143,
-        0.4286,
-        1.0,
-        0.9286
+        0.0476,
+        0.1429,
+        0.2857,
+        0.6667,
+        1.0
       ],
       [
         0.0,
-        0.2,
-        0.3,
+        0.1667,
+        0.25,
         1.0,
-        0.2
+        0.6667
       ],
       [
         0.0,
         0.2222,
         0.0,
         1.0,
-        0.5556
+        1.0
       ],
       [
         0.0,
         0.0,
+        0.4286,
+        1.0,
+        0.5714
+      ],
+      [
+        0.0,
+        0.0,
+        0.3333,
+        0.0,
+        1.0
+      ],
+      [
+        0.5,
+        0.5,
         0.6,
-        1.0,
-        0.6
-      ],
-      [
-        0.0,
-        0.0,
-        0.5,
-        0.0,
-        1.0
-      ],
-      [
-        0.8333,
-        0.8333,
-        1.0,
-        1.0,
+        0.6,
         1.0
       ],
       [
@@ -160,28 +160,28 @@
         0.0,
         0.0,
         1.0,
-        0.5
-      ],
-      [
-        0.5,
-        0.0,
-        0.0,
-        0.0,
-        1.0
-      ],
-      [
-        0.3636,
-        0.2727,
-        0.3636,
-        0.4545,
-        1.0
-      ],
-      [
-        1.0,
-        0.75,
-        0.375,
-        0.125,
         0.75
+      ],
+      [
+        0.2857,
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      [
+        0.2667,
+        0.2,
+        0.2667,
+        0.3333,
+        1.0
+      ],
+      [
+        0.8889,
+        0.6667,
+        0.3333,
+        0.1111,
+        1.0
       ],
       [
         0.0,
@@ -342,7 +342,8 @@
       "mock-2026-08-26-099",
       "mock-2026-08-26-100",
       "recvtQ0liVfrG7",
-      "recvtsKfefhHYc"
+      "recvtsKfefhHYc",
+      "recvtKTMDQs1rG"
     ],
     "infra|2026-W35": [
       "mock-2026-08-26-077",
@@ -375,7 +376,15 @@
       "recvu1S4qSMoUD",
       "recvu1S4qSodM7",
       "recvu1S4qSaEII",
-      "recvu1S4qSULKN"
+      "recvu1S4qSULKN",
+      "recvu7Bcb3jh1z",
+      "recvu7Bcb3MsTR",
+      "recvu7Bcb3jZid",
+      "recvu7Bcb3huuF",
+      "recvu2ZXD8YZrH",
+      "recvu7Bcb3NH05",
+      "recvu7Bcb3lhKm",
+      "recvu7Bcb3tnI4"
     ],
     "infra|2026-W36": [
       "recvtW9WBRPQmp",
@@ -383,7 +392,10 @@
       "recvtW9WBRJBmR",
       "recvu1S4qSf98L",
       "recvu1S4qSmOoN",
-      "recvu1S4qSULKN"
+      "recvu1S4qSULKN",
+      "recvu7Bcb3jh1z",
+      "recvu7Bcb3IHJB",
+      "recvu7Bcb3vCcH"
     ],
     "funding|2026-W36": [
       "recvtW9WBRSx2a",
@@ -391,7 +403,10 @@
       "recvtW9WBREO6t",
       "recvu1S4qSU3oT",
       "recvu1S4qSu0cd",
-      "recvu1S4qSTlad"
+      "recvu1S4qSTlad",
+      "recvu7Bcb3jZid",
+      "recvu7Bcb3AdwT",
+      "recvu7Bcb3sPvH"
     ],
     "product|2026-W36": [
       "recvtW9WBR1mmJ",
@@ -404,18 +419,25 @@
       "recvu1S4qSTlad",
       "recvu1S4qSaEII",
       "recvu1S4qScLJq",
-      "recvu1S4qSH6pR"
+      "recvu1S4qSH6pR",
+      "recvu7Bcb3huuF",
+      "recvu7Bcb3tnI4",
+      "recvu7Bcb3r0tw"
     ],
     "other|2026-W36": [
       "recvtW9WBRRLop",
       "recvtW9WBRRUDf",
-      "recvu1S4qSNMVZ"
+      "recvu1S4qSNMVZ",
+      "recvu2ZXD8ymcY",
+      "recvu7Bcb357yt"
     ],
     "multimodal|2026-W36": [
       "recvtW9WBRobE2",
       "recvtXfcLk9dFN",
       "recvu1S4qSMFXB",
-      "recvu1S4qSACdN"
+      "recvu1S4qSACdN",
+      "recvu1S4qSqy3r",
+      "recvu7Bcb3NH05"
     ],
     "open-source-model|2026-W36": [
       "recvtW9WBRobE2",
@@ -423,23 +445,34 @@
     ],
     "embodied|2026-W36": [
       "recvtW9WBR72ie",
-      "recvu1S4qSMFXB"
+      "recvu1S4qSMFXB",
+      "recvu1S4qSqy3r"
     ],
     "rag-search|2026-W36": [
       "recvtW9WBRXxbq",
       "recvtW9WBRxml8",
       "recvu1S4qSt8uO",
-      "recvu1S4qScLJq"
+      "recvu1S4qScLJq",
+      "recvu2ZXD8YZrH",
+      "recvu7Bcb3zGUn"
     ],
     "safety-policy|2026-W36": [
       "recvtW9WBRShl3",
       "recvu1S4qSNYhe",
       "recvu1S4qSUSHY",
-      "recvu1S4qS1YSz"
+      "recvu1S4qS1YSz",
+      "recvu7Bcb3ZIS1",
+      "recvu7Bcb3AdwT",
+      "recvu7Bcb3e7Ng"
     ],
     "reasoning|2026-W36": [
       "recvu1S4qSbYtM",
-      "recvu1S4qSkYcr"
+      "recvu1S4qSkYcr",
+      "recvu7Bcb3MsTR",
+      "recvu7Bcb3ZIS1",
+      "recvu7Bcb3lhKm",
+      "recvu1S4qSULKN",
+      "recvu1S4qSrg0l"
     ]
   },
   "itemIndex": {
@@ -1202,19 +1235,119 @@
       "title": "NVIDIA与CrowdStrike推出基于Nemotron的SafeMind智能网络防御方案",
       "source": "NVIDIA YouTube",
       "url": "https://www.youtube.com/watch?v=mknmrefvcp4"
+    },
+    "recvu1S4qSqy3r": {
+      "title": "LightNav-0：通过显式空间智能实现通用具身导航",
+      "source": "PwC Trending",
+      "url": "https://huggingface.co/papers/2608.30935"
+    },
+    "recvu2ZXD8ymcY": {
+      "title": "StudentSim：训练基于大语言模型的个性化学生模拟器",
+      "source": "PwC Trending",
+      "url": "https://huggingface.co/papers/2609.01591"
+    },
+    "recvu7Bcb3jh1z": {
+      "title": "AI推理成本的三重下降：从低价前沿模型到潜空间通信",
+      "source": "虎嗅",
+      "url": "https://www.huxiu.com/article/4888169.html"
+    },
+    "recvu7Bcb3MsTR": {
+      "title": "Google推出 Gemini 3.8 Flash 与 3.8 Flash Cyber",
+      "source": "Google DeepMind Blog",
+      "url": "https://deepmind.google/blog/introducing-gemini-3-8-flash-and-38-flash-cyber"
+    },
+    "recvu7Bcb357yt": {
+      "title": "El Segundo：以小城孵化器撬动美国硬科技制造业",
+      "source": "虎嗅",
+      "url": "https://www.huxiu.com/article/4888144.html"
+    },
+    "recvu7Bcb3ZIS1": {
+      "title": "OpenAI新模型“Astra”：循环深度强化推理，但或降低思维链可见性",
+      "source": "华尔街见闻",
+      "url": "https://wallstreetcn.com/articles/3780955"
+    },
+    "recvu7Bcb3jZid": {
+      "title": "据消息人士称，Palo Alto Networks以5亿美元现金加股票收购Console",
+      "source": "TechCrunch AI",
+      "url": "https://techcrunch.com/2026/09/02/palo-alto-networks-paid-500m-for-thrive-backed-console-sources-say"
+    },
+    "recvu7Bcb3huuF": {
+      "title": "WorkBuddy开放生态，Harness被杰富瑞视为腾讯核心资产",
+      "source": "华尔街见闻",
+      "url": "https://wallstreetcn.com/articles/3780956"
+    },
+    "recvu2ZXD8YZrH": {
+      "title": "Firecrawl 发布 v2.11.281：面向 Agent 的规模化网页搜索与抓取上下文 API",
+      "source": "GitHub Trending",
+      "url": "https://github.com/firecrawl/firecrawl/releases/tag/v2.11.281"
+    },
+    "recvu7Bcb3NH05": {
+      "title": "MoneyPrinterTurbo v1.3.6：支持多模型视频生成与批量自动化",
+      "source": "GitHub Trending",
+      "url": "https://github.com/harry0703/moneyprinterturbo/releases/tag/v1.3.6"
+    },
+    "recvu7Bcb3lhKm": {
+      "title": "Meta发布Muse Spark 1.3，智能体与科学推理能力提升",
+      "source": "品玩 / 硅星人",
+      "url": "https://www.pingwest.com/w/317023"
+    },
+    "recvu7Bcb3tnI4": {
+      "title": "Meta为适配AI智能体将7万员工内部通信迁移至Slack",
+      "source": "品玩 / 硅星人",
+      "url": "https://www.pingwest.com/w/317022"
+    },
+    "recvu7Bcb3AdwT": {
+      "title": "Pangram获900万美元融资，探索互联网内容可信度检测",
+      "source": "TechCrunch AI",
+      "url": "https://techcrunch.com/podcast/were-dangerously-close-to-dead-internet-theory-says-pangrams-ceo"
+    },
+    "recvu7Bcb3IHJB": {
+      "title": "Ollama v0.33.3 发布：新增缓存提示词令牌报告并更新多后端",
+      "source": "GitHub Trending",
+      "url": "https://github.com/ollama/ollama/releases/tag/v0.33.3-rc2"
+    },
+    "recvu7Bcb3zGUn": {
+      "title": "Firecrawl 发布 v2.11.289 API 镜像版本",
+      "source": "GitHub Trending",
+      "url": "https://github.com/firecrawl/firecrawl/releases/tag/v2.11.289"
+    },
+    "recvu7Bcb3sPvH": {
+      "title": "Builders Stage将在TechCrunch Disrupt 2026聚焦创业公司规模化策略",
+      "source": "TechCrunch AI",
+      "url": "https://techcrunch.com/2026/09/02/the-builders-stage-brings-practical-strategies-for-scaling-startups-to-techcrunch-disrupt-2026"
+    },
+    "recvu7Bcb3e7Ng": {
+      "title": "G20创新部长级会议以共识声明结束",
+      "source": "White House 科技政策发布",
+      "url": "https://www.whitehouse.gov/releases/2026/09/g20-innovation-ministerial-concludes-with-consensus-statement"
+    },
+    "recvu7Bcb3r0tw": {
+      "title": "ATV Big Air Tour借助ChatGPT将三天工作缩短至三小时",
+      "source": "OpenAI News",
+      "url": "https://openai.com/index/atv-big-air-tour"
+    },
+    "recvu1S4qSrg0l": {
+      "title": "Anthropic 发布 Claude Fable 5.1",
+      "source": "Anthropic YouTube",
+      "url": "https://www.youtube.com/watch?v=uvs88gnaxcg"
+    },
+    "recvu7Bcb3vCcH": {
+      "title": "《智能产业化》：台湾半导体生态支撑AI时代",
+      "source": "NVIDIA YouTube",
+      "url": "https://www.youtube.com/watch?v=3entvfteys4"
     }
   },
   "trend": {
-    "agent": 4.05,
-    "reasoning": 3.6,
-    "multimodal": 10.5,
-    "open-source-model": 4.0,
-    "rag-search": 3.0,
-    "infra": 1.125,
+    "agent": 5.25,
+    "reasoning": 6.0,
+    "multimodal": 13.5,
+    "open-source-model": 5.5,
+    "rag-search": 4.5,
+    "infra": 1.5,
     "embodied": 2.0,
-    "safety-policy": 3.0,
-    "product": 2.182,
-    "funding": 0.618,
+    "safety-policy": 5.25,
+    "product": 2.727,
+    "funding": 0.882,
     "other": 2.0
   },
   "window_end": "2026-W36"

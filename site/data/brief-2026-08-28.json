@@ -74,6 +74,26 @@
       "mediaAssets": {
         "images": [
           {
+            "url": "media/papers/recvtna5VI3LUX-p10-f1.png",
+            "alt": "PDF 第 10 页图表：Table 1 Benchmarking results on MMEB-v2. Baseline results are taken from the official MMEB leaderboard. †Closed- source leaderboard submission without publicly released model weights or a public inference endpoint. ⋆Proprietary commercial model with an undisclosed parameter count. CLS: classification; QA: question answering; Ret: retrieval; GD: visual grounding; V-Ret: video retrieval; M-Ret: moment retrieval.",
+            "kind": "pdf-page"
+          },
+          {
+            "url": "media/papers/recvtna5VI3LUX-p11-f2.png",
+            "alt": "PDF 第 11 页图表：Table 2 Evaluation results on MMEB-v3. V3-All averages all 190 tasks, comprising the 78 MMEB-v2 tasks, 53 Text tasks, 47 Agent tasks, 11 Audio tasks, and MCMR [10]. Following the evaluation protocol defined in the MMEB-v3 paper [15], Text results are reported using NDCG@5. Unsupported tasks are assigned a score of zero. RR: reasoning retrieval; IF: instruction following; LC: long-context retrieval; MC: multi-condition retrieval; GR: general retrieval.",
+            "kind": "pdf-page"
+          },
+          {
+            "url": "media/papers/recvtna5VI3LUX-p11-f3.png",
+            "alt": "PDF 第 11 页图表：Table 3 Cross-modal retrieval results on 12 public benchmarks. AVG denotes the average across the 12 datasets. †Proprietary commercial model with an undisclosed parameter count.",
+            "kind": "pdf-page"
+          },
+          {
+            "url": "media/papers/recvtna5VI3LUX-p12-f4.png",
+            "alt": "PDF 第 12 页图表：Table 4 Evaluation results on the in-house benchmark. AVG denotes the average over all 26 tasks. Cross-DM denotes cross-domain content matching; Article Rel. denotes article relevance; Video Rel. denotes video relevance.",
+            "kind": "pdf-page"
+          },
+          {
             "url": "https://arxiv.org/html/2608.24053v1/figs/mrl-performance-trend.png",
             "alt": "Figure 3 : MRL analysis of WeMM-Embedding-2B on MMEB-v2. Left: Performance retained on the image, video, and visual-document subsets across embedding dimensions. Right: Performance retained for classification (CLS), question answering (QA), and retrieval (RET), each averaged over the corresponding image and video tasks."
           }
@@ -174,6 +194,26 @@
       "imageUrl": "https://arxiv.org/html/2608.23283v2/TRACES_framework_figure.png",
       "mediaAssets": {
         "images": [
+          {
+            "url": "media/papers/recvtna5VI8ErK-p20-f1.png",
+            "alt": "PDF 第 20 页图表：Table 3: Performance on professional work, finance, and business simulation benchmarks. Bold in- dicates the best reported result in each benchmark column. Apodex results are grouped below the horizontal rule. All GDPVal entries report win rate; all external-model GDPVal results shown here are our reproductions under the Apodex harness. The Claude Opus 5 APEX-Agents result is likewise reproduced internally. YC-Bench (He et al., 2025) reports mean final net worth in USD; external YC- Bench results are taken from its official leaderboard. The DeepSeek V4 entries on FrontierFinance are internally",
+            "kind": "pdf-page"
+          },
+          {
+            "url": "media/papers/recvtna5VI8ErK-p21-f2.png",
+            "alt": "PDF 第 21 页图表：Table 4: Performance on scientific-research, general-reasoning, and deep-search benchmarks. Bold indicates the best reported result in each benchmark column. Apodex results are grouped below the horizontal rule. DeepSearchQA reports F1, and BioMysteryBench uses the Human-difficult subset.",
+            "kind": "pdf-page"
+          },
+          {
+            "url": "media/papers/recvtna5VI8ErK-p22-f3.png",
+            "alt": "PDF 第 22 页图表：Table 5: Model-scale-efficient agentic performance of Apodex mini models (35B parameters). Models are grouped by availability; Apodex results appear below the final rule. Dashes denote unavailable matched results. Bold indicates the best result in each benchmark column among the selected compari- son rows.",
+            "kind": "pdf-page"
+          },
+          {
+            "url": "media/papers/recvtna5VI8ErK-p24-f4.png",
+            "alt": "PDF 第 24 页图表：Table 6: Mathematical reasoning results on competition-level proof tasks. IMO 2025, IMO 2026, and USAMO 2026 are scored under the MathArena protocol.",
+            "kind": "pdf-page"
+          },
           {
             "url": "https://arxiv.org/html/2608.23283v2/TRACES_framework_figure.png",
             "alt": "Figure 5: The HDS6 capability taxonomy and process-grading pipeline. The six capability groups contain four rubric items each; an integrity gate is applied independently of the weighted rubric."
@@ -335,6 +375,26 @@
       "imageUrl": "https://arxiv.org/html/2608.24876v1/assets/motivation.png",
       "mediaAssets": {
         "images": [
+          {
+            "url": "media/papers/recvtsKfefMy1S-p1-f1.png",
+            "alt": "PDF 第 1 页图表：Figure 1 | Recuris improves task success from 3B open-weight models to frontier models. Performance across (i) task success (%), (ii) task success by episode length, and (iii) six long-horizon failure modes, each rescaled so the agent alone = 100, where a bar at 20 is an 80% reduction.",
+            "kind": "pdf-page"
+          },
+          {
+            "url": "media/papers/recvtsKfefMy1S-p11-f2.png",
+            "alt": "PDF 第 11 页图表：Table 1 presents the main results: four benchmarks under two adaptation regimes, with each model evaluated with and without Recuris. Recuris improves task success in 35 of the 37 completed model–benchmark pairs. The largest gains appear on 𝜏2-Retail and SkillFlow, where Recuris improves the deployment model by 23.3 and 16.8 points, reaching 81.4% and 51.4%, both with intervals excluding zero. The gain belongs to memory that revises itself rather than to memory as such: a Skill Memory held fixed adds nothing an interval separates from zero, which we take up in section 3.3.2. The gains are also ",
+            "kind": "pdf-page"
+          },
+          {
+            "url": "media/papers/recvtsKfefMy1S-p12-f3.png",
+            "alt": "PDF 第 12 页图表：Table 1 | Recuris improves task success where the task family has shared structure, and its value does not follow model scale. Cells are avg@4 task success (%); higher is better. Each model contributes a pair of rows, the benchmark’s own reference agent alone and that same agent with Recuris (grey). Bold marks the better of each pair; the subscript is Δ, shaded by the size of the gain; † marks a paired task-clustered bootstrap 95% CI excluding zero. Agents, models and protocol are given in section 3.1. – not evaluated on that benchmark.",
+            "kind": "pdf-page"
+          },
+          {
+            "url": "media/papers/recvtsKfefMy1S-p24-f4.png",
+            "alt": "PDF 第 24 页图表：Table 8 | Terminal-Bench 2.1, decomposed: the attempt budget carries the headline, and the memory terms are read at a matched budget. Every configuration stops at its first success. Solved counts tasks solved within budget at one rollout per attempt. Δ and 𝑝compare each row with the row above it on the same tasks, 𝑝from McNemar’s exact test; the last column names what that comparison isolates.",
+            "kind": "pdf-page"
+          },
           {
             "url": "https://arxiv.org/html/2608.24876v1/assets/motivation.png",
             "alt": "Figure 2 : Two shifts separate Recuris from prior memory-based agent harnesses. How memory is used (left): prior harnesses retrieve against a growing chat history and lose track of unresolved goals. Recuris retrieves at execution events, and a checker turns the environment’s response into a verified state update rather than trusting the dialogue. How memory evolves (right): prior harnesses rewrite the whole memory from one task outcome. Recuris reads the structured trajectory, attributes each failure to a component, patches exactly the components implicated, and admits the result only through a validation gate on held-out tasks."
@@ -1515,11 +1575,15 @@
       ],
       "imageUrl": "https://techcrunch.com/wp-content/uploads/2025/12/495cdfd5deaad915a1ad58ab35edcbaa84b90c4ce9b7ded356c5ad1b61884800.png?w=668",
       "mediaAssets": {
-        "images": [],
+        "images": [
+          {
+            "url": "https://techcrunch.com/wp-content/uploads/2025/12/495cdfd5deaad915a1ad58ab35edcbaa84b90c4ce9b7ded356c5ad1b61884800.png?w=668",
+            "alt": "Barret Zoph离开OpenAI后加入Google担任研究副总裁",
+            "kind": "article-cover"
+          }
+        ],
         "videos": [],
-        "documents": [],
-        "cover": "https://techcrunch.com/wp-content/uploads/2025/12/495cdfd5deaad915a1ad58ab35edcbaa84b90c4ce9b7ded356c5ad1b61884800.png?w=668",
-        "curatedBy": "llm"
+        "documents": []
       },
       "editorialStructure": "",
       "eventAggregation": {
