@@ -326,7 +326,7 @@
    "extra_config": "{\"query_terms\":[\"llm\",\"large language model\",\"agent\",\"rag\",\"inference\",\"diffusion\",\"multimodal\",\"fine-tuning\",\"mlops\"],\"topic_whitelist\":[\"llm\",\"large-language-models\",\"llmops\",\"agent\",\"ai-agents\",\"rag\",\"retrieval-augmented-generation\",\"inference\",\"llm-inference\",\"mlops\",\"transformers\",\"diffusion\",\"fine-tuning\",\"vector-database\",\"embeddings\",\"multimodal\",\"reasoning\",\"generative-ai\",\"text-to-image\",\"model-serving\",\"quantization\"],\"languages\":[\"python\",\"typescript\",\"javascript\",\"rust\",\"go\",\"c++\",\"cuda\",\"jupyter notebook\"],\"min_absolute_stars\":500,\"breakout_created_days\":60,\"breakout_min_stars\":300,\"active_pushed_days\":14,\"active_min_stars\":3000,\"exclude_topics\":[\"awesome\",\"awesome-list\",\"book\",\"tutorial\",\"roadmap\",\"interview\",\"cheatsheet\",\"course\"],\"exclude_name_regex\":\"(awesome|roadmap|interview|cheat-?sheet|tutorial|handbook|course|free-?code-?camp)\",\"wrapper_penalty\":-0.3,\"max_articles\":15}",
    "fetch_method": "Scrape",
    "keyword_regex": "(transformer|moe|mamba|agent|tool-use|reasoning|planning|long-context|multimodal|rlhf|dpo|grpo|inference|rag|benchmark|sota|alignment|safety|llm|diffusion|world-model|code-generation)",
-   "lookback_window": "30d",
+   "lookback_window": "7d",
    "name": "GitHub Trending",
    "notes": "Scrape trending页+REST API；需每日star快照",
    "priority": "P0",
@@ -345,7 +345,7 @@
    "extra_config": "{\"whitelist_review\":\"每季度\",\"cross_source_dedup\":\"与arXiv关联作者/项目名合并\"}",
    "fetch_method": "RSS",
    "keyword_regex": "(transformer|moe|mamba|agent|tool-use|reasoning|planning|long-context|multimodal|rlhf|dpo|grpo|inference|rag|benchmark|sota|alignment|safety|llm|diffusion|world-model|code-generation)",
-   "lookback_window": "14d",
+   "lookback_window": "7d",
    "name": "Stanford CRFM",
    "notes": "基础模型、AI 安全、政策研究、Foundation Model 生态",
    "priority": "P1",
@@ -364,7 +364,7 @@
    "extra_config": "{\"whitelist_review\":\"每季度\",\"cross_source_dedup\":\"与arXiv关联作者/项目名合并\"}",
    "fetch_method": "RSS",
    "keyword_regex": "(transformer|moe|mamba|agent|tool-use|reasoning|planning|long-context|multimodal|rlhf|dpo|grpo|inference|rag|benchmark|sota|alignment|safety|llm|diffusion|world-model|code-generation)",
-   "lookback_window": "14d",
+   "lookback_window": "7d",
    "name": "Berkeley BAIR",
    "notes": "机器人、CV、RL、生成模型、具身智能",
    "priority": "P1",
@@ -383,7 +383,7 @@
    "extra_config": "{\"whitelist_review\":\"每季度\",\"cross_source_dedup\":\"与arXiv关联作者/项目名合并\"}",
    "fetch_method": "RSS",
    "keyword_regex": "(transformer|moe|mamba|agent|tool-use|reasoning|planning|long-context|multimodal|rlhf|dpo|grpo|inference|rag|benchmark|sota|alignment|safety|llm|diffusion|world-model|code-generation)",
-   "lookback_window": "14d",
+   "lookback_window": "7d",
    "name": "MIT CSAIL",
    "notes": "机器人、NLP、CV、HCI、分布式 AI 系统",
    "priority": "P1",
@@ -402,7 +402,7 @@
    "extra_config": "{\"whitelist_review\":\"每季度\",\"cross_source_dedup\":\"与arXiv关联作者/项目名合并\"}",
    "fetch_method": "RSS",
    "keyword_regex": "(transformer|moe|mamba|agent|tool-use|reasoning|planning|long-context|multimodal|rlhf|dpo|grpo|inference|rag|benchmark|sota|alignment|safety|llm|diffusion|world-model|code-generation)",
-   "lookback_window": "14d",
+   "lookback_window": "7d",
    "name": "NYU CILVR Lab",
    "notes": "视觉语言、多模态、3D 理解、生成模型",
    "priority": "P1",
@@ -421,7 +421,7 @@
    "extra_config": "{\"whitelist_review\":\"每季度\",\"cross_source_dedup\":\"与arXiv关联作者/项目名合并\"}",
    "fetch_method": "RSS",
    "keyword_regex": "(transformer|moe|mamba|agent|tool-use|reasoning|planning|long-context|multimodal|rlhf|dpo|grpo|inference|rag|benchmark|sota|alignment|safety|llm|diffusion|world-model|code-generation)",
-   "lookback_window": "14d",
+   "lookback_window": "7d",
    "name": "Berkeley RDI",
    "notes": "机器人学习、具身 AI、人机协作、产业转化",
    "priority": "P1",
@@ -440,7 +440,7 @@
    "extra_config": "{\"whitelist_review\":\"每季度\",\"cross_source_dedup\":\"与arXiv关联作者/项目名合并\"}",
    "fetch_method": "RSS",
    "keyword_regex": "(transformer|moe|mamba|agent|tool-use|reasoning|planning|long-context|multimodal|rlhf|dpo|grpo|inference|rag|benchmark|sota|alignment|safety|llm|diffusion|world-model|code-generation)",
-   "lookback_window": "14d",
+   "lookback_window": "7d",
    "name": "Berkeley Sky Computing Lab",
    "notes": "云原生 AI 系统、大模型训练推理基础设施、Sky 系列项目",
    "priority": "P1",
@@ -469,7 +469,7 @@
    "来源类型": "纯网页"
   },
   {
-   "dedup_key": "hash(model_id+benchmark+date)",
+   "dedup_key": "normalize(url)",
    "dimension": "模型评测基准",
    "endpoint": {
     "link": "https://artificialanalysis.ai/articles",
@@ -487,7 +487,7 @@
    "来源类型": "纯网页"
   },
   {
-   "dedup_key": "hash(model_id+benchmark+date)",
+   "dedup_key": "normalize(url)",
    "dimension": "模型评测基准",
    "endpoint": {
     "link": "https://crfm.stanford.edu/feed",
@@ -504,7 +504,7 @@
    "来源类型": "纯网页"
   },
   {
-   "dedup_key": "hash(model_id+benchmark+date)",
+   "dedup_key": "normalize(url)",
    "dimension": "模型评测基准",
    "endpoint": {
     "link": "https://mlcommons.org/category/news/feed/",
@@ -521,7 +521,7 @@
    "来源类型": "纯网页"
   },
   {
-   "dedup_key": "hash(model_id+benchmark+date)",
+   "dedup_key": "normalize(url)",
    "dimension": "模型评测基准",
    "extra_config": "{\"snapshot_mode\":true,\"snapshot_retention_days\":365}",
    "fetch_method": "Manual",
@@ -535,7 +535,7 @@
    "来源类型": "纯网页"
   },
   {
-   "dedup_key": "hash(model_id+benchmark+date)",
+   "dedup_key": "normalize(url)",
    "dimension": "模型评测基准",
    "endpoint": {
     "link": "https://github.com/open-compass/OpenCompass/releases.atom",
@@ -560,7 +560,7 @@
    },
    "fetch_method": "Manual",
    "keyword_regex": "(adoption|enterprise|roi|deployment|production|pilot|customer|copilot|saas|gartner|case study|案例)",
-   "lookback_window": "14d",
+   "lookback_window": "7d",
    "name": "McKinsey State of AI",
    "notes": "PDF报告人工导入",
    "priority": "P0",
@@ -574,7 +574,7 @@
    "dimension": "产品化企业采用",
    "fetch_method": "Manual",
    "keyword_regex": "(adoption|enterprise|roi|deployment|production|pilot|customer|copilot|saas|gartner|case study|案例)",
-   "lookback_window": "14d",
+   "lookback_window": "7d",
    "name": "Deloitte/PwC/BCG/Bain AI",
    "notes": "报告PDF人工导入",
    "priority": "P1",
@@ -592,7 +592,7 @@
    },
    "fetch_method": "Manual",
    "keyword_regex": "(adoption|enterprise|roi|deployment|production|pilot|customer|copilot|saas|gartner|case study|案例)",
-   "lookback_window": "14d",
+   "lookback_window": "7d",
    "name": "Gartner AI / Hype Cycle",
    "notes": "订阅制",
    "priority": "P1",
@@ -610,7 +610,7 @@
    },
    "fetch_method": "RSS",
    "keyword_regex": "(adoption|enterprise|roi|deployment|production|pilot|customer|copilot|saas|gartner|case study|案例)",
-   "lookback_window": "14d",
+   "lookback_window": "7d",
    "name": "Salesforce AI",
    "priority": "P1",
    "source_id": "salesforce-ai",
@@ -627,7 +627,7 @@
    },
    "fetch_method": "RSS",
    "keyword_regex": "(adoption|enterprise|roi|deployment|production|pilot|customer|copilot|saas|gartner|case study|案例)",
-   "lookback_window": "14d",
+   "lookback_window": "7d",
    "name": "Microsoft Copilot / GitHub Copilot",
    "priority": "P0",
    "source_id": "ms-copilot",
@@ -640,7 +640,7 @@
    "dimension": "产品化企业采用",
    "fetch_method": "Manual",
    "keyword_regex": "(adoption|enterprise|roi|deployment|production|pilot|customer|copilot|saas|gartner|case study|案例)",
-   "lookback_window": "14d",
+   "lookback_window": "7d",
    "name": "行业垂直 AI 案例",
    "notes": "医疗/金融/法律/制造/教育/客服；News API待接",
    "priority": "P2",
@@ -650,7 +650,7 @@
    "来源类型": "纯网页"
   },
   {
-   "dedup_key": "hash(company_name+event_type+round)",
+   "dedup_key": "normalize(url)",
    "dimension": "创业融资并购",
    "endpoint": {
     "link": "https://pitchbook.com/",
@@ -668,7 +668,7 @@
    "来源类型": "纯网页"
   },
   {
-   "dedup_key": "hash(company_name+event_type+round)",
+   "dedup_key": "normalize(url)",
    "dimension": "创业融资并购",
    "endpoint": {
     "link": "https://www.cbinsights.com/research/artificial-intelligence/",
@@ -685,7 +685,7 @@
    "来源类型": "纯网页"
   },
   {
-   "dedup_key": "hash(company_name+event_type+round)",
+   "dedup_key": "normalize(url)",
    "dimension": "创业融资并购",
    "endpoint": {
     "link": "https://www.theinformation.com/",
@@ -703,7 +703,7 @@
    "来源类型": "纯网页"
   },
   {
-   "dedup_key": "hash(company_name+event_type+round)",
+   "dedup_key": "normalize(url)",
    "dimension": "创业融资并购",
    "endpoint": {
     "link": "https://news.google.com/rss/search?q=reuters.com%20artificial%20intelligence%20when:7d&hl=en-US&gl=US&ceid=US:en",
@@ -720,7 +720,7 @@
    "来源类型": "纯网页"
   },
   {
-   "dedup_key": "hash(company_name+event_type+round)",
+   "dedup_key": "normalize(url)",
    "dimension": "创业融资并购",
    "endpoint": {
     "link": "https://www.bloomberg.com/technology",
@@ -738,7 +738,7 @@
    "来源类型": "纯网页"
   },
   {
-   "dedup_key": "hash(company_name+event_type+round)",
+   "dedup_key": "normalize(url)",
    "dimension": "创业融资并购",
    "endpoint": {
     "link": "https://techcrunch.com/category/artificial-intelligence/feed/",
@@ -755,7 +755,7 @@
    "来源类型": "纯网页"
   },
   {
-   "dedup_key": "hash(company_name+event_type+round)",
+   "dedup_key": "normalize(url)",
    "dimension": "创业融资并购",
    "endpoint": {
     "link": "https://sifted.eu/feed",
@@ -772,7 +772,7 @@
    "来源类型": "纯网页"
   },
   {
-   "dedup_key": "hash(company_name+event_type+round)",
+   "dedup_key": "normalize(url)",
    "dimension": "创业融资并购",
    "endpoint": {
     "link": "https://36kr.com/feed",
@@ -789,7 +789,7 @@
    "来源类型": "公众号"
   },
   {
-   "dedup_key": "hash(company_name+event_type+round)",
+   "dedup_key": "normalize(url)",
    "dimension": "创业融资并购",
    "endpoint": {
     "link": "https://rsshub.app/latepost/latest",
@@ -806,7 +806,7 @@
    "来源类型": "公众号"
   },
   {
-   "dedup_key": "hash(company_name+event_type+round)",
+   "dedup_key": "normalize(url)",
    "dimension": "创业融资并购",
    "endpoint": {
     "link": "https://www.jiqizhixin.com/rss",
@@ -823,7 +823,7 @@
    "来源类型": "公众号"
   },
   {
-   "dedup_key": "hash(company_name+event_type+round)",
+   "dedup_key": "normalize(url)",
    "dimension": "创业融资并购",
    "fetch_method": "Manual",
    "keyword_regex": "(funding|raised|series [a-d]|valuation|acqui|merger|ipo|invest|融资|并购|估值|startup)",
@@ -836,7 +836,7 @@
    "来源类型": "纯网页"
   },
   {
-   "dedup_key": "hash(title+agency)",
+   "dedup_key": "normalize(url)",
    "dimension": "政策监管地缘",
    "endpoint": {
     "link": "https://www.ai.gov/",
@@ -854,7 +854,7 @@
    "来源类型": "纯网页"
   },
   {
-   "dedup_key": "hash(title+agency)",
+   "dedup_key": "normalize(url)",
    "dimension": "政策监管地缘",
    "endpoint": {
     "link": "https://www.nist.gov/news-events/news/rss.xml",
@@ -872,7 +872,7 @@
    "来源类型": "纯网页"
   },
   {
-   "dedup_key": "hash(title+agency)",
+   "dedup_key": "normalize(url)",
    "dimension": "政策监管地缘",
    "endpoint": {
     "link": "https://digital-strategy.ec.europa.eu/en/policies/regulatory-framework-ai",
@@ -891,7 +891,7 @@
    "来源类型": "纯网页"
   },
   {
-   "dedup_key": "hash(title+agency)",
+   "dedup_key": "normalize(url)",
    "dimension": "政策监管地缘",
    "endpoint": {
     "link": "https://wp.oecd.ai/feed",
@@ -909,7 +909,7 @@
    "来源类型": "纯网页"
   },
   {
-   "dedup_key": "hash(title+agency)",
+   "dedup_key": "normalize(url)",
    "dimension": "政策监管地缘",
    "endpoint": {
     "link": "https://www.smartnation.gov.cn/",
@@ -927,7 +927,7 @@
    "来源类型": "纯网页"
   },
   {
-   "dedup_key": "hash(title+agency)",
+   "dedup_key": "normalize(url)",
    "dimension": "政策监管地缘",
    "endpoint": {
     "link": "https://www.reuters.com/legal/",
@@ -945,7 +945,7 @@
    "来源类型": "纯网页"
   },
   {
-   "dedup_key": "hash(title+agency)",
+   "dedup_key": "normalize(url)",
    "dimension": "政策监管地缘",
    "endpoint": {
     "link": "https://incidentdatabase.ai/rss.xml",
@@ -1126,11 +1126,14 @@
     "text": "https://www.qbitai.com/feed"
    },
    "fetch_method": "RSS",
+   "keyword_regex": "(人工智能|智能体|大模型|大语言模型|生成式|多模态|具身|算力|算法|芯片|GPU|机器学习|深度学习|神经网络|强化学习|扩散模型|机器人|自动驾驶|开源模型|AIGC|LLM|GPT|Claude|Gemini|DeepSeek|文心|通义|千问|Kimi|豆包|Llama|OpenAI|Anthropic|英伟达|Transformer)",
+   "lookback_window": "24h",
    "name": "量子位",
    "notes": "A类·官网可抓(拟走Scrape),不必依赖微信。AI产业报道",
    "priority": "P1",
    "source_id": "qbitai",
    "status": "active",
+   "tier": "L3",
    "来源类型": "公众号"
   },
   {
@@ -1140,11 +1143,14 @@
     "text": "https://zhidx.com/rss"
    },
    "fetch_method": "RSS",
+   "keyword_regex": "(人工智能|智能体|大模型|大语言模型|生成式|多模态|具身|算力|算法|芯片|GPU|机器学习|深度学习|神经网络|强化学习|扩散模型|机器人|自动驾驶|开源模型|AIGC|LLM|GPT|Claude|Gemini|DeepSeek|文心|通义|千问|Kimi|豆包|Llama|OpenAI|Anthropic|英伟达|Transformer)",
+   "lookback_window": "24h",
    "name": "智东西",
    "notes": "A类·官网可抓。AI硬件/芯片/端侧,含车东西/芯东西",
    "priority": "P1",
    "source_id": "zhidx",
    "status": "active",
+   "tier": "L3",
    "来源类型": "公众号"
   },
   {
@@ -1156,10 +1162,13 @@
    "extra_config": "{\"keyword_min_hits\": 2}",
    "fetch_method": "Scrape",
    "keyword_regex": "(人工智能|智能体|大模型|大语言模型|生成式|多模态|具身|算力|算法|芯片|GPU|机器学习|深度学习|神经网络|强化学习|扩散模型|机器人|自动驾驶|开源模型|AIGC|LLM|GPT|Claude|Gemini|DeepSeek|文心|通义|千问|Kimi|豆包|Llama|OpenAI|Anthropic|英伟达|Transformer)",
+   "lookback_window": "24h",
    "name": "甲子光年",
    "notes": "A类·甲子光年·纯SPA首页无可抽 href 文章链接，Jina也拿不到，待接 API/专用抽取器",
+   "priority": "P2",
    "source_id": "jazzyear",
    "status": "experimental",
+   "tier": "L3",
    "来源类型": "公众号"
   },
   {
@@ -1169,11 +1178,14 @@
     "text": "https://www.leiphone.com/feed"
    },
    "fetch_method": "RSS",
+   "keyword_regex": "(人工智能|智能体|大模型|大语言模型|生成式|多模态|具身|算力|算法|芯片|GPU|机器学习|深度学习|神经网络|强化学习|扩散模型|机器人|自动驾驶|开源模型|AIGC|LLM|GPT|Claude|Gemini|DeepSeek|文心|通义|千问|Kimi|豆包|Llama|OpenAI|Anthropic|英伟达|Transformer)",
+   "lookback_window": "24h",
    "name": "AI科技评论 / 雷峰网",
    "notes": "A类·雷峰网旗下(含新智驾)。AI前沿研究/落地",
    "priority": "P1",
    "source_id": "leiphone",
    "status": "active",
+   "tier": "L3",
    "来源类型": "公众号"
   },
   {
@@ -1185,11 +1197,13 @@
    "extra_config": "{\"keyword_min_hits\": 2, \"link_path_include\": \"^/article/\"}",
    "fetch_method": "Scrape",
    "keyword_regex": "(人工智能|智能体|大模型|大语言模型|生成式|多模态|具身|算力|算法|芯片|GPU|机器学习|深度学习|神经网络|强化学习|扩散模型|机器人|自动驾驶|开源模型|AIGC|LLM|GPT|Claude|Gemini|DeepSeek|文心|通义|千问|Kimi|豆包|Llama|OpenAI|Anthropic|英伟达|Transformer)",
+   "lookback_window": "24h",
    "name": "虎嗅",
    "notes": "A类·官网有RSS。科技商业",
    "priority": "P1",
    "source_id": "huxiu",
    "status": "active",
+   "tier": "L3",
    "来源类型": "公众号"
   },
   {
@@ -1201,11 +1215,13 @@
    "extra_config": "{\"link_path_include\": \"^/news/\\\\d|\\\\.html$\", \"keyword_min_hits\": 2}",
    "fetch_method": "Scrape",
    "keyword_regex": "(人工智能|智能体|大模型|大语言模型|生成式|多模态|具身|算力|算法|芯片|GPU|机器学习|深度学习|神经网络|强化学习|扩散模型|机器人|自动驾驶|开源模型|AIGC|LLM|GPT|Claude|Gemini|DeepSeek|文心|通义|千问|Kimi|豆包|Llama|OpenAI|Anthropic|英伟达|Transformer)",
+   "lookback_window": "24h",
    "name": "极客公园 / Founder Park",
    "notes": "A类·官网可抓。科技/AI创业",
    "priority": "P1",
    "source_id": "geekpark",
    "status": "active",
+   "tier": "L3",
    "来源类型": "公众号"
   },
   {
@@ -1217,11 +1233,13 @@
    "extra_config": "{\"force_direct\": true, \"keyword_min_hits\": 2}",
    "fetch_method": "Scrape",
    "keyword_regex": "(人工智能|智能体|大模型|大语言模型|生成式|多模态|具身|算力|算法|芯片|GPU|机器学习|深度学习|神经网络|强化学习|扩散模型|机器人|自动驾驶|开源模型|AIGC|LLM|GPT|Claude|Gemini|DeepSeek|文心|通义|千问|Kimi|豆包|Llama|OpenAI|Anthropic|英伟达|Transformer)",
+   "lookback_window": "24h",
    "name": "品玩 / 硅星人",
    "notes": "A类·官网可抓,含硅星人。科技/AI",
    "priority": "P1",
    "source_id": "pingwest",
    "status": "active",
+   "tier": "L3",
    "来源类型": "公众号"
   },
   {
@@ -1233,11 +1251,13 @@
    "extra_config": "{\"force_direct\": true, \"keyword_min_hits\": 2}",
    "fetch_method": "Scrape",
    "keyword_regex": "(人工智能|智能体|大模型|大语言模型|生成式|多模态|具身|算力|算法|芯片|GPU|机器学习|深度学习|神经网络|强化学习|扩散模型|机器人|自动驾驶|开源模型|AIGC|LLM|GPT|Claude|Gemini|DeepSeek|文心|通义|千问|Kimi|豆包|Llama|OpenAI|Anthropic|英伟达|Transformer)",
+   "lookback_window": "24h",
    "name": "澎湃新闻·科技",
    "notes": "A类·泛科技/时政·官网可抓",
    "priority": "P1",
    "source_id": "thepaper",
    "status": "active",
+   "tier": "L3",
    "来源类型": "公众号"
   },
   {
@@ -1246,12 +1266,16 @@
     "link": "https://a.jiemian.com/index.php?m=article&a=rss",
     "text": "https://a.jiemian.com/index.php?m=article&a=rss"
    },
+   "extra_config": "{\"keyword_min_hits\": 2}",
    "fetch_method": "RSS",
+   "keyword_regex": "(人工智能|智能体|大模型|大语言模型|生成式|多模态|具身|算力|算法|芯片|GPU|机器学习|深度学习|神经网络|强化学习|扩散模型|机器人|自动驾驶|开源模型|AIGC|LLM|GPT|Claude|Gemini|DeepSeek|文心|通义|千问|Kimi|豆包|Llama|OpenAI|Anthropic|英伟达|Transformer)",
+   "lookback_window": "24h",
    "name": "界面新闻",
    "notes": "A类·财经商业·官网可抓",
    "priority": "P1",
    "source_id": "jiemian",
    "status": "active",
+   "tier": "L3",
    "来源类型": "公众号"
   },
   {
@@ -1263,11 +1287,13 @@
    "extra_config": "{\"link_path_include\": \"^/articles/\\\\d\", \"keyword_min_hits\": 2}",
    "fetch_method": "Scrape",
    "keyword_regex": "(人工智能|智能体|大模型|大语言模型|生成式|多模态|具身|算力|算法|芯片|GPU|机器学习|深度学习|神经网络|强化学习|扩散模型|机器人|自动驾驶|开源模型|AIGC|LLM|GPT|Claude|Gemini|DeepSeek|文心|通义|千问|Kimi|豆包|Llama|OpenAI|Anthropic|英伟达|Transformer)",
+   "lookback_window": "24h",
    "name": "华尔街见闻",
    "notes": "A类·财经/宏观·官网可抓",
    "priority": "P1",
    "source_id": "wallstreetcn",
    "status": "active",
+   "tier": "L3",
    "来源类型": "公众号"
   },
   {
@@ -1279,11 +1305,13 @@
    "extra_config": "{\"force_direct\": true, \"keyword_min_hits\": 2}",
    "fetch_method": "Scrape",
    "keyword_regex": "(人工智能|智能体|大模型|大语言模型|生成式|多模态|具身|算力|算法|芯片|GPU|机器学习|深度学习|神经网络|强化学习|扩散模型|机器人|自动驾驶|开源模型|AIGC|LLM|GPT|Claude|Gemini|DeepSeek|文心|通义|千问|Kimi|豆包|Llama|OpenAI|Anthropic|英伟达|Transformer)",
+   "lookback_window": "24h",
    "name": "财新",
    "notes": "A类·财经深度(部分付费墙)·官网可抓",
    "priority": "P1",
    "source_id": "caixin",
    "status": "active",
+   "tier": "L3",
    "来源类型": "公众号"
   },
   {
@@ -1295,11 +1323,13 @@
    "extra_config": "{\"link_path_include\": \"^/article/\\\\d\", \"keyword_min_hits\": 2}",
    "fetch_method": "Scrape",
    "keyword_regex": "(人工智能|智能体|大模型|大语言模型|生成式|多模态|具身|算力|算法|芯片|GPU|机器学习|深度学习|神经网络|强化学习|扩散模型|机器人|自动驾驶|开源模型|AIGC|LLM|GPT|Claude|Gemini|DeepSeek|文心|通义|千问|Kimi|豆包|Llama|OpenAI|Anthropic|英伟达|Transformer)",
+   "lookback_window": "24h",
    "name": "果壳",
    "notes": "A类·科普/思想·官网可抓",
    "priority": "P1",
    "source_id": "guokr",
    "status": "active",
+   "tier": "L3",
    "来源类型": "公众号"
   },
   {
@@ -1857,7 +1887,7 @@
    "extra_config": "{\"keyword_min_hits\":2,\"policy_stage_extract\":true,\"document_pdf_enrich\":true,\"max_document_pdfs\":2,\"title_exclude_regex\":\"(trade agenda|auto manufacturing|stationary sources|chemical manufacturing|tariffs?|duties on|adjusting imports|space transportation|space launch)\"}",
    "fetch_method": "RSS",
    "keyword_regex": "(artificial intelligence|\\bA\\.I\\.\\b|\\bAI\\b|machine learning|foundation models?|large language models?|\\bLLMs?\\b|generative AI|AI safety|AI governance|Genesis Mission)",
-   "lookback_window": "30d",
+   "lookback_window": "7d",
    "name": "White House 科技政策发布",
    "notes": "仅收录明确谈 AI/ML/模型的政策；science and technology、R&D 不能单独过",
    "priority": "P0",
@@ -1876,7 +1906,7 @@
    "extra_config": "{\"keyword_min_hits\":2,\"policy_stage_extract\":true,\"document_pdf_enrich\":true,\"max_document_pdfs\":2,\"title_exclude_regex\":\"(trade agenda|auto manufacturing|stationary sources|chemical manufacturing|tariffs?|duties on|adjusting imports|space transportation|space launch)\"}",
    "fetch_method": "RSS",
    "keyword_regex": "(artificial intelligence|\\bA\\.I\\.\\b|\\bAI\\b|machine learning|foundation models?|large language models?|\\bLLMs?\\b|generative AI|AI safety|AI governance|Genesis Mission)",
-   "lookback_window": "30d",
+   "lookback_window": "7d",
    "name": "White House 科技总统行动",
    "notes": "仅收录明确谈 AI/ML/模型的总统行动；航天运输等泛科技备忘录不入库",
    "priority": "P0",

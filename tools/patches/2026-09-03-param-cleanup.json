@@ -1,0 +1,172 @@
+{
+ "artificial-analysis": {
+  "dedup_key": "normalize(url)"
+ },
+ "stanford-helm": {
+  "dedup_key": "normalize(url)"
+ },
+ "mlperf": {
+  "dedup_key": "normalize(url)"
+ },
+ "academic-benchmarks": {
+  "dedup_key": "normalize(url)"
+ },
+ "opencompass": {
+  "dedup_key": "normalize(url)"
+ },
+ "pitchbook": {
+  "dedup_key": "normalize(url)"
+ },
+ "cb-insights": {
+  "dedup_key": "normalize(url)"
+ },
+ "the-information": {
+  "dedup_key": "normalize(url)"
+ },
+ "reuters-ai": {
+  "dedup_key": "normalize(url)"
+ },
+ "bloomberg-tech": {
+  "dedup_key": "normalize(url)"
+ },
+ "techcrunch-ai": {
+  "dedup_key": "normalize(url)"
+ },
+ "sifted": {
+  "dedup_key": "normalize(url)"
+ },
+ "36kr-ai": {
+  "dedup_key": "normalize(url)"
+ },
+ "latepost-ai": {
+  "dedup_key": "normalize(url)"
+ },
+ "jiqizhixin": {
+  "dedup_key": "normalize(url)"
+ },
+ "corp-signals": {
+  "dedup_key": "normalize(url)"
+ },
+ "ai-gov-us": {
+  "dedup_key": "normalize(url)"
+ },
+ "nist-ai-rmf": {
+  "dedup_key": "normalize(url)"
+ },
+ "eu-ai-act": {
+  "dedup_key": "normalize(url)"
+ },
+ "oecd-ai": {
+  "dedup_key": "normalize(url)"
+ },
+ "singapore-nais": {
+  "dedup_key": "normalize(url)"
+ },
+ "litigation-tracker": {
+  "dedup_key": "normalize(url)"
+ },
+ "ai-incident-db": {
+  "dedup_key": "normalize(url)"
+ },
+ "qbitai": {
+  "lookback_window": "24h",
+  "tier": "L3",
+  "keyword_regex": "(人工智能|智能体|大模型|大语言模型|生成式|多模态|具身|算力|算法|芯片|GPU|机器学习|深度学习|神经网络|强化学习|扩散模型|机器人|自动驾驶|开源模型|AIGC|LLM|GPT|Claude|Gemini|DeepSeek|文心|通义|千问|Kimi|豆包|Llama|OpenAI|Anthropic|英伟达|Transformer)"
+ },
+ "zhidx": {
+  "lookback_window": "24h",
+  "tier": "L3",
+  "keyword_regex": "(人工智能|智能体|大模型|大语言模型|生成式|多模态|具身|算力|算法|芯片|GPU|机器学习|深度学习|神经网络|强化学习|扩散模型|机器人|自动驾驶|开源模型|AIGC|LLM|GPT|Claude|Gemini|DeepSeek|文心|通义|千问|Kimi|豆包|Llama|OpenAI|Anthropic|英伟达|Transformer)"
+ },
+ "jazzyear": {
+  "lookback_window": "24h",
+  "tier": "L3",
+  "priority": "P2"
+ },
+ "leiphone": {
+  "lookback_window": "24h",
+  "tier": "L3",
+  "keyword_regex": "(人工智能|智能体|大模型|大语言模型|生成式|多模态|具身|算力|算法|芯片|GPU|机器学习|深度学习|神经网络|强化学习|扩散模型|机器人|自动驾驶|开源模型|AIGC|LLM|GPT|Claude|Gemini|DeepSeek|文心|通义|千问|Kimi|豆包|Llama|OpenAI|Anthropic|英伟达|Transformer)"
+ },
+ "huxiu": {
+  "lookback_window": "24h",
+  "tier": "L3"
+ },
+ "geekpark": {
+  "lookback_window": "24h",
+  "tier": "L3"
+ },
+ "pingwest": {
+  "lookback_window": "24h",
+  "tier": "L3"
+ },
+ "thepaper": {
+  "lookback_window": "24h",
+  "tier": "L3"
+ },
+ "jiemian": {
+  "lookback_window": "24h",
+  "tier": "L3",
+  "keyword_regex": "(人工智能|智能体|大模型|大语言模型|生成式|多模态|具身|算力|算法|芯片|GPU|机器学习|深度学习|神经网络|强化学习|扩散模型|机器人|自动驾驶|开源模型|AIGC|LLM|GPT|Claude|Gemini|DeepSeek|文心|通义|千问|Kimi|豆包|Llama|OpenAI|Anthropic|英伟达|Transformer)",
+  "extra_config": {
+   "keyword_min_hits": 2
+  }
+ },
+ "wallstreetcn": {
+  "lookback_window": "24h",
+  "tier": "L3"
+ },
+ "caixin": {
+  "lookback_window": "24h",
+  "tier": "L3"
+ },
+ "guokr": {
+  "lookback_window": "24h",
+  "tier": "L3"
+ },
+ "github-trending": {
+  "lookback_window": "7d"
+ },
+ "lab-stanford-crfm": {
+  "lookback_window": "7d"
+ },
+ "lab-berkeley-bair": {
+  "lookback_window": "7d"
+ },
+ "lab-mit-csail": {
+  "lookback_window": "7d"
+ },
+ "lab-nyu-cilvr": {
+  "lookback_window": "7d"
+ },
+ "lab-berkeley-rdi": {
+  "lookback_window": "7d"
+ },
+ "lab-berkeley-sky": {
+  "lookback_window": "7d"
+ },
+ "mckinsey-state-of-ai": {
+  "lookback_window": "7d"
+ },
+ "consulting-ai-reports": {
+  "lookback_window": "7d"
+ },
+ "gartner-ai": {
+  "lookback_window": "7d"
+ },
+ "salesforce-ai": {
+  "lookback_window": "7d"
+ },
+ "ms-copilot": {
+  "lookback_window": "7d"
+ },
+ "vertical-ai-cases": {
+  "lookback_window": "7d"
+ },
+ "whitehouse-tech-releases": {
+  "lookback_window": "7d"
+ },
+ "whitehouse-tech-actions": {
+  "lookback_window": "7d"
+ }
+}

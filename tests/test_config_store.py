@@ -186,6 +186,43 @@ class SeedFileIntegrityTest(unittest.TestCase):
         orphans = sorted(set(self.typed) - known)
         self.assertEqual(orphans, [], f"二级参数指向不存在的源：{orphans}")
 
+    def test_dedup_key_strategies_are_implemented(self):
+        """dedup_key 只是给 build_dedup_key 看的策略名，写了代码不认的形式会静默退成 URL 去重。
+
+        更糟的是 hash(model_id+…) 这类会被 "hash(model" 前缀误匹配成按标题去重，
+        同标题不同页面从此再也进不来。所以只允许 process.build_dedup_key 真正实现的几种。
+        """
+        implemented = ("normalize(url)", "podcast_guid", "x_post_id", "youtube_video_id", "arxiv_id")
+        bad = {}
+        for row in self.rows:
+            raw = str(sources.cell(row.get("dedup_key")) or "").strip()
+            if not raw or raw.startswith(implemented):
+                continue
+            # hash(model_family+version) / hash(model_name+version) 是有意按标题去重的发布页
+            if raw.startswith("hash(model_") and "benchmark" not in raw:
+                continue
+            bad[row["source_id"]] = raw
+        self.assertEqual(bad, {}, f"build_dedup_key 不认的 dedup_key（实际会退成 URL 或标题去重）：{bad}")
+
+    def test_collectable_sources_declare_lookback_window(self):
+        """没填时间窗会静默回落 168h。新闻类源按 7 天采，简报里旧闻会挤掉当天的稿。"""
+        missing = sorted(
+            row["source_id"]
+            for row in self.rows
+            if str(sources.cell(row.get("fetch_method")) or "") not in {"Manual", "API", "Bridge"}
+            and not str(sources.cell(row.get("lookback_window")) or "").strip()
+        )
+        self.assertEqual(missing, [], f"可采集的源没填 lookback_window：{missing}")
+
+    def test_lookback_windows_do_not_exceed_daily_cap(self):
+        """简报端把时间窗硬顶在 7 天（daily.select_candidates），采集窗更长只会多占飞书表。"""
+        too_long = {}
+        for row in self.rows:
+            raw = str(sources.cell(row.get("lookback_window")) or "").strip()
+            if raw and sources.parse_lookback_hours(raw) > 7 * 24:
+                too_long[row["source_id"]] = raw
+        self.assertEqual(too_long, {}, f"采集窗超过简报 7 天上限：{too_long}")
+
 
 if __name__ == "__main__":
     unittest.main()
