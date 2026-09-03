@@ -148,56 +148,24 @@ def diagnose_clean(
         )
         quality_fields: dict[str, Any] = {}
         if is_paper:
-            metrics.update(tcfg.infer_paper_metrics(title, body_text, url))
             params = (type_cfg or {}).get("params") or {}
-            # 先用本地信号分硬过滤，减少外网富集次数
-            min_sig = params.get("min_signal_score")
-            if min_sig is not None and metrics.get("signal_score") is not None:
-                if float(metrics["signal_score"]) < float(min_sig):
-                    drop(
-                        item,
-                        "min_signal_score",
-                        {"signal_score": metrics.get("signal_score"), "threshold": min_sig},
-                    )
-                    st["local_filter_ms"] += (time.perf_counter() - item_t0) * 1000
-                    continue
-            log.info("富集 %s | %s", feed_id, title[:60])
-            enrich_t0 = time.perf_counter()
-            enriched = paper_enrich.enrich_paper(
-                url,
-                signal_score=float(metrics.get("signal_score") or 50),
-                venue_whitelist=params.get("venue_whitelist"),
-                venue_blacklist=params.get("venue_blacklist"),
-            )
-            enrich_delta_ms = (time.perf_counter() - enrich_t0) * 1000
+            log.info("评估 %s | %s", feed_id, title[:60])
+            verdict = paper_enrich.evaluate_paper(title, body_text, url, params, metrics)
+            if not verdict.keep:
+                drop(
+                    item,
+                    verdict.reason,
+                    {
+                        "signal_score": metrics.get("signal_score"),
+                        "threshold": params.get("min_signal_score"),
+                    },
+                )
+                st["local_filter_ms"] += (time.perf_counter() - item_t0) * 1000
+                continue
+            enrich_delta_ms = verdict.enrich_ms
             st["enrich_calls"] += 1
             st["enrich_ms"] += enrich_delta_ms
-            if enriched.get("accepted_venue"):
-                metrics["is_preprint"] = False
-            elif enriched.get("arxiv_id"):
-                metrics["is_preprint"] = True
-            for k in (
-                "accepted_venue",
-                "community_heat",
-                "venue_score",
-                "venue_reason",
-                "quality_score",
-            ):
-                if enriched.get(k) is not None:
-                    metrics[k] = enriched[k]
-            quality_fields = {
-                "quality_score": enriched.get("quality_score"),
-                "accepted_venue": enriched.get("accepted_venue") or "",
-                "community_heat": enriched.get("community_heat"),
-                "paper_metrics_json": {
-                    "arxiv_id": enriched.get("arxiv_id"),
-                    "comment": enriched.get("arxiv_comment"),
-                    "signal_score": metrics.get("signal_score"),
-                    "quality_score": enriched.get("quality_score"),
-                    "venue_reason": enriched.get("venue_reason"),
-                    "accepted_venue": enriched.get("accepted_venue"),
-                },
-            }
+            quality_fields = verdict.quality_fields
 
         if type_cfg:
             keep, reason = tcfg.apply_typed_filter(

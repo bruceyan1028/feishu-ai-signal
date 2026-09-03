@@ -349,59 +349,13 @@ def process_and_clean(
         )
         quality_fields: dict[str, Any] = {}
         if is_paper:
-            metrics.update(tcfg.infer_paper_metrics(title, body_text, url))
-            params = (type_cfg or {}).get("params") or {}
-            # 本地信号分先硬过滤，减少外网富集
-            min_sig = params.get("min_signal_score")
-            if min_sig is not None and metrics.get("signal_score") is not None:
-                if float(metrics["signal_score"]) < float(min_sig):
-                    drop(feed_id, "min_signal_score")
-                    continue
-            enriched = paper_enrich.enrich_paper(
-                url,
-                signal_score=float(metrics.get("signal_score") or 50),
-                venue_whitelist=params.get("venue_whitelist"),
-                venue_blacklist=params.get("venue_blacklist"),
+            verdict = paper_enrich.evaluate_paper(
+                title, body_text, url, (type_cfg or {}).get("params"), metrics
             )
-            # 录用后不再视为纯预印本
-            if enriched.get("accepted_venue"):
-                metrics["is_preprint"] = False
-            elif enriched.get("arxiv_id"):
-                metrics["is_preprint"] = True
-            metrics.update(
-                {
-                    k: v
-                    for k, v in enriched.items()
-                    if k
-                    in {
-                        "accepted_venue",
-                        "community_heat",
-                        "venue_score",
-                        "venue_reason",
-                        "quality_score",
-                    }
-                    and v is not None
-                }
-            )
-            quality_fields = {
-                "quality_score": enriched.get("quality_score"),
-                "accepted_venue": enriched.get("accepted_venue") or "",
-                "community_heat": enriched.get("community_heat"),
-                "paper_metrics_json": {
-                    "arxiv_id": enriched.get("arxiv_id"),
-                    "comment": enriched.get("arxiv_comment"),
-                    "journal_ref": enriched.get("journal_ref"),
-                    "venue_score": enriched.get("venue_score"),
-                    "venue_reason": enriched.get("venue_reason"),
-                    "community": {
-                        "upvotes": enriched.get("community_upvotes"),
-                        "comments": enriched.get("community_comments"),
-                        "heat": enriched.get("community_heat"),
-                    },
-                    "signal_score": metrics.get("signal_score"),
-                    "quality_score": enriched.get("quality_score"),
-                },
-            }
+            if not verdict.keep:
+                drop(feed_id, verdict.reason)
+                continue
+            quality_fields = verdict.quality_fields
 
         if type_cfg:
             keep, reason = tcfg.apply_typed_filter(

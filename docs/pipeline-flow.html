@@ -317,16 +317,16 @@ flowchart TB
   G4 --> G4b{"published_ms 为 None？"}
   G4b -->|是| D4["丢 missing_or_invalid_date<br/>（明确禁止用采集时间冒充发布时间）"]
   G4b -->|否| G5{"⑤ lookback :334<br/>heat_keep？"}
-  G5 -->|heat_keep=true| G6
+  G5 -->|heat_keep=true| G7
   G5 -->|否| G5b{"now − published_ms ≥ lookback_ms？<br/>lookback_hours = feed.lookback_hours 或 168<br/>纯日期(无时分秒) 再 +24h 宽限"}
   G5b -->|是| D5["丢 lookback<br/>（若其余条件都能过，计入 drop_stats 回写飞书「时间窗过滤」）"]
   G5b -->|否| G7{"⑥ 关键词 :363<br/>fetch_method ∈ {Bridge, Social} → 跳过<br/>Podcast：标题命中 或 正文前 1600 字命中 ≥ max(3, min_hits)<br/>其余：标题命中即过；否则正文命中 ≥ keyword_min_hits(默认 1)<br/>正则 = feed.keyword_regex 或 DEFAULT_KEYWORD（ai|llm|agent|model|gpt|claude|gemini|…）"}
   G7 -->|未命中| D7["丢 keyword_regex"]
   G7 -->|命中/跳过| G9{"⑦ 是论文源？<br/>sources.is_paper_source :378"}
-  G9 -->|是| PM["infer_paper_metrics typed_config.py:90<br/>基准 50 · 代码链接 +15 · 正文≥800 +5 / &lt;200 −10<br/>sota +12 · benchmark +8 · 开源 +10 · 顶会 +15 · lecture notes −45 · retracted −50 · clamp 0-100"]
-  PM --> G9b{"⑧ signal_score &lt; min_signal_score？<br/>arxiv-* 默认 55 · 顶刊源不套"}
+  G9 -->|是| PM["⑧ 论文分支（整段收在 paper_enrich.evaluate_paper，漏斗只拿 verdict）<br/>infer_paper_metrics：基准 50 · 代码链接 +15 · 正文≥800 +5 / &lt;200 −10<br/>sota +12 · benchmark +8 · 开源 +10 · 顶会 +15 · lecture notes −45 · retracted −50 · clamp 0-100"]
+  PM --> G9b{"signal_score &lt; min_signal_score？<br/>arxiv-* 默认 55（备注后门可覆盖）· 顶刊源不套"}
   G9b -->|是| D9["丢 min_signal_score"]
-  G9b -->|否| PE["paper_enrich.enrich_paper（PAPER_ENRICH_ENABLED，CI 中关闭）<br/>export.arxiv.org 取录用/期刊 · huggingface.co/api/papers 取 upvotes/comments · 12s · 熔断 429×3/异常×5<br/>venue：黑名单 0 / 无录用 20 / 白名单 100 / 其它已录用 60<br/>community = 0.6·log(upvotes,500) + 0.4·log(comments,80)<br/>quality_score = 0.40·venue + 0.35·signal + 0.25·community（社区未知则按可用维归一）"]
+  G9b -->|否| PE["enrich_paper（PAPER_ENRICH_ENABLED，CI 中关闭）— 漏斗里唯一的外网请求<br/>export.arxiv.org 取录用/期刊 · huggingface.co/api/papers 取 upvotes/comments · 12s · 熔断 429×3/异常×5<br/>venue：黑名单 0 / 无录用 20 / 白名单 100 / 其它已录用 60<br/>community = 0.6·log(upvotes,500) + 0.4·log(comments,80)<br/>quality_score = 0.40·venue + 0.35·signal + 0.25·community（社区未知则按可用维归一）<br/>→ metrics 就地回填 · quality_fields 挂到 row"]
   PE --> G10
   G9 -->|否| G10{"⑨ 类型化过滤 typed_config.apply_typed_filter :294<br/>（仅 source_id 命中二级表时）<br/>keyword_include 任一命中 · keyword_exclude 命中即丢 · min_chars<br/>venue_whitelist/blacklist · account/channel_whitelist<br/>数值钩子(仅 metrics 提供时)：min_impact_factor/min_read_count/min_views/min_followers/min_engagement/min_duration_sec/min_quality_score/min_community_heat<br/>布尔硬门：require_community_heat(缺失也丢，已录用豁免) · exclude_preprint · require_code · exclude_ad · exclude_retweets · require_acceptance"}
   G10 -->|任一不过| D10["丢（阶段名 = 具体 reason）"]

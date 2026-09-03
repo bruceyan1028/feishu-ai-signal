@@ -76,12 +76,16 @@ class FunnelAttributionTest(unittest.TestCase):
         )
 
     def test_every_declared_stage_exists_in_process(self):
-        # health 的阶段名与 process 的淘汰点必须对齐，否则报告会漏掉一整类淘汰
-        source = Path("src/process.py").read_text(encoding="utf-8")
+        # health 的阶段名与漏斗的淘汰点必须对齐，否则报告会漏掉一整类淘汰。
+        # 论文分支的淘汰点（min_signal_score）在 paper_enrich.evaluate_paper 里。
+        source = "\n".join(
+            Path(p).read_text(encoding="utf-8")
+            for p in ("src/process.py", "src/paper_enrich.py")
+        )
         for stage in health.FUNNEL_STAGES:
             if stage in {"raw", "typed_filter"}:
                 continue
-            self.assertIn(f'"{stage}"', source, f"process.py 里找不到淘汰点 {stage}")
+            self.assertIn(f'"{stage}"', source, f"漏斗里找不到淘汰点 {stage}")
 
 
 class BuildRecordsTest(unittest.TestCase):

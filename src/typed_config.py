@@ -21,30 +21,6 @@ from . import config, feishu
 log = logging.getLogger(__name__)
 
 _LIST_SPLIT_RE = re.compile(r"[,，、;；\n\r]+")
-_CODE_LINK_RE = re.compile(
-    r"(?:github\.com|gitlab\.com)/[\w.-]+/[\w.-]+|"
-    r"huggingface\.co/(?:spaces|models|datasets)/[\w.-]+|"
-    r"(?:https?://)?[\w.-]+\.github\.io/",
-    re.I,
-)
-
-# 论文轻量信号分：仅用标题+摘要，不依赖外部 API。基准 50，再加减。
-_SIGNAL_POS: list[tuple[re.Pattern[str], int]] = [
-    (re.compile(r"\b(state[- ]of[- ]the[- ]art|sota)\b", re.I), 12),
-    (re.compile(r"\b(benchmark|leaderboard)\b", re.I), 8),
-    (re.compile(r"\b(open[- ]source|released? (?:code|model|weights))\b", re.I), 10),
-    (re.compile(r"\b(foundation model|large language model|\bllm\b|multimodal|agentic)\b", re.I), 8),
-    (re.compile(r"\b(reasoning|planning|tool[- ]use|rlhf|dpo|grpo|moe)\b", re.I), 8),
-    (re.compile(r"\b(outperform|surpass|beats?|improves? over)\b", re.I), 6),
-    (re.compile(r"\b(neurips|iclr|icml|cvpr|eccv|acl|emnlp|aaai|nature|science|jmlr)\b", re.I), 15),
-]
-_SIGNAL_NEG: list[tuple[re.Pattern[str], int]] = [
-    (re.compile(r"\b(lecture notes?|homework|course(?:work| project)|problem set|tutorial slides?)\b", re.I), -45),
-    (re.compile(r"\b(undergraduate|course project|class project|term paper)\b", re.I), -35),
-    (re.compile(r"\b(retracted|withdrawn|duplicate submission)\b", re.I), -50),
-    (re.compile(r"\b(position paper|opinion|perspective only)\b", re.I), -8),
-    (re.compile(r"\b(preliminary|work in progress|extended abstract)\b", re.I), -10),
-]
 
 
 def _as_list(value: Any) -> list[str]:
@@ -85,30 +61,6 @@ def _as_mapping(value: Any) -> dict[str, Any]:
         return parsed if isinstance(parsed, dict) else {}
     except (TypeError, ValueError):
         return {}
-
-
-def infer_paper_metrics(title: str, body: str, url: str = "") -> dict[str, Any]:
-    """从标题/摘要推断论文轻量指标（无需外部 API）。"""
-    text = f"{title}\n{body}\n{url}"
-    has_code = bool(_CODE_LINK_RE.search(text))
-    score = 50
-    if has_code:
-        score += 15
-    if len(body or "") >= 800:
-        score += 5
-    elif len(body or "") < 200:
-        score -= 10
-    for pattern, delta in _SIGNAL_POS:
-        if pattern.search(text):
-            score += delta
-    for pattern, delta in _SIGNAL_NEG:
-        if pattern.search(text):
-            score += delta
-    return {
-        "has_code": has_code,
-        "signal_score": max(0, min(100, score)),
-        "is_preprint": "arxiv.org/" in (url or "").lower(),
-    }
 
 
 # 每种类型：飞书字段名 -> (内部参数键, 解析器)

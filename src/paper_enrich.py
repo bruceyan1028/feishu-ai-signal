@@ -1,5 +1,7 @@
-"""论文质量富集：录用信息(A)、社区热度(D)。
+"""论文评估：本地信号分 → 信号分门槛 → 录用信息(A) / 社区热度(D) 富集 → 质量分。
 
+清洗漏斗里所有论文专属逻辑（含唯一一处外网请求）都收在这里，`evaluate_paper`
+是唯一入口；process / diag_paper 只拿结果，不碰富集细节。
 失败降级为 0 / 空，不阻断主流程。不再使用作者影响力（Semantic Scholar）。
 """
 from __future__ import annotations
@@ -7,6 +9,8 @@ from __future__ import annotations
 import logging
 import math
 import re
+import time
+from dataclasses import dataclass, field
 from typing import Any
 from xml.etree import ElementTree as ET
 
@@ -15,6 +19,127 @@ import requests
 from . import config
 
 log = logging.getLogger(__name__)
+
+_CODE_LINK_RE = re.compile(
+    r"(?:github\.com|gitlab\.com)/[\w.-]+/[\w.-]+|"
+    r"huggingface\.co/(?:spaces|models|datasets)/[\w.-]+|"
+    r"(?:https?://)?[\w.-]+\.github\.io/",
+    re.I,
+)
+
+# 论文轻量信号分：仅用标题+摘要，不依赖外部 API。基准 50，再加减。
+_SIGNAL_POS: list[tuple[re.Pattern[str], int]] = [
+    (re.compile(r"\b(state[- ]of[- ]the[- ]art|sota)\b", re.I), 12),
+    (re.compile(r"\b(benchmark|leaderboard)\b", re.I), 8),
+    (re.compile(r"\b(open[- ]source|released? (?:code|model|weights))\b", re.I), 10),
+    (re.compile(r"\b(foundation model|large language model|\bllm\b|multimodal|agentic)\b", re.I), 8),
+    (re.compile(r"\b(reasoning|planning|tool[- ]use|rlhf|dpo|grpo|moe)\b", re.I), 8),
+    (re.compile(r"\b(outperform|surpass|beats?|improves? over)\b", re.I), 6),
+    (re.compile(r"\b(neurips|iclr|icml|cvpr|eccv|acl|emnlp|aaai|nature|science|jmlr)\b", re.I), 15),
+]
+_SIGNAL_NEG: list[tuple[re.Pattern[str], int]] = [
+    (re.compile(r"\b(lecture notes?|homework|course(?:work| project)|problem set|tutorial slides?)\b", re.I), -45),
+    (re.compile(r"\b(undergraduate|course project|class project|term paper)\b", re.I), -35),
+    (re.compile(r"\b(retracted|withdrawn|duplicate submission)\b", re.I), -50),
+    (re.compile(r"\b(position paper|opinion|perspective only)\b", re.I), -8),
+    (re.compile(r"\b(preliminary|work in progress|extended abstract)\b", re.I), -10),
+]
+
+# enrich_paper 返回值里要同步进 metrics 的键（供 typed_filter 的数值/布尔钩子判定）
+_METRIC_KEYS = ("accepted_venue", "community_heat", "venue_score", "venue_reason", "quality_score")
+
+
+def infer_paper_metrics(title: str, body: str, url: str = "") -> dict[str, Any]:
+    """从标题/摘要推断论文轻量指标（无需外部 API）。"""
+    text = f"{title}\n{body}\n{url}"
+    has_code = bool(_CODE_LINK_RE.search(text))
+    score = 50
+    if has_code:
+        score += 15
+    if len(body or "") >= 800:
+        score += 5
+    elif len(body or "") < 200:
+        score -= 10
+    for pattern, delta in _SIGNAL_POS:
+        if pattern.search(text):
+            score += delta
+    for pattern, delta in _SIGNAL_NEG:
+        if pattern.search(text):
+            score += delta
+    return {
+        "has_code": has_code,
+        "signal_score": max(0, min(100, score)),
+        "is_preprint": "arxiv.org/" in (url or "").lower(),
+    }
+
+
+@dataclass
+class PaperVerdict:
+    keep: bool
+    reason: str = ""
+    quality_fields: dict[str, Any] = field(default_factory=dict)
+    enriched: bool = False
+    enrich_ms: float = 0.0
+
+
+def evaluate_paper(
+    title: str,
+    body_text: str,
+    url: str,
+    params: dict[str, Any] | None,
+    metrics: dict[str, Any],
+) -> PaperVerdict:
+    """漏斗里的论文分支：本地信号分 → min_signal_score 硬门 → 外网富集 → 质量分。
+
+    metrics 就地更新（signal_score / has_code / is_preprint 及富集回填的录用、热度、
+    质量分），供后续 apply_typed_filter 读取。信号分门槛放在富集之前，是为了把
+    明显不像论文的条目挡在外网请求之外。
+    """
+    params = params or {}
+    metrics.update(infer_paper_metrics(title, body_text, url))
+
+    min_sig = params.get("min_signal_score")
+    if min_sig is not None and metrics.get("signal_score") is not None:
+        if float(metrics["signal_score"]) < float(min_sig):
+            return PaperVerdict(keep=False, reason="min_signal_score")
+
+    t0 = time.perf_counter()
+    enriched = enrich_paper(
+        url,
+        signal_score=float(metrics.get("signal_score") or 50),
+        venue_whitelist=params.get("venue_whitelist"),
+        venue_blacklist=params.get("venue_blacklist"),
+    )
+    enrich_ms = (time.perf_counter() - t0) * 1000
+
+    # 录用后不再视为纯预印本
+    if enriched.get("accepted_venue"):
+        metrics["is_preprint"] = False
+    elif enriched.get("arxiv_id"):
+        metrics["is_preprint"] = True
+    metrics.update({k: enriched[k] for k in _METRIC_KEYS if enriched.get(k) is not None})
+
+    quality_fields = {
+        "quality_score": enriched.get("quality_score"),
+        "accepted_venue": enriched.get("accepted_venue") or "",
+        "community_heat": enriched.get("community_heat"),
+        "paper_metrics_json": {
+            "arxiv_id": enriched.get("arxiv_id"),
+            "comment": enriched.get("arxiv_comment"),
+            "journal_ref": enriched.get("journal_ref"),
+            "venue_score": enriched.get("venue_score"),
+            "venue_reason": enriched.get("venue_reason"),
+            "accepted_venue": enriched.get("accepted_venue"),
+            "community": {
+                "upvotes": enriched.get("community_upvotes"),
+                "comments": enriched.get("community_comments"),
+                "heat": enriched.get("community_heat"),
+            },
+            "signal_score": metrics.get("signal_score"),
+            "quality_score": enriched.get("quality_score"),
+        },
+    }
+    return PaperVerdict(keep=True, quality_fields=quality_fields, enriched=True, enrich_ms=enrich_ms)
 
 _ARXIV_ID_RE = re.compile(
     r"(?:arxiv\.org/(?:abs|pdf|html)/|huggingface\.co/papers/)"
