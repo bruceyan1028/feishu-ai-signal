@@ -252,6 +252,26 @@
       "mediaAssets": {
         "images": [
           {
+            "url": "media/papers/recvu1S4qSbYtM-p7-f1.png",
+            "alt": "PDF 第 7 页图表：Table 1 Main results across model scales and training strategies. Subscripts denote changes relative to the corresponding base model. The best result in each section per column is in bold.",
+            "kind": "pdf-page"
+          },
+          {
+            "url": "media/papers/recvu1S4qSbYtM-p8-f2.png",
+            "alt": "PDF 第 8 页图表：Table 2 Win Rate Results. For each criterion, we report the percentage of comparisons in which each model is selected as the best among the baseline trained on PaperGym-20k , the baseline trained on RubricHub Science , and the",
+            "kind": "pdf-page"
+          },
+          {
+            "url": "media/papers/recvu1S4qSbYtM-p9-f3.png",
+            "alt": "PDF 第 9 页图表：Figure 3 Left: Data scaling law with GRPO training. Right: Training dynamics across two-stage orderings of OPSD and GRPO on Qwen3-1.7B.",
+            "kind": "pdf-page"
+          },
+          {
+            "url": "media/papers/recvu1S4qSbYtM-p9-f4.png",
+            "alt": "PDF 第 9 页图表：Table 3 Criterion leakage comparison.",
+            "kind": "pdf-page"
+          },
+          {
             "url": "https://arxiv.org/html/2608.31119v1/framework.png",
             "alt": "Figure 1 : Overview of the PaperGym framework. (a) Data Generation: arXiv papers are parsed into four stages to synthesize questions and answers; rubrics are generated, merged, ranked, and filtered. (b) Two-Stage Policy Training: rubric-based OPSD followed by rubric-as-rewards GRPO."
           },
@@ -1637,12 +1657,6 @@
             "alt": "零跑销量增长与毛利率变化",
             "kind": "article-figure",
             "afterHeading": "01.零跑站稳10万，鸿蒙智行继续回落"
-          },
-          {
-            "url": "media/huxiu/recvu2ZXD8xoDM-3.png",
-            "alt": "小鹏与理想8月销量对比",
-            "kind": "article-figure",
-            "afterHeading": "02.小鹏守在4万，理想反弹"
           },
           {
             "url": "media/huxiu/recvu2ZXD8xoDM-4.png",

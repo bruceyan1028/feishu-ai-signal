@@ -520,6 +520,9 @@ def format_for_feishu(item: dict[str, Any]) -> dict[str, Any]:
         or media_assets.get("videos")
         or media_assets.get("audio")
         or media_assets.get("documents")
+        # 只带外链文章卡的帖子（正文一句话 + 一张官方封面）在这里漏判过：整份
+        # media_assets 不写库，封面和跳转链接就都没了
+        or media_assets.get("articles")
         or media_assets.get("policy")
     ):
         fields["媒体资源"] = json.dumps(media_assets, ensure_ascii=False)

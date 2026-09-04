@@ -79,6 +79,26 @@
       "mediaAssets": {
         "images": [
           {
+            "url": "media/papers/recvu1S4qSbYtM-p7-f1.png",
+            "alt": "PDF 第 7 页图表：Table 1 Main results across model scales and training strategies. Subscripts denote changes relative to the corresponding base model. The best result in each section per column is in bold.",
+            "kind": "pdf-page"
+          },
+          {
+            "url": "media/papers/recvu1S4qSbYtM-p8-f2.png",
+            "alt": "PDF 第 8 页图表：Table 2 Win Rate Results. For each criterion, we report the percentage of comparisons in which each model is selected as the best among the baseline trained on PaperGym-20k , the baseline trained on RubricHub Science , and the",
+            "kind": "pdf-page"
+          },
+          {
+            "url": "media/papers/recvu1S4qSbYtM-p9-f3.png",
+            "alt": "PDF 第 9 页图表：Figure 3 Left: Data scaling law with GRPO training. Right: Training dynamics across two-stage orderings of OPSD and GRPO on Qwen3-1.7B.",
+            "kind": "pdf-page"
+          },
+          {
+            "url": "media/papers/recvu1S4qSbYtM-p9-f4.png",
+            "alt": "PDF 第 9 页图表：Table 3 Criterion leakage comparison.",
+            "kind": "pdf-page"
+          },
+          {
             "url": "https://arxiv.org/html/2608.31119v1/framework.png",
             "alt": "Figure 1 : Overview of the PaperGym framework. (a) Data Generation: arXiv papers are parsed into four stages to synthesize questions and answers; rubrics are generated, merged, ranked, and filtered. (b) Two-Stage Policy Training: rubric-based OPSD followed by rubric-as-rewards GRPO."
           },
@@ -211,6 +231,26 @@
       "imageUrl": "https://arxiv.org/html/2608.30935v1/pipeline.png",
       "mediaAssets": {
         "images": [
+          {
+            "url": "media/papers/recvu1S4qSqy3r-p9-f1.png",
+            "alt": "PDF 第 9 页图表：Fig. 7. Automatic pre-annotation pipeline for INSIGHT-Bench. The pipeline first samples navigable viewpoints (orange dots) and renders RGB and metric-depth observations in 4 headings. Molmo2 then produces open-set image-space pointing predictions, which are lifted into 3D and merged across views. The green dots denote the resulting spatially consistent 3D target instances.",
+            "kind": "pdf-page"
+          },
+          {
+            "url": "media/papers/recvu1S4qSqy3r-p9-f2.png",
+            "alt": "PDF 第 9 页图表：Fig. 8. Automatic data-generation and instruction-labeling pipeline for INSIGHT-Bench. All scene sources are converted to a common 3D target inventory; we then draw a target and a start pose from which it is visible in at least one offline inventory view, plan a route on the navigation mesh, anchor the stop, and render an egocentric clip with action labels. The evaluated policy remains monocular, and the target need not appear in its initial forward-facing observation. Instructions are drafted by either a rule-template route or a video-VLM route, rewritten by an LLM under semantic checks, and ",
+            "kind": "pdf-page"
+          },
+          {
+            "url": "media/papers/recvu1S4qSqy3r-p10-f3.png",
+            "alt": "PDF 第 10 页图表：Fig. 9. Two-axis diagnostic taxonomy of INSIGHT-Bench. The scene axis groups environments by dominant function and layout, independent of their source dataset. The instruction axis identifies the spatial mechanism required to resolve the goal.",
+            "kind": "pdf-page"
+          },
+          {
+            "url": "media/papers/recvu1S4qSqy3r-p10-f4.png",
+            "alt": "PDF 第 10 页图表：Fig. 10. Composition of INSIGHT-Bench. The training split contains 1,683 scenes and 53,090 episodes collected from HM3D/MP3D, Habitat-GS, InteriorGS, and VLNVerse, whereas the evaluation split contains 210 scenes and 1,097 episodes from Habitat-GS, InteriorGS, HM3D, and MP3D. The lower histograms show the Top-50 navigation-target frequencies on a logarithmic scale.",
+            "kind": "pdf-page"
+          },
           {
             "url": "https://arxiv.org/html/2608.30935v1/pipeline.png",
             "alt": "Fig. 2 : Overview of LightNav-0 . A compact pretrained VLM consumes a temporally compressed egocentric RGB history and a natural-language goal. It first emits pointing as an explicit spatial reasoning trace, followed by three residual vector-quantized (RVQ) action tokens. The action tokens decode to 10 future SE ⁡ ( 2 ) \\mathrm{SE}(2) waypoints and are executed by an embodiment-specific low-level controller. The same backbone, token interface, and objective are used for all navigation tasks."

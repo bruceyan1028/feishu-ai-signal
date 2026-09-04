@@ -534,6 +534,47 @@ class SocialSourceTest(unittest.TestCase):
         self.assertEqual(article["url"], "https://example.com/model-2")
         self.assertEqual(article["image"], "https://pbs.twimg.com/news_img/cover.jpg")
 
+    def test_article_only_post_still_writes_media_assets(self) -> None:
+        """「一句话 + 官方文章卡」这种帖子没有图片视频，媒体资源不能整份不写库。"""
+        post = _item(
+            post_id="601",
+            text="Introducing GPT-6 Astra: https://t.co/astra",
+        )
+        post["entities"] = {
+            "urls": [
+                {
+                    "url": "https://t.co/astra",
+                    "expanded_url": "https://openai.com/index/gpt-6-astra/",
+                    "title": "GPT-6 Astra: A new generation of intelligence",
+                    "description": "Our most intelligent and aligned model yet.",
+                    "images": [{"url": "https://pbs.twimg.com/news_img/astra.jpg"}],
+                }
+            ]
+        }
+        items = social._build_account_items(
+            [post], {}, feed=_feed(), username="gdb", profile={"followers": 1000000}
+        )
+        assets = items[0]["media_assets"]
+        self.assertEqual(assets["images"], [])
+        self.assertEqual(assets["videos"], [])
+        kept, _ = social.filter_social_items(items, classifier=lambda _: True)
+        cleaned = process.process_and_clean(
+            kept,
+            {
+                "social-media": {
+                    "entity_type": "social",
+                    "params": {"account_whitelist": ["gdb"]},
+                }
+            },
+        )
+        fields = process.format_for_feishu(cleaned[0])
+        stored = json.loads(fields["媒体资源"])
+        self.assertEqual(
+            [item["url"] for item in stored["articles"]],
+            ["https://openai.com/index/gpt-6-astra/"],
+        )
+        self.assertEqual(stored["articles"][0]["image"], "https://pbs.twimg.com/news_img/astra.jpg")
+
     def test_seed_contains_personal_p0_accounts(self) -> None:
         seed = json.loads(
             (Path(__file__).resolve().parents[1] / "src" / "seed_default.json").read_text()
