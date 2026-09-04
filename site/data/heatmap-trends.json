@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-04T16:00:14+08:00",
+  "generatedAt": "2026-09-04T18:31:40+08:00",
   "days": [
     "2026-08-29",
     "2026-08-30",
@@ -354,111 +354,243 @@
     }
   },
   "x": {
-    "error": "未配置 X_BEARER_TOKEN",
+    "error": "",
     "matrix": {
       "raw": [
         [
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          0.0
+          153.0,
+          170.0,
+          285.0,
+          237.0,
+          719.0,
+          11121.0,
+          8225.0
         ],
         [
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          0.0
+          52.0,
+          38.0,
+          65.0,
+          48.0,
+          64.0,
+          155.0,
+          117.0
         ],
         [
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          0.0
+          1320.0,
+          608.0,
+          612.0,
+          723.0,
+          939.0,
+          1344.0,
+          548.0
         ],
         [
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          0.0
+          14.0,
+          5.0,
+          8.0,
+          19.0,
+          62.0,
+          72.0,
+          7.0
         ],
         [
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          0.0
+          2512.0,
+          2291.0,
+          1903.0,
+          1608.0,
+          1962.0,
+          6218.0,
+          2190.0
         ]
       ],
       "normalized": [
         [
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          0.0
+          0.0138,
+          0.0153,
+          0.0256,
+          0.0213,
+          0.0647,
+          1.0,
+          0.7396
         ],
         [
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          0.0
+          0.3355,
+          0.2452,
+          0.4194,
+          0.3097,
+          0.4129,
+          1.0,
+          0.7548
         ],
         [
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          0.0
+          0.9821,
+          0.4524,
+          0.4554,
+          0.5379,
+          0.6987,
+          1.0,
+          0.4077
         ],
         [
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          0.0
+          0.1944,
+          0.0694,
+          0.1111,
+          0.2639,
+          0.8611,
+          1.0,
+          0.0972
         ],
         [
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          0.0
+          0.404,
+          0.3684,
+          0.306,
+          0.2586,
+          0.3155,
+          1.0,
+          0.3522
         ]
       ]
     },
     "trend": {
-      "gpt-6": 1.0,
-      "artificial-general-intelligence": 1.0,
-      "sam-altman": 1.0,
-      "alexandr-wang": 1.0,
-      "hugging-face": 1.0
+      "gpt-6": 3.89,
+      "artificial-general-intelligence": 1.664,
+      "sam-altman": 0.593,
+      "alexandr-wang": 0.233,
+      "hugging-face": 0.797
     },
-    "items": {},
-    "itemIndex": {}
+    "items": {
+      "gpt-6|2026-08-29": [
+        "x-gpt-6"
+      ],
+      "gpt-6|2026-08-30": [
+        "x-gpt-6"
+      ],
+      "gpt-6|2026-08-31": [
+        "x-gpt-6"
+      ],
+      "gpt-6|2026-09-01": [
+        "x-gpt-6"
+      ],
+      "gpt-6|2026-09-02": [
+        "x-gpt-6"
+      ],
+      "gpt-6|2026-09-03": [
+        "x-gpt-6"
+      ],
+      "gpt-6|2026-09-04": [
+        "x-gpt-6"
+      ],
+      "artificial-general-intelligence|2026-08-29": [
+        "x-artificial-general-intelligence"
+      ],
+      "artificial-general-intelligence|2026-08-30": [
+        "x-artificial-general-intelligence"
+      ],
+      "artificial-general-intelligence|2026-08-31": [
+        "x-artificial-general-intelligence"
+      ],
+      "artificial-general-intelligence|2026-09-01": [
+        "x-artificial-general-intelligence"
+      ],
+      "artificial-general-intelligence|2026-09-02": [
+        "x-artificial-general-intelligence"
+      ],
+      "artificial-general-intelligence|2026-09-03": [
+        "x-artificial-general-intelligence"
+      ],
+      "artificial-general-intelligence|2026-09-04": [
+        "x-artificial-general-intelligence"
+      ],
+      "sam-altman|2026-08-29": [
+        "x-sam-altman"
+      ],
+      "sam-altman|2026-08-30": [
+        "x-sam-altman"
+      ],
+      "sam-altman|2026-08-31": [
+        "x-sam-altman"
+      ],
+      "sam-altman|2026-09-01": [
+        "x-sam-altman"
+      ],
+      "sam-altman|2026-09-02": [
+        "x-sam-altman"
+      ],
+      "sam-altman|2026-09-03": [
+        "x-sam-altman"
+      ],
+      "sam-altman|2026-09-04": [
+        "x-sam-altman"
+      ],
+      "alexandr-wang|2026-08-29": [
+        "x-alexandr-wang"
+      ],
+      "alexandr-wang|2026-08-30": [
+        "x-alexandr-wang"
+      ],
+      "alexandr-wang|2026-08-31": [
+        "x-alexandr-wang"
+      ],
+      "alexandr-wang|2026-09-01": [
+        "x-alexandr-wang"
+      ],
+      "alexandr-wang|2026-09-02": [
+        "x-alexandr-wang"
+      ],
+      "alexandr-wang|2026-09-03": [
+        "x-alexandr-wang"
+      ],
+      "alexandr-wang|2026-09-04": [
+        "x-alexandr-wang"
+      ],
+      "hugging-face|2026-08-29": [
+        "x-hugging-face"
+      ],
+      "hugging-face|2026-08-30": [
+        "x-hugging-face"
+      ],
+      "hugging-face|2026-08-31": [
+        "x-hugging-face"
+      ],
+      "hugging-face|2026-09-01": [
+        "x-hugging-face"
+      ],
+      "hugging-face|2026-09-02": [
+        "x-hugging-face"
+      ],
+      "hugging-face|2026-09-03": [
+        "x-hugging-face"
+      ],
+      "hugging-face|2026-09-04": [
+        "x-hugging-face"
+      ]
+    },
+    "itemIndex": {
+      "x-gpt-6": {
+        "title": "X 热搜 · \"gpt 6\" -is:retweet",
+        "source": "X",
+        "url": "https://x.com/search?q=%22gpt%206%22%20-is%3Aretweet&src=typed_query&f=live"
+      },
+      "x-artificial-general-intelligence": {
+        "title": "X 热搜 · \"artificial general intelligence\" -is:retweet",
+        "source": "X",
+        "url": "https://x.com/search?q=%22artificial%20general%20intelligence%22%20-is%3Aretweet&src=typed_query&f=live"
+      },
+      "x-sam-altman": {
+        "title": "X 热搜 · \"sam altman\" -is:retweet",
+        "source": "X",
+        "url": "https://x.com/search?q=%22sam%20altman%22%20-is%3Aretweet&src=typed_query&f=live"
+      },
+      "x-alexandr-wang": {
+        "title": "X 热搜 · \"alexandr wang\" -is:retweet",
+        "source": "X",
+        "url": "https://x.com/search?q=%22alexandr%20wang%22%20-is%3Aretweet&src=typed_query&f=live"
+      },
+      "x-hugging-face": {
+        "title": "X 热搜 · \"hugging face\" -is:retweet",
+        "source": "X",
+        "url": "https://x.com/search?q=%22hugging%20face%22%20-is%3Aretweet&src=typed_query&f=live"
+      }
+    }
   }
 }

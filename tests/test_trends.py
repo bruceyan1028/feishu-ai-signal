@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import json
+import os
 import tempfile
 import unittest
 from datetime import date
@@ -392,3 +393,28 @@ class WorkflowTest(unittest.TestCase):
         text = Path(".github/workflows/daily-brief.yml").read_text(encoding="utf-8")
         self.assertIn("python -m src.trends", text)
         self.assertIn("heatmap-trends.json", text)
+
+
+class DotenvTest(unittest.TestCase):
+    def test_run_loads_dotenv_before_build(self):
+        loaded: list[int] = []
+        with patch.object(trends, "_load_dotenv", lambda: loaded.append(1)):
+            with patch.object(trends, "load_previous", return_value=None):
+                with patch.object(trends, "build_payload", return_value={"ok": 1}):
+                    with patch.object(trends, "write_payload", return_value=Path("x")):
+                        self.assertEqual(trends.run(["--output", "x"]), 0)
+        self.assertEqual(loaded, [1])
+
+    def test_load_dotenv_fills_missing_x_token(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            (root / ".env").write_text("X_BEARER_TOKEN=from-file\n", encoding="utf-8")
+            old = os.environ.pop("X_BEARER_TOKEN", None)
+            try:
+                with patch.object(trends, "ROOT", root):
+                    trends._load_dotenv()
+                self.assertEqual(os.environ.get("X_BEARER_TOKEN"), "from-file")
+            finally:
+                os.environ.pop("X_BEARER_TOKEN", None)
+                if old is not None:
+                    os.environ["X_BEARER_TOKEN"] = old

@@ -1030,10 +1030,30 @@ def write_payload(payload: dict[str, Any], output: Path | str) -> Path:
     return path
 
 
+def _load_dotenv() -> None:
+    """本机 `python -m src.trends` 不经过 bootstrap，需要自己把 .env 灌进环境。
+
+    已在环境里的变量不覆盖：CI 用 GitHub Secrets，本机已 export 的优先。
+    """
+    env_path = ROOT / ".env"
+    if not env_path.is_file():
+        return
+    for line in env_path.read_text(encoding="utf-8").splitlines():
+        line = line.strip()
+        if not line or line.startswith("#") or "=" not in line:
+            continue
+        key, _, val = line.partition("=")
+        key = key.strip()
+        val = val.strip().strip('"').strip("'")
+        if key and key not in os.environ:
+            os.environ[key] = val
+
+
 def run(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="从 Google 热搜筛 AI 话题并生成热力图 JSON")
     parser.add_argument("--output", default=str(DEFAULT_OUTPUT))
     args = parser.parse_args(argv)
+    _load_dotenv()
     previous = load_previous(args.output)
     payload = build_payload(previous=previous)
     path = write_payload(payload, args.output)
