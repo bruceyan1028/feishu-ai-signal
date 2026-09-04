@@ -1,105 +1,101 @@
 {
-  "generatedAt": "2026-09-03T11:15:18+08:00",
+  "generatedAt": "2026-09-04T12:33:49+08:00",
   "days": [
-    "2026-08-28",
     "2026-08-29",
     "2026-08-30",
     "2026-08-31",
     "2026-09-01",
     "2026-09-02",
-    "2026-09-03"
+    "2026-09-03",
+    "2026-09-04"
   ],
   "topics": [
-    "gemini-3-8-flash",
-    "fable-5-1",
-    "artificial-intelligence-news",
-    "classroom"
+    "chatgpt-astra",
+    "gpt-6",
+    "sam-altman",
+    "hugging-face"
   ],
   "labels": {
-    "gemini-3-8-flash": "gemini 3.8 flash",
-    "fable-5-1": "fable 5.1",
-    "artificial-intelligence-news": "artificial intelligence news",
-    "classroom": "classroom"
+    "chatgpt-astra": "chatgpt astra",
+    "gpt-6": "gpt 6",
+    "sam-altman": "sam altman",
+    "hugging-face": "hugging face"
   },
   "queries": {
-    "gemini-3-8-flash": {
-      "g": "gemini 3.8 flash",
-      "x": "\"gemini 3.8 flash\" -is:retweet"
+    "chatgpt-astra": {
+      "g": "chatgpt astra",
+      "x": "\"chatgpt astra\" -is:retweet"
     },
-    "fable-5-1": {
-      "g": "fable 5.1",
-      "x": "\"fable 5.1\" -is:retweet"
+    "gpt-6": {
+      "g": "gpt 6",
+      "x": "\"gpt 6\" -is:retweet"
     },
-    "artificial-intelligence-news": {
-      "g": "artificial intelligence news",
-      "x": "\"artificial intelligence news\" -is:retweet"
+    "sam-altman": {
+      "g": "sam altman",
+      "x": "\"sam altman\" -is:retweet"
     },
-    "classroom": {
-      "g": "classroom",
-      "x": "\"classroom\" -is:retweet"
+    "hugging-face": {
+      "g": "hugging face",
+      "x": "\"hugging face\" -is:retweet"
     }
   },
   "scopes": {
-    "gemini-3-8-flash": "global",
-    "fable-5-1": "global",
-    "artificial-intelligence-news": "global",
-    "classroom": "global"
+    "chatgpt-astra": "global",
+    "gpt-6": "global",
+    "sam-altman": "global",
+    "hugging-face": "global"
   },
   "marks": {
-    "gemini-3-8-flash": "🌐",
-    "fable-5-1": "🌐",
-    "artificial-intelligence-news": "🌐",
-    "classroom": "🌐"
+    "chatgpt-astra": "🌐",
+    "gpt-6": "🌐",
+    "sam-altman": "🌐",
+    "hugging-face": "🌐"
   },
   "breakouts": [
-    "gemini-3-8-flash",
-    "fable-5-1",
-    "artificial-intelligence-news",
-    "classroom"
+    "chatgpt-astra",
+    "gpt-6",
+    "sam-altman",
+    "hugging-face"
   ],
   "selection": {
     "method": "google-trending-ai",
     "volumes": {
-      "gemini-3-8-flash": 2000,
-      "fable-5-1": 10000,
-      "artificial-intelligence-news": 2000,
-      "classroom": 5000
+      "chatgpt-astra": 200000,
+      "gpt-6": 500000,
+      "sam-altman": 100000,
+      "hugging-face": 10000
     },
     "geos": {
-      "gemini-3-8-flash": [
-        "US",
-        "JP"
+      "chatgpt-astra": [
+        "IN"
       ],
-      "fable-5-1": [
+      "gpt-6": [
         "US",
+        "AU"
+      ],
+      "sam-altman": [
         "GB",
-        "IN",
-        "DE",
-        "JP",
         "AU",
         "CA"
       ],
-      "artificial-intelligence-news": [
+      "hugging-face": [
         "US",
-        "IN"
-      ],
-      "classroom": [
         "GB",
-        "JP",
-        "AU"
+        "AU",
+        "CA"
       ]
     },
     "plot_geo": {
-      "gemini-3-8-flash": "",
-      "fable-5-1": "",
-      "artificial-intelligence-news": "",
-      "classroom": ""
+      "chatgpt-astra": "",
+      "gpt-6": "",
+      "sam-altman": "",
+      "hugging-face": ""
     },
     "breakouts": [
-      "gemini-3-8-flash",
-      "fable-5-1",
-      "artificial-intelligence-news",
-      "classroom"
+      "chatgpt-astra",
+      "gpt-6",
+      "sam-altman",
+      "hugging-face"
     ]
   },
   "google-trends": {
@@ -112,34 +108,34 @@
           1.0,
           1.0,
           3.0,
-          41.0,
+          21.0,
           100.0
         ],
         [
-          3.0,
-          2.0,
-          1.0,
-          2.0,
-          66.0,
-          100.0,
-          63.0
+          4.0,
+          4.0,
+          5.0,
+          5.0,
+          6.0,
+          31.0,
+          100.0
         ],
         [
+          6.0,
+          5.0,
+          7.0,
+          7.0,
+          8.0,
+          33.0,
+          100.0
+        ],
+        [
+          36.0,
+          33.0,
+          33.0,
+          34.0,
           40.0,
-          36.0,
-          34.0,
-          62.0,
-          73.0,
-          93.0,
-          100.0
-        ],
-        [
-          69.0,
-          34.0,
-          36.0,
-          77.0,
-          85.0,
-          92.0,
+          84.0,
           100.0
         ]
       ],
@@ -150,300 +146,346 @@
           0.01,
           0.01,
           0.03,
-          0.41,
+          0.21,
           1.0
         ],
         [
-          0.03,
-          0.02,
-          0.01,
-          0.02,
-          0.66,
-          1.0,
-          0.63
+          0.04,
+          0.04,
+          0.05,
+          0.05,
+          0.06,
+          0.31,
+          1.0
         ],
         [
+          0.06,
+          0.05,
+          0.07,
+          0.07,
+          0.08,
+          0.33,
+          1.0
+        ],
+        [
+          0.36,
+          0.33,
+          0.33,
+          0.34,
           0.4,
-          0.36,
-          0.34,
-          0.62,
-          0.73,
-          0.93,
-          1.0
-        ],
-        [
-          0.69,
-          0.34,
-          0.36,
-          0.77,
-          0.85,
-          0.92,
+          0.84,
           1.0
         ]
       ]
     },
     "trend": {
-      "gemini-3-8-flash": 12.5,
-      "fable-5-1": 2.172,
-      "artificial-intelligence-news": 1.775,
-      "classroom": 1.527
+      "chatgpt-astra": 21.429,
+      "gpt-6": 10.909,
+      "sam-altman": 9.091,
+      "hugging-face": 2.308
     },
     "items": {
-      "gemini-3-8-flash|2026-08-28": [
-        "g-gemini-3-8-flash"
+      "chatgpt-astra|2026-08-29": [
+        "g-chatgpt-astra"
       ],
-      "gemini-3-8-flash|2026-08-29": [
-        "g-gemini-3-8-flash"
+      "chatgpt-astra|2026-08-30": [
+        "g-chatgpt-astra"
       ],
-      "gemini-3-8-flash|2026-08-30": [
-        "g-gemini-3-8-flash"
+      "chatgpt-astra|2026-08-31": [
+        "g-chatgpt-astra"
       ],
-      "gemini-3-8-flash|2026-08-31": [
-        "g-gemini-3-8-flash"
+      "chatgpt-astra|2026-09-01": [
+        "g-chatgpt-astra"
       ],
-      "gemini-3-8-flash|2026-09-01": [
-        "g-gemini-3-8-flash"
+      "chatgpt-astra|2026-09-02": [
+        "g-chatgpt-astra"
       ],
-      "gemini-3-8-flash|2026-09-02": [
-        "g-gemini-3-8-flash"
+      "chatgpt-astra|2026-09-03": [
+        "g-chatgpt-astra"
       ],
-      "gemini-3-8-flash|2026-09-03": [
-        "g-gemini-3-8-flash"
+      "chatgpt-astra|2026-09-04": [
+        "g-chatgpt-astra"
       ],
-      "fable-5-1|2026-08-28": [
-        "g-fable-5-1"
+      "gpt-6|2026-08-29": [
+        "g-gpt-6"
       ],
-      "fable-5-1|2026-08-29": [
-        "g-fable-5-1"
+      "gpt-6|2026-08-30": [
+        "g-gpt-6"
       ],
-      "fable-5-1|2026-08-30": [
-        "g-fable-5-1"
+      "gpt-6|2026-08-31": [
+        "g-gpt-6"
       ],
-      "fable-5-1|2026-08-31": [
-        "g-fable-5-1"
+      "gpt-6|2026-09-01": [
+        "g-gpt-6"
       ],
-      "fable-5-1|2026-09-01": [
-        "g-fable-5-1"
+      "gpt-6|2026-09-02": [
+        "g-gpt-6"
       ],
-      "fable-5-1|2026-09-02": [
-        "g-fable-5-1"
+      "gpt-6|2026-09-03": [
+        "g-gpt-6"
       ],
-      "fable-5-1|2026-09-03": [
-        "g-fable-5-1",
-        "g-fable-5-1-q1",
-        "g-fable-5-1-q2",
-        "g-fable-5-1-q3",
-        "g-fable-5-1-q4",
-        "g-fable-5-1-q5"
+      "gpt-6|2026-09-04": [
+        "g-gpt-6"
       ],
-      "artificial-intelligence-news|2026-08-28": [
-        "g-artificial-intelligence-news"
+      "sam-altman|2026-08-29": [
+        "g-sam-altman"
       ],
-      "artificial-intelligence-news|2026-08-29": [
-        "g-artificial-intelligence-news"
+      "sam-altman|2026-08-30": [
+        "g-sam-altman"
       ],
-      "artificial-intelligence-news|2026-08-30": [
-        "g-artificial-intelligence-news"
+      "sam-altman|2026-08-31": [
+        "g-sam-altman"
       ],
-      "artificial-intelligence-news|2026-08-31": [
-        "g-artificial-intelligence-news"
+      "sam-altman|2026-09-01": [
+        "g-sam-altman"
       ],
-      "artificial-intelligence-news|2026-09-01": [
-        "g-artificial-intelligence-news"
+      "sam-altman|2026-09-02": [
+        "g-sam-altman"
       ],
-      "artificial-intelligence-news|2026-09-02": [
-        "g-artificial-intelligence-news"
+      "sam-altman|2026-09-03": [
+        "g-sam-altman"
       ],
-      "artificial-intelligence-news|2026-09-03": [
-        "g-artificial-intelligence-news"
+      "sam-altman|2026-09-04": [
+        "g-sam-altman"
       ],
-      "classroom|2026-08-28": [
-        "g-classroom"
+      "hugging-face|2026-08-29": [
+        "g-hugging-face"
       ],
-      "classroom|2026-08-29": [
-        "g-classroom"
+      "hugging-face|2026-08-30": [
+        "g-hugging-face"
       ],
-      "classroom|2026-08-30": [
-        "g-classroom"
+      "hugging-face|2026-08-31": [
+        "g-hugging-face"
       ],
-      "classroom|2026-08-31": [
-        "g-classroom"
+      "hugging-face|2026-09-01": [
+        "g-hugging-face"
       ],
-      "classroom|2026-09-01": [
-        "g-classroom"
+      "hugging-face|2026-09-02": [
+        "g-hugging-face"
       ],
-      "classroom|2026-09-02": [
-        "g-classroom"
+      "hugging-face|2026-09-03": [
+        "g-hugging-face"
       ],
-      "classroom|2026-09-03": [
-        "g-classroom",
-        "g-classroom-q1",
-        "g-classroom-q2",
-        "g-classroom-q3",
-        "g-classroom-q4",
-        "g-classroom-q5"
+      "hugging-face|2026-09-04": [
+        "g-hugging-face"
       ]
     },
     "itemIndex": {
-      "g-gemini-3-8-flash": {
-        "title": "Google Trends · gemini 3.8 flash",
+      "g-chatgpt-astra": {
+        "title": "Google Trends · chatgpt astra",
         "source": "Google Trends",
-        "url": "https://trends.google.com/trends/explore?date=now%207-d&q=gemini%203.8%20flash"
+        "url": "https://trends.google.com/trends/explore?date=now%207-d&q=chatgpt%20astra"
       },
-      "g-fable-5-1": {
-        "title": "Google Trends · fable 5.1",
+      "g-gpt-6": {
+        "title": "Google Trends · gpt 6",
         "source": "Google Trends",
-        "url": "https://trends.google.com/trends/explore?date=now%207-d&q=fable%205.1"
+        "url": "https://trends.google.com/trends/explore?date=now%207-d&q=gpt%206"
       },
-      "g-fable-5-1-q1": {
-        "title": "claude pricing",
+      "g-sam-altman": {
+        "title": "Google Trends · sam altman",
         "source": "Google Trends",
-        "url": "https://trends.google.com/trends/explore?date=now%207-d&q=claude%20pricing"
+        "url": "https://trends.google.com/trends/explore?date=now%207-d&q=sam%20altman"
       },
-      "g-fable-5-1-q2": {
-        "title": "artificial analysis",
+      "g-hugging-face": {
+        "title": "Google Trends · hugging face",
         "source": "Google Trends",
-        "url": "https://trends.google.com/trends/explore?date=now%207-d&q=artificial%20analysis"
-      },
-      "g-fable-5-1-q3": {
-        "title": "claude desktop",
-        "source": "Google Trends",
-        "url": "https://trends.google.com/trends/explore?date=now%207-d&q=claude%20desktop"
-      },
-      "g-fable-5-1-q4": {
-        "title": "fable 5.1 reviews",
-        "source": "Google Trends",
-        "url": "https://trends.google.com/trends/explore?date=now%207-d&q=fable%205.1%20reviews"
-      },
-      "g-fable-5-1-q5": {
-        "title": "update claude code",
-        "source": "Google Trends",
-        "url": "https://trends.google.com/trends/explore?date=now%207-d&q=update%20claude%20code"
-      },
-      "g-artificial-intelligence-news": {
-        "title": "Google Trends · artificial intelligence news",
-        "source": "Google Trends",
-        "url": "https://trends.google.com/trends/explore?date=now%207-d&q=artificial%20intelligence%20news"
-      },
-      "g-classroom": {
-        "title": "Google Trends · classroom",
-        "source": "Google Trends",
-        "url": "https://trends.google.com/trends/explore?date=now%207-d&q=classroom"
-      },
-      "g-classroom-q1": {
-        "title": "khan academy ai classroom research",
-        "source": "Google Trends",
-        "url": "https://trends.google.com/trends/explore?date=now%207-d&q=khan%20academy%20ai%20classroom%20research"
-      },
-      "g-classroom-q2": {
-        "title": "arbor",
-        "source": "Google Trends",
-        "url": "https://trends.google.com/trends/explore?date=now%207-d&q=arbor"
-      },
-      "g-classroom-q3": {
-        "title": "mymcps classroom",
-        "source": "Google Trends",
-        "url": "https://trends.google.com/trends/explore?date=now%207-d&q=mymcps%20classroom"
-      },
-      "g-classroom-q4": {
-        "title": "classroom accedi",
-        "source": "Google Trends",
-        "url": "https://trends.google.com/trends/explore?date=now%207-d&q=classroom%20accedi"
-      },
-      "g-classroom-q5": {
-        "title": "khan academy",
-        "source": "Google Trends",
-        "url": "https://trends.google.com/trends/explore?date=now%207-d&q=khan%20academy"
+        "url": "https://trends.google.com/trends/explore?date=now%207-d&q=hugging%20face"
       }
     }
   },
   "x": {
-    "error": "gemini-3-8-flash: X API 返回 402 Payment Required：请在 Developer Console 购买 credits，并确认当前 App 有可用余额",
+    "error": "",
     "matrix": {
       "raw": [
         [
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          0.0
+          11.0,
+          11.0,
+          13.0,
+          22.0,
+          28.0,
+          325.0,
+          51.0
         ],
         [
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          0.0
+          153.0,
+          170.0,
+          285.0,
+          237.0,
+          719.0,
+          11166.0,
+          3924.0
         ],
         [
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          0.0
+          1320.0,
+          608.0,
+          612.0,
+          723.0,
+          939.0,
+          1347.0,
+          256.0
         ],
         [
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          0.0
+          2512.0,
+          2291.0,
+          1903.0,
+          1608.0,
+          1962.0,
+          6225.0,
+          979.0
         ]
       ],
       "normalized": [
         [
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          0.0
+          0.0338,
+          0.0338,
+          0.04,
+          0.0677,
+          0.0862,
+          1.0,
+          0.1569
         ],
         [
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          0.0
+          0.0137,
+          0.0152,
+          0.0255,
+          0.0212,
+          0.0644,
+          1.0,
+          0.3514
         ],
         [
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          0.0
+          0.98,
+          0.4514,
+          0.4543,
+          0.5367,
+          0.6971,
+          1.0,
+          0.1901
         ],
         [
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          0.0
+          0.4035,
+          0.368,
+          0.3057,
+          0.2583,
+          0.3152,
+          1.0,
+          0.1573
         ]
       ]
     },
     "trend": {
-      "gemini-3-8-flash": 1.0,
-      "fable-5-1": 1.0,
-      "artificial-intelligence-news": 1.0,
-      "classroom": 1.0
+      "chatgpt-astra": 0.746,
+      "gpt-6": 1.849,
+      "sam-altman": 0.277,
+      "hugging-face": 0.356
     },
-    "items": {},
-    "itemIndex": {}
+    "items": {
+      "chatgpt-astra|2026-08-29": [
+        "x-chatgpt-astra"
+      ],
+      "chatgpt-astra|2026-08-30": [
+        "x-chatgpt-astra"
+      ],
+      "chatgpt-astra|2026-08-31": [
+        "x-chatgpt-astra"
+      ],
+      "chatgpt-astra|2026-09-01": [
+        "x-chatgpt-astra"
+      ],
+      "chatgpt-astra|2026-09-02": [
+        "x-chatgpt-astra"
+      ],
+      "chatgpt-astra|2026-09-03": [
+        "x-chatgpt-astra"
+      ],
+      "chatgpt-astra|2026-09-04": [
+        "x-chatgpt-astra"
+      ],
+      "gpt-6|2026-08-29": [
+        "x-gpt-6"
+      ],
+      "gpt-6|2026-08-30": [
+        "x-gpt-6"
+      ],
+      "gpt-6|2026-08-31": [
+        "x-gpt-6"
+      ],
+      "gpt-6|2026-09-01": [
+        "x-gpt-6"
+      ],
+      "gpt-6|2026-09-02": [
+        "x-gpt-6"
+      ],
+      "gpt-6|2026-09-03": [
+        "x-gpt-6"
+      ],
+      "gpt-6|2026-09-04": [
+        "x-gpt-6"
+      ],
+      "sam-altman|2026-08-29": [
+        "x-sam-altman"
+      ],
+      "sam-altman|2026-08-30": [
+        "x-sam-altman"
+      ],
+      "sam-altman|2026-08-31": [
+        "x-sam-altman"
+      ],
+      "sam-altman|2026-09-01": [
+        "x-sam-altman"
+      ],
+      "sam-altman|2026-09-02": [
+        "x-sam-altman"
+      ],
+      "sam-altman|2026-09-03": [
+        "x-sam-altman"
+      ],
+      "sam-altman|2026-09-04": [
+        "x-sam-altman"
+      ],
+      "hugging-face|2026-08-29": [
+        "x-hugging-face"
+      ],
+      "hugging-face|2026-08-30": [
+        "x-hugging-face"
+      ],
+      "hugging-face|2026-08-31": [
+        "x-hugging-face"
+      ],
+      "hugging-face|2026-09-01": [
+        "x-hugging-face"
+      ],
+      "hugging-face|2026-09-02": [
+        "x-hugging-face"
+      ],
+      "hugging-face|2026-09-03": [
+        "x-hugging-face"
+      ],
+      "hugging-face|2026-09-04": [
+        "x-hugging-face"
+      ]
+    },
+    "itemIndex": {
+      "x-chatgpt-astra": {
+        "title": "X 热搜 · \"chatgpt astra\" -is:retweet",
+        "source": "X",
+        "url": "https://x.com/search?q=%22chatgpt%20astra%22%20-is%3Aretweet&src=typed_query&f=live"
+      },
+      "x-gpt-6": {
+        "title": "X 热搜 · \"gpt 6\" -is:retweet",
+        "source": "X",
+        "url": "https://x.com/search?q=%22gpt%206%22%20-is%3Aretweet&src=typed_query&f=live"
+      },
+      "x-sam-altman": {
+        "title": "X 热搜 · \"sam altman\" -is:retweet",
+        "source": "X",
+        "url": "https://x.com/search?q=%22sam%20altman%22%20-is%3Aretweet&src=typed_query&f=live"
+      },
+      "x-hugging-face": {
+        "title": "X 热搜 · \"hugging face\" -is:retweet",
+        "source": "X",
+        "url": "https://x.com/search?q=%22hugging%20face%22%20-is%3Aretweet&src=typed_query&f=live"
+      }
+    }
   }
 }

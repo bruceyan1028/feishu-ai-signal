@@ -1035,7 +1035,7 @@
       },
       "editorialStructure": "source",
       "eventAggregation": {
-        "total": 3,
+        "total": 2,
         "groups": [
           {
             "key": "官方来源",
@@ -1060,13 +1060,6 @@
                 "url": "https://www.modelscope.cn/models/zhipuai/glm-5.3-flash",
                 "note": "同事件的其它源头报道。",
                 "text": "GLM-5.3-Flash：原生多模态高效模型 —— 同事件的其它源头报道。"
-              },
-              {
-                "source": "华尔街见闻",
-                "title": "智谱GLM-5.3-Flash以超10万张国产芯片承载大规模推理，英伟达护城河再受考验",
-                "url": "https://wallstreetcn.com/articles/3780391",
-                "note": "同事件的其它源头报道。",
-                "text": "智谱GLM-5.3-Flash以超10万张国产芯片承载大规模推理，英伟达护城河再受考验 —— 同事件的其它源头报道。"
               }
             ]
           }

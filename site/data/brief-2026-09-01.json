@@ -441,23 +441,18 @@
       "mediaAssets": {
         "images": [
           {
-            "url": "media/papers/recvtQ0liV6Ouh-p1-f1.png",
-            "alt": "PDF 第 1 页图表：Figure 1: Leaderboard across four representative agent benchmarks. JIT-Agent-generated harnesses consis- tently improve the underlying backbone agents across deep research, daily work, planning, and workspace tasks, demonstrating that just-in-time harness synthesis provides gains beyond model scaling alone.",
+            "url": "media/papers/recvtQ0liV6Ouh-p8-f1.png",
+            "alt": "PDF 第 8 页图表：Table 2: Main results across nine agentic benchmarks. Rows prefixed by JIT-Agent use the same backbone as their vanilla counterpart but replace its default scaffold with a JIT-generated harness. Scores are reported on a 0–100 scale; higher is better. Top-1, Top-2, and Top-3 results in each column are highlighted in soft green, yellow-green, and yellow, respectively; Top-1 is also bolded.",
             "kind": "pdf-page"
           },
           {
             "url": "media/papers/recvtQ0liV6Ouh-p8-f2.png",
-            "alt": "PDF 第 8 页图表：Figure 3: Training pipeline of JIT-Agent. Stage I learns task-conditioned harness customization. Stage II converts failed harnesses and execution diagnostics into bounded repair trajectories. Stage III performs online evolution by comparing candidate harnesses against the incumbent bank, optimizing decoupled reward, latency, and cost advantages, and retaining frontier-improving designs.",
+            "alt": "PDF 第 8 页图表：Table 3: Controlled comparison with advanced agent harnesses. For each fixed backbone, we report task performance (Perf.), average token consumption per case in thousands (#Tokens (K)), and API cost per case in USD. Performance is better when higher; tokens and cost are better when lower. The best value within each backbone group is bolded.",
             "kind": "pdf-page"
           },
           {
-            "url": "media/papers/recvtQ0liV6Ouh-p12-f3.png",
-            "alt": "PDF 第 12 页图表：Table 3 compares JIT-generated harnesses with vanilla agentic backbones and frontier model baselines. We report three deep research benchmarks, two daily work benchmarks, two planning benchmarks, and two workspace benchmarks.",
-            "kind": "pdf-page"
-          },
-          {
-            "url": "media/papers/recvtQ0liV6Ouh-p13-f4.png",
-            "alt": "PDF 第 13 页图表：Table 3: Main results across nine agentic benchmarks. Rows prefixed by JIT-Agent use the same backbone as their vanilla counterpart but replace its default scaffold with a JIT-generated harness. Scores are reported on a 0–100 scale; higher is better. Top-1, Top-2, and Top-3 results in each column are highlighted in soft green, yellow-green, and yellow, respectively; Top-1 is also bolded. Missing evaluations are denoted by “—”.",
+            "url": "media/papers/recvtQ0liV6Ouh-p8-f3.png",
+            "alt": "PDF 第 8 页图表：Table 3 controls the backbone and compares six harnesses on DeepSeek-V4-Flash and Qwen3.6-Flash across DeepSearchQA, xBench-DS, and AgentIF, reporting performance, tokens, and API cost per case. JIT-Agent achieves the best performance in four of six settings: it exceeds the strongest fixed harness by 4.7 points on DeepSearchQA and 4.0 on xBench-DS with DeepSeek-V4-Flash, and by 7.0 on xBench-DS and 2.9 on AgentIF with Qwen3.6-Flash. In the two remaining settings, it trails the best score by only 3.1 and 3.9 points while using substantially fewer tokens, confirming that no fixed harness dominat",
             "kind": "pdf-page"
           },
           {
@@ -838,7 +833,7 @@
       },
       "editorialStructure": "source",
       "eventAggregation": {
-        "total": 3,
+        "total": 2,
         "groups": [
           {
             "key": "官方来源",
@@ -863,13 +858,6 @@
                 "url": "https://www.modelscope.cn/models/zhipuai/glm-5.3-flash",
                 "note": "同事件的其它源头报道。",
                 "text": "GLM-5.3-Flash：原生多模态高效模型 —— 同事件的其它源头报道。"
-              },
-              {
-                "source": "华尔街见闻",
-                "title": "智谱GLM-5.3-Flash以超10万张国产芯片承载大规模推理，英伟达护城河再受考验",
-                "url": "https://wallstreetcn.com/articles/3780391",
-                "note": "同事件的其它源头报道。",
-                "text": "智谱GLM-5.3-Flash以超10万张国产芯片承载大规模推理，英伟达护城河再受考验 —— 同事件的其它源头报道。"
               }
             ]
           }

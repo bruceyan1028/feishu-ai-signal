@@ -624,7 +624,7 @@
       },
       "editorialStructure": "source",
       "eventAggregation": {
-        "total": 3,
+        "total": 2,
         "groups": [
           {
             "key": "官方来源",
@@ -649,13 +649,6 @@
                 "url": "https://www.modelscope.cn/models/zhipuai/glm-5.3-flash",
                 "note": "同事件的其它源头报道。",
                 "text": "GLM-5.3-Flash：原生多模态高效模型 —— 同事件的其它源头报道。"
-              },
-              {
-                "source": "华尔街见闻",
-                "title": "智谱GLM-5.3-Flash以超10万张国产芯片承载大规模推理，英伟达护城河再受考验",
-                "url": "https://wallstreetcn.com/articles/3780391",
-                "note": "同事件的其它源头报道。",
-                "text": "智谱GLM-5.3-Flash以超10万张国产芯片承载大规模推理，英伟达护城河再受考验 —— 同事件的其它源头报道。"
               }
             ]
           }
@@ -733,58 +726,6 @@
                 "url": "https://zhidx.com/p/588704.html",
                 "note": "原始发布 / 公告。",
                 "text": "阿里发布全新 Qoder：让编程能力面向更多人和场景 —— 原始发布 / 公告。"
-              }
-            ]
-          }
-        ]
-      }
-    },
-    {
-      "recordId": "recvtyL4nNuvk1",
-      "sourceId": "leiphone",
-      "title": "商汤大装置支撑智谱 GLM-5.3-Flash上线，国产异构助力前沿智能进入普惠时代",
-      "titleCn": "商汤大装置支撑智谱开源原生多模态模型GLM-5.3-Flash上线",
-      "source": "AI科技评论 / 雷峰网",
-      "url": "https://www.leiphone.com/category/ai/w9ofyn3ujryrvmc0.html",
-      "category": "中文媒体",
-      "contentType": "公众号",
-      "publishedDate": "2026-08-27",
-      "publishedAtMs": 1787835000000,
-      "summary": "智谱上线并开源总参数320B、采用稀疏架构的原生多模态模型GLM-5.3-Flash，官方称其在Artificial Analysis Intelligence Index中获得57分。商汤大装置通过国产异构混推为其提供大规模算力与Token服务，原文称其在测试中实现端到端性能提升3倍，单Token成本达到主流英伟达GPU相当水平。",
-      "deepAnalysis": "【核心内容】\n8月26日晚，智谱正式上线并开源GLM-5.3-Flash（320B-A18B），这是GLM-5系列首个原生多模态模型。原文称，该模型总参数量为320B，能力超过GLM-5.2，在Artificial Analysis Intelligence Index中获得57分，进入全球前沿模型能力区间，并与Anthropic Claude Opus 4.8得分持平。模型结合智谱最新的30T Token多模态预训练语料，架构面向极低成本设计。商汤大装置为其上线提供大规模国产算力支持与Token服务。\n\n【关键细节】\n该合作依托商汤“一套模型、一座Token工厂、一套智能体管控系统”的能力体系。Token工厂通过多模态模型与大装置基础设施联合优化，协调不同芯片、集群、能源和交付节点，生产质量更高、成本更低的Token，并与模型迭代形成双向反哺。正式发布前，GLM-5.3-Flash曾以匿名模型Ox-Alpha在OpenCode和OpenRouter进行大规模测试，Token调用量达到62T，原文称全部请求流量由国产芯片提供算力。相较同一硬件环境的初始基线，国产芯片集群使端到端服务性能提升3倍，硬件效率和单Token成本达到主流英伟达GPU相当水平。商汤还称，异构混合推理可按照不同推理阶段对计算和带宽的需求分配芯片资源，整体推理性价比达到NVIDIA H系列的1.25倍；相较国产同构推理，同等成本下Token产能扩大约2.5倍。通过算子优化、多卡并行调优和工具链适配，平台降低了国产算力应用门槛，并以TPW，即Tokens Per Watt，作为AIDC能效指标。Token Factory在7月日均Token服务量达到2.42万亿，预计2026年年底突破日均10万亿，全年Token量级增长25倍。\n\n【价值与影响】\n这项实践的核心变化，不是单独证明某一款国产芯片或模型性能，而是将异构调度、推理引擎优化、集群服务和成本控制放入同一条生产链路。对于模型公司，国产芯片集群若能在长时间、高调用量业务中保持可接受的性能和成本，就能增加算力供给与部署选择；对于基础设施提供商，竞争重点也从单卡峰值转向跨芯片协同、Token产能、能效和交付能力。62T真实测试流量以及模型上线案例，为国产算力支撑前沿模型推理提供了比单点基准更接近商业部署的示例。若文中关于性能、成本和规模目标的数据可持续复现，国产算力的规模化商用将从“可用性验证”进一步转向服务稳定性和经济性的竞争。\n\n【局限与风险】\n原文主要提供商汤和智谱一方的结果与口径，未披露国产芯片具体型号、芯片数量、集群拓扑、推理框架版本、并发量、输入输出长度、延迟分位数、功耗测量方法及成本核算边界，因此“性能提升3倍”“成本相当”与“NVIDIA H系列1.25倍”等结论暂时难以独立复核。Artificial Analysis得分的测试条件和模型版本也未在原文说明，不能仅凭单一指数推断全面能力。62T调用量反映测试规模，但原文未披露请求分布、有效Token比例、服务稳定性和故障率。2026年日均10万亿Token是预期目标而非已实现结果，实际还可能受到芯片供应、软件适配、能源和客户需求影响。原文未披露模型开源许可证、权重与推理代码的完整范围，以及多模态数据合规和安全评估情况。\n\n【行动建议】\n1. 要求披露芯片型号、集群配置、模型并行方式、推理引擎和完整基准脚本，在统一输入输出与并发条件下复测吞吐、延迟、TPW及单Token成本。\n2. 对比国产异构、国产同构和NVIDIA H系列方案，分别记录预填充、解码、长上下文和多模态输入等阶段的性能差异。\n3. 跟踪GLM-5.3-Flash开源材料、许可证和实际部署文档，验证第三方能否复现核心结果，并检查模型与数据使用的合规说明。\n4. 持续观察62T测试后的长期服务指标，包括高峰稳定性、故障恢复、资源利用率和真实客户调用量，再评估其规模化商用可持续性。",
-      "why": "该案例将国产异构算力、前沿多模态模型推理和规模化Token服务结合起来，展示了国产芯片从单点适配走向真实业务商用的可能性。",
-      "impact": 86,
-      "novelty": 78,
-      "actionability": 76,
-      "urgency": "高",
-      "tags": [
-        "AI",
-        "LLM",
-        "多模态",
-        "硬件"
-      ],
-      "imageUrl": "https://static.leiphone.com/uploads/new/images/20260827//6a9032358843b.jpg?imageMogr2/quality/90",
-      "mediaAssets": {
-        "images": [],
-        "videos": [],
-        "documents": [],
-        "cover": "https://static.leiphone.com/uploads/new/images/20260827//6a9032358843b.jpg?imageMogr2/quality/90",
-        "curatedBy": "llm"
-      },
-      "editorialStructure": "",
-      "eventAggregation": {
-        "total": 1,
-        "groups": [
-          {
-            "key": "官方来源",
-            "tone": "#16130f",
-            "items": [
-              {
-                "source": "AI科技评论 / 雷峰网",
-                "title": "商汤大装置支撑智谱开源原生多模态模型GLM-5.3-Flash上线",
-                "url": "https://www.leiphone.com/category/ai/w9ofyn3ujryrvmc0.html",
-                "note": "原始发布 / 公告。",
-                "text": "商汤大装置支撑智谱开源原生多模态模型GLM-5.3-Flash上线 —— 原始发布 / 公告。"
               }
             ]
           }
