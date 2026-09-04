@@ -1544,10 +1544,10 @@
    "lookback_window": "7d",
    "min_content_chars": 30,
    "name": "X 白名单账号",
-   "notes": "个人号白名单；gdb/karpathy/OfficialLoganK/_catwu/dawnsongtweets/steipete。缺 credits，保持 paused。",
+   "notes": "个人号白名单；gdb/karpathy/OfficialLoganK/_catwu/dawnsongtweets/steipete。已充值 credits，每日一次采集。",
    "priority": "P0",
    "source_id": "social-media",
-   "status": "paused",
+   "status": "active",
    "tier": "L4",
    "来源类型": "社交媒体"
   },
