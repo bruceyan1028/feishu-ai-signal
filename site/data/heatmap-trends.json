@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-04T18:31:40+08:00",
+  "generatedAt": "2026-09-04T19:07:28+08:00",
   "days": [
     "2026-08-29",
     "2026-08-30",
@@ -10,35 +10,29 @@
     "2026-09-04"
   ],
   "topics": [
+    "happy-janmashtami",
     "gpt-6",
-    "artificial-general-intelligence",
     "sam-altman",
-    "alexandr-wang",
     "hugging-face"
   ],
   "labels": {
+    "happy-janmashtami": "happy janmashtami",
     "gpt-6": "gpt 6",
-    "artificial-general-intelligence": "artificial general intelligence",
     "sam-altman": "sam altman",
-    "alexandr-wang": "alexandr wang",
     "hugging-face": "hugging face"
   },
   "queries": {
+    "happy-janmashtami": {
+      "g": "happy janmashtami",
+      "x": "\"happy janmashtami\" -is:retweet"
+    },
     "gpt-6": {
       "g": "gpt 6",
       "x": "\"gpt 6\" -is:retweet"
     },
-    "artificial-general-intelligence": {
-      "g": "artificial general intelligence",
-      "x": "\"artificial general intelligence\" -is:retweet"
-    },
     "sam-altman": {
       "g": "sam altman",
       "x": "\"sam altman\" -is:retweet"
-    },
-    "alexandr-wang": {
-      "g": "alexandr wang",
-      "x": "\"alexandr wang\" -is:retweet"
     },
     "hugging-face": {
       "g": "hugging face",
@@ -46,40 +40,38 @@
     }
   },
   "scopes": {
+    "happy-janmashtami": "global",
     "gpt-6": "global",
-    "artificial-general-intelligence": "global",
     "sam-altman": "global",
-    "alexandr-wang": "global",
     "hugging-face": "global"
   },
   "marks": {
+    "happy-janmashtami": "🌐",
     "gpt-6": "🌐",
-    "artificial-general-intelligence": "🌐",
     "sam-altman": "🌐",
-    "alexandr-wang": "🌐",
     "hugging-face": "🌐"
   },
   "breakouts": [
+    "happy-janmashtami",
     "gpt-6",
-    "artificial-general-intelligence",
     "sam-altman",
-    "alexandr-wang",
     "hugging-face"
   ],
   "selection": {
     "method": "google-trending-ai",
     "volumes": {
+      "happy-janmashtami": 100000,
       "gpt-6": 200000,
-      "artificial-general-intelligence": 2000,
       "sam-altman": 100000,
-      "alexandr-wang": 2000,
       "hugging-face": 10000
     },
     "geos": {
-      "gpt-6": [
-        "US"
+      "happy-janmashtami": [
+        "IN"
       ],
-      "artificial-general-intelligence": [
+      "gpt-6": [
+        "US",
+        "DE",
         "AU"
       ],
       "sam-altman": [
@@ -87,9 +79,6 @@
         "DE",
         "AU",
         "CA"
-      ],
-      "alexandr-wang": [
-        "IN"
       ],
       "hugging-face": [
         "US",
@@ -99,126 +88,211 @@
       ]
     },
     "plot_geo": {
+      "happy-janmashtami": "",
       "gpt-6": "",
-      "artificial-general-intelligence": "",
       "sam-altman": "",
-      "alexandr-wang": "",
       "hugging-face": ""
     },
     "breakouts": [
+      "happy-janmashtami",
       "gpt-6",
-      "artificial-general-intelligence",
       "sam-altman",
-      "alexandr-wang",
       "hugging-face"
     ]
   },
   "google-trends": {
     "error": "",
+    "topics": [
+      "happy-janmashtami",
+      "gpt-6",
+      "sam-altman",
+      "hugging-face"
+    ],
+    "labels": {
+      "happy-janmashtami": "happy janmashtami",
+      "gpt-6": "gpt 6",
+      "sam-altman": "sam altman",
+      "hugging-face": "hugging face"
+    },
+    "queries": {
+      "happy-janmashtami": {
+        "g": "happy janmashtami",
+        "x": "\"happy janmashtami\" -is:retweet"
+      },
+      "gpt-6": {
+        "g": "gpt 6",
+        "x": "\"gpt 6\" -is:retweet"
+      },
+      "sam-altman": {
+        "g": "sam altman",
+        "x": "\"sam altman\" -is:retweet"
+      },
+      "hugging-face": {
+        "g": "hugging face",
+        "x": "\"hugging face\" -is:retweet"
+      }
+    },
+    "scopes": {
+      "happy-janmashtami": "global",
+      "gpt-6": "global",
+      "sam-altman": "global",
+      "hugging-face": "global"
+    },
+    "marks": {
+      "happy-janmashtami": "🌐",
+      "gpt-6": "🌐",
+      "sam-altman": "🌐",
+      "hugging-face": "🌐"
+    },
+    "breakouts": [
+      "happy-janmashtami",
+      "gpt-6",
+      "sam-altman",
+      "hugging-face"
+    ],
+    "selection": {
+      "volumes": {
+        "happy-janmashtami": 100000,
+        "gpt-6": 200000,
+        "sam-altman": 100000,
+        "hugging-face": 10000
+      },
+      "geos": {
+        "happy-janmashtami": [
+          "IN"
+        ],
+        "gpt-6": [
+          "US",
+          "DE",
+          "AU"
+        ],
+        "sam-altman": [
+          "GB",
+          "DE",
+          "AU",
+          "CA"
+        ],
+        "hugging-face": [
+          "US",
+          "GB",
+          "AU",
+          "CA"
+        ]
+      },
+      "plot_geo": {
+        "happy-janmashtami": "",
+        "gpt-6": "",
+        "sam-altman": "",
+        "hugging-face": ""
+      },
+      "method": "google-trending-ai"
+    },
     "matrix": {
       "raw": [
         [
-          3.0,
-          3.0,
-          5.0,
-          5.0,
-          5.0,
-          28.0,
-          100.0
-        ],
-        [
-          11.0,
+          0.0,
+          0.0,
+          1.0,
+          1.0,
+          2.0,
           10.0,
-          12.0,
-          14.0,
-          15.0,
-          16.0,
           100.0
         ],
         [
-          8.0,
+          3.0,
+          4.0,
+          5.0,
+          5.0,
+          6.0,
+          31.0,
+          100.0
+        ],
+        [
+          9.0,
           7.0,
           10.0,
           9.0,
           11.0,
-          46.0,
+          50.0,
           100.0
         ],
         [
-          8.0,
-          8.0,
-          8.0,
-          9.0,
-          13.0,
-          69.0,
-          100.0
-        ],
-        [
-          40.0,
-          34.0,
-          34.0,
-          37.0,
+          41.0,
+          35.0,
+          38.0,
+          39.0,
           44.0,
-          94.0,
-          100.0
+          100.0,
+          95.0
         ]
       ],
       "normalized": [
         [
-          0.03,
-          0.03,
-          0.05,
-          0.05,
-          0.05,
-          0.28,
-          1.0
-        ],
-        [
-          0.11,
+          0.0,
+          0.0,
+          0.01,
+          0.01,
+          0.02,
           0.1,
-          0.12,
-          0.14,
-          0.15,
-          0.16,
           1.0
         ],
         [
-          0.08,
+          0.03,
+          0.04,
+          0.05,
+          0.05,
+          0.06,
+          0.31,
+          1.0
+        ],
+        [
+          0.09,
           0.07,
           0.1,
           0.09,
           0.11,
-          0.46,
+          0.5,
           1.0
         ],
         [
-          0.08,
-          0.08,
-          0.08,
-          0.09,
-          0.13,
-          0.69,
-          1.0
-        ],
-        [
-          0.4,
-          0.34,
-          0.34,
-          0.37,
+          0.41,
+          0.35,
+          0.38,
+          0.39,
           0.44,
-          0.94,
-          1.0
+          1.0,
+          0.95
         ]
       ]
     },
     "trend": {
-      "gpt-6": 12.245,
-      "artificial-general-intelligence": 7.692,
-      "sam-altman": 6.593,
-      "alexandr-wang": 5.217,
-      "hugging-face": 2.12
+      "happy-janmashtami": 42.857,
+      "gpt-6": 11.111,
+      "sam-altman": 6.25,
+      "hugging-face": 1.919
     },
     "items": {
+      "happy-janmashtami|2026-08-29": [
+        "g-happy-janmashtami"
+      ],
+      "happy-janmashtami|2026-08-30": [
+        "g-happy-janmashtami"
+      ],
+      "happy-janmashtami|2026-08-31": [
+        "g-happy-janmashtami"
+      ],
+      "happy-janmashtami|2026-09-01": [
+        "g-happy-janmashtami"
+      ],
+      "happy-janmashtami|2026-09-02": [
+        "g-happy-janmashtami"
+      ],
+      "happy-janmashtami|2026-09-03": [
+        "g-happy-janmashtami"
+      ],
+      "happy-janmashtami|2026-09-04": [
+        "g-happy-janmashtami"
+      ],
       "gpt-6|2026-08-29": [
         "g-gpt-6"
       ],
@@ -240,27 +314,6 @@
       "gpt-6|2026-09-04": [
         "g-gpt-6"
       ],
-      "artificial-general-intelligence|2026-08-29": [
-        "g-artificial-general-intelligence"
-      ],
-      "artificial-general-intelligence|2026-08-30": [
-        "g-artificial-general-intelligence"
-      ],
-      "artificial-general-intelligence|2026-08-31": [
-        "g-artificial-general-intelligence"
-      ],
-      "artificial-general-intelligence|2026-09-01": [
-        "g-artificial-general-intelligence"
-      ],
-      "artificial-general-intelligence|2026-09-02": [
-        "g-artificial-general-intelligence"
-      ],
-      "artificial-general-intelligence|2026-09-03": [
-        "g-artificial-general-intelligence"
-      ],
-      "artificial-general-intelligence|2026-09-04": [
-        "g-artificial-general-intelligence"
-      ],
       "sam-altman|2026-08-29": [
         "g-sam-altman"
       ],
@@ -281,27 +334,6 @@
       ],
       "sam-altman|2026-09-04": [
         "g-sam-altman"
-      ],
-      "alexandr-wang|2026-08-29": [
-        "g-alexandr-wang"
-      ],
-      "alexandr-wang|2026-08-30": [
-        "g-alexandr-wang"
-      ],
-      "alexandr-wang|2026-08-31": [
-        "g-alexandr-wang"
-      ],
-      "alexandr-wang|2026-09-01": [
-        "g-alexandr-wang"
-      ],
-      "alexandr-wang|2026-09-02": [
-        "g-alexandr-wang"
-      ],
-      "alexandr-wang|2026-09-03": [
-        "g-alexandr-wang"
-      ],
-      "alexandr-wang|2026-09-04": [
-        "g-alexandr-wang"
       ],
       "hugging-face|2026-08-29": [
         "g-hugging-face"
@@ -326,25 +358,20 @@
       ]
     },
     "itemIndex": {
+      "g-happy-janmashtami": {
+        "title": "Google Trends · happy janmashtami",
+        "source": "Google Trends",
+        "url": "https://trends.google.com/trends/explore?date=now%207-d&q=happy%20janmashtami"
+      },
       "g-gpt-6": {
         "title": "Google Trends · gpt 6",
         "source": "Google Trends",
         "url": "https://trends.google.com/trends/explore?date=now%207-d&q=gpt%206"
       },
-      "g-artificial-general-intelligence": {
-        "title": "Google Trends · artificial general intelligence",
-        "source": "Google Trends",
-        "url": "https://trends.google.com/trends/explore?date=now%207-d&q=artificial%20general%20intelligence"
-      },
       "g-sam-altman": {
         "title": "Google Trends · sam altman",
         "source": "Google Trends",
         "url": "https://trends.google.com/trends/explore?date=now%207-d&q=sam%20altman"
-      },
-      "g-alexandr-wang": {
-        "title": "Google Trends · alexandr wang",
-        "source": "Google Trends",
-        "url": "https://trends.google.com/trends/explore?date=now%207-d&q=alexandr%20wang"
       },
       "g-hugging-face": {
         "title": "Google Trends · hugging face",
@@ -355,241 +382,155 @@
   },
   "x": {
     "error": "",
+    "topics": [
+      "gemini-start-the-adventure",
+      "gpt-6-astra"
+    ],
+    "labels": {
+      "gemini-start-the-adventure": "GEMINI START THE ADVENTURE",
+      "gpt-6-astra": "GPT-6 Astra"
+    },
+    "queries": {
+      "gemini-start-the-adventure": {
+        "g": "GEMINI START THE ADVENTURE",
+        "x": "\"GEMINI START THE ADVENTURE\" -is:retweet"
+      },
+      "gpt-6-astra": {
+        "g": "GPT-6 Astra",
+        "x": "\"GPT-6 Astra\" -is:retweet"
+      }
+    },
+    "scopes": {
+      "gemini-start-the-adventure": "global",
+      "gpt-6-astra": "country"
+    },
+    "marks": {
+      "gemini-start-the-adventure": "🌐",
+      "gpt-6-astra": "🇺🇸"
+    },
+    "breakouts": [],
+    "selection": {
+      "volumes": {
+        "gemini-start-the-adventure": 42,
+        "gpt-6-astra": 5
+      },
+      "geos": {
+        "gemini-start-the-adventure": [
+          "WORLD",
+          "US",
+          "IN",
+          "DE"
+        ],
+        "gpt-6-astra": [
+          "US"
+        ]
+      },
+      "plot_geo": {
+        "gemini-start-the-adventure": "",
+        "gpt-6-astra": "US"
+      },
+      "method": "x-trends-by-woeid"
+    },
     "matrix": {
       "raw": [
         [
-          153.0,
-          170.0,
-          285.0,
-          237.0,
-          719.0,
-          11121.0,
-          8225.0
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          8022.0
         ],
         [
-          52.0,
-          38.0,
-          65.0,
-          48.0,
-          64.0,
-          155.0,
-          117.0
-        ],
-        [
-          1320.0,
-          608.0,
-          612.0,
-          723.0,
-          939.0,
-          1344.0,
-          548.0
-        ],
-        [
-          14.0,
-          5.0,
-          8.0,
-          19.0,
+          57.0,
           62.0,
-          72.0,
-          7.0
-        ],
-        [
-          2512.0,
-          2291.0,
-          1903.0,
-          1608.0,
-          1962.0,
-          6218.0,
-          2190.0
+          94.0,
+          94.0,
+          295.0,
+          7876.0,
+          6669.0
         ]
       ],
       "normalized": [
         [
-          0.0138,
-          0.0153,
-          0.0256,
-          0.0213,
-          0.0647,
-          1.0,
-          0.7396
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          1.0
         ],
         [
-          0.3355,
-          0.2452,
-          0.4194,
-          0.3097,
-          0.4129,
+          0.0072,
+          0.0079,
+          0.0119,
+          0.0119,
+          0.0375,
           1.0,
-          0.7548
-        ],
-        [
-          0.9821,
-          0.4524,
-          0.4554,
-          0.5379,
-          0.6987,
-          1.0,
-          0.4077
-        ],
-        [
-          0.1944,
-          0.0694,
-          0.1111,
-          0.2639,
-          0.8611,
-          1.0,
-          0.0972
-        ],
-        [
-          0.404,
-          0.3684,
-          0.306,
-          0.2586,
-          0.3155,
-          1.0,
-          0.3522
+          0.8467
         ]
       ]
     },
     "trend": {
-      "gpt-6": 3.89,
-      "artificial-general-intelligence": 1.664,
-      "sam-altman": 0.593,
-      "alexandr-wang": 0.233,
-      "hugging-face": 0.797
+      "gemini-start-the-adventure": 2.0,
+      "gpt-6-astra": 4.72
     },
     "items": {
-      "gpt-6|2026-08-29": [
-        "x-gpt-6"
+      "gemini-start-the-adventure|2026-08-29": [
+        "x-gemini-start-the-adventure"
       ],
-      "gpt-6|2026-08-30": [
-        "x-gpt-6"
+      "gemini-start-the-adventure|2026-08-30": [
+        "x-gemini-start-the-adventure"
       ],
-      "gpt-6|2026-08-31": [
-        "x-gpt-6"
+      "gemini-start-the-adventure|2026-08-31": [
+        "x-gemini-start-the-adventure"
       ],
-      "gpt-6|2026-09-01": [
-        "x-gpt-6"
+      "gemini-start-the-adventure|2026-09-01": [
+        "x-gemini-start-the-adventure"
       ],
-      "gpt-6|2026-09-02": [
-        "x-gpt-6"
+      "gemini-start-the-adventure|2026-09-02": [
+        "x-gemini-start-the-adventure"
       ],
-      "gpt-6|2026-09-03": [
-        "x-gpt-6"
+      "gemini-start-the-adventure|2026-09-03": [
+        "x-gemini-start-the-adventure"
       ],
-      "gpt-6|2026-09-04": [
-        "x-gpt-6"
+      "gemini-start-the-adventure|2026-09-04": [
+        "x-gemini-start-the-adventure"
       ],
-      "artificial-general-intelligence|2026-08-29": [
-        "x-artificial-general-intelligence"
+      "gpt-6-astra|2026-08-29": [
+        "x-gpt-6-astra"
       ],
-      "artificial-general-intelligence|2026-08-30": [
-        "x-artificial-general-intelligence"
+      "gpt-6-astra|2026-08-30": [
+        "x-gpt-6-astra"
       ],
-      "artificial-general-intelligence|2026-08-31": [
-        "x-artificial-general-intelligence"
+      "gpt-6-astra|2026-08-31": [
+        "x-gpt-6-astra"
       ],
-      "artificial-general-intelligence|2026-09-01": [
-        "x-artificial-general-intelligence"
+      "gpt-6-astra|2026-09-01": [
+        "x-gpt-6-astra"
       ],
-      "artificial-general-intelligence|2026-09-02": [
-        "x-artificial-general-intelligence"
+      "gpt-6-astra|2026-09-02": [
+        "x-gpt-6-astra"
       ],
-      "artificial-general-intelligence|2026-09-03": [
-        "x-artificial-general-intelligence"
+      "gpt-6-astra|2026-09-03": [
+        "x-gpt-6-astra"
       ],
-      "artificial-general-intelligence|2026-09-04": [
-        "x-artificial-general-intelligence"
-      ],
-      "sam-altman|2026-08-29": [
-        "x-sam-altman"
-      ],
-      "sam-altman|2026-08-30": [
-        "x-sam-altman"
-      ],
-      "sam-altman|2026-08-31": [
-        "x-sam-altman"
-      ],
-      "sam-altman|2026-09-01": [
-        "x-sam-altman"
-      ],
-      "sam-altman|2026-09-02": [
-        "x-sam-altman"
-      ],
-      "sam-altman|2026-09-03": [
-        "x-sam-altman"
-      ],
-      "sam-altman|2026-09-04": [
-        "x-sam-altman"
-      ],
-      "alexandr-wang|2026-08-29": [
-        "x-alexandr-wang"
-      ],
-      "alexandr-wang|2026-08-30": [
-        "x-alexandr-wang"
-      ],
-      "alexandr-wang|2026-08-31": [
-        "x-alexandr-wang"
-      ],
-      "alexandr-wang|2026-09-01": [
-        "x-alexandr-wang"
-      ],
-      "alexandr-wang|2026-09-02": [
-        "x-alexandr-wang"
-      ],
-      "alexandr-wang|2026-09-03": [
-        "x-alexandr-wang"
-      ],
-      "alexandr-wang|2026-09-04": [
-        "x-alexandr-wang"
-      ],
-      "hugging-face|2026-08-29": [
-        "x-hugging-face"
-      ],
-      "hugging-face|2026-08-30": [
-        "x-hugging-face"
-      ],
-      "hugging-face|2026-08-31": [
-        "x-hugging-face"
-      ],
-      "hugging-face|2026-09-01": [
-        "x-hugging-face"
-      ],
-      "hugging-face|2026-09-02": [
-        "x-hugging-face"
-      ],
-      "hugging-face|2026-09-03": [
-        "x-hugging-face"
-      ],
-      "hugging-face|2026-09-04": [
-        "x-hugging-face"
+      "gpt-6-astra|2026-09-04": [
+        "x-gpt-6-astra"
       ]
     },
     "itemIndex": {
-      "x-gpt-6": {
-        "title": "X 热搜 · \"gpt 6\" -is:retweet",
+      "x-gemini-start-the-adventure": {
+        "title": "X 热搜 · \"GEMINI START THE ADVENTURE\" -is:retweet",
         "source": "X",
-        "url": "https://x.com/search?q=%22gpt%206%22%20-is%3Aretweet&src=typed_query&f=live"
+        "url": "https://x.com/search?q=%22GEMINI%20START%20THE%20ADVENTURE%22%20-is%3Aretweet&src=typed_query&f=live"
       },
-      "x-artificial-general-intelligence": {
-        "title": "X 热搜 · \"artificial general intelligence\" -is:retweet",
+      "x-gpt-6-astra": {
+        "title": "X 热搜 · \"GPT-6 Astra\" -is:retweet",
         "source": "X",
-        "url": "https://x.com/search?q=%22artificial%20general%20intelligence%22%20-is%3Aretweet&src=typed_query&f=live"
-      },
-      "x-sam-altman": {
-        "title": "X 热搜 · \"sam altman\" -is:retweet",
-        "source": "X",
-        "url": "https://x.com/search?q=%22sam%20altman%22%20-is%3Aretweet&src=typed_query&f=live"
-      },
-      "x-alexandr-wang": {
-        "title": "X 热搜 · \"alexandr wang\" -is:retweet",
-        "source": "X",
-        "url": "https://x.com/search?q=%22alexandr%20wang%22%20-is%3Aretweet&src=typed_query&f=live"
-      },
-      "x-hugging-face": {
-        "title": "X 热搜 · \"hugging face\" -is:retweet",
-        "source": "X",
-        "url": "https://x.com/search?q=%22hugging%20face%22%20-is%3Aretweet&src=typed_query&f=live"
+        "url": "https://x.com/search?q=%22GPT-6%20Astra%22%20-is%3Aretweet&src=typed_query&f=live"
       }
     }
   }

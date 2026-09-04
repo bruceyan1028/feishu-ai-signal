@@ -13,7 +13,8 @@ __pycache__/
 .DS_Store
 *.log
 output/
-# trends.py 的原始响应快照只写不读（仓库里没有任何读回它的地方），trending 每天 700KB，
-# x 接口没开每天只写个 []；items/tagged/heatmap.json 是热力图重算要用的，照常入库
+# trends.py 的原始响应快照只写不读（仓库里没有任何读回它的地方），多地区榜单每天很大；
+# items/tagged/heatmap.json 是热力图重算要用的，照常入库
 data/trends/trending/
 data/trends/x/
+data/trends/x-trending/

@@ -1,8 +1,8 @@
-"""首页话题热力图：从 Google 热搜榜筛 AI 词，再补近 7 日兴趣 / X 讨论量。
+"""首页话题热力图：Google 与 X 各自从本平台热搜筛 AI 词，再补近 7 日热度。
 
-行不再是编辑预设赛道，而是当天多地区 `trending_now` 里命中 AI 规则的词。
-每个词单独拉一条 0–100 曲线（不和超级热词同框）。X 用同一组词数推文。
-热搜接口或兴趣指数失败时，尽量沿用上一份快照里同 id 的日期列。
+Google 行来自多地区 `trending_now`，X 行来自官方 Trends by WOEID；两边话题集
+完全独立。Google 每词拉 0–100 兴趣曲线，X 每词用 recent counts 数近 7 日帖子。
+任一平台失败时，只在该平台话题不变时沿用上一份快照的重叠日期。
 
     python -m src.trends --output site/data/heatmap-trends.json
 """
@@ -109,6 +109,18 @@ QUERIES: dict[str, dict[str, str]] = {
 BatchFn = Callable[[list[str]], tuple[list[str], dict[str, list[float]], dict[str, list[str]]]]
 CountsFn = Callable[[str, str], dict[str, Any]]
 TrendingFn = Callable[[str], Iterable[Any]]
+XTrendingFn = Callable[[int], dict[str, Any]]
+
+X_TREND_PLACES: tuple[tuple[str, int], ...] = (
+    ("", 1),  # Worldwide
+    ("US", 23424977),
+    ("GB", 23424975),
+    ("IN", 23424848),
+    ("DE", 23424829),
+    ("JP", 23424856),
+    ("AU", 23424748),
+    ("CA", 23424775),
+)
 
 
 @dataclass
@@ -317,6 +329,7 @@ def empty_source(days: list[str], *, topics: list[str] | None = None, error: str
     raw = [[0.0 for _ in range(cols)] for _ in ids]
     return {
         "error": error,
+        "topics": ids,
         "matrix": {"raw": raw, "normalized": normalize_rows(raw)},
         "trend": {topic: 1.0 for topic in ids},
         "items": {},
@@ -394,6 +407,17 @@ def _finish_source(
     items, index = _source_links(days, specs, kind=kind, related=related)
     return {
         "error": error,
+        "topics": topics,
+        "labels": {spec.id: spec.label for spec in specs},
+        "queries": {spec.id: spec.as_query() for spec in specs},
+        "scopes": {spec.id: spec.scope for spec in specs},
+        "marks": {spec.id: spec.mark for spec in specs},
+        "breakouts": [spec.id for spec in specs if spec.breakout],
+        "selection": {
+            "volumes": {spec.id: spec.volume for spec in specs},
+            "geos": {spec.id: list(spec.geos) for spec in specs},
+            "plot_geo": {spec.id: spec.geo for spec in specs},
+        },
         "matrix": {"raw": raw, "normalized": normalize_rows(raw)},
         "trend": trend_ratios(raw, topics),
         "items": items,
@@ -608,6 +632,79 @@ def select_trending_ai(
     return picked
 
 
+def _x_trends_get(woeid: int, *, bearer: str) -> dict[str, Any]:
+    from . import social
+
+    return social._api_get(
+        f"trends/by/woeid/{woeid}",
+        bearer=bearer,
+        params={"max_trends": 50, "trend.fields": "trend_name,tweet_count"},
+    )
+
+
+def fetch_x_trending_hits(
+    *,
+    bearer: str | None = None,
+    places: tuple[tuple[str, int], ...] = X_TREND_PLACES,
+    api_get: XTrendingFn | None = None,
+) -> list[dict[str, Any]]:
+    token = (os.environ.get("X_BEARER_TOKEN") or "").strip() if bearer is None else bearer.strip()
+    if not token:
+        raise RuntimeError("未配置 X_BEARER_TOKEN")
+    getter = api_get or (lambda woeid: _x_trends_get(woeid, bearer=token))
+    rows: list[dict[str, Any]] = []
+    errors: list[str] = []
+    succeeded = 0
+    for geo, woeid in places:
+        try:
+            payload = getter(woeid)
+            succeeded += 1
+        except Exception as exc:  # noqa: BLE001 - 单地区失败继续
+            errors.append(f"{geo or 'WORLD'}: {exc}")
+            log.warning("X 热搜 %s 失败：%s", geo or "WORLD", exc)
+            continue
+        trends = list(payload.get("data") or [])
+        for rank, item in enumerate(trends):
+            keyword = str(item.get("trend_name") or "").strip()
+            if not keyword:
+                continue
+            count = item.get("tweet_count")
+            # 官方响应经常不给 tweet_count；用榜内倒序分保留趋势排名，后续热度矩阵
+            # 仍由 tweets/counts/recent 的真实帖子数生成。
+            rank_score = max(1, len(trends) - rank)
+            rows.append(
+                {
+                    "keyword": keyword,
+                    "volume": int(count) if count is not None else rank_score,
+                    "geos": [geo or "WORLD"],
+                    "related": [],
+                }
+            )
+    if not succeeded:
+        raise RuntimeError(errors[0] if errors else "X Trends 未返回数据")
+    merged = merge_trending_hits(rows)
+    write_raw("x-trending", {"places": dict(places), "hits": merged, "errors": errors})
+    return merged
+
+
+def select_x_trending_ai(
+    *,
+    bearer: str | None = None,
+    places: tuple[tuple[str, int], ...] = X_TREND_PLACES,
+    api_get: XTrendingFn | None = None,
+    limit: int = MAX_TOPICS,
+) -> list[TopicSpec]:
+    hits = fetch_x_trending_hits(bearer=bearer, places=places, api_get=api_get)
+    picked = []
+    for spec in select_ai_topics(hits, limit=limit):
+        if "WORLD" in spec.geos or len(spec.geos) != 1:
+            picked.append(scoped_spec(spec, scope="global"))
+        else:
+            picked.append(scoped_spec(spec, scope="country", geo=spec.geos[0]))
+    log.info("X 热搜筛出 %d 个 AI 话题：%s", len(picked), ", ".join(spec.label for spec in picked) or "无")
+    return picked
+
+
 def specs_from_payload(payload: dict[str, Any] | None) -> list[TopicSpec]:
     if not payload:
         return []
@@ -642,6 +739,22 @@ def specs_from_payload(payload: dict[str, Any] | None) -> list[TopicSpec]:
             )
         )
     return out
+
+
+def specs_from_source(block: dict[str, Any] | None) -> list[TopicSpec]:
+    """恢复单个平台自己的话题；不回退顶层，避免把旧 Google 行误当成 X 热搜。"""
+    if not block or not block.get("topics"):
+        return []
+    payload = {
+        "topics": block.get("topics"),
+        "labels": block.get("labels"),
+        "queries": block.get("queries"),
+        "scopes": block.get("scopes"),
+        "marks": block.get("marks"),
+        "breakouts": block.get("breakouts"),
+        "selection": block.get("selection"),
+    }
+    return specs_from_payload(payload)
 
 
 def _make_google_batch() -> BatchFn:
@@ -962,7 +1075,9 @@ def build_payload(
     today: date | None = None,
     previous: dict[str, Any] | None = None,
     topics: list[TopicSpec] | None = None,
+    x_topics: list[TopicSpec] | None = None,
     select_fn: Callable[[], list[TopicSpec]] | None = None,
+    x_select_fn: Callable[[], list[TopicSpec]] | None = None,
     google_fn: Callable[[list[str]], dict[str, Any]] | None = None,
     x_fn: Callable[[list[str]], dict[str, Any]] | None = None,
 ) -> dict[str, Any]:
@@ -988,8 +1103,28 @@ def build_payload(
         google.pop("_chosen", None)
     topic_ids, labels, queries = _payload_topics(specs)
     breakouts = [spec.id for spec in specs if spec.breakout]
-    x_block = (x_fn or (lambda days_arg: fetch_x(days_arg, topics=specs)))(days)
+    if x_topics is not None:
+        x_specs = list(x_topics)
+    else:
+        x_picker = x_select_fn or select_x_trending_ai
+        try:
+            x_specs = list(x_picker() or [])
+        except Exception as exc:  # noqa: BLE001 - X 榜单失败只回退 X 自己昨天的话题
+            log.warning("X 热搜筛选失败：%s", exc)
+            x_specs = []
+        if not x_specs:
+            x_specs = specs_from_source((previous or {}).get("x"))
+    if x_specs:
+        x_block = (x_fn or (lambda days_arg: fetch_x(days_arg, topics=x_specs)))(days)
+    else:
+        x_block = empty_source(days, topics=[], error="X 热搜里今天没有筛出 AI 话题")
+    x_block["selection"] = {
+        **(x_block.get("selection") or {}),
+        "method": "x-trends-by-woeid",
+    }
     same_ids = topic_ids == list((previous or {}).get("topics") or [])
+    x_topic_ids = [spec.id for spec in x_specs]
+    same_x_ids = x_topic_ids == list(((previous or {}).get("x") or {}).get("topics") or [])
     if same_ids:
         google = coalesce(
             google,
@@ -999,9 +1134,23 @@ def build_payload(
             specs=specs,
             kind="g",
         )
+    if same_x_ids:
         x_block = coalesce(
-            x_block, (previous or {}).get("x"), old_days=old_days, new_days=days, specs=specs, kind="x"
+            x_block,
+            (previous or {}).get("x"),
+            old_days=old_days,
+            new_days=days,
+            specs=x_specs,
+            kind="x",
         )
+        x_block["selection"] = {
+            **(x_block.get("selection") or {}),
+            "method": "x-trends-by-woeid",
+        }
+    google["selection"] = {
+        **(google.get("selection") or {}),
+        "method": "google-trending-ai",
+    }
     return {
         "generatedAt": _now_iso(),
         "days": days,

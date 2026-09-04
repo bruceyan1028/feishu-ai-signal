@@ -47,11 +47,17 @@ def _google_solo(days: list[str]):
     return batch_fn
 
 
-def _x_counts(days: list[str], *, fail: set[str] | None = None):
+def _x_counts(
+    days: list[str],
+    *,
+    specs: list[trends.TopicSpec] | None = None,
+    fail: set[str] | None = None,
+):
+    specs = specs or _specs()
     fail = fail or set()
 
     def api_get(query: str, start_time: str):
-        topic = next(spec.id for spec in _specs() if spec.query_x == query)
+        topic = next(spec.id for spec in specs if spec.query_x == query)
         if topic in fail:
             raise RuntimeError(f"{topic} boom")
         data = []
@@ -252,6 +258,40 @@ class XCountsTest(_NoRawMixin):
         self.assertFalse(any(value for row in block["matrix"]["raw"] for value in row))
 
 
+class XTrendingTest(_NoRawMixin):
+    def test_selects_independent_ai_topics_from_x_regions(self):
+        payloads = {
+            1: {
+                "data": [
+                    {"trend_name": "Football"},
+                    {"trend_name": "GEMINI START THE ADVENTURE"},
+                ]
+            },
+            23424977: {
+                "data": [
+                    {"trend_name": "GPT-6 Astra", "tweet_count": 9000},
+                    {"trend_name": "GEMINI START THE ADVENTURE"},
+                ]
+            },
+        }
+        picked = trends.select_x_trending_ai(
+            bearer="token",
+            places=(("", 1), ("US", 23424977)),
+            api_get=lambda woeid: payloads[woeid],
+        )
+        self.assertEqual([spec.label for spec in picked], ["GPT-6 Astra", "GEMINI START THE ADVENTURE"])
+        self.assertEqual(picked[0].geos, ("US",))
+        self.assertIn("-is:retweet", picked[0].query_x)
+
+    def test_all_regions_failing_is_an_error(self):
+        with self.assertRaisesRegex(RuntimeError, "forbidden"):
+            trends.fetch_x_trending_hits(
+                bearer="token",
+                places=(("", 1),),
+                api_get=lambda _woeid: (_ for _ in ()).throw(RuntimeError("forbidden")),
+            )
+
+
 class BuildPayloadTest(_NoRawMixin):
     def test_contract_and_one_sided_failure(self):
         days = _days()
@@ -265,6 +305,7 @@ class BuildPayloadTest(_NoRawMixin):
         payload = trends.build_payload(
             today=date(2026, 8, 28),
             topics=_specs(),
+            x_topics=_specs(),
             google_fn=lambda _: google,
             x_fn=x_fail,
         )
@@ -295,6 +336,7 @@ class BuildPayloadTest(_NoRawMixin):
             today=date(2026, 8, 28),
             previous=previous,
             topics=_specs(),
+            x_topics=_specs(),
             google_fn=lambda days: trends.empty_source(
                 days, topics=list(trends.TOPICS), error="Trends blocked"
             ),
@@ -316,6 +358,7 @@ class BuildPayloadTest(_NoRawMixin):
             today=date(2026, 8, 28),
             previous=previous,
             select_fn=lambda: [],
+            x_topics=[],
             google_fn=lambda days: trends.empty_source(days, topics=["claude-code"], error="skip"),
             x_fn=lambda days: trends.empty_source(days, topics=["claude-code"], error="skip"),
         )
@@ -330,6 +373,7 @@ class BuildPayloadTest(_NoRawMixin):
         payload = trends.build_payload(
             today=date(2026, 8, 28),
             topics=specs,
+            x_topics=specs,
             google_fn=lambda days: trends.empty_source(days, topics=["dlss5", "flat"]),
             x_fn=lambda days: trends.empty_source(days, topics=["dlss5", "flat"]),
         )
@@ -347,6 +391,7 @@ class BuildPayloadTest(_NoRawMixin):
         payload = trends.build_payload(
             today=date(2026, 8, 28),
             topics=_specs(),
+            x_topics=_specs(),
             google_fn=lambda _: google,
             x_fn=lambda d: trends.empty_source(d, topics=list(trends.TOPICS), error="skip"),
         )
