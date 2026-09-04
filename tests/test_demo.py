@@ -910,13 +910,16 @@ class DeliveryTests(unittest.TestCase):
         board = template.split("function dataRailHtml")[1].split("function heatmapHtml")[0]
         self.assertNotIn("background-size: 44px 44px", board)
         self.assertNotIn("esc(m.creator)", board)
-        self.assertIn("logoChip(m.logoDomain", board)
+        self.assertIn("logoChip(r.logoDomain", board)
         # 只认路径，不锁 ?v= 版本号——换 logo 就得把缓存串一起改
         self.assertIn("data/logos/openai.svg?v=", board)
         self.assertIn("data/logos/qwen.svg?v=", board)
         self.assertNotIn("alibabadotcom.svg", board)
-        # 智能指数是模型名的背景填色，不是独立一列；当日区间在窄栏里不渲染
-        self.assertIn("fillWidth(m.intelligence)", board)
+        # 榜单指标是模型名的背景填色，不是独立一列；当日区间在窄栏里不渲染。
+        # AA 榜和 HF 榜共用这套行，填色字段由各页的 metricOf 给。
+        self.assertIn("fillWidth(metricOf(r))", board)
+        self.assertIn("metricOf: m => m.intelligence", board)
+        self.assertIn("metricOf: m => m.trending", board)
         self.assertNotIn("当日区间", board)
         self.assertNotIn("dash-range", board)
         self.assertIn("quoteGroup('美股'", board)

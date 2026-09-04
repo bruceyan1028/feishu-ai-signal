@@ -1,4 +1,4 @@
-"""首页两块数据看板：模型竞技场榜单 + AI 概念股行情。
+"""首页两块数据看板：模型榜单（AA 智能指数 + HF 社区热度）+ AI 概念股行情。
 
 和简报不同，这两块是「状态量」而非「事件流」：读者想在翻信号之前先扫一眼今天模型
 排名和资金面有没有变。所以它们不进条目表、不参与去重和打分，只有一份当期快照。
@@ -18,6 +18,11 @@
 总榜之外还有两张按参数规模分档的开源榜（4B–40B、≤4B）。接口既不给参数规模也不给
 开源标记，分不出这两档，只能读 AA 站上对应的分档页面；页面里每张图都内联一份
 schema.org Dataset，比解析 Next.js 的流式载荷稳定得多。
+
+第四张榜换个口径：Hugging Face 的公开模型接口，按 `trendingScore` 取
+`huggingface.co/models` 默认那一页的排序。AA 答的是「哪个模型更强」，这一榜答的是
+「社区这几天在下载谁」——视频、语音、时序这些没有智能指数的模型只在这里出得来。
+不需要 token。
 
 行情用腾讯免费行情接口：A 股 / 美股 / 港股同一套字段，无需鉴权。返回 GBK 编码的
 `v_<code>="a~b~c~..."`，字段按位取，各市场前 35 位布局一致。
@@ -61,6 +66,56 @@ _LD_JSON_RE = re.compile(
 )
 # 分档页是网页而非接口，带上项目标识便于对方在日志里认出这点访问量。
 _PAGE_HEADERS = {"User-Agent": "feishu-ai-signal (+https://artificialanalysis.ai)"}
+
+HF_SITE = "https://huggingface.co"
+HF_ENDPOINT = f"{HF_SITE}/api/models"
+HF_LIST_URL = f"{HF_SITE}/models"
+# 列表接口默认只回 id / likes / downloads 那几位；参数规模、更新时间、推理可用
+# 都要显式 expand 才给。
+HF_EXPAND: tuple[str, ...] = (
+    "author",
+    "downloads",
+    "likes",
+    "trendingScore",
+    "pipeline_tag",
+    "lastModified",
+    "safetensors",
+    "inferenceProviderMapping",
+)
+_HF_HEADERS = {"User-Agent": "feishu-ai-signal (+https://huggingface.co/models)"}
+
+# pipeline_tag 是英文机器标签，窄栏里换成中文短词。认不出的照原样显示，
+# HF 新增任务类型时不会变成空白一格。
+_HF_TASKS = {
+    "text-generation": "文本生成",
+    "image-text-to-text": "图文理解",
+    "video-text-to-text": "视频理解",
+    "audio-text-to-text": "语音理解",
+    "any-to-any": "全模态",
+    "text-to-image": "文生图",
+    "image-to-image": "图生图",
+    "text-to-video": "文生视频",
+    "image-to-video": "图生视频",
+    "image-text-to-video": "图文生视频",
+    "video-to-video": "视频转绘",
+    "text-to-3d": "文生 3D",
+    "image-to-3d": "图生 3D",
+    "text-to-speech": "语音合成",
+    "text-to-audio": "音频生成",
+    "audio-to-audio": "音频转换",
+    "automatic-speech-recognition": "语音识别",
+    "feature-extraction": "向量表征",
+    "sentence-similarity": "文本相似",
+    "text-ranking": "重排序",
+    "visual-document-retrieval": "文档检索",
+    "fill-mask": "掩码填充",
+    "translation": "机器翻译",
+    "image-classification": "图像分类",
+    "image-segmentation": "图像分割",
+    "object-detection": "目标检测",
+    "time-series-forecasting": "时序预测",
+    "robotics": "机器人",
+}
 
 QUOTE_ENDPOINT = "https://qt.gtimg.cn/q="
 _QUOTE_RE = re.compile(r'v_(\w+)="([^"]*)"')
@@ -172,6 +227,9 @@ _CREATOR_DOMAINS: tuple[tuple[str, str], ...] = (
     ("anthropic", "anthropic.com"),
     ("google", "google.com"),
     ("deepmind", "deepmind.google"),
+    # minimax 必须排在 xai 前面：这是顺序敏感的子串匹配，HF 的组织名 MiniMaxAI
+    # 去掉分隔符是 minimaxai，含 xai，排在后面就会挂上 Grok 的 logo。
+    ("minimax", "minimaxi.com"),
     ("xai", "x.ai"),
     ("meta", "meta.com"),
     ("deepseek", "deepseek.com"),
@@ -181,7 +239,6 @@ _CREATOR_DOMAINS: tuple[tuple[str, str], ...] = (
     ("zai", "z.ai"),
     ("kimi", "moonshot.cn"),
     ("moonshot", "moonshot.cn"),
-    ("minimax", "minimaxi.com"),
     ("bytedance", "bytedance.com"),
     ("stepfun", "stepfun.com"),
     ("openbmb", "openbmb.cn"),
@@ -256,6 +313,12 @@ def _num(value: Any) -> float | None:
 
 def _round(value: float | None, digits: int) -> float | None:
     return None if value is None else round(value, digits)
+
+
+def _int(value: Any) -> int | None:
+    """计数类字段（下载、点赞、热度分）落成整数，别让 JSON 里出现 151021.0。"""
+    parsed = _num(value)
+    return None if parsed is None else int(parsed)
 
 
 # --- 模型竞技场榜单 ---
@@ -505,6 +568,107 @@ def fetch_size_buckets(
     ]
 
 
+# --- Hugging Face 热度榜 ---
+
+
+def _hf_task_label(tag: Any) -> str:
+    key = str(tag or "").strip()
+    return _HF_TASKS.get(key, key)
+
+
+def _hf_params_b(model: dict[str, Any]) -> float | None:
+    """参数规模换算成「多少 B」。
+
+    接口不给现成的规模，只在 safetensors 索引里给张量总数。GGUF 量化仓库和不传
+    safetensors 的权重没有这一位，留 None——0 会被读成「零参数」而不是「不知道」。
+    """
+    total = _num((model.get("safetensors") or {}).get("total"))
+    return None if total is None else total / 1e9
+
+
+def _hf_row(model: dict[str, Any], rank: int) -> dict[str, Any]:
+    repo = str(model.get("id") or "")
+    org, _, name = repo.partition("/")
+    if not name:  # 少数官方仓库没有组织前缀，例如 gpt2
+        org, name = "", repo
+    org = str(model.get("author") or org)
+    return {
+        "rank": rank,
+        "repo": repo,
+        # 组织归属由 logo 说清楚了，窄栏里只留仓库名那一段
+        "name": name,
+        "org": org,
+        "logoDomain": _creator_domain(org),
+        "trending": _int(model.get("trendingScore")),
+        "likes": _int(model.get("likes")),
+        "downloads": _int(model.get("downloads")),
+        "params": _round(_hf_params_b(model), 1),
+        "task": _hf_task_label(model.get("pipeline_tag")),
+        # 有厂商接了推理服务才能直接调，这是「今天能不能用上」的分界
+        "inference": bool(model.get("inferenceProviderMapping")),
+        "updatedAt": str(model.get("lastModified") or "")[:10],
+        "url": f"{HF_SITE}/{repo}" if repo else HF_LIST_URL,
+    }
+
+
+def rank_hf_models(
+    data: list[dict[str, Any]], limit: int = LEADERBOARD_LIMIT
+) -> list[dict[str, Any]]:
+    """按热度分降序取前 N，丢掉没有热度分的仓库。
+
+    排序参数是查询串里的东西，这里不指望接口一定照办，自己再排一次；顺手把没有
+    排序依据的行去掉，免得它们靠返回顺序混进前几名。
+    """
+    scored = [
+        item
+        for item in data or []
+        if isinstance(item, dict) and _num(item.get("trendingScore")) is not None
+    ]
+    scored.sort(key=lambda item: _num(item.get("trendingScore")) or 0, reverse=True)
+    return [_hf_row(item, rank) for rank, item in enumerate(scored[:limit], 1)]
+
+
+def fetch_hf_trending(limit: int = LEADERBOARD_LIMIT) -> dict[str, Any]:
+    """`huggingface.co/models` 默认那一页的排序。公开接口，不需要 token。
+
+    和 AA 两张榜互补：AA 按统一口径测「哪个模型更强」，这一榜是「社区这几天在
+    下载谁」。视频、语音、时序这些没有智能指数的模型只在这一榜里出得来。
+    """
+    board: dict[str, Any] = {
+        "source": "Hugging Face",
+        "sourceUrl": HF_LIST_URL,
+        "metric": "热度分",
+        "updatedAt": "",
+        "error": "",
+        "models": [],
+    }
+    params = [("sort", "trendingScore"), ("direction", "-1"), ("limit", str(limit))]
+    params += [("expand[]", field) for field in HF_EXPAND]
+    try:
+        response = requests.get(
+            HF_ENDPOINT, params=params, headers=_HF_HEADERS, timeout=HTTP_TIMEOUT
+        )
+        response.raise_for_status()
+        data = response.json()
+    except Exception as exc:  # noqa: BLE001 - 同上，一块挂了不该拖垮整轮发布
+        board["error"] = str(exc)
+        log.warning("HF 热度榜获取失败：%s", exc)
+        return board
+    if not isinstance(data, list):
+        # 接口改成 {"models": [...]} 这类包装时要能看出来，否则只表现为「这榜空了」
+        board["error"] = "HF 接口未返回模型列表"
+        log.warning("HF 热度榜响应不是列表，接口结构可能已变")
+        return board
+    board["models"] = rank_hf_models(data, limit)
+    if not board["models"]:
+        board["error"] = "HF 接口未给出热度分"
+        log.warning("HF 热度榜无有效条目，trendingScore 可能已改名")
+        return board
+    board["updatedAt"] = _now_iso()
+    log.info("HF 热度榜 %d 条（返回 %d）", len(board["models"]), len(data))
+    return board
+
+
 # --- AI 概念股行情 ---
 
 
@@ -605,6 +769,7 @@ def build_payload() -> dict[str, Any]:
     return {
         "generatedAt": _now_iso(),
         "leaderboard": fetch_leaderboard(),
+        "hfTrending": fetch_hf_trending(),
         "market": fetch_market(),
     }
 
@@ -653,7 +818,11 @@ def keep_last_good(
     if not previous:
         return payload
     merged = dict(payload)
-    for board_key, rows_key in (("leaderboard", "models"), ("market", "quotes")):
+    for board_key, rows_key in (
+        ("leaderboard", "models"),
+        ("hfTrending", "models"),
+        ("market", "quotes"),
+    ):
         incoming = payload.get(board_key) or {}
         old = previous.get(board_key) or {}
         if incoming.get("error") and not _board_has_rows(incoming, rows_key):

@@ -214,6 +214,17 @@ class FetchLeaderboardTest(unittest.TestCase):
         # 认不出的厂商不该硬凑域名：前端拿到空串会回退字标
         self.assertEqual(dashboard._creator_domain("某个新实验室"), "")
 
+    def test_creator_domain_is_order_sensitive_on_overlapping_needles(self):
+        """匹配是按顺序找子串，minimax 排在 xai 后面会让 MiniMax 挂上 Grok 的 logo。"""
+        self.assertEqual(dashboard._creator_domain("MiniMaxAI"), "minimaxi.com")
+        self.assertEqual(dashboard._creator_domain("MiniMax"), "minimaxi.com")
+        self.assertEqual(dashboard._creator_domain("SpaceXAI"), "x.ai")
+        # HF 的组织名是小写连字符写法，和 AA 的厂商名走同一张表
+        self.assertEqual(dashboard._creator_domain("zai-org"), "z.ai")
+        self.assertEqual(dashboard._creator_domain("deepseek-ai"), "deepseek.com")
+        # Google DeepMind 仍归到 google.com（仓库里备了 Google 的官方 SVG）
+        self.assertEqual(dashboard._creator_domain("Google DeepMind"), "google.com")
+
     @patch.dict("os.environ", {"ARTIFICIAL_ANALYSIS_API_KEY": "k"}, clear=False)
     @patch("src.dashboard.requests.get")
     def test_limit_caps_rows(self, mock_get: MagicMock):
@@ -363,6 +374,148 @@ class SizeBucketTest(unittest.TestCase):
         self.assertIn("https://artificialanalysis.ai/models/open-source/tiny", urls)
 
 
+class HfTrendingTest(unittest.TestCase):
+    """HF 热度榜：公开接口不需要 token，字段来自 `expand[]`。"""
+
+    @staticmethod
+    def _model(repo, trending, **extra):
+        payload = {
+            "id": repo,
+            "author": repo.split("/")[0],
+            "trendingScore": trending,
+            "likes": 100,
+            "downloads": 2000,
+            "pipeline_tag": "text-generation",
+            "lastModified": "2026-08-31T13:33:35.000Z",
+            "safetensors": {"total": 753329940480},
+            "inferenceProviderMapping": [{"provider": "novita", "status": "live"}],
+        }
+        payload.update(extra)
+        return payload
+
+    @patch("src.dashboard.requests.get")
+    def test_sorts_by_trending_score_and_drops_unscored(self, mock_get: MagicMock):
+        mock_get.return_value = MagicMock(
+            status_code=200,
+            json=lambda: [
+                self._model("Qwen/Qwen3.8-27B", 547),
+                self._model("zai-org/GLM-5.3", 957),
+                self._model("some/unscored", None),
+            ],
+        )
+        board = dashboard.fetch_hf_trending(limit=5)
+        self.assertEqual(board["error"], "")
+        self.assertEqual([m["name"] for m in board["models"]], ["GLM-5.3", "Qwen3.8-27B"])
+        self.assertEqual([m["rank"] for m in board["models"]], [1, 2])
+        self.assertEqual(board["metric"], "热度分")
+        self.assertTrue(board["updatedAt"])
+
+    @patch("src.dashboard.requests.get")
+    def test_row_splits_org_from_repo_and_derives_params(self, mock_get: MagicMock):
+        mock_get.return_value = MagicMock(
+            status_code=200, json=lambda: [self._model("zai-org/GLM-5.3", 957)]
+        )
+        row = dashboard.fetch_hf_trending()["models"][0]
+        self.assertEqual(row["repo"], "zai-org/GLM-5.3")
+        # 组织归属由 logo 说清楚，窄栏里只留仓库名
+        self.assertEqual(row["name"], "GLM-5.3")
+        self.assertEqual(row["org"], "zai-org")
+        self.assertEqual(row["logoDomain"], "z.ai")
+        self.assertEqual(row["url"], "https://huggingface.co/zai-org/GLM-5.3")
+        # safetensors 给的是张量总数，展示要的是「多少 B」
+        self.assertEqual(row["params"], 753.3)
+        self.assertEqual(row["task"], "文本生成")
+        self.assertTrue(row["inference"])
+        self.assertEqual(row["updatedAt"], "2026-08-31")
+        # 计数字段落成整数，别让 JSON 里出现 2000.0
+        self.assertIsInstance(row["trending"], int)
+        self.assertIsInstance(row["downloads"], int)
+
+    @patch("src.dashboard.requests.get")
+    def test_missing_optional_fields_stay_none_not_zero(self, mock_get: MagicMock):
+        """GGUF 量化仓库没有 safetensors，也常常不带 pipeline_tag。"""
+        mock_get.return_value = MagicMock(
+            status_code=200,
+            json=lambda: [
+                self._model(
+                    "unsloth/Qwen3.8-27B-GGUF",
+                    299,
+                    safetensors=None,
+                    pipeline_tag=None,
+                    inferenceProviderMapping=[],
+                )
+            ],
+        )
+        row = dashboard.fetch_hf_trending()["models"][0]
+        # 0B 会被读成「零参数」而不是「不知道」
+        self.assertIsNone(row["params"])
+        self.assertEqual(row["task"], "")
+        self.assertFalse(row["inference"])
+        self.assertEqual(row["logoDomain"], "")
+
+    @patch("src.dashboard.requests.get")
+    def test_no_org_prefix_repo_keeps_its_name(self, mock_get: MagicMock):
+        mock_get.return_value = MagicMock(
+            status_code=200, json=lambda: [{"id": "gpt2", "trendingScore": 12}]
+        )
+        row = dashboard.fetch_hf_trending()["models"][0]
+        self.assertEqual(row["name"], "gpt2")
+        self.assertEqual(row["org"], "")
+        self.assertEqual(row["url"], "https://huggingface.co/gpt2")
+
+    def test_task_labels_fall_back_to_the_raw_tag(self):
+        """HF 新增任务类型时要照原样显示，不能空一格。"""
+        self.assertEqual(dashboard._hf_task_label("image-text-to-text"), "图文理解")
+        self.assertEqual(dashboard._hf_task_label("time-series-forecasting"), "时序预测")
+        self.assertEqual(dashboard._hf_task_label("brand-new-task"), "brand-new-task")
+        self.assertEqual(dashboard._hf_task_label(None), "")
+
+    @patch("src.dashboard.requests.get")
+    def test_request_asks_for_the_fields_the_board_needs(self, mock_get: MagicMock):
+        """不带 expand 时接口不回参数规模、更新时间和推理可用，那几列会静静地空掉。"""
+        mock_get.return_value = MagicMock(status_code=200, json=lambda: [])
+        dashboard.fetch_hf_trending(limit=12)
+        params = dict(mock_get.call_args.kwargs["params"])
+        self.assertEqual(params["sort"], "trendingScore")
+        self.assertEqual(params["direction"], "-1")
+        self.assertEqual(params["limit"], "12")
+        expanded = [
+            value
+            for key, value in mock_get.call_args.kwargs["params"]
+            if key == "expand[]"
+        ]
+        for field in ("safetensors", "lastModified", "inferenceProviderMapping"):
+            self.assertIn(field, expanded)
+
+    @patch("src.dashboard.requests.get")
+    def test_response_shape_change_surfaces_as_error(self, mock_get: MagicMock):
+        mock_get.return_value = MagicMock(status_code=200, json=lambda: {"models": []})
+        board = dashboard.fetch_hf_trending()
+        self.assertEqual(board["models"], [])
+        self.assertIn("模型列表", board["error"])
+
+    @patch("src.dashboard.requests.get")
+    def test_renamed_score_field_surfaces_as_error(self, mock_get: MagicMock):
+        mock_get.return_value = MagicMock(
+            status_code=200, json=lambda: [{"id": "a/b", "likes": 1}]
+        )
+        board = dashboard.fetch_hf_trending()
+        self.assertEqual(board["models"], [])
+        self.assertIn("热度分", board["error"])
+
+    @patch("src.dashboard.requests.get", side_effect=RuntimeError("429"))
+    def test_api_failure_degrades_to_error_field(self, _mock_get: MagicMock):
+        board = dashboard.fetch_hf_trending()
+        self.assertEqual(board["models"], [])
+        self.assertIn("429", board["error"])
+
+    def test_board_needs_no_api_key(self):
+        """AA 要 key，HF 不要；别把 HF 榜也绑到 AA 的 key 上。"""
+        source = Path("src/dashboard.py").read_text(encoding="utf-8")
+        block = source.split("def fetch_hf_trending")[1].split("\ndef ")[0]
+        self.assertNotIn("API_KEY", block)
+
+
 class WritePayloadTest(unittest.TestCase):
     def test_writes_utf8_json(self):
         with tempfile.TemporaryDirectory() as temp:
@@ -374,14 +527,17 @@ class WritePayloadTest(unittest.TestCase):
     def test_keep_last_good_retains_old_board_when_new_fetch_fails(self):
         previous = {
             "leaderboard": {"error": "", "models": [{"name": "Claude Opus 5"}]},
+            "hfTrending": {"error": "", "models": [{"name": "GLM-5.3"}]},
             "market": {"error": "", "quotes": [{"name": "寒武纪"}]},
         }
         incoming = {
             "leaderboard": {"error": "429", "models": []},
+            "hfTrending": {"error": "503", "models": []},
             "market": {"error": "", "quotes": [{"name": "英伟达"}]},
         }
         merged = dashboard.keep_last_good(incoming, previous)
         self.assertEqual(merged["leaderboard"]["models"][0]["name"], "Claude Opus 5")
+        self.assertEqual(merged["hfTrending"]["models"][0]["name"], "GLM-5.3")
         self.assertEqual(merged["market"]["quotes"][0]["name"], "英伟达")
 
     def test_keep_last_good_falls_back_per_size_bucket(self):
@@ -434,11 +590,13 @@ class WritePayloadTest(unittest.TestCase):
 
     @patch.dict("os.environ", {"ARTIFICIAL_ANALYSIS_API_KEY": "k"}, clear=False)
     @patch("src.dashboard.fetch_market")
+    @patch("src.dashboard.fetch_hf_trending")
     @patch("src.dashboard.fetch_leaderboard")
     def test_refresh_into_overwrites_stale_snapshot(
-        self, mock_board: MagicMock, mock_market: MagicMock
+        self, mock_board: MagicMock, mock_hf: MagicMock, mock_market: MagicMock
     ):
         mock_board.return_value = {"error": "", "models": [{"name": "GPT-5.6 Sol"}]}
+        mock_hf.return_value = {"error": "", "models": [{"name": "GLM-5.3"}]}
         mock_market.return_value = {"error": "", "quotes": [{"name": "英伟达"}]}
         with tempfile.TemporaryDirectory() as temp:
             output = Path(temp) / "dashboard-latest.json"
@@ -528,6 +686,25 @@ class FrontendContractTest(unittest.TestCase):
         for note in ("4B–40B", "≤4B"):
             self.assertIn(note, Path("src/dashboard.py").read_text(encoding="utf-8"))
             self.assertNotIn(note, template)
+
+    def test_hf_trending_shares_the_model_board(self):
+        """HF 热度和 AA 智能指数同一块看板切页；右栏只有 300px 出头，放不下第四块。"""
+        template = Path("index.html").read_text(encoding="utf-8")
+        self.assertIn("data.hfTrending", template)
+        self.assertIn("huggingface.co/models", template)
+        self.assertIn("Hugging Face", template)
+        self.assertIn("key: 'hf'", template)
+        # 四张榜共用一套行渲染，指标只是换个字段
+        self.assertIn("const rankRows", template)
+
+    def test_model_board_titles_follow_the_active_page(self):
+        """HF 那一页挂在「Artificial Analysis」标题下就是署错了源。"""
+        template = Path("index.html").read_text(encoding="utf-8")
+        self.assertIn("board(aaPage.source", template)
+        self.assertNotIn("board('Artificial Analysis'", template)
+        # 条款要求页面署名并链回 AA，综合与分档两页仍走这个源
+        self.assertIn("source: 'Artificial Analysis'", template)
+        self.assertIn("source: 'Hugging Face'", template)
 
     def test_live_quote_tickers_match_the_pipeline(self):
         template = Path("index.html").read_text(encoding="utf-8")
