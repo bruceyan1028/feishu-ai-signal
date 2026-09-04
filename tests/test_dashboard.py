@@ -8,6 +8,17 @@ from unittest.mock import MagicMock, patch
 from src import dashboard, publish
 
 
+def _css_rule(template: str, selector: str) -> str:
+    """取 `index.html` 里某个选择器的声明块。
+
+    断言排版约束（不折行、右对齐、独立成块）时要看的是 CSS 而不是 HTML，而整份
+    模板里 `overflow: hidden` 这类声明到处都有，不限定到选择器就等于没断言。
+    """
+    match = re.search(rf"^\s*{re.escape(selector)}\s*\{{([^}}]*)\}}", template, re.M)
+    assert match, f"index.html 里找不到 {selector} 的样式"
+    return match.group(1)
+
+
 # 腾讯行情真实响应的截断样本：只保留到总市值那一位，够覆盖全部取值下标。
 def _quote_line(code: str, name: str, price: str, prev_close: str, pct: str, cap: str) -> str:
     parts = [""] * 46
@@ -884,12 +895,66 @@ class FrontendContractTest(unittest.TestCase):
         self.assertIn("hfPage.key === 'spaces'", rail)
 
     def test_hf_meta_items_do_not_break_between_icon_and_number(self):
-        """换行断在「♡」和数字之间会让图标独自留在行尾，数字掉到下一行。"""
-        rail = (Path("index.html").read_text(encoding="utf-8")
-                .split("function dataRailHtml")[1].split("function heatmapHtml")[0])
-        self.assertIn("meta.map(m => `<span>${m}</span>`)", rail)
+        """省略号断在「♡」和数字之间会让图标留在行尾、数字被切掉。"""
+        template = Path("index.html").read_text(encoding="utf-8")
+        rail = template.split("function dataRailHtml")[1].split("function heatmapHtml")[0]
+        # 每个指标连图标先包成一个 span，再由分隔点拼起来
+        self.assertIn("""meta.join('<span class="hf-sep">·</span>')""", rail)
         self.assertIn("↓&nbsp;", rail)
         self.assertIn("♡&nbsp;", rail)
+
+    def test_hf_meta_stays_on_one_line(self):
+        """第二行折行会把卡片撑高，相邻两条就看不出边界。
+
+        放不下时压缩的是任务名 / 简介那一段（`.hf-flex`），数字保持完整——数字才是
+        这一行的信息。
+        """
+        template = Path("index.html").read_text(encoding="utf-8")
+        meta_css = _css_rule(template, ".hf-meta")
+        self.assertIn("white-space: nowrap", meta_css)
+        self.assertIn("overflow: hidden", meta_css)
+        self.assertNotIn("flex-wrap: wrap", meta_css)
+        # 只有可压缩的那一段允许收缩，其余指标不参与
+        self.assertIn("flex: none", _css_rule(template, ".hf-meta > *"))
+        flex_css = _css_rule(template, ".hf-flex")
+        self.assertIn("text-overflow: ellipsis", flex_css)
+        rail = template.split("function dataRailHtml")[1].split("function heatmapHtml")[0]
+        self.assertIn("""<span class="hf-flex">${esc(item.task)}""", rail)
+        self.assertIn("""<span class="hf-flex">${esc(item.note)}""", rail)
+
+    def test_hf_update_date_sits_at_the_right_of_the_title_line(self):
+        """更新日期和名字同属「这是哪一版」，排在首行右端而不是挤进指标行。"""
+        template = Path("index.html").read_text(encoding="utf-8")
+        rail = template.split("function dataRailHtml")[1].split("function heatmapHtml")[0]
+        self.assertIn("""<span class="hf-aside">${aside}""", rail)
+        head = rail.split("const head = isSpace")[0]
+        self.assertIn("dayText(item.updatedAt)", head)
+        aside_css = _css_rule(template, ".hf-aside")
+        self.assertIn("margin-left: auto", aside_css)
+        # 地方不够该让左边的名字先省，日期缺一位就没法读了
+        self.assertIn("flex: none", aside_css)
+
+    def test_spaces_show_likes_instead_of_an_update_date(self):
+        """应用天天有人重新部署，更新时间对它没有信息量，官网的应用卡也不出。"""
+        rail = (Path("index.html").read_text(encoding="utf-8")
+                .split("function dataRailHtml")[1].split("function heatmapHtml")[0])
+        card = rail.split("const hfCard")[1].split("const hfBody")[0]
+        aside = card.split("const aside")[1].split(";")[0]
+        self.assertIn("isSpace", aside)
+        self.assertIn("likes", aside)
+        # 日期只在非应用那一支出现，但仍留在 tooltip 里
+        self.assertIn("isSpace && dayText(item.updatedAt)", card)
+
+    def test_hf_rows_are_separate_blocks(self):
+        """只靠一根细分隔线时五条挤成一整段，边界扫不出来。"""
+        template = Path("index.html").read_text(encoding="utf-8")
+        item_css = _css_rule(template, ".hf-item")
+        self.assertIn("background:", item_css)
+        self.assertIn("border:", item_css)
+        self.assertNotIn("border-bottom", item_css)
+        self.assertIn("gap:", _css_rule(template, ".hf-list"))
+        rail = template.split("function dataRailHtml")[1].split("function heatmapHtml")[0]
+        self.assertIn("""<div class="hf-list">""", rail)
 
     def test_switching_tabs_keeps_the_scroll_position(self):
         """整块换掉 innerHTML 会把页面和右栏的滚动位置一起归零，切个页不该跳回顶部。"""

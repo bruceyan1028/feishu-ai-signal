@@ -144,22 +144,32 @@
      档位后缀（Adaptive Reasoning, High）可以长得多,仍按上面那条先缩。 */
   .aa-tag.is-size { flex: none; max-width: none; }
   .rank-row { display: grid; grid-template-columns: 20px 22px minmax(0,1fr); gap: 8px; align-items: center; padding: 5px 14px; border-bottom: 1px solid rgba(255,255,255,.05); }
-  /* HF 本周热度:照官网首页那三栏的卡片排法——名字一行,参数规模/更新时间/下载/
-     点赞一行。先前套用上面榜单那种「一行 + 进度条」,这些数字只放得进 tooltip,
-     等于没有。官网没有名次也没有热度分,这里也不加:顺序本身就是「本周热度」。 */
-  .hf-item { display: block; padding: 8px 14px; border-bottom: 1px solid rgba(255,255,255,.05); text-decoration: none; color: inherit; }
-  .hf-item:hover { background: rgba(255,255,255,.06); }
-  .hf-head { display: flex; align-items: center; gap: 6px; min-width: 0; }
-  .hf-emoji { flex: none; font-size: 14px; line-height: 1; }
-  .hf-name { min-width: 0; font-size: 12.5px; font-weight: 650; color: #faf7f0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  /* HF 本周热度:照官网首页那三栏的卡片排法——名字一行,任务/规模/下载/点赞一行。
+     先前套用上面榜单那种「一行 + 进度条」,这些数字只放得进 tooltip,等于没有。
+     官网没有名次也没有热度分,这里也不加:顺序本身就是「本周热度」。
+     每条独立成块:比看板底色亮一档、带描边、彼此留空隙,相邻两条的边界才一眼看得
+     出;只靠一根细分隔线时五条挤在一起像一整段。直角,和右栏其余面板一致。 */
+  .hf-list { display: flex; flex-direction: column; gap: 6px; padding: 8px 12px 12px; }
+  .hf-item { display: block; padding: 7px 9px; background: rgba(255,255,255,.055); border: 1px solid rgba(255,255,255,.09); text-decoration: none; color: inherit; }
+  .hf-item:hover { background: rgba(255,255,255,.11); border-color: rgba(255,255,255,.2); }
+  .hf-head { display: flex; align-items: baseline; gap: 6px; min-width: 0; }
+  .hf-emoji { flex: none; font-size: 13px; line-height: 1; }
+  .hf-name { min-width: 0; font-size: 12px; font-weight: 650; color: #faf7f0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   /* 仓库全名是机器标识,等宽体下 owner/name 那道斜杠和版本号更好认 */
-  .hf-name.is-repo { font-family: 'Geist Mono', ui-monospace, Menlo, monospace; font-size: 11.5px; font-weight: 600; }
+  .hf-name.is-repo { font-family: 'Geist Mono', ui-monospace, Menlo, monospace; font-size: 11px; font-weight: 600; }
+  /* 首行右端:模型和数据集放更新日期,Spaces 放点赞数。不参与压缩——地方不够该让
+     左边的名字先省,日期缺一位就没法读了。 */
+  .hf-aside { flex: none; margin-left: auto; font-family: 'Geist Mono', ui-monospace, Menlo, monospace; font-size: 9.5px; white-space: nowrap; color: #8f887a; }
+  .hf-aside b { font-weight: 600; color: #c4bfb6; }
   /* 绿点 = 这个 Space 现在真的在跑;停在 BUILDING / RUNTIME_ERROR 的点开是白屏 */
-  .hf-live { flex: none; width: 5px; height: 5px; border-radius: 50%; background: #34d399; }
-  .hf-note { display: block; margin-top: 3px; font-size: 10.5px; line-height: 1.45; color: #a8a294; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .hf-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 2px 7px; margin-top: 4px; font-family: 'Geist Mono', ui-monospace, Menlo, monospace; font-size: 10px; color: #8f887a; }
+  .hf-live { flex: none; align-self: center; width: 5px; height: 5px; border-radius: 50%; background: #34d399; }
+  /* 第二行一律压在一行内:折到第三行会把卡片撑高,相邻两条又看不出边界。放不下时
+     只压缩任务名或简介那一段(.hf-flex),数字保持完整——数字才是这行的信息。 */
+  .hf-meta { display: flex; align-items: center; gap: 6px; margin-top: 4px; font-family: 'Geist Mono', ui-monospace, Menlo, monospace; font-size: 9.5px; color: #8f887a; white-space: nowrap; overflow: hidden; }
+  .hf-meta > * { flex: none; }
   .hf-meta b { font-weight: 600; color: #c4bfb6; }
-  .hf-sep { opacity: .35; }
+  .hf-flex { flex: 0 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+  .hf-sep { opacity: .3; }
   .heat-toggle { display: flex; border: 1px solid rgba(255,255,255,.12); margin: 0 14px 8px; }
   .heat-toggle button { flex: 1; height: 26px; border: none; background: transparent; color: #8f887a; font-size: 11px; font-weight: 650; cursor: pointer; }
   .heat-toggle button + button { border-left: 1px solid rgba(255,255,255,.12); }
@@ -2372,19 +2382,32 @@ function dataRailHtml(A){
   const hfPage = hfSections.find(s => s.key === state.hfTab) || hfSections[0] || null;
   const hfItems = (hfPage && hfPage.items) || [];
   const isSpace = !!(hfPage && hfPage.key === 'spaces');
-  // 一条卡片。官网把这几个数字排在名字下面而不是藏进 hover,这里照做:下载量和
-  // 更新日期正是判断「这条值不值得点」的依据,收进 tooltip 等于没给。
+  // 一条卡片,固定两行:名字 + 右端一个数,底下一行指标。官网把这几个数字排在名字
+  // 下面而不是藏进 hover,这里照做——下载量和更新日期正是判断「这条值不值得点」的
+  // 依据,收进 tooltip 等于没给。两行固定,五张卡高度一致,边界才扫得清。
   const hfCard = item => {
-    // 每个指标包成一个整体再进 flex,否则换行会断在图标和数字之间,出现「♡」独自
-    // 留在行尾、数字被推到下一行。顺序照官网:任务 · 规模 · 更新 · 下载 · ⚡ · 点赞。
+    const likes = countText(item.likes) ? `♡&nbsp;<b>${countText(item.likes)}</b>` : '';
+    // 更新日期挪到首行右端:它和名字同属「这是哪一版」,而第二行留给热度指标。
+    // Spaces 天天有人重新部署,更新时间对它没有信息量(官网的应用卡也不出),
+    // 首行右端改放点赞数,三栏的卡片形状仍然一致。
+    const aside = isSpace
+      ? likes
+      : (dayText(item.updatedAt) ? `更新&nbsp;${esc(dayText(item.updatedAt))}` : '');
+    // 每个指标连图标包成一个 span 再进 flex,否则省略号会断在图标和数字之间,
+    // 出现「♡」留在行尾、数字被切掉。第一位给 .hf-flex:地方不够先压它。
     const meta = [];
-    if(item.task) meta.push(esc(item.task));
-    if(paramText(item.params)) meta.push(`<b>${esc(paramText(item.params))}</b>`);
-    if(dayText(item.updatedAt)) meta.push(`更新&nbsp;${esc(dayText(item.updatedAt))}`);
-    if(countText(item.downloads)) meta.push(`↓&nbsp;<b>${countText(item.downloads)}</b>`);
-    // ⚡ 是官网模型页那个「Inference Available」标记:有厂商接了推理服务才能直接调
-    if(item.inference) meta.push('<b title="已接推理服务，可直接调用">⚡</b>');
-    if(countText(item.likes)) meta.push(`♡&nbsp;<b>${countText(item.likes)}</b>`);
+    if(isSpace){
+      // 简介是这一栏唯一说得清「它是干什么的」的字段,优先给它地方
+      if(item.note) meta.push(`<span class="hf-flex">${esc(item.note)}</span>`);
+      if(item.sdk) meta.push(`<span>${esc(item.sdk)}</span>`);
+    } else {
+      if(item.task) meta.push(`<span class="hf-flex">${esc(item.task)}</span>`);
+      if(paramText(item.params)) meta.push(`<span><b>${esc(paramText(item.params))}</b></span>`);
+      if(countText(item.downloads)) meta.push(`<span>↓&nbsp;<b>${countText(item.downloads)}</b></span>`);
+      // ⚡ 是官网模型页那个「Inference Available」标记:有厂商接了推理服务才能直接调
+      if(item.inference) meta.push('<span><b title="已接推理服务，可直接调用">⚡</b></span>');
+      if(likes) meta.push(`<span>${likes}</span>`);
+    }
     // Spaces 的仓库名常是 wan555 这种缩写,作者给的标题才是给人看的;模型和数据集
     // 反过来,owner/name 本身就是大家引用它的方式,照官网用等宽体出全名。
     const head = isSpace
@@ -2396,18 +2419,18 @@ function dataRailHtml(A){
     const tip = [
       item.repo,
       item.note,
+      isSpace && dayText(item.updatedAt) ? `更新 ${dayText(item.updatedAt)}` : '',
       item.stage && !item.live ? `未在运行（${item.stage}）` : '',
       `${(hf && hf.metric) || '热度分'} ${num(item.trending, 0)}`,
     ].filter(Boolean).join(' · ');
     return `<a class="hf-item" href="${esc(item.url || '')}" target="_blank" rel="noopener" title="${esc(tip)}">
-      <span class="hf-head">${head}${live}</span>
-      ${item.note ? `<span class="hf-note">${esc(item.note)}</span>` : ''}
-      <span class="hf-meta">${meta.map(m => `<span>${m}</span>`).join('<span class="hf-sep">·</span>')}</span>
+      <span class="hf-head">${head}${live}${aside ? `<span class="hf-aside">${aside}</span>` : ''}</span>
+      ${meta.length ? `<span class="hf-meta">${meta.join('<span class="hf-sep">·</span>')}</span>` : ''}
     </a>`;
   };
   // 三栏各自成败,所以按当前那一栏报错;整块都没有栏时才退回整块的 error
   const hfBody = boardBody(hfPage || hf, hfPage ? hfPage.label : '本周热度', hfItems,
-    () => `<div>${hfItems.map(hfCard).join('')}</div>`);
+    () => `<div class="hf-list">${hfItems.map(hfCard).join('')}</div>`);
   const hfNav = hfSections.length > 1 ? `
     <nav class="aa-tabs" aria-label="Hugging Face 本周热度">
       ${hfSections.map(s => `<button type="button" class="${s.key===(hfPage&&hfPage.key)?'on':''}" title="${esc(`${s.label} · 本周热度前 ${(s.items||[]).length}`)}" onclick="App.setHfTab('${esc(s.key)}')">${esc(s.label)}</button>`).join('')}
