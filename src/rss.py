@@ -401,7 +401,7 @@ def curate_display_media(
     return media, current
 
 
-_ANALYSIS_HEADING_RE = re.compile(r"【([^】]+)】|^##\s+(.+)$", re.M)
+_ANALYSIS_HEADING_RE = re.compile(r"【([^】]+)】|^#{2,4}\s+(.+)$", re.M)
 _MAX_PUSHED_BODY_IMAGES = 4
 
 
@@ -474,6 +474,14 @@ def _dedupe_image_candidates(
     return merged
 
 
+def _signal_section_headings(signal: dict[str, Any]) -> list[str]:
+    """插图要挂在小节后面：有 AI 解读时用解读的小节，照抄原文的条目用原文小标题。"""
+    return analysis_section_headings(
+        str(signal.get("deepAnalysis") or signal.get("deep_analysis") or "")
+        or str(signal.get("body") or "")
+    )
+
+
 def _match_heading(label: str, headings: list[str]) -> str:
     want = str(label or "").strip()
     if not want:
@@ -493,9 +501,7 @@ def _llm_pick_article_images(
 
     if not config.LLM_API_KEY or not candidates:
         return None
-    headings = analysis_section_headings(
-        str(signal.get("deepAnalysis") or signal.get("deep_analysis") or "")
-    )
+    headings = _signal_section_headings(signal)
     lines = []
     for index, item in enumerate(candidates):
         lines.append(
@@ -568,9 +574,7 @@ def select_pushed_article_images(
     ):
         return curate_display_media(signal, article_media)
 
-    headings = analysis_section_headings(
-        str(signal.get("deepAnalysis") or signal.get("deep_analysis") or "")
-    )
+    headings = _signal_section_headings(signal)
     media = dict(signal.get("mediaAssets") or signal.get("media_assets") or {})
     cover_url = ""
     cover_index = picked.get("cover_index")

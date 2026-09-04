@@ -1087,10 +1087,12 @@ class DeepAnalysisTest(unittest.TestCase):
 
     def test_structured_editorial_keeps_original_headings(self):
         section = "这是具有事实、机制与判断的长段落。" * 40
+        # 中文媒体与公众号照抄原文，精编只留给其它分类的长文
         fields = {
-            "来源类型": "公众号",
-            "source_id": "huxiu",
-            "来源": "虎嗅",
+            "来源类型": "纯网页",
+            "source_id": "nvidia-blog",
+            "来源": "NVIDIA Blog",
+            "分类": "算力芯片云",
             "原文": (
                 f"导语。\n\n## 直接原因：模型危机\n\n{section}\n\n"
                 f"## 深层原因：组织链条过长\n\n{section}\n\n"
@@ -1112,9 +1114,10 @@ class DeepAnalysisTest(unittest.TestCase):
         """英文小标题必须配中文，存量解读缺中文时要重新生成而不是照搬。"""
         section = "该章节包含足够多的事实和分析。" * 40
         fields = {
-            "来源类型": "公众号",
+            "来源类型": "纯网页",
             "source_id": "nvidia-blog",
             "来源": "NVIDIA Blog",
+            "分类": "算力芯片云",
             "原文": (
                 f"## World Models Are the Foundation\n\n{section}\n\n"
                 f"## Cosmos 3: The Frontier Model\n\n{section}\n\n"
@@ -1141,9 +1144,10 @@ class DeepAnalysisTest(unittest.TestCase):
     def test_chinese_headings_are_not_rebuilt(self):
         section = "该章节包含足够多的事实和分析。" * 40
         fields = {
-            "来源类型": "公众号",
-            "source_id": "huxiu",
-            "来源": "虎嗅",
+            "来源类型": "纯网页",
+            "source_id": "nvidia-blog",
+            "来源": "NVIDIA Blog",
+            "分类": "算力芯片云",
             "原文": (
                 f"## 直接原因\n\n{section}\n\n"
                 f"## 深层原因\n\n{section}\n\n"
@@ -1179,9 +1183,10 @@ class DeepAnalysisTest(unittest.TestCase):
     def test_old_fixed_analysis_is_rebuilt_for_structured_editorial(self):
         section = "该章节包含足够多的事实和分析。" * 40
         fields = {
-            "来源类型": "公众号",
-            "source_id": "huxiu",
-            "来源": "虎嗅",
+            "来源类型": "纯网页",
+            "source_id": "nvidia-blog",
+            "来源": "NVIDIA Blog",
+            "分类": "算力芯片云",
             "原文": (
                 f"## 直接原因\n\n{section}\n\n"
                 f"## 深层原因\n\n{section}\n\n"
@@ -1247,6 +1252,127 @@ class DeepAnalysisTest(unittest.TestCase):
             self.assertEqual(daily._ensure_deep_analysis(fields, analysis), {})
         llm.assert_not_called()
         self.assertEqual(analysis["deep_analysis_cn"], "【核心内容】\n已有解读。")
+
+
+class VerbatimBodyTest(unittest.TestCase):
+    """中文媒体与公众号：详情页照抄原文，连各级小标题一起保留。"""
+
+    def _wechat_fields(self, body: str) -> dict:
+        return {
+            "标题": "国产大模型的一次组织重构",
+            "来源": "虎嗅",
+            "来源类型": "公众号",
+            "source_id": "huxiu",
+            "分类": "中文媒体",
+            "原文": body,
+        }
+
+    def _long_chinese_body(self) -> str:
+        section = "这一段包含具体的事实、数字与作者判断。" * 12
+        return (
+            f"导语交代事件本身。\n\n## 直接原因：模型危机\n\n{section}\n\n"
+            f"### 时间线\n\n{section}\n\n#### 一处细节\n\n{section}\n\n"
+            f"## 对行业的影响\n\n{section}"
+        )
+
+    def test_chinese_wechat_article_goes_verbatim(self):
+        fields = self._wechat_fields(self._long_chinese_body())
+        self.assertTrue(daily.verbatim_body_mode(fields))
+        # 照抄原文时不再做原结构精编，结构由正文本身保留
+        self.assertFalse(daily.editorial_structure_mode(fields))
+        requirement = daily.analysis_requirement(
+            is_paper=False, is_social=False, verbatim_body=True
+        )
+        self.assertIn("照抄原文", requirement)
+        self.assertNotIn("【核心内容】", requirement)
+
+    def test_chinese_media_web_article_goes_verbatim(self):
+        fields = self._wechat_fields(self._long_chinese_body())
+        fields.update({"来源类型": "纯网页", "来源": "机器之心", "source_id": "jiqizhixin"})
+        self.assertEqual(daily.content_type(fields), "文章")
+        self.assertTrue(daily.verbatim_body_mode(fields))
+
+    def test_english_and_short_bodies_keep_deep_analysis(self):
+        english = self._wechat_fields("The company restructured its model team. " * 60)
+        self.assertFalse(daily.verbatim_body_mode(english))
+        short = self._wechat_fields("只抓到一句导语。")
+        self.assertFalse(daily.verbatim_body_mode(short))
+        paper = {"来源类型": "论文", "分类": "中文媒体", "原文": self._long_chinese_body()}
+        self.assertFalse(daily.verbatim_body_mode(paper))
+
+    def test_verbatim_signal_carries_body_and_drops_deep_analysis(self):
+        fields = self._wechat_fields(self._long_chinese_body())
+        analysis = {
+            "title_cn": "国产大模型的一次组织重构",
+            "summary_cn": "摘要。",
+            "deep_analysis_cn": "【核心内容】\n存量解读。",
+            "why": "重要。",
+            "impact": 70,
+            "novelty": 60,
+            "actionability": 50,
+            "urgency": "中",
+            "topics": ["LLM"],
+        }
+        signal = daily._signal_from_fields("rec1", fields, analysis)
+        self.assertTrue(signal["bodyVerbatim"])
+        self.assertEqual(signal["deepAnalysis"], "")
+        self.assertEqual(signal["editorialStructure"], "")
+        for marker in ("## 直接原因：模型危机", "### 时间线", "#### 一处细节"):
+            self.assertIn(marker, signal["body"])
+
+    def test_verbatim_entries_skip_deep_analysis_backfill(self):
+        fields = self._wechat_fields(self._long_chinese_body())
+        fields["AI深度解读"] = "【核心内容】\n存量解读。"
+        analysis = {"summary_cn": "摘要", "why": "重要"}
+        with mock.patch.object(daily.report, "_llm_json") as llm:
+            self.assertEqual(daily._ensure_deep_analysis(fields, analysis), {})
+        llm.assert_not_called()
+        self.assertEqual(analysis["deep_analysis_cn"], "")
+
+    def test_published_record_carries_verbatim_body(self):
+        record = {
+            "record_id": "rec2",
+            "fields": {
+                **self._wechat_fields(self._long_chinese_body()),
+                "中文摘要": "摘要。",
+                "AI深度解读": "【核心内容】\n存量解读。",
+                "链接": "https://mp.weixin.qq.com/s/abc",
+            },
+        }
+        signal = publish._signal_from_record(record)
+        self.assertTrue(signal["bodyVerbatim"])
+        self.assertEqual(signal["deepAnalysis"], "")
+        self.assertIn("## 对行业的影响", signal["body"])
+
+    def test_tail_notices_and_brand_signature_are_dropped(self):
+        body = (
+            "正文最后一段结论。\n\n"
+            "AI行业信号 频道: 前沿科技\n\n"
+            "本内容由作者授权发布，观点仅代表作者本人，不代表虎嗅立场。\n\n"
+            "如对本稿件有异议或投诉，请联系 tougao@huxiu.com。"
+        )
+        self.assertEqual(daily.clean_body(body, "虎嗅"), "正文最后一段结论。")
+        self.assertEqual(
+            daily.clean_body("正文结论。\n\n雷峰网 雷峰网", "AI科技评论 / 雷峰网"),
+            "正文结论。",
+        )
+        # 只清理尾部：同样的说法出现在正文中段时不动
+        middle = "本内容由作者授权发布，仅供参考。\n\n真正的正文段落。"
+        self.assertEqual(daily.clean_body(middle, "虎嗅"), middle)
+
+    def test_html_extraction_keeps_heading_levels(self):
+        html = (
+            "<h2>一级小节</h2><p>段落一。</p>"
+            "<h3>二级小节</h3><p>段落二。</p>"
+            "<h4>三级小节</h4><p>段落三。</p>"
+            "<h5>更深一层</h5><p>段落四。</p>"
+        )
+        text = scrape.html_to_text(html)
+        self.assertIn("## 一级小节", text)
+        self.assertIn("### 二级小节", text)
+        self.assertIn("#### 三级小节", text)
+        # h5/h6 罕见，并到四级，不再生出更深的层级
+        self.assertIn("#### 更深一层", text)
 
 
 if __name__ == "__main__":

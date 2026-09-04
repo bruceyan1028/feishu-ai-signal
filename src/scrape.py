@@ -136,7 +136,7 @@ def _normalize_paragraphs(text: str) -> str:
     text = re.sub(r"[ \t\u00a0\u3000]+", " ", text)
     text = re.sub(r" *\n *", "\n", text)
     text = re.sub(r"\n{3,}", "\n\n", text)
-    text = re.sub(r"(?m)^(##\s+)\*{1,2}(.+?)\*{1,2}\s*$", r"\1\2", text)
+    text = re.sub(r"(?m)^(#{2,4}\s+)\*{1,2}(.+?)\*{1,2}\s*$", r"\1\2", text)
     return text.strip()
 
 
@@ -147,7 +147,7 @@ def _one_line(text: str) -> str:
 _TABLE_RE = re.compile(r"(?is)<table\b[^>]*>(.*?)</table>")
 _ROW_RE = re.compile(r"(?is)<tr\b[^>]*>(.*?)</tr>")
 _CELL_RE = re.compile(r"(?is)<t[hd]\b[^>]*>(.*?)</t[hd]>")
-_EDITORIAL_HEADING_RE = re.compile(r"(?is)<h[2-5]\b[^>]*>(.*?)</h[2-5]>")
+_EDITORIAL_HEADING_RE = re.compile(r"(?is)<h([2-6])\b[^>]*>(.*?)</h[2-6]>")
 
 
 def _table_to_text(match: re.Match[str]) -> str:
@@ -168,9 +168,14 @@ def _table_to_text(match: re.Match[str]) -> str:
 
 
 def _editorial_heading_to_text(match: re.Match[str]) -> str:
-    """把原文小标题保留为轻量标记，供精编与网页恢复原有结构。"""
-    title = _one_line(_TAG_RE.sub(" ", match.group(1)))
-    return f"\n\n## {title}\n\n" if title else " "
+    """把原文小标题保留为轻量标记，供精编与网页恢复原有结构。
+
+    层级一起留住：中文媒体与公众号的详情页照抄原文，h2/h3/h4 的从属关系就是作者
+    的论证骨架，全压成 `##` 会把子小节读成并列章节。h5/h6 罕见，并到 `####`。
+    """
+    level = min(int(match.group(1)), 4)
+    title = _one_line(_TAG_RE.sub(" ", match.group(2)))
+    return f"\n\n{'#' * level} {title}\n\n" if title else " "
 
 
 def html_to_text(html: str) -> str:

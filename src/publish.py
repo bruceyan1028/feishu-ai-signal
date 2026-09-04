@@ -103,6 +103,9 @@ def _signal_from_record(record: dict[str, Any]) -> dict[str, Any]:
     full_text = paper_metrics.get("full_text") or {}
     if not isinstance(full_text, dict):
         full_text = {}
+    social_metrics = _json_cell(fields.get("社媒指标"), {})
+    if not isinstance(social_metrics, dict):
+        social_metrics = {}
     signal = {
         "recordId": str(record.get("record_id") or ""),
         "sourceId": str(daily.scalar(fields.get("source_id")) or ""),
@@ -126,6 +129,13 @@ def _signal_from_record(record: dict[str, Any]) -> dict[str, Any]:
         "mediaAssets": daily.media_assets(fields.get("媒体资源")),
         "editorialStructure": "source" if daily.editorial_structure_mode(fields) else "",
     }
+    if social_metrics:
+        signal["socialMetrics"] = social_metrics
+    if daily.verbatim_body_mode(fields):
+        # 中文媒体/公众号的详情页照抄原文，历史简报重建也要带上正文
+        signal.update(daily.display_body(fields))
+        signal["bodyVerbatim"] = True
+        signal["deepAnalysis"] = ""
     if full_text:
         signal.update(
             {
@@ -160,6 +170,37 @@ def _within_source_window(
     hours = max(1, min(7 * 24, int(lookback_hours[source_id])))
     published = datetime.fromtimestamp(published_ms / 1000, CN_TZ)
     return brief_end - timedelta(hours=hours) <= published <= brief_end
+
+
+SOCIAL_WINDOW_DAYS = 3
+SOCIAL_POST_LIMIT = 40
+
+
+def recent_social_posts(
+    entries: dict[str, dict[str, Any]],
+    brief_date: str,
+    *,
+    days: int = SOCIAL_WINDOW_DAYS,
+    limit: int = SOCIAL_POST_LIMIT,
+) -> list[dict[str, Any]]:
+    """社媒帖子不占简报的信号名额，按发布时间独立成栏。"""
+    try:
+        end = datetime.strptime(brief_date, "%Y-%m-%d").replace(tzinfo=CN_TZ) + timedelta(days=1)
+    except (TypeError, ValueError):
+        return []
+    start = end - timedelta(days=max(1, days))
+    picked = []
+    for signal in entries.values():
+        if signal.get("contentType") != "社交媒体帖子":
+            continue
+        stamp = int(signal.get("publishedAtMs") or 0)
+        if not stamp:
+            continue
+        when = datetime.fromtimestamp(stamp / 1000, CN_TZ)
+        if start <= when <= end:
+            picked.append(signal)
+    picked.sort(key=lambda s: int(s.get("publishedAtMs") or 0), reverse=True)
+    return picked[:limit]
 
 
 def load_entry_pool(token: str) -> dict[str, dict[str, Any]]:
@@ -209,6 +250,7 @@ def load_recent_briefs(
                 "intro": str(daily.scalar(fields.get("导语")) or ""),
                 "bullets": _json_cell(fields.get("关键要点"), []),
                 "signals": signals,
+                "socialPosts": recent_social_posts(entries, date),
                 "briefRecordId": str(record.get("record_id") or ""),
                 "briefTableId": table_id,
             }
@@ -473,7 +515,7 @@ def build_site(
 
 
 def refresh_side_boards(site: Path | str) -> Path:
-    """日报发布后立刻重拉 AA 智能指数与行情，避免本机只跑 publish 时沿用旧快照。"""
+    """日报发布后立刻重拉 AA 智能指数、HF 热度与行情，避免本机只跑 publish 时沿用旧快照。"""
     from . import dashboard
 
     output = Path(site) / "data" / "dashboard-latest.json"

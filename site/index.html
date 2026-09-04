@@ -157,6 +157,8 @@
   }
   /* --- 信号卡片:可点,悬停做硬阴影位移(编辑/野兽派风) --- */
   .signal-card { cursor: pointer; transition: transform .12s ease, box-shadow .12s ease; align-items: stretch; height: 288px; }
+  /* 帖子卡是竖排的完整帖子，长度随正文和媒体走，不能锁在文章卡的 288px 上 */
+  .signal-card.social-card { display: block; height: auto; }
   .signal-card:hover { transform: translate(-2px, -2px); box-shadow: 6px 6px 0 var(--ds-accent) !important; }
   .signal-card:hover .card-hint { opacity: 1; transform: translateX(0); }
   .card-hint { opacity: 0; transform: translateX(-4px); transition: opacity .2s ease, transform .2s ease; }
@@ -915,6 +917,9 @@ async function loadBrief(){
       date: s.publishedDate || data.date || '',
       summary: s.summary || '',
       deepAnalysis: s.deepAnalysis || '',
+      body: s.body || '',
+      bodyVerbatim: !!s.bodyVerbatim,
+      bodyTruncated: !!s.bodyTruncated,
       editorialStructure: s.editorialStructure || '',
       why: s.why || '',
       novel: Number(s.novelty) || 0,
@@ -924,6 +929,7 @@ async function loadBrief(){
       mediaAssets: s.mediaAssets || {images:[], videos:[]},
       transcriptEvidence: s.transcriptEvidence || '',
       podcastMetrics: s.podcastMetrics || null,
+      socialMetrics: s.socialMetrics || null,
       topComments: Array.isArray(s.topComments) ? s.topComments : [],
       commentFetchError: s.commentFetchError || '',
       eventAggregation: s.eventAggregation || null,
@@ -1749,6 +1755,127 @@ function avatarHtml(src){
   return `<span title="${esc(src)}" style="position: relative; flex: none; width: 30px; height: 30px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; overflow: hidden; background: ${a.bg}; color: ${a.color}; border: 1px solid ${a.border || 'rgba(22,19,15,.16)'}; font-family: 'Geist Mono', ui-monospace, Menlo, monospace; font-size: 11px; font-weight: 700; letter-spacing: -.03em; box-shadow: 0 1px 3px rgba(0,0,0,.4);">${a.t}${img}</span>`;
 }
 
+// --- X 帖子卡:按 X 原生结构渲染，作者 / 原创或引用 / 媒体 / 互动数都来自 socialMetrics ---
+const X_VERIFIED_SVG = '<svg viewBox="0 0 24 24" style="width:15px;height:15px;fill:#1d9bf0;flex:none;"><path d="M22.25 12c0-1.43-.88-2.67-2.19-3.34.46-1.39.2-2.9-.81-3.91s-2.52-1.27-3.91-.81C14.67 2.63 13.43 1.75 12 1.75s-2.67.88-3.34 2.19c-1.39-.46-2.9-.2-3.91.81s-1.27 2.52-.81 3.91C2.63 9.33 1.75 10.57 1.75 12s.88 2.67 2.19 3.34c-.46 1.39-.2 2.9.81 3.91s2.52 1.27 3.91.81c.67 1.31 1.91 2.19 3.34 2.19s2.67-.88 3.34-2.19c1.39.46 2.9.2 3.91-.81s1.27-2.52.81-3.91c1.31-.67 2.19-1.91 2.19-3.34zm-11.71 4.2L6.8 12.46l1.41-1.42 2.26 2.26 4.8-5.23 1.47 1.36-6.2 6.77z"/></svg>';
+const X_ACT_SVG = {
+  reply:'<path d="M21 11.5a8.4 8.4 0 0 1-9 8.4 9 9 0 0 1-3.9-.9L3 20.5l1.6-4.6A8.4 8.4 0 0 1 3.6 11.5a8.4 8.4 0 0 1 8.4-8.4 8.4 8.4 0 0 1 9 8.4z"/>',
+  repost:'<path d="M17 1l4 4-4 4"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><path d="M7 23l-4-4 4-4"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/>',
+  like:'<path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1.1 1L12 21.2l7.7-7.7 1.1-1a5.5 5.5 0 0 0 0-7.9z"/>',
+  views:'<path d="M3 20h4V10H3zM10 20h4V4h-4zM17 20h4v-7h-4z"/>',
+  bookmark:'<path d="M6 3h12v18l-6-5-6 5z"/>',
+};
+function xCount(n){
+  const v = Number(n) || 0;
+  if(!v) return '';
+  if(v >= 100000) return Math.round(v/10000) + '万';
+  if(v >= 10000) return (v/10000).toFixed(1).replace(/\.0$/,'') + '万';
+  return v.toLocaleString('en-US');
+}
+function xAvatarHtml(url, name, size){
+  const px = size || 40;
+  const initials = String(name || '').trim().split(/\s+/).slice(0,2).map(w=>w[0]||'').join('').toUpperCase() || 'X';
+  const img = url ? `<img src="${esc(url)}" alt="" loading="lazy" onerror="this.remove()" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;">` : '';
+  return `<span style="position:relative;flex:none;width:${px}px;height:${px}px;border-radius:50%;overflow:hidden;background:#ddd8cd;color:#55504a;display:inline-flex;align-items:center;justify-content:center;font-family:'Geist Mono',monospace;font-size:${Math.round(px/3)}px;font-weight:700;">${esc(initials)}${img}</span>`;
+}
+function xMediaHtml(assets, radius){
+  const a = assets || {};
+  const videos = (a.videos || []).filter(v=>v && (v.thumbnailUrl || v.url));
+  const images = (a.images || []).filter(i=>i && i.url);
+  const r = radius || 16;
+  if(videos.length){
+    const v = videos[0];
+    const secs = Number(v.durationSec) || 0;
+    const dur = secs ? `${Math.floor(secs/60)}:${String(Math.round(secs%60)).padStart(2,'0')}` : '';
+    return `<div style="position:relative;border:1px solid #cfd9de;border-radius:${r}px;overflow:hidden;margin-bottom:11px;background:#e9e5dd;">
+      <img src="${esc(v.thumbnailUrl || v.url)}" alt="" loading="lazy" onerror="this.remove()" style="display:block;width:100%;max-height:340px;object-fit:cover;">
+      <span style="position:absolute;inset:0;margin:auto;width:52px;height:52px;border-radius:50%;background:rgba(0,0,0,.6);display:flex;align-items:center;justify-content:center;"><svg viewBox="0 0 24 24" style="width:19px;height:19px;fill:#fff;margin-left:3px;"><path d="M8 5v14l11-7z"/></svg></span>
+      ${dur?`<span style="position:absolute;left:11px;bottom:11px;background:rgba(0,0,0,.78);color:#fff;font-family:'Geist Mono',monospace;font-size:11px;font-weight:700;padding:2px 7px;border-radius:4px;">${esc(dur)}</span>`:''}
+    </div>`;
+  }
+  if(!images.length) return '';
+  const shown = images.slice(0,4);
+  if(shown.length === 1){
+    return `<div style="border:1px solid #cfd9de;border-radius:${r}px;overflow:hidden;margin-bottom:11px;background:#e9e5dd;">
+      <img src="${esc(shown[0].url)}" alt="" loading="lazy" onerror="this.closest('div').remove()" style="display:block;width:100%;max-height:340px;object-fit:cover;"></div>`;
+  }
+  return `<div style="display:grid;grid-template-columns:1fr 1fr;gap:2px;border:1px solid #cfd9de;border-radius:${r}px;overflow:hidden;margin-bottom:11px;background:#e9e5dd;">
+    ${shown.map(i=>`<img src="${esc(i.url)}" alt="" loading="lazy" onerror="this.remove()" style="display:block;width:100%;height:168px;object-fit:cover;">`).join('')}
+  </div>`;
+}
+function xQuoteHtml(q){
+  if(!q || !(q.text || q.account || (q.media_assets && ((q.media_assets.images||[]).length || (q.media_assets.videos||[]).length)))) return '';
+  const dt = String(q.created_at || '').slice(0,10);
+  const head = q.account
+    ? `<span style="display:flex;align-items:center;gap:5px;margin-bottom:4px;">
+         ${xAvatarHtml(q.avatar, q.account_name || q.account, 20)}
+         <span style="font-size:14px;font-weight:700;">${esc(q.account_name || q.account)}</span>
+         ${q.verified ? X_VERIFIED_SVG : ''}
+         <span style="font-size:13.5px;color:#536471;">@${esc(q.account)}${dt?' · '+esc(dt):''}</span>
+       </span>`
+    : `<span style="display:block;margin-bottom:4px;font-family:'Geist Mono',monospace;font-size:11px;color:#536471;">被引原帖</span>`;
+  return `<div style="border:1px solid #cfd9de;border-radius:16px;padding:11px 13px;margin-bottom:11px;">
+    ${head}
+    ${q.text?`<p style="margin:0;font-size:14px;line-height:1.5;color:#0f1419;">${esc(String(q.text).slice(0,280))}</p>`:''}
+    ${xMediaHtml(q.media_assets, 12)}
+  </div>`;
+}
+function socialCardHtml(A, s, queued, canQueue){
+  const mono = "'Geist Mono', ui-monospace, Menlo, monospace";
+  const m = s.socialMetrics || {};
+  const num = String(s.rank).padStart(2,'0');
+  const account = String(m.account || '').replace(/^@/,'');
+  const name = m.account_name || account || s.source;
+  const dt = String(s.date || '');
+  const threads = Number(m.thread_count) || 0;
+  const kindChip = m.is_quote
+    ? `<span style="font-family:'Geist Mono',monospace;font-size:10px;font-weight:700;padding:2px 7px;border-radius:999px;border:1px solid #cfd9de;color:#536471;white-space:nowrap;">引用${m.quoted && m.quoted.account ? ' @'+esc(m.quoted.account) : ''}</span>`
+    : `<span style="font-family:'Geist Mono',monospace;font-size:10px;font-weight:700;padding:2px 7px;border-radius:999px;background:#0f1419;color:#fff;white-space:nowrap;">原创${threads>1?' · 线程 '+threads:''}</span>`;
+  const act = (key, val) => `<span style="display:inline-flex;align-items:center;gap:6px;font-size:13px;color:#536471;"><svg viewBox="0 0 24 24" style="width:17px;height:17px;fill:none;stroke:#536471;stroke-width:1.7;stroke-linecap:round;">${X_ACT_SVG[key]}</svg>${esc(val)}</span>`;
+  const catChip = v => `<span style="font-family: ${mono}; font-weight: 700; color: ${A.accent}; background: ${A.accentFaint}; border: 1px solid ${A.accentBorder}; padding: 3px 9px;">${esc(v)}</span>`;
+  const tagsHtml = (s.tags || []).filter(t=>t && t!=='其他')
+    .map(t=>`<span style="font-family: ${mono}; font-weight: 600; color: ${UI.text2}; background: rgba(22,19,15,.04); border: 1px solid ${UI.border}; padding: 3px 8px; white-space: nowrap;">#${esc(t)}</span>`).join('');
+  // 正文原样展示；帖子本身就短，不像文章那样只给摘要
+  const body = String(s.title || '').trim();
+  return `
+  <article id="signal-${s.rank}" class="signal-card social-card" onclick="App.openDetail(${s.rank})" style="position:relative;background:${UI.card};border:1.5px solid var(--ds-ink-line);box-shadow:5px 5px 0 rgba(22,19,15,.07);overflow:hidden;">
+    <div class="sc-meta" style="display:flex;align-items:center;gap:8px;padding:0 46px 0 0;border-bottom:1px solid var(--ds-ink-line);font-family:${mono};font-size:10.5px;letter-spacing:.04em;color:${UI.text3};flex-wrap:wrap;">
+      <span style="min-width:40px;height:38px;background:${A.accent};color:#fff;display:inline-flex;align-items:center;justify-content:center;font-family:${mono};font-size:15px;font-weight:700;border-right:1.5px solid var(--ds-ink-line);margin-right:6px;">${num}</span>
+      ${catChip(s.cat)}
+      <span style="font-family:${mono};font-weight:700;color:#17613a;background:#e5f5e9;border:1px solid #8bc7a0;padding:3px 9px;">社交媒体帖子</span>
+      ${tagsHtml}
+      <span style="margin-left:auto;">${esc(dt)}</span>
+    </div>
+    <button onclick="event.stopPropagation(); App.addPending(${s.rank})" title="${!canQueue?'公开站只读；在本地配置台可加入周报待分析':queued?'已在周报待分析':'加入周报待分析'}" ${queued||!canQueue?'disabled':''} style="position:absolute;top:0;right:0;z-index:2;width:36px;height:36px;border:none;border-left:1px solid var(--ds-ink-line);border-bottom:1px solid var(--ds-ink-line);background:${queued?A.accent:'#fff'};color:${queued?'#fff':UI.text3};font-size:14px;cursor:${queued||!canQueue?'default':'pointer'};opacity:${canQueue?1:.45};display:inline-flex;align-items:center;justify-content:center;">${queued?'✓':'＋'}</button>
+
+    <div style="padding:14px 18px 13px;color:#0f1419;">
+      <div style="display:flex;align-items:center;gap:5px;margin-bottom:3px;">
+        ${xAvatarHtml(m.account_avatar, name, 40)}
+        <span style="margin-left:5px;font-size:15px;font-weight:700;">${esc(name)}</span>
+        ${m.account_verified ? X_VERIFIED_SVG : ''}
+        <span style="font-size:14px;color:#536471;">@${esc(account)}</span>
+        <span style="font-size:14px;color:#536471;">· ${esc(dt)}</span>
+        ${kindChip}
+      </div>
+      <div style="padding-left:50px;">
+        <p style="margin:0 0 6px;font-size:14px;font-weight:700;line-height:1.5;border-left:3px solid ${A.accent};padding-left:9px;">${esc(s.zhTitle)}</p>
+        ${body?`<p style="margin:0 0 10px;font-size:15px;line-height:1.5;white-space:pre-wrap;display:-webkit-box;-webkit-line-clamp:6;-webkit-box-orient:vertical;overflow:hidden;">${esc(body)}</p>`:''}
+        ${xMediaHtml(s.mediaAssets, 16)}
+        ${xQuoteHtml(m.quoted)}
+        <div style="display:flex;align-items:center;justify-content:space-between;max-width:440px;margin-top:2px;">
+          ${act('reply', xCount(m.replies) || '0')}
+          ${act('repost', xCount((Number(m.reposts)||0) + (Number(m.quotes)||0)) || '0')}
+          ${act('like', xCount(m.likes) || '0')}
+          ${m.impressions ? act('views', xCount(m.impressions)) : ''}
+          ${act('bookmark', xCount(m.bookmarks) || '')}
+        </div>
+      </div>
+    </div>
+    <div class="sc-why" style="padding:12px 18px;border-top:1px solid var(--ds-ink-line);background:${A.accentSoft};border-left:3px solid ${A.accent};">
+      <p style="margin:0;font-size:12.5px;line-height:1.65;color:${UI.text2};display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;"><strong style="color:${A.accentDeep};">为何重要</strong> · ${esc(s.why)}</p>
+    </div>
+  </article>`;
+}
+
 // 新闻主题 logo:按标题 / 标签匹配主题品牌(而非信号来源)
 const TOPIC_BRANDS = [
   { re: /Claude|Anthropic|Sonnet/i,        t: 'C',   bg: '#2a1a12', color: '#e0916f', domain: 'anthropic.com' },
@@ -2297,6 +2424,8 @@ function briefHtml(A){
     // 否则读者不知道这条能不能被排进下期周报。
     const queued = state.pending.includes(s.recordId);
     const canQueue = state.pendingWritable;
+    // 帖子有自己的形态：作者、原创或引用、被引原帖、互动数，套文章卡会全丢
+    if(s.contentType === '社交媒体帖子' && s.socialMetrics) return socialCardHtml(A, s, queued, canQueue);
     const num = String(s.rank).padStart(2,'0');
     const tp = topicFor(s);
     const imgUrl = topicImageUrl(s);
@@ -2724,12 +2853,113 @@ function tableBlockHtml(block){
   return `<div style="margin:22px 0; overflow-x:auto;"><table style="width:100%; border-collapse:collapse; background:#fff;">${body}</table></div>`;
 }
 
+const PROSE_CSS = 'font-family:"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif; letter-spacing:0; word-spacing:0; text-align:left; text-justify:none; word-break:normal; overflow-wrap:break-word;';
+
+// 仅当原图自带说明文字时才显示图注，不再加「原文配图 N」这类编号标签
+function figureHtml(s, item){
+  return `<figure style="margin:24px 0; border:1px solid ${UI.border}; background:#fff;"><img src="${esc(item.url)}" alt="${esc(item.alt||s.zhTitle)}" loading="lazy" onerror="this.closest('figure').remove()" style="display:block; width:100%; max-height:560px; object-fit:contain;">${item.alt?`<figcaption style="padding:9px 12px; font-size:11.5px; color:${UI.text3};">${esc(item.alt)}</figcaption>`:''}</figure>`;
+}
+
+// 正文配图:模型选过图时按小标题就位,否则在段落间均匀铺开
+function bodyImagePlacer(s, images, paraCount){
+  const llmPlaced = s.mediaAssets?.curatedBy === 'llm';
+  let pending = images.slice();
+  let placed = 0;
+  const step = !llmPlaced && images.length && paraCount
+    ? Math.max(1, Math.ceil(paraCount / images.length))
+    : 0;
+  return {
+    step,
+    // 小标题名可能与模型记下的写法略有出入,双向包含即算命中
+    forHeading(heading){
+      const key = String(heading||'').trim();
+      if(!llmPlaced || !key) return [];
+      const matched = [], rest = [];
+      pending.forEach(item=>{
+        const h = String(item.afterHeading || item.after_heading || '').trim();
+        if(h && (h === key || key.includes(h) || h.includes(key))) matched.push(item);
+        else rest.push(item);
+      });
+      pending = rest;
+      return matched;
+    },
+    next(){ return images[placed] ? images[placed++] : null; },
+    rest(){ return llmPlaced ? pending : images.slice(placed); },
+  };
+}
+
+// 后端给不出正文时退回 AI 解读,详情页不能留白
+function verbatimBodyMode(s){
+  return !!(s && s.bodyVerbatim && String(s.body||'').trim());
+}
+
+// 原文里的 **强调** 是作者自己的排版,照抄时按加粗渲染而不是留下星号
+function verbatimProse(text){
+  return zhProseHtml(esc(text).replace(/\n/g,'<br>')).replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+}
+
+// 中文媒体与公众号:详情页照抄原文,连各级小标题一起保留,不做任何改写
+function verbatimBody(A, s){
+  const figure = item => figureHtml(s, item);
+  const summary = s.summary
+    ? `<div style="margin: 0 0 22px; padding: 12px 14px; background: ${A.accentSoft}; border: 1px solid ${A.accentBorder}; border-left: 3px solid ${A.accent};">
+        <div style="font-size: 11px; font-weight: 700; letter-spacing: .04em; color: ${A.accentDeep}; margin-bottom: 7px;">✦ 结论速览</div>
+        <div style="font-size: 15px; line-height: 2; color: ${UI.text2}; ${PROSE_CSS}">${zhProseHtml(esc(s.summary))}</div>
+      </div>`
+    : '';
+  const coverUrl = String(s.imageUrl || s.mediaAssets?.cover || '').split('?')[0].toLowerCase();
+  const images = (s.mediaAssets?.images || []).filter(item=>{
+    if(!item?.url) return false;
+    return item.url.split('?')[0].toLowerCase() !== coverUrl;
+  }).slice(0,8);
+  const videos = s.kind==='视频' ? [] : (s.mediaAssets?.videos || []).filter(item=>item?.embedUrl).slice(0,1);
+  const paras = splitParagraphs(s.body);
+  if(!paras.length){
+    return `${summary}<p style="margin:0 0 18px; font-size:15px; line-height:2; color:${UI.text2}; ${PROSE_CSS}">${zhProseHtml(esc(`${s.source} 的这条内容暂未抓到可展示的正文,可点击下方「阅读原文」查看。`))}</p>${originalLink(A, s)}`;
+  }
+  const placer = bodyImagePlacer(s, images, paras.length);
+  const blocks = [];
+  // 原文小标题按层级排版:二级是章节,三级/四级是章节内的分层
+  const headingBlock = (level, raw) => {
+    const text = esc(String(raw).replace(/\*\*/g, ''));
+    if(level >= 4) return `<h4 style="margin:26px 0 10px; font-size:14.5px; line-height:1.5; font-weight:700; color:${UI.text2};">${text}</h4>`;
+    if(level === 3) return `<h3 style="margin:28px 0 12px; padding-bottom:7px; border-bottom:1px solid ${UI.border}; font-size:16.5px; line-height:1.5; color:${UI.text};">${text}</h3>`;
+    return `<div style="margin:32px 0 14px; padding:10px 13px; border-left:4px solid ${A.accent}; background:${A.accentFaint};">
+      <h2 style="margin:0; font-size:19px; line-height:1.5; letter-spacing:-.01em; color:${UI.text};">${text}</h2>
+    </div>`;
+  };
+  paras.forEach((para, index)=>{
+    const heading = para.match(/^(#{2,4})\s+([^\n]+)([\s\S]*)$/);
+    if(heading){
+      const level = heading[1].length;
+      const text = heading[2].trim();
+      blocks.push(headingBlock(level, text));
+      const trailing = heading[3].trim();
+      if(trailing) blocks.push(`<p style="margin:0 0 18px; font-size:15px; line-height:2.08; color:${UI.text2}; ${PROSE_CSS}">${verbatimProse(trailing)}</p>`);
+      placer.forHeading(text).forEach(item=> blocks.push(figure(item)));
+      return;
+    }
+    const table = tableBlockHtml(para);
+    blocks.push(table || `<p style="margin:0 0 18px; font-size:15px; line-height:2.08; color:${UI.text2}; ${PROSE_CSS}">${verbatimProse(para)}</p>`);
+    if(placer.step && (index + 1) % placer.step === 0){
+      const item = placer.next();
+      if(item) blocks.push(figure(item));
+    }
+  });
+  placer.rest().forEach(item=> blocks.push(figure(item)));
+  videos.forEach(item=> blocks.push(`<div style="margin:24px 0;background:#000;">${videoFacadeHtml(item, s.zhTitle, s.url, s.imageUrl)}</div>`));
+  const truncated = s.bodyTruncated
+    ? `<div style="margin:6px 0 0; padding:10px 13px; border:1px dashed var(--ds-ink-line); font-size:12.5px; color:${UI.text3};">正文按篇幅上限截断,完整内容请见原文。</div>`
+    : '';
+  return `${summary}${blocks.join('')}${truncated}${originalLink(A, s)}`;
+}
+
 // 详情正文只展示 AI 提炼内容与原文配图；原文保留在跳转链接中，不再整篇贴入卡片
 function articleBody(A, s){
-  const proseStyle = 'font-family:"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif; letter-spacing:0; word-spacing:0; text-align:left; text-justify:none; word-break:normal; overflow-wrap:break-word;';
+  if(verbatimBodyMode(s)) return verbatimBody(A, s);
+  const proseStyle = PROSE_CSS;
   const P = html => `<p style="margin: 0 0 18px; font-size: 15px; line-height: 2; color: ${UI.text2}; ${proseStyle}">${zhProseHtml(html)}</p>`;
-  // 仅当原图自带说明文字时才显示图注，不再加「原文配图 N」这类编号标签
-  const figure = item => `<figure style="margin:24px 0; border:1px solid ${UI.border}; background:#fff;"><img src="${esc(item.url)}" alt="${esc(item.alt||s.zhTitle)}" loading="lazy" onerror="this.closest('figure').remove()" style="display:block; width:100%; max-height:560px; object-fit:contain;">${item.alt?`<figcaption style="padding:9px 12px; font-size:11.5px; color:${UI.text3};">${esc(item.alt)}</figcaption>`:''}</figure>`;
+  const figure = item => figureHtml(s, item);
 
   // 短摘要负责速览，主体使用按内容类型生成的深度解读
   const summary = s.summary || `${s.source} 的这条内容暂未生成摘要，可点击下方「阅读原文」查看。`;
@@ -3002,8 +3232,9 @@ function detailHtml(A){
       </div>
     </div>`).join('');
 
+  const verbatim = verbatimBodyMode(s);
   const tabs = [
-    { key:'正文', label:'AI 摘要' },
+    { key:'正文', label: verbatim ? '原文全文' : 'AI 摘要' },
     { key:'事件聚合', label:'事件聚合' },
     { key:'讨论', label:'讨论 · 反馈' },
   ];
@@ -3016,8 +3247,8 @@ function detailHtml(A){
       <div style="max-width: 760px; margin: 0 auto;">
         ${detailMediaHtml(A, s)}
         <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
-          <span style="width: 22px; height: 22px; border-radius: 6px; display: inline-flex; align-items: center; justify-content: center; background: ${A.accentSoft}; border: 1px solid ${A.accentBorder}; color: ${A.accentBright}; font-size: 12px;">✦</span>
-          <span style="font-size: 13px; font-weight: 700; color: ${UI.text};">AI 提炼内容</span>
+          <span style="width: 22px; height: 22px; border-radius: 6px; display: inline-flex; align-items: center; justify-content: center; background: ${verbatim?'rgba(22,19,15,.05)':A.accentSoft}; border: 1px solid ${verbatim?UI.border:A.accentBorder}; color: ${verbatim?UI.text2:A.accentBright}; font-size: 12px;">${verbatim?'原':'✦'}</span>
+          <span style="font-size: 13px; font-weight: 700; color: ${UI.text};">${verbatim?'原文全文 · 未经改写':'AI 提炼内容'}</span>
         </div>
         ${sourceVideoHtml(s)}
         ${sourcePodcastHtml(A, s)}

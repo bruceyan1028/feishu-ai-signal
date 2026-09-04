@@ -275,6 +275,8 @@ python -m src.health --days 30
 
 英文正文按优先级/影响分翻译，上限见 `BODY_TRANSLATE_*`。详情页展示深度解读，不堆整篇译文。
 
+例外：分类为「中文媒体」或载体为「公众号」的中文稿走 `daily.verbatim_body_mode`，详情页照抄原文（连 `##` / `###` / `####` 各级小标题一起保留），不生成也不展示 `deepAnalysis`。原文抓得太短（<200 字）或其实是英文时自动退回深度解读那条线。
+
 同事件：`cluster` 用标题相似度选主条目，其它源进 `eventPeers` / 详情页「事件聚合」。
 
 单条 LLM 失败会跳过该条，不整份作废；大面积失败才中止发布。
@@ -340,7 +342,7 @@ python -m src.health --days 30
 - 深色终端风：纯黑底白字，涨红跌绿跟中文财经惯例。榜单只出模型名不出厂商名（logo 已经把归属说清楚了，再补一遍文字只是把行撑宽）。
 - 侧栏只有 300px 出头。吞吐、单价、当日区间、市值这些**需要横向对比才有意义的列，在窄栏里直接不渲染**——挤成三号字既比不出差距也没人看，要这些数字的人会点进数据源。
 - 智能指数也不占独立一列：填进模型名那一格的背景，长度按**可见区间**（末位→榜首）铺开，绝对值叠在字右边。一根条 + 一行字用同一块地方，名字也能完整显示。用 0 或 100 做基准时前 12 名只差几分，所有行会填成一样长。
-- `dashboard-latest.json` 在 `publish._PERSISTENT_DATA_GLOBS` 里：日报重建会清空 `site/`，先暂存旧快照再重拉 AA 与行情；新拉失败则沿用昨天的，避免首页空白。
+- `dashboard-latest.json` 在 `publish._PERSISTENT_DATA_GLOBS` 里：日报重建会清空 `site/`，先暂存旧快照再重拉 AA、HF 与行情；新拉失败则沿用昨天的，避免首页空白。
 
 ### 话题热力图
 
@@ -636,6 +638,8 @@ python -m tools.export_seed
 ## 前端数据契约（给改 UI 的人）
 
 `brief-*.json` 的 `signals[]` 常用字段：`recordId`、`sourceId`、`title`、`titleCn`、`source`、`url`、`category`、`contentType`、`tier`、`priority`、`publishedDate`、`summary`、`why`、`deepAnalysis`、`impact`、`novelty`、`actionability`、`urgency`、`tags`、`imageUrl`、`mediaAssets`（`images` / `videos` / `audio` / `documents`）、`eventAggregation`、`pdfUrl`、`paperVisualPages`。
+
+照抄原文的条目（中文媒体 / 公众号）额外带 `bodyVerbatim: true`、`body`（含各级 `#` 小标题的原文）、`bodyTruncated`，此时 `deepAnalysis` 为空，详情页只渲染 `body`。
 
 `sources.json`：`generatedAt`、`origin`、`sources[]`（`id`、`name`、`status`、`statusLabel`、`format`、`tier`、`priority`、`fetchMethod`、`last`、`perDay`、`briefCount`）、`meta.writable`。
 

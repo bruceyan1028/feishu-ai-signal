@@ -31,6 +31,9 @@ TOPIC_OPTIONS = {"AI", "LLM", "Agent", "RAG", "推理", "多模态", "开源", "
 URGENCY_TO_TABLE = {"高": "High", "中": "Medium", "低": "Low"}
 URGENCY_TO_CN = {value: key for key, value in URGENCY_TO_TABLE.items()}
 PAPER_ANALYSIS_VERSION = 2
+SOCIAL_CONTENT_TYPE = "社交媒体帖子"
+# 社媒是独立一栏，只受自己的条数上限约束
+SOCIAL_POST_LIMIT = 40
 
 
 _CJK_RE = re.compile(r"[\u4e00-\u9fff]")
@@ -91,7 +94,12 @@ def analysis_requirement(
     is_social: bool,
     is_policy: bool = False,
     preserve_structure: bool = False,
+    verbatim_body: bool = False,
 ) -> str:
+    if verbatim_body:
+        return (
+            'deep_analysis_cn 直接输出空字符串 ""：这条的详情页照抄原文，不需要 AI 解读。'
+        )
     if is_paper:
         return """deep_analysis_cn 写 1000-1800 字；以学术证据密度为优先，不用行业新闻套话凑字数。
 deep_analysis_cn 必须使用以下论文专用结构，每个标题独占一行，标题与正文之间换行，各节之间空一行：
@@ -174,6 +182,29 @@ def is_chinese_text(text: str) -> bool:
 
 
 _WP_TAIL_RE = re.compile(r"(?is)\n*The post\b.*?\bappeared first on\b[^\n]*$")
+# 页脚声明：版权、投诉邮箱、频道标签、关注引导。照抄原文时这些模板文字会跟到读者眼前
+_TAIL_NOTICE_RE = re.compile(
+    r"^(?:本(?:内容|文|作品)由.{0,24}发布"
+    r"|(?:观点|内容)仅代表作者"
+    r"|如对本(?:稿件|文).{0,8}(?:异议|疑问|投诉)"
+    r"|(?:未经授权|禁止|谢绝)转载"
+    r"|[^\n]{0,16}频道\s*[:：]\s*\S{1,12}$"
+    r"|(?:关注|扫码).{0,12}公众号)"
+)
+
+
+def _strip_tail_notices(body: str, source: str = "") -> str:
+    """剥掉正文末尾的页脚段落与重复的品牌落款，它们是页面模板不是文章内容。"""
+    names = {part.strip() for part in re.split(r"[/｜|·]", str(source or "")) if part.strip()}
+    paragraphs = body.split("\n\n")
+    while len(paragraphs) > 1:
+        tail = paragraphs[-1].strip()
+        tokens = tail.split()
+        brand_only = bool(names and tokens) and all(token in names for token in tokens)
+        if not brand_only and not _TAIL_NOTICE_RE.match(tail):
+            break
+        paragraphs.pop()
+    return "\n\n".join(paragraphs).strip()
 
 
 def clean_body(text: str, source: str = "") -> str:
@@ -197,7 +228,7 @@ def clean_body(text: str, source: str = "") -> str:
     body = re.sub(r" *\n *", "\n", body)
     body = re.sub(r"\n{3,}", "\n\n", body).strip()
     # 存量条目的结尾还留着 WordPress 的版权尾巴，采集端已不再写入，展示前兜底去掉
-    return _WP_TAIL_RE.sub("", body).strip()
+    return _strip_tail_notices(_WP_TAIL_RE.sub("", body).strip(), source)
 
 
 _TRANSLATE_PROMPT = """把下面的文章正文忠实翻译成简体中文。
@@ -206,7 +237,7 @@ _TRANSLATE_PROMPT = """把下面的文章正文忠实翻译成简体中文。
 2. 只翻译，不要概括、不要删减、不要添加任何评论或总结；
 3. 公司名、产品名、模型名、论文名等专有名词保留英文原名；
 4. 形如「单元格 | 单元格」的行是原文表格，逐行翻译并原样保留「|」分隔与换行，不要合并成段落；
-5. 形如「## 小标题」的行必须保留“## ”标记和原有层级位置；
+5. 形如「## 小标题」「### 小标题」的行必须保留原有的 “#” 层级标记和位置；
 6. 只输出严格 JSON：{{"body_cn": "翻译后的正文"}}
 
 正文：
@@ -396,7 +427,29 @@ def content_type(fields: dict[str, Any]) -> str:
     return "文章"
 
 
-_EDITORIAL_HEADING_RE = re.compile(r"(?m)^##\s+([^\n]{2,80})\s*$")
+# 中文媒体与公众号的原文本身就是给中文读者写好的成稿，再让模型改写一遍只会
+# 丢掉事实、数字和作者的小标题结构，详情页因此直接照抄原文。
+VERBATIM_BODY_CATEGORIES = {"中文媒体"}
+
+
+def verbatim_body_mode(fields: dict[str, Any]) -> bool:
+    """详情页是否照抄原文（含各级小标题），而不是展示 AI 深度解读。"""
+    kind = content_type(fields)
+    if kind not in {"文章", "公众号"}:
+        return False
+    category = sources.normalize_category(scalar(fields.get("分类")) or "其他")
+    if kind != "公众号" and category not in VERBATIM_BODY_CATEGORIES:
+        return False
+    body = clean_body(
+        str(scalar(fields.get("原文")) or ""),
+        str(scalar(fields.get("来源")) or ""),
+    )
+    # 抓到的只是一段导语，或者这条其实是英文稿时，照抄没有意义，回到 AI 解读那条线
+    return len(body) >= 200 and is_chinese_text(body)
+
+
+# 原文小标题带层级（`##` / `###` / `####`），匹配时不区分层级，只取标题文字
+_EDITORIAL_HEADING_RE = re.compile(r"(?m)^#{2,4}\s+([^\n]{2,80})\s*$")
 _EDITORIAL_NOISE_HEADING_RE = re.compile(
     r"^(?:相关文章|推荐阅读|热门|标签|关于作者|联系我们|相关阅读|更多内容)$"
 )
@@ -415,6 +468,9 @@ def editorial_structure_mode(fields: dict[str, Any], text: str = "") -> bool:
     """判断原文是否已具备值得沿用的长文结构，而不是按来源类型一刀切。"""
     if content_type(fields) not in {"文章", "公众号"} or is_policy_signal(fields):
         return False
+    # 照抄原文的条目连精编都不做，原结构由正文本身保留
+    if verbatim_body_mode(fields):
+        return False
     body = clean_body(
         text or str(scalar(fields.get("原文")) or ""),
         str(scalar(fields.get("来源")) or ""),
@@ -429,7 +485,7 @@ def editorial_structure_mode(fields: dict[str, Any], text: str = "") -> bool:
     if len(set(headings)) < 3:
         return False
     # 至少三个章节应有实质正文，避免把相关推荐/导航列表误认成高质量结构。
-    sections = re.split(r"(?m)^##\s+[^\n]+\s*$", body)[1:]
+    sections = re.split(r"(?m)^#{2,4}\s+[^\n]+\s*$", body)[1:]
     substantive = sum(len(section.strip()) >= 180 for section in sections)
     return substantive >= 3
 
@@ -572,9 +628,14 @@ def select_candidates(
     github_count = 0
     p0_count = 0
     per_source: Counter[str] = Counter()
+    social: list[dict[str, Any]] = []
     for item in candidates:
         is_arxiv = _is_arxiv(item)
         item_type = content_type(item["fields"])
+        # 社媒帖子独立成栏，不参与排序也不占用简报名额
+        if item_type == SOCIAL_CONTENT_TYPE:
+            social.append(item)
+            continue
         is_paper = item_type == "论文"
         is_video = item_type == "视频"
         is_podcast = item_type == "播客"
@@ -605,13 +666,14 @@ def select_candidates(
         per_source[item["source_id"]] += 1
         if len(selected) >= total_limit:
             break
-    return selected
+    return selected + social[:SOCIAL_POST_LIMIT]
 
 
 def analyze_signal(fields: dict[str, Any]) -> dict[str, Any]:
     is_paper = content_type(fields) == "论文"
     is_social = content_type(fields) == "社交媒体帖子"
     is_policy = is_policy_signal(fields)
+    verbatim_body = verbatim_body_mode(fields)
     preserve_structure = editorial_structure_mode(fields)
     paper_extra = ""
     policy_extra = ""
@@ -677,6 +739,7 @@ def analyze_signal(fields: dict[str, Any]) -> dict[str, Any]:
         is_social=is_social,
         is_policy=is_policy,
         preserve_structure=preserve_structure,
+        verbatim_body=verbatim_body,
     )
     pdf_document_count = sum(
         document.get("fullTextSource") == "pdf" for document in policy_documents
@@ -702,7 +765,7 @@ deep_analysis_cn（中文分析）。
 原文/论文证据：{analysis_text}"""
     raw = report._llm_json(prompt, image_urls=image_urls)
     topics = normalize_topics(fields, list(raw.get("topics") or []))
-    deep_analysis = str(raw.get("deep_analysis_cn") or "").strip()
+    deep_analysis = "" if verbatim_body else str(raw.get("deep_analysis_cn") or "").strip()
     if preserve_structure:
         deep_analysis = compact_editorial_analysis(deep_analysis)
     result = {
@@ -745,6 +808,12 @@ def _signal_from_fields(record_id: str, fields: dict[str, Any], analysis: dict[s
     full_text = paper_metrics.get("full_text") or {}
     if not isinstance(full_text, dict):
         full_text = {}
+    try:
+        social_metrics = json.loads(str(scalar(fields.get("社媒指标")) or "{}"))
+    except (TypeError, ValueError):
+        social_metrics = {}
+    if not isinstance(social_metrics, dict):
+        social_metrics = {}
     signal = {
         "recordId": record_id,
         "sourceId": str(scalar(fields.get("source_id")) or ""),
@@ -775,6 +844,14 @@ def _signal_from_fields(record_id: str, fields: dict[str, Any], analysis: dict[s
             else ""
         ),
     }
+    if verbatim_body_mode(fields):
+        # 中文媒体/公众号照抄原文：正文连各级小标题一起进 JSON，前端不再读 deepAnalysis
+        signal.update(display_body(fields))
+        signal["bodyVerbatim"] = True
+        signal["deepAnalysis"] = ""
+    if social_metrics:
+        # 帖子卡要按 X 的样子渲染：作者头像、原创/引用、被引原帖、互动数都来自这里
+        signal["socialMetrics"] = social_metrics
     if full_text:
         signal.update(
             {
@@ -815,6 +892,10 @@ def _ensure_deep_analysis(
     fields: dict[str, Any], analysis: dict[str, Any]
 ) -> dict[str, Any]:
     """为已分析的存量条目补齐详情页深度解读，新条目由 analyze_signal 一次生成。"""
+    if verbatim_body_mode(fields):
+        # 照抄原文的条目不需要解读；存量值留在表里但不再展示，也不花 token 刷新
+        analysis["deep_analysis_cn"] = ""
+        return {}
     preserve_structure = editorial_structure_mode(fields)
     cached = str(
         analysis.get("deep_analysis_cn")
@@ -1014,13 +1095,24 @@ def generate(day: str | None = None) -> dict[str, Any]:
     if not candidates:
         raise RuntimeError("近七日没有可用于简报的信号")
 
-    # 同事件折叠：标题近似者只保留最优主条目进分析，其它源留给事件聚合
+    # 同事件折叠：标题近似者只保留最优主条目进分析，其它源留给事件聚合。
+    # 社媒不参与折叠，也不占 DAILY_CANDIDATE_LIMIT，折完再原样接回去。
+    social_candidates = [
+        item for item in candidates if content_type(item["fields"]) == SOCIAL_CONTENT_TYPE
+    ]
+    news_candidates = [
+        item for item in candidates if content_type(item["fields"]) != SOCIAL_CONTENT_TYPE
+    ]
     candidates = cluster.collapse_for_brief(
-        candidates,
+        news_candidates,
         threshold=0.85,
         limit=config.DAILY_CANDIDATE_LIMIT,
+    ) + social_candidates
+    log.info(
+        "同事件折叠后候选 %d 条（其中社媒 %d 条独立成栏）",
+        len(candidates),
+        len(social_candidates),
     )
-    log.info("同事件折叠后候选 %d 条", len(candidates))
 
     updates: list[dict[str, Any]] = []
     analyzed: list[dict[str, Any]] = []
@@ -1167,8 +1259,13 @@ def generate(day: str | None = None) -> dict[str, Any]:
         ),
         reverse=True,
     )
+    social_posts = [s for s in analyzed if s.get("contentType") == SOCIAL_CONTENT_TYPE]
+    social_posts.sort(key=lambda s: str(s.get("publishedDate") or ""), reverse=True)
     signals = cluster.attach_aggregations(
-        balance_output_signals(analyzed, config.DAILY_SIGNAL_LIMIT)
+        balance_output_signals(
+            [s for s in analyzed if s.get("contentType") != SOCIAL_CONTENT_TYPE],
+            config.DAILY_SIGNAL_LIMIT,
+        )
     )
     article_targets = [
         signal
@@ -1291,6 +1388,7 @@ def generate(day: str | None = None) -> dict[str, Any]:
         "intro": str(synth.get("intro") or "今日 AI 信号已完成采集与分析。"),
         "bullets": bullets,
         "signals": signals,
+        "socialPosts": social_posts,
     }
     table_id = config.FEISHU_BRIEF_TABLE_ID or feishu.ensure_daily_brief_table(token)
     payload["briefRecordId"] = _upsert_brief(token, table_id, payload)

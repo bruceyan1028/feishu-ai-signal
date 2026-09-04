@@ -9,7 +9,7 @@ alwaysApply: true
 
 ## 顺序
 
-1. 采集 `src.main` → 生成 `src.daily` → `src.publish`（会重拉 AA 智能指数与行情快照）
+1. 采集 `src.main` → 生成 `src.daily` → `src.publish`（会重拉 AA 智能指数、HF 热度与行情快照）
 2. 提交并推送 `site/`（或走 `daily-brief.yml` 的 deploy-send）
 3. 确认公网 `data/brief-YYYY-MM-DD.json` 的 `date` 已是当天
 4. 再 `python -m src.notify`

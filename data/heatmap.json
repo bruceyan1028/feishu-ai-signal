@@ -39,85 +39,85 @@
         3,
         6,
         14,
-        21
+        26
       ],
       [
         0,
         2,
         3,
         12,
-        8
+        10
       ],
       [
         0,
         2,
         0,
         9,
-        9
+        12
       ],
       [
         0,
         0,
         3,
         7,
-        4
+        5
       ],
       [
         0,
         0,
         2,
         0,
-        6
+        8
       ],
       [
         5,
         5,
         6,
         6,
-        10
+        14
       ],
       [
         0,
         0,
         0,
         4,
-        3
+        4
       ],
       [
         2,
         0,
         0,
         0,
-        7
+        9
       ],
       [
         4,
         3,
         4,
         5,
-        15
+        22
       ],
       [
         8,
         6,
         3,
         1,
-        9
+        12
       ],
       [
         0,
         0,
         0,
         0,
-        5
+        8
       ]
     ],
     "normalized": [
       [
-        0.0476,
-        0.1429,
-        0.2857,
-        0.6667,
+        0.0385,
+        0.1154,
+        0.2308,
+        0.5385,
         1.0
       ],
       [
@@ -125,13 +125,13 @@
         0.1667,
         0.25,
         1.0,
-        0.6667
+        0.8333
       ],
       [
         0.0,
-        0.2222,
+        0.1667,
         0.0,
-        1.0,
+        0.75,
         1.0
       ],
       [
@@ -139,20 +139,20 @@
         0.0,
         0.4286,
         1.0,
-        0.5714
+        0.7143
       ],
       [
         0.0,
         0.0,
-        0.3333,
+        0.25,
         0.0,
         1.0
       ],
       [
-        0.5,
-        0.5,
-        0.6,
-        0.6,
+        0.3571,
+        0.3571,
+        0.4286,
+        0.4286,
         1.0
       ],
       [
@@ -160,27 +160,27 @@
         0.0,
         0.0,
         1.0,
-        0.75
+        1.0
       ],
       [
-        0.2857,
+        0.2222,
         0.0,
         0.0,
         0.0,
         1.0
       ],
       [
-        0.2667,
-        0.2,
-        0.2667,
-        0.3333,
+        0.1818,
+        0.1364,
+        0.1818,
+        0.2273,
         1.0
       ],
       [
-        0.8889,
         0.6667,
-        0.3333,
-        0.1111,
+        0.5,
+        0.25,
+        0.0833,
         1.0
       ],
       [
@@ -384,7 +384,12 @@
       "recvu2ZXD8YZrH",
       "recvu7Bcb3NH05",
       "recvu7Bcb3lhKm",
-      "recvu7Bcb3tnI4"
+      "recvu7Bcb3tnI4",
+      "recvudLnQxoajC",
+      "recvudLnQxgsL8",
+      "recvudLnQxBXcT",
+      "recvudLnQxLEY8",
+      "recvudLnQx0wTS"
     ],
     "infra|2026-W36": [
       "recvtW9WBRPQmp",
@@ -395,7 +400,11 @@
       "recvu1S4qSULKN",
       "recvu7Bcb3jh1z",
       "recvu7Bcb3IHJB",
-      "recvu7Bcb3vCcH"
+      "recvu7Bcb3vCcH",
+      "recvudLnQxoajC",
+      "recvudLnQxnkeA",
+      "recvudLnQx6dAU",
+      "recvudLnQx0wTS"
     ],
     "funding|2026-W36": [
       "recvtW9WBRSx2a",
@@ -406,7 +415,10 @@
       "recvu1S4qSTlad",
       "recvu7Bcb3jZid",
       "recvu7Bcb3AdwT",
-      "recvu7Bcb3sPvH"
+      "recvu7Bcb3sPvH",
+      "recvudLnQxzOG3",
+      "recvudLnQxnkeA",
+      "recvudLnQxwL2q"
     ],
     "product|2026-W36": [
       "recvtW9WBR1mmJ",
@@ -422,14 +434,23 @@
       "recvu1S4qSH6pR",
       "recvu7Bcb3huuF",
       "recvu7Bcb3tnI4",
-      "recvu7Bcb3r0tw"
+      "recvu7Bcb3r0tw",
+      "recvudLnQx7mnN",
+      "recvudLnQxgsL8",
+      "recvudLnQxYut2",
+      "recvudLnQxNdMh",
+      "recvudLnQx5bgd",
+      "recvudLnQx78Fp",
+      "recvudLnQxEdGP"
     ],
     "other|2026-W36": [
       "recvtW9WBRRLop",
       "recvtW9WBRRUDf",
       "recvu1S4qSNMVZ",
       "recvu2ZXD8ymcY",
-      "recvu7Bcb357yt"
+      "recvu7Bcb357yt",
+      "recvudLnQxfWU3",
+      "recvudLnQxCZGK"
     ],
     "multimodal|2026-W36": [
       "recvtW9WBRobE2",
@@ -437,11 +458,14 @@
       "recvu1S4qSMFXB",
       "recvu1S4qSACdN",
       "recvu1S4qSqy3r",
-      "recvu7Bcb3NH05"
+      "recvu7Bcb3NH05",
+      "recvudLnQx6dAU",
+      "recvudLnQxNdMh"
     ],
     "open-source-model|2026-W36": [
       "recvtW9WBRobE2",
-      "recvu1S4qSmOoN"
+      "recvu1S4qSmOoN",
+      "recvudLnQxzOG3"
     ],
     "embodied|2026-W36": [
       "recvtW9WBR72ie",
@@ -454,7 +478,9 @@
       "recvu1S4qSt8uO",
       "recvu1S4qScLJq",
       "recvu2ZXD8YZrH",
-      "recvu7Bcb3zGUn"
+      "recvu7Bcb3zGUn",
+      "recvudLnQxBXcT",
+      "recvudLnQxfu8Q"
     ],
     "safety-policy|2026-W36": [
       "recvtW9WBRShl3",
@@ -463,7 +489,8 @@
       "recvu1S4qS1YSz",
       "recvu7Bcb3ZIS1",
       "recvu7Bcb3AdwT",
-      "recvu7Bcb3e7Ng"
+      "recvu7Bcb3e7Ng",
+      "recvudLnQxe5zB"
     ],
     "reasoning|2026-W36": [
       "recvu1S4qSbYtM",
@@ -472,7 +499,8 @@
       "recvu7Bcb3ZIS1",
       "recvu7Bcb3lhKm",
       "recvu1S4qSULKN",
-      "recvu1S4qSrg0l"
+      "recvu1S4qSrg0l",
+      "recvudLnQx7mnN"
     ]
   },
   "itemIndex": {
@@ -1335,19 +1363,114 @@
       "title": "《智能产业化》：台湾半导体生态支撑AI时代",
       "source": "NVIDIA YouTube",
       "url": "https://www.youtube.com/watch?v=3entvfteys4"
+    },
+    "recvudLnQxzOG3": {
+      "title": "英伟达宣布以129.3亿美元收购Hugging Face并承诺维持开放定位",
+      "source": "品玩 / 硅星人",
+      "url": "https://www.pingwest.com/w/317053"
+    },
+    "recvudLnQxfWU3": {
+      "title": "推出 WeatherNext 3：Google DeepMind 更先进、更精准的全球天气 AI 模型",
+      "source": "Google DeepMind Blog",
+      "url": "https://deepmind.google/blog/introducing-weathernext-3-our-most-advanced-and-accurate-global-weather-ai-model"
+    },
+    "recvudLnQx7mnN": {
+      "title": "GPT-6 Astra发布：媒体称其在多项评测中领先",
+      "source": "智东西",
+      "url": "https://zhidx.com/p/590669.html"
+    },
+    "recvudLnQxoajC": {
+      "title": "NVIDIA在IFA 2026加速端侧AI",
+      "source": "NVIDIA Blog",
+      "url": "https://blogs.nvidia.com/blog/local-ai-ifa-next-gen-agents-nv-pair-rtx-spark"
+    },
+    "recvudLnQxgsL8": {
+      "title": "千问办公上线首月用户突破3000万，企业用户占比过半",
+      "source": "品玩 / 硅星人",
+      "url": "https://www.pingwest.com/w/317059"
+    },
+    "recvudLnQxBXcT": {
+      "title": "智能体时代，实时事实数据成为AI新基础设施",
+      "source": "虎嗅",
+      "url": "https://www.huxiu.com/article/4888461.html"
+    },
+    "recvudLnQxe5zB": {
+      "title": "Daybreak：投入10亿美元保护关键服务的一线防御者",
+      "source": "OpenAI News",
+      "url": "https://openai.com/index/daybreak-for-frontline-defenders"
+    },
+    "recvudLnQxnkeA": {
+      "title": "Crusoe据报以300亿美元估值融资30亿美元",
+      "source": "TechCrunch AI",
+      "url": "https://techcrunch.com/2026/09/03/crusoe-reportedly-raises-3b-at-a-30b-valuation"
+    },
+    "recvudLnQxwL2q": {
+      "title": "Thinking Machines据报洽谈10亿美元融资，估值至少400亿美元",
+      "source": "TechCrunch AI",
+      "url": "https://techcrunch.com/2026/09/03/accel-reportedly-in-talks-to-lead-1b-round-for-thinking-machines-at-40b-valuation"
+    },
+    "recvudLnQx6dAU": {
+      "title": "Ollama v0.33.3 发布：MLX 引擎支持 Gemma 4 图像与音频",
+      "source": "GitHub Trending",
+      "url": "https://github.com/ollama/ollama/releases/tag/v0.33.3"
+    },
+    "recvudLnQxCZGK": {
+      "title": "AI时代联邦制企业的组织负债：WPP重组启示",
+      "source": "虎嗅",
+      "url": "https://www.huxiu.com/article/4888479.html"
+    },
+    "recvudLnQxLEY8": {
+      "title": "Browser Use 0.13.10：升级浏览器代理运行时并强化依赖与安全验证",
+      "source": "GitHub Trending",
+      "url": "https://github.com/browser-use/browser-use/releases/tag/0.13.10"
+    },
+    "recvudLnQxYut2": {
+      "title": "WhatsApp在印度上线账单支付，接入超2.2万家账单服务商",
+      "source": "Meta Newsroom AI",
+      "url": "https://about.fb.com/news/2026/09/launching-bill-payments-in-india-helping-people-to-pay-everyday-household-bills-directly-on-whatsapp"
+    },
+    "recvudLnQxfu8Q": {
+      "title": "Firecrawl 发布 v2.11.296：面向规模化网页搜索、抓取与交互的 Context API",
+      "source": "GitHub Trending",
+      "url": "https://github.com/firecrawl/firecrawl/releases/tag/v2.11.296"
+    },
+    "recvudLnQxNdMh": {
+      "title": "猛玛 LARK A2 联动 WorkBuddy，探索无线麦克风作为 AI 语音入口",
+      "source": "AI科技评论 / 雷峰网",
+      "url": "https://www.leiphone.com/category/industrynews/tv9hpfzjsa1aq6bt.html"
+    },
+    "recvudLnQx5bgd": {
+      "title": "Legora借助GPT-6 Astra数分钟审阅41份文件",
+      "source": "OpenAI News",
+      "url": "https://openai.com/index/legora-financial-statement-review-with-astra"
+    },
+    "recvudLnQx78Fp": {
+      "title": "华为WATCH 6 Pro陶瓷白将于9月7日发布，主打全陶瓷设计与腕上智能健康体验",
+      "source": "品玩 / 硅星人",
+      "url": "https://www.pingwest.com/w/317060"
+    },
+    "recvudLnQxEdGP": {
+      "title": "Playco 使用 GPT-6 Astra 将游戏原型手动修复减少 50%",
+      "source": "OpenAI News",
+      "url": "https://openai.com/index/playco-game-prototyping-with-astra"
+    },
+    "recvudLnQx0wTS": {
+      "title": "Nous Research 为 Hermes Agent 提供 NVIDIA 系统一键本地部署",
+      "source": "NVIDIA YouTube",
+      "url": "https://www.youtube.com/watch?v=taqnuvmcrbs"
     }
   },
   "trend": {
-    "agent": 5.25,
-    "reasoning": 6.0,
-    "multimodal": 13.5,
-    "open-source-model": 5.5,
-    "rag-search": 4.5,
-    "infra": 1.5,
+    "agent": 6.0,
+    "reasoning": 6.6,
+    "multimodal": 15.75,
+    "open-source-model": 6.0,
+    "rag-search": 6.0,
+    "infra": 1.875,
     "embodied": 2.0,
-    "safety-policy": 5.25,
-    "product": 2.727,
-    "funding": 0.882,
+    "safety-policy": 6.75,
+    "product": 3.682,
+    "funding": 1.147,
     "other": 2.0
   },
   "window_end": "2026-W36"
