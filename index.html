@@ -1971,21 +1971,22 @@ function socialPostCardHtml(A, p){
   // 折叠按行数走（跟 X 一样），是否真的超出由渲染后量出来，不靠字数猜
   const tid = `stx-${esc(p.recordId)}`;
   const segments = xThreadSegments(p);
-  const toggle = (label) =>
-    `<button type="button" class="social-more" onclick="App.toggleSocialText(${sourceIdArg(p.recordId)})">${label}</button>`;
   let content;
   if(segments.length > 1){
-    // 线程默认只摊开首段：整条铺开会长到看不见互动数据，后续段落点开再看
+    // 线程默认只摊开首段：整条铺开会长到看不见互动数据，后续段落点开再看。
+    // 首段也可能长到被裁，所以按钮 id 沿用 `${tid}-more`，让 syncSocialClamp 量完
+    // 再决定文案是「显示更多 · 线程还有 N 段」还是只提段数。
+    const rest = segments.length - 1;
     const segHtml = (seg, index) => `
       <div style="${index?'margin-top:12px;padding-top:12px;border-top:1px dashed #e3e8ea;':''}">
         ${index?`<span style="display:block;margin-bottom:5px;font-family:'Geist Mono',monospace;font-size:10.5px;font-weight:700;color:#8b98a5;">${index+1}/${segments.length}</span>`:''}
-        ${seg.text?`<div class="social-text${!index&&!open?' is-clamped':''}" style="margin-bottom:${(seg.assets.images.length||seg.assets.videos.length||seg.assets.articles.length)?'9px':'0'};">${xTextHtml(seg.text)}</div>`:''}
+        ${seg.text?`<div${index?'':` id="${tid}"`} class="social-text${!index&&!open?' is-clamped':''}" style="margin-bottom:${(seg.assets.images.length||seg.assets.videos.length||seg.assets.articles.length)?'9px':'0'};">${xTextHtml(seg.text)}</div>`:''}
         ${xMediaHtml(seg.assets, 16, seg.url || p.url)}
       </div>`;
     content = `<div style="margin:0 0 10px;">
       ${segHtml(segments[0], 0)}
       <div${open?'':' hidden'}>${segments.slice(1).map((seg, index)=>segHtml(seg, index+1)).join('')}</div>
-      ${toggle(open ? '收起线程' : `显示完整线程 · 还有 ${segments.length-1} 段`)}
+      <button type="button" id="${tid}-more" class="social-more" data-thread="${rest}"${open?' data-open="1"':''} onclick="App.toggleSocialText(${sourceIdArg(p.recordId)})">${open?'收起线程':`显示完整线程 · 还有 ${rest} 段`}</button>
     </div>`;
   }else{
     const body = text
@@ -4146,14 +4147,29 @@ function render(){
 // 按字数猜会在短行多、或者窄屏折行时判错。
 function syncSocialClamp(){
   document.querySelectorAll('.social-text').forEach(el=>{
-    const more = document.getElementById(`${el.id}-more`);
+    const more = el.id ? document.getElementById(`${el.id}-more`) : null;
     if(!more) return;
-    more.hidden = el.classList.contains('is-clamped')
-      ? el.scrollHeight - el.clientHeight <= 2
-      : false;
+    const clamped = el.classList.contains('is-clamped');
+    const cut = clamped && el.scrollHeight - el.clientHeight > 2;
+    const rest = Number(more.dataset.thread || 0);
+    if(rest){
+      // 线程按钮管的是后续段落，永远要留着；首段也被裁时才在文案里提「显示更多」
+      more.hidden = false;
+      if(!more.dataset.open){
+        more.textContent = cut
+          ? `显示更多 · 线程还有 ${rest} 段`
+          : `显示完整线程 · 还有 ${rest} 段`;
+      }
+      return;
+    }
+    more.hidden = clamped ? !cut : false;
   });
 }
 window.addEventListener('resize', syncSocialClamp);
+// 首屏那次量高度可能赶在 Geist 加载完之前：那时行高偏小，scrollHeight 约等于
+// clientHeight，正文明明被裁掉了却判成不用折叠，读者就只能看到半截帖子。
+if(document.fonts && document.fonts.ready) document.fonts.ready.then(syncSocialClamp);
+window.addEventListener('load', syncSocialClamp);
 
 // 账号栏内容比左导航短，底边要至少和 FORMATS 块齐平，否则中间那列看着像截断的。
 function syncAccountsHeight(){
