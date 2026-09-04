@@ -2595,7 +2595,8 @@ function feedNavHtml(A, counts){
 function briefHtml(A){
   const mono = "'Geist Mono', ui-monospace, Menlo, monospace";
 
-  const bullets = briefMeta.bullets || [];
+  // 要点多于 6 条时横向跑马灯会一直转，读者抓不住当天重点，多出来的不渲染
+  const bullets = (briefMeta.bullets || []).slice(0, 6);
   const pointsHtml = (bullets.length ? bullets : (briefMeta.intro ? [{ title: briefMeta.title, text: briefMeta.intro, refs: [] }] : [])).map((b) => {
     const firstRef = (b.refs && b.refs[0]) || 0;
     const s = firstRef ? signals.find(x => x.rank === firstRef) : null;
