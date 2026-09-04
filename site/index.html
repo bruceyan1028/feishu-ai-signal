@@ -143,10 +143,23 @@
   /* 参数规模最多七个字符,不参与压缩:挤成「30…」比不显示还没用,该让模型名去省地方。
      档位后缀（Adaptive Reasoning, High）可以长得多,仍按上面那条先缩。 */
   .aa-tag.is-size { flex: none; max-width: none; }
-  /* 榜单的一行。HF 那三栏是链接,其余是死行,两种都走这条栅格。 */
-  .rank-row { display: grid; grid-template-columns: 20px 22px minmax(0,1fr); gap: 8px; align-items: center; padding: 5px 14px; border-bottom: 1px solid rgba(255,255,255,.05); text-decoration: none; color: inherit; }
-  a.rank-row:hover .aa-tag { color: rgba(250,247,240,.85); }
-  a.rank-row:hover { background: rgba(255,255,255,.05); }
+  .rank-row { display: grid; grid-template-columns: 20px 22px minmax(0,1fr); gap: 8px; align-items: center; padding: 5px 14px; border-bottom: 1px solid rgba(255,255,255,.05); }
+  /* HF 本周热度:照官网首页那三栏的卡片排法——名字一行,参数规模/更新时间/下载/
+     点赞一行。先前套用上面榜单那种「一行 + 进度条」,这些数字只放得进 tooltip,
+     等于没有。官网没有名次也没有热度分,这里也不加:顺序本身就是「本周热度」。 */
+  .hf-item { display: block; padding: 8px 14px; border-bottom: 1px solid rgba(255,255,255,.05); text-decoration: none; color: inherit; }
+  .hf-item:hover { background: rgba(255,255,255,.06); }
+  .hf-head { display: flex; align-items: center; gap: 6px; min-width: 0; }
+  .hf-emoji { flex: none; font-size: 14px; line-height: 1; }
+  .hf-name { min-width: 0; font-size: 12.5px; font-weight: 650; color: #faf7f0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  /* 仓库全名是机器标识,等宽体下 owner/name 那道斜杠和版本号更好认 */
+  .hf-name.is-repo { font-family: 'Geist Mono', ui-monospace, Menlo, monospace; font-size: 11.5px; font-weight: 600; }
+  /* 绿点 = 这个 Space 现在真的在跑;停在 BUILDING / RUNTIME_ERROR 的点开是白屏 */
+  .hf-live { flex: none; width: 5px; height: 5px; border-radius: 50%; background: #34d399; }
+  .hf-note { display: block; margin-top: 3px; font-size: 10.5px; line-height: 1.45; color: #a8a294; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .hf-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 2px 7px; margin-top: 4px; font-family: 'Geist Mono', ui-monospace, Menlo, monospace; font-size: 10px; color: #8f887a; }
+  .hf-meta b { font-weight: 600; color: #c4bfb6; }
+  .hf-sep { opacity: .35; }
   .heat-toggle { display: flex; border: 1px solid rgba(255,255,255,.12); margin: 0 14px 8px; }
   .heat-toggle button { flex: 1; height: 26px; border: none; background: transparent; color: #8f887a; font-size: 11px; font-weight: 650; cursor: pointer; }
   .heat-toggle button + button { border-left: 1px solid rgba(255,255,255,.12); }
@@ -2249,9 +2262,6 @@ function dataRailHtml(A){
       : `<span class="logo-fb">${letters}</span>`;
     return `<span class="aa-logo" style="flex: none; width: ${size}px; height: ${size}px; border-radius: 5px; display: inline-flex; align-items: center; justify-content: center; overflow: hidden; background: #fff; color: #16130f; font-family: ${mono}; font-size: ${Math.round(size*0.42)}px; font-weight: 700;">${inner}</span>`;
   };
-  // HF 应用的头像位:作者自己挑的 emoji。这里不套白底——白底上的 emoji 像个贴纸,
-  // 而 emoji 本身就有颜色,直接放在黑底上跟旁边的彩色 logo 一样能认出来。
-  const emojiChip = (emoji, size) => `<span class="aa-logo" style="flex: none; width: ${size}px; height: ${size}px; display: inline-flex; align-items: center; justify-content: center; font-size: ${Math.round(size*0.72)}px; line-height: 1;">${esc(emoji)}</span>`;
 
   const empty = msg => `<p style="margin: 0; padding: 26px 14px; text-align: center; font-family: ${mono}; font-size: 11.5px; line-height: 1.7; color: ${DIM};">${esc(msg)}</p>`;
 
@@ -2299,28 +2309,26 @@ function dataRailHtml(A){
     return s.slice(0,4) === String(new Date().getFullYear()) ? s.slice(5) : s;
   };
 
-  // AA 三张榜和 HF 三栏共用一套行:名次 + 头像 + 「名字格」,指标填进名字格的背景。
-  // 一根条和一行字用同一块地方,窄栏里省下的就是名字能完整显示的那几十像素。填色
-  // 按可见区间(末位→榜首)铺开,用 0 或 100 做基准时榜上只差几分,所有行会填成一样长。
+  // AA 三张榜共用一套行:名次 + logo + 「名字格」,智能指数填进名字格的背景。一根条
+  // 和一行字用同一块地方,窄栏里省下的就是名字能完整显示的那几十像素。填色按可见
+  // 区间(末位→榜首)铺开,用 0 或 100 做基准时前 12 名只差几分,所有行会填成一样长。
   const rankRows = (rows, metricOf, cellOf) => {
     const scores = rows.map(r => metricOf(r) || 0);
     const hi = Math.max(...scores), lo = Math.min(...scores);
     const fillWidth = v => hi > lo ? 8 + 92 * ((v || 0) - lo) / (hi - lo) : 100;
     return `<div>${rows.map(r => {
       const c = cellOf(r);
-      const inner = `
+      return `
+      <div class="rank-row">
         <span style="font-family: ${mono}; font-size: 11px; font-weight: 700; color: ${r.rank<=3 ? A.accent : DIM};">${String(r.rank).padStart(2,'0')}</span>
-        ${c.emoji ? emojiChip(c.emoji, 22) : logoChip(r.logoDomain, c.owner, 22)}
+        ${logoChip(r.logoDomain, c.owner, 22)}
         <span style="position: relative; display: flex; align-items: center; gap: 6px; min-width: 0; height: 26px; padding: 0 8px; overflow: hidden; background: rgba(255,255,255,.05);">
           <span style="position: absolute; left: 0; top: 0; bottom: 0; width: ${fillWidth(metricOf(r))}%; background: linear-gradient(90deg, color-mix(in srgb, ${A.accent} 78%, transparent), color-mix(in srgb, ${A.accent} 26%, transparent));"></span>
           <span title="${esc(c.full)}" style="position: relative; min-width: 0; font-size: 12.5px; font-weight: 650; color: ${TXT}; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${esc(r.name)}</span>
           ${c.tag ? `<span class="aa-tag${c.sizeTag ? ' is-size' : ''}" title="${esc(c.full)}">${esc(c.tag)}</span>` : ''}
           <span title="${esc(c.hint)}" style="position: relative; margin-left: auto; font-family: ${mono}; font-size: 11.5px; font-weight: 700; color: ${TXT}; font-variant-numeric: tabular-nums;">${c.value}</span>
-        </span>`;
-      // HF 那三栏点进去看仓库本身才是这块的用处；AA 的行没有单条地址，仍是死行
-      return c.href
-        ? `<a class="rank-row" href="${esc(c.href)}" target="_blank" rel="noopener">${inner}</a>`
-        : `<div class="rank-row">${inner}</div>`;
+        </span>
+      </div>`;
     }).join('')}</div>`;
   };
 
@@ -2363,32 +2371,43 @@ function dataRailHtml(A){
   const hfSections = (hf && hf.sections) || [];
   const hfPage = hfSections.find(s => s.key === state.hfTab) || hfSections[0] || null;
   const hfItems = (hfPage && hfPage.items) || [];
-  // 应用的作者多是个人账号,拿它认 logo 没有意义;emoji 是作者自己挑的脸,
-  // 首页也是靠它认的,所以这一栏用 emoji 顶掉 logo 那一格。
-  const hfCell = item => ({
-    owner: item.owner,
-    emoji: item.emoji || '',
-    href: item.url || '',
-    full: item.repo + (item.note ? ` — ${item.note}` : ''),
-    // 模型那栏用参数规模,应用和数据集没有这回事,留空不占位
-    tag: paramText(item.params),
-    sizeTag: true,
-    value: num(item.trending, 0),
-    hint: [
-      `${(hf && hf.metric) || '热度分'} ${num(item.trending,0)}`,
-      item.task,
+  const isSpace = !!(hfPage && hfPage.key === 'spaces');
+  // 一条卡片。官网把这几个数字排在名字下面而不是藏进 hover,这里照做:下载量和
+  // 更新日期正是判断「这条值不值得点」的依据,收进 tooltip 等于没给。
+  const hfCard = item => {
+    // 每个指标包成一个整体再进 flex,否则换行会断在图标和数字之间,出现「♡」独自
+    // 留在行尾、数字被推到下一行。顺序照官网:任务 · 规模 · 更新 · 下载 · ⚡ · 点赞。
+    const meta = [];
+    if(item.task) meta.push(esc(item.task));
+    if(paramText(item.params)) meta.push(`<b>${esc(paramText(item.params))}</b>`);
+    if(dayText(item.updatedAt)) meta.push(`更新&nbsp;${esc(dayText(item.updatedAt))}`);
+    if(countText(item.downloads)) meta.push(`↓&nbsp;<b>${countText(item.downloads)}</b>`);
+    // ⚡ 是官网模型页那个「Inference Available」标记:有厂商接了推理服务才能直接调
+    if(item.inference) meta.push('<b title="已接推理服务，可直接调用">⚡</b>');
+    if(countText(item.likes)) meta.push(`♡&nbsp;<b>${countText(item.likes)}</b>`);
+    // Spaces 的仓库名常是 wan555 这种缩写,作者给的标题才是给人看的;模型和数据集
+    // 反过来,owner/name 本身就是大家引用它的方式,照官网用等宽体出全名。
+    const head = isSpace
+      ? `${item.emoji ? `<span class="hf-emoji">${esc(item.emoji)}</span>` : ''}<span class="hf-name">${esc(item.name)}</span>`
+      : `<span class="hf-name is-repo">${esc(item.repo || item.name)}</span>`;
+    const live = item.live
+      ? `<span class="hf-live" title="${esc(`运行中${item.sdk ? ` · ${item.sdk}` : ''}`)}"></span>`
+      : '';
+    const tip = [
+      item.repo,
       item.note,
-      countText(item.likes) ? `${countText(item.likes)} 点赞` : '',
-      countText(item.downloads) ? `${countText(item.downloads)} 下载` : '',
-      item.inference ? '已接推理服务' : '',
-      // 停在 BUILDING / RUNTIME_ERROR 的应用点开是白屏,值得先说一声
       item.stage && !item.live ? `未在运行（${item.stage}）` : '',
-      dayText(item.updatedAt) ? `更新 ${dayText(item.updatedAt)}` : '',
-    ].filter(Boolean).join(' · '),
-  });
+      `${(hf && hf.metric) || '热度分'} ${num(item.trending, 0)}`,
+    ].filter(Boolean).join(' · ');
+    return `<a class="hf-item" href="${esc(item.url || '')}" target="_blank" rel="noopener" title="${esc(tip)}">
+      <span class="hf-head">${head}${live}</span>
+      ${item.note ? `<span class="hf-note">${esc(item.note)}</span>` : ''}
+      <span class="hf-meta">${meta.map(m => `<span>${m}</span>`).join('<span class="hf-sep">·</span>')}</span>
+    </a>`;
+  };
   // 三栏各自成败,所以按当前那一栏报错;整块都没有栏时才退回整块的 error
   const hfBody = boardBody(hfPage || hf, hfPage ? hfPage.label : '本周热度', hfItems,
-    () => rankRows(hfItems, i => i.trending, hfCell));
+    () => `<div>${hfItems.map(hfCard).join('')}</div>`);
   const hfNav = hfSections.length > 1 ? `
     <nav class="aa-tabs" aria-label="Hugging Face 本周热度">
       ${hfSections.map(s => `<button type="button" class="${s.key===(hfPage&&hfPage.key)?'on':''}" title="${esc(`${s.label} · 本周热度前 ${(s.items||[]).length}`)}" onclick="App.setHfTab('${esc(s.key)}')">${esc(s.label)}</button>`).join('')}
@@ -4168,10 +4187,24 @@ function tasksHtml(A){
   </main>`;
 }
 
+// 换页才回到顶部。留在同一页里的操作（切榜单、换筛选、展开更多）要停在原地：
+// 整块换掉 innerHTML 时页面高度会瞬间塌成 0，浏览器顺手把滚动位置夹回顶部，
+// 右栏那条自己滚动的看板列也会一起归零。换完立刻放回去。
+let renderedPage = null;
 function render(){
+  const stay = renderedPage === state.page;
+  const scrollY = stay ? window.scrollY : 0;
+  const railTop = stay ? (document.querySelector('.feed-data') || {}).scrollTop || 0 : 0;
   const A = computeAccents();
   const page = state.page==='brief' ? briefHtml(A) : state.page==='sources' ? sourcesHtml(A) : tasksHtml(A);
   document.getElementById('app').innerHTML = `<div style="position: relative; z-index: 1; min-height: 100vh; background: ${UI.canvas}; padding-bottom: 48px;">${headerHtml(A)}${page}</div>${bottomBarHtml(A)}`;
+  renderedPage = state.page;
+  // 换页从头看,别把上一页的滚动深度带过来
+  window.scrollTo(0, scrollY);
+  if(railTop){
+    const rail = document.querySelector('.feed-data');
+    if(rail) rail.scrollTop = railTop;
+  }
   renderDetailLayer();
   bindPointsMarquee();
   syncAccountsHeight();

@@ -73,26 +73,28 @@ HF_TRENDING_LIMIT = 5
 # 三类各有自己的列表接口，但排序参数和响应外形一致。第四位是该类要显式 expand
 # 的字段：列表接口默认只回 id / likes / trendingScore 那几位，其余不点名就不给，
 # 漏一个的表现是那一列静静地空掉，不会报错。
+# 栏目名保留 HF 自己的说法（Models / Spaces / Datasets）：Spaces 译成「应用」会
+# 丢掉它在 HF 语境里的含义，而这三个词读者在官网上天天见。
 HF_KINDS: tuple[tuple[str, str, str, tuple[str, ...]], ...] = (
     (
         "models",
-        "模型",
+        "Models",
         "models",
         ("author", "downloads", "likes", "trendingScore", "pipeline_tag",
          "lastModified", "safetensors", "inferenceProviderMapping"),
     ),
     (
-        # 应用没有下载量，identity 靠 cardData 里的标题和 emoji——作者多是个人账号，
-        # 拿组织名认 logo 没有意义，首页也是用 emoji 认脸的。
+        # Spaces 没有下载量，identity 靠 cardData 里的标题和 emoji——作者多是个人
+        # 账号，拿组织名认 logo 没有意义，首页也是用 emoji 认脸的。
         "spaces",
-        "应用",
+        "Spaces",
         "spaces",
         ("author", "likes", "trendingScore", "lastModified", "sdk", "runtime",
          "cardData"),
     ),
     (
         "datasets",
-        "数据集",
+        "Datasets",
         "datasets",
         ("author", "downloads", "likes", "trendingScore", "lastModified"),
     ),

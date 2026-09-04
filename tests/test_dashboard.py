@@ -439,8 +439,9 @@ class HfTrendingTest(unittest.TestCase):
         self.assertEqual(
             [s["key"] for s in board["sections"]], ["models", "spaces", "datasets"]
         )
+        # 栏目名保留 HF 自己的说法：Spaces 译成「应用」会丢掉它在 HF 语境里的含义
         self.assertEqual(
-            [s["label"] for s in board["sections"]], ["模型", "应用", "数据集"]
+            [s["label"] for s in board["sections"]], ["Models", "Spaces", "Datasets"]
         )
         self.assertEqual(board["error"], "")
         self.assertTrue(board["updatedAt"])
@@ -846,29 +847,60 @@ class FrontendContractTest(unittest.TestCase):
         # 「热度」不再是 AA 的第四页
         self.assertNotIn("key: 'hf'", template)
         self.assertNotIn("board(aaPage.source", template)
-        # 两块共用一套行渲染，指标只是换个字段
-        self.assertIn("const rankRows", template)
+        # AA 仍用带进度条的榜单行；HF 是官网那种卡片，两者不再共用一套行
         self.assertIn("rankRows(models, m => m.intelligence", template)
-        self.assertIn("rankRows(hfItems, i => i.trending", template)
+        self.assertIn("const hfCard", template)
+        self.assertNotIn("rankRows(hfItems", template)
 
     def test_hf_board_switches_between_the_three_homepage_columns(self):
         template = Path("index.html").read_text(encoding="utf-8")
         self.assertIn("App.setHfTab", template)
         self.assertIn("hfTab: 'models'", template)
-        # 栏目名由后端给，前端不硬编码「模型 / 应用 / 数据集」
+        # 栏目名由后端给，前端不硬编码
         labels = [label for _, label, _, _ in dashboard.HF_KINDS]
-        self.assertEqual(labels, ["模型", "应用", "数据集"])
+        self.assertEqual(labels, ["Models", "Spaces", "Datasets"])
+        rail = (template.split("function dataRailHtml")[1]
+                .split("function heatmapHtml")[0])
         for label in labels:
-            self.assertNotIn(f"'{label}'", template.split("function dataRailHtml")[1]
-                             .split("function heatmapHtml")[0])
+            self.assertNotIn(f"'{label}'", rail)
 
-    def test_hf_rows_link_to_the_repo_and_spaces_show_their_emoji(self):
-        """点进去看仓库本身才是这块的用处；应用的作者是个人账号，认脸靠 emoji。"""
+    def test_hf_cards_show_the_numbers_instead_of_hiding_them_in_a_tooltip(self):
+        """照官网把更新时间、下载量、点赞排在名字下面。
+
+        这些正是判断「值不值得点」的依据，收进 hover 等于没给；官网也不显示名次
+        和热度分，顺序本身就是「本周热度」。
+        """
+        rail = (Path("index.html").read_text(encoding="utf-8")
+                .split("function dataRailHtml")[1].split("function heatmapHtml")[0])
+        self.assertIn("countText(item.downloads)", rail)
+        self.assertIn("countText(item.likes)", rail)
+        self.assertIn("dayText(item.updatedAt)", rail)
+        self.assertIn('class="hf-meta"', rail)
+        # 卡片整体是链接，点进去看仓库本身才是这块的用处
+        self.assertIn('class="hf-item" href=', rail)
+        # Spaces 认脸靠作者自选的 emoji 和标题；模型/数据集出 owner/name 全名
+        self.assertIn('class="hf-emoji"', rail)
+        self.assertIn('class="hf-name is-repo"', rail)
+        self.assertIn("hfPage.key === 'spaces'", rail)
+
+    def test_hf_meta_items_do_not_break_between_icon_and_number(self):
+        """换行断在「♡」和数字之间会让图标独自留在行尾，数字掉到下一行。"""
+        rail = (Path("index.html").read_text(encoding="utf-8")
+                .split("function dataRailHtml")[1].split("function heatmapHtml")[0])
+        self.assertIn("meta.map(m => `<span>${m}</span>`)", rail)
+        self.assertIn("↓&nbsp;", rail)
+        self.assertIn("♡&nbsp;", rail)
+
+    def test_switching_tabs_keeps_the_scroll_position(self):
+        """整块换掉 innerHTML 会把页面和右栏的滚动位置一起归零，切个页不该跳回顶部。"""
         template = Path("index.html").read_text(encoding="utf-8")
-        self.assertIn("href: item.url", template)
-        self.assertIn("const emojiChip", template)
-        self.assertIn("c.emoji ? emojiChip(c.emoji, 22)", template)
-        self.assertIn("a.rank-row:hover", template)
+        block = template.split("function render(){")[1].split("\nfunction ")[0]
+        self.assertIn("renderedPage === state.page", block)
+        self.assertIn("window.scrollY", block)
+        # 右栏那条看板列自己也在滚动，要单独记一份
+        self.assertIn(".feed-data", block)
+        self.assertIn("scrollTop", block)
+        self.assertIn("window.scrollTo(0, scrollY)", block)
 
     def test_live_quote_tickers_match_the_pipeline(self):
         template = Path("index.html").read_text(encoding="utf-8")

@@ -1,10 +1,10 @@
 {
-  "generatedAt": "2026-09-04T17:53:08+08:00",
+  "generatedAt": "2026-09-04T18:08:21+08:00",
   "leaderboard": {
     "source": "Artificial Analysis",
     "sourceUrl": "https://artificialanalysis.ai/",
     "metric": "智能指数",
-    "updatedAt": "2026-09-04T17:53:16+08:00",
+    "updatedAt": "2026-09-04T18:08:22+08:00",
     "error": "",
     "models": [
       {
@@ -182,7 +182,7 @@
         "label": "小模型",
         "note": "4B–40B",
         "sourceUrl": "https://artificialanalysis.ai/models/open-source/small",
-        "updatedAt": "2026-09-04T17:53:27+08:00",
+        "updatedAt": "2026-09-04T18:08:22+08:00",
         "error": "",
         "models": [
           {
@@ -336,7 +336,7 @@
         "label": "微型",
         "note": "≤4B",
         "sourceUrl": "https://artificialanalysis.ai/models/open-source/tiny",
-        "updatedAt": "2026-09-04T17:53:33+08:00",
+        "updatedAt": "2026-09-04T18:08:23+08:00",
         "error": "",
         "models": [
           {
@@ -491,14 +491,14 @@
     "source": "Hugging Face",
     "sourceUrl": "https://huggingface.co/",
     "metric": "热度分",
-    "updatedAt": "2026-09-04T17:53:35+08:00",
+    "updatedAt": "2026-09-04T18:08:25+08:00",
     "error": "",
     "sections": [
       {
         "key": "models",
-        "label": "模型",
+        "label": "Models",
         "sourceUrl": "https://huggingface.co/models",
-        "updatedAt": "2026-09-04T17:53:34+08:00",
+        "updatedAt": "2026-09-04T18:08:24+08:00",
         "error": "",
         "items": [
           {
@@ -506,8 +506,8 @@
             "repo": "zai-org/GLM-5.3",
             "name": "GLM-5.3",
             "owner": "zai-org",
-            "trending": 857,
-            "likes": 1636,
+            "trending": 856,
+            "likes": 1638,
             "downloads": 303534,
             "updatedAt": "2026-09-04",
             "url": "https://huggingface.co/zai-org/GLM-5.3",
@@ -522,7 +522,7 @@
             "name": "Qwen3.8-Flash-Next",
             "owner": "Qwen",
             "trending": 607,
-            "likes": 4832,
+            "likes": 4833,
             "downloads": 351374,
             "updatedAt": "2026-08-27",
             "url": "https://huggingface.co/Qwen/Qwen3.8-Flash-Next",
@@ -536,8 +536,8 @@
             "repo": "Qwen/Qwen3.8-27B",
             "name": "Qwen3.8-27B",
             "owner": "Qwen",
-            "trending": 547,
-            "likes": 13870,
+            "trending": 549,
+            "likes": 13872,
             "downloads": 5739341,
             "updatedAt": "2026-08-14",
             "url": "https://huggingface.co/Qwen/Qwen3.8-27B",
@@ -548,26 +548,11 @@
           },
           {
             "rank": 4,
-            "repo": "zai-org/GLM-5.3-Flash",
-            "name": "GLM-5.3-Flash",
-            "owner": "zai-org",
-            "trending": 532,
-            "likes": 2030,
-            "downloads": 654957,
-            "updatedAt": "2026-09-04",
-            "url": "https://huggingface.co/zai-org/GLM-5.3-Flash",
-            "logoDomain": "z.ai",
-            "params": 321.3,
-            "task": "图文理解",
-            "inference": true
-          },
-          {
-            "rank": 5,
             "repo": "deepseek-ai/DeepSeek-V4-Flash-Vision-Exp",
             "name": "DeepSeek-V4-Flash-Vision-Exp",
             "owner": "deepseek-ai",
-            "trending": 532,
-            "likes": 564,
+            "trending": 534,
+            "likes": 567,
             "downloads": 133024,
             "updatedAt": "2026-09-01",
             "url": "https://huggingface.co/deepseek-ai/DeepSeek-V4-Flash-Vision-Exp",
@@ -575,14 +560,29 @@
             "params": 304.6,
             "task": "图文理解",
             "inference": true
+          },
+          {
+            "rank": 5,
+            "repo": "zai-org/GLM-5.3-Flash",
+            "name": "GLM-5.3-Flash",
+            "owner": "zai-org",
+            "trending": 532,
+            "likes": 2031,
+            "downloads": 654957,
+            "updatedAt": "2026-09-04",
+            "url": "https://huggingface.co/zai-org/GLM-5.3-Flash",
+            "logoDomain": "z.ai",
+            "params": 321.3,
+            "task": "图文理解",
+            "inference": true
           }
         ]
       },
       {
         "key": "spaces",
-        "label": "应用",
+        "label": "Spaces",
         "sourceUrl": "https://huggingface.co/spaces",
-        "updatedAt": "2026-09-04T17:53:35+08:00",
+        "updatedAt": "2026-09-04T18:08:24+08:00",
         "error": "",
         "items": [
           {
@@ -590,8 +590,8 @@
             "repo": "pollen-robotics/microduck-simulator",
             "name": "Microduck Sandbox",
             "owner": "pollen-robotics",
-            "trending": 276,
-            "likes": 395,
+            "trending": 277,
+            "likes": 396,
             "downloads": null,
             "updatedAt": "2026-09-04",
             "url": "https://huggingface.co/spaces/pollen-robotics/microduck-simulator",
@@ -674,9 +674,9 @@
       },
       {
         "key": "datasets",
-        "label": "数据集",
+        "label": "Datasets",
         "sourceUrl": "https://huggingface.co/datasets",
-        "updatedAt": "2026-09-04T17:53:35+08:00",
+        "updatedAt": "2026-09-04T18:08:25+08:00",
         "error": "",
         "items": [
           {
@@ -697,7 +697,7 @@
             "name": "cad-1000-hours",
             "owner": "markov-ai",
             "trending": 151,
-            "likes": 354,
+            "likes": 355,
             "downloads": 101777,
             "updatedAt": "2026-08-21",
             "url": "https://huggingface.co/datasets/markov-ai/cad-1000-hours",
@@ -732,8 +732,8 @@
             "repo": "kuben-developer/tiktok-videos-4b",
             "name": "tiktok-videos-4b",
             "owner": "kuben-developer",
-            "trending": 76,
-            "likes": 79,
+            "trending": 77,
+            "likes": 80,
             "downloads": 3072,
             "updatedAt": "2026-09-02",
             "url": "https://huggingface.co/datasets/kuben-developer/tiktok-videos-4b",
@@ -746,7 +746,7 @@
   "market": {
     "source": "腾讯财经",
     "sourceUrl": "https://stockapp.finance.qq.com/",
-    "updatedAt": "2026-09-04T17:53:35+08:00",
+    "updatedAt": "2026-09-04T18:08:25+08:00",
     "error": "",
     "quotes": [
       {

@@ -329,13 +329,16 @@ python -m src.health --days 30
 - 分档榜（`AA_SIZE_PAGES`）读的是网页而不是接口：接口既不给参数规模也不给开源标记，分不出这两档。取页面里每张图内联的 schema.org Dataset（`<script type="application/ld+json">`），比解析 Next.js 流式载荷稳定；解析不出来会写 `error` 而不是静静地空一档，页面改版才看得见。厂商名按 slug 从接口那份数据借一份，只为取 logo——接口挂了分档榜照样有数，只是 logo 退成字标。
 - 分档榜**照搬页面的排序和条目名，不按模型去重**：总榜去重是怕一家的四个档位占满榜，而分档榜的用处正是复现那一页。同名不同档靠 `tag`（`xhigh`、`Non-reasoning`）区分，窄栏里用小字排在模型名右边。
 - 三张 AA 榜共用一块看板、切页展示（`state.leaderboardTab`），不并排三块——右栏只有 300px 出头，三块会把行情和热力图挤出首屏。逐档回退：小模型页挂了不牵连微型页，总榜靠旧快照顶上时这轮拉到的分档也不跟着退回旧值。
-- **HF 那块是独立看板，不是 AA 的一页**（`state.hfTab`）：AA 答「哪个模型更强」，HF 答「社区这周在看什么」；而且应用和数据集根本不是模型，挂在 AA 的标题和智能指数口径下就是署错了源。两块共用一套行渲染（`rankRows`），指标只是换个字段。
+- **HF 那块是独立看板，不是 AA 的一页**（`state.hfTab`）：AA 答「哪个模型更强」，HF 答「社区这周在看什么」；而且 Spaces 和 Datasets 根本不是模型，挂在 AA 的标题和智能指数口径下就是署错了源。
+- **HF 三栏照官网的卡片排法，不套 AA 那种「一行 + 进度条」**：名字一行，任务 / 参数规模 / 更新时间 / 下载 / ⚡ / 点赞一行（`hf-item`）。这些数字正是判断「值不值得点」的依据，塞进 tooltip 等于没给。官网不显示名次也不显示热度分，这里也不加——顺序本身就是「本周热度」。每个指标包成一个整体再进 flex，否则换行会断在图标和数字之间，出现「♡」独自留在行尾、数字被推到下一行。
+- 栏目名保留 HF 自己的说法（**Models / Spaces / Datasets**）：`Spaces` 译成「应用」会丢掉它在 HF 语境里的含义，而这三个词读者在官网上天天见。
 - HF 复现首页「Trending this week」的三栏，各 5 条（`HF_TRENDING_LIMIT`，跟着首页，别自作主张取 12）。三类字段不一样，各自点名 `expand[]`（`HF_KINDS` 第四位）：
-  - **模型**：`safetensors`、`pipeline_tag`、`inferenceProviderMapping`。`safetensors.total` 是张量总数，换算成「多少 B」；GGUF 量化仓库没有这一位，留 `None` 而不是 0——0 会被读成「零参数」。`pipeline_tag` 按 `_HF_TASKS` 换中文短词，认不出的照原样显示，HF 新增任务类型时不会空一格。
-  - **应用**：没有下载量这回事（`downloads` 留 `None`）。仓库名常是 `wan555` 这种缩写，展示名取 `cardData.title`；作者多是个人账号，拿它认 logo 没有意义，用 `cardData.emoji` 当头像——首页也是靠它认脸的。`runtime.stage` 只有 `_HF_LIVE_STAGES` 里那几个算能用，停在 `BUILDING` / `RUNTIME_ERROR` 的点开是白屏。
-  - **数据集**：页面地址多一段 `/datasets/`，照模型那样拼会 404。榜上尽是 2024 年的经典集（squad、glue、imdb），所以前端 `dayText` 对往年日期带上年份，只出「03-04」会被当成今年刚更新过。
+  - **Models**：`safetensors`、`pipeline_tag`、`inferenceProviderMapping`。`safetensors.total` 是张量总数，换算成「多少 B」；GGUF 量化仓库没有这一位，留 `None` 而不是 0——0 会被读成「零参数」。`pipeline_tag` 按 `_HF_TASKS` 换中文短词，认不出的照原样显示，HF 新增任务类型时不会空一格。⚡ 对应官网的「Inference Available」。
+  - **Spaces**：没有下载量这回事（`downloads` 留 `None`）。仓库名常是 `wan555` 这种缩写，展示名取 `cardData.title`，卡片头用 `cardData.emoji` 认脸——作者多是个人账号，拿它认 logo 没有意义，官网也是靠 emoji 认的。`runtime.stage` 只有 `_HF_LIVE_STAGES` 里那几个算能用，卡片上出绿点；停在 `BUILDING` / `RUNTIME_ERROR` 的点开是白屏。
+  - **Datasets**：页面地址多一段 `/datasets/`，照模型那样拼会 404。榜上尽是 2024 年的经典集（squad、glue、imdb），所以前端 `dayText` 对往年日期带上年份，只出「03-04」会被当成今年刚更新过。
 - `expand[]` 写错时对方回的是**报错体而不是列表**（`cardData` 是应用那边的名字，模型接口不认），所以拿到非列表要写 `error`；不写只会表现为「这一栏突然空了」。三类各自成败，全挂了才算整块挂；逐栏回退和 AA 分档共用 `keep_last_good_buckets`（差别只在装行的字段叫 `models` 还是 `items`）。
-- HF 那三栏的行是**链接**，点进去看仓库本身才是这块的用处；AA 的行没有单条地址，仍是死行。
+- HF 的卡片整体是**链接**，点进去看仓库本身才是这块的用处；AA 的行没有单条地址，仍是死行。
+- `render()` 整块换掉 `#app` 的 `innerHTML`，页面高度瞬间塌成 0，浏览器顺手把滚动位置夹回顶部，右栏那条自己滚动的看板列（`.feed-data`）也会一起归零。所以**同一页内的重渲染要记回两处滚动位置**（`renderedPage` 判断是否换页），否则切个榜单页就被弹回页首；换页仍然回顶。
 - **`_CREATOR_DOMAINS` 是顺序敏感的子串匹配**，动它要留意重叠：HF 的组织名 `MiniMaxAI` 去掉分隔符含 `xai`，`minimax` 排在 `xai` 后面就会给 MiniMax 挂上 Grok 的 logo。同一张表同时喂 AA 的厂商名（`Z AI`）和 HF 的组织名（`zai-org`）。
 - 行情接口返回 GBK，按位取值（现价 3、昨收 4、涨跌幅 32、总市值 45），各市场前 35 位布局一致。涨跌额一律用现价减昨收现算——涨跌幅那一位在个别市场会给空串，而现价和昨收一直有值。
 - 域名和标的写在一起（`TICKERS` 第三位、`_CREATOR_DOMAINS`），页面不该知道「智谱」对应哪个域名。取不到 favicon 的（中芯国际、海光）直接留空走字标，别配一个注定 404 的域名。
