@@ -1544,7 +1544,7 @@
    "lookback_window": "7d",
    "min_content_chars": 30,
    "name": "X 白名单账号",
-   "notes": "官方 API 增量采集；先以 10 个 P0 账号 experimental 灰度",
+   "notes": "个人号白名单；gdb/karpathy/OfficialLoganK/_catwu/dawnsongtweets/steipete。缺 credits，保持 paused。",
    "priority": "P0",
    "source_id": "social-media",
    "status": "paused",
@@ -2355,14 +2355,14 @@
    "source_id": "social-media",
    "名称": "X 白名单账号",
    "启用智能精筛": true,
-   "备注": "首批 10 个官方账号；稳定运行一周后再扩容",
+   "备注": "首批 6 个个人号；官方号已撤。缺 credits，保持 paused。",
    "排除回复": true,
    "排除转发": true,
    "智能精筛起始分": 45,
    "正文最少字数": 30,
    "直接入库分": 70,
-   "账号分级": "{\"openai\":\"P0\",\"anthropicai\":\"P0\",\"googledeepmind\":\"P0\",\"aiatmeta\":\"P0\",\"xai\":\"P0\",\"mistralai\":\"P0\",\"cohere\":\"P0\",\"huggingface\":\"P0\",\"nvidiaai\":\"P0\",\"stabilityai\":\"P0\"}",
-   "账号白名单": "OpenAI,AnthropicAI,GoogleDeepMind,AIatMeta,xai,MistralAI,cohere,huggingface,NVIDIAAI,StabilityAI"
+   "账号分级": "{\"gdb\":\"P0\",\"karpathy\":\"P0\",\"officiallogank\":\"P0\",\"_catwu\":\"P0\",\"dawnsongtweets\":\"P0\",\"steipete\":\"P0\"}",
+   "账号白名单": "gdb,karpathy,OfficialLoganK,_catwu,dawnsongtweets,steipete"
   }
  ],
  "二级参数-GitHub": [

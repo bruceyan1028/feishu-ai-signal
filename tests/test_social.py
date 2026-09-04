@@ -267,7 +267,95 @@ class SocialSourceTest(unittest.TestCase):
         self.assertEqual(len(kept), 1)
         self.assertEqual(kept[0]["metrics"]["gate"], "llm")
 
-    def test_seed_contains_ten_p0_pilot_accounts(self) -> None:
+    @patch("src.social._api_get")
+    def test_profile_resolves_avatar_and_verified_once(self, api_get) -> None:
+        api_get.return_value = {
+            "data": [
+                {
+                    "id": "9",
+                    "username": "Karpathy",
+                    "name": "Andrej Karpathy",
+                    "public_metrics": {"followers_count": 1200000},
+                    "profile_image_url": "https://pbs.twimg.com/profile_images/1/ak_normal.jpg",
+                    "verified": True,
+                    "verified_type": "blue",
+                }
+            ]
+        }
+        state: dict = {}
+        resolved = social._resolve_accounts(["karpathy"], state, bearer="t")
+        profile = resolved["karpathy"]
+        self.assertEqual(profile["avatar"], "https://pbs.twimg.com/profile_images/1/ak_400x400.jpg")
+        self.assertTrue(profile["verified"])
+        self.assertIn("profile_image_url", api_get.call_args.kwargs["params"]["user.fields"])
+        # 已解析过的账号不再重复请求
+        api_get.reset_mock()
+        social._resolve_accounts(["karpathy"], state, bearer="t")
+        api_get.assert_not_called()
+
+    @patch("src.social._api_get")
+    def test_users_by_degrades_when_field_unsupported(self, api_get) -> None:
+        api_get.side_effect = [
+            RuntimeError("X API 400: Invalid field verified_type"),
+            {"data": [{"id": "9", "username": "gdb", "name": "Greg Brockman"}]},
+        ]
+        resolved = social._resolve_accounts(["gdb"], {}, bearer="t")
+        self.assertEqual(resolved["gdb"]["user_id"], "9")
+        self.assertNotIn("verified_type", api_get.call_args.kwargs["params"]["user.fields"])
+
+    def test_quoted_author_and_media_are_carried(self) -> None:
+        post = _item(post_id="500", refs=[{"type": "quoted", "id": "400"}],
+                     text="This ships the pricing change we flagged: 30% cheaper inference for everyone.")
+        items = social._build_account_items(
+            [post],
+            {
+                "mk1": {
+                    "media_key": "mk1",
+                    "type": "video",
+                    "preview_image_url": "https://pbs.twimg.com/thumb.jpg",
+                    "duration_ms": 1775000,
+                }
+            },
+            feed=_feed(),
+            username="openai",
+            profile={
+                "name": "OpenAI",
+                "followers": 100,
+                "avatar": "https://pbs.twimg.com/profile_images/1/oa_400x400.jpg",
+                "verified": True,
+            },
+            referenced_by_id={
+                "400": {
+                    "id": "400",
+                    "author_id": "77",
+                    "text": "We are cutting inference prices today.",
+                    "created_at": "2026-04-29T10:00:00.000Z",
+                    "attachments": {"media_keys": ["mk1"]},
+                }
+            },
+            users_by_id={
+                "77": {
+                    "id": "77",
+                    "username": "stephzhan",
+                    "name": "Stephanie Zhan",
+                    "profile_image_url": "https://pbs.twimg.com/profile_images/2/sz_normal.jpg",
+                    "verified": True,
+                }
+            },
+        )
+        metrics = items[0]["metrics"]
+        self.assertEqual(metrics["account_avatar"], "https://pbs.twimg.com/profile_images/1/oa_400x400.jpg")
+        self.assertTrue(metrics["account_verified"])
+        quoted = metrics["quoted"]
+        self.assertEqual(quoted["account"], "stephzhan")
+        self.assertEqual(quoted["account_name"], "Stephanie Zhan")
+        self.assertEqual(quoted["avatar"], "https://pbs.twimg.com/profile_images/2/sz_400x400.jpg")
+        self.assertTrue(quoted["verified"])
+        video = quoted["media_assets"]["videos"][0]
+        self.assertEqual(video["thumbnailUrl"], "https://pbs.twimg.com/thumb.jpg")
+        self.assertEqual(video["durationSec"], 1775.0)
+
+    def test_seed_contains_personal_p0_accounts(self) -> None:
         seed = json.loads(
             (Path(__file__).resolve().parents[1] / "src" / "seed_default.json").read_text()
         )
@@ -276,10 +364,14 @@ class SocialSourceTest(unittest.TestCase):
             for item in seed["二级参数-社媒"]
             if item.get("source_id") == "social-media"
         )
-        accounts = [part.strip() for part in row["账号白名单"].split(",")]
+        accounts = [part.strip().lstrip("@").lower() for part in row["账号白名单"].split(",")]
         tiers = json.loads(row["账号分级"])
-        self.assertEqual(len(accounts), 10)
+        self.assertEqual(
+            accounts,
+            ["gdb", "karpathy", "officiallogank", "_catwu", "dawnsongtweets", "steipete"],
+        )
         self.assertEqual(set(tiers.values()), {"P0"})
+        self.assertEqual(len(accounts), 6)
 
     def test_seven_day_ten_account_replay_precision(self) -> None:
         """合成回放先验证漏斗；真实 API 灰度由 experimental 诊断命令执行。"""

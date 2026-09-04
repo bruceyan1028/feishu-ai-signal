@@ -36,7 +36,8 @@ def _load_dotenv() -> None:
 
 def _kept_payload(item: dict) -> dict:
     metrics = item.get("metrics") or {}
-    return {
+    quoted = metrics.get("quoted") or {}
+    payload = {
         "url": item.get("url"),
         "gate": metrics.get("gate"),
         "score": metrics.get("social_score"),
@@ -47,7 +48,21 @@ def _kept_payload(item: dict) -> dict:
         "event_and_evidence": metrics.get("event_and_evidence"),
         "core_fact": metrics.get("llm_core_fact") or "",
         "title": item.get("title"),
+        # 渲染卡片要用的字段，顺带在诊断里核对是否真的取到
+        "avatar": metrics.get("account_avatar") or "",
+        "verified": metrics.get("account_verified"),
+        "impressions": metrics.get("impressions"),
     }
+    if quoted:
+        payload["quoted"] = {
+            "account": quoted.get("account"),
+            "account_name": quoted.get("account_name"),
+            "avatar": quoted.get("avatar"),
+            "verified": quoted.get("verified"),
+            "images": len((quoted.get("media_assets") or {}).get("images") or []),
+            "videos": len((quoted.get("media_assets") or {}).get("videos") or []),
+        }
+    return payload
 
 
 def run_username(username: str, lookback_hours: int) -> int:

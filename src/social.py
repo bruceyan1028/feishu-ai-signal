@@ -58,6 +58,10 @@ _TWEET_FIELDS = (
     "id,text,author_id,created_at,conversation_id,referenced_tweets,"
     "public_metrics,entities,attachments,edit_history_tweet_ids,lang,note_tweet"
 )
+_USER_FIELDS = "name,username,public_metrics,profile_image_url,verified,verified_type"
+_EXPANSIONS = "attachments.media_keys,referenced_tweets.id,referenced_tweets.id.author_id"
+# 头像和蓝 V 是后加的：游标里存着旧结构的账号要重解析一次才会补上。
+_PROFILE_REV = 2
 
 
 @dataclass
@@ -108,18 +112,58 @@ def _account_names(feed: dict[str, Any]) -> list[str]:
     return result
 
 
+def _big_avatar(url: str) -> str:
+    """X 默认给 48px 的 _normal 图，卡片和侧栏都糊；换成 400px 那档。"""
+    return re.sub(r"_normal(\.\w+)$", r"_400x400\1", str(url or "").strip())
+
+
+def _user_profile(user: dict[str, Any]) -> dict[str, Any]:
+    metrics = user.get("public_metrics") or {}
+    username = str(user.get("username") or "").lower()
+    return {
+        "user_id": str(user.get("id") or ""),
+        "name": str(user.get("name") or username),
+        "username": username,
+        "followers": int(metrics.get("followers_count") or 0),
+        "avatar": _big_avatar(user.get("profile_image_url")),
+        "verified": bool(user.get("verified")),
+        "verified_type": str(user.get("verified_type") or ""),
+    }
+
+
+def _users_by(usernames: list[str], *, bearer: str) -> dict[str, Any]:
+    """老 App 权限可能不认 verified_type / profile_image_url，逐级降级而不是整批失败。"""
+    fields = _USER_FIELDS
+    while True:
+        try:
+            return _api_get(
+                "users/by",
+                bearer=bearer,
+                params={"usernames": ",".join(usernames), "user.fields": fields},
+            )
+        except RuntimeError as exc:
+            dropped = next(
+                (f for f in ("verified_type", "verified", "profile_image_url") if f in fields),
+                "",
+            )
+            if not dropped:
+                raise
+            fields = fields.replace(f",{dropped}", "")
+            log.warning("X users/by 不支持 %s，已降级：%s", dropped, exc)
+
+
 def _resolve_accounts(
     usernames: list[str],
     state: dict[str, Any],
     *,
     bearer: str,
 ) -> dict[str, dict[str, Any]]:
-    """仅解析状态中尚无 user_id 的账号，并把资料写回待持久化状态。"""
+    """仅解析资料缺失或结构过期的账号，并把资料写回待持久化状态。"""
     resolved: dict[str, dict[str, Any]] = {}
     missing = []
     for username in usernames:
         saved = state.get(username) if isinstance(state.get(username), dict) else {}
-        if saved.get("user_id"):
+        if saved.get("user_id") and int(saved.get("profile_rev") or 0) >= _PROFILE_REV:
             resolved[username] = dict(saved)
         else:
             missing.append(username)
@@ -127,22 +171,14 @@ def _resolve_accounts(
         batch = missing[start : start + 100]
         if not batch:
             continue
-        payload = _api_get(
-            "users/by",
-            bearer=bearer,
-            params={"usernames": ",".join(batch), "user.fields": "name,username,public_metrics"},
-        )
+        payload = _users_by(batch, bearer=bearer)
         for user in payload.get("data") or []:
-            username = str(user.get("username") or "").lower()
-            metrics = user.get("public_metrics") or {}
+            profile = _user_profile(user)
+            username = profile["username"]
             saved = dict(state.get(username) or {})
-            saved.update(
-                {
-                    "user_id": str(user.get("id") or ""),
-                    "name": str(user.get("name") or username),
-                    "followers": int(metrics.get("followers_count") or 0),
-                }
-            )
+            saved.update(profile)
+            # 解析过就记版本；接口没给头像也不要每轮重试。
+            saved["profile_rev"] = _PROFILE_REV
             state[username] = saved
             resolved[username] = saved
         unresolved = sorted(set(batch) - set(resolved))
@@ -158,21 +194,29 @@ def _timeline(
     since_id: str = "",
     lookback_hours: int = 168,
     max_pages: int = 20,
-) -> tuple[list[dict[str, Any]], dict[str, dict[str, Any]], dict[str, dict[str, Any]]]:
+) -> tuple[
+    list[dict[str, Any]],
+    dict[str, dict[str, Any]],
+    dict[str, dict[str, Any]],
+    dict[str, dict[str, Any]],
+]:
     posts: list[dict[str, Any]] = []
     media: dict[str, dict[str, Any]] = {}
     referenced: dict[str, dict[str, Any]] = {}
+    users: dict[str, dict[str, Any]] = {}
     token = ""
     start_time = (
         datetime.now(timezone.utc) - timedelta(hours=max(1, lookback_hours))
     ).strftime("%Y-%m-%dT%H:%M:%SZ")
     tweet_fields = _TWEET_FIELDS
+    expansions = _EXPANSIONS
     use_start_time = not since_id
     for _ in range(max_pages):
         params: dict[str, Any] = {
             "max_results": 100,
             "tweet.fields": tweet_fields,
-            "expansions": "attachments.media_keys,referenced_tweets.id",
+            "expansions": expansions,
+            "user.fields": "name,username,profile_image_url,verified",
             "media.fields": "media_key,type,url,preview_image_url,width,height,duration_ms,public_metrics",
             "exclude": "retweets",
         }
@@ -191,6 +235,10 @@ def _timeline(
                 tweet_fields = tweet_fields.replace(",note_tweet", "")
                 log.warning("X timeline 不支持 note_tweet，已降级：%s", exc)
                 continue
+            if "referenced_tweets.id.author_id" in expansions:
+                expansions = expansions.replace(",referenced_tweets.id.author_id", "")
+                log.warning("X timeline 不支持被引作者 expansion，已降级：%s", exc)
+                continue
             if use_start_time:
                 use_start_time = False
                 log.warning("X timeline start_time 被拒，改走本地时间窗：%s", exc)
@@ -206,6 +254,10 @@ def _timeline(
             key = str(obj.get("id") or "")
             if key:
                 referenced[key] = obj
+        for obj in includes.get("users") or []:
+            key = str(obj.get("id") or "")
+            if key:
+                users[key] = obj
         meta = payload.get("meta") or {}
         token = str(meta.get("next_token") or "")
         if not token:
@@ -224,7 +276,7 @@ def _timeline(
             if created >= cutoff:
                 filtered.append(post)
         posts = filtered
-    return posts, media, referenced
+    return posts, media, referenced, users
 
 
 def _reference_types(post: dict[str, Any]) -> set[str]:
@@ -270,21 +322,48 @@ def _article_cards(posts: list[dict[str, Any]]) -> list[str]:
     return cards
 
 
-def _referenced_texts(
+def _quoted_tweets(
     posts: list[dict[str, Any]], referenced_by_id: dict[str, dict[str, Any]]
-) -> list[str]:
-    texts: list[str] = []
+) -> list[dict[str, Any]]:
+    """线程里所有被引用的原帖对象，按出现顺序去重。"""
+    out: list[dict[str, Any]] = []
     seen: set[str] = set()
     for post in posts:
         for ref in post.get("referenced_tweets") or []:
+            if str(ref.get("type") or "") != "quoted":
+                continue
             ref_id = str(ref.get("id") or "")
             if not ref_id or ref_id in seen:
                 continue
             seen.add(ref_id)
-            text = _post_full_text(referenced_by_id.get(ref_id) or {})
-            if text:
-                texts.append(text)
-    return texts
+            tweet = referenced_by_id.get(ref_id)
+            if tweet:
+                out.append(tweet)
+    return out
+
+
+def _quoted_context(
+    quoted: list[dict[str, Any]],
+    users_by_id: dict[str, dict[str, Any]],
+    media_by_key: dict[str, dict[str, Any]],
+) -> dict[str, Any]:
+    """被引原帖的作者、正文与配图。引用型帖子只会引一条，取第一条即可。"""
+    if not quoted:
+        return {}
+    tweet = quoted[0]
+    author = users_by_id.get(str(tweet.get("author_id") or "")) or {}
+    _, assets = _media_assets([tweet], media_by_key)
+    return {
+        "post_id": str(tweet.get("id") or ""),
+        # 卡片只展示被引原帖的摘要，长文没必要整篇塞进「社媒指标」
+        "text": _post_full_text(tweet)[:1000],
+        "created_at": str(tweet.get("created_at") or ""),
+        "account": str(author.get("username") or "").lower(),
+        "account_name": str(author.get("name") or ""),
+        "avatar": _big_avatar(author.get("profile_image_url")),
+        "verified": bool(author.get("verified")),
+        "media_assets": assets,
+    }
 
 
 def _media_assets(
@@ -328,8 +407,10 @@ def _build_account_items(
     username: str,
     profile: dict[str, Any],
     referenced_by_id: dict[str, dict[str, Any]] | None = None,
+    users_by_id: dict[str, dict[str, Any]] | None = None,
 ) -> list[dict[str, Any]]:
     referenced_by_id = referenced_by_id or {}
+    users_by_id = users_by_id or {}
     groups: dict[str, list[dict[str, Any]]] = defaultdict(list)
     for post in posts:
         conversation = str(post.get("conversation_id") or post.get("id") or "")
@@ -369,14 +450,21 @@ def _build_account_items(
         reposts = sum(int(item.get("retweet_count") or 0) for item in public)
         quotes = sum(int(item.get("quote_count") or 0) for item in public)
         bookmarks = sum(int(item.get("bookmark_count") or 0) for item in public)
+        impressions = sum(int(item.get("impression_count") or 0) for item in public)
         engagement = likes + 2 * replies + 2 * reposts + 2 * quotes + bookmarks
         is_retweet = "retweeted" in refs
         is_quote = "quoted" in refs
         # 纯转发没有本人增量；引用转述只计自己写的字。
         own_source = "" if is_retweet and not is_quote else "\n".join(texts)
         own_text = _clean_own_text(own_source)
-        quoted_texts = _referenced_texts(thread_posts, referenced_by_id) if is_quote else []
-        quoted_text = _clean_own_text("\n".join(quoted_texts))
+        quoted = (
+            _quoted_context(
+                _quoted_tweets(thread_posts, referenced_by_id), users_by_id, media_by_key
+            )
+            if is_quote
+            else {}
+        )
+        quoted_text = _clean_own_text(str(quoted.get("text") or ""))
         item_feed = dict(feed)
         item_feed["name"] = f"X · @{username}"
         item_feed["x_post_id"] = canonical_id
@@ -395,12 +483,15 @@ def _build_account_items(
                     "conversation_id": conversation,
                     "account": username,
                     "account_name": profile.get("name") or username,
+                    "account_avatar": str(profile.get("avatar") or ""),
+                    "account_verified": bool(profile.get("verified")),
                     "followers": int(profile.get("followers") or 0),
                     "likes": likes,
                     "replies": replies,
                     "reposts": reposts,
                     "quotes": quotes,
                     "bookmarks": bookmarks,
+                    "impressions": impressions,
                     "engagement": engagement,
                     "is_retweet": is_retweet,
                     "is_reply": "replied_to" in refs,
@@ -411,6 +502,7 @@ def _build_account_items(
                     "own_chars": len(own_text),
                     "quoted_text": quoted_text,
                     "quoted_chars": len(quoted_text),
+                    "quoted": quoted,
                     "has_article": bool(cards) or any(len(_post_full_text(post)) > 280 for post in thread_posts),
                     "has_media": has_media,
                 },
@@ -427,7 +519,7 @@ def _fetch_account(
     *,
     bearer: str,
 ) -> tuple[list[dict[str, Any]], str, int]:
-    posts, media, referenced = _timeline(
+    posts, media, referenced, users = _timeline(
         str(profile["user_id"]),
         bearer=bearer,
         since_id=str(profile.get("since_id") or ""),
@@ -442,6 +534,7 @@ def _fetch_account(
         username=username,
         profile=profile,
         referenced_by_id=referenced,
+        users_by_id=users,
     ), max_seen, len(posts)
 
 
