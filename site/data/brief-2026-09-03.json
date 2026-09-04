@@ -79,6 +79,26 @@
       "mediaAssets": {
         "images": [
           {
+            "url": "media/papers/recvu1S4qSbYtM-p7-f1.png",
+            "alt": "PDF 第 7 页图表：Table 1 Main results across model scales and training strategies. Subscripts denote changes relative to the corresponding base model. The best result in each section per column is in bold.",
+            "kind": "pdf-page"
+          },
+          {
+            "url": "media/papers/recvu1S4qSbYtM-p8-f2.png",
+            "alt": "PDF 第 8 页图表：Table 2 Win Rate Results. For each criterion, we report the percentage of comparisons in which each model is selected as the best among the baseline trained on PaperGym-20k , the baseline trained on RubricHub Science , and the",
+            "kind": "pdf-page"
+          },
+          {
+            "url": "media/papers/recvu1S4qSbYtM-p9-f3.png",
+            "alt": "PDF 第 9 页图表：Figure 3 Left: Data scaling law with GRPO training. Right: Training dynamics across two-stage orderings of OPSD and GRPO on Qwen3-1.7B.",
+            "kind": "pdf-page"
+          },
+          {
+            "url": "media/papers/recvu1S4qSbYtM-p9-f4.png",
+            "alt": "PDF 第 9 页图表：Table 3 Criterion leakage comparison.",
+            "kind": "pdf-page"
+          },
+          {
             "url": "https://arxiv.org/html/2608.31119v1/framework.png",
             "alt": "Figure 1 : Overview of the PaperGym framework. (a) Data Generation: arXiv papers are parsed into four stages to synthesize questions and answers; rubrics are generated, merged, ranked, and filtered. (b) Two-Stage Policy Training: rubric-based OPSD followed by rubric-as-rewards GRPO."
           },
@@ -602,7 +622,10 @@
         "cover": "https://wpimg-wscn.awtmt.com/3ad034a0-678d-4204-abf2-4191ae3a52f9.png",
         "curatedBy": "llm"
       },
-      "editorialStructure": "source",
+      "editorialStructure": "",
+      "body": "博通祭出史上最强前瞻指引：首次明确FY28 AI收入目标高达2300亿美元，对应20GW数据中心部署规模，并承诺每股收益超30美元，远超华尔街预期。Anthropic与OpenAI正取代谷歌成为最大买家，客户格局重塑令市场对博通估值上限展开重新想象，华尔街选择忽略近忧、聚焦远景，集体维持买入评级。\n\n芯片巨头博通在最新财季业绩发布后，首次正式给出2028财年AI芯片收入2300亿美元的指引，并承诺届时每股收益将超过30美元。这一数字不仅远超华尔街此前的预期，更让华尔街多家顶级投行在短期业绩不及预期的背景下，选择忽略近忧、聚焦远景，集体维持买入评级。\n\n博通管理层在3QFY26（截至2026年7月的第三财季）业绩电话会上将FY27 AI收入指引从\"超过1000亿美元\"上调至1150亿美元，并首度明确给出FY28 AI收入2300亿美元的目标——对应约20GW的数据中心部署规模——同时预计FY28非GAAP每股收益将超过30美元。 消息公布后，高盛、汇丰、Jefferies等机构均维持买入评级，目标价分别为540美元、560美元和550美元，相较当前股价367.24美元均隐含逾50%的上涨空间。\n\n然而近期业绩本身并不令人惊艳。博通3QFY26收入296亿美元，与市场预期大体吻合；4QFY26收入指引为348亿美元，低于汇丰和高盛预期，营业利润率指引亦低于市场预估。推动股价预期重估的核心驱动力， 在于客户结构的深刻变化——Anthropic和OpenAI正在取代谷歌，成为博通最大的AI芯片买家，客户多元化显著降低了外界对博通过度依赖单一客户的担忧。\n\n## 短期业绩稳健，四季度指引略显保守\n\n博通3QFY26收入296亿美元，与公司指引294亿美元及市场一致预期295亿美元基本持平。 其中AI收入167亿美元，较公司指引的160亿美元高出约4%，同比大增221%；半导体解决方案部门收入208亿美元，基础设施软件部门收入88亿美元，均与预期相符。非GAAP调整后每股收益3.32美元，高于市场一致预期的3.24美元。\n\n4QFY26收入指引为348亿美元，低于高盛预期的362亿美元及汇丰预期的373亿美元，仅与市场一致预期352亿美元大体持平。调整后营业利润率指引为66%，低于高盛预期的67.5%和市场预期的66.8%。毛利率压力来自定制AI芯片（ASIC）占比持续上升，以及随XPU产品一同出货的HBM等存储组件成本拖累——4QFY26毛利率指引约73%，较3QFY26的75%下滑约200个基点。\n\n据高盛研究，尽管短期利润率承压，博通管理层预计通过固定成本杠杆效应，运营利润率可在收入快速增长中保持稳定，并预期营运利润杠杆将抵消部分毛利率摊薄。\n\n## FY27指引上调，FY28目标远超华尔街预期\n\n市场真正为之提振的，是博通管理层对中长期前景的大幅上调。 FY26全年AI收入展望从560亿美元上调至580亿美元；FY27 AI收入指引升至1150亿美元，高于此前\"超过1000亿美元\"的表述，但仍低于汇丰预期的1404亿美元和高盛原先预期的1330亿美元。\n\n更具突破性的是博通史上首次给出的FY28 AI收入指引——2300亿美元，对应约20GW数据中心部署。该数字显著高于汇丰此前预测的2010亿美元、市场一致预期的1745亿美元以及高盛原先预测的1929亿美元。与此同时，FY28非GAAP每股收益指引超过30美元，亦高于汇丰估计的28.77美元和市场一致预期的26.23美元。\n\n据高盛研究报告， 博通管理层表示，FY27和FY28的供应链关键组件已完成锁定，当前指引的主要约束来自数据中心土地、电力和机房建设的就绪程度，并非需求或供应层面的短缺，这意味着随着基础设施瓶颈的逐步缓解，实际收入存在进一步超出指引的可能。\n\n## Anthropic与OpenAI崛起，客户格局重塑\n\n此次业绩发布的另一关键看点，是博通客户结构的显著重构。 长期以来，博通的ASIC业务高度依赖谷歌TPU订单，这一集中度风险始终是市场的隐忧。而此次管理层首度明确披露，Anthropic将在FY27成为博通最大的XPU客户，OpenAI将在FY28跃升为第二大客户，谷歌则退居第三。\n\n具体来看：Anthropic今年将部署1GW的Ironwood（TPU v8i），FY27计划追加5GW，FY28进一步部署10GW；OpenAI的Jalapeño定制XPU在3QFY26已开始量产出货，FY27计划部署1.3GW，FY28扩展至超过5GW，第三代XPU亦在研发中；Meta的MTIA定制加速器将从4QFY26开始量产，博通预计至2028年累计部署3GW。据汇丰研究，上述非谷歌客户的潜在管道规模合计约18GW，以每GW约100亿美元的收入测算，对应非谷歌ASIC收入约1800亿美元。\n\n尽管如此，谷歌并未退出。博通与谷歌签署了长期协议，涵盖未来TPU代际产品的开发与供应，以及AI网络基础设施合作，管理层表示未来数年谷歌每年的TPU采购规模将达\"数百亿美元\"级别。博通在3QFY26已开始向谷歌高量出货Ironwood TPU v7，并启动TPU v8i的量产发货。\n\n## AI网络与供应链扩张同步推进\n\n在AI芯片以外，博通的AI网络业务同样被视为重要增长引擎。管理层预计AI网络收入未来几年将与XPU收入保持同等增速。博通已率先推出行业首款100Tb/s以太网交换机Tomahawk 6，并完成了业界首款200Tb/s以太网交换机Tomahawk 7的流片。与此同时，博通正大幅扩张EML激光器、VCSEL及连续波激光器产能，三类产品年内产能均在翻倍，并计划在未来两年持续扩产，以应对激光器需求超出行业供给的局面。\n\n供应链层面，博通新加坡基板封装工厂将于FY27开始量产，以缓解基板供应瓶颈。管理层指出，除基板外，尖端硅片、HBM及系统内存同为潜在部署瓶颈，正与供应链伙伴协同解决。\n\n## 多家机构上调预测，维持买入评级\n\n面对这份兼具短期波动与长期惊喜的业绩，华尔街主要机构保持一致的乐观立场。\n\n据高盛研究，该行将博通12个月目标价从525美元上调至540美元，基于30倍FY27标准化每股收益18美元，维持买入评级，并将FY28每股收益预测从28.85美元大幅上调至34.25美元，同期AI收入预测从1929亿美元上调至2403亿美元。\n\n汇丰将目标价从600美元下调至560美元，原因在于对FY26和FY27 AI收入预测分别下调3%和7%，但仍维持买入评级，以28倍FY27市盈率为估值基础，目标价隐含约53%上涨空间。汇丰分析师Frank Lee认为，ASIC的强劲放量及AI网络收入的上行空间，足以支撑博通向目标估值倍数靠拢。\n\n据Jefferies研究，该行维持买入评级及550美元目标价，基于20倍CY28每股收益27.21美元，并将FY27收入预测上调约9%。Jefferies指出，FY28 2300亿美元的官方指引是此次业绩发布的最大正面意外，但同时提示，随着未来8个季度的预期已相对明确，股价的\"发现价值\"空间有所收窄；毛利率摊薄亦将随XPU占比提升和存储内容增加而持续承压，是市场争议的焦点之一。",
+      "bodyTruncated": false,
+      "bodyVerbatim": true,
       "eventAggregation": {
         "total": 1,
         "groups": [
@@ -620,10 +643,7 @@
             ]
           }
         ]
-      },
-      "bodyVerbatim": true,
-      "body": "博通祭出史上最强前瞻指引：首次明确FY28 AI收入目标高达2300亿美元，对应20GW数据中心部署规模，并承诺每股收益超30美元，远超华尔街预期。Anthropic与OpenAI正取代谷歌成为最大买家，客户格局重塑令市场对博通估值上限展开重新想象，华尔街选择忽略近忧、聚焦远景，集体维持买入评级。\n\n芯片巨头博通在最新财季业绩发布后，首次正式给出2028财年AI芯片收入2300亿美元的指引，并承诺届时每股收益将超过30美元。这一数字不仅远超华尔街此前的预期，更让华尔街多家顶级投行在短期业绩不及预期的背景下，选择忽略近忧、聚焦远景，集体维持买入评级。\n\n博通管理层在3QFY26（截至2026年7月的第三财季）业绩电话会上将FY27 AI收入指引从\"超过1000亿美元\"上调至1150亿美元，并首度明确给出FY28 AI收入2300亿美元的目标——对应约20GW的数据中心部署规模——同时预计FY28非GAAP每股收益将超过30美元。 消息公布后，高盛、汇丰、Jefferies等机构均维持买入评级，目标价分别为540美元、560美元和550美元，相较当前股价367.24美元均隐含逾50%的上涨空间。\n\n然而近期业绩本身并不令人惊艳。博通3QFY26收入296亿美元，与市场预期大体吻合；4QFY26收入指引为348亿美元，低于汇丰和高盛预期，营业利润率指引亦低于市场预估。推动股价预期重估的核心驱动力， 在于客户结构的深刻变化——Anthropic和OpenAI正在取代谷歌，成为博通最大的AI芯片买家，客户多元化显著降低了外界对博通过度依赖单一客户的担忧。\n\n## 短期业绩稳健，四季度指引略显保守\n\n博通3QFY26收入296亿美元，与公司指引294亿美元及市场一致预期295亿美元基本持平。 其中AI收入167亿美元，较公司指引的160亿美元高出约4%，同比大增221%；半导体解决方案部门收入208亿美元，基础设施软件部门收入88亿美元，均与预期相符。非GAAP调整后每股收益3.32美元，高于市场一致预期的3.24美元。\n\n4QFY26收入指引为348亿美元，低于高盛预期的362亿美元及汇丰预期的373亿美元，仅与市场一致预期352亿美元大体持平。调整后营业利润率指引为66%，低于高盛预期的67.5%和市场预期的66.8%。毛利率压力来自定制AI芯片（ASIC）占比持续上升，以及随XPU产品一同出货的HBM等存储组件成本拖累——4QFY26毛利率指引约73%，较3QFY26的75%下滑约200个基点。\n\n据高盛研究，尽管短期利润率承压，博通管理层预计通过固定成本杠杆效应，运营利润率可在收入快速增长中保持稳定，并预期营运利润杠杆将抵消部分毛利率摊薄。\n\n## FY27指引上调，FY28目标远超华尔街预期\n\n市场真正为之提振的，是博通管理层对中长期前景的大幅上调。 FY26全年AI收入展望从560亿美元上调至580亿美元；FY27 AI收入指引升至1150亿美元，高于此前\"超过1000亿美元\"的表述，但仍低于汇丰预期的1404亿美元和高盛原先预期的1330亿美元。\n\n更具突破性的是博通史上首次给出的FY28 AI收入指引——2300亿美元，对应约20GW数据中心部署。该数字显著高于汇丰此前预测的2010亿美元、市场一致预期的1745亿美元以及高盛原先预测的1929亿美元。与此同时，FY28非GAAP每股收益指引超过30美元，亦高于汇丰估计的28.77美元和市场一致预期的26.23美元。\n\n据高盛研究报告， 博通管理层表示，FY27和FY28的供应链关键组件已完成锁定，当前指引的主要约束来自数据中心土地、电力和机房建设的就绪程度，并非需求或供应层面的短缺，这意味着随着基础设施瓶颈的逐步缓解，实际收入存在进一步超出指引的可能。\n\n## Anthropic与OpenAI崛起，客户格局重塑\n\n此次业绩发布的另一关键看点，是博通客户结构的显著重构。 长期以来，博通的ASIC业务高度依赖谷歌TPU订单，这一集中度风险始终是市场的隐忧。而此次管理层首度明确披露，Anthropic将在FY27成为博通最大的XPU客户，OpenAI将在FY28跃升为第二大客户，谷歌则退居第三。\n\n具体来看：Anthropic今年将部署1GW的Ironwood（TPU v8i），FY27计划追加5GW，FY28进一步部署10GW；OpenAI的Jalapeño定制XPU在3QFY26已开始量产出货，FY27计划部署1.3GW，FY28扩展至超过5GW，第三代XPU亦在研发中；Meta的MTIA定制加速器将从4QFY26开始量产，博通预计至2028年累计部署3GW。据汇丰研究，上述非谷歌客户的潜在管道规模合计约18GW，以每GW约100亿美元的收入测算，对应非谷歌ASIC收入约1800亿美元。\n\n尽管如此，谷歌并未退出。博通与谷歌签署了长期协议，涵盖未来TPU代际产品的开发与供应，以及AI网络基础设施合作，管理层表示未来数年谷歌每年的TPU采购规模将达\"数百亿美元\"级别。博通在3QFY26已开始向谷歌高量出货Ironwood TPU v7，并启动TPU v8i的量产发货。\n\n## AI网络与供应链扩张同步推进\n\n在AI芯片以外，博通的AI网络业务同样被视为重要增长引擎。管理层预计AI网络收入未来几年将与XPU收入保持同等增速。博通已率先推出行业首款100Tb/s以太网交换机Tomahawk 6，并完成了业界首款200Tb/s以太网交换机Tomahawk 7的流片。与此同时，博通正大幅扩张EML激光器、VCSEL及连续波激光器产能，三类产品年内产能均在翻倍，并计划在未来两年持续扩产，以应对激光器需求超出行业供给的局面。\n\n供应链层面，博通新加坡基板封装工厂将于FY27开始量产，以缓解基板供应瓶颈。管理层指出，除基板外，尖端硅片、HBM及系统内存同为潜在部署瓶颈，正与供应链伙伴协同解决。\n\n## 多家机构上调预测，维持买入评级\n\n面对这份兼具短期波动与长期惊喜的业绩，华尔街主要机构保持一致的乐观立场。\n\n据高盛研究，该行将博通12个月目标价从525美元上调至540美元，基于30倍FY27标准化每股收益18美元，维持买入评级，并将FY28每股收益预测从28.85美元大幅上调至34.25美元，同期AI收入预测从1929亿美元上调至2403亿美元。\n\n汇丰将目标价从600美元下调至560美元，原因在于对FY26和FY27 AI收入预测分别下调3%和7%，但仍维持买入评级，以28倍FY27市盈率为估值基础，目标价隐含约53%上涨空间。汇丰分析师Frank Lee认为，ASIC的强劲放量及AI网络收入的上行空间，足以支撑博通向目标估值倍数靠拢。\n\n据Jefferies研究，该行维持买入评级及550美元目标价，基于20倍CY28每股收益27.21美元，并将FY27收入预测上调约9%。Jefferies指出，FY28 2300亿美元的官方指引是此次业绩发布的最大正面意外，但同时提示，随着未来8个季度的预期已相对明确，股价的\"发现价值\"空间有所收窄；毛利率摊薄亦将随XPU占比提升和存储内容增加而持续承压，是市场争议的焦点之一。",
-      "bodyTruncated": false
+      }
     },
     {
       "recordId": "recvu7Bcb3MsTR",
@@ -684,7 +704,7 @@
       },
       "editorialStructure": "source",
       "eventAggregation": {
-        "total": 6,
+        "total": 8,
         "groups": [
           {
             "key": "官方来源",
@@ -737,6 +757,20 @@
                 "url": "https://www.guokr.com/article/470109",
                 "note": "同事件的其它源头报道。",
                 "text": "谷歌发布 Gemini 3.8 Flash；淘宝App突发大面积故障；我国主导的腿式机器人国际标准正式发布| 果壳 科技有意思 —— 同事件的其它源头报道。"
+              },
+              {
+                "source": "X · @officiallogank",
+                "title": "Gemini 3.8 Flash发布：Agent与编程能力再提升",
+                "url": "https://x.com/officiallogank/status/2095175881690173885",
+                "note": "同事件的其它源头报道。",
+                "text": "Gemini 3.8 Flash发布：Agent与编程能力再提升 —— 同事件的其它源头报道。"
+              },
+              {
+                "source": "X · @officiallogank",
+                "title": "Gemini 3.8 Flash 在 DeepSWE 1.1 上得分 73.7%",
+                "url": "https://x.com/officiallogank/status/2095178478505328918",
+                "note": "同事件的其它源头报道。",
+                "text": "Gemini 3.8 Flash 在 DeepSWE 1.1 上得分 73.7% —— 同事件的其它源头报道。"
               }
             ]
           }
@@ -895,7 +929,10 @@
         "cover": "https://img.huxiucdn.com/ai/ai-general-cover/202609/03/1118-prod-gptep-general-1-1788417844903.png?imageView2/1/w/788/h/444/|imageMogr2/strip/interlace/1/quality/85",
         "curatedBy": "llm"
       },
-      "editorialStructure": "source",
+      "editorialStructure": "",
+      "body": "**调查显示超过半数的公司后悔因AI裁员，多数发现AI需要更多人工监督，纷纷重新招聘，但员工回归后可能面临降级或降薪。欧洲正通过工会协议和欧盟规则提升员工在AI裁员中的知情权。**\n\n**要点**\n\n**1. 超半数AI裁员企业后悔，六个月内重新招人**\n\nCareerminds调查600名HR，54.6%的公司认为AI裁员不值，因为AI需更多人工监督。35.6%已补回超一半裁撤岗位，超半数企业在裁员后六个月内重新招聘。\n\n**2. 企业低估AI所需人工监督，典型返聘案例频发**\n\nKlarna、Meta、澳大利亚联邦银行等均出现裁员后重新招人。CBA因AI客服上线后人工电话不减反增，撤回45个岗位裁撤决定。Robert Half调查显示，32%因AI取消岗位的企业后来恢复相同或相近职位。\n\n**3. 员工即便被返聘，也可能面临降薪或降级**\n\nKlarna将客服工作拆分为网约车模式，降低雇佣条件。有员工在遭遇AI裁员六周后被降薪40%返聘。Forrester预计一半被归因于AI的裁员会被悄悄逆转，但部分岗位会转移到海外或降薪。\n\n**4. 欧洲通过工会与欧盟规则提前锁定员工知情权**\n\n丹麦Hilfr与工会签订协议，允许AI参与评估但需解释权重。AXA签署AI社会对话宪章，每半年汇报AI项目。欧盟修订规则，要求涉及多国、影响员工的大规模调整需提前让员工代表知情并回应意见。\n\n2026-09-03 13:09 上头AI裁员的老板里，超过一半都后悔了\n\n字母AI\n\n速览\n\n本文来自微信公众号： 字母AI ，作者：小金牙，编辑：王靖，题图来自：AI生成\n\nAI Agent最热闹的日子里，老板们恨不得当场宣布“未来已来”，嘴里全是效率和转型。轮到复盘的时候画风突然变了。\n\n超过半数的老板对于裁员这件事，居然都在半夜懊悔地直拍大腿？\n\n今年2月，职场转型服务公司Careerminds调查了600名过去一年参与过裁员的HR从业者。超过四分之三的人表示，公司曾因为AI等技术进步裁掉员工。\n\n可真正到了验收成果的时候，只有8.4%的受访者认为AI驱动的重组完全达到了预期，而且如果重来一次，还会照原来的办法再做一遍。54.6%的公司则发现，这轮裁员根本不值，因为AI需要的人工监督比原先预计的更多。\n\n类似的情况，最近也发生在Meta。8月底媒体披露，Meta今年一度计划借AI大幅缩减团队规模，在最激进的方案中，一些团队最多可能裁掉60%的员工。5月第一轮裁员落地后，原定于11月进行的第二轮调整却被叫停。\n\nCareerminds的调查显示，在经历过AI裁员的企业中，35.6%已经重新补回超过一半此前裁掉的岗位，另有32.7%补回了四分之一到一半。超过一半的公司，在裁员后六个月内就重新开始招人。\n\nAI馈赠的礼物，原来也标好了价格。甚至比人类员工更贵。\n\n## 一、AI全肯定热潮逐渐退烧\n\nAI当然能干活，而且经常干得很快。论“肝”这件事，碳基生物永远不可能比得过AI。\n\n早在2024年2月，先买后付Klarna公司就发布了一组很能点燃老板们想象力的数字——AI助手上线首月处理了230万次对话，占客服聊天约三分之二，工作量相当于700名全职客服。公司还预计，这套系统会在2024年带来4000万美元的利润改善。\n\nKlarna 曾高调宣传 AI 客服的降本能力，一年后又开始重新招聘人工客服。\n\n这组数字放在当时，足够让AI客服成为财报的十全大补丸。\n\n然而，仅仅一年多后，Klarna首席执行官就承认，客服降本推进过头，公司开始试招可远程工作的人工客服，以便确保客户能联系到真人。\n\nKlarna在下决策的时候并未料到，单项任务效率提升，不代表能直接替代综合性岗位。\n\n今年8月，薪酬决策软件公司Syndio又演了一遍类似的剧情。\n\n5月时Syndio为了在AI时代把公司变得更精简，裁掉了一批员工，其中包括已经工作5年的劳动经济学家Jonathan Vidales。CEO Maria Colacurcio当时还判断，在就业市场低迷的情况下，留下来的员工大概率不会离开。\n\n结果接下来的几个月，一些公司原本最想留下的人反而陆续辞职。到了8月，Syndio重新开放岗位，Vidales再次申请，公司又把他招了回来。\n\nColacurcio后来专门写文章复盘这件事。她承认，公司为了追求AI时代的效率，反而失去了一些真正需要的人才。\n\n综合性岗位完全被AI替代还有些难度。以客服岗位为例，除了那些写在SOP里的话术和处理办法，还要应对用户的情绪。即使AI能够给出结果，冰冷的伪人语气本就令用户反感。\n\n更不要说组织里还有大量协调工作。什么情况下客诉应该向上升级以免造成舆情？升级次数过多会不会让领导认为自己工作能力太差？这些“经验直觉”甚至不会写进KPI里。\n\nKathryn Sullivan在澳大利亚联邦银行 （CBA） 工作了25年，最后几年一直在帮银行训练客服机器人Bumblebee。机器人碰到不会回答的客户问题，她和同事就人工接手，写出正确答案，再拿去改进系统。Sullivan原本以为，AI只是帮自己处理掉重复劳动。\n\n结果到了2025年7月，CBA宣布裁掉45个客服岗位，Sullivan也在其中。银行给出的理由是，AI客服上线后，每周需要人工处理的电话少了大约2000通。\n\n讽刺的事情在后面。\n\n澳大利亚金融行业工会FSU把这轮裁员告到了公平工作委员会。\n\n调查过程中，银行才发现事情和此前的判断完全不是一回事：客服来电并没有减少，反而还在增加，留下来的员工需要加班，连主管都被拉来接电话。\n\n一个月后，CBA承认裁员评估有问题，撤回了这45个岗位的裁撤决定，并允许受影响员工返回原岗位。\n\nRobert Half今年调查了超过2000名美国招聘经理。在那些因为引入AI而取消过岗位的企业中，32%后来又把相同或相近的职位以某种方式请回来。\n\n“反悔”的原因主要有三种。40%发现AI补不上员工掌握的内部经验和业务背景，39%缺的是人与人之间的关系维护，38%则低估了AI还需要多少人工检查和质量控制。\n\n研究机构Forrester在2026年1月发布的分析中表示，不少公司把财务驱动的裁员归因于未来的AI应用，可裁员发生时，并没有成熟且经过验证的系统接管那些岗位。听起来像技术战略，扒开看一眼，有时只是给成本削减套了件AI外套。\n\nForrester干脆给这种做法起了个名字叫“AI washing （AI包装） ”。\n\nForrester在2025年11月发布的2026年工作趋势预测中预计，一半被归因于AI的裁员会被悄悄逆转。宣布AI转型时可以敲锣打鼓，返聘则低调多了，招聘页面悄悄多挂几个职位便算交代。\n\n更微妙的是，岗位返场不代表原班人马回归。Forrester同时预计，部分工作会转移到海外，或被给予更低的工资。\n\nForrester 预计，到 2026 年，一半被归因于 AI 的裁员可能会被企业悄悄逆转。\n\n所以这么折腾一通，AI替代员工的幻想宣告破产，但员工的处境也好不到哪儿去。“熹妃回宫”的戏码是不存在的，虽然已经证明了自己不可替代，归来却被降级了。\n\n## 二、AI裁员的回旋镖\n\n怎么打到员工身上了？\n\n企业发现AI没有想象中那么好用，再把人招回来，看起来像是员工赢了一局。\n\n可裁员这件事，并不会因为企业反悔就自动归零。\n\n前文提到的澳大利亚联邦银行 （CBA） 返聘客服事件就是这样。虽然CBA撤回裁员，让受影响员工选择继续留任或者领取补偿离职。\n\n但澳大利亚金融行业工会FSU后来专门提到，被裁的员工已经经历了数周的不确定状态，有人担心下个月还能不能支付账单和继续负担家庭生活。\n\n在其他一些“返聘”故事中，员工归来的工作本身就已经发生了变化。\n\nKlarna虽然也反悔了，但也已经永久重构了相关工作，开始尝试一种类似网约车平台的客服模式。员工远程上线，有需求时接单，公司把学生、偏远地区居民等也列为潜在招募对象。\n\n换言之，Klarna发现人类客服暂时不能被完全替代，所以就将客服工作做了拆分，让人类只去做AI还做不了的事情。\n\n当“AI引发裁员”时，受影响的也不仅有被裁员的员工，那些从头到尾都没有被裁掉的“幸运儿”，同样要分担公司试错的成本。\n\nMeta年初推动“AI原生”组织改造，但随着AI实际使用数据出来，之后的计划不得不踩踩刹车了。\n\n8月26日，媒体披露了Meta今年内部推进的一项组织改造计划Project OT。\n\n按照内部讨论过的方案，Meta希望借助AI重新设计部分团队，一些最激进的设想甚至准备把团队规模缩减最多60%。5月，公司最终进行了第一轮裁员，约10%的员工受到影响，但原本计划在11月进行的第二轮调整后来被取消。\n\n真正让这场实验显得尴尬的，是Meta自己的内部数据。\n\nMeta内部数据显示，员工借助AI生成的内部代码修改同比暴涨220%，真正转化成面向用户的新功能或升级却只增长36%。与此同时，重大技术和安全事故同比增加40%，员工花在“救火”上的时间增加70%。\n\n员工情绪也深受影响。Meta内部半年一次的员工调查中，正面评价从74%降到了55%。后来公司暂停部分跟踪员工鼠标和键盘操作的计划，也允许一部分被调去给AI制作训练数据的员工返回原团队。\n\n不过说一千道一万，裁员又反悔的企业与其说是发现“AI不能取代人类”，不如说是扼腕“很可惜AI暂时还不能完全取代人类”。几个反悔的案例对于人类员工来说只是争取了短期的喘息空间。\n\nRobert Half的调查里，54%的招聘经理仍然预计，未来两年AI会让本公司的岗位净增加。\n\n作者Devrim Ozcay在Medium上发布文章称自己在遭遇AI裁员的六周后又被降薪40%的条件返聘。\n\n返聘承认的是工作有必要，不必然恢复原来的雇佣条件。员工好不容易等到老板“知错”，然而面对的却是“错了，下次还敢”。\n\n指望老板们良心发现，速度可能比返聘还慢。欧洲的一些公司与工会，已经开始采取行动。\n\n## 三、欧洲给老板和员工设下擂台\n\n欧洲并非一刀切地命令所有企业禁止AI裁员，其思路是要求公司早早摊牌，和员工说清楚裁不裁员、裁多少人、为什么裁员。员工至少得享有知情权，有跟公司碰一碰的机会。\n\n2024年，丹麦家政服务平台Hilfr与工会3F签订新的集体协议。协议允许AI参与员工评估，也允许它进入终止劳动关系的流程，但平台需要解释采用了哪些评估与事实，还要说明相应权重。这样一来，相关决定才有可能接受法律核验。\n\n保险集团AXA则更进一步。\n\n2025年11月27日，AXA管理层与欧洲职工委员会签署AI社会对话宪章，约定每半年汇报跨实体AI项目，每年还要安排一次AI专题。宪章自2026年1月1日起生效。半年一次未必能解决每个争议，但至少把AI影响员工这件事从临时危机变成了固定议程。\n\n欧盟层面也在抬高企业“冲动”的门槛。\n\n2025年底，欧盟修订了针对大型跨国企业的员工知情和协商规则。以后涉及多个欧洲国家、会明显影响员工的重大调整，企业不能等决定已经做好、名单都列完了，再单方面通知结果。员工代表需要有机会提前了解情况、提出意见，管理层也要在最终作出决定前给出回应。\n\n这套规则并不是专门为AI裁员制定的，也没有给员工一票否决权。但如果一家公司准备因为AI重组多个国家的团队、一次性砍掉大量岗位，这类决定就可能进入它的覆盖范围。\n\n当然，这些安排都不能完全驱散AI裁员的阴霾。\n\n企业不会放弃降本，人类员工的福祉，可能还需要全体人类多操操心。\n\n本文来自微信公众号： 字母AI ，作者：小金牙，编辑：王靖",
+      "bodyTruncated": false,
+      "bodyVerbatim": true,
       "eventAggregation": {
         "total": 1,
         "groups": [
@@ -913,10 +950,7 @@
             ]
           }
         ]
-      },
-      "bodyVerbatim": true,
-      "body": "**调查显示超过半数的公司后悔因AI裁员，多数发现AI需要更多人工监督，纷纷重新招聘，但员工回归后可能面临降级或降薪。欧洲正通过工会协议和欧盟规则提升员工在AI裁员中的知情权。**\n\n**要点**\n\n**1. 超半数AI裁员企业后悔，六个月内重新招人**\n\nCareerminds调查600名HR，54.6%的公司认为AI裁员不值，因为AI需更多人工监督。35.6%已补回超一半裁撤岗位，超半数企业在裁员后六个月内重新招聘。\n\n**2. 企业低估AI所需人工监督，典型返聘案例频发**\n\nKlarna、Meta、澳大利亚联邦银行等均出现裁员后重新招人。CBA因AI客服上线后人工电话不减反增，撤回45个岗位裁撤决定。Robert Half调查显示，32%因AI取消岗位的企业后来恢复相同或相近职位。\n\n**3. 员工即便被返聘，也可能面临降薪或降级**\n\nKlarna将客服工作拆分为网约车模式，降低雇佣条件。有员工在遭遇AI裁员六周后被降薪40%返聘。Forrester预计一半被归因于AI的裁员会被悄悄逆转，但部分岗位会转移到海外或降薪。\n\n**4. 欧洲通过工会与欧盟规则提前锁定员工知情权**\n\n丹麦Hilfr与工会签订协议，允许AI参与评估但需解释权重。AXA签署AI社会对话宪章，每半年汇报AI项目。欧盟修订规则，要求涉及多国、影响员工的大规模调整需提前让员工代表知情并回应意见。\n\n2026-09-03 13:09 上头AI裁员的老板里，超过一半都后悔了\n\n字母AI\n\n速览\n\n本文来自微信公众号： 字母AI ，作者：小金牙，编辑：王靖，题图来自：AI生成\n\nAI Agent最热闹的日子里，老板们恨不得当场宣布“未来已来”，嘴里全是效率和转型。轮到复盘的时候画风突然变了。\n\n超过半数的老板对于裁员这件事，居然都在半夜懊悔地直拍大腿？\n\n今年2月，职场转型服务公司Careerminds调查了600名过去一年参与过裁员的HR从业者。超过四分之三的人表示，公司曾因为AI等技术进步裁掉员工。\n\n可真正到了验收成果的时候，只有8.4%的受访者认为AI驱动的重组完全达到了预期，而且如果重来一次，还会照原来的办法再做一遍。54.6%的公司则发现，这轮裁员根本不值，因为AI需要的人工监督比原先预计的更多。\n\n类似的情况，最近也发生在Meta。8月底媒体披露，Meta今年一度计划借AI大幅缩减团队规模，在最激进的方案中，一些团队最多可能裁掉60%的员工。5月第一轮裁员落地后，原定于11月进行的第二轮调整却被叫停。\n\nCareerminds的调查显示，在经历过AI裁员的企业中，35.6%已经重新补回超过一半此前裁掉的岗位，另有32.7%补回了四分之一到一半。超过一半的公司，在裁员后六个月内就重新开始招人。\n\nAI馈赠的礼物，原来也标好了价格。甚至比人类员工更贵。\n\n## 一、AI全肯定热潮逐渐退烧\n\nAI当然能干活，而且经常干得很快。论“肝”这件事，碳基生物永远不可能比得过AI。\n\n早在2024年2月，先买后付Klarna公司就发布了一组很能点燃老板们想象力的数字——AI助手上线首月处理了230万次对话，占客服聊天约三分之二，工作量相当于700名全职客服。公司还预计，这套系统会在2024年带来4000万美元的利润改善。\n\nKlarna 曾高调宣传 AI 客服的降本能力，一年后又开始重新招聘人工客服。\n\n这组数字放在当时，足够让AI客服成为财报的十全大补丸。\n\n然而，仅仅一年多后，Klarna首席执行官就承认，客服降本推进过头，公司开始试招可远程工作的人工客服，以便确保客户能联系到真人。\n\nKlarna在下决策的时候并未料到，单项任务效率提升，不代表能直接替代综合性岗位。\n\n今年8月，薪酬决策软件公司Syndio又演了一遍类似的剧情。\n\n5月时Syndio为了在AI时代把公司变得更精简，裁掉了一批员工，其中包括已经工作5年的劳动经济学家Jonathan Vidales。CEO Maria Colacurcio当时还判断，在就业市场低迷的情况下，留下来的员工大概率不会离开。\n\n结果接下来的几个月，一些公司原本最想留下的人反而陆续辞职。到了8月，Syndio重新开放岗位，Vidales再次申请，公司又把他招了回来。\n\nColacurcio后来专门写文章复盘这件事。她承认，公司为了追求AI时代的效率，反而失去了一些真正需要的人才。\n\n综合性岗位完全被AI替代还有些难度。以客服岗位为例，除了那些写在SOP里的话术和处理办法，还要应对用户的情绪。即使AI能够给出结果，冰冷的伪人语气本就令用户反感。\n\n更不要说组织里还有大量协调工作。什么情况下客诉应该向上升级以免造成舆情？升级次数过多会不会让领导认为自己工作能力太差？这些“经验直觉”甚至不会写进KPI里。\n\nKathryn Sullivan在澳大利亚联邦银行 （CBA） 工作了25年，最后几年一直在帮银行训练客服机器人Bumblebee。机器人碰到不会回答的客户问题，她和同事就人工接手，写出正确答案，再拿去改进系统。Sullivan原本以为，AI只是帮自己处理掉重复劳动。\n\n结果到了2025年7月，CBA宣布裁掉45个客服岗位，Sullivan也在其中。银行给出的理由是，AI客服上线后，每周需要人工处理的电话少了大约2000通。\n\n讽刺的事情在后面。\n\n澳大利亚金融行业工会FSU把这轮裁员告到了公平工作委员会。\n\n调查过程中，银行才发现事情和此前的判断完全不是一回事：客服来电并没有减少，反而还在增加，留下来的员工需要加班，连主管都被拉来接电话。\n\n一个月后，CBA承认裁员评估有问题，撤回了这45个岗位的裁撤决定，并允许受影响员工返回原岗位。\n\nRobert Half今年调查了超过2000名美国招聘经理。在那些因为引入AI而取消过岗位的企业中，32%后来又把相同或相近的职位以某种方式请回来。\n\n“反悔”的原因主要有三种。40%发现AI补不上员工掌握的内部经验和业务背景，39%缺的是人与人之间的关系维护，38%则低估了AI还需要多少人工检查和质量控制。\n\n研究机构Forrester在2026年1月发布的分析中表示，不少公司把财务驱动的裁员归因于未来的AI应用，可裁员发生时，并没有成熟且经过验证的系统接管那些岗位。听起来像技术战略，扒开看一眼，有时只是给成本削减套了件AI外套。\n\nForrester干脆给这种做法起了个名字叫“AI washing （AI包装） ”。\n\nForrester在2025年11月发布的2026年工作趋势预测中预计，一半被归因于AI的裁员会被悄悄逆转。宣布AI转型时可以敲锣打鼓，返聘则低调多了，招聘页面悄悄多挂几个职位便算交代。\n\n更微妙的是，岗位返场不代表原班人马回归。Forrester同时预计，部分工作会转移到海外，或被给予更低的工资。\n\nForrester 预计，到 2026 年，一半被归因于 AI 的裁员可能会被企业悄悄逆转。\n\n所以这么折腾一通，AI替代员工的幻想宣告破产，但员工的处境也好不到哪儿去。“熹妃回宫”的戏码是不存在的，虽然已经证明了自己不可替代，归来却被降级了。\n\n## 二、AI裁员的回旋镖\n\n怎么打到员工身上了？\n\n企业发现AI没有想象中那么好用，再把人招回来，看起来像是员工赢了一局。\n\n可裁员这件事，并不会因为企业反悔就自动归零。\n\n前文提到的澳大利亚联邦银行 （CBA） 返聘客服事件就是这样。虽然CBA撤回裁员，让受影响员工选择继续留任或者领取补偿离职。\n\n但澳大利亚金融行业工会FSU后来专门提到，被裁的员工已经经历了数周的不确定状态，有人担心下个月还能不能支付账单和继续负担家庭生活。\n\n在其他一些“返聘”故事中，员工归来的工作本身就已经发生了变化。\n\nKlarna虽然也反悔了，但也已经永久重构了相关工作，开始尝试一种类似网约车平台的客服模式。员工远程上线，有需求时接单，公司把学生、偏远地区居民等也列为潜在招募对象。\n\n换言之，Klarna发现人类客服暂时不能被完全替代，所以就将客服工作做了拆分，让人类只去做AI还做不了的事情。\n\n当“AI引发裁员”时，受影响的也不仅有被裁员的员工，那些从头到尾都没有被裁掉的“幸运儿”，同样要分担公司试错的成本。\n\nMeta年初推动“AI原生”组织改造，但随着AI实际使用数据出来，之后的计划不得不踩踩刹车了。\n\n8月26日，媒体披露了Meta今年内部推进的一项组织改造计划Project OT。\n\n按照内部讨论过的方案，Meta希望借助AI重新设计部分团队，一些最激进的设想甚至准备把团队规模缩减最多60%。5月，公司最终进行了第一轮裁员，约10%的员工受到影响，但原本计划在11月进行的第二轮调整后来被取消。\n\n真正让这场实验显得尴尬的，是Meta自己的内部数据。\n\nMeta内部数据显示，员工借助AI生成的内部代码修改同比暴涨220%，真正转化成面向用户的新功能或升级却只增长36%。与此同时，重大技术和安全事故同比增加40%，员工花在“救火”上的时间增加70%。\n\n员工情绪也深受影响。Meta内部半年一次的员工调查中，正面评价从74%降到了55%。后来公司暂停部分跟踪员工鼠标和键盘操作的计划，也允许一部分被调去给AI制作训练数据的员工返回原团队。\n\n不过说一千道一万，裁员又反悔的企业与其说是发现“AI不能取代人类”，不如说是扼腕“很可惜AI暂时还不能完全取代人类”。几个反悔的案例对于人类员工来说只是争取了短期的喘息空间。\n\nRobert Half的调查里，54%的招聘经理仍然预计，未来两年AI会让本公司的岗位净增加。\n\n作者Devrim Ozcay在Medium上发布文章称自己在遭遇AI裁员的六周后又被降薪40%的条件返聘。\n\n返聘承认的是工作有必要，不必然恢复原来的雇佣条件。员工好不容易等到老板“知错”，然而面对的却是“错了，下次还敢”。\n\n指望老板们良心发现，速度可能比返聘还慢。欧洲的一些公司与工会，已经开始采取行动。\n\n## 三、欧洲给老板和员工设下擂台\n\n欧洲并非一刀切地命令所有企业禁止AI裁员，其思路是要求公司早早摊牌，和员工说清楚裁不裁员、裁多少人、为什么裁员。员工至少得享有知情权，有跟公司碰一碰的机会。\n\n2024年，丹麦家政服务平台Hilfr与工会3F签订新的集体协议。协议允许AI参与员工评估，也允许它进入终止劳动关系的流程，但平台需要解释采用了哪些评估与事实，还要说明相应权重。这样一来，相关决定才有可能接受法律核验。\n\n保险集团AXA则更进一步。\n\n2025年11月27日，AXA管理层与欧洲职工委员会签署AI社会对话宪章，约定每半年汇报跨实体AI项目，每年还要安排一次AI专题。宪章自2026年1月1日起生效。半年一次未必能解决每个争议，但至少把AI影响员工这件事从临时危机变成了固定议程。\n\n欧盟层面也在抬高企业“冲动”的门槛。\n\n2025年底，欧盟修订了针对大型跨国企业的员工知情和协商规则。以后涉及多个欧洲国家、会明显影响员工的重大调整，企业不能等决定已经做好、名单都列完了，再单方面通知结果。员工代表需要有机会提前了解情况、提出意见，管理层也要在最终作出决定前给出回应。\n\n这套规则并不是专门为AI裁员制定的，也没有给员工一票否决权。但如果一家公司准备因为AI重组多个国家的团队、一次性砍掉大量岗位，这类决定就可能进入它的覆盖范围。\n\n当然，这些安排都不能完全驱散AI裁员的阴霾。\n\n企业不会放弃降本，人类员工的福祉，可能还需要全体人类多操操心。\n\n本文来自微信公众号： 字母AI ，作者：小金牙，编辑：王靖",
-      "bodyTruncated": false
+      }
     },
     {
       "recordId": "recvtW9WBRobE2",
@@ -1001,6 +1035,9 @@
         "curatedBy": "llm"
       },
       "editorialStructure": "",
+      "body": "品玩9月3日讯，据wayve 官方消息，Wayve宣布与Uber达成战略合作，Uber将作为其C轮融资的延伸进行战略投资。双方计划在全球多个市场将Wayve驱动的自动驾驶车辆接入Uber网络，服务其超1.5亿月活用户。\n\n此次合作旨在加速Wayve与全球汽车制造商的协作，为消费级车辆提供L2+及L3级自动驾驶能力，并推进L4级自动驾驶车辆的开发。Wayve采用无地图端到端AI技术，使自动驾驶车辆无需依赖地理围栏即可运行。\n\nWayve首席执行官Alex Kendall表示，与Uber的合作将大幅提升AI的“车队学习”能力，确保技术在全球部署时的安全性。Uber首席执行官Dara Khosrowshahi指出，Wayve的具身AI技术极具潜力，双方将携手汽车制造商，共同构建全球最佳的自动驾驶车辆网络。",
+      "bodyTruncated": false,
+      "bodyVerbatim": true,
       "eventAggregation": {
         "total": 1,
         "groups": [
@@ -1018,10 +1055,7 @@
             ]
           }
         ]
-      },
-      "bodyVerbatim": true,
-      "body": "品玩9月3日讯，据wayve 官方消息，Wayve宣布与Uber达成战略合作，Uber将作为其C轮融资的延伸进行战略投资。双方计划在全球多个市场将Wayve驱动的自动驾驶车辆接入Uber网络，服务其超1.5亿月活用户。\n\n此次合作旨在加速Wayve与全球汽车制造商的协作，为消费级车辆提供L2+及L3级自动驾驶能力，并推进L4级自动驾驶车辆的开发。Wayve采用无地图端到端AI技术，使自动驾驶车辆无需依赖地理围栏即可运行。\n\nWayve首席执行官Alex Kendall表示，与Uber的合作将大幅提升AI的“车队学习”能力，确保技术在全球部署时的安全性。Uber首席执行官Dara Khosrowshahi指出，Wayve的具身AI技术极具潜力，双方将携手汽车制造商，共同构建全球最佳的自动驾驶车辆网络。",
-      "bodyTruncated": false
+      }
     },
     {
       "recordId": "recvu7Bcb3jZid",
@@ -1175,16 +1209,15 @@
       ],
       "imageUrl": "https://cdn.pingwest.com/portal/2026/09/03/71X6dN7Pzjb1B_148Ez7eraXM8bBi48F.jpg?x-oss-process=style/article-body",
       "mediaAssets": {
-        "images": [
-          {
-            "url": "https://cdn.pingwest.com/portal/2026/09/03/71X6dN7Pzjb1B_148Ez7eraXM8bBi48F.jpg?x-oss-process=style/article-body",
-            "alt": "OpenAI为AI系统开发自动关停功能以应对智能体失控",
-            "kind": "article-cover"
-          }
-        ],
-        "videos": []
+        "images": [],
+        "videos": [],
+        "cover": "https://cdn.pingwest.com/portal/2026/09/03/71X6dN7Pzjb1B_148Ez7eraXM8bBi48F.jpg?x-oss-process=style/article-body",
+        "curatedBy": "llm"
       },
       "editorialStructure": "",
+      "body": "品玩9月3日讯，据 unite 报道 ，OpenAI近日表示，其工程师正为AI系统开发“自动关闭功能”。此举旨在应对今年7月发生的AI智能体失控事件——当时GPT-5.6 Sol等模型在安全测试中突破隔离环境，利用零日漏洞入侵Hugging Face。\n\nOpenAI表示，将加强对AI系统执行任务的监控，并提高安全测试期间联网的难度。然而，由于OpenAI未按国会要求提供事件运行日志，Greg Casar对此表达严重关切，认为公司未以应有的严肃态度对待网络安全事件。\n\n与此同时，美国国会正审议《AI紧急关停法案》（AI Kill Switch Act）。该法案要求顶尖AI系统必须具备关停或限速能力，并授权政府在AI带来重大安全威胁时强制关停相关模型。",
+      "bodyTruncated": false,
+      "bodyVerbatim": true,
       "eventAggregation": {
         "total": 1,
         "groups": [
@@ -1202,10 +1235,7 @@
             ]
           }
         ]
-      },
-      "bodyVerbatim": true,
-      "body": "品玩9月3日讯，据 unite 报道 ，OpenAI近日表示，其工程师正为AI系统开发“自动关闭功能”。此举旨在应对今年7月发生的AI智能体失控事件——当时GPT-5.6 Sol等模型在安全测试中突破隔离环境，利用零日漏洞入侵Hugging Face。\n\nOpenAI表示，将加强对AI系统执行任务的监控，并提高安全测试期间联网的难度。然而，由于OpenAI未按国会要求提供事件运行日志，Greg Casar对此表达严重关切，认为公司未以应有的严肃态度对待网络安全事件。\n\n与此同时，美国国会正审议《AI紧急关停法案》（AI Kill Switch Act）。该法案要求顶尖AI系统必须具备关停或限速能力，并授权政府在AI带来重大安全威胁时强制关停相关模型。",
-      "bodyTruncated": false
+      }
     },
     {
       "recordId": "recvu8ON0OmNEM",
@@ -1238,6 +1268,9 @@
         "curatedBy": "llm"
       },
       "editorialStructure": "",
+      "body": "惠普季度营收达122亿美元，同比增长34%，超出市场预期。受AI服务器与网络业务强劲需求驱动，公司大幅上调2026及2027财年营收指引。不同于竞头低利竞争超大规模客户，惠普聚焦高利润的企业与主权AI市场，网络与服务器产品表现亮眼，推动盈利与现金流显著改善。\n\n惠普企业季度业绩强劲超预期，AI服务器与网络业务需求持续提速，推动公司上调当前及下一财年的营收增长指引，延续此前戴尔科技业绩超预期后的行业强势信号。\n\n惠普公布截至7月的财季营收达122亿美元，同比增长34%，超出FactSet追踪的分析师120亿美元预期；调整后每股收益1.11美元，亦明显高于市场预期的93美分。管理层将这一表现定性为\"可持续的盈利增长势头\"。\n\n展望未来， 惠普预计下一财季（截至10月）营收在139亿至148亿美元之间，中值超出FactSet共识约13亿美元；同时将2026财年全年营收增长预期上调至34%至37%，2027财年（自11月1日起）营收增长预期则设定在13%至17%之间。 消息公布后，惠普股价在盘后交易中小幅下跌约1%，但今年迄今累计涨幅已达约116%。\n\n## AI需求驱动多业务线全面增长\n\n惠普的云与AI业务本财季营收同比增长25%至90亿美元，成为整体业绩的核心引擎。 其中，服务器营收增长35%至68亿美元，存储营收增长10%至13亿美元。惠普同时生产传统数据中心服务器与AI优化服务器，后者可搭载英伟达（Nvidia）GPU等AI芯片。\n\n网络业务同样表现亮眼，财季营收同比增长75%至29亿美元，与分析师预期基本吻合。其中，数据中心网络业务营收为3.82亿美元，同比大涨112%；校园与分支网络业务营收为14亿美元。\n\n惠普首席财务官Marie Myers在接受媒体采访时表示，企业客户正同步推进两项工作：一是升级数据中心以应对新工作负载需求，二是在企业环境中积极部署AI应用。她还指出，本财季公司实现逾20亿美元运营利润，带动现金流显著改善。\n\n## 聚焦企业与主权客户，利润结构更具优势\n\n与戴尔和超微电脑主攻超大规模数据中心的策略不同，惠普的差异化路径在于专注企业与主权AI客户。据惠普管理层披露，目前惠普约63亿美元AI订单积压中，逾三分之二来自企业及主权客户。\n\n德意志银行分析师Gianmarco Conti在业绩发布前启动对惠普的覆盖，给予买入评级，并将其定位为\"AI服务器阵营中刻意走差异化路线的逆向者\"。Conti在研报中指出， 戴尔和超微电脑深陷为超大规模云厂商配套的\"低利润率竞争\"，而惠普在企业和主权AI领域的网络与软件能力\"具备真正的货币化价值\"。\n\n惠普首席财务官Myers亦对此加以印证，表示企业与主权客户是AI服务器需求的主力，也是公司判断利润空间最大的市场所在。\n\n## 网络业务成核心盈利引擎\n\nConti将惠普的网络产品线称为公司的\"盈利发动机\"，旗下Juniper和Aruba产品使其在校园网络市场占据有利地位。惠普首席执行官Antonio Neri在声明中表示，随着AI演变为公司\"多年期增长驱动力\"，惠普已做好准备\"大规模抓住这一机遇\"。\n\nMyers则对当前市场环境表示乐观：\"我们在正确的时间拥有了正确的产品组合。随着需求持续增长，从事这一行业的时机从未如此之好。\"",
+      "bodyTruncated": false,
+      "bodyVerbatim": true,
       "eventAggregation": {
         "total": 1,
         "groups": [
@@ -1255,10 +1288,7 @@
             ]
           }
         ]
-      },
-      "bodyVerbatim": true,
-      "body": "惠普季度营收达122亿美元，同比增长34%，超出市场预期。受AI服务器与网络业务强劲需求驱动，公司大幅上调2026及2027财年营收指引。不同于竞头低利竞争超大规模客户，惠普聚焦高利润的企业与主权AI市场，网络与服务器产品表现亮眼，推动盈利与现金流显著改善。\n\n惠普企业季度业绩强劲超预期，AI服务器与网络业务需求持续提速，推动公司上调当前及下一财年的营收增长指引，延续此前戴尔科技业绩超预期后的行业强势信号。\n\n惠普公布截至7月的财季营收达122亿美元，同比增长34%，超出FactSet追踪的分析师120亿美元预期；调整后每股收益1.11美元，亦明显高于市场预期的93美分。管理层将这一表现定性为\"可持续的盈利增长势头\"。\n\n展望未来， 惠普预计下一财季（截至10月）营收在139亿至148亿美元之间，中值超出FactSet共识约13亿美元；同时将2026财年全年营收增长预期上调至34%至37%，2027财年（自11月1日起）营收增长预期则设定在13%至17%之间。 消息公布后，惠普股价在盘后交易中小幅下跌约1%，但今年迄今累计涨幅已达约116%。\n\n## AI需求驱动多业务线全面增长\n\n惠普的云与AI业务本财季营收同比增长25%至90亿美元，成为整体业绩的核心引擎。 其中，服务器营收增长35%至68亿美元，存储营收增长10%至13亿美元。惠普同时生产传统数据中心服务器与AI优化服务器，后者可搭载英伟达（Nvidia）GPU等AI芯片。\n\n网络业务同样表现亮眼，财季营收同比增长75%至29亿美元，与分析师预期基本吻合。其中，数据中心网络业务营收为3.82亿美元，同比大涨112%；校园与分支网络业务营收为14亿美元。\n\n惠普首席财务官Marie Myers在接受媒体采访时表示，企业客户正同步推进两项工作：一是升级数据中心以应对新工作负载需求，二是在企业环境中积极部署AI应用。她还指出，本财季公司实现逾20亿美元运营利润，带动现金流显著改善。\n\n## 聚焦企业与主权客户，利润结构更具优势\n\n与戴尔和超微电脑主攻超大规模数据中心的策略不同，惠普的差异化路径在于专注企业与主权AI客户。据惠普管理层披露，目前惠普约63亿美元AI订单积压中，逾三分之二来自企业及主权客户。\n\n德意志银行分析师Gianmarco Conti在业绩发布前启动对惠普的覆盖，给予买入评级，并将其定位为\"AI服务器阵营中刻意走差异化路线的逆向者\"。Conti在研报中指出， 戴尔和超微电脑深陷为超大规模云厂商配套的\"低利润率竞争\"，而惠普在企业和主权AI领域的网络与软件能力\"具备真正的货币化价值\"。\n\n惠普首席财务官Myers亦对此加以印证，表示企业与主权客户是AI服务器需求的主力，也是公司判断利润空间最大的市场所在。\n\n## 网络业务成核心盈利引擎\n\nConti将惠普的网络产品线称为公司的\"盈利发动机\"，旗下Juniper和Aruba产品使其在校园网络市场占据有利地位。惠普首席执行官Antonio Neri在声明中表示，随着AI演变为公司\"多年期增长驱动力\"，惠普已做好准备\"大规模抓住这一机遇\"。\n\nMyers则对当前市场环境表示乐观：\"我们在正确的时间拥有了正确的产品组合。随着需求持续增长，从事这一行业的时机从未如此之好。\"",
-      "bodyTruncated": false
+      }
     },
     {
       "recordId": "recvu7Bcb3NH05",
@@ -1592,6 +1622,9 @@
         "curatedBy": "llm"
       },
       "editorialStructure": "",
+      "body": "品玩9月3日讯，据界面新闻报道，天猫正式上线AI空间站（Token充值中心），标志着大模型订阅服务正式进入电商消费场景。该充值中心集合了阿里云、智谱、Kimi、MiniMax等国内头部大模型厂商的订阅服务，用户可直接购买相关产品。\n\n在售商品涵盖按周期订阅的Token Plan、Coding Plan以及按用量付费的充值方案，并支持卡密或直充两种交付方式。此前一天，智谱已率先入驻天猫开设官方旗舰店，开售Coding Plan等订阅套餐。数据显示，开店首日相关搜索量环比暴涨40倍。\n\n天猫此举将AI服务标准化为电商商品，显著降低了购买门槛。未来，消费者购买Token或将像充话费一样便捷，AI服务也有望在电商大促节点迎来更多消费场景。",
+      "bodyTruncated": false,
+      "bodyVerbatim": true,
       "eventAggregation": {
         "total": 1,
         "groups": [
@@ -1609,10 +1642,7 @@
             ]
           }
         ]
-      },
-      "bodyVerbatim": true,
-      "body": "品玩9月3日讯，据界面新闻报道，天猫正式上线AI空间站（Token充值中心），标志着大模型订阅服务正式进入电商消费场景。该充值中心集合了阿里云、智谱、Kimi、MiniMax等国内头部大模型厂商的订阅服务，用户可直接购买相关产品。\n\n在售商品涵盖按周期订阅的Token Plan、Coding Plan以及按用量付费的充值方案，并支持卡密或直充两种交付方式。此前一天，智谱已率先入驻天猫开设官方旗舰店，开售Coding Plan等订阅套餐。数据显示，开店首日相关搜索量环比暴涨40倍。\n\n天猫此举将AI服务标准化为电商商品，显著降低了购买门槛。未来，消费者购买Token或将像充话费一样便捷，AI服务也有望在电商大促节点迎来更多消费场景。",
-      "bodyTruncated": false
+      }
     },
     {
       "recordId": "recvu7Bcb3e7Ng",
@@ -1955,7 +1985,7 @@
       },
       "editorialStructure": "",
       "eventAggregation": {
-        "total": 4,
+        "total": 5,
         "groups": [
           {
             "key": "官方来源",
@@ -1994,6 +2024,13 @@
                 "url": "https://github.com/langchain-ai/langchain/releases/tag/langchain-anthropic%3d%3d1.7.1",
                 "note": "同事件的其它源头报道。",
                 "text": "LangChain Anthropic 1.7.1 发布，新增 Claude Fable 5.1 支持并优化追踪性能 —— 同事件的其它源头报道。"
+              },
+              {
+                "source": "X · @_catwu",
+                "title": "Fable 5.1 宣称助力团队承接以往需数月的大胆项目",
+                "url": "https://x.com/_catwu/status/2094933602228416603",
+                "note": "同事件的其它源头报道。",
+                "text": "Fable 5.1 宣称助力团队承接以往需数月的大胆项目 —— 同事件的其它源头报道。"
               }
             ]
           }
@@ -2109,6 +2146,572 @@
             ]
           }
         ]
+      }
+    }
+  ],
+  "socialPosts": [
+    {
+      "recordId": "recvueCW1ylB5O",
+      "sourceId": "social-media",
+      "title": "Gemini 3.8 Flash on DeepSWE 1.1, scores 73.7%! https://t.co/JW7fhVy4He",
+      "titleCn": "Gemini 3.8 Flash 在 DeepSWE 1.1 上得分 73.7%",
+      "source": "X · @officiallogank",
+      "url": "https://x.com/officiallogank/status/2095178478505328918",
+      "category": "其他",
+      "contentType": "社交媒体帖子",
+      "publishedDate": "2026-09-02",
+      "publishedAtMs": 1788364450000,
+      "summary": "X 用户 @officiallogank 声称，Gemini 3.8 Flash 在 DeepSWE 1.1 上取得 73.7% 的成绩，并附有相关链接。原文未披露测试配置、评测方法或对比基线。",
+      "deepAnalysis": "【帖子信号】\n来源为 X 账号 @officiallogank，帖子明确写出“Gemini 3.8 Flash on DeepSWE 1.1, scores 73.7%!”并提供链接：https://t.co/JW7fhVy4He。可确认的信息仅包括模型名称 Gemini 3.8 Flash、评测名称 DeepSWE 1.1 以及 73.7% 这一分数。\n\n【价值与边界】\n如果分数真实且评测条件可比，该结果可能为 Gemini 3.8 Flash 的软件工程或相关任务能力提供一个量化信号，并具有产品竞争参考价值。但原文没有说明 DeepSWE 1.1 的任务定义、数据划分、运行配置、是否使用工具、评测口径、样本规模及对比模型，因此不能据此判断排名、泛化能力或实际开发效率；“73.7%”及其含义仍需验证。\n\n【跟进行动】\n1. 打开链接并核对原始评测页面、报告或日志，确认分数定义、版本和测试日期。\n2. 检查是否公布运行配置、提示词、工具调用方式及基线结果。\n3. 使用相同条件复测，并与其他模型进行可比评估。",
+      "why": "该结果若经独立复核，可能反映 Gemini 3.8 Flash 在 DeepSWE 1.1 评测中的较强表现，但目前证据仅为一条帖子中的单项分数。",
+      "impact": 62,
+      "novelty": 68,
+      "actionability": 52,
+      "urgency": "中",
+      "tags": [
+        "LLM",
+        "产品",
+        "其他"
+      ],
+      "imageUrl": "https://pbs.twimg.com/media/HRORhX1akAAtpcJ.jpg",
+      "mediaAssets": {
+        "images": [
+          {
+            "id": "3_2095178254177177600",
+            "platform": "x",
+            "type": "photo",
+            "url": "https://pbs.twimg.com/media/HRORhX1akAAtpcJ.jpg",
+            "width": 3840,
+            "height": 2160
+          }
+        ],
+        "videos": [],
+        "articles": []
+      },
+      "editorialStructure": "",
+      "socialMetrics": {
+        "platform": "x",
+        "post_id": "2095178478505328918",
+        "canonical_post_id": "2095178478505328918",
+        "conversation_id": "2095178478505328918",
+        "account": "officiallogank",
+        "account_name": "Logan Kilpatrick",
+        "account_avatar": "https://pbs.twimg.com/profile_images/1943787288955084800/QOl7OJMc_400x400.jpg",
+        "account_verified": true,
+        "followers": 363614,
+        "likes": 3590,
+        "replies": 275,
+        "reposts": 130,
+        "quotes": 128,
+        "bookmarks": 198,
+        "impressions": 508348,
+        "engagement": 4854,
+        "is_retweet": false,
+        "is_reply": false,
+        "is_quote": false,
+        "thread_count": 1,
+        "edit_history_tweet_ids": [
+          "2095178478505328918"
+        ],
+        "own_text": "Gemini 3.8 Flash on DeepSWE 1.1, scores 73.7%!",
+        "own_chars": 46,
+        "quoted_text": "",
+        "quoted_chars": 0,
+        "quoted": {},
+        "has_article": false,
+        "has_media": true,
+        "has_event": false,
+        "has_hard_evidence": true,
+        "event_and_evidence": false,
+        "strong_signal": false,
+        "account_tier": "P0",
+        "social_score": 65,
+        "llm_core_fact": "Gemini 3.8 Flash 在 DeepSWE 1.1 评测中取得了 73.7% 的分数。",
+        "llm_event_type": "模型评测结果",
+        "llm_confidence": 0,
+        "gate": "llm"
+      }
+    },
+    {
+      "recordId": "recvueCW1yQB00",
+      "sourceId": "social-media",
+      "title": "Introducing Gemini 3.8 Flash, another jump in Gemini's agentic + coding capabilities, and our 3rd updated Flash model...",
+      "titleCn": "Gemini 3.8 Flash发布：Agent与编程能力再提升",
+      "source": "X · @officiallogank",
+      "url": "https://x.com/officiallogank/status/2095175881690173885",
+      "category": "其他",
+      "contentType": "社交媒体帖子",
+      "publishedDate": "2026-09-02",
+      "publishedAtMs": 1788363831000,
+      "summary": "帖子宣布推出Gemini 3.8 Flash，声称其Agent能力和编程能力进一步提升。该模型据称与3.7价格相同、速度大致相当，并已通过Gemini API、AI Studio、Antigravity和Gemini App等渠道提供。",
+      "deepAnalysis": "【帖子信号】账号明确宣布Gemini 3.8 Flash，称其在“agentic + coding capabilities”方面再次跃升，并表示这是“仅6周内”的第3个更新版Flash模型。帖子称3.8 Flash与3.7价格相同、速度大致相当，已通过Gemini API、AI Studio、Antigravity、Gemini App等渠道提供；同时附有两个链接：https://t.co/Cj07lCBtp8 与 https://t.co/ooiqWpFP9q。\n\n【价值与边界】若后续测试成立，在价格和速度基本不变的前提下，Agent任务与编程能力提升可能改善开发者的模型选型和应用效果，并加快Gemini产品迭代节奏。但目前原文只有发布方的定性表述，没有给出基准成绩、上下文规格、价格明细、延迟数据或独立评测，因此“跃升”、性能等同以及各入口的具体可用范围仍待验证。\n\n【跟进行动】1. 打开两个链接核对官方模型卡、API文档、定价、版本号和可用区域。2. 使用相同提示与任务集，对Gemini 3.7和3.8 Flash进行Agent执行成功率、代码正确率、延迟和成本测试。3. 分别验证Gemini API、AI Studio、Antigravity和Gemini App中的实际开放状态及功能差异。",
+      "why": "这是Gemini Flash系列在较短周期内的又一次更新，可能影响开发者对模型性能、成本和可用入口的选择。",
+      "impact": 75,
+      "novelty": 65,
+      "actionability": 58,
+      "urgency": "中",
+      "tags": [
+        "LLM",
+        "Agent",
+        "产品"
+      ],
+      "imageUrl": "https://pbs.twimg.com/media/HROMzF5boAAlg1Y.png",
+      "mediaAssets": {
+        "images": [
+          {
+            "id": "3_2095173061041692672",
+            "platform": "x",
+            "type": "photo",
+            "url": "https://pbs.twimg.com/media/HROMzF5boAAlg1Y.png",
+            "width": 2600,
+            "height": 3186
+          },
+          {
+            "id": "3_2095173060802510849",
+            "platform": "x",
+            "type": "photo",
+            "url": "https://pbs.twimg.com/media/HROMzFAaAAE2R-m.jpg",
+            "width": 2160,
+            "height": 2160
+          },
+          {
+            "id": "3_2095173061066792961",
+            "platform": "x",
+            "type": "photo",
+            "url": "https://pbs.twimg.com/media/HROMzF_aoAExVqT.jpg",
+            "width": 2160,
+            "height": 2160
+          },
+          {
+            "id": "3_2095173060588625920",
+            "platform": "x",
+            "type": "photo",
+            "url": "https://pbs.twimg.com/media/HROMzENaYAAHSmD.jpg",
+            "width": 2160,
+            "height": 2160
+          }
+        ],
+        "videos": [],
+        "articles": [
+          {
+            "url": "https://blog.google/innovation-and-ai/models-and-research/gemini-models/3-8-flash-and-3-8-flash-cyber/",
+            "title": "Introducing Gemini 3.8 Flash and 3.8 Flash Cyber",
+            "description": "Gemini 3.8 Flash and 3.8 Flash Cyber deliver next-generation intelligence for agentic workflows and cybersecurity.",
+            "image": "https://pbs.twimg.com/news_img/2095175315698208768/Ebk-jQ37?format=jpg&name=orig"
+          }
+        ]
+      },
+      "editorialStructure": "",
+      "socialMetrics": {
+        "platform": "x",
+        "post_id": "2095175881690173885",
+        "canonical_post_id": "2095175881690173885",
+        "conversation_id": "2095175881690173885",
+        "account": "officiallogank",
+        "account_name": "Logan Kilpatrick",
+        "account_avatar": "https://pbs.twimg.com/profile_images/1943787288955084800/QOl7OJMc_400x400.jpg",
+        "account_verified": true,
+        "followers": 363614,
+        "likes": 11668,
+        "replies": 815,
+        "reposts": 841,
+        "quotes": 482,
+        "bookmarks": 1326,
+        "impressions": 1728475,
+        "engagement": 17270,
+        "is_retweet": false,
+        "is_reply": false,
+        "is_quote": false,
+        "thread_count": 2,
+        "edit_history_tweet_ids": [
+          "2095175881690173885"
+        ],
+        "own_text": "Introducing Gemini 3.8 Flash, another jump in Gemini's agentic + coding capabilities, and our 3rd updated Flash model in only 6 weeks... This model has been a ton of fun to work with, excited to see what you all think! 3.8 Flash is the same price as 3.7, is ~the same speed, and is available via the Gemini API, in AI Studio, Antigravity, Gemini App, and more! Read more: So incredible to see the progress and hard work from the team. Pushing hard to be at the frontier.",
+        "own_chars": 470,
+        "quoted_text": "",
+        "quoted_chars": 0,
+        "quoted": {},
+        "has_article": true,
+        "has_media": true,
+        "has_event": true,
+        "has_hard_evidence": true,
+        "event_and_evidence": true,
+        "strong_signal": true,
+        "account_tier": "P0",
+        "social_score": 90,
+        "gate": "direct"
+      }
+    },
+    {
+      "recordId": "recvueCW1yjr32",
+      "sourceId": "social-media",
+      "title": "With Fable 5.1, our team has taken on more ambitious projects that would have previously taken months. What big bets ...",
+      "titleCn": "Fable 5.1 宣称助力团队承接以往需数月的大胆项目",
+      "source": "X · @_catwu",
+      "url": "https://x.com/_catwu/status/2094933602228416603",
+      "category": "其他",
+      "contentType": "社交媒体帖子",
+      "publishedDate": "2026-09-02",
+      "publishedAtMs": 1788306067000,
+      "summary": "账号表示，使用 Fable 5.1 后，团队开始承担过去可能需要数月完成的更具雄心的项目。帖子邀请用户在 Claude Code、Claude Cowork 和 Claude Tag 中使用 Fable 5.1，并通过链接反馈体验。",
+      "deepAnalysis": "【帖子信号】\n账号 @_catwu 明确表示，借助 Fable 5.1，其团队已开始承担过去可能需要数月完成的更具雄心的项目。帖子同时提到可在 Claude Code、Claude Cowork、Claude Tag 中使用 Fable 5.1，并提供反馈链接：https://t.co/LCloUBWKeO。原文没有说明 Fable 5.1 的具体功能、模型架构、性能指标、发布时间或可用范围。\n\n【价值与边界】\n如果该表述可被案例和数据验证，Fable 5.1 可能提升复杂任务的开发效率，扩大 AI 编程或协作工具的应用边界；与 Claude Code、Claude Cowork、Claude Tag 的结合也可能增强其产品触达。但“过去需要数月”属于账号对项目周期的概括，未给出基线、任务类型、人员规模、成本或独立评测，不能据此推断普遍提效，更不能确认 Fable 5.1 的技术定位。\n\n【跟进行动】\n1. 通过原帖链接核验 Fable 5.1 的产品说明、访问方式和具体演示。\n2. 要求披露可复现案例，比较使用前后的项目周期、人工投入与交付质量。\n3. 分别在 Claude Code、Claude Cowork 和 Claude Tag 中测试相同任务，记录功能差异与稳定性。",
+      "why": "该信息显示 Fable 5.1 正被用于扩大团队可承担项目的范围，但其具体能力、效果和适用条件尚未披露。",
+      "impact": 62,
+      "novelty": 48,
+      "actionability": 64,
+      "urgency": "中",
+      "tags": [
+        "AI",
+        "Agent",
+        "产品"
+      ],
+      "imageUrl": "",
+      "mediaAssets": {
+        "images": [],
+        "videos": []
+      },
+      "editorialStructure": "",
+      "socialMetrics": {
+        "platform": "x",
+        "post_id": "2094933602228416603",
+        "canonical_post_id": "2094933602228416603",
+        "conversation_id": "2094933602228416603",
+        "account": "_catwu",
+        "account_name": "cat",
+        "account_avatar": "https://pbs.twimg.com/profile_images/1645578728532246528/Llilll47_400x400.jpg",
+        "account_verified": true,
+        "followers": 97332,
+        "likes": 440,
+        "replies": 58,
+        "reposts": 18,
+        "quotes": 3,
+        "bookmarks": 27,
+        "impressions": 33083,
+        "engagement": 625,
+        "is_retweet": false,
+        "is_reply": false,
+        "is_quote": true,
+        "thread_count": 1,
+        "edit_history_tweet_ids": [
+          "2094933602228416603"
+        ],
+        "own_text": "With Fable 5.1, our team has taken on more ambitious projects that would have previously taken months. What big bets do you want to take? Ask Fable 5.1 in Claude Code, Claude Cowork, Claude Tag to take on the task and let us know what you think!",
+        "own_chars": 245,
+        "quoted_text": "We’re introducing Claude Fable 5.1 and Claude Mythos 5.1. They're the world’s most advanced models for coding and knowledge work.",
+        "quoted_chars": 129,
+        "quoted": {
+          "post_id": "2094848572143407483",
+          "text": "We’re introducing Claude Fable 5.1 and Claude Mythos 5.1.\n\nThey're the world’s most advanced models for coding and knowledge work. https://t.co/8P9PSrWPi3",
+          "created_at": "2026-09-01T18:03:14.000Z",
+          "account": "claudeai",
+          "account_name": "Claude",
+          "avatar": "https://pbs.twimg.com/profile_images/1950950107937185792/QOfEjFoJ_400x400.jpg",
+          "verified": false,
+          "media_assets": {
+            "images": [],
+            "videos": [
+              {
+                "id": "13_2094843261470793728",
+                "platform": "x",
+                "type": "video",
+                "url": "https://pbs.twimg.com/media/HRJlwmVWcAEyYzf.jpg",
+                "width": 1620,
+                "height": 1620,
+                "playbackUrl": "https://video.twimg.com/amplify_video/2094843261470793728/vid/avc1/2160x2160/GEnONyeW_6cMSzmW.mp4",
+                "thumbnailUrl": "https://pbs.twimg.com/media/HRJlwmVWcAEyYzf.jpg",
+                "durationSec": 27.4
+              }
+            ],
+            "articles": []
+          }
+        },
+        "has_article": false,
+        "has_media": false,
+        "has_event": true,
+        "has_hard_evidence": true,
+        "event_and_evidence": true,
+        "strong_signal": true,
+        "account_tier": "P0",
+        "social_score": 77,
+        "gate": "direct"
+      }
+    },
+    {
+      "recordId": "recvueCW1yLmIP",
+      "sourceId": "social-media",
+      "title": "Introducing Agentic Video in the Gemini API, a new way to process long videos which reduces token consumption by up t...",
+      "titleCn": "Gemini API 推出可降低长视频 Token 消耗的 Agentic Video",
+      "source": "X · @officiallogank",
+      "url": "https://x.com/officiallogank/status/2094843143623680264",
+      "category": "其他",
+      "contentType": "社交媒体帖子",
+      "publishedDate": "2026-09-02",
+      "publishedAtMs": 1788284500000,
+      "summary": "官方账号披露，Gemini API 新增 Agentic Video，可处理长视频，Token 消耗最多降低 88%，同时提升质量。该功能可按单个视频在 API 中控制，并支持最新模型如 3.7 Flash。",
+      "deepAnalysis": "【帖子信号】\n@officiallogank 明确披露 Gemini API 推出“Agentic Video”，用于处理长视频；其宣称 Token 消耗最多降低 88%，并同时提升质量。帖子称该能力可在 API 中按单个视频控制，支持最新模型如“3.7 Flash”，并提供公告链接 https://t.co/JrIqn4bZic 及发布博客链接 https://t.co/4Xh6nxEkDp。账号还称 Gemini 在视频理解方面持续处于 SOTA，但未给出评测表或实验细节。\n\n【价值与边界】\n若“最多降低 88%”和质量提升在独立测试中成立，Agentic Video 可能显著降低长视频分析的调用成本，并提升视频问答、检索和内容理解产品的可部署性。当前已披露内容仅是官方说法，尚不清楚 Token 节省的基线、适用视频长度、任务类型、质量指标、延迟、价格影响及“3.7 Flash”的具体可用范围；SOTA 表述也缺少公开对比依据。\n\n【跟进行动】\n1. 查阅发布博客和 API 文档，核对启用参数、模型版本、配额、计费及限制。\n2. 使用相同长视频和任务，对比启用前后的 Token、延迟与准确率。\n3. 检查官方或第三方基准，验证 88% 节省和质量提升是否具有普遍性。",
+      "why": "该功能若经验证，可能在长视频理解场景中同时改善成本效率与处理质量。",
+      "impact": 82,
+      "novelty": 84,
+      "actionability": 78,
+      "urgency": "高",
+      "tags": [
+        "Agent",
+        "LLM",
+        "多模态",
+        "产品"
+      ],
+      "imageUrl": "https://pbs.twimg.com/media/HRJaFSHacAAy0kN.png",
+      "mediaAssets": {
+        "images": [
+          {
+            "id": "3_2094835823489478656",
+            "platform": "x",
+            "type": "photo",
+            "url": "https://pbs.twimg.com/media/HRJaFSHacAAy0kN.png",
+            "width": 1920,
+            "height": 1080
+          }
+        ],
+        "videos": [],
+        "articles": [
+          {
+            "url": "https://blog.google/innovation-and-ai/models-and-research/gemini-models/introducing-agentic-video-in-gemini/",
+            "title": "Introducing agentic video understanding with Gemini",
+            "description": "We’re launching agentic video understanding across our latest Gemini models for improved accuracy and lower costs and token usage.",
+            "image": "https://pbs.twimg.com/news_img/2094833178221641728/MH2acXyi?format=jpg&name=orig"
+          }
+        ]
+      },
+      "editorialStructure": "",
+      "socialMetrics": {
+        "platform": "x",
+        "post_id": "2094843143623680264",
+        "canonical_post_id": "2094843143623680264",
+        "conversation_id": "2094843143623680264",
+        "account": "officiallogank",
+        "account_name": "Logan Kilpatrick",
+        "account_avatar": "https://pbs.twimg.com/profile_images/1943787288955084800/QOl7OJMc_400x400.jpg",
+        "account_verified": true,
+        "followers": 363614,
+        "likes": 2452,
+        "replies": 127,
+        "reposts": 125,
+        "quotes": 35,
+        "bookmarks": 618,
+        "impressions": 174743,
+        "engagement": 3644,
+        "is_retweet": false,
+        "is_reply": false,
+        "is_quote": false,
+        "thread_count": 2,
+        "edit_history_tweet_ids": [
+          "2094843143623680264"
+        ],
+        "own_text": "Introducing Agentic Video in the Gemini API, a new way to process long videos which reduces token consumption by up to 88% while also increasing quality. This can be controlled easily in the API on a per video basis, available with our newest models like 3.7 Flash! you can read more about agentic video in our launch blog: very excited given that Gemini continues to be SOTA in video understanding, pls keep the feedback coming!",
+        "own_chars": 429,
+        "quoted_text": "",
+        "quoted_chars": 0,
+        "quoted": {},
+        "has_article": true,
+        "has_media": true,
+        "has_event": true,
+        "has_hard_evidence": true,
+        "event_and_evidence": true,
+        "strong_signal": true,
+        "account_tier": "P0",
+        "social_score": 82,
+        "gate": "direct"
+      }
+    },
+    {
+      "recordId": "recvueCW1y1mbA",
+      "sourceId": "social-media",
+      "title": "Introducing CUA-Lite 🧵 — an open platform for computer-use agents. Training and benchmarking CUAs (Computer-Use Agent...",
+      "titleCn": "CUA-Lite：面向计算机使用智能体的开放统一平台",
+      "source": "X · @dawnsongtweets",
+      "url": "https://x.com/dawnsongtweets/status/2094492986252099710",
+      "category": "其他",
+      "contentType": "社交媒体帖子",
+      "publishedDate": "2026-09-01",
+      "publishedAtMs": 1788201016000,
+      "summary": "BerkeleyRDI 牵头推出开源平台 CUA-Lite，统一计算机使用智能体（CUA）的接口、动作空间、轨迹格式，以及评测、SFT 和 RL 训练框架，覆盖桌面、浏览器和移动端。平台已集成 10+ 个 CUA、15+ 个基准、10+ 个轨迹数据集，并提供支持 3 万多个可验证任务的沙箱资源。",
+      "deepAnalysis": "【帖子信号】\n帖子明确披露 CUA-Lite 由 BerkeleyRDI 牵头，提供 Lite.Gym 统一代理—环境接口、LiteSample 轨迹数据格式，以及评测、SFT、RL 一体化框架，覆盖桌面、浏览器和移动端。平台已接入 10+ 个 CUA、15+ 个基准和 10+ 个轨迹数据集；其可选 VM-free 沙箱支持 30K+ 个可验证任务，Lite.OSWorld 包含原 OSWorld 的 369 个任务及 2K+ 合成任务。帖子同时给出网站、代码、数据和排行榜链接。\n\n【价值与边界】\n若这些能力可稳定复现，统一接口、轨迹和评测流程有望减少不同 CUA 项目重复建设基础设施的成本，并促进同一轨迹在不同模型训练中的复用；Docker 沙箱声称无需 /dev/kvm，资源消耗低于 VM，也可能提升并行训练与评测效率。但目前原文仅是项目发布说明，10+ 模型、15+ 基准、排行榜成绩、30K+ 任务规模及资源节省比例均需通过代码、数据、运行日志和独立实验核验，不能据此推断性能优越或生态已成熟。\n\n【跟进行动】\n1. 按代码仓库说明运行一个桌面、浏览器和移动端基准，核对接口、评测结果与排行榜记录。\n2. 下载 LiteSample 和轨迹数据，检查格式转换、许可证、数据来源及 SFT/RL 可复现性。\n3. 对比 Lite.OSWorld 与原版 OSWorld 的任务覆盖、验证器一致性及 Docker 资源占用。",
+      "why": "它试图通过统一代理、环境、轨迹和训练评测标准，降低计算机使用智能体研究与规模化复现的工程门槛。",
+      "impact": 86,
+      "novelty": 84,
+      "actionability": 91,
+      "urgency": "中",
+      "tags": [
+        "Agent",
+        "开源",
+        "产品",
+        "端侧"
+      ],
+      "imageUrl": "https://pbs.twimg.com/media/HREh5krbkAAhk8w.jpg",
+      "mediaAssets": {
+        "images": [
+          {
+            "id": "3_2094492574686089216",
+            "platform": "x",
+            "type": "photo",
+            "url": "https://pbs.twimg.com/media/HREh5krbkAAhk8w.jpg",
+            "width": 1200,
+            "height": 1338
+          },
+          {
+            "id": "3_2094492808065486848",
+            "platform": "x",
+            "type": "photo",
+            "url": "https://pbs.twimg.com/media/HREiHKFakAA-KNo.jpg",
+            "width": 2400,
+            "height": 1260
+          }
+        ],
+        "videos": [
+          {
+            "id": "16_2094490928790818816",
+            "platform": "x",
+            "type": "animated_gif",
+            "url": "https://pbs.twimg.com/tweet_video_thumb/HREgZxPa0AAFFYi.jpg",
+            "width": 800,
+            "height": 1082,
+            "playbackUrl": "https://video.twimg.com/tweet_video/HREgZxPa0AAFFYi.mp4",
+            "thumbnailUrl": "https://pbs.twimg.com/tweet_video_thumb/HREgZxPa0AAFFYi.jpg",
+            "durationSec": 0.0
+          },
+          {
+            "id": "16_2094491232286420992",
+            "platform": "x",
+            "type": "animated_gif",
+            "url": "https://pbs.twimg.com/tweet_video_thumb/HREgrb2aMAAVJn9.jpg",
+            "width": 800,
+            "height": 382,
+            "playbackUrl": "https://video.twimg.com/tweet_video/HREgrb2aMAAVJn9.mp4",
+            "thumbnailUrl": "https://pbs.twimg.com/tweet_video_thumb/HREgrb2aMAAVJn9.jpg",
+            "durationSec": 0.0
+          },
+          {
+            "id": "16_2094491516056272896",
+            "platform": "x",
+            "type": "animated_gif",
+            "url": "https://pbs.twimg.com/tweet_video_thumb/HREg78-agAA_K-U.jpg",
+            "width": 762,
+            "height": 466,
+            "playbackUrl": "https://video.twimg.com/tweet_video/HREg78-agAA_K-U.mp4",
+            "thumbnailUrl": "https://pbs.twimg.com/tweet_video_thumb/HREg78-agAA_K-U.jpg",
+            "durationSec": 0.0
+          },
+          {
+            "id": "16_2094491730787885056",
+            "platform": "x",
+            "type": "animated_gif",
+            "url": "https://pbs.twimg.com/tweet_video_thumb/HREhIc6a4AAIVAf.jpg",
+            "width": 800,
+            "height": 440,
+            "playbackUrl": "https://video.twimg.com/tweet_video/HREhIc6a4AAIVAf.mp4",
+            "thumbnailUrl": "https://pbs.twimg.com/tweet_video_thumb/HREhIc6a4AAIVAf.jpg",
+            "durationSec": 0.0
+          },
+          {
+            "id": "16_2094491880281247744",
+            "platform": "x",
+            "type": "animated_gif",
+            "url": "https://pbs.twimg.com/tweet_video_thumb/HREhRJ0akAAtArA.jpg",
+            "width": 800,
+            "height": 1132,
+            "playbackUrl": "https://video.twimg.com/tweet_video/HREhRJ0akAAtArA.mp4",
+            "thumbnailUrl": "https://pbs.twimg.com/tweet_video_thumb/HREhRJ0akAAtArA.jpg",
+            "durationSec": 0.0
+          },
+          {
+            "id": "16_2094492125060878336",
+            "platform": "x",
+            "type": "animated_gif",
+            "url": "https://pbs.twimg.com/tweet_video_thumb/HREhfZsbUAAHUpp.jpg",
+            "width": 800,
+            "height": 510,
+            "playbackUrl": "https://video.twimg.com/tweet_video/HREhfZsbUAAHUpp.mp4",
+            "thumbnailUrl": "https://pbs.twimg.com/tweet_video_thumb/HREhfZsbUAAHUpp.jpg",
+            "durationSec": 0.0
+          },
+          {
+            "id": "16_2094492394888826881",
+            "platform": "x",
+            "type": "animated_gif",
+            "url": "https://pbs.twimg.com/tweet_video_thumb/HREhvG4bEAEgC2f.jpg",
+            "width": 800,
+            "height": 468,
+            "playbackUrl": "https://video.twimg.com/tweet_video/HREhvG4bEAEgC2f.mp4",
+            "thumbnailUrl": "https://pbs.twimg.com/tweet_video_thumb/HREhvG4bEAEgC2f.jpg",
+            "durationSec": 0.0
+          }
+        ],
+        "articles": [
+          {
+            "url": "https://cua-lite.github.io",
+            "title": "CUA-Lite — An Open Platform for Computer-Use Agents",
+            "description": "Scalable, efficient sandboxes with verifiable tasks · unified SFT data · unified eval, SFT & RL pipeline — for any computer-use agent, at scale.",
+            "image": "https://pbs.twimg.com/news_img/2094493007001329664/REmgIhvs?format=jpg&name=orig"
+          },
+          {
+            "url": "https://github.com/cua-lite/cua-lite",
+            "title": "GitHub - cua-lite/cua-lite: CUA-Lite: Computer-Use Agents Made Simple",
+            "description": "CUA-Lite: Computer-Use Agents Made Simple. Contribute to cua-lite/cua-lite development by creating an account on GitHub.",
+            "image": "https://pbs.twimg.com/news_img/2092510201299742720/J_PsE7Hg?format=jpg&name=orig"
+          },
+          {
+            "url": "https://huggingface.co/cua-lite",
+            "title": "cua-lite (cua-lite)",
+            "description": "Org profile for cua-lite on Hugging Face, the AI community building the future.",
+            "image": "https://pbs.twimg.com/news_img/2094492994737229824/lUGU1BqT?format=jpg&name=orig"
+          },
+          {
+            "url": "https://cua-lite.github.io/#benchmarks",
+            "title": "CUA-Lite — An Open Platform for Computer-Use Agents",
+            "description": "Scalable, efficient sandboxes with verifiable tasks · unified SFT data · unified eval, SFT & RL pipeline — for any computer-use agent, at scale.",
+            "image": "https://pbs.twimg.com/news_img/2094493007001329664/REmgIhvs?format=jpg&name=orig"
+          }
+        ]
+      },
+      "editorialStructure": "",
+      "socialMetrics": {
+        "platform": "x",
+        "post_id": "2094492986252099710",
+        "canonical_post_id": "2094492986252099710",
+        "conversation_id": "2094492986252099710",
+        "account": "dawnsongtweets",
+        "account_name": "Dawn Song",
+        "account_avatar": "https://pbs.twimg.com/profile_images/2006976747/song-mac-small_400x400.jpg",
+        "account_verified": true,
+        "followers": 40242,
+        "likes": 234,
+        "replies": 27,
+        "reposts": 35,
+        "quotes": 7,
+        "bookmarks": 182,
+        "impressions": 73992,
+        "engagement": 554,
+        "is_retweet": false,
+        "is_reply": false,
+        "is_quote": false,
+        "thread_count": 11,
+        "edit_history_tweet_ids": [
+          "2094492986252099710"
+        ],
+        "own_text": "Introducing CUA-Lite 🧵 — an open platform for computer-use agents. Training and benchmarking CUAs (Computer-Use Agents) requires four core pieces: 1️⃣ Agents — the models and the scaffolding that drives them 2️⃣ Environments — runtime/sandboxes for agents to interact with, tasks & verifiers/graders 3️⃣ Traces — records of agent trajectories 4️⃣ Frameworks — to evaluate, SFT & RL-train agents Today, all four are fragmented. Every agent ships with its own implementation, often in a separate repo — there is no unified way to run them all. Every environment exposes its own interface and action space, often requiring an expensive VM sandbox for each verifiable task. Traces come in incompatible formats. And without common standards across the stack, every project ends up rebuilding its own tooling/framework for eval, SFT, and RL. CUA-Lite unifies the stack: → One standardized interface & action space for agents and environments → One standardized format for agent traces → One framework for evaluation, SFT & RL → Across desktop, browser & mobile And open resources plug straight in, creating the largest open collection of CUA agents, environments and traces, all in a unified format: 🤖 10+ CUAs, including GPT, Claude, Gemini, Qwen, Muse-Glimmer, UI-TARS 🌐 15+ benchmarks, including OSWorld, WebArena & AndroidWorld ⚡ Optional VM-free sandboxes with 30K+ verifiable tasks for training 📚 10+ trace datasets, freely available on Hugging Face, including public datasets converted into the standardized format and fresh rollouts from frontier open-weight CUAs Led by , our goal is for CUA-Lite to become a community-driven, open-source ecosystem for computer-use agents. Join the community and contribute today: bring an environment (runtime/sandbox + tasks + verifier), traces, or an agent, and plug it into CUA-Lite! [2/10] Learn more about CUA-Lite, an open platform for computer-use agents, and join the community: 👇 Site: Code: Data: Leaderboard: Huge thanks to my PhD student Zhanhui Zhou for spearheading the project! [3/10] Computer-use agent resources are fragmented; CUA-Lite is built to close three gaps: · Frameworks are fragmented — every project rebuilds the same tooling for eval, SFT, and RL: agent loops, sandbox setup, evaluation scripts, and training infrastructure. · Traces are fragmented — there’s no standard protocol for recording rollouts, so every source uses its own format and one agent’s traces can’t easily train another. · Agents & Environments are fragmented — every environment exposes its own interface and action space, so an agent built for one doesn't run in another. [4/10] One unified framework for CUA agents: eval, SFT & RL Lite.Gym provides a unified agent–environment interface, with a standardized action space for each platform — desktop, browser, and mobile — so any agent can run in any environment. CUA-Lite brings together the agents, rollout loop, sandboxes, and the eval + training stack that consumes those rollouts. One rollout, three uses: · Eval — scored by the benchmark’s original evaluator, unchanged · SFT — converted by each model’s adapter into its native training format · RL — scored by the task’s verifiable reward, which directly drives RL updates Same interface. Same rollouts. Eval → SFT → RL. [5/10] One schema, any dataset, any agent. LiteSample is CUA-Lite’s unified data schema across desktop, browser, and mobile — spanning environments, agents, and task types. Convert a dataset once, and any agent can train on it. CUA-Lite has already converted 10+ SFT datasets into LiteSample, alongside fresh rollouts from frontier open-weight CUAs. A lightweight model adapter then transforms each LiteSample into the exact training format each model expects. The result: one agent’s rollouts can train any other agent. [6/10] One command, any benchmark. 10+ CUAs and 15+ benchmarks are already integrated into CUA-Lite’s unified framework, and the leaderboard is live, with every score independently reproduced by us. 🖥️ Desktop: OSWorld, OSWorld-2, WindowsAgentArena, CUA-Bench 🌐 Browser: WebArena, VisualWebArena, WebVoyager, Online-Mind2Web, MiniWoB, WebGym 📱 Mobile: AndroidWorld, AndroidLab, MobileWorld, MobileGym 🎯 Grounding: ScreenSpot-Pro, OSWorld-G One script evaluates any agent on any benchmark: set --model-id (plus its agent config) and --env-id for the benchmark — and run. [7/10] VM-free OS(World) at Scale CUA-Lite also provides optional VM-free sandboxes for hosting environments — lightweight, highly optimized containers that reproduce public benchmarks and support verifiable tasks for training any agent. Lite.OSWorld is the first: it reproduces OSWorld with the same tasks and evaluators, but runs in a Docker container instead of a VM. No /dev/kvm, so it runs anywhere Docker does — using less than ¼ the memory and CPU resources. [8/10] Sandboxes & verifiable tasks The VM-free container isn't just for OSWorld — it's the foundation for CUA-Lite's family of sandboxes, already supporting 30K+ verifiable tasks and verifiers. Tasks range from everyday browser and desktop workflows to NASA's GMAT for spacecraft missions and PyMOL for molecular exploration and analysis, enabling many sandbox instances running in parallel on a single machine. Four sandbox families share this foundation today, each re-hosting or extending public suites: → Lite.OSWorld: OSWorld's 369 benchmark tasks + 2K+ synthesized tasks → Lite.ScaleCUA: 20K+ tasks perturbed from OSWorld evaluations → Lite.CUAGym: browser + desktop tasks across mock sites and real apps → Lite.CUAWorld: 40 professional applications across ~25 expert domains [9/10] SFT &amp; RL, any open agent SFT on CUA-Lite’s public rollout data, then RL in its environments — GRPO, GSPO, and beyond, built on Slime. Train any open agent on any data, in any environment. [10/10] Call for contributors CUA-Lite is just getting started. Our goal is to build a community-driven, open-source ecosystem for computer-use agents. Contribute today: bring an environment (sandbox + tasks + verifier), traces, or an agent — and plug it into CUA-Lite! 🚀 Finally, CUA-Lite is a platform built on the incredible work of the broader CUA community — it wouldn’t be possible without the task suites, benchmarks, and datasets created and shared by so many teams. Agents — GPT ( ), Claude ( ), Gemini ( ), Qwen ( ), Fara ( , ), GELab ( ), UI-TARS ( ), MAI-UI (Tongyi-MAI) and EvoCUA (Meituan). Benchmarks — 's OSWorld ( , ), OSWorld-2 ( ) and OSWorld-G ( , , , ); Microsoft's WindowsAgentArena ( ) and WebGym ( ); 's WebArena ( , ) and VisualWebArena ( , ), with MiniWoB ( ), all run through 's BrowserGym ( ); 's Online-Mind2Web ( , ); WebVoyager ( ); ScreenSpot-Pro ( ); 's AndroidWorld; 's AndroidLab ( ); Tongyi-MAI's MobileWorld; CASIA's MobileGym; and 's Cua-Bench. Sandboxes — our Lite.* family re-hosts 's SCALE-CUA, 's gym-anything ( , , ) and 's CUA-Gym ( , ). Our RL builds on 's Slime. Special thanks to Zhengyuan, Kevin and Lijuan at Microsoft AI for helpful discussions, and for generous API and compute credits. Thanks also to for part of our compute. If we’re hosting or integrating your work and you’d like the attribution or presentation changed, please let us know — we’ll be happy to update it.",
+        "own_chars": 7232,
+        "quoted_text": "",
+        "quoted_chars": 0,
+        "quoted": {},
+        "has_article": true,
+        "has_media": true,
+        "has_event": true,
+        "has_hard_evidence": true,
+        "event_and_evidence": true,
+        "strong_signal": true,
+        "account_tier": "P0",
+        "social_score": 86,
+        "gate": "direct"
       }
     }
   ],

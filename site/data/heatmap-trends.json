@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-04T12:33:49+08:00",
+  "generatedAt": "2026-09-04T16:00:14+08:00",
   "days": [
     "2026-08-29",
     "2026-08-30",
@@ -10,29 +10,35 @@
     "2026-09-04"
   ],
   "topics": [
-    "chatgpt-astra",
     "gpt-6",
+    "artificial-general-intelligence",
     "sam-altman",
+    "alexandr-wang",
     "hugging-face"
   ],
   "labels": {
-    "chatgpt-astra": "chatgpt astra",
     "gpt-6": "gpt 6",
+    "artificial-general-intelligence": "artificial general intelligence",
     "sam-altman": "sam altman",
+    "alexandr-wang": "alexandr wang",
     "hugging-face": "hugging face"
   },
   "queries": {
-    "chatgpt-astra": {
-      "g": "chatgpt astra",
-      "x": "\"chatgpt astra\" -is:retweet"
-    },
     "gpt-6": {
       "g": "gpt 6",
       "x": "\"gpt 6\" -is:retweet"
     },
+    "artificial-general-intelligence": {
+      "g": "artificial general intelligence",
+      "x": "\"artificial general intelligence\" -is:retweet"
+    },
     "sam-altman": {
       "g": "sam altman",
       "x": "\"sam altman\" -is:retweet"
+    },
+    "alexandr-wang": {
+      "g": "alexandr wang",
+      "x": "\"alexandr wang\" -is:retweet"
     },
     "hugging-face": {
       "g": "hugging face",
@@ -40,43 +46,50 @@
     }
   },
   "scopes": {
-    "chatgpt-astra": "global",
     "gpt-6": "global",
+    "artificial-general-intelligence": "global",
     "sam-altman": "global",
+    "alexandr-wang": "global",
     "hugging-face": "global"
   },
   "marks": {
-    "chatgpt-astra": "🌐",
     "gpt-6": "🌐",
+    "artificial-general-intelligence": "🌐",
     "sam-altman": "🌐",
+    "alexandr-wang": "🌐",
     "hugging-face": "🌐"
   },
   "breakouts": [
-    "chatgpt-astra",
     "gpt-6",
+    "artificial-general-intelligence",
     "sam-altman",
+    "alexandr-wang",
     "hugging-face"
   ],
   "selection": {
     "method": "google-trending-ai",
     "volumes": {
-      "chatgpt-astra": 200000,
-      "gpt-6": 500000,
+      "gpt-6": 200000,
+      "artificial-general-intelligence": 2000,
       "sam-altman": 100000,
+      "alexandr-wang": 2000,
       "hugging-face": 10000
     },
     "geos": {
-      "chatgpt-astra": [
-        "IN"
-      ],
       "gpt-6": [
-        "US",
+        "US"
+      ],
+      "artificial-general-intelligence": [
         "AU"
       ],
       "sam-altman": [
         "GB",
+        "DE",
         "AU",
         "CA"
+      ],
+      "alexandr-wang": [
+        "IN"
       ],
       "hugging-face": [
         "US",
@@ -86,15 +99,17 @@
       ]
     },
     "plot_geo": {
-      "chatgpt-astra": "",
       "gpt-6": "",
+      "artificial-general-intelligence": "",
       "sam-altman": "",
+      "alexandr-wang": "",
       "hugging-face": ""
     },
     "breakouts": [
-      "chatgpt-astra",
       "gpt-6",
+      "artificial-general-intelligence",
       "sam-altman",
+      "alexandr-wang",
       "hugging-face"
     ]
   },
@@ -103,109 +118,107 @@
     "matrix": {
       "raw": [
         [
-          1.0,
-          1.0,
-          1.0,
-          1.0,
           3.0,
-          21.0,
+          3.0,
+          5.0,
+          5.0,
+          5.0,
+          28.0,
           100.0
         ],
         [
-          4.0,
-          4.0,
-          5.0,
-          5.0,
-          6.0,
-          31.0,
+          11.0,
+          10.0,
+          12.0,
+          14.0,
+          15.0,
+          16.0,
           100.0
         ],
         [
-          6.0,
-          5.0,
-          7.0,
-          7.0,
           8.0,
-          33.0,
+          7.0,
+          10.0,
+          9.0,
+          11.0,
+          46.0,
           100.0
         ],
         [
-          36.0,
-          33.0,
-          33.0,
-          34.0,
+          8.0,
+          8.0,
+          8.0,
+          9.0,
+          13.0,
+          69.0,
+          100.0
+        ],
+        [
           40.0,
-          84.0,
+          34.0,
+          34.0,
+          37.0,
+          44.0,
+          94.0,
           100.0
         ]
       ],
       "normalized": [
         [
-          0.01,
-          0.01,
-          0.01,
-          0.01,
           0.03,
-          0.21,
+          0.03,
+          0.05,
+          0.05,
+          0.05,
+          0.28,
           1.0
         ],
         [
-          0.04,
-          0.04,
-          0.05,
-          0.05,
-          0.06,
-          0.31,
+          0.11,
+          0.1,
+          0.12,
+          0.14,
+          0.15,
+          0.16,
           1.0
         ],
         [
-          0.06,
-          0.05,
-          0.07,
-          0.07,
           0.08,
-          0.33,
+          0.07,
+          0.1,
+          0.09,
+          0.11,
+          0.46,
           1.0
         ],
         [
-          0.36,
-          0.33,
-          0.33,
-          0.34,
+          0.08,
+          0.08,
+          0.08,
+          0.09,
+          0.13,
+          0.69,
+          1.0
+        ],
+        [
           0.4,
-          0.84,
+          0.34,
+          0.34,
+          0.37,
+          0.44,
+          0.94,
           1.0
         ]
       ]
     },
     "trend": {
-      "chatgpt-astra": 21.429,
-      "gpt-6": 10.909,
-      "sam-altman": 9.091,
-      "hugging-face": 2.308
+      "gpt-6": 12.245,
+      "artificial-general-intelligence": 7.692,
+      "sam-altman": 6.593,
+      "alexandr-wang": 5.217,
+      "hugging-face": 2.12
     },
     "items": {
-      "chatgpt-astra|2026-08-29": [
-        "g-chatgpt-astra"
-      ],
-      "chatgpt-astra|2026-08-30": [
-        "g-chatgpt-astra"
-      ],
-      "chatgpt-astra|2026-08-31": [
-        "g-chatgpt-astra"
-      ],
-      "chatgpt-astra|2026-09-01": [
-        "g-chatgpt-astra"
-      ],
-      "chatgpt-astra|2026-09-02": [
-        "g-chatgpt-astra"
-      ],
-      "chatgpt-astra|2026-09-03": [
-        "g-chatgpt-astra"
-      ],
-      "chatgpt-astra|2026-09-04": [
-        "g-chatgpt-astra"
-      ],
       "gpt-6|2026-08-29": [
         "g-gpt-6"
       ],
@@ -227,6 +240,27 @@
       "gpt-6|2026-09-04": [
         "g-gpt-6"
       ],
+      "artificial-general-intelligence|2026-08-29": [
+        "g-artificial-general-intelligence"
+      ],
+      "artificial-general-intelligence|2026-08-30": [
+        "g-artificial-general-intelligence"
+      ],
+      "artificial-general-intelligence|2026-08-31": [
+        "g-artificial-general-intelligence"
+      ],
+      "artificial-general-intelligence|2026-09-01": [
+        "g-artificial-general-intelligence"
+      ],
+      "artificial-general-intelligence|2026-09-02": [
+        "g-artificial-general-intelligence"
+      ],
+      "artificial-general-intelligence|2026-09-03": [
+        "g-artificial-general-intelligence"
+      ],
+      "artificial-general-intelligence|2026-09-04": [
+        "g-artificial-general-intelligence"
+      ],
       "sam-altman|2026-08-29": [
         "g-sam-altman"
       ],
@@ -247,6 +281,27 @@
       ],
       "sam-altman|2026-09-04": [
         "g-sam-altman"
+      ],
+      "alexandr-wang|2026-08-29": [
+        "g-alexandr-wang"
+      ],
+      "alexandr-wang|2026-08-30": [
+        "g-alexandr-wang"
+      ],
+      "alexandr-wang|2026-08-31": [
+        "g-alexandr-wang"
+      ],
+      "alexandr-wang|2026-09-01": [
+        "g-alexandr-wang"
+      ],
+      "alexandr-wang|2026-09-02": [
+        "g-alexandr-wang"
+      ],
+      "alexandr-wang|2026-09-03": [
+        "g-alexandr-wang"
+      ],
+      "alexandr-wang|2026-09-04": [
+        "g-alexandr-wang"
       ],
       "hugging-face|2026-08-29": [
         "g-hugging-face"
@@ -271,20 +326,25 @@
       ]
     },
     "itemIndex": {
-      "g-chatgpt-astra": {
-        "title": "Google Trends · chatgpt astra",
-        "source": "Google Trends",
-        "url": "https://trends.google.com/trends/explore?date=now%207-d&q=chatgpt%20astra"
-      },
       "g-gpt-6": {
         "title": "Google Trends · gpt 6",
         "source": "Google Trends",
         "url": "https://trends.google.com/trends/explore?date=now%207-d&q=gpt%206"
       },
+      "g-artificial-general-intelligence": {
+        "title": "Google Trends · artificial general intelligence",
+        "source": "Google Trends",
+        "url": "https://trends.google.com/trends/explore?date=now%207-d&q=artificial%20general%20intelligence"
+      },
       "g-sam-altman": {
         "title": "Google Trends · sam altman",
         "source": "Google Trends",
         "url": "https://trends.google.com/trends/explore?date=now%207-d&q=sam%20altman"
+      },
+      "g-alexandr-wang": {
+        "title": "Google Trends · alexandr wang",
+        "source": "Google Trends",
+        "url": "https://trends.google.com/trends/explore?date=now%207-d&q=alexandr%20wang"
       },
       "g-hugging-face": {
         "title": "Google Trends · hugging face",
@@ -294,198 +354,111 @@
     }
   },
   "x": {
-    "error": "",
+    "error": "未配置 X_BEARER_TOKEN",
     "matrix": {
       "raw": [
         [
-          11.0,
-          11.0,
-          13.0,
-          22.0,
-          28.0,
-          325.0,
-          51.0
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
         ],
         [
-          153.0,
-          170.0,
-          285.0,
-          237.0,
-          719.0,
-          11166.0,
-          3924.0
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
         ],
         [
-          1320.0,
-          608.0,
-          612.0,
-          723.0,
-          939.0,
-          1347.0,
-          256.0
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
         ],
         [
-          2512.0,
-          2291.0,
-          1903.0,
-          1608.0,
-          1962.0,
-          6225.0,
-          979.0
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
         ]
       ],
       "normalized": [
         [
-          0.0338,
-          0.0338,
-          0.04,
-          0.0677,
-          0.0862,
-          1.0,
-          0.1569
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
         ],
         [
-          0.0137,
-          0.0152,
-          0.0255,
-          0.0212,
-          0.0644,
-          1.0,
-          0.3514
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
         ],
         [
-          0.98,
-          0.4514,
-          0.4543,
-          0.5367,
-          0.6971,
-          1.0,
-          0.1901
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
         ],
         [
-          0.4035,
-          0.368,
-          0.3057,
-          0.2583,
-          0.3152,
-          1.0,
-          0.1573
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
         ]
       ]
     },
     "trend": {
-      "chatgpt-astra": 0.746,
-      "gpt-6": 1.849,
-      "sam-altman": 0.277,
-      "hugging-face": 0.356
+      "gpt-6": 1.0,
+      "artificial-general-intelligence": 1.0,
+      "sam-altman": 1.0,
+      "alexandr-wang": 1.0,
+      "hugging-face": 1.0
     },
-    "items": {
-      "chatgpt-astra|2026-08-29": [
-        "x-chatgpt-astra"
-      ],
-      "chatgpt-astra|2026-08-30": [
-        "x-chatgpt-astra"
-      ],
-      "chatgpt-astra|2026-08-31": [
-        "x-chatgpt-astra"
-      ],
-      "chatgpt-astra|2026-09-01": [
-        "x-chatgpt-astra"
-      ],
-      "chatgpt-astra|2026-09-02": [
-        "x-chatgpt-astra"
-      ],
-      "chatgpt-astra|2026-09-03": [
-        "x-chatgpt-astra"
-      ],
-      "chatgpt-astra|2026-09-04": [
-        "x-chatgpt-astra"
-      ],
-      "gpt-6|2026-08-29": [
-        "x-gpt-6"
-      ],
-      "gpt-6|2026-08-30": [
-        "x-gpt-6"
-      ],
-      "gpt-6|2026-08-31": [
-        "x-gpt-6"
-      ],
-      "gpt-6|2026-09-01": [
-        "x-gpt-6"
-      ],
-      "gpt-6|2026-09-02": [
-        "x-gpt-6"
-      ],
-      "gpt-6|2026-09-03": [
-        "x-gpt-6"
-      ],
-      "gpt-6|2026-09-04": [
-        "x-gpt-6"
-      ],
-      "sam-altman|2026-08-29": [
-        "x-sam-altman"
-      ],
-      "sam-altman|2026-08-30": [
-        "x-sam-altman"
-      ],
-      "sam-altman|2026-08-31": [
-        "x-sam-altman"
-      ],
-      "sam-altman|2026-09-01": [
-        "x-sam-altman"
-      ],
-      "sam-altman|2026-09-02": [
-        "x-sam-altman"
-      ],
-      "sam-altman|2026-09-03": [
-        "x-sam-altman"
-      ],
-      "sam-altman|2026-09-04": [
-        "x-sam-altman"
-      ],
-      "hugging-face|2026-08-29": [
-        "x-hugging-face"
-      ],
-      "hugging-face|2026-08-30": [
-        "x-hugging-face"
-      ],
-      "hugging-face|2026-08-31": [
-        "x-hugging-face"
-      ],
-      "hugging-face|2026-09-01": [
-        "x-hugging-face"
-      ],
-      "hugging-face|2026-09-02": [
-        "x-hugging-face"
-      ],
-      "hugging-face|2026-09-03": [
-        "x-hugging-face"
-      ],
-      "hugging-face|2026-09-04": [
-        "x-hugging-face"
-      ]
-    },
-    "itemIndex": {
-      "x-chatgpt-astra": {
-        "title": "X 热搜 · \"chatgpt astra\" -is:retweet",
-        "source": "X",
-        "url": "https://x.com/search?q=%22chatgpt%20astra%22%20-is%3Aretweet&src=typed_query&f=live"
-      },
-      "x-gpt-6": {
-        "title": "X 热搜 · \"gpt 6\" -is:retweet",
-        "source": "X",
-        "url": "https://x.com/search?q=%22gpt%206%22%20-is%3Aretweet&src=typed_query&f=live"
-      },
-      "x-sam-altman": {
-        "title": "X 热搜 · \"sam altman\" -is:retweet",
-        "source": "X",
-        "url": "https://x.com/search?q=%22sam%20altman%22%20-is%3Aretweet&src=typed_query&f=live"
-      },
-      "x-hugging-face": {
-        "title": "X 热搜 · \"hugging face\" -is:retweet",
-        "source": "X",
-        "url": "https://x.com/search?q=%22hugging%20face%22%20-is%3Aretweet&src=typed_query&f=live"
-      }
-    }
+    "items": {},
+    "itemIndex": {}
   }
 }
