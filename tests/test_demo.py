@@ -916,10 +916,10 @@ class DeliveryTests(unittest.TestCase):
         self.assertIn("data/logos/qwen.svg?v=", board)
         self.assertNotIn("alibabadotcom.svg", board)
         # 榜单指标是模型名的背景填色，不是独立一列；当日区间在窄栏里不渲染。
-        # AA 榜和 HF 榜共用这套行，填色字段由各页的 metricOf 给。
+        # AA 那块和 HF 那块共用这套行，各自传自己的指标字段进来。
         self.assertIn("fillWidth(metricOf(r))", board)
-        self.assertIn("metricOf: m => m.intelligence", board)
-        self.assertIn("metricOf: m => m.trending", board)
+        self.assertIn("rankRows(models, m => m.intelligence", board)
+        self.assertIn("rankRows(hfItems, i => i.trending", board)
         self.assertNotIn("当日区间", board)
         self.assertNotIn("dash-range", board)
         self.assertIn("quoteGroup('美股'", board)

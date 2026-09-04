@@ -19,10 +19,10 @@
 开源标记，分不出这两档，只能读 AA 站上对应的分档页面；页面里每张图都内联一份
 schema.org Dataset，比解析 Next.js 的流式载荷稳定得多。
 
-第四张榜换个口径：Hugging Face 的公开模型接口，按 `trendingScore` 取
-`huggingface.co/models` 默认那一页的排序。AA 答的是「哪个模型更强」，这一榜答的是
-「社区这几天在下载谁」——视频、语音、时序这些没有智能指数的模型只在这里出得来。
-不需要 token。
+再单独一块换口径：Hugging Face 首页「Trending this week」的模型 / 应用 / 数据集三栏，
+各取 5 条。AA 答的是「哪个模型更强」，这里答的是「社区这周在看什么」——应用和数据集
+根本不是模型，没有智能指数可比，也没有别处可看。三类各有自己的列表接口，公开、不需要
+token，但要点名 `expand[]` 才回参数规模、运行状态这些字段。
 
 行情用腾讯免费行情接口：A 股 / 美股 / 港股同一套字段，无需鉴权。返回 GBK 编码的
 `v_<code>="a~b~c~..."`，字段按位取，各市场前 35 位布局一致。
@@ -68,21 +68,40 @@ _LD_JSON_RE = re.compile(
 _PAGE_HEADERS = {"User-Agent": "feishu-ai-signal (+https://artificialanalysis.ai)"}
 
 HF_SITE = "https://huggingface.co"
-HF_ENDPOINT = f"{HF_SITE}/api/models"
-HF_LIST_URL = f"{HF_SITE}/models"
-# 列表接口默认只回 id / likes / downloads 那几位；参数规模、更新时间、推理可用
-# 都要显式 expand 才给。
-HF_EXPAND: tuple[str, ...] = (
-    "author",
-    "downloads",
-    "likes",
-    "trendingScore",
-    "pipeline_tag",
-    "lastModified",
-    "safetensors",
-    "inferenceProviderMapping",
+# 首页那一栏只给 5 条，跟着它，不要自作主张取 12——「本周在看什么」是个短名单
+HF_TRENDING_LIMIT = 5
+# 三类各有自己的列表接口，但排序参数和响应外形一致。第四位是该类要显式 expand
+# 的字段：列表接口默认只回 id / likes / trendingScore 那几位，其余不点名就不给，
+# 漏一个的表现是那一列静静地空掉，不会报错。
+HF_KINDS: tuple[tuple[str, str, str, tuple[str, ...]], ...] = (
+    (
+        "models",
+        "模型",
+        "models",
+        ("author", "downloads", "likes", "trendingScore", "pipeline_tag",
+         "lastModified", "safetensors", "inferenceProviderMapping"),
+    ),
+    (
+        # 应用没有下载量，identity 靠 cardData 里的标题和 emoji——作者多是个人账号，
+        # 拿组织名认 logo 没有意义，首页也是用 emoji 认脸的。
+        "spaces",
+        "应用",
+        "spaces",
+        ("author", "likes", "trendingScore", "lastModified", "sdk", "runtime",
+         "cardData"),
+    ),
+    (
+        "datasets",
+        "数据集",
+        "datasets",
+        ("author", "downloads", "likes", "trendingScore", "lastModified"),
+    ),
 )
-_HF_HEADERS = {"User-Agent": "feishu-ai-signal (+https://huggingface.co/models)"}
+_HF_HEADERS = {"User-Agent": "feishu-ai-signal (+https://huggingface.co/)"}
+
+# runtime.stage 的取值里只有这几个算「现在能点开就用」，其余（BUILDING、
+# RUNTIME_ERROR、PAUSED…）都不算。
+_HF_LIVE_STAGES = {"RUNNING", "RUNNING_APP_STARTING", "RUNNING_BUILDING"}
 
 # pipeline_tag 是英文机器标签，窄栏里换成中文短词。认不出的照原样显示，
 # HF 新增任务类型时不会变成空白一格。
@@ -568,7 +587,7 @@ def fetch_size_buckets(
     ]
 
 
-# --- Hugging Face 热度榜 ---
+# --- Hugging Face 本周热度（模型 / 应用 / 数据集） ---
 
 
 def _hf_task_label(tag: Any) -> str:
@@ -586,86 +605,169 @@ def _hf_params_b(model: dict[str, Any]) -> float | None:
     return None if total is None else total / 1e9
 
 
-def _hf_row(model: dict[str, Any], rank: int) -> dict[str, Any]:
-    repo = str(model.get("id") or "")
-    org, _, name = repo.partition("/")
+def _hf_base_row(item: dict[str, Any], rank: int, kind: str) -> dict[str, Any]:
+    """三类共有的那几位。`id` 一律是 `owner/name` 形式，展示时只留后半段。"""
+    repo = str(item.get("id") or "")
+    owner, _, name = repo.partition("/")
     if not name:  # 少数官方仓库没有组织前缀，例如 gpt2
-        org, name = "", repo
-    org = str(model.get("author") or org)
+        owner, name = "", repo
+    owner = str(item.get("author") or owner)
+    # 数据集的 URL 多一段 /datasets/，模型和应用不一样
+    prefix = {"datasets": "/datasets", "spaces": "/spaces"}.get(kind, "")
     return {
         "rank": rank,
         "repo": repo,
-        # 组织归属由 logo 说清楚了，窄栏里只留仓库名那一段
         "name": name,
-        "org": org,
-        "logoDomain": _creator_domain(org),
-        "trending": _int(model.get("trendingScore")),
-        "likes": _int(model.get("likes")),
-        "downloads": _int(model.get("downloads")),
-        "params": _round(_hf_params_b(model), 1),
-        "task": _hf_task_label(model.get("pipeline_tag")),
-        # 有厂商接了推理服务才能直接调，这是「今天能不能用上」的分界
-        "inference": bool(model.get("inferenceProviderMapping")),
-        "updatedAt": str(model.get("lastModified") or "")[:10],
-        "url": f"{HF_SITE}/{repo}" if repo else HF_LIST_URL,
+        "owner": owner,
+        "trending": _int(item.get("trendingScore")),
+        "likes": _int(item.get("likes")),
+        "downloads": _int(item.get("downloads")),
+        "updatedAt": str(item.get("lastModified") or "")[:10],
+        "url": f"{HF_SITE}{prefix}/{repo}" if repo else f"{HF_SITE}/",
     }
 
 
-def rank_hf_models(
-    data: list[dict[str, Any]], limit: int = LEADERBOARD_LIMIT
+def _hf_model_row(item: dict[str, Any], rank: int) -> dict[str, Any]:
+    row = _hf_base_row(item, rank, "models")
+    row.update(
+        {
+            # 组织归属由 logo 说清楚了，窄栏里只留仓库名那一段
+            "logoDomain": _creator_domain(row["owner"]),
+            "params": _round(_hf_params_b(item), 1),
+            "task": _hf_task_label(item.get("pipeline_tag")),
+            # 有厂商接了推理服务才能直接调，这是「今天能不能用上」的分界
+            "inference": bool(item.get("inferenceProviderMapping")),
+        }
+    )
+    return row
+
+
+def _hf_space_row(item: dict[str, Any], rank: int) -> dict[str, Any]:
+    """应用没有下载量，认脸靠 cardData 里的标题和 emoji——首页也是这么排的。"""
+    row = _hf_base_row(item, rank, "spaces")
+    card = item.get("cardData") or {}
+    stage = str((item.get("runtime") or {}).get("stage") or "")
+    row.update(
+        {
+            # 作者多是个人账号，拿它认 logo 没有意义，用 emoji 当头像
+            "logoDomain": "",
+            "emoji": str(card.get("emoji") or ""),
+            # cardData 的标题是作者给人看的名字，仓库名常常是 wan555 这种缩写
+            "name": str(card.get("title") or row["name"]),
+            "note": str(card.get("short_description") or ""),
+            "sdk": str(item.get("sdk") or card.get("sdk") or ""),
+            "stage": stage,
+            # 停在 BUILDING / RUNTIME_ERROR 的应用点开是白屏，值得先标出来
+            "live": stage in _HF_LIVE_STAGES,
+        }
+    )
+    return row
+
+
+def _hf_dataset_row(item: dict[str, Any], rank: int) -> dict[str, Any]:
+    row = _hf_base_row(item, rank, "datasets")
+    row["logoDomain"] = _creator_domain(row["owner"])
+    return row
+
+
+_HF_ROW_BUILDERS = {
+    "models": _hf_model_row,
+    "spaces": _hf_space_row,
+    "datasets": _hf_dataset_row,
+}
+
+
+def rank_hf_items(
+    data: list[dict[str, Any]], kind: str, limit: int = HF_TRENDING_LIMIT
 ) -> list[dict[str, Any]]:
-    """按热度分降序取前 N，丢掉没有热度分的仓库。
+    """按热度分降序取前 N，丢掉没有热度分的条目。
 
     排序参数是查询串里的东西，这里不指望接口一定照办，自己再排一次；顺手把没有
-    排序依据的行去掉，免得它们靠返回顺序混进前几名。
+    排序依据的条目去掉，免得它们靠返回顺序混进前几名。
     """
+    build = _HF_ROW_BUILDERS[kind]
     scored = [
         item
         for item in data or []
         if isinstance(item, dict) and _num(item.get("trendingScore")) is not None
     ]
     scored.sort(key=lambda item: _num(item.get("trendingScore")) or 0, reverse=True)
-    return [_hf_row(item, rank) for rank, item in enumerate(scored[:limit], 1)]
+    return [build(item, rank) for rank, item in enumerate(scored[:limit], 1)]
 
 
-def fetch_hf_trending(limit: int = LEADERBOARD_LIMIT) -> dict[str, Any]:
-    """`huggingface.co/models` 默认那一页的排序。公开接口，不需要 token。
-
-    和 AA 两张榜互补：AA 按统一口径测「哪个模型更强」，这一榜是「社区这几天在
-    下载谁」。视频、语音、时序这些没有智能指数的模型只在这一榜里出得来。
-    """
-    board: dict[str, Any] = {
-        "source": "Hugging Face",
-        "sourceUrl": HF_LIST_URL,
-        "metric": "热度分",
+def fetch_hf_section(
+    key: str,
+    label: str,
+    path: str,
+    expand: tuple[str, ...],
+    limit: int = HF_TRENDING_LIMIT,
+) -> dict[str, Any]:
+    """抓一类。三类各自成败：应用接口挂了不该把模型和数据集也换成「暂无」。"""
+    section: dict[str, Any] = {
+        "key": key,
+        "label": label,
+        "sourceUrl": f"{HF_SITE}/{path}",
         "updatedAt": "",
         "error": "",
-        "models": [],
+        "items": [],
     }
     params = [("sort", "trendingScore"), ("direction", "-1"), ("limit", str(limit))]
-    params += [("expand[]", field) for field in HF_EXPAND]
+    params += [("expand[]", field) for field in expand]
     try:
         response = requests.get(
-            HF_ENDPOINT, params=params, headers=_HF_HEADERS, timeout=HTTP_TIMEOUT
+            f"{HF_SITE}/api/{path}",
+            params=params,
+            headers=_HF_HEADERS,
+            timeout=HTTP_TIMEOUT,
         )
         response.raise_for_status()
         data = response.json()
-    except Exception as exc:  # noqa: BLE001 - 同上，一块挂了不该拖垮整轮发布
-        board["error"] = str(exc)
-        log.warning("HF 热度榜获取失败：%s", exc)
-        return board
+    except Exception as exc:  # noqa: BLE001 - 同上，一类挂了不该拖垮整轮发布
+        section["error"] = str(exc)
+        log.warning("HF %s 获取失败：%s", key, exc)
+        return section
     if not isinstance(data, list):
-        # 接口改成 {"models": [...]} 这类包装时要能看出来，否则只表现为「这榜空了」
-        board["error"] = "HF 接口未返回模型列表"
-        log.warning("HF 热度榜响应不是列表，接口结构可能已变")
-        return board
-    board["models"] = rank_hf_models(data, limit)
-    if not board["models"]:
-        board["error"] = "HF 接口未给出热度分"
-        log.warning("HF 热度榜无有效条目，trendingScore 可能已改名")
-        return board
-    board["updatedAt"] = _now_iso()
-    log.info("HF 热度榜 %d 条（返回 %d）", len(board["models"]), len(data))
+        # 接口改成 {"models": [...]} 这类包装、或者 expand 写错回了报错体时，
+        # 都会走到这里；不写 error 只会表现为「这一栏突然空了」
+        section["error"] = "HF 接口未返回列表"
+        log.warning("HF %s 响应不是列表，接口结构可能已变：%r", key, data)
+        return section
+    section["items"] = rank_hf_items(data, key, limit)
+    if not section["items"]:
+        section["error"] = "HF 接口未给出热度分"
+        log.warning("HF %s 无有效条目，trendingScore 可能已改名", key)
+        return section
+    section["updatedAt"] = _now_iso()
+    log.info("HF %s %d 条（返回 %d）", key, len(section["items"]), len(data))
+    return section
+
+
+def fetch_hf_trending(limit: int = HF_TRENDING_LIMIT) -> dict[str, Any]:
+    """HF 首页「Trending this week」那三栏：模型 / 应用 / 数据集。
+
+    公开接口，不需要 token。和 AA 的榜是两个问题：AA 按统一口径测「哪个模型更
+    强」，这里是「社区这周在看什么」。应用和数据集尤其没有别处可看——一个开源
+    数据集突然被下载几十万次，往往比又一次刷榜更早说明方向。
+    """
+    board: dict[str, Any] = {
+        "source": "Hugging Face",
+        "sourceUrl": f"{HF_SITE}/",
+        "metric": "热度分",
+        "updatedAt": "",
+        "error": "",
+        "sections": [],
+    }
+    board["sections"] = [
+        fetch_hf_section(key, label, path, expand, limit)
+        for key, label, path, expand in HF_KINDS
+    ]
+    if any(section["items"] for section in board["sections"]):
+        board["updatedAt"] = _now_iso()
+    else:
+        # 三类全挂才算整块挂了，页面照实说原因而不是留白
+        board["error"] = next(
+            (s["error"] for s in board["sections"] if s["error"]), "HF 三类均无数据"
+        )
     return board
 
 
@@ -791,9 +893,15 @@ def _board_has_rows(board: dict[str, Any] | None, key: str) -> bool:
 
 
 def keep_last_good_buckets(
-    incoming: list[dict[str, Any]], previous: list[dict[str, Any]]
+    incoming: list[dict[str, Any]],
+    previous: list[dict[str, Any]],
+    rows_key: str = "models",
 ) -> list[dict[str, Any]]:
-    """分档榜逐档回退：小模型页挂了不该把微型页也换成旧数据。"""
+    """逐段回退：小模型页挂了不该把微型页也换成旧数据。
+
+    AA 分档榜和 HF 三栏是同一个形状——一列带 `key` 的子块，各自成败，所以共用
+    这一份；差别只在装行的字段叫 `models` 还是 `items`。
+    """
     if not incoming:
         return previous
     old = {bucket.get("key"): bucket for bucket in previous}
@@ -802,8 +910,8 @@ def keep_last_good_buckets(
         stale = old.get(bucket.get("key"))
         if (
             bucket.get("error")
-            and not _board_has_rows(bucket, "models")
-            and _board_has_rows(stale, "models")
+            and not _board_has_rows(bucket, rows_key)
+            and _board_has_rows(stale, rows_key)
         ):
             kept.append(stale)
         else:
@@ -820,7 +928,6 @@ def keep_last_good(
     merged = dict(payload)
     for board_key, rows_key in (
         ("leaderboard", "models"),
-        ("hfTrending", "models"),
         ("market", "quotes"),
     ):
         incoming = payload.get(board_key) or {}
@@ -835,6 +942,14 @@ def keep_last_good(
     )
     if buckets and isinstance(merged.get("leaderboard"), dict):
         merged["leaderboard"] = {**merged["leaderboard"], "buckets": buckets}
+    # HF 那块没有「整块」的行，只有三栏；逐栏回退就够，不必再判整块
+    sections = keep_last_good_buckets(
+        (payload.get("hfTrending") or {}).get("sections") or [],
+        (previous.get("hfTrending") or {}).get("sections") or [],
+        rows_key="items",
+    )
+    if sections and isinstance(merged.get("hfTrending"), dict):
+        merged["hfTrending"] = {**merged["hfTrending"], "sections": sections}
     return merged
 
 

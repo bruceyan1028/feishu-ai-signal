@@ -321,17 +321,22 @@ python -m src.health --days 30
 | --- | --- | --- | --- |
 | 模型竞技场 | Artificial Analysis 免费 API | `ARTIFICIAL_ANALYSIS_API_KEY` | 按智能指数取前 12，带吞吐与混合单价 |
 | 分档开源榜 | AA `models/open-source/{small,tiny}` 页面 | 无 | 4B–40B 与 ≤4B 两档，各取智能指数前 12 |
-| HF 热度榜 | `huggingface.co/api/models` | 无 | 按 `trendingScore` 取前 12，带参数规模、下载、点赞、任务类型 |
+| HF 本周热度 | `huggingface.co/api/{models,spaces,datasets}` | 无 | 三类各按 `trendingScore` 取前 5，复现首页「Trending this week」 |
 | AI 概念股 | 腾讯行情 `qt.gtimg.cn` | 无 | `TICKERS` 美股 / 中资（A 股+港股）分列，只收算力与半导体，不含腾讯阿里 |
 
 - 每个来源**各自捕获异常**，失败写进各自的 `error` 字段并照常落盘。看板缺数据顶多少一屏，把整轮日报拖挂就得不偿失；页面按 `error` 显示「暂无数据：原因」，留白会让停更看起来像正常状态。
 - 榜单缺 key 时同样走这条降级路径，不报错。key 按其条款不得进客户端代码、响应需缓存，所以只能在流水线里取；页面必须署名并链回 artificialanalysis.ai。
 - 分档榜（`AA_SIZE_PAGES`）读的是网页而不是接口：接口既不给参数规模也不给开源标记，分不出这两档。取页面里每张图内联的 schema.org Dataset（`<script type="application/ld+json">`），比解析 Next.js 流式载荷稳定；解析不出来会写 `error` 而不是静静地空一档，页面改版才看得见。厂商名按 slug 从接口那份数据借一份，只为取 logo——接口挂了分档榜照样有数，只是 logo 退成字标。
 - 分档榜**照搬页面的排序和条目名，不按模型去重**：总榜去重是怕一家的四个档位占满榜，而分档榜的用处正是复现那一页。同名不同档靠 `tag`（`xhigh`、`Non-reasoning`）区分，窄栏里用小字排在模型名右边。
-- HF 那一榜换的是**口径而不是排名方式**：AA 按统一口径答「哪个模型更强」，HF 答「社区这几天在下载谁」。视频、语音、时序这些没有智能指数的模型只在这一榜里出得来。参数规模、更新时间、有没有接推理服务都要显式 `expand[]` 才回（`HF_EXPAND`），漏一个那几项就静静地空掉；`safetensors` 只在传了该格式的仓库里有，GGUF 量化版拿不到规模，留 `None` 而不是 0——0 会被读成「零参数」。`pipeline_tag` 按 `_HF_TASKS` 换中文短词，认不出的照原样显示，HF 新增任务类型时不会空一格。
+- 三张 AA 榜共用一块看板、切页展示（`state.leaderboardTab`），不并排三块——右栏只有 300px 出头，三块会把行情和热力图挤出首屏。逐档回退：小模型页挂了不牵连微型页，总榜靠旧快照顶上时这轮拉到的分档也不跟着退回旧值。
+- **HF 那块是独立看板，不是 AA 的一页**（`state.hfTab`）：AA 答「哪个模型更强」，HF 答「社区这周在看什么」；而且应用和数据集根本不是模型，挂在 AA 的标题和智能指数口径下就是署错了源。两块共用一套行渲染（`rankRows`），指标只是换个字段。
+- HF 复现首页「Trending this week」的三栏，各 5 条（`HF_TRENDING_LIMIT`，跟着首页，别自作主张取 12）。三类字段不一样，各自点名 `expand[]`（`HF_KINDS` 第四位）：
+  - **模型**：`safetensors`、`pipeline_tag`、`inferenceProviderMapping`。`safetensors.total` 是张量总数，换算成「多少 B」；GGUF 量化仓库没有这一位，留 `None` 而不是 0——0 会被读成「零参数」。`pipeline_tag` 按 `_HF_TASKS` 换中文短词，认不出的照原样显示，HF 新增任务类型时不会空一格。
+  - **应用**：没有下载量这回事（`downloads` 留 `None`）。仓库名常是 `wan555` 这种缩写，展示名取 `cardData.title`；作者多是个人账号，拿它认 logo 没有意义，用 `cardData.emoji` 当头像——首页也是靠它认脸的。`runtime.stage` 只有 `_HF_LIVE_STAGES` 里那几个算能用，停在 `BUILDING` / `RUNTIME_ERROR` 的点开是白屏。
+  - **数据集**：页面地址多一段 `/datasets/`，照模型那样拼会 404。榜上尽是 2024 年的经典集（squad、glue、imdb），所以前端 `dayText` 对往年日期带上年份，只出「03-04」会被当成今年刚更新过。
+- `expand[]` 写错时对方回的是**报错体而不是列表**（`cardData` 是应用那边的名字，模型接口不认），所以拿到非列表要写 `error`；不写只会表现为「这一栏突然空了」。三类各自成败，全挂了才算整块挂；逐栏回退和 AA 分档共用 `keep_last_good_buckets`（差别只在装行的字段叫 `models` 还是 `items`）。
+- HF 那三栏的行是**链接**，点进去看仓库本身才是这块的用处；AA 的行没有单条地址，仍是死行。
 - **`_CREATOR_DOMAINS` 是顺序敏感的子串匹配**，动它要留意重叠：HF 的组织名 `MiniMaxAI` 去掉分隔符含 `xai`，`minimax` 排在 `xai` 后面就会给 MiniMax 挂上 Grok 的 logo。同一张表同时喂 AA 的厂商名（`Z AI`）和 HF 的组织名（`zai-org`）。
-- 四张榜共用一块看板、切页展示（`state.leaderboardTab`），不并排四块——右栏只有 300px 出头，四块会把行情和热力图挤出首屏。四页共用一套行渲染（`rankRows`），指标只是换个字段（`metricOf`）。**看板标题和链接跟着当前页走**：HF 那一页挂在「Artificial Analysis」标题下就是署错了源，而 AA 的条款要求页面署名并链回它自己的站。
-- 逐档回退：小模型页挂了不牵连微型页，总榜靠旧快照顶上时这轮拉到的分档也不跟着退回旧值；`hfTrending` 和总榜、行情一样各自回退。老快照没有 `hfTrending` 时前端不显示这一页，而不是显示一页空的。
 - 行情接口返回 GBK，按位取值（现价 3、昨收 4、涨跌幅 32、总市值 45），各市场前 35 位布局一致。涨跌额一律用现价减昨收现算——涨跌幅那一位在个别市场会给空串，而现价和昨收一直有值。
 - 域名和标的写在一起（`TICKERS` 第三位、`_CREATOR_DOMAINS`），页面不该知道「智谱」对应哪个域名。取不到 favicon 的（中芯国际、海光）直接留空走字标，别配一个注定 404 的域名。
 - **榜上能出现的厂商，logo 一律在 `site/data/logos/` 备一份官网原文件**，由前端 `LOGO_ASSET` 按域名映射；`s2/favicons` 只作兜底。Google 那个代理不只是国内打不开，还会返回错东西——`ibm.com` 给的是 Adobe CMS 的占位机器人图，看着像 logo 但跟 IBM 无关。
@@ -389,7 +394,7 @@ python -m src.aggregate
 
 - **左栏**：SECTIONS / FORMATS 筛选。
 - **中栏**：全部信号卡片。
-- **右栏**：话题热力 + 模型榜单 + AI 概念股，三块作为整体 `sticky`，超出视口时整列滚动，单块不压缩。
+- **右栏**：话题热力 + AA 模型榜单 + HF 本周热度 + AI 概念股，四块作为整体 `sticky`，超出视口时整列滚动，单块不压缩。
 - 最上「今日核心要点」跨三列；卡片能排进一行时居中且不滚动。
 - 三个格子都写了 `min-width: 0`。栅格项默认 `min-width: auto`，热力图那行周列会把整列顶宽，窄屏上整页跟着横向溢出。
 - 断点：≤1280px 右栏落到左栏下面（两列）；≤760px 单列，热力图可横滑，看板沉到信息流下面。
@@ -457,7 +462,7 @@ python -m src.sources_api    # http://127.0.0.1:8787 ，只绑回环
 | `notify` | 飞书卡片：分组、排版、群聊优先发送与投递汇总 |
 | `source_view` / `sources_api` | 信号源展示模型与本机配置台（含规则字段编辑与校验） |
 | `health` | 分源采集健康记录与体检报告（`python -m src.health`） |
-| `dashboard` | 首页模型榜单与 AI 概念股看板（`python -m src.dashboard`） |
+| `dashboard` | 首页模型榜单、HF 本周热度与 AI 概念股看板（`python -m src.dashboard`） |
 | `heatmap` / `tag_topics` / `aggregate` | 话题打标与首页左栏热力图 |
 | `openai_charts` | OpenAI 文章里的 Vega 图转图片 |
 | `diag_*` | 单通道诊断，默认不写条目（播客统计仍回写；`--write` 才入库） |

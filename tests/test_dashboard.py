@@ -375,7 +375,10 @@ class SizeBucketTest(unittest.TestCase):
 
 
 class HfTrendingTest(unittest.TestCase):
-    """HF 热度榜：公开接口不需要 token，字段来自 `expand[]`。"""
+    """HF 首页「Trending this week」三栏：模型 / 应用 / 数据集。
+
+    公开接口不需要 token；参数规模、更新时间这些字段要点名 `expand[]` 才回。
+    """
 
     @staticmethod
     def _model(repo, trending, **extra):
@@ -393,33 +396,81 @@ class HfTrendingTest(unittest.TestCase):
         payload.update(extra)
         return payload
 
-    @patch("src.dashboard.requests.get")
-    def test_sorts_by_trending_score_and_drops_unscored(self, mock_get: MagicMock):
-        mock_get.return_value = MagicMock(
-            status_code=200,
-            json=lambda: [
+    @staticmethod
+    def _space(repo, trending, **card):
+        return {
+            "id": repo,
+            "author": repo.split("/")[0],
+            "trendingScore": trending,
+            "likes": 395,
+            "lastModified": "2026-09-04T09:09:54.000Z",
+            "sdk": "docker",
+            "runtime": {"stage": "RUNNING"},
+            "cardData": {"title": "Microduck Sandbox", "emoji": "🐤", **card},
+        }
+
+    @staticmethod
+    def _dataset(repo, trending):
+        return {
+            "id": repo,
+            "author": repo.split("/")[0],
+            "trendingScore": trending,
+            "likes": 626,
+            "downloads": 264632,
+            "lastModified": "2024-03-04T13:54:37.000Z",
+        }
+
+    def _section(self, kind, rows):
+        """只喂一类，取回那一栏。"""
+        spec = {key: (label, path, exp) for key, label, path, exp in dashboard.HF_KINDS}
+        label, path, expand = spec[kind]
+        with patch("src.dashboard.requests.get") as mock_get:
+            mock_get.return_value = MagicMock(status_code=200, json=lambda: rows)
+            section = dashboard.fetch_hf_section(kind, label, path, expand)
+        return section
+
+    def test_board_carries_the_three_homepage_columns(self):
+        with patch("src.dashboard.fetch_hf_section") as mock_section:
+            mock_section.side_effect = lambda key, label, *_a, **_k: {
+                "key": key, "label": label, "error": "", "items": [{"rank": 1}],
+                "updatedAt": "t", "sourceUrl": "u",
+            }
+            board = dashboard.fetch_hf_trending()
+        self.assertEqual(
+            [s["key"] for s in board["sections"]], ["models", "spaces", "datasets"]
+        )
+        self.assertEqual(
+            [s["label"] for s in board["sections"]], ["模型", "应用", "数据集"]
+        )
+        self.assertEqual(board["error"], "")
+        self.assertTrue(board["updatedAt"])
+
+    def test_homepage_shows_five_per_column(self):
+        """首页那三栏各 5 条，别自作主张取 12——「本周在看什么」是个短名单。"""
+        self.assertEqual(dashboard.HF_TRENDING_LIMIT, 5)
+
+    def test_sorts_by_trending_score_and_drops_unscored(self):
+        section = self._section(
+            "models",
+            [
                 self._model("Qwen/Qwen3.8-27B", 547),
                 self._model("zai-org/GLM-5.3", 957),
                 self._model("some/unscored", None),
             ],
         )
-        board = dashboard.fetch_hf_trending(limit=5)
-        self.assertEqual(board["error"], "")
-        self.assertEqual([m["name"] for m in board["models"]], ["GLM-5.3", "Qwen3.8-27B"])
-        self.assertEqual([m["rank"] for m in board["models"]], [1, 2])
-        self.assertEqual(board["metric"], "热度分")
-        self.assertTrue(board["updatedAt"])
-
-    @patch("src.dashboard.requests.get")
-    def test_row_splits_org_from_repo_and_derives_params(self, mock_get: MagicMock):
-        mock_get.return_value = MagicMock(
-            status_code=200, json=lambda: [self._model("zai-org/GLM-5.3", 957)]
+        self.assertEqual(section["error"], "")
+        self.assertEqual(
+            [m["name"] for m in section["items"]], ["GLM-5.3", "Qwen3.8-27B"]
         )
-        row = dashboard.fetch_hf_trending()["models"][0]
+        self.assertEqual([m["rank"] for m in section["items"]], [1, 2])
+        self.assertTrue(section["updatedAt"])
+
+    def test_model_row_splits_owner_from_repo_and_derives_params(self):
+        row = self._section("models", [self._model("zai-org/GLM-5.3", 957)])["items"][0]
         self.assertEqual(row["repo"], "zai-org/GLM-5.3")
         # 组织归属由 logo 说清楚，窄栏里只留仓库名
         self.assertEqual(row["name"], "GLM-5.3")
-        self.assertEqual(row["org"], "zai-org")
+        self.assertEqual(row["owner"], "zai-org")
         self.assertEqual(row["logoDomain"], "z.ai")
         self.assertEqual(row["url"], "https://huggingface.co/zai-org/GLM-5.3")
         # safetensors 给的是张量总数，展示要的是「多少 B」
@@ -431,12 +482,67 @@ class HfTrendingTest(unittest.TestCase):
         self.assertIsInstance(row["trending"], int)
         self.assertIsInstance(row["downloads"], int)
 
-    @patch("src.dashboard.requests.get")
-    def test_missing_optional_fields_stay_none_not_zero(self, mock_get: MagicMock):
+    def test_space_row_takes_its_face_from_card_data(self):
+        """应用的仓库名常是 wan555 这种缩写，作者给人看的名字在 cardData 里。"""
+        row = self._section(
+            "spaces",
+            [
+                self._space(
+                    "pollen-robotics/microduck-simulator",
+                    277,
+                    short_description="Show a bold fullscreen landing page",
+                )
+            ],
+        )["items"][0]
+        self.assertEqual(row["name"], "Microduck Sandbox")
+        self.assertEqual(row["emoji"], "🐤")
+        self.assertEqual(row["note"], "Show a bold fullscreen landing page")
+        self.assertEqual(row["url"], "https://huggingface.co/spaces/pollen-robotics/microduck-simulator")
+        self.assertTrue(row["live"])
+        # 应用没有下载量这回事，别拿 0 冒充
+        self.assertIsNone(row["downloads"])
+        # 作者多是个人账号，拿它认 logo 没有意义，前端用 emoji 当头像
+        self.assertEqual(row["logoDomain"], "")
+
+    def test_space_without_card_title_falls_back_to_the_repo_name(self):
+        row = self._section(
+            "spaces", [{"id": "someone/ProtectBirds", "trendingScore": 67}]
+        )["items"][0]
+        self.assertEqual(row["name"], "ProtectBirds")
+        self.assertEqual(row["emoji"], "")
+        self.assertFalse(row["live"])
+
+    def test_stalled_spaces_are_not_marked_live(self):
+        """停在 BUILDING / RUNTIME_ERROR 的应用点开是白屏，不能标成能用。"""
+        for stage, live in (
+            ("RUNNING", True),
+            ("BUILDING", False),
+            ("RUNTIME_ERROR", False),
+            ("PAUSED", False),
+            ("SLEEPING", False),
+        ):
+            with self.subTest(stage=stage):
+                row = self._section(
+                    "spaces",
+                    [{"id": "a/b", "trendingScore": 1, "runtime": {"stage": stage}}],
+                )["items"][0]
+                self.assertEqual(row["live"], live)
+                self.assertEqual(row["stage"], stage)
+
+    def test_dataset_row_links_under_the_datasets_path(self):
+        """数据集的页面地址多一段 /datasets/，照模型那样拼会 404。"""
+        row = self._section("datasets", [self._dataset("rajpurkar/squad", 161)])["items"][0]
+        self.assertEqual(row["name"], "squad")
+        self.assertEqual(row["owner"], "rajpurkar")
+        self.assertEqual(row["url"], "https://huggingface.co/datasets/rajpurkar/squad")
+        self.assertEqual(row["downloads"], 264632)
+        self.assertEqual(row["updatedAt"], "2024-03-04")
+
+    def test_missing_optional_fields_stay_none_not_zero(self):
         """GGUF 量化仓库没有 safetensors，也常常不带 pipeline_tag。"""
-        mock_get.return_value = MagicMock(
-            status_code=200,
-            json=lambda: [
+        row = self._section(
+            "models",
+            [
                 self._model(
                     "unsloth/Qwen3.8-27B-GGUF",
                     299,
@@ -445,22 +551,17 @@ class HfTrendingTest(unittest.TestCase):
                     inferenceProviderMapping=[],
                 )
             ],
-        )
-        row = dashboard.fetch_hf_trending()["models"][0]
+        )["items"][0]
         # 0B 会被读成「零参数」而不是「不知道」
         self.assertIsNone(row["params"])
         self.assertEqual(row["task"], "")
         self.assertFalse(row["inference"])
         self.assertEqual(row["logoDomain"], "")
 
-    @patch("src.dashboard.requests.get")
-    def test_no_org_prefix_repo_keeps_its_name(self, mock_get: MagicMock):
-        mock_get.return_value = MagicMock(
-            status_code=200, json=lambda: [{"id": "gpt2", "trendingScore": 12}]
-        )
-        row = dashboard.fetch_hf_trending()["models"][0]
+    def test_no_owner_prefix_repo_keeps_its_name(self):
+        row = self._section("models", [{"id": "gpt2", "trendingScore": 12}])["items"][0]
         self.assertEqual(row["name"], "gpt2")
-        self.assertEqual(row["org"], "")
+        self.assertEqual(row["owner"], "")
         self.assertEqual(row["url"], "https://huggingface.co/gpt2")
 
     def test_task_labels_fall_back_to_the_raw_tag(self):
@@ -471,49 +572,73 @@ class HfTrendingTest(unittest.TestCase):
         self.assertEqual(dashboard._hf_task_label(None), "")
 
     @patch("src.dashboard.requests.get")
-    def test_request_asks_for_the_fields_the_board_needs(self, mock_get: MagicMock):
-        """不带 expand 时接口不回参数规模、更新时间和推理可用，那几列会静静地空掉。"""
+    def test_each_column_asks_for_the_fields_it_needs(self, mock_get: MagicMock):
+        """不点名 expand 时接口不回那些字段，表现是那一列静静地空掉，不会报错。
+
+        每类要的字段不一样，写错了对方会回一个报错体而不是列表——`cardData` 是
+        应用那边的名字，模型接口不认。
+        """
         mock_get.return_value = MagicMock(status_code=200, json=lambda: [])
-        dashboard.fetch_hf_trending(limit=12)
-        params = dict(mock_get.call_args.kwargs["params"])
-        self.assertEqual(params["sort"], "trendingScore")
-        self.assertEqual(params["direction"], "-1")
-        self.assertEqual(params["limit"], "12")
-        expanded = [
-            value
-            for key, value in mock_get.call_args.kwargs["params"]
-            if key == "expand[]"
-        ]
-        for field in ("safetensors", "lastModified", "inferenceProviderMapping"):
-            self.assertIn(field, expanded)
+        needed = {
+            "models": ("safetensors", "pipeline_tag", "inferenceProviderMapping"),
+            "spaces": ("cardData", "runtime"),
+            "datasets": ("downloads", "likes"),
+        }
+        for key, label, path, expand in dashboard.HF_KINDS:
+            with self.subTest(kind=key):
+                dashboard.fetch_hf_section(key, label, path, expand)
+                sent = mock_get.call_args.kwargs["params"]
+                flat = dict(sent)
+                self.assertEqual(flat["sort"], "trendingScore")
+                self.assertEqual(flat["direction"], "-1")
+                self.assertEqual(flat["limit"], str(dashboard.HF_TRENDING_LIMIT))
+                expanded = [v for k, v in sent if k == "expand[]"]
+                for field in needed[key]:
+                    self.assertIn(field, expanded)
+                self.assertIn(f"/api/{path}", mock_get.call_args.args[0])
 
-    @patch("src.dashboard.requests.get")
-    def test_response_shape_change_surfaces_as_error(self, mock_get: MagicMock):
-        mock_get.return_value = MagicMock(status_code=200, json=lambda: {"models": []})
-        board = dashboard.fetch_hf_trending()
-        self.assertEqual(board["models"], [])
-        self.assertIn("模型列表", board["error"])
+    def test_response_shape_change_surfaces_as_error(self):
+        """expand 写错时对方回的是报错体而不是列表，得能看出来。"""
+        section = self._section("models", {"error": "Invalid option"})
+        self.assertEqual(section["items"], [])
+        self.assertIn("列表", section["error"])
 
-    @patch("src.dashboard.requests.get")
-    def test_renamed_score_field_surfaces_as_error(self, mock_get: MagicMock):
-        mock_get.return_value = MagicMock(
-            status_code=200, json=lambda: [{"id": "a/b", "likes": 1}]
-        )
-        board = dashboard.fetch_hf_trending()
-        self.assertEqual(board["models"], [])
-        self.assertIn("热度分", board["error"])
+    def test_renamed_score_field_surfaces_as_error(self):
+        section = self._section("models", [{"id": "a/b", "likes": 1}])
+        self.assertEqual(section["items"], [])
+        self.assertIn("热度分", section["error"])
 
     @patch("src.dashboard.requests.get", side_effect=RuntimeError("429"))
-    def test_api_failure_degrades_to_error_field(self, _mock_get: MagicMock):
-        board = dashboard.fetch_hf_trending()
-        self.assertEqual(board["models"], [])
-        self.assertIn("429", board["error"])
+    def test_one_column_failing_leaves_the_others_alone(self, mock_get: MagicMock):
+        section = dashboard.fetch_hf_section("spaces", "应用", "spaces", ("likes",))
+        self.assertEqual(section["items"], [])
+        self.assertIn("429", section["error"])
+        # 三类各自成败：只有全挂了才算整块挂
+        with patch("src.dashboard.fetch_hf_section") as mock_one:
+            mock_one.side_effect = lambda key, label, *_a, **_k: {
+                "key": key, "label": label, "items": [] if key == "spaces" else [{}],
+                "error": "429" if key == "spaces" else "", "updatedAt": "", "sourceUrl": "",
+            }
+            board = dashboard.fetch_hf_trending()
+        self.assertEqual(board["error"], "")
+        self.assertTrue(board["updatedAt"])
+
+    def test_all_columns_failing_surfaces_on_the_board(self):
+        with patch("src.dashboard.fetch_hf_section") as mock_one:
+            mock_one.side_effect = lambda key, label, *_a, **_k: {
+                "key": key, "label": label, "items": [], "error": "503",
+                "updatedAt": "", "sourceUrl": "",
+            }
+            board = dashboard.fetch_hf_trending()
+        self.assertIn("503", board["error"])
+        self.assertEqual(board["updatedAt"], "")
 
     def test_board_needs_no_api_key(self):
-        """AA 要 key，HF 不要；别把 HF 榜也绑到 AA 的 key 上。"""
+        """AA 要 key，HF 不要；别把 HF 那块也绑到 AA 的 key 上。"""
         source = Path("src/dashboard.py").read_text(encoding="utf-8")
-        block = source.split("def fetch_hf_trending")[1].split("\ndef ")[0]
-        self.assertNotIn("API_KEY", block)
+        for func in ("def fetch_hf_trending", "def fetch_hf_section"):
+            block = source.split(func)[1].split("\ndef ")[0]
+            self.assertNotIn("API_KEY", block)
 
 
 class WritePayloadTest(unittest.TestCase):
@@ -527,18 +652,43 @@ class WritePayloadTest(unittest.TestCase):
     def test_keep_last_good_retains_old_board_when_new_fetch_fails(self):
         previous = {
             "leaderboard": {"error": "", "models": [{"name": "Claude Opus 5"}]},
-            "hfTrending": {"error": "", "models": [{"name": "GLM-5.3"}]},
             "market": {"error": "", "quotes": [{"name": "寒武纪"}]},
         }
         incoming = {
             "leaderboard": {"error": "429", "models": []},
-            "hfTrending": {"error": "503", "models": []},
             "market": {"error": "", "quotes": [{"name": "英伟达"}]},
         }
         merged = dashboard.keep_last_good(incoming, previous)
         self.assertEqual(merged["leaderboard"]["models"][0]["name"], "Claude Opus 5")
-        self.assertEqual(merged["hfTrending"]["models"][0]["name"], "GLM-5.3")
         self.assertEqual(merged["market"]["quotes"][0]["name"], "英伟达")
+
+    def test_keep_last_good_falls_back_per_hf_column(self):
+        """应用那一栏挂了不该把模型和数据集也换成旧数据。"""
+        previous = {
+            "hfTrending": {
+                "error": "",
+                "sections": [
+                    {"key": "models", "error": "", "items": [{"name": "旧模型"}]},
+                    {"key": "spaces", "error": "", "items": [{"name": "旧应用"}]},
+                    {"key": "datasets", "error": "", "items": [{"name": "旧数据集"}]},
+                ],
+            }
+        }
+        incoming = {
+            "hfTrending": {
+                "error": "",
+                "sections": [
+                    {"key": "models", "error": "", "items": [{"name": "新模型"}]},
+                    {"key": "spaces", "error": "429", "items": []},
+                    {"key": "datasets", "error": "", "items": [{"name": "新数据集"}]},
+                ],
+            }
+        }
+        sections = dashboard.keep_last_good(incoming, previous)["hfTrending"]["sections"]
+        self.assertEqual([s["items"][0]["name"] for s in sections],
+                         ["新模型", "旧应用", "新数据集"])
+        # 回退不能改到旧快照本身，否则同一轮里后续再读会拿到被污染的数据
+        self.assertEqual(previous["hfTrending"]["sections"][0]["items"][0]["name"], "旧模型")
 
     def test_keep_last_good_falls_back_per_size_bucket(self):
         """小模型页挂了不该把微型页也换成旧数据，反之亦然。"""
@@ -687,24 +837,38 @@ class FrontendContractTest(unittest.TestCase):
             self.assertIn(note, Path("src/dashboard.py").read_text(encoding="utf-8"))
             self.assertNotIn(note, template)
 
-    def test_hf_trending_shares_the_model_board(self):
-        """HF 热度和 AA 智能指数同一块看板切页；右栏只有 300px 出头，放不下第四块。"""
+    def test_hf_trending_is_its_own_board_not_an_aa_tab(self):
+        """应用和数据集根本不是模型，挂在 AA 的标题和智能指数口径下就是署错了源。"""
         template = Path("index.html").read_text(encoding="utf-8")
         self.assertIn("data.hfTrending", template)
-        self.assertIn("huggingface.co/models", template)
-        self.assertIn("Hugging Face", template)
-        self.assertIn("key: 'hf'", template)
-        # 四张榜共用一套行渲染，指标只是换个字段
+        self.assertIn("board('Hugging Face'", template)
+        self.assertIn("board('Artificial Analysis'", template)
+        # 「热度」不再是 AA 的第四页
+        self.assertNotIn("key: 'hf'", template)
+        self.assertNotIn("board(aaPage.source", template)
+        # 两块共用一套行渲染，指标只是换个字段
         self.assertIn("const rankRows", template)
+        self.assertIn("rankRows(models, m => m.intelligence", template)
+        self.assertIn("rankRows(hfItems, i => i.trending", template)
 
-    def test_model_board_titles_follow_the_active_page(self):
-        """HF 那一页挂在「Artificial Analysis」标题下就是署错了源。"""
+    def test_hf_board_switches_between_the_three_homepage_columns(self):
         template = Path("index.html").read_text(encoding="utf-8")
-        self.assertIn("board(aaPage.source", template)
-        self.assertNotIn("board('Artificial Analysis'", template)
-        # 条款要求页面署名并链回 AA，综合与分档两页仍走这个源
-        self.assertIn("source: 'Artificial Analysis'", template)
-        self.assertIn("source: 'Hugging Face'", template)
+        self.assertIn("App.setHfTab", template)
+        self.assertIn("hfTab: 'models'", template)
+        # 栏目名由后端给，前端不硬编码「模型 / 应用 / 数据集」
+        labels = [label for _, label, _, _ in dashboard.HF_KINDS]
+        self.assertEqual(labels, ["模型", "应用", "数据集"])
+        for label in labels:
+            self.assertNotIn(f"'{label}'", template.split("function dataRailHtml")[1]
+                             .split("function heatmapHtml")[0])
+
+    def test_hf_rows_link_to_the_repo_and_spaces_show_their_emoji(self):
+        """点进去看仓库本身才是这块的用处；应用的作者是个人账号，认脸靠 emoji。"""
+        template = Path("index.html").read_text(encoding="utf-8")
+        self.assertIn("href: item.url", template)
+        self.assertIn("const emojiChip", template)
+        self.assertIn("c.emoji ? emojiChip(c.emoji, 22)", template)
+        self.assertIn("a.rank-row:hover", template)
 
     def test_live_quote_tickers_match_the_pipeline(self):
         template = Path("index.html").read_text(encoding="utf-8")

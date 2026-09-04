@@ -143,6 +143,10 @@
   /* 参数规模最多七个字符,不参与压缩:挤成「30…」比不显示还没用,该让模型名去省地方。
      档位后缀（Adaptive Reasoning, High）可以长得多,仍按上面那条先缩。 */
   .aa-tag.is-size { flex: none; max-width: none; }
+  /* 榜单的一行。HF 那三栏是链接,其余是死行,两种都走这条栅格。 */
+  .rank-row { display: grid; grid-template-columns: 20px 22px minmax(0,1fr); gap: 8px; align-items: center; padding: 5px 14px; border-bottom: 1px solid rgba(255,255,255,.05); text-decoration: none; color: inherit; }
+  a.rank-row:hover .aa-tag { color: rgba(250,247,240,.85); }
+  a.rank-row:hover { background: rgba(255,255,255,.05); }
   .heat-toggle { display: flex; border: 1px solid rgba(255,255,255,.12); margin: 0 14px 8px; }
   .heat-toggle button { flex: 1; height: 26px; border: none; background: transparent; color: #8f887a; font-size: 11px; font-weight: 650; cursor: pointer; }
   .heat-toggle button + button { border-left: 1px solid rgba(255,255,255,.12); }
@@ -410,6 +414,7 @@ const state = {
   heatmapSource: 'google-trends',
   heatmapPick: null,
   leaderboardTab: 'overall',
+  hfTab: 'models',
   pointsShift: 0,
   pointsPaused: false,
   showScoreBars: true,
@@ -945,6 +950,8 @@ async function loadBrief(){
     })).filter(p=>p.account);
     signals = (data.signals || []).map((s, index)=>({
       rank: index + 1,
+      // 要点里的 refs 用的是这个原始序号，rank 下面会按影响分重排，别拿 rank 去对
+      srcIndex: index + 1,
       recordId: s.recordId,
       sourceId: s.sourceId || '',
       impact: Number(s.impact) || 0,
@@ -1481,6 +1488,10 @@ const App = {
   },
   setLeaderboardTab(key){
     state.leaderboardTab = key;
+    render();
+  },
+  setHfTab(key){
+    state.hfTab = key;
     render();
   },
   openHeatNews(topic, evt){
@@ -2238,6 +2249,9 @@ function dataRailHtml(A){
       : `<span class="logo-fb">${letters}</span>`;
     return `<span class="aa-logo" style="flex: none; width: ${size}px; height: ${size}px; border-radius: 5px; display: inline-flex; align-items: center; justify-content: center; overflow: hidden; background: #fff; color: #16130f; font-family: ${mono}; font-size: ${Math.round(size*0.42)}px; font-weight: 700;">${inner}</span>`;
   };
+  // HF 应用的头像位:作者自己挑的 emoji。这里不套白底——白底上的 emoji 像个贴纸,
+  // 而 emoji 本身就有颜色,直接放在黑底上跟旁边的彩色 logo 一样能认出来。
+  const emojiChip = (emoji, size) => `<span class="aa-logo" style="flex: none; width: ${size}px; height: ${size}px; display: inline-flex; align-items: center; justify-content: center; font-size: ${Math.round(size*0.72)}px; line-height: 1;">${esc(emoji)}</span>`;
 
   const empty = msg => `<p style="margin: 0; padding: 26px 14px; text-align: center; font-family: ${mono}; font-size: 11.5px; line-height: 1.7; color: ${DIM};">${esc(msg)}</p>`;
 
@@ -2277,31 +2291,39 @@ function dataRailHtml(A){
     if(n >= 1e3) return `${(n/1e3).toFixed(n >= 1e4 ? 0 : 1).replace(/\.0$/,'')}k`;
     return String(n);
   };
+  // 往年的日期要带上年份。数据集那一栏尽是 2024 年的经典集（squad、glue），
+  // 只出「03-04」会被当成今年刚更新过。
+  const dayText = iso => {
+    const s = String(iso || '');
+    if(s.length < 10) return '';
+    return s.slice(0,4) === String(new Date().getFullYear()) ? s.slice(5) : s;
+  };
 
-  // 四张榜共用一套行:名次 + logo + 「名字格」,指标填进名字格的背景。一根条和一行字
-  // 用同一块地方,窄栏里省下的就是名字能完整显示的那几十像素。填色按可见区间
-  // (末位→榜首)铺开,用 0 或 100 做基准时前 12 名只差几分,所有行会填成一样长。
+  // AA 三张榜和 HF 三栏共用一套行:名次 + 头像 + 「名字格」,指标填进名字格的背景。
+  // 一根条和一行字用同一块地方,窄栏里省下的就是名字能完整显示的那几十像素。填色
+  // 按可见区间(末位→榜首)铺开,用 0 或 100 做基准时榜上只差几分,所有行会填成一样长。
   const rankRows = (rows, metricOf, cellOf) => {
     const scores = rows.map(r => metricOf(r) || 0);
     const hi = Math.max(...scores), lo = Math.min(...scores);
     const fillWidth = v => hi > lo ? 8 + 92 * ((v || 0) - lo) / (hi - lo) : 100;
     return `<div>${rows.map(r => {
       const c = cellOf(r);
-      return `
-      <div style="display: grid; grid-template-columns: 20px 22px minmax(0,1fr); gap: 8px; align-items: center; padding: 5px 14px; border-bottom: 1px solid rgba(255,255,255,.05);">
+      const inner = `
         <span style="font-family: ${mono}; font-size: 11px; font-weight: 700; color: ${r.rank<=3 ? A.accent : DIM};">${String(r.rank).padStart(2,'0')}</span>
-        ${logoChip(r.logoDomain, c.owner, 22)}
+        ${c.emoji ? emojiChip(c.emoji, 22) : logoChip(r.logoDomain, c.owner, 22)}
         <span style="position: relative; display: flex; align-items: center; gap: 6px; min-width: 0; height: 26px; padding: 0 8px; overflow: hidden; background: rgba(255,255,255,.05);">
           <span style="position: absolute; left: 0; top: 0; bottom: 0; width: ${fillWidth(metricOf(r))}%; background: linear-gradient(90deg, color-mix(in srgb, ${A.accent} 78%, transparent), color-mix(in srgb, ${A.accent} 26%, transparent));"></span>
           <span title="${esc(c.full)}" style="position: relative; min-width: 0; font-size: 12.5px; font-weight: 650; color: ${TXT}; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${esc(r.name)}</span>
           ${c.tag ? `<span class="aa-tag${c.sizeTag ? ' is-size' : ''}" title="${esc(c.full)}">${esc(c.tag)}</span>` : ''}
           <span title="${esc(c.hint)}" style="position: relative; margin-left: auto; font-family: ${mono}; font-size: 11.5px; font-weight: 700; color: ${TXT}; font-variant-numeric: tabular-nums;">${c.value}</span>
-        </span>
-      </div>`;
+        </span>`;
+      // HF 那三栏点进去看仓库本身才是这块的用处；AA 的行没有单条地址，仍是死行
+      return c.href
+        ? `<a class="rank-row" href="${esc(c.href)}" target="_blank" rel="noopener">${inner}</a>`
+        : `<div class="rank-row">${inner}</div>`;
     }).join('')}</div>`;
   };
 
-  const aaHome = 'https://artificialanalysis.ai/';
   const aaMetric = (lb && lb.metric) || '智能指数';
   const aaCell = m => ({
     owner: m.creator,
@@ -2310,56 +2332,66 @@ function dataRailHtml(A){
     value: num(m.intelligence, 1),
     hint: `${aaMetric} ${num(m.intelligence,1)}${paramText(m.params) ? ` · ${paramText(m.params)} 参数` : ''}`,
   });
-  // HF 那一榜里模型名已经带组织前缀(zai-org/GLM-5.3),logo 说清了归属就只留仓库名;
-  // 参数规模比组织名更值得占小字位——同名模型的差别常常就在规模。
-  const hfCell = m => ({
-    owner: m.org,
-    full: m.repo,
-    tag: paramText(m.params),
-    sizeTag: true,
-    value: num(m.trending, 0),
-    hint: [
-      `${(hf && hf.metric) || '热度分'} ${num(m.trending,0)}`,
-      m.task,
-      countText(m.likes) ? `${countText(m.likes)} 点赞` : '',
-      countText(m.downloads) ? `${countText(m.downloads)} 下载` : '',
-      m.inference ? '已接推理服务' : '',
-      m.updatedAt ? `更新 ${m.updatedAt.slice(5)}` : '',
-    ].filter(Boolean).join(' · '),
-  });
 
-  // 总榜、两张按参数规模分档的开源榜,加一张 HF 社区热度榜。同一块看板切页而不是
-  // 并排四块:四块占满整条右栏,行情和热力图就被挤到首屏之外了。AA 答的是「哪个
-  // 模型更强」,HF 答的是「社区这几天在下载谁」,同一块里换个指标看。
+  // 总榜之外还有两张按参数规模分档的开源榜。同一块看板切页而不是并排三块:
+  // 三块占满整条右栏,行情和热力图就被挤到首屏之外了。
   const aaPages = [{
       key: 'overall', label: '综合', hint: '全部模型 · 智能指数', noun: '榜单',
-      board: lb, source: 'Artificial Analysis', home: aaHome,
-      metric: aaMetric, metricOf: m => m.intelligence, cell: aaCell,
+      board: lb,
     }]
-    // 老快照没有 buckets / hfTrending,缺的那几页就不出现
+    // 老快照没有 buckets,只有一页时下面那条切页条也不显示
     .concat(((lb && lb.buckets) || []).map(b => ({
       key: b.key, label: b.note || b.label, hint: `${b.label} · ${b.note} 开源模型`,
       noun: `${b.note || b.label}榜单`,
-      board: b, source: 'Artificial Analysis', home: aaHome,
-      metric: aaMetric, metricOf: m => m.intelligence, cell: aaCell,
-    })))
-    .concat(hf ? [{
-      key: 'hf', label: '热度', hint: 'Hugging Face · 社区下载与点赞趋势',
-      noun: 'Hugging Face 热度',
-      board: hf, source: 'Hugging Face', home: 'https://huggingface.co/models',
-      metric: hf.metric || '热度分', metricOf: m => m.trending, cell: hfCell,
-    }] : []);
+      board: b,
+    })));
   const aaPage = aaPages.find(p => p.key === state.leaderboardTab) || aaPages[0];
   const aaBoard = aaPage.board;
   const models = (aaBoard && aaBoard.models) || [];
 
   const arenaBody = boardBody(aaBoard, aaPage.noun, models,
-    () => rankRows(models, aaPage.metricOf, aaPage.cell));
+    () => rankRows(models, m => m.intelligence, aaCell));
 
-  // 只有一页时不显示切页条
   const aaNav = aaPages.length > 1 ? `
     <nav class="aa-tabs" aria-label="模型榜单">
       ${aaPages.map(p => `<button type="button" class="${p.key===aaPage.key?'on':''}" title="${esc(p.hint)}" onclick="App.setLeaderboardTab('${esc(p.key)}')">${esc(p.label)}</button>`).join('')}
+    </nav>` : '';
+
+  // HF 首页「Trending this week」三栏。和 AA 分开成两块:AA 答「哪个模型更强」,
+  // 这里答「社区这周在看什么」,而且应用和数据集根本不是模型,挂在 AA 的标题和
+  // 智能指数口径下就是署错了源。三栏各 5 条、切页展示,和上面同一套壳。
+  const hfSections = (hf && hf.sections) || [];
+  const hfPage = hfSections.find(s => s.key === state.hfTab) || hfSections[0] || null;
+  const hfItems = (hfPage && hfPage.items) || [];
+  // 应用的作者多是个人账号,拿它认 logo 没有意义;emoji 是作者自己挑的脸,
+  // 首页也是靠它认的,所以这一栏用 emoji 顶掉 logo 那一格。
+  const hfCell = item => ({
+    owner: item.owner,
+    emoji: item.emoji || '',
+    href: item.url || '',
+    full: item.repo + (item.note ? ` — ${item.note}` : ''),
+    // 模型那栏用参数规模,应用和数据集没有这回事,留空不占位
+    tag: paramText(item.params),
+    sizeTag: true,
+    value: num(item.trending, 0),
+    hint: [
+      `${(hf && hf.metric) || '热度分'} ${num(item.trending,0)}`,
+      item.task,
+      item.note,
+      countText(item.likes) ? `${countText(item.likes)} 点赞` : '',
+      countText(item.downloads) ? `${countText(item.downloads)} 下载` : '',
+      item.inference ? '已接推理服务' : '',
+      // 停在 BUILDING / RUNTIME_ERROR 的应用点开是白屏,值得先说一声
+      item.stage && !item.live ? `未在运行（${item.stage}）` : '',
+      dayText(item.updatedAt) ? `更新 ${dayText(item.updatedAt)}` : '',
+    ].filter(Boolean).join(' · '),
+  });
+  // 三栏各自成败,所以按当前那一栏报错;整块都没有栏时才退回整块的 error
+  const hfBody = boardBody(hfPage || hf, hfPage ? hfPage.label : '本周热度', hfItems,
+    () => rankRows(hfItems, i => i.trending, hfCell));
+  const hfNav = hfSections.length > 1 ? `
+    <nav class="aa-tabs" aria-label="Hugging Face 本周热度">
+      ${hfSections.map(s => `<button type="button" class="${s.key===(hfPage&&hfPage.key)?'on':''}" title="${esc(`${s.label} · 本周热度前 ${(s.items||[]).length}`)}" onclick="App.setHfTab('${esc(s.key)}')">${esc(s.label)}</button>`).join('')}
     </nav>` : '';
 
   const mk = dashboard.market;
@@ -2411,17 +2443,19 @@ function dataRailHtml(A){
     if(b.live) return clock ? `实时 ${clock}` : '实时';
     return b.updatedAt ? b.updatedAt.slice(5,16).replace('T',' ') : '—';
   };
-  // 标题和署名跟着当前页走:HF 那一页挂在「Artificial Analysis」标题下就是署错了源,
-  // 而 AA 的条款要求页面署名并链回它自己的站。
-  const aaStamp = (() => {
-    const when = stamp(aaBoard);
-    return when && when !== '—' ? `${aaPage.metric} · ${when}` : aaPage.metric;
-  })();
+  // 每块的副标题都是「指标 · 时间」,时间取当前那一页/那一栏的,不是整块的
+  const metricStamp = (metric, b) => {
+    const when = stamp(b);
+    return when && when !== '—' ? `${metric} · ${when}` : metric;
+  };
 
   return `
   <aside class="feed-data">
     ${heatmapHtml(A)}
-    ${board(aaPage.source, aaStamp, arenaBody, (aaBoard&&aaBoard.sourceUrl)||aaPage.home, aaNav)}
+    ${board('Artificial Analysis', metricStamp(aaMetric, aaBoard), arenaBody,
+      (aaBoard&&aaBoard.sourceUrl)||'https://artificialanalysis.ai/', aaNav)}
+    ${board('Hugging Face', metricStamp('本周热度', hfPage || hf), hfBody,
+      (hfPage&&hfPage.sourceUrl)||(hf&&hf.sourceUrl)||'https://huggingface.co/', hfNav)}
     ${board('AI 概念股', stamp(mk), marketBody)}
   </aside>`;
 }
@@ -2599,10 +2633,10 @@ function briefHtml(A){
   const bullets = (briefMeta.bullets || []).slice(0, 6);
   const pointsHtml = (bullets.length ? bullets : (briefMeta.intro ? [{ title: briefMeta.title, text: briefMeta.intro, refs: [] }] : [])).map((b) => {
     const firstRef = (b.refs && b.refs[0]) || 0;
-    const s = firstRef ? signals.find(x => x.rank === firstRef) : null;
+    const s = firstRef ? signals.find(x => x.srcIndex === firstRef) : null;
     const imgUrl = s ? topicImageUrl(s) : '';
     const tp = s ? topicFor(s) : { t: 'AI', bg: '#111', color: '#2458b5' };
-    const click = firstRef ? `onclick="App.openDetail(${firstRef})" style="cursor:pointer;"` : '';
+    const click = s ? `onclick="App.openDetail(${s.rank})" style="cursor:pointer;"` : '';
     // 标题直接用被引用信号自己的标题：二次总结的说法会和「全部信号」里的同一条对不上
     const cardTitle = (s && s.zhTitle) || b.title || '';
     return `
