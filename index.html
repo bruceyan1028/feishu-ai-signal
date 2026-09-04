@@ -89,6 +89,27 @@
      或一个不折行的长标题就能把整列顶宽，窄屏上整页跟着横向溢出。 */
   .feed-points { grid-area: points; min-width: 0; }
   .feed-nav { grid-area: nav; min-width: 0; position: sticky; top: 76px; }
+  /* 社媒筛选时在左导航和信息流之间插一列账号栏 */
+  .feed-shell.with-accounts { grid-template-columns: 148px 220px minmax(0, 1fr) 304px; grid-template-areas: "points points points points" "nav accounts feed data"; }
+  .feed-accounts { grid-area: accounts; min-width: 0; position: sticky; top: 76px; display: flex; flex-direction: column; }
+  /* 账号栏融进页面白底：不画边框、不铺底色，只靠灰色块和淡阴影分层 */
+  .acct-panel { flex: 1; display: flex; flex-direction: column; padding-bottom: 10px; background: transparent; }
+  .acct-label { display: flex; align-items: center; gap: 7px; padding: 2px 10px 9px; font-family: 'Geist Mono', ui-monospace, Menlo, monospace; font-size: 10px; font-weight: 700; letter-spacing: .14em; color: #9a9488; }
+  .acct-label::after { content: ''; flex: 1; height: 1px; background: linear-gradient(90deg, rgba(22,19,15,.14), rgba(22,19,15,0)); }
+  .acct-item { display: flex; align-items: center; gap: 8px; width: 100%; padding: 7px 10px; border: 0; border-radius: 9px; background: transparent; color: var(--ds-text); font-family: inherit; font-size: 12.5px; text-align: left; cursor: pointer; transition: background .12s, box-shadow .12s; }
+  .acct-item:hover { background: #f1efea; }
+  .acct-item.on { position: relative; background: #fff; font-weight: 600; box-shadow: 0 1px 2px rgba(22,19,15,.06), 0 6px 16px rgba(22,19,15,.07); }
+  .acct-item.on::before { content: ''; position: absolute; left: 0; top: 50%; transform: translateY(-50%); width: 3px; height: 16px; border-radius: 0 2px 2px 0; background: var(--ds-accent); }
+  .acct-item .acct-n { margin-left: auto; font-family: 'Geist Mono', ui-monospace, Menlo, monospace; font-size: 11px; color: #9a9488; }
+  .acct-item.on .acct-n { color: var(--ds-accent); }
+  .acct-group { display: flex; align-items: center; gap: 6px; padding: 14px 10px 5px; font-size: 12px; font-weight: 700; color: #6f6857; }
+  .acct-group.off { color: #b3ada0; }
+  .acct-tag { margin-left: auto; font-family: 'Geist Mono', ui-monospace, Menlo, monospace; font-size: 10px; font-weight: 400; color: #a8a294; }
+  /* 帖子正文按行数折叠，超出才露「显示更多」，是否超出由 syncSocialClamp 量 */
+  .social-text { margin: 0; font-size: 15px; line-height: 1.5; white-space: pre-wrap; overflow-wrap: anywhere; }
+  .social-text.is-clamped { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 6; overflow: hidden; }
+  .social-more { border: 0; background: none; padding: 0; margin-top: 3px; font-size: 14.5px; color: #1d9bf0; cursor: pointer; font-family: inherit; }
+  .social-more:hover { text-decoration: underline; }
   .nav-all { display: flex; flex-direction: column; align-items: stretch; gap: 6px; margin-bottom: 12px; }
   .nav-all-btn { width: 100%; height: 34px; border: 1.5px solid var(--ds-ink-line); background: #0a0a0a; color: #faf7f0; font-size: 12.5px; font-weight: 700; cursor: pointer; font-family: inherit; }
   .nav-all-btn.on { background: var(--ds-accent); color: #fff; border-color: var(--ds-accent); }
@@ -152,6 +173,8 @@
   /* 两列:右栏落到左栏下面,信息流保持一整条 */
   @media (max-width: 1280px) {
     .feed-shell { grid-template-columns: 148px minmax(0, 1fr); grid-template-areas: "points points" "nav feed" "data feed"; }
+    .feed-shell.with-accounts { grid-template-columns: 148px minmax(0, 1fr); grid-template-areas: "points points" "nav feed" "accounts feed" "data feed"; }
+    .feed-accounts { position: static; }
     .feed-nav { position: static; }
     .feed-data { position: static; max-height: none; overflow: visible; margin-top: 18px; }
   }
@@ -326,6 +349,8 @@
 
     /* --- 三列塌成一列:筛选在上,看板沉到信息流下面 --- */
     .feed-shell { grid-template-columns: minmax(0, 1fr) !important; grid-template-areas: "points" "nav" "feed" "data" !important; gap: 18px !important; padding: 16px 12px 40px !important; }
+    .feed-shell.with-accounts { grid-template-areas: "points" "nav" "accounts" "feed" "data" !important; }
+    .feed-accounts { position: static !important; }
     .feed-nav { position: static !important; }
     .feed-data { position: static !important; max-height: none !important; overflow: visible !important; margin-top: 0 !important; }
 
@@ -688,7 +713,8 @@ function heatNewsUrl(topic){
 applyHeatDemo('google-trends');
 
 const filters = ['全部', '端侧模型', '前沿模型公司', '技术研究开源', '算力芯片云', '政策监管地缘', '模型评测基准', '产品化企业采用', '创业融资并购', '中文媒体', '其他'];
-const FORMAT_FILTERS = ['论文', '视频', '播客', '社交媒体帖子', '公众号', 'Github热榜'];
+const SOCIAL_FILTER = '社交媒体帖子';
+const FORMAT_FILTERS = ['论文', '视频', '播客', SOCIAL_FILTER, '公众号', 'Github热榜'];
 // 「端侧模型」是标签驱动的横切专题,不是领域分类:按 tags 匹配
 const EDGE_FILTER = '端侧模型';
 function normalizeCategory(cat){
@@ -909,7 +935,8 @@ async function loadBrief(){
       name: (s.socialMetrics||{}).account_name || s.source || '',
       platform: (s.socialMetrics||{}).platform || 'x',
       zhTitle: s.titleCn || '',
-      text: s.title || '',
+      // socialText 是帖子全文（线程各段都在里面）；title 只是 117 字摘录，退化时才用
+      text: s.socialText || s.title || '',
       url: s.url || '',
       date: s.publishedDate || '',
       why: s.why || '',
@@ -1267,7 +1294,6 @@ async function loadHeatmap(){
 }
 const App = {
   goBrief(){ state.page='brief'; state.detailRank=null; render(); },
-  goSocial(){ state.page='social'; state.detailRank=null; render(); },
   pickSocialAccount(account){ state.socialAccount=account; render(); },
   toggleSocialText(recordId){
     const next = new Set(state.socialExpanded);
@@ -1724,7 +1750,6 @@ function previewNotice(title, description){
 function headerHtml(A){
   const items = [
     { key: 'brief',   label: '今日简报', act: 'App.goBrief()',   icon: '<path d="M4 5h16M4 10h16M4 15h10M4 20h7"/>' },
-    { key: 'social',  label: '社媒', act: 'App.goSocial()', icon: '<path d="M21 11.5a8.4 8.4 0 0 1-9 8.4 9 9 0 0 1-3.9-.9L3 20.5l1.6-4.6A8.4 8.4 0 0 1 3.6 11.5a8.4 8.4 0 0 1 8.4-8.4 8.4 8.4 0 0 1 9 8.4z"/>' },
     { key: 'sources', label: '信号源', act: 'App.goSources()', icon: '<path d="M12 3v18M5 8l7-5 7 5M5 8v8l7 5 7-5V8"/>' },
     { key: 'tasks',   label: '任务视图', act: 'App.goTasks()', icon: '<rect x="3" y="4" width="7" height="7" rx="1.4"/><rect x="14" y="4" width="7" height="4" rx="1.4"/><rect x="3" y="15" width="7" height="5" rx="1.4"/><rect x="14" y="11" width="7" height="9" rx="1.4"/>' },
   ];
@@ -1802,49 +1827,88 @@ function xAvatarHtml(url, name, size){
   const img = url ? `<img src="${esc(url)}" alt="" loading="lazy" onerror="this.remove()" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;">` : '';
   return `<span style="position:relative;flex:none;width:${px}px;height:${px}px;border-radius:50%;overflow:hidden;background:#ddd8cd;color:#55504a;display:inline-flex;align-items:center;justify-content:center;font-family:'Geist Mono',monospace;font-size:${Math.round(px/3)}px;font-weight:700;">${esc(initials)}${img}</span>`;
 }
-function xMediaHtml(assets, radius){
+function xProfileUrl(account){
+  return `https://x.com/${encodeURIComponent(String(account || '').replace(/^@/,''))}`;
+}
+function xTextHtml(text){
+  const value = String(text || '');
+  const token = /(https?:\/\/[^\s<]+|@[A-Za-z0-9_]{1,15}|#[^\s#]+)/g;
+  let out = '', last = 0;
+  for(const match of value.matchAll(token)){
+    out += esc(value.slice(last, match.index));
+    const raw = match[0];
+    let href = raw;
+    if(raw[0] === '@') href = xProfileUrl(raw.slice(1));
+    else if(raw[0] === '#') href = `https://x.com/hashtag/${encodeURIComponent(raw.slice(1))}`;
+    out += `<a href="${esc(href)}" target="_blank" rel="noopener" onclick="event.stopPropagation()" style="color:#1d9bf0;text-decoration:none;">${esc(raw)}</a>`;
+    last = Number(match.index) + raw.length;
+  }
+  return out + esc(value.slice(last));
+}
+function xArticleHtml(article, radius){
+  if(!article || !article.url) return '';
+  let host = '';
+  try{ host = new URL(article.url).hostname.replace(/^www\./,''); }catch(_){}
+  return `<a href="${esc(article.url)}" target="_blank" rel="noopener" onclick="event.stopPropagation()" style="display:block;border:1px solid #cfd9de;border-radius:${radius}px;overflow:hidden;margin-bottom:11px;color:#0f1419;text-decoration:none;background:#fff;">
+    ${article.image?`<img src="${esc(article.image)}" alt="" loading="lazy" style="display:block;width:100%;max-height:340px;object-fit:cover;background:#e9e5dd;">`:''}
+    <span style="display:block;padding:10px 12px;">
+      ${host?`<span style="display:block;margin-bottom:2px;font-size:12.5px;color:#536471;">来自 ${esc(host)}</span>`:''}
+      ${article.title?`<strong style="display:block;font-size:14px;line-height:1.4;">${esc(article.title)}</strong>`:''}
+      ${article.description?`<span style="display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden;margin-top:3px;font-size:13px;line-height:1.4;color:#536471;">${esc(article.description)}</span>`:''}
+    </span>
+  </a>`;
+}
+function xMediaHtml(assets, radius, fallbackUrl){
   const a = assets || {};
   const videos = (a.videos || []).filter(v=>v && (v.thumbnailUrl || v.url));
   const images = (a.images || []).filter(i=>i && i.url);
+  const articles = (a.articles || []).filter(item=>item && item.url);
   const r = radius || 16;
-  if(videos.length){
-    const v = videos[0];
+  const blocks = articles.map(item=>xArticleHtml(item, r));
+  videos.forEach(v=>{
     const secs = Number(v.durationSec) || 0;
     const dur = secs ? `${Math.floor(secs/60)}:${String(Math.round(secs%60)).padStart(2,'0')}` : '';
-    return `<div style="position:relative;border:1px solid #cfd9de;border-radius:${r}px;overflow:hidden;margin-bottom:11px;background:#e9e5dd;">
-      <img src="${esc(v.thumbnailUrl || v.url)}" alt="" loading="lazy" onerror="this.remove()" style="display:block;width:100%;max-height:340px;object-fit:cover;">
-      <span style="position:absolute;inset:0;margin:auto;width:52px;height:52px;border-radius:50%;background:rgba(0,0,0,.6);display:flex;align-items:center;justify-content:center;"><svg viewBox="0 0 24 24" style="width:19px;height:19px;fill:#fff;margin-left:3px;"><path d="M8 5v14l11-7z"/></svg></span>
+    blocks.push(v.playbackUrl
+      ? `<div style="position:relative;border:1px solid #cfd9de;border-radius:${r}px;overflow:hidden;margin-bottom:11px;background:#000;">
+      <video src="${esc(v.playbackUrl)}" poster="${esc(v.thumbnailUrl || '')}" controls playsinline preload="metadata" onclick="event.stopPropagation()" style="display:block;width:100%;max-height:420px;background:#000;"></video>
       ${dur?`<span style="position:absolute;left:11px;bottom:11px;background:rgba(0,0,0,.78);color:#fff;font-family:'Geist Mono',monospace;font-size:11px;font-weight:700;padding:2px 7px;border-radius:4px;">${esc(dur)}</span>`:''}
-    </div>`;
+    </div>`
+      : `<a href="${esc(fallbackUrl || v.url)}" target="_blank" rel="noopener" onclick="event.stopPropagation()" style="position:relative;display:block;border:1px solid #cfd9de;border-radius:${r}px;overflow:hidden;margin-bottom:11px;background:#e9e5dd;">
+      <img src="${esc(v.thumbnailUrl || v.url)}" alt="" loading="lazy" style="display:block;width:100%;max-height:340px;object-fit:cover;">
+      <span style="position:absolute;inset:0;margin:auto;width:52px;height:52px;border-radius:50%;background:rgba(0,0,0,.6);display:flex;align-items:center;justify-content:center;"><svg viewBox="0 0 24 24" style="width:19px;height:19px;fill:#fff;margin-left:3px;"><path d="M8 5v14l11-7z"/></svg></span>
+    </a>`);
+  });
+  if(images.length){
+    const shown = images.slice(0,4);
+    if(shown.length === 1){
+      blocks.push(`<a href="${esc(shown[0].url)}" target="_blank" rel="noopener" onclick="event.stopPropagation()" style="display:block;border:1px solid #cfd9de;border-radius:${r}px;overflow:hidden;margin-bottom:11px;background:#e9e5dd;">
+        <img src="${esc(shown[0].url)}" alt="" loading="lazy" onerror="this.closest('a').remove()" style="display:block;width:100%;max-height:340px;object-fit:cover;"></a>`);
+    }else{
+      blocks.push(`<div style="display:grid;grid-template-columns:1fr 1fr;gap:2px;border:1px solid #cfd9de;border-radius:${r}px;overflow:hidden;margin-bottom:11px;background:#e9e5dd;">
+        ${shown.map(i=>`<a href="${esc(i.url)}" target="_blank" rel="noopener" onclick="event.stopPropagation()"><img src="${esc(i.url)}" alt="" loading="lazy" style="display:block;width:100%;height:168px;object-fit:cover;"></a>`).join('')}
+      </div>`);
+    }
   }
-  if(!images.length) return '';
-  const shown = images.slice(0,4);
-  if(shown.length === 1){
-    return `<div style="border:1px solid #cfd9de;border-radius:${r}px;overflow:hidden;margin-bottom:11px;background:#e9e5dd;">
-      <img src="${esc(shown[0].url)}" alt="" loading="lazy" onerror="this.closest('div').remove()" style="display:block;width:100%;max-height:340px;object-fit:cover;"></div>`;
-  }
-  return `<div style="display:grid;grid-template-columns:1fr 1fr;gap:2px;border:1px solid #cfd9de;border-radius:${r}px;overflow:hidden;margin-bottom:11px;background:#e9e5dd;">
-    ${shown.map(i=>`<img src="${esc(i.url)}" alt="" loading="lazy" onerror="this.remove()" style="display:block;width:100%;height:168px;object-fit:cover;">`).join('')}
-  </div>`;
+  return blocks.join('');
 }
 function xQuoteHtml(q){
   if(!q || !(q.text || q.account || (q.media_assets && ((q.media_assets.images||[]).length || (q.media_assets.videos||[]).length)))) return '';
   const dt = String(q.created_at || '').slice(0,10);
+  const quoteUrl = q.account && q.post_id ? `${xProfileUrl(q.account)}/status/${encodeURIComponent(q.post_id)}` : '';
   const head = q.account
     ? `<span style="display:flex;align-items:center;gap:5px;margin-bottom:4px;">
-         ${xAvatarHtml(q.avatar, q.account_name || q.account, 20)}
-         <span style="font-size:14px;font-weight:700;">${esc(q.account_name || q.account)}</span>
+         <a href="${esc(xProfileUrl(q.account))}" target="_blank" rel="noopener" onclick="event.stopPropagation()" style="display:flex;text-decoration:none;">${xAvatarHtml(q.avatar, q.account_name || q.account, 20)}</a>
+         <a href="${esc(xProfileUrl(q.account))}" target="_blank" rel="noopener" onclick="event.stopPropagation()" style="font-size:14px;font-weight:700;color:#0f1419;text-decoration:none;">${esc(q.account_name || q.account)}</a>
          ${q.verified ? X_VERIFIED_SVG : ''}
          <span style="font-size:13.5px;color:#536471;">@${esc(q.account)}${dt?' · '+esc(dt):''}</span>
        </span>`
     : `<span style="display:block;margin-bottom:4px;font-family:'Geist Mono',monospace;font-size:11px;color:#536471;">被引原帖</span>`;
   return `<div style="border:1px solid #cfd9de;border-radius:16px;padding:11px 13px;margin-bottom:11px;">
     ${head}
-    ${q.text?`<p style="margin:0;font-size:14px;line-height:1.5;color:#0f1419;">${esc(String(q.text).slice(0,280))}</p>`:''}
-    ${xMediaHtml(q.media_assets, 12)}
+    ${q.text?`<p style="margin:0 0 7px;font-size:14px;line-height:1.5;color:#0f1419;white-space:pre-wrap;">${xTextHtml(String(q.text).slice(0,1000))}</p>`:''}
+    ${xMediaHtml(q.media_assets, 12, quoteUrl)}
   </div>`;
 }
-const SOCIAL_FOLD_CHARS = 260;
 const SOCIAL_PLATFORMS = [
   { key:'x', label:'X', icon:'<path d="M18.2 2h3.3l-7.2 8.3L23 22h-6.6l-5.2-6.8L5.2 22H1.9l7.7-8.8L1.3 2H8l4.7 6.2L18.2 2zm-1.2 18h1.8L7.1 3.9H5.2L17 20z"/>' },
   { key:'reddit', label:'Reddit', icon:'<path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm5.2 11.3c.1.3.1.6.1.9 0 2.7-3.2 4.9-7.1 4.9s-7.1-2.2-7.1-4.9c0-.3 0-.6.1-.9a1.7 1.7 0 1 1 2-2.7 8.7 8.7 0 0 1 4.6-1.4l.9-4.1 2.9.6a1.4 1.4 0 1 1 .3 1.2l-2.4-.5-.8 3.4a8.7 8.7 0 0 1 4 1.4 1.7 1.7 0 1 1 2.6 2z"/>' },
@@ -1859,17 +1923,20 @@ function socialPostCardHtml(A, p){
     : `<span style="font-family:'Geist Mono',monospace;font-size:10px;font-weight:700;padding:2px 7px;border-radius:999px;background:#0f1419;color:#fff;white-space:nowrap;">原创${threads>1?' · 线程 '+threads:''}</span>`;
   const act = (key, val) => `<span style="display:inline-flex;align-items:center;gap:6px;font-size:13px;color:#536471;"><svg viewBox="0 0 24 24" style="width:17px;height:17px;fill:none;stroke:#536471;stroke-width:1.7;stroke-linecap:round;">${X_ACT_SVG[key]}</svg>${esc(val)}</span>`;
   const text = String(p.text || '').trim();
-  const long = text.length > SOCIAL_FOLD_CHARS;
   const open = state.socialExpanded.includes(p.recordId);
-  const shown = long && !open ? text.slice(0, SOCIAL_FOLD_CHARS).replace(/\s+\S*$/, '') + '…' : text;
-  const toggle = long
-    ? `<button onclick="App.toggleSocialText(${sourceIdArg(p.recordId)})" style="border:none;background:none;padding:0;margin:0 0 10px;font-size:14px;color:#1d9bf0;cursor:pointer;font-family:inherit;">${open?'收起':'展开全文'}</button>`
+  // 折叠按行数走（跟 X 一样），是否真的超出由渲染后量出来，不靠字数猜
+  const tid = `stx-${esc(p.recordId)}`;
+  const body = text
+    ? `<div style="margin:0 0 10px;">
+        <div id="${tid}" class="social-text${open?'':' is-clamped'}">${xTextHtml(text)}</div>
+        <button type="button" id="${tid}-more" class="social-more" hidden onclick="App.toggleSocialText(${sourceIdArg(p.recordId)})">${open?'收起':'显示更多'}</button>
+      </div>`
     : '';
   return `
   <article style="background:#fff;border:1px solid #cfd9de;border-radius:16px;padding:14px 16px;color:#0f1419;">
     <div style="display:flex;align-items:center;gap:5px;margin-bottom:3px;">
-      ${xAvatarHtml(m.account_avatar, p.name, 40)}
-      <span style="margin-left:5px;font-size:15px;font-weight:700;">${esc(p.name)}</span>
+      <a href="${esc(xProfileUrl(p.account))}" target="_blank" rel="noopener" onclick="event.stopPropagation()" style="display:flex;text-decoration:none;">${xAvatarHtml(m.account_avatar, p.name, 40)}</a>
+      <a href="${esc(xProfileUrl(p.account))}" target="_blank" rel="noopener" onclick="event.stopPropagation()" style="margin-left:5px;font-size:15px;font-weight:700;color:#0f1419;text-decoration:none;">${esc(p.name)}</a>
       ${m.account_verified ? X_VERIFIED_SVG : ''}
       <span style="font-size:14px;color:#536471;">@${esc(p.account)}</span>
       <span style="font-size:14px;color:#536471;">· ${esc(p.date)}</span>
@@ -1877,9 +1944,8 @@ function socialPostCardHtml(A, p){
     </div>
     <div style="padding-left:50px;">
       ${p.zhTitle?`<p style="margin:0 0 7px;font-size:14px;font-weight:700;line-height:1.5;border-left:3px solid ${A.accent};padding-left:9px;">${esc(p.zhTitle)}</p>`:''}
-      ${shown?`<p style="margin:0 0 ${long?'4px':'10px'};font-size:15px;line-height:1.5;white-space:pre-wrap;">${esc(shown)}</p>`:''}
-      ${toggle}
-      ${xMediaHtml(p.mediaAssets, 16)}
+      ${body}
+      ${xMediaHtml(p.mediaAssets, 16, p.url)}
       ${xQuoteHtml(m.quoted)}
       <div style="display:flex;align-items:center;justify-content:space-between;max-width:430px;margin-top:2px;">
         ${act('reply', xCount(m.replies) || '0')}
@@ -1892,6 +1958,13 @@ function socialPostCardHtml(A, p){
   </article>`;
 }
 
+function visibleSocialPosts(){
+  return state.socialAccount === '*'
+    ? socialPosts
+    : socialPosts.filter(p => p.account === state.socialAccount);
+}
+
+// 账号栏只在「社交媒体帖子」筛选下出现，占左导航和信息流之间那一列
 function socialSideHtml(A){
   const byAccount = new Map();
   socialPosts.forEach(p=>{
@@ -1902,82 +1975,51 @@ function socialSideHtml(A){
   });
   const accounts = [...byAccount.values()].sort((a,b)=>b.count-a.count || a.name.localeCompare(b.name));
   const total = socialPosts.length;
-  const platRow = SOCIAL_PLATFORMS.map(pl=>{
-    const n = socialPosts.filter(p=>(p.platform||'x')===pl.key).length;
-    const on = n > 0;
-    return `<div title="${esc(pl.label)}${on?'':' · 未接入'}" style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;padding:7px 0 5px;">
-      <span style="width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;background:${on?A.accent:'rgba(22,19,15,.05)'};">
-        <svg viewBox="0 0 24 24" style="width:16px;height:16px;fill:${on?'#fff':'#bfb9ad'};">${pl.icon}</svg></span>
-      <span style="font-family:'Geist Mono',monospace;font-size:10.5px;color:${on?A.accent:'#bfb9ad'};font-weight:${on?700:400};">${on?n:'—'}</span>
-    </div>`;
-  }).join('');
-  const row = (key, label, sub, count) => {
+  const row = (key, label, count) => {
     const on = state.socialAccount === key;
-    return `<div onclick="App.pickSocialAccount(${sourceIdArg(key)})" style="display:flex;align-items:center;gap:8px;padding:6px 14px;cursor:pointer;font-size:13px;background:${on?'#e8e6e1':'transparent'};font-weight:${on?600:400};">
+    return `<button type="button" class="acct-item${on?' on':''}" onclick="App.pickSocialAccount(${sourceIdArg(key)})">
       ${label}
-      <span style="margin-left:auto;font-family:'Geist Mono',monospace;font-size:11px;color:${UI.text3};">${count}</span>
-    </div>`;
+      <span class="acct-n">${count}</span>
+    </button>`;
   };
   const accountRows = accounts.map(a=>row(
     a.account,
-    `${xAvatarHtml(a.avatar, a.name, 22)}<span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${esc(a.name)} <small style="color:${UI.text3};font-size:11.5px;">@${esc(a.account)}</small></span>`,
-    '',
+    `${xAvatarHtml(a.avatar, a.name, 22)}<span style="min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${esc(a.name)} <small style="color:#9a9488;font-size:11.5px;">@${esc(a.account)}</small></span>`,
     a.count,
   )).join('');
   const pending = SOCIAL_PLATFORMS.slice(1).map(pl=>`
-    <div style="display:flex;align-items:center;gap:6px;padding:11px 12px 5px;font-size:12.5px;font-weight:700;color:#b0aa9e;">
-      <span style="font-size:9px;width:9px;">▸</span>
-      <span style="width:16px;height:16px;display:inline-flex;align-items:center;justify-content:center;"><svg viewBox="0 0 24 24" style="width:13px;height:13px;fill:#c8c2b6;">${pl.icon}</svg></span>
+    <div class="acct-group off">
+      <span style="width:16px;height:16px;display:inline-flex;align-items:center;justify-content:center;"><svg viewBox="0 0 24 24" style="width:13px;height:13px;fill:#c2bcae;">${pl.icon}</svg></span>
       ${esc(pl.label)}
-      <span style="margin-left:auto;font-family:'Geist Mono',monospace;font-size:10px;color:#b0aa9e;border:1px solid #ddd8cd;padding:1px 6px;">未接入</span>
+      <span class="acct-tag">未接入</span>
     </div>`).join('');
   return `
-  <aside style="flex:none;width:252px;background:#f7f7f5;border-right:1.5px solid var(--ds-ink-line);padding-bottom:16px;">
-    <div style="display:flex;gap:4px;padding:8px 10px 12px;border-bottom:1px solid ${UI.border};">${platRow}</div>
-    <div style="display:flex;align-items:center;padding:13px 14px 7px;">
-      <b style="font-size:15px;">社媒</b>
-      <span style="margin-left:auto;font-family:'Geist Mono',monospace;font-size:11.5px;color:${UI.text3};">${total}</span>
+  <aside class="feed-accounts">
+    <div class="acct-panel">
+      <div class="acct-label">ACCOUNTS</div>
+      ${row('*', `<span style="width:22px;text-align:center;color:${A.accent};">★</span><span>全部</span>`, total)}
+      <div class="acct-group">
+        <span style="width:16px;height:16px;display:inline-flex;align-items:center;justify-content:center;"><svg viewBox="0 0 24 24" style="width:13px;height:13px;fill:#3b352a;">${SOCIAL_PLATFORMS[0].icon}</svg></span>
+        <span class="acct-tag" style="margin-left:0;">${accounts.length} 个账号 · ${total}</span>
+      </div>
+      ${accountRows}
+      ${pending}
+      <div style="flex:1;min-height:14px;"></div>
     </div>
-    ${row('*', `<span style="width:22px;text-align:center;color:#e8a838;">★</span><span>全部</span>`, '', total)}
-    <div style="display:flex;align-items:center;gap:6px;padding:11px 12px 5px;font-size:12.5px;font-weight:700;color:${UI.text2};">
-      <span style="font-size:9px;width:9px;">▾</span>
-      <span style="width:16px;height:16px;display:inline-flex;align-items:center;justify-content:center;"><svg viewBox="0 0 24 24" style="width:13px;height:13px;fill:var(--ds-text);">${SOCIAL_PLATFORMS[0].icon}</svg></span>
-      X<span style="margin-left:auto;font-family:'Geist Mono',monospace;font-size:11px;color:${UI.text3};font-weight:400;">${accounts.length} 个账号 · ${total}</span>
-    </div>
-    ${accountRows}
-    ${pending}
   </aside>`;
 }
 
-function socialHtml(A){
-  const list = state.socialAccount === '*'
-    ? socialPosts
-    : socialPosts.filter(p=>p.account === state.socialAccount);
-  const cur = state.socialAccount === '*' ? null : list[0];
-  const body = socialPosts.length === 0
-    ? `<div style="padding:56px 22px;text-align:center;font-size:13.5px;line-height:1.9;color:${UI.text3};">
-         今天没有社媒帖子。<br>X 源目前是 paused，账号白名单在「信号源」页配置。</div>`
-    : (list.length
-        ? `<div style="display:flex;flex-direction:column;gap:14px;padding:16px 18px 26px;">${list.map(p=>socialPostCardHtml(A,p)).join('')}</div>`
-        : `<div style="padding:46px 22px;text-align:center;font-size:13.5px;color:${UI.text3};">这个账号今天没有过线的帖子。</div>`);
-  return `
-  <main style="max-width:1100px;margin:0 auto;padding:22px 24px 40px;">
-    <div style="margin-bottom:14px;">
-      <h1 class="page-title" style="margin:0 0 5px;font-size:27px;font-weight:700;letter-spacing:-.015em;color:var(--ds-text);">社媒</h1>
-      <p style="margin:0;font-size:13.5px;line-height:1.7;color:${UI.text2};max-width:760px;">白名单账号的原创与引用帖，经硬过滤与事实闸筛过。这里独立于每日简报的信号排名，不占简报名额，也不参与编号。</p>
-    </div>
-    <div style="display:flex;align-items:stretch;border:1.5px solid var(--ds-ink-line);box-shadow:5px 5px 0 rgba(22,19,15,.07);background:#fff;overflow:hidden;">
-      ${socialSideHtml(A)}
-      <div style="flex:1;min-width:0;max-width:636px;">
-        <div style="display:flex;align-items:baseline;gap:8px;padding:11px 18px;border-bottom:1px solid #cfd9de;background:#fff;">
-          <b style="font-size:16px;">${esc(cur ? cur.name : '全部')}</b>
-          <span style="font-size:12.5px;color:#536471;">${cur ? '@'+esc(cur.account) : 'X · '+new Set(socialPosts.map(p=>p.account)).size+' 个账号'}</span>
-          <span style="margin-left:auto;font-family:'Geist Mono',monospace;font-size:11.5px;color:#536471;">${list.length} 条</span>
-        </div>
-        ${body}
-      </div>
-    </div>
-  </main>`;
+// 社媒筛选下的信息流：不编号、不套分类芯片，卡片就是完整帖子
+function socialStreamHtml(A){
+  const list = visibleSocialPosts();
+  if(!socialPosts.length){
+    return `<div style="padding:52px 20px;text-align:center;font-size:13.5px;line-height:1.9;color:${UI.text3};">
+      今天没有社媒帖子。<br>X 源目前是 paused，账号白名单在「信号源」页配置。</div>`;
+  }
+  if(!list.length){
+    return `<div style="padding:42px 20px;text-align:center;font-size:13.5px;color:${UI.text3};">这个账号今天没有过线的帖子。</div>`;
+  }
+  return `<div style="display:flex;flex-direction:column;gap:14px;max-width:600px;">${list.map(p=>socialPostCardHtml(A,p)).join('')}</div>`;
 }
 
 // 新闻主题 logo:按标题 / 标签匹配主题品牌(而非信号来源)
@@ -2522,6 +2564,9 @@ function briefHtml(A){
     if(f === '全部') return;
     counts[f] = signals.filter(s => matchesFilter(s, f)).length;
   });
+  // 社媒不在 signals 里，计数走它自己那份
+  counts[SOCIAL_FILTER] = socialPosts.length;
+  const socialMode = state.filter === SOCIAL_FILTER;
 
   const cardsHtml = visible.map((s, idx) => {
     // 「待分析」是真会写进周报待纳入表的动作，公开站只读时按钮置灰而不是藏起来，
@@ -2578,7 +2623,7 @@ function briefHtml(A){
   }).join('');
 
   return `
-  <main class="feed-shell">
+  <main class="feed-shell${socialMode?' with-accounts':''}">
     <div class="feed-points">
       ${techDivider(A, '01', '今日核心要点', briefMeta.date || '')}
       ${pointsHtml ? `
@@ -2594,16 +2639,19 @@ function briefHtml(A){
     </div>
 
     ${feedNavHtml(A, counts)}
+    ${socialMode ? socialSideHtml(A) : ''}
 
     <div class="feed-main">
-      ${techDivider(A, '02', '全部信号', `${briefMeta.date || ''} · ${visible.length}/${signals.length}`)}
-      ${signals.length ? '' : `
+      ${socialMode
+        ? techDivider(A, '02', '社媒帖子', `${briefMeta.date || ''} · ${visibleSocialPosts().length}/${socialPosts.length} · 不计入简报信号`)
+        : techDivider(A, '02', '全部信号', `${briefMeta.date || ''} · ${visible.length}/${signals.length}`)}
+      ${socialMode ? '' : signals.length ? '' : `
       <div style="padding: 8px 0 26px;">
         <h3 style="margin: 0 0 10px; font-size: 20px; font-weight: 700; letter-spacing: -.01em; color: var(--ds-text);">${esc(briefMeta.title)}</h3>
         <p style="margin: 0; font-size: 14.5px; line-height: 1.7; color: ${UI.text2};">${esc(briefMeta.intro)}</p>
       </div>`}
-      ${signals.length && !visible.length ? `<p style="padding: 28px 0; font-size: 13px; color: ${UI.text3};">「${esc(state.filter)}」今天没有信号，换个板块或点左栏「清除筛选」。</p>` : ''}
-      <div style="display: flex; flex-direction: column; gap: 20px;">${cardsHtml}</div>
+      ${socialMode || !signals.length || visible.length ? '' : `<p style="padding: 28px 0; font-size: 13px; color: ${UI.text3};">「${esc(state.filter)}」今天没有信号，换个板块或点左栏「清除筛选」。</p>`}
+      ${socialMode ? socialStreamHtml(A) : `<div style="display: flex; flex-direction: column; gap: 20px;">${cardsHtml}</div>`}
 
       <div style="margin-top: 34px; padding: 16px 18px; border: 1.5px solid var(--ds-ink-line); background: #fff; box-shadow: 4px 4px 0 rgba(22,19,15,.06);">
         <div style="display: flex; align-items: baseline; gap: 10px; margin-bottom: 4px; flex-wrap: wrap;">
@@ -4023,13 +4071,35 @@ function tasksHtml(A){
 
 function render(){
   const A = computeAccents();
-  const page = state.page==='brief' ? briefHtml(A)
-    : state.page==='social' ? socialHtml(A)
-    : state.page==='sources' ? sourcesHtml(A) : tasksHtml(A);
+  const page = state.page==='brief' ? briefHtml(A) : state.page==='sources' ? sourcesHtml(A) : tasksHtml(A);
   document.getElementById('app').innerHTML = `<div style="position: relative; z-index: 1; min-height: 100vh; background: ${UI.canvas}; padding-bottom: 48px;">${headerHtml(A)}${page}</div>${bottomBarHtml(A)}`;
   renderDetailLayer();
   bindPointsMarquee();
+  syncAccountsHeight();
+  syncSocialClamp();
 }
+
+// 「显示更多」只在正文真的被裁掉时出现：折叠态比较 scrollHeight 与可见高度，
+// 按字数猜会在短行多、或者窄屏折行时判错。
+function syncSocialClamp(){
+  document.querySelectorAll('.social-text').forEach(el=>{
+    const more = document.getElementById(`${el.id}-more`);
+    if(!more) return;
+    more.hidden = el.classList.contains('is-clamped')
+      ? el.scrollHeight - el.clientHeight <= 2
+      : false;
+  });
+}
+window.addEventListener('resize', syncSocialClamp);
+
+// 账号栏内容比左导航短，底边要至少和 FORMATS 块齐平，否则中间那列看着像截断的。
+function syncAccountsHeight(){
+  const nav = document.querySelector('.feed-nav');
+  const acct = document.querySelector('.feed-accounts');
+  if(!nav || !acct) return;
+  acct.style.minHeight = getComputedStyle(acct).position === 'static' ? '' : `${nav.offsetHeight}px`;
+}
+window.addEventListener('resize', syncAccountsHeight);
 
 // 原先 CSS `pointsSlide 56s` 走完一套卡片；能排进视口时不滚动、不复制。
 const POINTS_LOOP_MS = 56000;
@@ -4165,8 +4235,8 @@ function renderDetailLayer(){
 
 window.addEventListener('keydown', (e)=>{ if(e.key==='Escape'){ App.closeDetail(); } });
 window.addEventListener('resize', ()=>{ applyPointsShift(); });
-// #social 可直接落到社媒页，方便分享和回看
-if(location.hash === '#social') state.page = 'social';
+// #social 直接落到社媒筛选，方便分享和回看
+if(location.hash === '#social') state.filter = SOCIAL_FILTER;
 render();
 loadBrief();
 loadSources();

@@ -131,6 +131,7 @@ def _signal_from_record(record: dict[str, Any]) -> dict[str, Any]:
     }
     if social_metrics:
         signal["socialMetrics"] = social_metrics
+        signal["socialText"] = daily.social_full_text(fields)
     if daily.verbatim_body_mode(fields):
         # 中文媒体/公众号的详情页照抄原文，历史简报重建也要带上正文
         signal.update(daily.display_body(fields))

@@ -124,6 +124,38 @@ class SocialSourceTest(unittest.TestCase):
         kept, _ = social.filter_social_items(items, classifier=lambda _: True)
         self.assertEqual(len(kept), 1)
 
+    def test_replies_to_other_people_inside_own_conversation_are_not_thread(self) -> None:
+        root = _item(post_id="100", conversation_id="100")
+        self_thread = _item(
+            post_id="101",
+            text="2/ Here are the benchmark details.",
+            refs=[{"type": "replied_to", "id": "100"}],
+            conversation_id="100",
+        )
+        comment_reply = _item(
+            post_id="102",
+            text="@someone Thanks, we will fix that in the next release.",
+            refs=[{"type": "replied_to", "id": "999"}],
+            conversation_id="100",
+        )
+        items = social._build_account_items(
+            [root, self_thread, comment_reply],
+            {},
+            feed=_feed(),
+            username="openai",
+            profile={"name": "OpenAI", "followers": 1000000},
+        )
+        self.assertEqual(len(items), 2)
+        thread = next(item for item in items if item["metrics"]["post_id"] == "100")
+        reply = next(item for item in items if item["metrics"]["post_id"] == "102")
+        self.assertEqual(thread["metrics"]["thread_count"], 2)
+        self.assertFalse(thread["metrics"]["is_reply"])
+        self.assertEqual(reply["metrics"]["thread_count"], 1)
+        self.assertTrue(reply["metrics"]["is_reply"])
+        kept, stats = social.filter_social_items(items, classifier=lambda _: True)
+        self.assertEqual([item["metrics"]["post_id"] for item in kept], ["100"])
+        self.assertEqual(stats["reply"], 1)
+
     def test_repost_reply_noise_and_short_posts_are_hard_filtered(self) -> None:
         posts = [
             _item(post_id="1", refs=[{"type": "retweeted", "id": "0"}]),
@@ -220,6 +252,38 @@ class SocialSourceTest(unittest.TestCase):
         self.assertEqual(kept[0]["metrics"]["post_id"], "12")
         self.assertEqual(kept[0]["metrics"]["gate"], "direct")
 
+    def test_quoted_original_supplies_event_keywords(self) -> None:
+        """转载官方发布时，事件词往往只在原帖里，本人评论没有 announce/launch。"""
+        post = _item(
+            post_id="88",
+            text=(
+                "Been using Astra on vitest, tsx and SwiftPM; it found and patched "
+                "upstream dependency bugs and opened PRs."
+            ),
+            refs=[{"type": "quoted", "id": "77"}],
+        )
+        items = social._build_account_items(
+            [post],
+            {},
+            feed=_feed(),
+            username="steipete",
+            profile={"followers": 100000, "verified": True},
+            referenced_by_id={
+                "77": {
+                    "id": "77",
+                    "author_id": "1",
+                    "text": "Introducing GPT-6 Astra with 30% better computer use. Now available.",
+                }
+            },
+            users_by_id={"1": {"id": "1", "username": "OpenAI", "name": "OpenAI", "verified": True}},
+        )
+        kept, stats = social.filter_social_items(items, classifier=lambda _: False)
+        self.assertTrue(items[0]["metrics"]["has_event"])
+        self.assertTrue(items[0]["metrics"]["has_hard_evidence"])
+        self.assertEqual(len(kept), 1)
+        self.assertEqual(kept[0]["metrics"]["gate"], "direct")
+        self.assertEqual(stats.get("direct"), 1)
+
     def test_casual_model_talk_cannot_skip_fact_gate(self) -> None:
         post = _item(post_id="21", text="This model is so good, crazy times to be in AI.")
         items = social._build_account_items(
@@ -314,6 +378,18 @@ class SocialSourceTest(unittest.TestCase):
                     "type": "video",
                     "preview_image_url": "https://pbs.twimg.com/thumb.jpg",
                     "duration_ms": 1775000,
+                    "variants": [
+                        {
+                            "content_type": "video/mp4",
+                            "bit_rate": 256000,
+                            "url": "https://video.twimg.com/low.mp4",
+                        },
+                        {
+                            "content_type": "video/mp4",
+                            "bit_rate": 2176000,
+                            "url": "https://video.twimg.com/high.mp4",
+                        },
+                    ],
                 }
             },
             feed=_feed(),
@@ -353,7 +429,33 @@ class SocialSourceTest(unittest.TestCase):
         self.assertTrue(quoted["verified"])
         video = quoted["media_assets"]["videos"][0]
         self.assertEqual(video["thumbnailUrl"], "https://pbs.twimg.com/thumb.jpg")
+        self.assertEqual(video["playbackUrl"], "https://video.twimg.com/high.mp4")
         self.assertEqual(video["durationSec"], 1775.0)
+
+    def test_article_card_keeps_click_url_and_cover(self) -> None:
+        post = _item(post_id="600", text="Introducing Model 2: https://t.co/article")
+        post["entities"] = {
+            "urls": [
+                {
+                    "url": "https://t.co/article",
+                    "expanded_url": "https://example.com/model-2",
+                    "unwound_url": "https://example.com/model-2",
+                    "title": "Model 2",
+                    "description": "A new generation of intelligence.",
+                    "images": [{"url": "https://pbs.twimg.com/news_img/cover.jpg"}],
+                }
+            ]
+        }
+        items = social._build_account_items(
+            [post],
+            {},
+            feed=_feed(),
+            username="openai",
+            profile={"name": "OpenAI", "followers": 1000000},
+        )
+        article = items[0]["media_assets"]["articles"][0]
+        self.assertEqual(article["url"], "https://example.com/model-2")
+        self.assertEqual(article["image"], "https://pbs.twimg.com/news_img/cover.jpg")
 
     def test_seed_contains_personal_p0_accounts(self) -> None:
         seed = json.loads(

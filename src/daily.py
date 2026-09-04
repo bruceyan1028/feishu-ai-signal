@@ -333,6 +333,18 @@ def _translated_chars(fields: dict[str, Any]) -> int:
     return _LEGACY_TRANSLATE_LIMIT if str(scalar(fields.get("中文正文")) or "").strip() else 0
 
 
+# 线程各段之间采集端写的是 `---` 分隔行，卡片按段落连续渲染就够，不需要这条横线
+_THREAD_SEP_RE = re.compile(r"(?m)^\s*-{3,}\s*$")
+
+
+def social_full_text(fields: dict[str, Any]) -> str:
+    """帖子卡展示的全文：优先「原文」，缺失时退回标题摘录。"""
+    source = str(scalar(fields.get("来源")) or "")
+    body = clean_body(str(scalar(fields.get("原文")) or ""), source)
+    body = re.sub(r"\n{3,}", "\n\n", _THREAD_SEP_RE.sub("", body)).strip()
+    return body or str(scalar(fields.get("标题")) or "").strip()
+
+
 def display_body(fields: dict[str, Any]) -> dict[str, Any]:
     """给前端的正文：中文源直接用原文，英文源用缓存译文。"""
     source = str(scalar(fields.get("来源")) or "")
@@ -852,6 +864,8 @@ def _signal_from_fields(record_id: str, fields: dict[str, Any], analysis: dict[s
     if social_metrics:
         # 帖子卡要按 X 的样子渲染：作者头像、原创/引用、被引原帖、互动数都来自这里
         signal["socialMetrics"] = social_metrics
+        # 「标题」只是正文头 117 字的摘录，帖子卡要的是全文（线程各段都在「原文」里）
+        signal["socialText"] = social_full_text(fields)
     if full_text:
         signal.update(
             {

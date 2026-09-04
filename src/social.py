@@ -60,6 +60,9 @@ _TWEET_FIELDS = (
 )
 _USER_FIELDS = "name,username,public_metrics,profile_image_url,verified,verified_type"
 _EXPANSIONS = "attachments.media_keys,referenced_tweets.id,referenced_tweets.id.author_id"
+_MEDIA_FIELDS = (
+    "media_key,type,url,preview_image_url,width,height,duration_ms,public_metrics,variants"
+)
 # 头像和蓝 V 是后加的：游标里存着旧结构的账号要重解析一次才会补上。
 _PROFILE_REV = 2
 
@@ -210,6 +213,7 @@ def _timeline(
     ).strftime("%Y-%m-%dT%H:%M:%SZ")
     tweet_fields = _TWEET_FIELDS
     expansions = _EXPANSIONS
+    media_fields = _MEDIA_FIELDS
     use_start_time = not since_id
     for _ in range(max_pages):
         params: dict[str, Any] = {
@@ -217,7 +221,7 @@ def _timeline(
             "tweet.fields": tweet_fields,
             "expansions": expansions,
             "user.fields": "name,username,profile_image_url,verified",
-            "media.fields": "media_key,type,url,preview_image_url,width,height,duration_ms,public_metrics",
+            "media.fields": media_fields,
             "exclude": "retweets",
         }
         if since_id:
@@ -238,6 +242,10 @@ def _timeline(
             if "referenced_tweets.id.author_id" in expansions:
                 expansions = expansions.replace(",referenced_tweets.id.author_id", "")
                 log.warning("X timeline 不支持被引作者 expansion，已降级：%s", exc)
+                continue
+            if "variants" in media_fields:
+                media_fields = media_fields.replace(",variants", "")
+                log.warning("X timeline 不支持视频 variants，已降级：%s", exc)
                 continue
             if use_start_time:
                 use_start_time = False
@@ -276,7 +284,52 @@ def _timeline(
             if created >= cutoff:
                 filtered.append(post)
         posts = filtered
+    quote_ids = [
+        str(ref.get("id") or "")
+        for post in posts
+        for ref in post.get("referenced_tweets") or []
+        if str(ref.get("type") or "") == "quoted" and ref.get("id")
+    ]
+    if quote_ids:
+        quoted_payload = _lookup_tweets(quote_ids, bearer=bearer)
+        for obj in quoted_payload.get("data") or []:
+            referenced[str(obj.get("id") or "")] = obj
+        includes = quoted_payload.get("includes") or {}
+        for obj in includes.get("media") or []:
+            media[str(obj.get("media_key") or "")] = obj
+        for obj in includes.get("users") or []:
+            users[str(obj.get("id") or "")] = obj
     return posts, media, referenced, users
+
+
+def _lookup_tweets(tweet_ids: list[str], *, bearer: str) -> dict[str, Any]:
+    """补齐被引帖媒体；timeline expansion 不会展开被引帖自己的 media_keys。"""
+    ids = list(dict.fromkeys(tweet_ids))[:100]
+    fields = _TWEET_FIELDS
+    media_fields = _MEDIA_FIELDS
+    while True:
+        try:
+            return _api_get(
+                "tweets",
+                bearer=bearer,
+                params={
+                    "ids": ",".join(ids),
+                    "tweet.fields": fields,
+                    "expansions": "attachments.media_keys,author_id",
+                    "user.fields": "name,username,profile_image_url,verified",
+                    "media.fields": media_fields,
+                },
+            )
+        except RuntimeError as exc:
+            if "note_tweet" in fields:
+                fields = fields.replace(",note_tweet", "")
+                log.warning("X tweets lookup 不支持 note_tweet，已降级：%s", exc)
+                continue
+            if "variants" in media_fields:
+                media_fields = media_fields.replace(",variants", "")
+                log.warning("X tweets lookup 不支持视频 variants，已降级：%s", exc)
+                continue
+            raise
 
 
 def _reference_types(post: dict[str, Any]) -> set[str]:
@@ -300,8 +353,8 @@ def _clean_own_text(text: str) -> str:
     return re.sub(r"\s+", " ", cleaned).strip()
 
 
-def _article_cards(posts: list[dict[str, Any]]) -> list[str]:
-    cards: list[str] = []
+def _article_cards(posts: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    cards: list[dict[str, Any]] = []
     seen: set[str] = set()
     for post in posts:
         for url in (post.get("entities") or {}).get("urls") or []:
@@ -316,9 +369,19 @@ def _article_cards(posts: list[dict[str, Any]]) -> list[str]:
             if not key or key in seen:
                 continue
             seen.add(key)
-            chunk = " ".join(part for part in (title, desc, expanded) if part)
-            if chunk:
-                cards.append(chunk)
+            images = url.get("images") or []
+            image = next(
+                (str(item.get("url") or "") for item in images if item.get("url")),
+                "",
+            )
+            cards.append(
+                {
+                    "url": expanded,
+                    "title": title,
+                    "description": desc,
+                    "image": image,
+                }
+            )
     return cards
 
 
@@ -353,6 +416,7 @@ def _quoted_context(
     tweet = quoted[0]
     author = users_by_id.get(str(tweet.get("author_id") or "")) or {}
     _, assets = _media_assets([tweet], media_by_key)
+    assets["articles"] = _article_cards([tweet])
     return {
         "post_id": str(tweet.get("id") or ""),
         # 卡片只展示被引原帖的摘要，长文没必要整篇塞进「社媒指标」
@@ -392,11 +456,62 @@ def _media_assets(
             if kind == "photo":
                 images.append(asset)
             else:
+                variants = [
+                    variant
+                    for variant in obj.get("variants") or []
+                    if str(variant.get("content_type") or "") == "video/mp4"
+                    and variant.get("url")
+                ]
+                variants.sort(key=lambda variant: int(variant.get("bit_rate") or 0))
+                asset["playbackUrl"] = str((variants[-1] if variants else {}).get("url") or "")
                 asset["thumbnailUrl"] = str(obj.get("preview_image_url") or "")
                 asset["durationSec"] = round(float(obj.get("duration_ms") or 0) / 1000, 1)
                 videos.append(asset)
     image_url = str((images[0] if images else {}).get("url") or "")
-    return image_url, {"images": images, "videos": videos}
+    return image_url, {"images": images, "videos": videos, "articles": []}
+
+
+def _reply_parent_id(post: dict[str, Any]) -> str:
+    return next(
+        (
+            str(ref.get("id") or "")
+            for ref in post.get("referenced_tweets") or []
+            if str(ref.get("type") or "") == "replied_to"
+        ),
+        "",
+    )
+
+
+def _thread_groups(posts: list[dict[str, Any]]) -> list[tuple[str, list[dict[str, Any]]]]:
+    """只合并本人自线程；回复评论者的内容即使 conversation_id 相同也保持单条。"""
+    conversations: dict[str, list[dict[str, Any]]] = defaultdict(list)
+    for post in posts:
+        conversation = str(post.get("conversation_id") or post.get("id") or "")
+        if conversation:
+            conversations[conversation].append(post)
+    result: list[tuple[str, list[dict[str, Any]]]] = []
+    for conversation, members in conversations.items():
+        by_id = {str(post.get("id") or ""): post for post in members}
+        root = by_id.get(conversation)
+        if not root:
+            result.extend((conversation, [post]) for post in members)
+            continue
+        thread_ids = {conversation}
+        changed = True
+        while changed:
+            changed = False
+            for post_id, post in by_id.items():
+                if post_id not in thread_ids and _reply_parent_id(post) in thread_ids:
+                    thread_ids.add(post_id)
+                    changed = True
+        thread = [post for post in members if str(post.get("id") or "") in thread_ids]
+        result.append((conversation, thread))
+        result.extend(
+            (conversation, [post])
+            for post in members
+            if str(post.get("id") or "") not in thread_ids
+        )
+    return result
 
 
 def _build_account_items(
@@ -411,13 +526,8 @@ def _build_account_items(
 ) -> list[dict[str, Any]]:
     referenced_by_id = referenced_by_id or {}
     users_by_id = users_by_id or {}
-    groups: dict[str, list[dict[str, Any]]] = defaultdict(list)
-    for post in posts:
-        conversation = str(post.get("conversation_id") or post.get("id") or "")
-        if conversation:
-            groups[conversation].append(post)
     out = []
-    for conversation, thread_posts in groups.items():
+    for conversation, thread_posts in _thread_groups(posts):
         thread_posts.sort(key=lambda post: int(str(post.get("id") or "0")))
         root = next(
             (post for post in thread_posts if str(post.get("id")) == conversation),
@@ -428,13 +538,11 @@ def _build_account_items(
         texts = [text for text in texts if text]
         cards = _article_cards(thread_posts)
         image_url, assets = _media_assets(thread_posts, media_by_key)
+        assets["articles"] = cards
         has_media = bool(assets.get("images") or assets.get("videos"))
         if not texts and not cards and not has_media:
             continue
-        body_parts = list(texts)
-        if cards:
-            body_parts.extend(cards)
-        body = "\n\n---\n\n".join(body_parts)
+        body = "\n\n---\n\n".join(texts)
         first = texts[0] if texts else (cards[0] if cards else "")
         compact = re.sub(r"\s+", " ", first).strip()
         title = compact[:117] + ("..." if len(compact) > 117 else "")
@@ -454,6 +562,7 @@ def _build_account_items(
         engagement = likes + 2 * replies + 2 * reposts + 2 * quotes + bookmarks
         is_retweet = "retweeted" in refs
         is_quote = "quoted" in refs
+        is_reply = "replied_to" in _reference_types(root)
         # 纯转发没有本人增量；引用转述只计自己写的字。
         own_source = "" if is_retweet and not is_quote else "\n".join(texts)
         own_text = _clean_own_text(own_source)
@@ -494,7 +603,7 @@ def _build_account_items(
                     "impressions": impressions,
                     "engagement": engagement,
                     "is_retweet": is_retweet,
-                    "is_reply": "replied_to" in refs,
+                    "is_reply": is_reply,
                     "is_quote": is_quote,
                     "thread_count": len(thread_posts),
                     "edit_history_tweet_ids": edit_history,
@@ -615,17 +724,41 @@ def _item_text(item: dict[str, Any]) -> str:
     return f"{item.get('title') or ''}\n{item.get('body') or ''}"
 
 
+def _quoted_text(item: dict[str, Any]) -> str:
+    metrics = item.get("metrics") or {}
+    quoted = metrics.get("quoted") or {}
+    return "\n".join(
+        part
+        for part in (
+            str(metrics.get("quoted_text") or ""),
+            str(quoted.get("text") or ""),
+        )
+        if part
+    )
+
+
+def _gate_text(item: dict[str, Any]) -> str:
+    """直通闸看本人正文，也看被引原帖：转载官方发布时事件词往往只在原帖里。"""
+    return f"{_item_text(item)}\n{_quoted_text(item)}".strip()
+
+
+def _quoted_has_article(item: dict[str, Any]) -> bool:
+    quoted = (item.get("metrics") or {}).get("quoted") or {}
+    assets = quoted.get("media_assets") or {}
+    return bool(assets.get("articles"))
+
+
 def _has_hard_evidence(item: dict[str, Any]) -> bool:
     """可核验证据：代码/论文链、数字、长线程、X 文章。有图/任意 URL 不算。"""
     metrics = item.get("metrics") or {}
-    text = _item_text(item)
+    text = _gate_text(item)
     if _CODE_RE.search(text):
         return True
     if _NUMBER_RE.search(text):
         return True
     if int(metrics.get("thread_count") or 0) >= 3:
         return True
-    return bool(metrics.get("has_article"))
+    return bool(metrics.get("has_article") or _quoted_has_article(item))
 
 
 def _has_media(item: dict[str, Any]) -> bool:
@@ -641,7 +774,7 @@ def _has_media(item: dict[str, Any]) -> bool:
 
 def _annotate_gates(item: dict[str, Any]) -> None:
     metrics = item.setdefault("metrics", {})
-    text = _item_text(item)
+    text = _gate_text(item)
     metrics["has_event"] = bool(_EVENT_RE.search(text))
     metrics["has_hard_evidence"] = _has_hard_evidence(item)
     metrics["has_media"] = _has_media(item)
@@ -667,7 +800,7 @@ def score_item(
     tiers = feed.get("account_tiers") or {}
     tier = str(tiers.get(account) or feed.get("priority") or "P1").upper()
     account_score = 20 if tier == "P0" else 12 if tier == "P1" else 6
-    text = _item_text(item)
+    text = _gate_text(item)
     _annotate_gates(item)
     intent = 25 if metrics.get("has_event") else 18 if _TECH_RE.search(text) else 8
     evidence = 0
