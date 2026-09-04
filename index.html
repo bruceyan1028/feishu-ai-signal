@@ -1914,6 +1914,50 @@ const SOCIAL_PLATFORMS = [
   { key:'reddit', label:'Reddit', icon:'<path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm5.2 11.3c.1.3.1.6.1.9 0 2.7-3.2 4.9-7.1 4.9s-7.1-2.2-7.1-4.9c0-.3 0-.6.1-.9a1.7 1.7 0 1 1 2-2.7 8.7 8.7 0 0 1 4.6-1.4l.9-4.1 2.9.6a1.4 1.4 0 1 1 .3 1.2l-2.4-.5-.8 3.4a8.7 8.7 0 0 1 4 1.4 1.7 1.7 0 1 1 2.6 2z"/>' },
   { key:'telegram', label:'Telegram', icon:'<path d="M21.9 4.3 18.9 19c-.2 1-.8 1.3-1.7.8l-4.6-3.4-2.2 2.1c-.2.2-.5.5-1 .5l.4-4.9 8.9-8c.4-.3-.1-.5-.6-.2L7.2 12.8l-4.7-1.5c-1-.3-1-1 .2-1.5l18.4-7.1c.9-.3 1.6.2 1.3 1.6z"/>' },
 ];
+// 线程各段的文字与它自己的图/视频/文章配对。采集端只在段里存 media_key，
+// 资源实体统一从整条帖子的 mediaAssets 取，取不到就跳过，不渲染失效地址。
+function xThreadSegments(p){
+  const raw = ((p.metrics || {}).thread_segments) || [];
+  if(!Array.isArray(raw) || raw.length < 2) return [];
+  const all = p.mediaAssets || {};
+  const byKey = new Map();
+  (all.images || []).forEach(item=>{ if(item && item.id) byKey.set(String(item.id), ['images', item]); });
+  (all.videos || []).forEach(item=>{ if(item && item.id) byKey.set(String(item.id), ['videos', item]); });
+  const byUrl = new Map();
+  (all.articles || []).forEach(item=>{ if(item && item.url) byUrl.set(String(item.url), item); });
+  const used = new Set();
+  const segments = raw.map(seg=>{
+    const assets = { images:[], videos:[], articles:[] };
+    (seg.media_keys || []).forEach(key=>{
+      const hit = byKey.get(String(key));
+      if(!hit) return;
+      assets[hit[0]].push(hit[1]);
+      used.add(String(key));
+    });
+    (seg.article_urls || []).forEach(url=>{
+      const hit = byUrl.get(String(url));
+      if(!hit) return;
+      assets.articles.push(hit);
+      used.add(String(url));
+    });
+    return { text:String(seg.text || '').trim(), url:String(seg.url || ''), assets };
+  });
+  // 没被任何段认领的素材（例如展示媒体被重新挑过）挂到末段，避免整块丢掉
+  const orphan = {
+    images: (all.images || []).filter(item=>item && item.id && !used.has(String(item.id))),
+    videos: (all.videos || []).filter(item=>item && item.id && !used.has(String(item.id))),
+    articles: (all.articles || []).filter(item=>item && item.url && !used.has(String(item.url))),
+  };
+  if(orphan.images.length || orphan.videos.length || orphan.articles.length){
+    const tail = segments[segments.length - 1];
+    tail.assets = {
+      images: tail.assets.images.concat(orphan.images),
+      videos: tail.assets.videos.concat(orphan.videos),
+      articles: tail.assets.articles.concat(orphan.articles),
+    };
+  }
+  return segments;
+}
 // 帖子本身就是全文，卡片不再跳详情页；过长时就地折叠
 function socialPostCardHtml(A, p){
   const m = p.metrics || {};
@@ -1926,12 +1970,32 @@ function socialPostCardHtml(A, p){
   const open = state.socialExpanded.includes(p.recordId);
   // 折叠按行数走（跟 X 一样），是否真的超出由渲染后量出来，不靠字数猜
   const tid = `stx-${esc(p.recordId)}`;
-  const body = text
-    ? `<div style="margin:0 0 10px;">
+  const segments = xThreadSegments(p);
+  const toggle = (label) =>
+    `<button type="button" class="social-more" onclick="App.toggleSocialText(${sourceIdArg(p.recordId)})">${label}</button>`;
+  let content;
+  if(segments.length > 1){
+    // 线程默认只摊开首段：整条铺开会长到看不见互动数据，后续段落点开再看
+    const segHtml = (seg, index) => `
+      <div style="${index?'margin-top:12px;padding-top:12px;border-top:1px dashed #e3e8ea;':''}">
+        ${index?`<span style="display:block;margin-bottom:5px;font-family:'Geist Mono',monospace;font-size:10.5px;font-weight:700;color:#8b98a5;">${index+1}/${segments.length}</span>`:''}
+        ${seg.text?`<div class="social-text${!index&&!open?' is-clamped':''}" style="margin-bottom:${(seg.assets.images.length||seg.assets.videos.length||seg.assets.articles.length)?'9px':'0'};">${xTextHtml(seg.text)}</div>`:''}
+        ${xMediaHtml(seg.assets, 16, seg.url || p.url)}
+      </div>`;
+    content = `<div style="margin:0 0 10px;">
+      ${segHtml(segments[0], 0)}
+      <div${open?'':' hidden'}>${segments.slice(1).map((seg, index)=>segHtml(seg, index+1)).join('')}</div>
+      ${toggle(open ? '收起线程' : `显示完整线程 · 还有 ${segments.length-1} 段`)}
+    </div>`;
+  }else{
+    const body = text
+      ? `<div style="margin:0 0 10px;">
         <div id="${tid}" class="social-text${open?'':' is-clamped'}">${xTextHtml(text)}</div>
         <button type="button" id="${tid}-more" class="social-more" hidden onclick="App.toggleSocialText(${sourceIdArg(p.recordId)})">${open?'收起':'显示更多'}</button>
       </div>`
-    : '';
+      : '';
+    content = `${body}${xMediaHtml(p.mediaAssets, 16, p.url)}`;
+  }
   return `
   <article style="background:#fff;border:1px solid #cfd9de;border-radius:16px;padding:14px 16px;color:#0f1419;">
     <div style="display:flex;align-items:center;gap:5px;margin-bottom:3px;">
@@ -1944,8 +2008,7 @@ function socialPostCardHtml(A, p){
     </div>
     <div style="padding-left:50px;">
       ${p.zhTitle?`<p style="margin:0 0 7px;font-size:14px;font-weight:700;line-height:1.5;border-left:3px solid ${A.accent};padding-left:9px;">${esc(p.zhTitle)}</p>`:''}
-      ${body}
-      ${xMediaHtml(p.mediaAssets, 16, p.url)}
+      ${content}
       ${xQuoteHtml(m.quoted)}
       <div style="display:flex;align-items:center;justify-content:space-between;max-width:430px;margin-top:2px;">
         ${act('reply', xCount(m.replies) || '0')}

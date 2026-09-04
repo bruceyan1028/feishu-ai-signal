@@ -2236,12 +2236,114 @@
         "reposts": 35,
         "quotes": 7,
         "bookmarks": 182,
-        "impressions": 73992,
+        "impressions": 74258,
         "engagement": 554,
         "is_retweet": false,
         "is_reply": false,
         "is_quote": false,
         "thread_count": 11,
+        "thread_segments": [
+          {
+            "post_id": "2094492986252099710",
+            "url": "https://x.com/dawnsongtweets/status/2094492986252099710",
+            "text": "Introducing CUA-Lite 🧵 — an open platform for computer-use agents.\n\nTraining and benchmarking CUAs (Computer-Use Agents) requires four core pieces:\n\n1️⃣ Agents — the models and the scaffolding that drives them\n2️⃣ Environments — runtime/sandboxes for agents to interact with, tasks & verifiers/graders\n3️⃣ Traces — records of agent trajectories\n4️⃣ Frameworks — to evaluate, SFT & RL-train agents\nToday, all four are fragmented.\n\nEvery agent ships with its own implementation, often in a separate repo — there is no unified way to run them all. Every environment exposes its own interface and action space, often requiring an expensive VM sandbox for each verifiable task. Traces come in incompatible formats. And without common standards across the stack, every project ends up rebuilding its own tooling/framework for eval, SFT, and RL.\n\nCUA-Lite unifies the stack:\n\n→ One standardized interface & action space for agents and environments\n→ One standardized format for agent traces\n→ One framework for evaluation, SFT & RL\n→ Across desktop, browser & mobile\n\nAnd open resources plug straight in, creating the largest open collection of CUA agents, environments and traces, all in a unified format:\n\n🤖 10+ CUAs, including GPT, Claude, Gemini, Qwen, Muse-Glimmer, UI-TARS\n🌐 15+ benchmarks, including OSWorld, WebArena & AndroidWorld\n⚡ Optional VM-free sandboxes with 30K+ verifiable tasks for training\n📚 10+ trace datasets, freely available on Hugging Face, including public datasets converted into the standardized format and fresh rollouts from frontier open-weight CUAs\n\nLed by @BerkeleyRDI , our goal is for CUA-Lite to become a community-driven, open-source ecosystem for computer-use agents.\n\nJoin the community and contribute today: bring an environment (runtime/sandbox + tasks + verifier), traces, or an agent, and plug it into CUA-Lite!",
+            "media_keys": [
+              "16_2094490928790818816"
+            ],
+            "article_urls": []
+          },
+          {
+            "post_id": "2094492988743487677",
+            "url": "https://x.com/dawnsongtweets/status/2094492988743487677",
+            "text": "[2/10] Learn more about CUA-Lite, an open platform for computer-use agents, and join the community: 👇\n\nSite: https://t.co/N6uMHTfNFr\nCode: https://t.co/NtA9x1xs3k\nData: https://t.co/yRybcZe2PN\nLeaderboard: https://t.co/ANWTWO6l3L\n\nHuge thanks to my PhD student Zhanhui Zhou @asapzzhou for spearheading the project!",
+            "media_keys": [],
+            "article_urls": [
+              "https://cua-lite.github.io",
+              "https://github.com/cua-lite/cua-lite",
+              "https://huggingface.co/cua-lite",
+              "https://cua-lite.github.io/#benchmarks"
+            ]
+          },
+          {
+            "post_id": "2094492990823923884",
+            "url": "https://x.com/dawnsongtweets/status/2094492990823923884",
+            "text": "[3/10] Computer-use agent resources are fragmented; CUA-Lite is built to close three gaps:\n\n· Frameworks are fragmented — every project rebuilds the same tooling for eval, SFT, and RL: agent loops, sandbox setup, evaluation scripts, and training infrastructure.\n\n· Traces are fragmented — there’s no standard protocol for recording rollouts, so every source uses its own format and one agent’s traces can’t easily train another.\n\n· Agents & Environments are fragmented — every environment exposes its own interface and action space, so an agent built for one doesn't run in another.",
+            "media_keys": [
+              "16_2094491232286420992"
+            ],
+            "article_urls": []
+          },
+          {
+            "post_id": "2094492992585535940",
+            "url": "https://x.com/dawnsongtweets/status/2094492992585535940",
+            "text": "[4/10] One unified framework for CUA agents: eval, SFT & RL\n\nLite.Gym provides a unified agent–environment interface, with a standardized action space for each platform — desktop, browser, and mobile — so any agent can run in any environment.\n\nCUA-Lite brings together the agents, rollout loop, sandboxes, and the eval + training stack that consumes those rollouts.\n\nOne rollout, three uses:\n\n· Eval — scored by the benchmark’s original evaluator, unchanged\n· SFT — converted by each model’s adapter into its native training format\n· RL — scored by the task’s verifiable reward, which directly drives RL updates\n\nSame interface. Same rollouts. Eval → SFT → RL.",
+            "media_keys": [
+              "16_2094491516056272896"
+            ],
+            "article_urls": []
+          },
+          {
+            "post_id": "2094492994397409541",
+            "url": "https://x.com/dawnsongtweets/status/2094492994397409541",
+            "text": "[5/10] One schema, any dataset, any agent.\n\nLiteSample is CUA-Lite’s unified data schema across desktop, browser, and mobile — spanning environments, agents, and task types. Convert a dataset once, and any agent can train on it.\n\nCUA-Lite has already converted 10+ SFT datasets into LiteSample, alongside fresh rollouts from frontier open-weight CUAs. A lightweight model adapter then transforms each LiteSample into the exact training format each model expects.\n\nThe result: one agent’s rollouts can train any other agent.\n\nhttps://t.co/yRybcZe2PN",
+            "media_keys": [
+              "16_2094491730787885056"
+            ],
+            "article_urls": []
+          },
+          {
+            "post_id": "2094492996343668884",
+            "url": "https://x.com/dawnsongtweets/status/2094492996343668884",
+            "text": "[6/10] One command, any benchmark.\n\n10+ CUAs and 15+ benchmarks are already integrated into CUA-Lite’s unified framework, and the leaderboard is live, with every score independently reproduced by us.\n\n🖥️ Desktop: OSWorld, OSWorld-2, WindowsAgentArena, CUA-Bench\n🌐 Browser: WebArena, VisualWebArena, WebVoyager, Online-Mind2Web, MiniWoB, WebGym\n📱 Mobile: AndroidWorld, AndroidLab, MobileWorld, MobileGym\n🎯 Grounding: ScreenSpot-Pro, OSWorld-G\n\nOne script evaluates any agent on any benchmark: set --model-id (plus its agent config) and --env-id for the benchmark — and run.\n\nhttps://t.co/ANWTWO6l3L",
+            "media_keys": [
+              "16_2094491880281247744"
+            ],
+            "article_urls": []
+          },
+          {
+            "post_id": "2094492998482657660",
+            "url": "https://x.com/dawnsongtweets/status/2094492998482657660",
+            "text": "[7/10] VM-free OS(World) at Scale\n\nCUA-Lite also provides optional VM-free sandboxes for hosting environments — lightweight, highly optimized containers that reproduce public benchmarks and support verifiable tasks for training any agent.\n\nLite.OSWorld is the first: it reproduces OSWorld with the same tasks and evaluators, but runs in a Docker container instead of a VM. No /dev/kvm, so it runs anywhere Docker does — using less than ¼ the memory and CPU resources.",
+            "media_keys": [
+              "16_2094492125060878336"
+            ],
+            "article_urls": []
+          },
+          {
+            "post_id": "2094493000328163486",
+            "url": "https://x.com/dawnsongtweets/status/2094493000328163486",
+            "text": "[8/10] Sandboxes & verifiable tasks\n\nThe VM-free container isn't just for OSWorld — it's the foundation for CUA-Lite's family of sandboxes, already supporting 30K+ verifiable tasks and verifiers. Tasks range from everyday browser and desktop workflows to NASA's GMAT for spacecraft missions and PyMOL for molecular exploration and analysis, enabling many sandbox instances running in parallel on a single machine.\n\nFour sandbox families share this foundation today, each re-hosting or extending public suites:\n\n→ Lite.OSWorld: OSWorld's 369 benchmark tasks + 2K+ synthesized tasks\n→ Lite.ScaleCUA: 20K+ tasks perturbed from OSWorld evaluations\n→ Lite.CUAGym: browser + desktop tasks across mock sites and real apps\n→ Lite.CUAWorld: 40 professional applications across ~25 expert domains",
+            "media_keys": [
+              "16_2094492394888826881"
+            ],
+            "article_urls": []
+          },
+          {
+            "post_id": "2094493002274357674",
+            "url": "https://x.com/dawnsongtweets/status/2094493002274357674",
+            "text": "[9/10] SFT &amp; RL, any open agent\n\nSFT on CUA-Lite’s public rollout data, then RL in its environments — GRPO, GSPO, and beyond, built on Slime.\n\nTrain any open agent on any data, in any environment. https://t.co/8LmYLG0KID",
+            "media_keys": [
+              "3_2094492574686089216"
+            ],
+            "article_urls": []
+          },
+          {
+            "post_id": "2094493004027556064",
+            "url": "https://x.com/dawnsongtweets/status/2094493004027556064",
+            "text": "[10/10] Call for contributors\n\nCUA-Lite is just getting started. Our goal is to build a community-driven, open-source ecosystem for computer-use agents.\n\nContribute today: bring an environment (sandbox + tasks + verifier), traces, or an agent — and plug it into CUA-Lite! 🚀\n\nhttps://t.co/N6uMHTfNFr",
+            "media_keys": [
+              "3_2094492808065486848"
+            ],
+            "article_urls": []
+          },
+          {
+            "post_id": "2094493006468690233",
+            "url": "https://x.com/dawnsongtweets/status/2094493006468690233",
+            "text": "Finally, CUA-Lite is a platform built on the incredible work of the broader CUA community — it wouldn’t be possible without the task suites, benchmarks, and datasets created and shared by so many teams.\n\nAgents — GPT (@OpenAI), Claude (@AnthropicAI), Gemini (@GoogleDeepMind), Qwen (@Alibaba_Qwen), Fara (@MSFTResearch, @AhmedHAwadallah), GELab (@StepFun_ai), UI-TARS (@agent_tars), MAI-UI (Tongyi-MAI) and EvoCUA (Meituan).\n\nBenchmarks — @XLangNLP's OSWorld (@TianbaoX, @taoyds), OSWorld-2 (@yuan_mengq43669) and OSWorld-G (@jiaqideng07, @xiaochuanlee, @junlin45300, @SFResearch); Microsoft's WindowsAgentArena (@rogerio_bonatti) and WebGym (@jackbot_cs); @LTIatCMU's WebArena (@shuyanzh36, @gneubig) and VisualWebArena (@kohjingyu, @dan_fried), with MiniWoB (@stanfordnlp), all run through @ServiceNowRSRCH's BrowserGym (@tlsdc_); @osunlp's Online-Mind2Web (@xue_tianci, @ysu_nlp); WebVoyager (@wyu_nd); ScreenSpot-Pro (@kxli_2000); @GoogleDeepMind's AndroidWorld; @thukeg's AndroidLab (@ericdongyx); Tongyi-MAI's MobileWorld; CASIA's MobileGym; and @trycua's Cua-Bench.\n\nSandboxes — our Lite.* family re-hosts @thukeg's SCALE-CUA, @LTIatCMU's gym-anything (@PranjalAggarw16, @gneubig, @wellecks) and @XLangNLP's CUA-Gym (@BowenWangNLP, @taoyds). Our RL builds on @thukeg's Slime.\n\nSpecial thanks to Zhengyuan, Kevin and Lijuan at Microsoft AI for helpful discussions, and for generous API and compute credits.\n\nThanks also to @LambdaAPI for part of our compute.\nIf we’re hosting or integrating your work and you’d like the attribution or presentation changed, please let us know — we’ll be happy to update it.",
+            "media_keys": [],
+            "article_urls": []
+          }
+        ],
         "edit_history_tweet_ids": [
           "2094492986252099710"
         ],
@@ -2259,7 +2361,8 @@
         "account_tier": "P0",
         "social_score": 86,
         "gate": "direct"
-      }
+      },
+      "socialText": "Introducing CUA-Lite 🧵 — an open platform for computer-use agents.\n\nTraining and benchmarking CUAs (Computer-Use Agents) requires four core pieces:\n\n1️⃣ Agents — the models and the scaffolding that drives them\n2️⃣ Environments — runtime/sandboxes for agents to interact with, tasks & verifiers/graders\n3️⃣ Traces — records of agent trajectories\n4️⃣ Frameworks — to evaluate, SFT & RL-train agents\nToday, all four are fragmented.\n\nEvery agent ships with its own implementation, often in a separate repo — there is no unified way to run them all. Every environment exposes its own interface and action space, often requiring an expensive VM sandbox for each verifiable task. Traces come in incompatible formats. And without common standards across the stack, every project ends up rebuilding its own tooling/framework for eval, SFT, and RL.\n\nCUA-Lite unifies the stack:\n\n→ One standardized interface & action space for agents and environments\n→ One standardized format for agent traces\n→ One framework for evaluation, SFT & RL\n→ Across desktop, browser & mobile\n\nAnd open resources plug straight in, creating the largest open collection of CUA agents, environments and traces, all in a unified format:\n\n🤖 10+ CUAs, including GPT, Claude, Gemini, Qwen, Muse-Glimmer, UI-TARS\n🌐 15+ benchmarks, including OSWorld, WebArena & AndroidWorld\n⚡ Optional VM-free sandboxes with 30K+ verifiable tasks for training\n📚 10+ trace datasets, freely available on Hugging Face, including public datasets converted into the standardized format and fresh rollouts from frontier open-weight CUAs\n\nLed by @BerkeleyRDI , our goal is for CUA-Lite to become a community-driven, open-source ecosystem for computer-use agents.\n\nJoin the community and contribute today: bring an environment (runtime/sandbox + tasks + verifier), traces, or an agent, and plug it into CUA-Lite!\n\n[2/10] Learn more about CUA-Lite, an open platform for computer-use agents, and join the community: 👇\n\nSite: https://t.co/N6uMHTfNFr\nCode: https://t.co/NtA9x1xs3k\nData: https://t.co/yRybcZe2PN\nLeaderboard: https://t.co/ANWTWO6l3L\n\nHuge thanks to my PhD student Zhanhui Zhou @asapzzhou for spearheading the project!\n\n[3/10] Computer-use agent resources are fragmented; CUA-Lite is built to close three gaps:\n\n· Frameworks are fragmented — every project rebuilds the same tooling for eval, SFT, and RL: agent loops, sandbox setup, evaluation scripts, and training infrastructure.\n\n· Traces are fragmented — there’s no standard protocol for recording rollouts, so every source uses its own format and one agent’s traces can’t easily train another.\n\n· Agents & Environments are fragmented — every environment exposes its own interface and action space, so an agent built for one doesn't run in another.\n\n[4/10] One unified framework for CUA agents: eval, SFT & RL\n\nLite.Gym provides a unified agent–environment interface, with a standardized action space for each platform — desktop, browser, and mobile — so any agent can run in any environment.\n\nCUA-Lite brings together the agents, rollout loop, sandboxes, and the eval + training stack that consumes those rollouts.\n\nOne rollout, three uses:\n\n· Eval — scored by the benchmark’s original evaluator, unchanged\n· SFT — converted by each model’s adapter into its native training format\n· RL — scored by the task’s verifiable reward, which directly drives RL updates\n\nSame interface. Same rollouts. Eval → SFT → RL.\n\n[5/10] One schema, any dataset, any agent.\n\nLiteSample is CUA-Lite’s unified data schema across desktop, browser, and mobile — spanning environments, agents, and task types. Convert a dataset once, and any agent can train on it.\n\nCUA-Lite has already converted 10+ SFT datasets into LiteSample, alongside fresh rollouts from frontier open-weight CUAs. A lightweight model adapter then transforms each LiteSample into the exact training format each model expects.\n\nThe result: one agent’s rollouts can train any other agent.\n\nhttps://t.co/yRybcZe2PN\n\n[6/10] One command, any benchmark.\n\n10+ CUAs and 15+ benchmarks are already integrated into CUA-Lite’s unified framework, and the leaderboard is live, with every score independently reproduced by us.\n\n🖥️ Desktop: OSWorld, OSWorld-2, WindowsAgentArena, CUA-Bench\n🌐 Browser: WebArena, VisualWebArena, WebVoyager, Online-Mind2Web, MiniWoB, WebGym\n📱 Mobile: AndroidWorld, AndroidLab, MobileWorld, MobileGym\n🎯 Grounding: ScreenSpot-Pro, OSWorld-G\n\nOne script evaluates any agent on any benchmark: set --model-id (plus its agent config) and --env-id for the benchmark — and run.\n\nhttps://t.co/ANWTWO6l3L\n\n[7/10] VM-free OS(World) at Scale\n\nCUA-Lite also provides optional VM-free sandboxes for hosting environments — lightweight, highly optimized containers that reproduce public benchmarks and support verifiable tasks for training any agent.\n\nLite.OSWorld is the first: it reproduces OSWorld with the same tasks and evaluators, but runs in a Docker container instead of a VM. No /dev/kvm, so it runs anywhere Docker does — using less than ¼ the memory and CPU resources.\n\n[8/10] Sandboxes & verifiable tasks\n\nThe VM-free container isn't just for OSWorld — it's the foundation for CUA-Lite's family of sandboxes, already supporting 30K+ verifiable tasks and verifiers. Tasks range from everyday browser and desktop workflows to NASA's GMAT for spacecraft missions and PyMOL for molecular exploration and analysis, enabling many sandbox instances running in parallel on a single machine.\n\nFour sandbox families share this foundation today, each re-hosting or extending public suites:\n\n→ Lite.OSWorld: OSWorld's 369 benchmark tasks + 2K+ synthesized tasks\n→ Lite.ScaleCUA: 20K+ tasks perturbed from OSWorld evaluations\n→ Lite.CUAGym: browser + desktop tasks across mock sites and real apps\n→ Lite.CUAWorld: 40 professional applications across ~25 expert domains\n\n[9/10] SFT & RL, any open agent\n\nSFT on CUA-Lite’s public rollout data, then RL in its environments — GRPO, GSPO, and beyond, built on Slime.\n\nTrain any open agent on any data, in any environment. https://t.co/8LmYLG0KID\n\n[10/10] Call for contributors\n\nCUA-Lite is just getting started. Our goal is to build a community-driven, open-source ecosystem for computer-use agents.\n\nContribute today: bring an environment (sandbox + tasks + verifier), traces, or an agent — and plug it into CUA-Lite! 🚀\n\nhttps://t.co/N6uMHTfNFr\n\nFinally, CUA-Lite is a platform built on the incredible work of the broader CUA community — it wouldn’t be possible without the task suites, benchmarks, and datasets created and shared by so many teams.\n\nAgents — GPT (@OpenAI), Claude (@AnthropicAI), Gemini (@GoogleDeepMind), Qwen (@Alibaba_Qwen), Fara (@MSFTResearch, @AhmedHAwadallah), GELab (@StepFun_ai), UI-TARS (@agent_tars), MAI-UI (Tongyi-MAI) and EvoCUA (Meituan).\n\nBenchmarks — @XLangNLP's OSWorld (@TianbaoX, @taoyds), OSWorld-2 (@yuan_mengq43669) and OSWorld-G (@jiaqideng07, @xiaochuanlee, @junlin45300, @SFResearch); Microsoft's WindowsAgentArena (@rogerio_bonatti) and WebGym (@jackbot_cs); @LTIatCMU's WebArena (@shuyanzh36, @gneubig) and VisualWebArena (@kohjingyu, @dan_fried), with MiniWoB (@stanfordnlp), all run through @ServiceNowRSRCH's BrowserGym (@tlsdc_); @osunlp's Online-Mind2Web (@xue_tianci, @ysu_nlp); WebVoyager (@wyu_nd); ScreenSpot-Pro (@kxli_2000); @GoogleDeepMind's AndroidWorld; @thukeg's AndroidLab (@ericdongyx); Tongyi-MAI's MobileWorld; CASIA's MobileGym; and @trycua's Cua-Bench.\n\nSandboxes — our Lite.* family re-hosts @thukeg's SCALE-CUA, @LTIatCMU's gym-anything (@PranjalAggarw16, @gneubig, @wellecks) and @XLangNLP's CUA-Gym (@BowenWangNLP, @taoyds). Our RL builds on @thukeg's Slime.\n\nSpecial thanks to Zhengyuan, Kevin and Lijuan at Microsoft AI for helpful discussions, and for generous API and compute credits.\n\nThanks also to @LambdaAPI for part of our compute.\nIf we’re hosting or integrating your work and you’d like the attribution or presentation changed, please let us know — we’ll be happy to update it."
     },
     {
       "recordId": "recvueCW1yO4Lj",
@@ -2351,7 +2454,8 @@
         "llm_event_type": "产品发布/能力更新",
         "llm_confidence": 0,
         "gate": "llm"
-      }
+      },
+      "socialText": "Two months ago, we started the mission to “build OpenClaw with OpenClaw,” and bit by bit, we moved everyone from using their local coding harness to using https://t.co/ZFauM82U4k - our shared agent that knows what everyone’s working on and orchestrates it all.\n\nMultiplayer coding + infinite compute with nodes and cloud sessions has been a game changer for how we build.\n\nLocal harnesses feel like relics of the past now."
     },
     {
       "recordId": "recvueCW1yH5uV",
@@ -2379,7 +2483,21 @@
       "imageUrl": "",
       "mediaAssets": {
         "images": [],
-        "videos": []
+        "videos": [],
+        "articles": [
+          {
+            "url": "https://openai.com/index/hugging-face-incident-and-the-road-ahead/",
+            "title": "The Hugging Face incident and the road ahead",
+            "description": "OpenAI shares findings from the Hugging Face security incident and the steps we’re taking to strengthen AI model security, monitoring, and alignment.",
+            "image": "https://pbs.twimg.com/news_img/2095237198757122048/eQUosVrt?format=jpg&name=orig"
+          },
+          {
+            "url": "https://www.cybergym.io/",
+            "title": "Frontier AI Cybersecurity Observatory",
+            "description": "A cybersecurity observatory of benchmarks measuring how well AI agents handle real-world vulnerabilities.",
+            "image": "https://pbs.twimg.com/news_img/2094208778988351488/d32JSMRi?format=jpg&name=orig"
+          }
+        ]
       },
       "editorialStructure": "",
       "socialMetrics": {
@@ -2397,12 +2515,31 @@
         "reposts": 19,
         "quotes": 6,
         "bookmarks": 74,
-        "impressions": 23942,
+        "impressions": 23947,
         "engagement": 378,
         "is_retweet": false,
         "is_reply": false,
         "is_quote": true,
         "thread_count": 2,
+        "thread_segments": [
+          {
+            "post_id": "2094208718896558526",
+            "url": "https://x.com/dawnsongtweets/status/2094208718896558526",
+            "text": "I completely agree. This may be one of the clearest signs yet that we’re entering a new era of AI agents.\n\nWe developed ExploitGym to measure whether AI agents can turn real-world vulnerabilities into working exploits. But what happened during the evaluation at OpenAI went beyond what the benchmark was designed to measure: agents found unintended paths, coordinated across instances, worked around containment controls, and compromised real-world infrastructure.\n\nAs agents become more capable and autonomous, ensuring they are properly aligned, that they understand and respect the boundaries of what they are authorized to do, is becoming increasingly critical.\n\nLots to do as next step: we need to continue measuring frontier cyber capabilities as they evolve, and urgently strengthen agent alignment, monitoring, containment, and secure evaluation/training infrastructure. These are becoming essential safeguards as agent capabilities rapidly advance.\n\nThe question is no longer just what AI agents can do. It’s what they will do when we haven’t anticipated the path they take.",
+            "media_keys": [],
+            "article_urls": []
+          },
+          {
+            "post_id": "2094208720767250732",
+            "url": "https://x.com/dawnsongtweets/status/2094208720767250732",
+            "text": "More info on ExploitGym and the OpenAI/Hugging Face incident:\n\nhttps://t.co/WvYcC1OSZA\n\nhttps://t.co/uLjUZwOtOH",
+            "media_keys": [],
+            "article_urls": [
+              "https://openai.com/index/hugging-face-incident-and-the-road-ahead/",
+              "https://www.cybergym.io/"
+            ]
+          }
+        ],
         "edit_history_tweet_ids": [
           "2094208718896558526"
         ],
@@ -2433,7 +2570,8 @@
         "account_tier": "P0",
         "social_score": 74,
         "gate": "direct"
-      }
+      },
+      "socialText": "I completely agree. This may be one of the clearest signs yet that we’re entering a new era of AI agents.\n\nWe developed ExploitGym to measure whether AI agents can turn real-world vulnerabilities into working exploits. But what happened during the evaluation at OpenAI went beyond what the benchmark was designed to measure: agents found unintended paths, coordinated across instances, worked around containment controls, and compromised real-world infrastructure.\n\nAs agents become more capable and autonomous, ensuring they are properly aligned, that they understand and respect the boundaries of what they are authorized to do, is becoming increasingly critical.\n\nLots to do as next step: we need to continue measuring frontier cyber capabilities as they evolve, and urgently strengthen agent alignment, monitoring, containment, and secure evaluation/training infrastructure. These are becoming essential safeguards as agent capabilities rapidly advance.\n\nThe question is no longer just what AI agents can do. It’s what they will do when we haven’t anticipated the path they take.\n\nMore info on ExploitGym and the OpenAI/Hugging Face incident:\n\nhttps://t.co/WvYcC1OSZA\n\nhttps://t.co/uLjUZwOtOH"
     },
     {
       "recordId": "recvueCW1yQo3w",
@@ -2488,12 +2626,30 @@
         "reposts": 6,
         "quotes": 0,
         "bookmarks": 26,
-        "impressions": 18589,
+        "impressions": 18593,
         "engagement": 117,
         "is_retweet": false,
         "is_reply": false,
         "is_quote": true,
         "thread_count": 2,
+        "thread_segments": [
+          {
+            "post_id": "2093747765193089380",
+            "url": "https://x.com/dawnsongtweets/status/2093747765193089380",
+            "text": "🤔 Wow, this looks quite unexpected: ❤️ 343 · 🔁 78 · 🔖 257, with only 30K views!\n\nEither X is remarkably good at finding exactly the right audience, or it’s failing to recognize that this post deserves broader reach.\n\nWhich is it? Poll below 👇 https://t.co/8i3KuWJ3hI https://t.co/3tMHKBvyv4",
+            "media_keys": [
+              "3_2093744550858887168"
+            ],
+            "article_urls": []
+          },
+          {
+            "post_id": "2093748955851170040",
+            "url": "https://x.com/dawnsongtweets/status/2093748955851170040",
+            "text": "What’s the explanation?",
+            "media_keys": [],
+            "article_urls": []
+          }
+        ],
         "edit_history_tweet_ids": [
           "2093747765193089380"
         ],
@@ -2533,7 +2689,8 @@
         "account_tier": "P0",
         "social_score": 76,
         "gate": "direct"
-      }
+      },
+      "socialText": "🤔 Wow, this looks quite unexpected: ❤️ 343 · 🔁 78 · 🔖 257, with only 30K views!\n\nEither X is remarkably good at finding exactly the right audience, or it’s failing to recognize that this post deserves broader reach.\n\nWhich is it? Poll below 👇 https://t.co/8i3KuWJ3hI https://t.co/3tMHKBvyv4\n\nWhat’s the explanation?"
     }
   ],
   "briefRecordId": "recvtWeBTin39T",

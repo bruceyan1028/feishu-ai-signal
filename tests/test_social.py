@@ -156,6 +156,83 @@ class SocialSourceTest(unittest.TestCase):
         self.assertEqual([item["metrics"]["post_id"] for item in kept], ["100"])
         self.assertEqual(stats["reply"], 1)
 
+    def test_thread_segments_pair_each_post_with_its_own_media(self) -> None:
+        """线程各段的图/视频要跟着自己那段走，卡片才不会「文字一堆、素材一堆」。"""
+        root = _item(post_id="300", conversation_id="300", text="1/ Introducing CUA-Lite.")
+        root["attachments"] = {"media_keys": ["mk-a"]}
+        second = _item(
+            post_id="301",
+            conversation_id="300",
+            text="2/ Benchmark coverage across desktop and browser.",
+            refs=[{"type": "replied_to", "id": "300"}],
+        )
+        second["attachments"] = {"media_keys": ["mk-b"]}
+        third = _item(
+            post_id="302",
+            conversation_id="300",
+            text="3/ Code and docs are open now.",
+            refs=[{"type": "replied_to", "id": "301"}],
+        )
+        third["entities"] = {
+            "urls": [
+                {
+                    "expanded_url": "https://github.com/cua-lite/cua-lite",
+                    "title": "CUA-Lite",
+                    "description": "Computer-use agents made simple",
+                }
+            ]
+        }
+        media = {
+            "mk-a": {"media_key": "mk-a", "type": "photo", "url": "https://pbs.twimg.com/a.jpg"},
+            "mk-b": {
+                "media_key": "mk-b",
+                "type": "video",
+                "preview_image_url": "https://pbs.twimg.com/b.jpg",
+                "variants": [
+                    {
+                        "content_type": "video/mp4",
+                        "bit_rate": 832000,
+                        "url": "https://video.twimg.com/b.mp4",
+                    }
+                ],
+            },
+        }
+        items = social._build_account_items(
+            [root, second, third],
+            media,
+            feed=_feed(),
+            username="dawnsongtweets",
+            profile={"name": "Dawn Song", "followers": 100000},
+        )
+        self.assertEqual(len(items), 1)
+        segments = items[0]["metrics"]["thread_segments"]
+        self.assertEqual([seg["post_id"] for seg in segments], ["300", "301", "302"])
+        self.assertEqual(segments[0]["media_keys"], ["mk-a"])
+        self.assertEqual(segments[1]["media_keys"], ["mk-b"])
+        self.assertEqual(segments[2]["media_keys"], [])
+        self.assertEqual(segments[2]["article_urls"], ["https://github.com/cua-lite/cua-lite"])
+        self.assertEqual(
+            segments[1]["url"], "https://x.com/dawnsongtweets/status/301"
+        )
+        # 段里只存 key，资源实体仍只在整条帖子的 media_assets 里留一份
+        self.assertEqual(
+            [asset["id"] for asset in items[0]["media_assets"]["images"]], ["mk-a"]
+        )
+        self.assertEqual(
+            [asset["id"] for asset in items[0]["media_assets"]["videos"]], ["mk-b"]
+        )
+        self.assertNotIn("url", segments[0]["media_keys"])
+
+    def test_single_post_has_no_thread_segments(self) -> None:
+        items = social._build_account_items(
+            [_item(post_id="400")],
+            {},
+            feed=_feed(),
+            username="openai",
+            profile={"followers": 1000},
+        )
+        self.assertEqual(items[0]["metrics"]["thread_segments"], [])
+
     def test_repost_reply_noise_and_short_posts_are_hard_filtered(self) -> None:
         posts = [
             _item(post_id="1", refs=[{"type": "retweeted", "id": "0"}]),

@@ -167,10 +167,18 @@ class SeedFileIntegrityTest(unittest.TestCase):
             sources.map_feed_sources,
             sources.map_media_sources,
             sources.map_podcast_sources,
-            sources.map_social_sources,
             sources.map_scrape_sources,
         ):
             claimed |= {feed["id"] for feed in mapper(self.records)}
+        # Social 源的账号白名单在二级参数里，不喂进去 mapper 一个都认不出来
+        social_params = {
+            source_id: cfg.get("params") or {}
+            for source_id, cfg in self.typed.items()
+            if cfg.get("entity_type") == "social"
+        }
+        claimed |= {
+            feed["id"] for feed in sources.map_social_sources(self.records, social_params)
+        }
         orphans = sorted(
             row["source_id"]
             for row in self.rows

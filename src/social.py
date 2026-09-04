@@ -514,6 +514,38 @@ def _thread_groups(posts: list[dict[str, Any]]) -> list[tuple[str, list[dict[str
     return result
 
 
+def _thread_segments(posts: list[dict[str, Any]], username: str) -> list[dict[str, Any]]:
+    """线程逐段留下「这段的文字 + 这段自己的图/视频/文章」，卡片才能一一对应地渲染。
+
+    段里只记 media_key 与文章链接，资源实体仍读整条帖子的 media_assets：URL 不抄两份，
+    publish 端若对展示媒体做过增删，按 key 取不到就自然少一张，不会渲染出失效地址。
+    """
+    segments: list[dict[str, Any]] = []
+    for post in posts:
+        text = _post_full_text(post)
+        media_keys = [
+            str(key)
+            for key in (post.get("attachments") or {}).get("media_keys") or []
+            if str(key)
+        ]
+        article_urls = [
+            str(card.get("url") or "") for card in _article_cards([post]) if card.get("url")
+        ]
+        if not (text or media_keys or article_urls):
+            continue
+        post_id = str(post.get("id") or "")
+        segments.append(
+            {
+                "post_id": post_id,
+                "url": f"https://x.com/{username}/status/{post_id}" if post_id else "",
+                "text": text,
+                "media_keys": media_keys,
+                "article_urls": article_urls,
+            }
+        )
+    return segments
+
+
 def _build_account_items(
     posts: list[dict[str, Any]],
     media_by_key: dict[str, dict[str, Any]],
@@ -539,6 +571,7 @@ def _build_account_items(
         cards = _article_cards(thread_posts)
         image_url, assets = _media_assets(thread_posts, media_by_key)
         assets["articles"] = cards
+        segments = _thread_segments(thread_posts, username)
         has_media = bool(assets.get("images") or assets.get("videos"))
         if not texts and not cards and not has_media:
             continue
@@ -606,6 +639,8 @@ def _build_account_items(
                     "is_reply": is_reply,
                     "is_quote": is_quote,
                     "thread_count": len(thread_posts),
+                    # 单条帖子没有配对问题，只有线程才需要按段落分组
+                    "thread_segments": segments if len(segments) > 1 else [],
                     "edit_history_tweet_ids": edit_history,
                     "own_text": own_text,
                     "own_chars": len(own_text),

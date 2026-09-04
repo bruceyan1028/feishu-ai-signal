@@ -1484,12 +1484,30 @@
         "reposts": 6,
         "quotes": 0,
         "bookmarks": 26,
-        "impressions": 18589,
+        "impressions": 18593,
         "engagement": 117,
         "is_retweet": false,
         "is_reply": false,
         "is_quote": true,
         "thread_count": 2,
+        "thread_segments": [
+          {
+            "post_id": "2093747765193089380",
+            "url": "https://x.com/dawnsongtweets/status/2093747765193089380",
+            "text": "🤔 Wow, this looks quite unexpected: ❤️ 343 · 🔁 78 · 🔖 257, with only 30K views!\n\nEither X is remarkably good at finding exactly the right audience, or it’s failing to recognize that this post deserves broader reach.\n\nWhich is it? Poll below 👇 https://t.co/8i3KuWJ3hI https://t.co/3tMHKBvyv4",
+            "media_keys": [
+              "3_2093744550858887168"
+            ],
+            "article_urls": []
+          },
+          {
+            "post_id": "2093748955851170040",
+            "url": "https://x.com/dawnsongtweets/status/2093748955851170040",
+            "text": "What’s the explanation?",
+            "media_keys": [],
+            "article_urls": []
+          }
+        ],
         "edit_history_tweet_ids": [
           "2093747765193089380"
         ],
@@ -1529,7 +1547,8 @@
         "account_tier": "P0",
         "social_score": 76,
         "gate": "direct"
-      }
+      },
+      "socialText": "🤔 Wow, this looks quite unexpected: ❤️ 343 · 🔁 78 · 🔖 257, with only 30K views!\n\nEither X is remarkably good at finding exactly the right audience, or it’s failing to recognize that this post deserves broader reach.\n\nWhich is it? Poll below 👇 https://t.co/8i3KuWJ3hI https://t.co/3tMHKBvyv4\n\nWhat’s the explanation?"
     }
   ],
   "briefRecordId": "recvtL0u0W6SFg",

@@ -2305,7 +2305,8 @@
         "llm_event_type": "产品发布/能力更新",
         "llm_confidence": 0,
         "gate": "llm"
-      }
+      },
+      "socialText": "Two months ago, we started the mission to “build OpenClaw with OpenClaw,” and bit by bit, we moved everyone from using their local coding harness to using https://t.co/ZFauM82U4k - our shared agent that knows what everyone’s working on and orchestrates it all.\n\nMultiplayer coding + infinite compute with nodes and cloud sessions has been a game changer for how we build.\n\nLocal harnesses feel like relics of the past now."
     },
     {
       "recordId": "recvueCW1yH5uV",
@@ -2333,7 +2334,21 @@
       "imageUrl": "",
       "mediaAssets": {
         "images": [],
-        "videos": []
+        "videos": [],
+        "articles": [
+          {
+            "url": "https://openai.com/index/hugging-face-incident-and-the-road-ahead/",
+            "title": "The Hugging Face incident and the road ahead",
+            "description": "OpenAI shares findings from the Hugging Face security incident and the steps we’re taking to strengthen AI model security, monitoring, and alignment.",
+            "image": "https://pbs.twimg.com/news_img/2095237198757122048/eQUosVrt?format=jpg&name=orig"
+          },
+          {
+            "url": "https://www.cybergym.io/",
+            "title": "Frontier AI Cybersecurity Observatory",
+            "description": "A cybersecurity observatory of benchmarks measuring how well AI agents handle real-world vulnerabilities.",
+            "image": "https://pbs.twimg.com/news_img/2094208778988351488/d32JSMRi?format=jpg&name=orig"
+          }
+        ]
       },
       "editorialStructure": "",
       "socialMetrics": {
@@ -2351,12 +2366,31 @@
         "reposts": 19,
         "quotes": 6,
         "bookmarks": 74,
-        "impressions": 23942,
+        "impressions": 23947,
         "engagement": 378,
         "is_retweet": false,
         "is_reply": false,
         "is_quote": true,
         "thread_count": 2,
+        "thread_segments": [
+          {
+            "post_id": "2094208718896558526",
+            "url": "https://x.com/dawnsongtweets/status/2094208718896558526",
+            "text": "I completely agree. This may be one of the clearest signs yet that we’re entering a new era of AI agents.\n\nWe developed ExploitGym to measure whether AI agents can turn real-world vulnerabilities into working exploits. But what happened during the evaluation at OpenAI went beyond what the benchmark was designed to measure: agents found unintended paths, coordinated across instances, worked around containment controls, and compromised real-world infrastructure.\n\nAs agents become more capable and autonomous, ensuring they are properly aligned, that they understand and respect the boundaries of what they are authorized to do, is becoming increasingly critical.\n\nLots to do as next step: we need to continue measuring frontier cyber capabilities as they evolve, and urgently strengthen agent alignment, monitoring, containment, and secure evaluation/training infrastructure. These are becoming essential safeguards as agent capabilities rapidly advance.\n\nThe question is no longer just what AI agents can do. It’s what they will do when we haven’t anticipated the path they take.",
+            "media_keys": [],
+            "article_urls": []
+          },
+          {
+            "post_id": "2094208720767250732",
+            "url": "https://x.com/dawnsongtweets/status/2094208720767250732",
+            "text": "More info on ExploitGym and the OpenAI/Hugging Face incident:\n\nhttps://t.co/WvYcC1OSZA\n\nhttps://t.co/uLjUZwOtOH",
+            "media_keys": [],
+            "article_urls": [
+              "https://openai.com/index/hugging-face-incident-and-the-road-ahead/",
+              "https://www.cybergym.io/"
+            ]
+          }
+        ],
         "edit_history_tweet_ids": [
           "2094208718896558526"
         ],
@@ -2387,7 +2421,8 @@
         "account_tier": "P0",
         "social_score": 74,
         "gate": "direct"
-      }
+      },
+      "socialText": "I completely agree. This may be one of the clearest signs yet that we’re entering a new era of AI agents.\n\nWe developed ExploitGym to measure whether AI agents can turn real-world vulnerabilities into working exploits. But what happened during the evaluation at OpenAI went beyond what the benchmark was designed to measure: agents found unintended paths, coordinated across instances, worked around containment controls, and compromised real-world infrastructure.\n\nAs agents become more capable and autonomous, ensuring they are properly aligned, that they understand and respect the boundaries of what they are authorized to do, is becoming increasingly critical.\n\nLots to do as next step: we need to continue measuring frontier cyber capabilities as they evolve, and urgently strengthen agent alignment, monitoring, containment, and secure evaluation/training infrastructure. These are becoming essential safeguards as agent capabilities rapidly advance.\n\nThe question is no longer just what AI agents can do. It’s what they will do when we haven’t anticipated the path they take.\n\nMore info on ExploitGym and the OpenAI/Hugging Face incident:\n\nhttps://t.co/WvYcC1OSZA\n\nhttps://t.co/uLjUZwOtOH"
     },
     {
       "recordId": "recvueCW1yQo3w",
@@ -2442,12 +2477,30 @@
         "reposts": 6,
         "quotes": 0,
         "bookmarks": 26,
-        "impressions": 18589,
+        "impressions": 18593,
         "engagement": 117,
         "is_retweet": false,
         "is_reply": false,
         "is_quote": true,
         "thread_count": 2,
+        "thread_segments": [
+          {
+            "post_id": "2093747765193089380",
+            "url": "https://x.com/dawnsongtweets/status/2093747765193089380",
+            "text": "🤔 Wow, this looks quite unexpected: ❤️ 343 · 🔁 78 · 🔖 257, with only 30K views!\n\nEither X is remarkably good at finding exactly the right audience, or it’s failing to recognize that this post deserves broader reach.\n\nWhich is it? Poll below 👇 https://t.co/8i3KuWJ3hI https://t.co/3tMHKBvyv4",
+            "media_keys": [
+              "3_2093744550858887168"
+            ],
+            "article_urls": []
+          },
+          {
+            "post_id": "2093748955851170040",
+            "url": "https://x.com/dawnsongtweets/status/2093748955851170040",
+            "text": "What’s the explanation?",
+            "media_keys": [],
+            "article_urls": []
+          }
+        ],
         "edit_history_tweet_ids": [
           "2093747765193089380"
         ],
@@ -2487,7 +2540,8 @@
         "account_tier": "P0",
         "social_score": 76,
         "gate": "direct"
-      }
+      },
+      "socialText": "🤔 Wow, this looks quite unexpected: ❤️ 343 · 🔁 78 · 🔖 257, with only 30K views!\n\nEither X is remarkably good at finding exactly the right audience, or it’s failing to recognize that this post deserves broader reach.\n\nWhich is it? Poll below 👇 https://t.co/8i3KuWJ3hI https://t.co/3tMHKBvyv4\n\nWhat’s the explanation?"
     }
   ],
   "briefRecordId": "recvtQ4uIWJwIS",
