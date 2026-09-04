@@ -1,10 +1,10 @@
 {
-  "generatedAt": "2026-09-04T17:49:49+08:00",
+  "generatedAt": "2026-09-04T17:53:08+08:00",
   "leaderboard": {
     "source": "Artificial Analysis",
     "sourceUrl": "https://artificialanalysis.ai/",
     "metric": "智能指数",
-    "updatedAt": "2026-09-04T17:49:50+08:00",
+    "updatedAt": "2026-09-04T17:53:16+08:00",
     "error": "",
     "models": [
       {
@@ -182,7 +182,7 @@
         "label": "小模型",
         "note": "4B–40B",
         "sourceUrl": "https://artificialanalysis.ai/models/open-source/small",
-        "updatedAt": "2026-09-04T17:49:50+08:00",
+        "updatedAt": "2026-09-04T17:53:27+08:00",
         "error": "",
         "models": [
           {
@@ -336,7 +336,7 @@
         "label": "微型",
         "note": "≤4B",
         "sourceUrl": "https://artificialanalysis.ai/models/open-source/tiny",
-        "updatedAt": "2026-09-04T17:49:51+08:00",
+        "updatedAt": "2026-09-04T17:53:33+08:00",
         "error": "",
         "models": [
           {
@@ -491,14 +491,14 @@
     "source": "Hugging Face",
     "sourceUrl": "https://huggingface.co/",
     "metric": "热度分",
-    "updatedAt": "2026-09-04T17:49:54+08:00",
+    "updatedAt": "2026-09-04T17:53:35+08:00",
     "error": "",
     "sections": [
       {
         "key": "models",
         "label": "模型",
         "sourceUrl": "https://huggingface.co/models",
-        "updatedAt": "2026-09-04T17:49:52+08:00",
+        "updatedAt": "2026-09-04T17:53:34+08:00",
         "error": "",
         "items": [
           {
@@ -506,7 +506,7 @@
             "repo": "zai-org/GLM-5.3",
             "name": "GLM-5.3",
             "owner": "zai-org",
-            "trending": 858,
+            "trending": 857,
             "likes": 1636,
             "downloads": 303534,
             "updatedAt": "2026-09-04",
@@ -521,7 +521,7 @@
             "repo": "Qwen/Qwen3.8-Flash-Next",
             "name": "Qwen3.8-Flash-Next",
             "owner": "Qwen",
-            "trending": 608,
+            "trending": 607,
             "likes": 4832,
             "downloads": 351374,
             "updatedAt": "2026-08-27",
@@ -551,7 +551,7 @@
             "repo": "zai-org/GLM-5.3-Flash",
             "name": "GLM-5.3-Flash",
             "owner": "zai-org",
-            "trending": 537,
+            "trending": 532,
             "likes": 2030,
             "downloads": 654957,
             "updatedAt": "2026-09-04",
@@ -582,7 +582,7 @@
         "key": "spaces",
         "label": "应用",
         "sourceUrl": "https://huggingface.co/spaces",
-        "updatedAt": "2026-09-04T17:49:53+08:00",
+        "updatedAt": "2026-09-04T17:53:35+08:00",
         "error": "",
         "items": [
           {
@@ -607,7 +607,7 @@
             "repo": "kulkas2pintu/wan555",
             "name": "Wan2.2 14B Fast Preview",
             "owner": "kulkas2pintu",
-            "trending": 151,
+            "trending": 149,
             "likes": 1742,
             "downloads": null,
             "updatedAt": "2026-07-19",
@@ -676,7 +676,7 @@
         "key": "datasets",
         "label": "数据集",
         "sourceUrl": "https://huggingface.co/datasets",
-        "updatedAt": "2026-09-04T17:49:54+08:00",
+        "updatedAt": "2026-09-04T17:53:35+08:00",
         "error": "",
         "items": [
           {
@@ -746,7 +746,7 @@
   "market": {
     "source": "腾讯财经",
     "sourceUrl": "https://stockapp.finance.qq.com/",
-    "updatedAt": "2026-09-04T17:49:54+08:00",
+    "updatedAt": "2026-09-04T17:53:35+08:00",
     "error": "",
     "quotes": [
       {

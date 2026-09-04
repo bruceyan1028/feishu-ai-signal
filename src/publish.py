@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import logging
 import re
 import shutil
 from concurrent.futures import ThreadPoolExecutor
@@ -26,6 +27,7 @@ from . import (
     sources,
 )
 
+log = logging.getLogger(__name__)
 CN_TZ = timezone(timedelta(hours=8))
 ROOT = Path(__file__).resolve().parent.parent
 TEMPLATE = ROOT / "index.html"
@@ -372,6 +374,81 @@ def mirror_huxiu_images(
             )
 
 
+def mirror_social_videos(
+    briefs: list[dict[str, Any]],
+    output_dir: Path | str,
+) -> None:
+    """把 X 视频落到站内。
+
+    video.twimg.com 只认空 Referer 或 twitter.com，浏览器从我们站上发起的请求带着
+    自家 Referer，直接 403，<video> 什么都放不出来。缩略图所在的 pbs.twimg.com 没这个
+    限制，所以表面看是「有封面、点了没反应」。拉不下来的就抹掉 playbackUrl，让卡片退回
+    封面加播放角标、点击跳回 X，别留一个放不了的播放器。
+    """
+    destination = Path(output_dir)
+    downloaded: dict[str, str] = {}
+    for brief in briefs:
+        for post in brief.get("socialPosts") or []:
+            media = dict(post.get("mediaAssets") or {})
+            videos = media.get("videos") or []
+            if not videos:
+                continue
+            prefix = _SAFE_FILENAME_RE.sub(
+                "-", str(post.get("recordId") or "social")
+            ).strip("-")
+            mirrored: list[dict[str, Any]] = []
+            for index, video in enumerate(videos, 1):
+                if not isinstance(video, dict):
+                    continue
+                source_url = str(video.get("playbackUrl") or "")
+                host = (urlsplit(source_url).hostname or "").lower().removeprefix("www.")
+                if not source_url or host != "video.twimg.com":
+                    mirrored.append(video)
+                    continue
+                relative = downloaded.get(source_url)
+                if not relative:
+                    try:
+                        response = requests.get(
+                            source_url,
+                            headers={
+                                "User-Agent": (
+                                    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
+                                    "AppleWebKit/537.36 Chrome/138 Safari/537.36"
+                                )
+                            },
+                            timeout=60,
+                        )
+                        response.raise_for_status()
+                        content_type = response.headers.get("content-type", "").split(
+                            ";", 1
+                        )[0].lower()
+                        if content_type != "video/mp4" or len(response.content) > 40_000_000:
+                            log.info(
+                                "X 视频跳过镜像 %s：%s %s 字节",
+                                source_url,
+                                content_type or "无类型",
+                                len(response.content),
+                            )
+                            mirrored.append(
+                                {k: v for k, v in video.items() if k != "playbackUrl"}
+                            )
+                            continue
+                        destination.mkdir(parents=True, exist_ok=True)
+                        filename = f"{prefix}-{index}.mp4"
+                        (destination / filename).write_bytes(response.content)
+                        relative = f"media/social/{filename}"
+                        downloaded[source_url] = relative
+                    except requests.RequestException as exc:
+                        log.info("X 视频镜像失败 %s：%s", source_url, exc)
+                        mirrored.append(
+                            {k: v for k, v in video.items() if k != "playbackUrl"}
+                        )
+                        continue
+                mirrored.append({**video, "playbackUrl": relative})
+            media["videos"] = mirrored
+            post["mediaAssets"] = media
+
+
 def build_site(
     briefs: list[dict[str, Any]],
     site_dir: Path | str = ROOT / "site",
@@ -389,6 +466,7 @@ def build_site(
     policy_media_dir = site / "media" / "policies"
     openai_chart_dir = site / "media" / "openai-charts"
     huxiu_media_dir = site / "media" / "huxiu"
+    social_media_dir = site / "media" / "social"
     shutil.copy2(TEMPLATE, site / "index.html")
     rendered_openai_charts: dict[str, list[dict[str, str]]] = {}
     for brief in briefs:
@@ -423,6 +501,7 @@ def build_site(
             signal["mediaAssets"] = media
             signal["imageUrl"] = chart_images[0]["url"]
     mirror_huxiu_images(briefs, huxiu_media_dir)
+    mirror_social_videos(briefs, social_media_dir)
     rendered: dict[str, list[dict[str, str]]] = {}
     for brief in briefs:
         for signal in brief.get("signals") or []:

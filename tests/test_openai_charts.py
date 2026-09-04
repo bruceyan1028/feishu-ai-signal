@@ -147,6 +147,55 @@ class OpenAiChartTest(unittest.TestCase):
             self.assertEqual(signal["imageUrl"], "media/huxiu/rec-huxiu-1.png")
             self.assertTrue((Path(directory) / "rec-huxiu-1.png").exists())
 
+    @staticmethod
+    def _social_brief() -> dict:
+        return {
+            "socialPosts": [
+                {
+                    "recordId": "rec-social",
+                    "url": "https://x.com/dawnsongtweets/status/1",
+                    "mediaAssets": {
+                        "images": [],
+                        "videos": [
+                            {
+                                "id": "16_1",
+                                "playbackUrl": "https://video.twimg.com/tweet_video/a.mp4",
+                                "thumbnailUrl": "https://pbs.twimg.com/tweet_video_thumb/a.jpg",
+                            }
+                        ],
+                    },
+                }
+            ]
+        }
+
+    def test_static_site_mirrors_x_videos_to_avoid_hotlink_blocking(self):
+        brief = self._social_brief()
+        response = mock.Mock()
+        response.headers = {"content-type": "video/mp4"}
+        response.content = b"\x00\x00\x00\x18ftypmp42"
+        response.raise_for_status.return_value = None
+        with tempfile.TemporaryDirectory() as directory:
+            with mock.patch.object(publish.requests, "get", return_value=response):
+                publish.mirror_social_videos([brief], directory)
+            video = brief["socialPosts"][0]["mediaAssets"]["videos"][0]
+            self.assertEqual(video["playbackUrl"], "media/social/rec-social-1.mp4")
+            self.assertTrue((Path(directory) / "rec-social-1.mp4").exists())
+
+    def test_unreachable_x_video_drops_playback_url_instead_of_dead_player(self):
+        brief = self._social_brief()
+        with tempfile.TemporaryDirectory() as directory:
+            with mock.patch.object(
+                publish.requests,
+                "get",
+                side_effect=publish.requests.RequestException("403"),
+            ):
+                publish.mirror_social_videos([brief], directory)
+            video = brief["socialPosts"][0]["mediaAssets"]["videos"][0]
+            self.assertNotIn("playbackUrl", video)
+            self.assertEqual(
+                video["thumbnailUrl"], "https://pbs.twimg.com/tweet_video_thumb/a.jpg"
+            )
+
 
 if __name__ == "__main__":
     unittest.main()
