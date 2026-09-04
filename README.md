@@ -335,6 +335,7 @@ python -m src.health --days 30
   - **固定两行**：首行是名字，右端一个数（`hf-aside`，`margin-left:auto`）；第二行是指标。行数固定，五张卡高度一致，边界才扫得清。
   - 首行右端放**更新日期**——它和名字同属「这是哪一版」，第二行留给热度指标；它不参与压缩，地方不够该让左边的名字先省，日期缺一位就没法读了。**Spaces 例外**：天天有人重新部署，更新时间对它没有信息量（官网的应用卡也不出），右端改放点赞数，只留在 tooltip 里。
   - 第二行（`hf-meta`）**一律压在一行内**：`nowrap` + `overflow:hidden`，折到第三行会把卡片撑高。放不下时只压缩任务名或简介那一段（`hf-flex`，其余 `flex:none`），数字保持完整——数字才是这行的信息。每个指标连图标先包成一个 `span`，否则省略号会断在图标和数字之间，出现「♡」留在行尾、数字被切掉。
+  - **≤1280px 那一档例外，放开折行**：那时看板落进 148px 的导航列（`grid-template-areas` 把 `data` 排到 `nav` 下面），一行装不下这几个数，而被 `overflow` 裁掉是静默的，点赞数没了也看不出来。≤760px 回到单列、宽度重新够用，要显式把 `nowrap` 收回来——上一档的 `max-width: 1280px` 在 760px 处同样命中。
 - 栏目名保留 HF 自己的说法（**Models / Spaces / Datasets**）：`Spaces` 译成「应用」会丢掉它在 HF 语境里的含义，而这三个词读者在官网上天天见。
 - HF 复现首页「Trending this week」的三栏，各 5 条（`HF_TRENDING_LIMIT`，跟着首页，别自作主张取 12）。三类字段不一样，各自点名 `expand[]`（`HF_KINDS` 第四位）：
   - **Models**：`safetensors`、`pipeline_tag`、`inferenceProviderMapping`。`safetensors.total` 是张量总数，换算成「多少 B」；GGUF 量化仓库没有这一位，留 `None` 而不是 0——0 会被读成「零参数」。`pipeline_tag` 按 `_HF_TASKS` 换中文短词，认不出的照原样显示，HF 新增任务类型时不会空一格。⚡ 对应官网的「Inference Available」。

@@ -204,6 +204,9 @@
     .feed-accounts { position: static; }
     .feed-nav { position: static; }
     .feed-data { position: static; max-height: none; overflow: visible; margin-top: 18px; }
+    /* 这个断点下看板落进 148px 的导航列，HF 卡片第二行的数字放不下。这里放开折行:
+       被 overflow 裁掉是静默的,点赞数没了也看不出来,折行至少数字还在。 */
+    .hf-meta { flex-wrap: wrap; overflow: visible; row-gap: 2px; }
   }
   /* --- 信号卡片:可点,悬停做硬阴影位移(编辑/野兽派风) --- */
   .signal-card { cursor: pointer; transition: transform .12s ease, box-shadow .12s ease; align-items: stretch; height: 288px; }
@@ -353,6 +356,9 @@
   @media (max-width: 760px) {
     /* 硬阴影(box-shadow: 5px 5px 0)会撑出横向滚动条 */
     body { overflow-x: hidden; }
+    /* 单列布局下看板重新占满宽度,不必再像 148px 那档那样折行(上一个断点的
+       max-width: 1280px 在这里同样命中,得显式收回来) */
+    .hf-meta { flex-wrap: nowrap; overflow: hidden; }
     /* iOS 在 font-size < 16px 的输入框获得焦点时会强制放大页面,
        放大后整页错位,这是手机上「排版乱掉」最常见的诱因 */
     input, select, textarea { font-size: 16px !important; }

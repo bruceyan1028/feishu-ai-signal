@@ -922,6 +922,19 @@ class FrontendContractTest(unittest.TestCase):
         self.assertIn("""<span class="hf-flex">${esc(item.task)}""", rail)
         self.assertIn("""<span class="hf-flex">${esc(item.note)}""", rail)
 
+    def test_hf_meta_may_wrap_where_the_rail_is_only_148px(self):
+        """≤1280px 时看板落进 148px 的导航列，一行装不下第二行那几个数。
+
+        被 `overflow: hidden` 裁掉是静默的——点赞数没了也看不出来，所以这一档放开
+        折行；≤760px 回到单列、宽度重新够用，要显式把不折行收回来（上一档的
+        `max-width: 1280px` 在 760px 处同样命中）。
+        """
+        template = Path("index.html").read_text(encoding="utf-8")
+        narrow = template.split("@media (max-width: 1280px) {")[1].split("\n  }")[0]
+        self.assertIn("flex-wrap: wrap", _css_rule(narrow, ".hf-meta"))
+        mobile = template.split("@media (max-width: 760px) {")[1].split("\n  }")[0]
+        self.assertIn("flex-wrap: nowrap", _css_rule(mobile, ".hf-meta"))
+
     def test_hf_update_date_sits_at_the_right_of_the_title_line(self):
         """更新日期和名字同属「这是哪一版」，排在首行右端而不是挤进指标行。"""
         template = Path("index.html").read_text(encoding="utf-8")
