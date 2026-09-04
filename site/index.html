@@ -147,29 +147,34 @@
   /* HF 本周热度:照官网首页那三栏的卡片排法——名字一行,任务/规模/下载/点赞一行。
      先前套用上面榜单那种「一行 + 进度条」,这些数字只放得进 tooltip,等于没有。
      官网没有名次也没有热度分,这里也不加:顺序本身就是「本周热度」。
-     每条独立成块:比看板底色亮一档、带描边、彼此留空隙,相邻两条的边界才一眼看得
-     出;只靠一根细分隔线时五条挤在一起像一整段。直角,和右栏其余面板一致。 */
+     每条独立成块,而且是**浅底卡片直接铺在看板的黑底上**:空隙里透出的黑就是分隔,
+     比在黑底上叠一层更亮的黑分得清得多,官网首页也是这么排的。颜色一律取 :root
+     那套浅色 token——整页本来就是白底,只有右栏是显式刷黑的,这里不另造一套。
+     直角,和右栏其余面板一致。 */
   .hf-list { display: flex; flex-direction: column; gap: 6px; padding: 8px 12px 12px; }
-  .hf-item { display: block; padding: 7px 9px; background: rgba(255,255,255,.055); border: 1px solid rgba(255,255,255,.09); text-decoration: none; color: inherit; }
-  .hf-item:hover { background: rgba(255,255,255,.11); border-color: rgba(255,255,255,.2); }
+  .hf-item { display: block; padding: 7px 9px; background: var(--ds-card); border: 1px solid var(--ds-border); text-decoration: none; color: var(--ds-text); }
+  /* 悬停沿用信号卡那套硬阴影,不动底色:换底色得再配一个不透明的浅色,而
+     accent-faint 这类半透明叠加铺在浅卡上会把背后的黑透出来。 */
+  .hf-item:hover { border-color: var(--ds-accent); box-shadow: 2px 2px 0 var(--ds-accent); }
   .hf-head { display: flex; align-items: baseline; gap: 6px; min-width: 0; }
   .hf-emoji { flex: none; font-size: 13px; line-height: 1; }
-  .hf-name { min-width: 0; font-size: 12px; font-weight: 650; color: #faf7f0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .hf-name { min-width: 0; font-size: 12px; font-weight: 650; color: var(--ds-text); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   /* 仓库全名是机器标识,等宽体下 owner/name 那道斜杠和版本号更好认 */
   .hf-name.is-repo { font-family: 'Geist Mono', ui-monospace, Menlo, monospace; font-size: 11px; font-weight: 600; }
   /* 首行右端:模型和数据集放更新日期,Spaces 放点赞数。不参与压缩——地方不够该让
      左边的名字先省,日期缺一位就没法读了。 */
-  .hf-aside { flex: none; margin-left: auto; font-family: 'Geist Mono', ui-monospace, Menlo, monospace; font-size: 9.5px; white-space: nowrap; color: #8f887a; }
-  .hf-aside b { font-weight: 600; color: #c4bfb6; }
-  /* 绿点 = 这个 Space 现在真的在跑;停在 BUILDING / RUNTIME_ERROR 的点开是白屏 */
-  .hf-live { flex: none; align-self: center; width: 5px; height: 5px; border-radius: 50%; background: #34d399; }
+  .hf-aside { flex: none; margin-left: auto; font-family: 'Geist Mono', ui-monospace, Menlo, monospace; font-size: 9.5px; white-space: nowrap; color: var(--ds-text-3); }
+  .hf-aside b { font-weight: 600; color: var(--ds-text-2); }
+  /* 绿点 = 这个 Space 现在真的在跑;停在 BUILDING / RUNTIME_ERROR 的点开是白屏。
+     取 --ds-good 而不是深色底那支亮绿,亮绿铺在浅卡上会发灰。 */
+  .hf-live { flex: none; align-self: center; width: 5px; height: 5px; border-radius: 50%; background: var(--ds-good); }
   /* 第二行一律压在一行内:折到第三行会把卡片撑高,相邻两条又看不出边界。放不下时
      只压缩任务名或简介那一段(.hf-flex),数字保持完整——数字才是这行的信息。 */
-  .hf-meta { display: flex; align-items: center; gap: 6px; margin-top: 4px; font-family: 'Geist Mono', ui-monospace, Menlo, monospace; font-size: 9.5px; color: #8f887a; white-space: nowrap; overflow: hidden; }
+  .hf-meta { display: flex; align-items: center; gap: 6px; margin-top: 4px; font-family: 'Geist Mono', ui-monospace, Menlo, monospace; font-size: 9.5px; color: var(--ds-text-3); white-space: nowrap; overflow: hidden; }
   .hf-meta > * { flex: none; }
-  .hf-meta b { font-weight: 600; color: #c4bfb6; }
+  .hf-meta b { font-weight: 600; color: var(--ds-text); }
   .hf-flex { flex: 0 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; }
-  .hf-sep { opacity: .3; }
+  .hf-sep { opacity: .4; }
   .heat-toggle { display: flex; border: 1px solid rgba(255,255,255,.12); margin: 0 14px 8px; }
   .heat-toggle button { flex: 1; height: 26px; border: none; background: transparent; color: #8f887a; font-size: 11px; font-weight: 650; cursor: pointer; }
   .heat-toggle button + button { border-left: 1px solid rgba(255,255,255,.12); }

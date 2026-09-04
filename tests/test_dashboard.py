@@ -958,14 +958,24 @@ class FrontendContractTest(unittest.TestCase):
         # 日期只在非应用那一支出现，但仍留在 tooltip 里
         self.assertIn("isSpace && dayText(item.updatedAt)", card)
 
-    def test_hf_rows_are_separate_blocks(self):
-        """只靠一根细分隔线时五条挤成一整段，边界扫不出来。"""
+    def test_hf_rows_are_separate_light_cards(self):
+        """浅底卡片铺在看板的黑底上，空隙里透出的黑就是分隔。
+
+        只靠一根细分隔线时五条挤成一整段，边界扫不出来；在黑底上叠一层更亮的黑也
+        分不清。颜色取 `:root` 那套浅色 token——整页本来就是白底，只有右栏是显式刷
+        黑的，这里不另造一套。
+        """
         template = Path("index.html").read_text(encoding="utf-8")
         item_css = _css_rule(template, ".hf-item")
-        self.assertIn("background:", item_css)
-        self.assertIn("border:", item_css)
+        self.assertIn("background: var(--ds-card)", item_css)
+        self.assertIn("border: 1px solid var(--ds-border)", item_css)
         self.assertNotIn("border-bottom", item_css)
         self.assertIn("gap:", _css_rule(template, ".hf-list"))
+        # 浅卡上必须换成深字，沿用深色底那几个浅色会看不见
+        for selector in (".hf-name", ".hf-aside", ".hf-meta", ".hf-meta b"):
+            self.assertIn("var(--ds-text", _css_rule(template, selector), selector)
+        # 亮绿（#34d399）是给深色底调的，铺在浅卡上会发灰
+        self.assertIn("background: var(--ds-good)", _css_rule(template, ".hf-live"))
         rail = template.split("function dataRailHtml")[1].split("function heatmapHtml")[0]
         self.assertIn("""<div class="hf-list">""", rail)
 
