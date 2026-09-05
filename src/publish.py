@@ -29,6 +29,23 @@ from . import (
 
 log = logging.getLogger(__name__)
 CN_TZ = timezone(timedelta(hours=8))
+_MEDIA_FETCH_TIMEOUT = 25
+
+
+def _call_with_timeout(fn, timeout: float, *args, **kwargs):
+    """外网 TLS 卡住时 requests 超时可能不返回，用线程上限切开。
+
+    超时后必须 shutdown(wait=False)：默认 wait=True 会继续等那个卡住的 worker。
+    """
+    pool = ThreadPoolExecutor(max_workers=1)
+    try:
+        future = pool.submit(fn, *args, **kwargs)
+        for thread in getattr(pool, "_threads", ()):
+            thread.daemon = True
+        return future.result(timeout=timeout)
+    finally:
+        pool.shutdown(wait=False)
+
 ROOT = Path(__file__).resolve().parent.parent
 TEMPLATE = ROOT / "index.html"
 _SAFE_FILENAME_RE = re.compile(r"[^a-zA-Z0-9_-]+")
@@ -406,7 +423,7 @@ def mirror_social_videos(
                     mirrored.append(video)
                     continue
                 relative = downloaded.get(source_url)
-                if not relative:
+                if relative is None:
                     try:
                         response = requests.get(
                             source_url,
@@ -416,7 +433,7 @@ def mirror_social_videos(
                                     "AppleWebKit/537.36 Chrome/138 Safari/537.36"
                                 )
                             },
-                            timeout=60,
+                            timeout=15,
                         )
                         response.raise_for_status()
                         content_type = response.headers.get("content-type", "").split(
@@ -429,6 +446,7 @@ def mirror_social_videos(
                                 content_type or "无类型",
                                 len(response.content),
                             )
+                            downloaded[source_url] = ""
                             mirrored.append(
                                 {k: v for k, v in video.items() if k != "playbackUrl"}
                             )
@@ -440,10 +458,16 @@ def mirror_social_videos(
                         downloaded[source_url] = relative
                     except requests.RequestException as exc:
                         log.info("X 视频镜像失败 %s：%s", source_url, exc)
+                        downloaded[source_url] = ""
                         mirrored.append(
                             {k: v for k, v in video.items() if k != "playbackUrl"}
                         )
                         continue
+                if not relative:
+                    mirrored.append(
+                        {k: v for k, v in video.items() if k != "playbackUrl"}
+                    )
+                    continue
                 mirrored.append({**video, "playbackUrl": relative})
             media["videos"] = mirrored
             post["mediaAssets"] = media
@@ -511,13 +535,19 @@ def build_site(
                 continue
             key = str(signal.get("recordId") or pdf_url)
             if key not in rendered:
-                files = paper_fulltext.write_visual_page_images(
-                    pdf_url,
-                    pages,
-                    paper_media_dir,
-                    key,
-                    list(signal.get("paperCaptions") or []),
-                )
+                try:
+                    files = _call_with_timeout(
+                        paper_fulltext.write_visual_page_images,
+                        _MEDIA_FETCH_TIMEOUT,
+                        pdf_url,
+                        pages,
+                        paper_media_dir,
+                        key,
+                        list(signal.get("paperCaptions") or []),
+                    )
+                except Exception as exc:  # noqa: BLE001 - 单篇 PDF 卡住不该拖死整站发布
+                    log.warning("论文配图失败或超时 %s: %s", key, exc)
+                    files = []
                 rendered[key] = [
                     {
                         "url": f"media/papers/{item['filename']}",
@@ -549,12 +579,18 @@ def build_site(
             for document_index, document in enumerate(documents, 1):
                 pdf_url = str(document.get("url") or "")
                 if pdf_url not in rendered_policy_documents:
-                    files = policy_document.write_visual_images(
-                        pdf_url,
-                        list(document.get("visualPages") or []),
-                        policy_media_dir,
-                        f"{signal.get('recordId') or 'policy'}-d{document_index}",
-                    )
+                    try:
+                        files = _call_with_timeout(
+                            policy_document.write_visual_images,
+                            _MEDIA_FETCH_TIMEOUT,
+                            pdf_url,
+                            list(document.get("visualPages") or []),
+                            policy_media_dir,
+                            f"{signal.get('recordId') or 'policy'}-d{document_index}",
+                        )
+                    except Exception as exc:  # noqa: BLE001 - 单份政策 PDF 卡住不该拖死发布
+                        log.warning("政策配图失败或超时 %s: %s", pdf_url, exc)
+                        files = []
                     rendered_policy_documents[pdf_url] = [
                         {
                             "url": f"media/policies/{item['filename']}",
@@ -653,7 +689,10 @@ def run() -> int:
         briefs = [current, *[item for item in briefs if item["date"] != current["date"]]][:7]
     curate_web_media(briefs)
     site = build_site(briefs, args.site_dir, params=params)
-    refresh_side_boards(site)
+    try:
+        _call_with_timeout(refresh_side_boards, 120, site)
+    except Exception as exc:  # noqa: BLE001 - 看板失败仍应发布当日简报
+        log.warning("看板重拉失败或超时：%s", exc)
     print(site)
     return 0
 

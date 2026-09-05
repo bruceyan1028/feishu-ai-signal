@@ -39,56 +39,56 @@
         3,
         6,
         14,
-        26
+        35
       ],
       [
         0,
         2,
         3,
         12,
-        10
+        12
       ],
       [
         0,
         2,
         0,
         9,
-        12
+        16
       ],
       [
         0,
         0,
         3,
         7,
-        5
+        7
       ],
       [
         0,
         0,
         2,
         0,
-        8
+        10
       ],
       [
         5,
         5,
         6,
         6,
-        14
+        17
       ],
       [
         0,
         0,
         0,
         4,
-        4
+        6
       ],
       [
         2,
         0,
         0,
         0,
-        9
+        13
       ],
       [
         4,
@@ -102,22 +102,22 @@
         6,
         3,
         1,
-        12
+        16
       ],
       [
         0,
         0,
         0,
         0,
-        8
+        15
       ]
     ],
     "normalized": [
       [
-        0.0385,
-        0.1154,
-        0.2308,
-        0.5385,
+        0.0286,
+        0.0857,
+        0.1714,
+        0.4,
         1.0
       ],
       [
@@ -125,13 +125,13 @@
         0.1667,
         0.25,
         1.0,
-        0.8333
+        1.0
       ],
       [
         0.0,
-        0.1667,
+        0.125,
         0.0,
-        0.75,
+        0.5625,
         1.0
       ],
       [
@@ -139,31 +139,31 @@
         0.0,
         0.4286,
         1.0,
-        0.7143
-      ],
-      [
-        0.0,
-        0.0,
-        0.25,
-        0.0,
-        1.0
-      ],
-      [
-        0.3571,
-        0.3571,
-        0.4286,
-        0.4286,
         1.0
       ],
       [
         0.0,
         0.0,
+        0.2,
         0.0,
-        1.0,
         1.0
       ],
       [
-        0.2222,
+        0.2941,
+        0.2941,
+        0.3529,
+        0.3529,
+        1.0
+      ],
+      [
+        0.0,
+        0.0,
+        0.0,
+        0.6667,
+        1.0
+      ],
+      [
+        0.1538,
         0.0,
         0.0,
         0.0,
@@ -177,10 +177,10 @@
         1.0
       ],
       [
-        0.6667,
         0.5,
-        0.25,
-        0.0833,
+        0.375,
+        0.1875,
+        0.0625,
         1.0
       ],
       [
@@ -389,7 +389,14 @@
       "recvudLnQxgsL8",
       "recvudLnQxBXcT",
       "recvudLnQxLEY8",
-      "recvudLnQx0wTS"
+      "recvudLnQx0wTS",
+      "recvujWsa2nKDo",
+      "recvujWsa28XQF",
+      "recvujWsa2VzgG",
+      "recvujWsa2Ndtp",
+      "recvujWsa2LL15",
+      "recvudLnQxMf5u",
+      "recvudLnQxfu8Q"
     ],
     "infra|2026-W36": [
       "recvtW9WBRPQmp",
@@ -404,7 +411,9 @@
       "recvudLnQxoajC",
       "recvudLnQxnkeA",
       "recvudLnQx6dAU",
-      "recvudLnQx0wTS"
+      "recvudLnQx0wTS",
+      "recvujWsa2OjtU",
+      "recvujWsa2K71N"
     ],
     "funding|2026-W36": [
       "recvtW9WBRSx2a",
@@ -418,7 +427,11 @@
       "recvu7Bcb3sPvH",
       "recvudLnQxzOG3",
       "recvudLnQxnkeA",
-      "recvudLnQxwL2q"
+      "recvudLnQxwL2q",
+      "recvujWsa2YOKI",
+      "recvujWsa2pApy",
+      "recvujWsa2K71N",
+      "recvujWsa2aZZF"
     ],
     "product|2026-W36": [
       "recvtW9WBR1mmJ",
@@ -450,7 +463,13 @@
       "recvu2ZXD8ymcY",
       "recvu7Bcb357yt",
       "recvudLnQxfWU3",
-      "recvudLnQxCZGK"
+      "recvudLnQxCZGK",
+      "recvujWsa2JII5",
+      "recvujWsa2bWB1",
+      "recvudLnQxsurX",
+      "recvujWsa205C4",
+      "recvujWsa2BbUb",
+      "recvujWsa2ilal"
     ],
     "multimodal|2026-W36": [
       "recvtW9WBRobE2",
@@ -460,17 +479,20 @@
       "recvu1S4qSqy3r",
       "recvu7Bcb3NH05",
       "recvudLnQx6dAU",
-      "recvudLnQxNdMh"
+      "recvudLnQxNdMh",
+      "recvujWsa28XQF"
     ],
     "open-source-model|2026-W36": [
       "recvtW9WBRobE2",
       "recvu1S4qSmOoN",
-      "recvudLnQxzOG3"
+      "recvudLnQxzOG3",
+      "recvujWsa2YOKI"
     ],
     "embodied|2026-W36": [
       "recvtW9WBR72ie",
       "recvu1S4qSMFXB",
-      "recvu1S4qSqy3r"
+      "recvu1S4qSqy3r",
+      "recvujWsa2pApy"
     ],
     "rag-search|2026-W36": [
       "recvtW9WBRXxbq",
@@ -480,7 +502,8 @@
       "recvu2ZXD8YZrH",
       "recvu7Bcb3zGUn",
       "recvudLnQxBXcT",
-      "recvudLnQxfu8Q"
+      "recvudLnQxfu8Q",
+      "recvujWsa2Ndtp"
     ],
     "safety-policy|2026-W36": [
       "recvtW9WBRShl3",
@@ -490,7 +513,10 @@
       "recvu7Bcb3ZIS1",
       "recvu7Bcb3AdwT",
       "recvu7Bcb3e7Ng",
-      "recvudLnQxe5zB"
+      "recvudLnQxe5zB",
+      "recvujWsa2VzgG",
+      "recvudLnQxLEY8",
+      "recvudLnQxMf5u"
     ],
     "reasoning|2026-W36": [
       "recvu1S4qSbYtM",
@@ -500,7 +526,8 @@
       "recvu7Bcb3lhKm",
       "recvu1S4qSULKN",
       "recvu1S4qSrg0l",
-      "recvudLnQx7mnN"
+      "recvudLnQx7mnN",
+      "recvujWsa2nKDo"
     ]
   },
   "itemIndex": {
@@ -1458,19 +1485,104 @@
       "title": "Nous Research 为 Hermes Agent 提供 NVIDIA 系统一键本地部署",
       "source": "NVIDIA YouTube",
       "url": "https://www.youtube.com/watch?v=taqnuvmcrbs"
+    },
+    "recvujWsa2YOKI": {
+      "title": "英伟达拟以129亿美元收购Hugging Face，引发开源平台中立性担忧",
+      "source": "虎嗅",
+      "url": "https://www.huxiu.com/article/4888767.html"
+    },
+    "recvujWsa2nKDo": {
+      "title": "Claude用11天完成费马大定理形式化证明",
+      "source": "智东西",
+      "url": "https://zhidx.com/p/590918.html"
+    },
+    "recvujWsa28XQF": {
+      "title": "GPT-6 Astra据称全量上线，主打3D生成与自主软件操作",
+      "source": "虎嗅",
+      "url": "https://www.huxiu.com/article/4888772.html"
+    },
+    "recvujWsa2JII5": {
+      "title": "清华AI算法提升詹姆斯·韦布望远镜宇宙观测数据效果",
+      "source": "果壳",
+      "url": "https://www.guokr.com/article/470122"
+    },
+    "recvujWsa2pApy": {
+      "title": "机器人训练数据公司 XDOF 洽谈 12 亿美元 B 轮融资",
+      "source": "TechCrunch AI",
+      "url": "https://techcrunch.com/2026/09/04/xdof-just-three-months-out-of-stealth-is-in-talks-for-a-series-b-at-a-1-2b-valuation"
+    },
+    "recvujWsa2VzgG": {
+      "title": "OpenAI代理集群事件引发独立调查与监管呼声",
+      "source": "TechCrunch AI",
+      "url": "https://techcrunch.com/2026/09/04/openais-rogue-agents-keep-escaping-with-no-formal-process-to-investigate-them"
+    },
+    "recvujWsa2OjtU": {
+      "title": "华为论文称LogicFolding实现高密度芯片低功耗",
+      "source": "华尔街见闻",
+      "url": "https://wallstreetcn.com/articles/3781137"
+    },
+    "recvujWsa2K71N": {
+      "title": "Nscale拟在IPO前融资35亿美元，英伟达或提供20亿美元",
+      "source": "TechCrunch AI",
+      "url": "https://techcrunch.com/2026/09/04/ai-compute-provider-nscale-is-looking-for-3-5b-in-pre-ipo-financing"
+    },
+    "recvujWsa2Ndtp": {
+      "title": "Firecrawl v2.11.305：面向 AI Agent 的规模化网页搜索、抓取与交互 API",
+      "source": "GitHub Trending",
+      "url": "https://github.com/firecrawl/firecrawl/releases/tag/v2.11.305"
+    },
+    "recvujWsa2aZZF": {
+      "title": "理想汽车26.5亿元增资欣旺达动力，深化动力电池自研与产业协同",
+      "source": "AI科技评论 / 雷峰网",
+      "url": "https://www.leiphone.com/category/industrynews/j6pap3lhwmfqvvuw.html"
+    },
+    "recvujWsa2bWB1": {
+      "title": "美国8月非农新增16.2万但结构含水分，信息技术就业下滑",
+      "source": "华尔街见闻",
+      "url": "https://wallstreetcn.com/articles/3781132"
+    },
+    "recvujWsa2LL15": {
+      "title": "LangChain Core 1.6.2 发布，新增 OpenAI 异步工具支持",
+      "source": "GitHub Trending",
+      "url": "https://github.com/langchain-ai/langchain/releases/tag/langchain-core%3d%3d1.6.2"
+    },
+    "recvudLnQxsurX": {
+      "title": "WeatherNext 3：更高频、更精细的全球天气预报模型",
+      "source": "Google DeepMind YouTube",
+      "url": "https://www.youtube.com/watch?v=_6jzlnrsxxq"
+    },
+    "recvudLnQxMf5u": {
+      "title": "OpenAI发布GPT-6 Astra，主打长时计算机操作与更高对齐性",
+      "source": "OpenAI YouTube",
+      "url": "https://www.youtube.com/watch?v=1qnsdr-qx_i"
+    },
+    "recvujWsa205C4": {
+      "title": "苹果据称研发首款OLED触屏MacBook Pro",
+      "source": "虎嗅",
+      "url": "https://www.huxiu.com/article/4888781.html"
+    },
+    "recvujWsa2BbUb": {
+      "title": "追觅携百余款产品亮相IFA 2026，覆盖16个品类并获6项国际奖项",
+      "source": "AI科技评论 / 雷峰网",
+      "url": "https://www.leiphone.com/category/industrynews/xnjjff9rfb30odeh.html"
+    },
+    "recvujWsa2ilal": {
+      "title": "泡泡玛特需求可持续性的底层逻辑：IP与情绪消费",
+      "source": "虎嗅",
+      "url": "https://www.huxiu.com/article/4888776.html"
     }
   },
   "trend": {
-    "agent": 6.0,
-    "reasoning": 6.6,
-    "multimodal": 15.75,
-    "open-source-model": 6.0,
-    "rag-search": 6.0,
-    "infra": 1.875,
+    "agent": 7.35,
+    "reasoning": 7.2,
+    "multimodal": 18.75,
+    "open-source-model": 7.0,
+    "rag-search": 7.5,
+    "infra": 2.156,
     "embodied": 2.0,
-    "safety-policy": 6.75,
+    "safety-policy": 9.75,
     "product": 3.682,
-    "funding": 1.147,
+    "funding": 1.5,
     "other": 2.0
   },
   "window_end": "2026-W36"

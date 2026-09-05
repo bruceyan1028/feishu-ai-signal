@@ -196,26 +196,6 @@
       "mediaAssets": {
         "images": [
           {
-            "url": "media/papers/recvtQ0liVoITN-p9-f1.png",
-            "alt": "PDF 第 9 页图表：Table 1: Answer accuracy and pedestrian-network adherence compare recognition, orientation, and active exploration question answering across the evaluated MLLM agents. Overall is the instance- count-weighted average across the three task types.",
-            "kind": "pdf-page"
-          },
-          {
-            "url": "media/papers/recvtQ0liVoITN-p13-f2.png",
-            "alt": "PDF 第 13 页图表：Figure 10: Example of GPT-5.5 crossing the road toward the goal direction before becoming blocked by a central obstacle and being unable to continue.",
-            "kind": "pdf-page"
-          },
-          {
-            "url": "media/papers/recvtQ0liVoITN-p13-f3.png",
-            "alt": "PDF 第 13 页图表：Table 3: Local question-answering accuracy and short-navigation success compare robustness across different daytime and weather conditions.",
-            "kind": "pdf-page"
-          },
-          {
-            "url": "media/papers/recvtQ0liVoITN-p14-f4.png",
-            "alt": "PDF 第 14 页图表：Table 4: Dynamic-environment results, where SR is the goal-reaching rate, PNA is the fraction of action time spent on the pedestrian network, SPR is the safe progress rate, which represents the fraction of road-closure episodes that respect the closure, and PCR is the pedestrian-collision rate.",
-            "kind": "pdf-page"
-          },
-          {
             "url": "https://arxiv.org/html/2608.27456v1/HKCase.png",
             "alt": "Figure 2: Dynamic simulation components of U r b a n Ground . The same urban environment can be rendered under different times of day and weather conditions, while a georeferenced pedestrian network supports animated pedestrian populations."
           },
@@ -380,26 +360,6 @@
       "imageUrl": "https://arxiv.org/html/2608.24876v1/assets/motivation.png",
       "mediaAssets": {
         "images": [
-          {
-            "url": "media/papers/recvtsKfefMy1S-p1-f1.png",
-            "alt": "PDF 第 1 页图表：Figure 1 | Recuris improves task success from 3B open-weight models to frontier models. Performance across (i) task success (%), (ii) task success by episode length, and (iii) six long-horizon failure modes, each rescaled so the agent alone = 100, where a bar at 20 is an 80% reduction.",
-            "kind": "pdf-page"
-          },
-          {
-            "url": "media/papers/recvtsKfefMy1S-p11-f2.png",
-            "alt": "PDF 第 11 页图表：Table 1 presents the main results: four benchmarks under two adaptation regimes, with each model evaluated with and without Recuris. Recuris improves task success in 35 of the 37 completed model–benchmark pairs. The largest gains appear on 𝜏2-Retail and SkillFlow, where Recuris improves the deployment model by 23.3 and 16.8 points, reaching 81.4% and 51.4%, both with intervals excluding zero. The gain belongs to memory that revises itself rather than to memory as such: a Skill Memory held fixed adds nothing an interval separates from zero, which we take up in section 3.3.2. The gains are also ",
-            "kind": "pdf-page"
-          },
-          {
-            "url": "media/papers/recvtsKfefMy1S-p12-f3.png",
-            "alt": "PDF 第 12 页图表：Table 1 | Recuris improves task success where the task family has shared structure, and its value does not follow model scale. Cells are avg@4 task success (%); higher is better. Each model contributes a pair of rows, the benchmark’s own reference agent alone and that same agent with Recuris (grey). Bold marks the better of each pair; the subscript is Δ, shaded by the size of the gain; † marks a paired task-clustered bootstrap 95% CI excluding zero. Agents, models and protocol are given in section 3.1. – not evaluated on that benchmark.",
-            "kind": "pdf-page"
-          },
-          {
-            "url": "media/papers/recvtsKfefMy1S-p24-f4.png",
-            "alt": "PDF 第 24 页图表：Table 8 | Terminal-Bench 2.1, decomposed: the attempt budget carries the headline, and the memory terms are read at a matched budget. Every configuration stops at its first success. Solved counts tasks solved within budget at one rollout per attempt. Δ and 𝑝compare each row with the row above it on the same tasks, 𝑝from McNemar’s exact test; the last column names what that comparison isolates.",
-            "kind": "pdf-page"
-          },
           {
             "url": "https://arxiv.org/html/2608.24876v1/assets/motivation.png",
             "alt": "Figure 2 : Two shifts separate Recuris from prior memory-based agent harnesses. How memory is used (left): prior harnesses retrieve against a growing chat history and lose track of unresolved goals. Recuris retrieves at execution events, and a checker turns the environment’s response into a verified state update rather than trusting the dialogue. How memory evolves (right): prior harnesses rewrite the whole memory from one task outcome. Recuris reads the structured trajectory, attributes each failure to a component, patches exactly the components implicated, and admits the result only through a validation gate on held-out tasks."
@@ -573,26 +533,6 @@
       "imageUrl": "https://arxiv.org/html/2608.24979v1/domain_radial.png",
       "mediaAssets": {
         "images": [
-          {
-            "url": "media/papers/recvtyL4nN0tjk-p3-f1.png",
-            "alt": "PDF 第 3 页图表：Table 1: Core design characteristics of related benchmarks. A solid dot indicates that the characteristic is part of the benchmark’s primary design; a dash indicates otherwise.",
-            "kind": "pdf-page"
-          },
-          {
-            "url": "media/papers/recvtyL4nN0tjk-p6-f2.png",
-            "alt": "PDF 第 6 页图表：Figure 2: Average score versus complete workflow pass rate.",
-            "kind": "pdf-page"
-          },
-          {
-            "url": "media/papers/recvtyL4nN0tjk-p7-f3.png",
-            "alt": "PDF 第 7 页图表：Figure 3: Domain performance.",
-            "kind": "pdf-page"
-          },
-          {
-            "url": "media/papers/recvtyL4nN0tjk-p8-f4.png",
-            "alt": "PDF 第 8 页图表：Figure 4: Resource use.",
-            "kind": "pdf-page"
-          },
           {
             "url": "https://arxiv.org/html/2608.24979v1/domain_radial.png",
             "alt": "Figure 1: Domain and workflow-family composition of the 97 released tasks; center bars show the retained Hard/Medium split."

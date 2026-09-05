@@ -79,26 +79,6 @@
       "mediaAssets": {
         "images": [
           {
-            "url": "media/papers/recvtRBLIkCm0k-p13-f1.png",
-            "alt": "PDF 第 13 页图表：Table 1 Quantitative physical reasoning results. We report MRA on the 2S, 2D, 3S, and 3D subsets and their macro-average on QuantiPhy-validation. The 4B and 9B variants produce direct answers, whereas the 27B reasoning variant is scored only on the answer emitted after its reasoning trace. Rows are grouped by model family, and Code-as-World-VL variants are highlighted in purple.",
-            "kind": "pdf-page"
-          },
-          {
-            "url": "media/papers/recvtRBLIkCm0k-p13-f2.png",
-            "alt": "PDF 第 13 页图表：Figure 9 Parameter scaling on QuantiPhy. Models with undisclosed parameter counts are grouped at the far right.",
-            "kind": "pdf-page"
-          },
-          {
-            "url": "media/papers/recvtRBLIkCm0k-p27-f3.png",
-            "alt": "PDF 第 27 页图表：Figure 11 Agentic discovery with the physics engine. Solid curves report performance over five iterative discovery rounds, while dashed gray lines mark Best-of-5 under the same five-evaluation budget. Higher is better for Visual Alignment, Object IoU, and Accuracy@2%D; lower is better for Traj-ADE and Velocity-ADE.",
-            "kind": "pdf-page"
-          },
-          {
-            "url": "media/papers/recvtRBLIkCm0k-p28-f4.png",
-            "alt": "PDF 第 28 页图表：Table 3 Pixel-level measurement evaluation. Referring-expression datasets evaluate object extent in images, while GOT-10K evaluates object extent and motion in video. Image-Space variants use only the first training phase; full Code-as-World-VL models additionally receive executable-world reinforcement learning.",
-            "kind": "pdf-page"
-          },
-          {
             "url": "https://arxiv.org/html/2608.27549v1/representation-wjl.png",
             "alt": "Figure 1 : Comparison among different physical world representations. Pixels preserve rich visual detail but lack explicit structure, leaving the underlying causes of observations ambiguous; 3D representations capture geometric structure but do not necessarily reveal physical mechanisms; and language provides compact semantic abstractions but lacks precision for continuous physical states. Code complements these representations by expressing the world as an abstract, quantitatively grounded, and executable representation."
           },
@@ -384,26 +364,6 @@
       "imageUrl": "https://arxiv.org/html/2608.27456v1/HKCase.png",
       "mediaAssets": {
         "images": [
-          {
-            "url": "media/papers/recvtQ0liVoITN-p9-f1.png",
-            "alt": "PDF 第 9 页图表：Table 1: Answer accuracy and pedestrian-network adherence compare recognition, orientation, and active exploration question answering across the evaluated MLLM agents. Overall is the instance- count-weighted average across the three task types.",
-            "kind": "pdf-page"
-          },
-          {
-            "url": "media/papers/recvtQ0liVoITN-p13-f2.png",
-            "alt": "PDF 第 13 页图表：Figure 10: Example of GPT-5.5 crossing the road toward the goal direction before becoming blocked by a central obstacle and being unable to continue.",
-            "kind": "pdf-page"
-          },
-          {
-            "url": "media/papers/recvtQ0liVoITN-p13-f3.png",
-            "alt": "PDF 第 13 页图表：Table 3: Local question-answering accuracy and short-navigation success compare robustness across different daytime and weather conditions.",
-            "kind": "pdf-page"
-          },
-          {
-            "url": "media/papers/recvtQ0liVoITN-p14-f4.png",
-            "alt": "PDF 第 14 页图表：Table 4: Dynamic-environment results, where SR is the goal-reaching rate, PNA is the fraction of action time spent on the pedestrian network, SPR is the safe progress rate, which represents the fraction of road-closure episodes that respect the closure, and PCR is the pedestrian-collision rate.",
-            "kind": "pdf-page"
-          },
           {
             "url": "https://arxiv.org/html/2608.27456v1/HKCase.png",
             "alt": "Figure 2: Dynamic simulation components of U r b a n Ground . The same urban environment can be rendered under different times of day and weather conditions, while a georeferenced pedestrian network supports animated pedestrian populations."
@@ -2583,7 +2543,6 @@
             "url": "https://pbs.twimg.com/tweet_video_thumb/HREgZxPa0AAFFYi.jpg",
             "width": 800,
             "height": 1082,
-            "playbackUrl": "media/social/recvueCW1y1mbA-1.mp4",
             "thumbnailUrl": "https://pbs.twimg.com/tweet_video_thumb/HREgZxPa0AAFFYi.jpg",
             "durationSec": 0.0
           },
@@ -2594,7 +2553,6 @@
             "url": "https://pbs.twimg.com/tweet_video_thumb/HREgrb2aMAAVJn9.jpg",
             "width": 800,
             "height": 382,
-            "playbackUrl": "media/social/recvueCW1y1mbA-2.mp4",
             "thumbnailUrl": "https://pbs.twimg.com/tweet_video_thumb/HREgrb2aMAAVJn9.jpg",
             "durationSec": 0.0
           },
@@ -2605,7 +2563,6 @@
             "url": "https://pbs.twimg.com/tweet_video_thumb/HREg78-agAA_K-U.jpg",
             "width": 762,
             "height": 466,
-            "playbackUrl": "media/social/recvueCW1y1mbA-3.mp4",
             "thumbnailUrl": "https://pbs.twimg.com/tweet_video_thumb/HREg78-agAA_K-U.jpg",
             "durationSec": 0.0
           },
@@ -2616,7 +2573,6 @@
             "url": "https://pbs.twimg.com/tweet_video_thumb/HREhIc6a4AAIVAf.jpg",
             "width": 800,
             "height": 440,
-            "playbackUrl": "media/social/recvueCW1y1mbA-4.mp4",
             "thumbnailUrl": "https://pbs.twimg.com/tweet_video_thumb/HREhIc6a4AAIVAf.jpg",
             "durationSec": 0.0
           },
@@ -2627,7 +2583,6 @@
             "url": "https://pbs.twimg.com/tweet_video_thumb/HREhRJ0akAAtArA.jpg",
             "width": 800,
             "height": 1132,
-            "playbackUrl": "media/social/recvueCW1y1mbA-5.mp4",
             "thumbnailUrl": "https://pbs.twimg.com/tweet_video_thumb/HREhRJ0akAAtArA.jpg",
             "durationSec": 0.0
           },
@@ -2638,7 +2593,6 @@
             "url": "https://pbs.twimg.com/tweet_video_thumb/HREhfZsbUAAHUpp.jpg",
             "width": 800,
             "height": 510,
-            "playbackUrl": "media/social/recvueCW1y1mbA-6.mp4",
             "thumbnailUrl": "https://pbs.twimg.com/tweet_video_thumb/HREhfZsbUAAHUpp.jpg",
             "durationSec": 0.0
           },
@@ -2649,7 +2603,6 @@
             "url": "https://pbs.twimg.com/tweet_video_thumb/HREhvG4bEAEgC2f.jpg",
             "width": 800,
             "height": 468,
-            "playbackUrl": "media/social/recvueCW1y1mbA-7.mp4",
             "thumbnailUrl": "https://pbs.twimg.com/tweet_video_thumb/HREhvG4bEAEgC2f.jpg",
             "durationSec": 0.0
           }
