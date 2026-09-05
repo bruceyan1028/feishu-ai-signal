@@ -1,13 +1,13 @@
 {
-  "generatedAt": "2026-09-04T19:07:28+08:00",
+  "generatedAt": "2026-09-05T15:39:35+08:00",
   "days": [
-    "2026-08-29",
     "2026-08-30",
     "2026-08-31",
     "2026-09-01",
     "2026-09-02",
     "2026-09-03",
-    "2026-09-04"
+    "2026-09-04",
+    "2026-09-05"
   ],
   "topics": [
     "happy-janmashtami",
@@ -101,7 +101,7 @@
     ]
   },
   "google-trends": {
-    "error": "",
+    "error": "'NoneType' object has no attribute 'raise_for_status'",
     "topics": [
       "happy-janmashtami",
       "gpt-6",
@@ -191,90 +191,87 @@
       "raw": [
         [
           0.0,
-          0.0,
           1.0,
           1.0,
           2.0,
           10.0,
+          100.0,
           100.0
         ],
         [
-          3.0,
           4.0,
           5.0,
           5.0,
           6.0,
           31.0,
+          100.0,
           100.0
         ],
         [
-          9.0,
           7.0,
           10.0,
           9.0,
           11.0,
           50.0,
+          100.0,
           100.0
         ],
         [
-          41.0,
           35.0,
           38.0,
           39.0,
           44.0,
           100.0,
+          95.0,
           95.0
         ]
       ],
       "normalized": [
         [
           0.0,
-          0.0,
           0.01,
           0.01,
           0.02,
           0.1,
-          1.0
+          1.0,
+          0.0
         ],
         [
-          0.03,
           0.04,
           0.05,
           0.05,
           0.06,
           0.31,
-          1.0
+          1.0,
+          0.0
         ],
         [
-          0.09,
           0.07,
           0.1,
           0.09,
           0.11,
           0.5,
-          1.0
+          1.0,
+          0.0
         ],
         [
-          0.41,
           0.35,
           0.38,
           0.39,
           0.44,
           1.0,
-          0.95
+          0.95,
+          0.0
         ]
       ]
     },
     "trend": {
-      "happy-janmashtami": 42.857,
-      "gpt-6": 11.111,
-      "sam-altman": 6.25,
-      "hugging-face": 1.919
+      "happy-janmashtami": 0.0,
+      "gpt-6": 0.0,
+      "sam-altman": 0.0,
+      "hugging-face": 0.0
     },
     "items": {
-      "happy-janmashtami|2026-08-29": [
-        "g-happy-janmashtami"
-      ],
       "happy-janmashtami|2026-08-30": [
         "g-happy-janmashtami"
       ],
@@ -293,8 +290,8 @@
       "happy-janmashtami|2026-09-04": [
         "g-happy-janmashtami"
       ],
-      "gpt-6|2026-08-29": [
-        "g-gpt-6"
+      "happy-janmashtami|2026-09-05": [
+        "g-happy-janmashtami"
       ],
       "gpt-6|2026-08-30": [
         "g-gpt-6"
@@ -314,8 +311,8 @@
       "gpt-6|2026-09-04": [
         "g-gpt-6"
       ],
-      "sam-altman|2026-08-29": [
-        "g-sam-altman"
+      "gpt-6|2026-09-05": [
+        "g-gpt-6"
       ],
       "sam-altman|2026-08-30": [
         "g-sam-altman"
@@ -335,8 +332,8 @@
       "sam-altman|2026-09-04": [
         "g-sam-altman"
       ],
-      "hugging-face|2026-08-29": [
-        "g-hugging-face"
+      "sam-altman|2026-09-05": [
+        "g-sam-altman"
       ],
       "hugging-face|2026-08-30": [
         "g-hugging-face"
@@ -354,6 +351,9 @@
         "g-hugging-face"
       ],
       "hugging-face|2026-09-04": [
+        "g-hugging-face"
+      ],
+      "hugging-face|2026-09-05": [
         "g-hugging-face"
       ]
     },
@@ -381,7 +381,7 @@
     }
   },
   "x": {
-    "error": "",
+    "error": "gemini-start-the-adventure: HTTPSConnectionPool(host='api.x.com', port=443): Max retries exceeded with url: /2/tweets/counts/recent?query=%22GEMINI+START+THE+ADVENTURE%22+-is%3Aretweet&granularity=day&start_time=2026-08-29T16%3A00%3A00Z (Caused by NameResolutionError(\"HTTPSConnection(host='api.x.com', port=443): Failed to resolve 'api.x.com' ([Errno 8] nodename nor servname provided, or not known)\"))",
     "topics": [
       "gemini-start-the-adventure",
       "gpt-6-astra"
@@ -439,16 +439,16 @@
           0.0,
           0.0,
           0.0,
-          0.0,
+          8022.0,
           8022.0
         ],
         [
-          57.0,
           62.0,
           94.0,
           94.0,
           295.0,
           7876.0,
+          6669.0,
           6669.0
         ]
       ],
@@ -459,28 +459,25 @@
           0.0,
           0.0,
           0.0,
-          0.0,
-          1.0
+          1.0,
+          0.0
         ],
         [
-          0.0072,
           0.0079,
           0.0119,
           0.0119,
           0.0375,
           1.0,
-          0.8467
+          0.8467,
+          0.0
         ]
       ]
     },
     "trend": {
-      "gemini-start-the-adventure": 2.0,
-      "gpt-6-astra": 4.72
+      "gemini-start-the-adventure": 0.0,
+      "gpt-6-astra": 0.0
     },
     "items": {
-      "gemini-start-the-adventure|2026-08-29": [
-        "x-gemini-start-the-adventure"
-      ],
       "gemini-start-the-adventure|2026-08-30": [
         "x-gemini-start-the-adventure"
       ],
@@ -499,8 +496,8 @@
       "gemini-start-the-adventure|2026-09-04": [
         "x-gemini-start-the-adventure"
       ],
-      "gpt-6-astra|2026-08-29": [
-        "x-gpt-6-astra"
+      "gemini-start-the-adventure|2026-09-05": [
+        "x-gemini-start-the-adventure"
       ],
       "gpt-6-astra|2026-08-30": [
         "x-gpt-6-astra"
@@ -518,6 +515,9 @@
         "x-gpt-6-astra"
       ],
       "gpt-6-astra|2026-09-04": [
+        "x-gpt-6-astra"
+      ],
+      "gpt-6-astra|2026-09-05": [
         "x-gpt-6-astra"
       ]
     },

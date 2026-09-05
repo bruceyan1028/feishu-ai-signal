@@ -702,6 +702,36 @@ class WritePayloadTest(unittest.TestCase):
         # 回退不能改到旧快照本身，否则同一轮里后续再读会拿到被污染的数据
         self.assertEqual(previous["hfTrending"]["sections"][0]["items"][0]["name"], "旧模型")
 
+    def test_keep_last_good_clears_board_error_when_hf_sections_restored(self):
+        """三类全超时回退后，整块 error 也要清掉，否则页面只剩超时文案。"""
+        previous = {
+            "hfTrending": {
+                "error": "",
+                "updatedAt": "2026-09-04T18:00:00+08:00",
+                "sections": [
+                    {
+                        "key": "models",
+                        "error": "",
+                        "updatedAt": "2026-09-04T18:00:00+08:00",
+                        "items": [{"name": "旧模型"}],
+                    },
+                ],
+            }
+        }
+        incoming = {
+            "hfTrending": {
+                "error": "connect timeout",
+                "updatedAt": "",
+                "sections": [
+                    {"key": "models", "error": "connect timeout", "items": []},
+                ],
+            }
+        }
+        board = dashboard.keep_last_good(incoming, previous)["hfTrending"]
+        self.assertEqual(board["error"], "")
+        self.assertEqual(board["sections"][0]["items"][0]["name"], "旧模型")
+        self.assertEqual(board["updatedAt"], "2026-09-04T18:00:00+08:00")
+
     def test_keep_last_good_falls_back_per_size_bucket(self):
         """小模型页挂了不该把微型页也换成旧数据，反之亦然。"""
         previous = {
@@ -758,10 +788,16 @@ class WritePayloadTest(unittest.TestCase):
         self, mock_board: MagicMock, mock_hf: MagicMock, mock_market: MagicMock
     ):
         mock_board.return_value = {"error": "", "models": [{"name": "GPT-5.6 Sol"}]}
-        mock_hf.return_value = {"error": "", "models": [{"name": "GLM-5.3"}]}
+        mock_hf.return_value = {
+            "error": "",
+            "sections": [
+                {"key": "models", "error": "", "items": [{"name": "GLM-5.3"}]},
+            ],
+        }
         mock_market.return_value = {"error": "", "quotes": [{"name": "英伟达"}]}
         with tempfile.TemporaryDirectory() as temp:
             output = Path(temp) / "dashboard-latest.json"
+            backup = Path(temp) / "dashboard-backup.json"
             output.write_text(
                 json.dumps(
                     {
@@ -773,9 +809,11 @@ class WritePayloadTest(unittest.TestCase):
                 ),
                 encoding="utf-8",
             )
-            dashboard.refresh_into(output)
+            with patch.object(dashboard, "BACKUP_OUTPUT", backup):
+                dashboard.refresh_into(output)
             written = json.loads(output.read_text(encoding="utf-8"))
             self.assertEqual(written["leaderboard"]["models"][0]["name"], "GPT-5.6 Sol")
+            self.assertTrue(backup.is_file())
 
 
 class PublishIntegrationTest(unittest.TestCase):

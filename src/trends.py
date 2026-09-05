@@ -1047,6 +1047,18 @@ def coalesce(
         return fresh
     merged = reindex_source(previous, old_days, new_days, specs, kind=kind)
     merged["error"] = str(fresh.get("error") or "")
+    # 拉数失败时窗口右端缺日会是 0，热力条看起来像断更；用旧窗口最后一天顶上
+    old_set = set(old_days)
+    raw = ((merged.get("matrix") or {}).get("raw")) or []
+    for row in raw:
+        last = 0.0
+        for index, day in enumerate(new_days):
+            if index >= len(row):
+                break
+            if day in old_set and float(row[index]):
+                last = float(row[index])
+            elif day not in old_set and last:
+                row[index] = last
     return merged
 
 

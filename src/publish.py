@@ -631,11 +631,18 @@ def build_site(
 
 
 def refresh_side_boards(site: Path | str) -> Path:
-    """日报发布后立刻重拉 AA 智能指数、HF 热度与行情，避免本机只跑 publish 时沿用旧快照。"""
-    from . import dashboard
+    """日报发布后立刻重拉 AA/HF/行情，并刷新话题热度，避免本机只跑 publish 时沿用旧快照。"""
+    from . import dashboard, trends
 
-    output = Path(site) / "data" / "dashboard-latest.json"
-    return dashboard.refresh_into(output)
+    site_path = Path(site)
+    dashboard_path = site_path / "data" / "dashboard-latest.json"
+    trends_path = site_path / "data" / "heatmap-trends.json"
+    written = dashboard.refresh_into(dashboard_path)
+    try:
+        trends.run(["--output", str(trends_path)])
+    except Exception as exc:  # noqa: BLE001 - 热度失败不该拖垮看板
+        log.warning("话题热度刷新失败：%s", exc)
+    return written
 
 
 def export_weekly(
@@ -689,10 +696,18 @@ def run() -> int:
         briefs = [current, *[item for item in briefs if item["date"] != current["date"]]][:7]
     curate_web_media(briefs)
     site = build_site(briefs, args.site_dir, params=params)
+    dashboard_path = Path(site) / "data" / "dashboard-latest.json"
     try:
-        _call_with_timeout(refresh_side_boards, 120, site)
+        _call_with_timeout(refresh_side_boards, 180, site)
     except Exception as exc:  # noqa: BLE001 - 看板失败仍应发布当日简报
         log.warning("看板重拉失败或超时：%s", exc)
+        # wait=False 时超时线程还会继续跑；作废它，避免晚到的空 HF 盖掉已恢复的快照
+        try:
+            from . import dashboard
+
+            dashboard.invalidate_refresh(dashboard_path)
+        except Exception:  # noqa: BLE001 - 作废失败也不影响简报落盘
+            pass
     print(site)
     return 0
 

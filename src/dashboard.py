@@ -951,22 +951,79 @@ def keep_last_good(
         rows_key="items",
     )
     if sections and isinstance(merged.get("hfTrending"), dict):
-        merged["hfTrending"] = {**merged["hfTrending"], "sections": sections}
+        board = {**merged["hfTrending"], "sections": sections}
+        # 三栏里只要还有可展示的旧数据，就清掉整块 error，避免页面只显示超时文案
+        if any(_board_has_rows(section, "items") for section in sections):
+            board["error"] = ""
+            board["updatedAt"] = next(
+                (
+                    str(section.get("updatedAt") or "")
+                    for section in sections
+                    if section.get("updatedAt")
+                ),
+                board.get("updatedAt") or "",
+            )
+        merged["hfTrending"] = board
     return merged
+
+
+# site/ 重建中断时 dashboard-latest.json 可能丢，落一份到仓库 data/ 作回退源
+BACKUP_OUTPUT = ROOT / "data" / "dashboard-backup.json"
+_refresh_generations: dict[str, int] = {}
+
+
+def invalidate_refresh(output: Path | str) -> None:
+    """超时后作废仍在跑的那一轮，防止晚到的空结果盖掉已恢复的快照。"""
+    key = str(Path(output).resolve())
+    _refresh_generations[key] = _refresh_generations.get(key, 0) + 1
+
+
+def _load_dashboard(path: Path) -> dict[str, Any] | None:
+    if not path.is_file():
+        return None
+    try:
+        data = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as exc:
+        log.warning("无法读取看板 %s：%s", path, exc)
+        return None
+    return data if isinstance(data, dict) else None
+
+
+def _hf_has_items(payload: dict[str, Any] | None) -> bool:
+    if not payload:
+        return False
+    sections = (payload.get("hfTrending") or {}).get("sections") or []
+    return any(_board_has_rows(section, "items") for section in sections)
 
 
 def refresh_into(output: Path | str) -> Path:
     """拉当期榜单与行情并落盘；一侧失败则沿用该侧旧数据。"""
     _load_dotenv()
     path = Path(output)
-    previous = None
-    if path.is_file():
-        try:
-            previous = json.loads(path.read_text(encoding="utf-8"))
-        except (OSError, json.JSONDecodeError) as exc:
-            log.warning("无法读取旧看板 %s：%s", path, exc)
+    key = str(path.resolve())
+    generation = _refresh_generations.get(key, 0) + 1
+    _refresh_generations[key] = generation
+    previous = _load_dashboard(path)
+    # site 被中途掐掉重建时，主文件可能已空，改从仓库内备份回退
+    if not _hf_has_items(previous):
+        backup = _load_dashboard(BACKUP_OUTPUT)
+        if _hf_has_items(backup):
+            log.warning("看板主文件无 HF 数据，改用 %s", BACKUP_OUTPUT)
+            previous = keep_last_good(previous or {}, backup) if previous else backup
     payload = keep_last_good(build_payload(), previous)
-    return write_payload(payload, path)
+    if _refresh_generations.get(key) != generation:
+        log.warning("看板刷新已被更新的一轮取代，丢弃本次写入 %s", path)
+        return path
+    written = write_payload(payload, path)
+    if _hf_has_items(payload):
+        try:
+            BACKUP_OUTPUT.parent.mkdir(parents=True, exist_ok=True)
+            BACKUP_OUTPUT.write_text(
+                json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8"
+            )
+        except OSError as exc:
+            log.warning("无法写入看板备份 %s：%s", BACKUP_OUTPUT, exc)
+    return written
 
 
 def run(argv: list[str] | None = None) -> int:
