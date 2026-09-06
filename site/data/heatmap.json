@@ -39,63 +39,63 @@
         3,
         6,
         14,
-        35
+        42
       ],
       [
         0,
         2,
         3,
         12,
-        12
+        13
       ],
       [
         0,
         2,
         0,
         9,
-        16
+        20
       ],
       [
         0,
         0,
         3,
         7,
-        7
+        8
       ],
       [
         0,
         0,
         2,
         0,
-        10
+        12
       ],
       [
         5,
         5,
         6,
         6,
-        17
+        22
       ],
       [
         0,
         0,
         0,
         4,
-        6
+        8
       ],
       [
         2,
         0,
         0,
         0,
-        13
+        18
       ],
       [
         4,
         3,
         4,
         5,
-        22
+        25
       ],
       [
         8,
@@ -109,71 +109,71 @@
         0,
         0,
         0,
-        15
+        23
       ]
     ],
     "normalized": [
       [
-        0.0286,
-        0.0857,
-        0.1714,
-        0.4,
+        0.0238,
+        0.0714,
+        0.1429,
+        0.3333,
         1.0
       ],
       [
+        0.0,
+        0.1538,
+        0.2308,
+        0.9231,
+        1.0
+      ],
+      [
+        0.0,
+        0.1,
+        0.0,
+        0.45,
+        1.0
+      ],
+      [
+        0.0,
+        0.0,
+        0.375,
+        0.875,
+        1.0
+      ],
+      [
+        0.0,
         0.0,
         0.1667,
-        0.25,
-        1.0,
-        1.0
-      ],
-      [
-        0.0,
-        0.125,
-        0.0,
-        0.5625,
-        1.0
-      ],
-      [
-        0.0,
-        0.0,
-        0.4286,
-        1.0,
-        1.0
-      ],
-      [
-        0.0,
-        0.0,
-        0.2,
         0.0,
         1.0
       ],
       [
-        0.2941,
-        0.2941,
-        0.3529,
-        0.3529,
-        1.0
-      ],
-      [
-        0.0,
-        0.0,
-        0.0,
-        0.6667,
-        1.0
-      ],
-      [
-        0.1538,
-        0.0,
-        0.0,
-        0.0,
-        1.0
-      ],
-      [
-        0.1818,
-        0.1364,
-        0.1818,
         0.2273,
+        0.2273,
+        0.2727,
+        0.2727,
+        1.0
+      ],
+      [
+        0.0,
+        0.0,
+        0.0,
+        0.5,
+        1.0
+      ],
+      [
+        0.1111,
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      [
+        0.16,
+        0.12,
+        0.16,
+        0.2,
         1.0
       ],
       [
@@ -396,7 +396,11 @@
       "recvujWsa2Ndtp",
       "recvujWsa2LL15",
       "recvudLnQxMf5u",
-      "recvudLnQxfu8Q"
+      "recvudLnQxfu8Q",
+      "recvupqJtiDMvx",
+      "recvupqJticraQ",
+      "recvupqJtiFHRL",
+      "recvupqJtiRHJA"
     ],
     "infra|2026-W36": [
       "recvtW9WBRPQmp",
@@ -413,7 +417,11 @@
       "recvudLnQx6dAU",
       "recvudLnQx0wTS",
       "recvujWsa2OjtU",
-      "recvujWsa2K71N"
+      "recvujWsa2K71N",
+      "recvujWsa2parM",
+      "recvujWsa2vQFs",
+      "recvupqJtiFHRL",
+      "recvupqJtivOTT"
     ],
     "funding|2026-W36": [
       "recvtW9WBRSx2a",
@@ -454,7 +462,10 @@
       "recvudLnQxNdMh",
       "recvudLnQx5bgd",
       "recvudLnQx78Fp",
-      "recvudLnQxEdGP"
+      "recvudLnQxEdGP",
+      "recvupqJtidVub",
+      "recvupqJtiuSlT",
+      "recvupqJtiDCQ6"
     ],
     "other|2026-W36": [
       "recvtW9WBRRLop",
@@ -469,7 +480,13 @@
       "recvudLnQxsurX",
       "recvujWsa205C4",
       "recvujWsa2BbUb",
-      "recvujWsa2ilal"
+      "recvujWsa2ilal",
+      "recvujWsa280Lz",
+      "recvudLnQxmhll",
+      "recvupqJtiukgh",
+      "recvupqJtihzKO",
+      "recvudLnQxQTco",
+      "recvtW9WBRh35z"
     ],
     "multimodal|2026-W36": [
       "recvtW9WBRobE2",
@@ -480,7 +497,8 @@
       "recvu7Bcb3NH05",
       "recvudLnQx6dAU",
       "recvudLnQxNdMh",
-      "recvujWsa28XQF"
+      "recvujWsa28XQF",
+      "recvupqJtiDCQ6"
     ],
     "open-source-model|2026-W36": [
       "recvtW9WBRobE2",
@@ -492,7 +510,8 @@
       "recvtW9WBR72ie",
       "recvu1S4qSMFXB",
       "recvu1S4qSqy3r",
-      "recvujWsa2pApy"
+      "recvujWsa2pApy",
+      "recvupqJtidVub"
     ],
     "rag-search|2026-W36": [
       "recvtW9WBRXxbq",
@@ -503,7 +522,9 @@
       "recvu7Bcb3zGUn",
       "recvudLnQxBXcT",
       "recvudLnQxfu8Q",
-      "recvujWsa2Ndtp"
+      "recvujWsa2Ndtp",
+      "recvupqJtiuSlT",
+      "recvupqJticraQ"
     ],
     "safety-policy|2026-W36": [
       "recvtW9WBRShl3",
@@ -516,7 +537,10 @@
       "recvudLnQxe5zB",
       "recvujWsa2VzgG",
       "recvudLnQxLEY8",
-      "recvudLnQxMf5u"
+      "recvudLnQxMf5u",
+      "recvupqJtiDMvx",
+      "recvupqJtiRHJA",
+      "recvudLnQxjiJJ"
     ],
     "reasoning|2026-W36": [
       "recvu1S4qSbYtM",
@@ -1570,18 +1594,103 @@
       "title": "泡泡玛特需求可持续性的底层逻辑：IP与情绪消费",
       "source": "虎嗅",
       "url": "https://www.huxiu.com/article/4888776.html"
+    },
+    "recvujWsa2parM": {
+      "title": "最大 AI 数据中心 IT 电力容量每十个月翻倍",
+      "source": "Epoch AI Compute Data",
+      "url": "https://epoch.ai/data-insights/frontier-data-center-power"
+    },
+    "recvupqJtiDMvx": {
+      "title": "OpenAI承认内部Agent绕过只读限制并向德国网站写入内容",
+      "source": "智东西",
+      "url": "https://zhidx.com/p/591232.html"
+    },
+    "recvujWsa2vQFs": {
+      "title": "华为到2030年能追上英伟达吗？",
+      "source": "Epoch AI Compute Data",
+      "url": "https://epoch.ai/publications/huaweis-roadmap-to-2031"
+    },
+    "recvupqJtidVub": {
+      "title": "IFA 2026：中国厂商规模创历史，物理AI与智能硬件加速出海",
+      "source": "智东西",
+      "url": "https://zhidx.com/p/591012.html"
+    },
+    "recvupqJtiuSlT": {
+      "title": "下一代媒体争夺的不是内容，而是“打断权”",
+      "source": "虎嗅",
+      "url": "https://www.huxiu.com/article/4888865.html"
+    },
+    "recvujWsa280Lz": {
+      "title": "超大规模用户需求推动公用事业关注小型模块化核反应堆",
+      "source": "Utility Dive",
+      "url": "https://www.utilitydive.com/news/utilities-eye-small-modular-nuclear-reactors-for-reliability-as-hyperscaler/829681"
+    },
+    "recvupqJticraQ": {
+      "title": "Firecrawl v2.11.306：面向 Agent 的规模化网页搜索、抓取与交互开源平台",
+      "source": "GitHub Trending",
+      "url": "https://github.com/firecrawl/firecrawl/releases/tag/v2.11.306"
+    },
+    "recvupqJtiFHRL": {
+      "title": "Ollama v0.34.0：接入 ChatGPT Desktop 并增强结构化输出与工具调用",
+      "source": "GitHub Trending",
+      "url": "https://github.com/ollama/ollama/releases/tag/v0.34.0-rc1"
+    },
+    "recvupqJtivOTT": {
+      "title": "AI芯片需求推动韩国出口创历史新高",
+      "source": "华尔街见闻",
+      "url": "https://wallstreetcn.com/articles/3781158"
+    },
+    "recvupqJtiRHJA": {
+      "title": "AI 智能体接管咖啡店与商店：宽容决策暴露管理风险",
+      "source": "果壳",
+      "url": "https://www.guokr.com/article/470126"
+    },
+    "recvudLnQxmhll": {
+      "title": "美国陆上风电项目管线收缩，风电与光伏购电价差扩大",
+      "source": "Utility Dive",
+      "url": "https://www.utilitydive.com/news/land-based-wind-power-pipeline-shrinks-as-price-gap-with-solar-widens/829573"
+    },
+    "recvupqJtiDCQ6": {
+      "title": "生成式AI助力中东年轻人创作政治恶搞并跨区域接单",
+      "source": "虎嗅",
+      "url": "https://www.huxiu.com/article/4888830.html"
+    },
+    "recvupqJtiukgh": {
+      "title": "AI Token付费门槛正在制造高校学生的使用鸿沟",
+      "source": "虎嗅",
+      "url": "https://www.huxiu.com/article/4888878.html"
+    },
+    "recvupqJtihzKO": {
+      "title": "清闲智能在IFA 2026展示动态人机工学椅",
+      "source": "品玩 / 硅星人",
+      "url": "https://www.pingwest.com/w/317108"
+    },
+    "recvudLnQxQTco": {
+      "title": "National Grid：差异化燃气与电力预测是审慎规划的基础",
+      "source": "Utility Dive",
+      "url": "https://www.utilitydive.com/news/different-forecasts-dont-mean-higher-bills-they-mean-responsible-planning/829035"
+    },
+    "recvtW9WBRh35z": {
+      "title": "德国官僚主义争议再起，创业生态遭批评：‘必须改变’",
+      "source": "Sifted",
+      "url": "https://sifted.eu/articles/german-bureaucracy-online-debate-startups-innovation"
+    },
+    "recvudLnQxjiJJ": {
+      "title": "CISA取消面向关键基础设施运营方的六项免费网络安全评估",
+      "source": "Utility Dive",
+      "url": "https://www.utilitydive.com/news/cisa-scraps-6-free-cybersecurity-assessments-for-critical-infrastructure-op/829570"
     }
   },
   "trend": {
-    "agent": 7.35,
-    "reasoning": 7.2,
-    "multimodal": 18.75,
-    "open-source-model": 7.0,
-    "rag-search": 7.5,
-    "infra": 2.156,
+    "agent": 8.4,
+    "reasoning": 7.5,
+    "multimodal": 21.75,
+    "open-source-model": 7.5,
+    "rag-search": 9.0,
+    "infra": 2.625,
     "embodied": 2.0,
-    "safety-policy": 9.75,
-    "product": 3.682,
+    "safety-policy": 13.5,
+    "product": 4.091,
     "funding": 1.5,
     "other": 2.0
   },

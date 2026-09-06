@@ -1,10 +1,10 @@
 {
-  "generatedAt": "2026-09-05T15:11:07+08:00",
+  "generatedAt": "2026-09-06T12:57:00+08:00",
   "leaderboard": {
     "source": "Artificial Analysis",
     "sourceUrl": "https://artificialanalysis.ai/",
     "metric": "智能指数",
-    "updatedAt": "2026-09-05T15:11:09+08:00",
+    "updatedAt": "2026-09-06T12:57:01+08:00",
     "error": "",
     "models": [
       {
@@ -18,8 +18,8 @@
         "coding": 81.6,
         "math": null,
         "price": 20.0,
-        "speed": 71.4,
-        "latency": 130.77
+        "speed": 69.8,
+        "latency": 170.42
       },
       {
         "rank": 2,
@@ -32,8 +32,8 @@
         "coding": 76.9,
         "math": null,
         "price": 20.0,
-        "speed": 0.0,
-        "latency": 0.0
+        "speed": 61.3,
+        "latency": 184.63
       },
       {
         "rank": 3,
@@ -46,8 +46,8 @@
         "coding": 78.0,
         "math": null,
         "price": 10.0,
-        "speed": 51.9,
-        "latency": 36.6
+        "speed": 49.3,
+        "latency": 38.2
       },
       {
         "rank": 4,
@@ -60,8 +60,8 @@
         "coding": 76.5,
         "math": null,
         "price": 20.0,
-        "speed": 65.9,
-        "latency": 63.82
+        "speed": 59.4,
+        "latency": 53.36
       },
       {
         "rank": 5,
@@ -70,7 +70,7 @@
         "variant": "Muse Spark 1.3 (max)",
         "creator": "Meta",
         "logoDomain": "meta.com",
-        "intelligence": 52.7,
+        "intelligence": 53.0,
         "coding": 76.3,
         "math": null,
         "price": 2.0,
@@ -88,8 +88,8 @@
         "coding": 77.4,
         "math": null,
         "price": 8.0,
-        "speed": 79.4,
-        "latency": 51.27
+        "speed": 79.3,
+        "latency": 50.23
       },
       {
         "rank": 7,
@@ -102,8 +102,8 @@
         "coding": 76.8,
         "math": null,
         "price": 3.0,
-        "speed": 60.4,
-        "latency": 39.85
+        "speed": 56.9,
+        "latency": 35.31
       },
       {
         "rank": 8,
@@ -116,8 +116,8 @@
         "coding": 76.2,
         "math": null,
         "price": 6.0,
-        "speed": 37.9,
-        "latency": 3.13
+        "speed": 38.9,
+        "latency": 2.99
       },
       {
         "rank": 9,
@@ -130,8 +130,8 @@
         "coding": 74.8,
         "math": null,
         "price": 2.15,
-        "speed": 78.4,
-        "latency": 1.43
+        "speed": 77.4,
+        "latency": 1.25
       },
       {
         "rank": 10,
@@ -144,8 +144,8 @@
         "coding": 76.3,
         "math": null,
         "price": 1.5,
-        "speed": 429.2,
-        "latency": 19.74
+        "speed": 340.0,
+        "latency": 8.15
       },
       {
         "rank": 11,
@@ -158,7 +158,7 @@
         "coding": 71.8,
         "math": null,
         "price": 3.0,
-        "speed": 39.1,
+        "speed": 38.4,
         "latency": 1.73
       },
       {
@@ -173,7 +173,7 @@
         "math": null,
         "price": 4.5,
         "speed": 104.1,
-        "latency": 116.65
+        "latency": 104.02
       }
     ],
     "buckets": [
@@ -182,7 +182,7 @@
         "label": "小模型",
         "note": "4B–40B",
         "sourceUrl": "https://artificialanalysis.ai/models/open-source/small",
-        "updatedAt": "2026-09-05T15:11:10+08:00",
+        "updatedAt": "2026-09-06T12:57:02+08:00",
         "error": "",
         "models": [
           {
@@ -193,7 +193,7 @@
             "tag": "xhigh",
             "creator": "Alibaba",
             "logoDomain": "qwen.ai",
-            "intelligence": 41.6,
+            "intelligence": 41.4,
             "params": 27.0,
             "url": "https://artificialanalysis.ai/models/qwen3-8-27b"
           },
@@ -336,7 +336,7 @@
         "label": "微型",
         "note": "≤4B",
         "sourceUrl": "https://artificialanalysis.ai/models/open-source/tiny",
-        "updatedAt": "2026-09-05T15:11:13+08:00",
+        "updatedAt": "2026-09-06T12:57:04+08:00",
         "error": "",
         "models": [
           {
@@ -746,7 +746,7 @@
   "market": {
     "source": "腾讯财经",
     "sourceUrl": "https://stockapp.finance.qq.com/",
-    "updatedAt": "2026-09-05T15:13:13+08:00",
+    "updatedAt": "2026-09-06T12:59:04+08:00",
     "error": "",
     "quotes": [
       {

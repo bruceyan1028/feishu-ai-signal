@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-05 15:11",
+  "generatedAt": "2026-09-06 12:57",
   "origin": "feishu",
   "briefWindowDays": 7,
   "sources": [
@@ -17,7 +17,7 @@
       "priority": "高",
       "fetchMethod": "Scrape",
       "lookback": "24h",
-      "last": "09-05 13:26",
+      "last": "09-06 11:57",
       "perDay": 0,
       "briefCount": 0
     },
@@ -71,7 +71,7 @@
       "priority": "高",
       "fetchMethod": "Scrape",
       "lookback": "7d",
-      "last": "09-05 13:26",
+      "last": "09-06 11:57",
       "perDay": 0,
       "briefCount": 0
     },
@@ -89,9 +89,9 @@
       "priority": "高",
       "fetchMethod": "Scrape",
       "lookback": "7d",
-      "last": "09-05 13:26",
+      "last": "09-06 11:57",
       "perDay": 2,
-      "briefCount": 27
+      "briefCount": 26
     },
     {
       "id": "gcp-ai-infra",
@@ -107,7 +107,7 @@
       "priority": "高",
       "fetchMethod": "RSS",
       "lookback": "24h",
-      "last": "09-05 13:26",
+      "last": "09-06 11:57",
       "perDay": 0,
       "briefCount": 1
     },
@@ -125,7 +125,7 @@
       "priority": "高",
       "fetchMethod": "RSS",
       "lookback": "24h",
-      "last": "09-05 13:26",
+      "last": "09-06 11:57",
       "perDay": 0,
       "briefCount": 2
     },
@@ -145,7 +145,7 @@
       "lookback": "72h",
       "last": "09-04 15:47",
       "perDay": 0,
-      "briefCount": 1
+      "briefCount": 2
     },
     {
       "id": "hf-papers-trending",
@@ -161,9 +161,9 @@
       "priority": "高",
       "fetchMethod": "Scrape",
       "lookback": "7d",
-      "last": "09-05 13:26",
+      "last": "09-06 11:57",
       "perDay": 0,
-      "briefCount": 10
+      "briefCount": 9
     },
     {
       "id": "jmlr",
@@ -179,7 +179,7 @@
       "priority": "高",
       "fetchMethod": "RSS",
       "lookback": "每周",
-      "last": "09-05 13:26",
+      "last": "09-06 11:57",
       "perDay": 0,
       "briefCount": 0
     },
@@ -215,7 +215,7 @@
       "priority": "高",
       "fetchMethod": "Scrape",
       "lookback": "24h",
-      "last": "09-05 13:26",
+      "last": "09-06 11:57",
       "perDay": 0,
       "briefCount": 0
     },
@@ -233,7 +233,7 @@
       "priority": "高",
       "fetchMethod": "RSS",
       "lookback": "24h",
-      "last": "09-05 13:26",
+      "last": "09-06 11:57",
       "perDay": 0,
       "briefCount": 0
     },
@@ -269,9 +269,9 @@
       "priority": "高",
       "fetchMethod": "Scrape",
       "lookback": "7d",
-      "last": "09-05 13:26",
+      "last": "09-06 11:57",
       "perDay": 0,
-      "briefCount": 11
+      "briefCount": 9
     },
     {
       "id": "nvidia-blog",
@@ -287,7 +287,7 @@
       "priority": "高",
       "fetchMethod": "RSS",
       "lookback": "24h",
-      "last": "09-05 13:26",
+      "last": "09-06 11:57",
       "perDay": 0,
       "briefCount": 2
     },
@@ -307,7 +307,7 @@
       "lookback": "72h",
       "last": "09-04 15:47",
       "perDay": 0,
-      "briefCount": 7
+      "briefCount": 8
     },
     {
       "id": "nature-computational-science",
@@ -323,7 +323,7 @@
       "priority": "高",
       "fetchMethod": "RSS",
       "lookback": "每周",
-      "last": "09-05 13:26",
+      "last": "09-06 11:57",
       "perDay": 0,
       "briefCount": 0
     },
@@ -341,7 +341,7 @@
       "priority": "高",
       "fetchMethod": "RSS",
       "lookback": "每周",
-      "last": "09-05 13:26",
+      "last": "09-06 11:57",
       "perDay": 0,
       "briefCount": 0
     },
@@ -359,7 +359,7 @@
       "priority": "高",
       "fetchMethod": "RSS",
       "lookback": "24h",
-      "last": "09-05 13:26",
+      "last": "09-06 11:57",
       "perDay": 0,
       "briefCount": 1
     },
@@ -379,7 +379,7 @@
       "lookback": "72h",
       "last": "09-04 15:47",
       "perDay": 0,
-      "briefCount": 4
+      "briefCount": 5
     },
     {
       "id": "opencompass",
@@ -395,9 +395,9 @@
       "priority": "高",
       "fetchMethod": "RSS",
       "lookback": "7d",
-      "last": "09-05 13:26",
+      "last": "09-06 11:57",
       "perDay": 0,
-      "briefCount": 3
+      "briefCount": 2
     },
     {
       "id": "papers-with-code-trending",
@@ -413,9 +413,9 @@
       "priority": "高",
       "fetchMethod": "Scrape",
       "lookback": "7d",
-      "last": "09-05 13:26",
+      "last": "09-06 11:57",
       "perDay": 0,
-      "briefCount": 18
+      "briefCount": 19
     },
     {
       "id": "papers-with-code-sota",
@@ -449,7 +449,7 @@
       "priority": "高",
       "fetchMethod": "RSS",
       "lookback": "24h",
-      "last": "09-05 13:26",
+      "last": "09-06 11:57",
       "perDay": 0,
       "briefCount": 0
     },
@@ -467,8 +467,8 @@
       "priority": "高",
       "fetchMethod": "RSS",
       "lookback": "24h",
-      "last": "09-05 13:26",
-      "perDay": 3,
+      "last": "09-06 11:57",
+      "perDay": 0,
       "briefCount": 12
     },
     {
@@ -485,7 +485,7 @@
       "priority": "高",
       "fetchMethod": "RSS",
       "lookback": "7d",
-      "last": "09-05 13:26",
+      "last": "09-06 11:57",
       "perDay": 0,
       "briefCount": 0
     },
@@ -503,9 +503,9 @@
       "priority": "高",
       "fetchMethod": "RSS",
       "lookback": "7d",
-      "last": "09-05 13:26",
+      "last": "09-06 11:57",
       "perDay": 0,
-      "briefCount": 3
+      "briefCount": 4
     },
     {
       "id": "social-media",
@@ -521,8 +521,8 @@
       "priority": "高",
       "fetchMethod": "Social",
       "lookback": "7d",
-      "last": "09-04 15:37",
-      "perDay": 10,
+      "last": "09-06 11:57",
+      "perDay": 0,
       "briefCount": 0
     },
     {
@@ -539,7 +539,7 @@
       "priority": "高",
       "fetchMethod": "RSS",
       "lookback": "24h",
-      "last": "09-05 13:26",
+      "last": "09-06 11:57",
       "perDay": 0,
       "briefCount": 0
     },
@@ -557,7 +557,7 @@
       "priority": "高",
       "fetchMethod": "RSS",
       "lookback": "24h",
-      "last": "09-05 13:26",
+      "last": "09-06 11:57",
       "perDay": 0,
       "briefCount": 0
     },
@@ -575,7 +575,7 @@
       "priority": "高",
       "fetchMethod": "RSS",
       "lookback": "24h",
-      "last": "09-05 13:26",
+      "last": "09-06 11:57",
       "perDay": 0,
       "briefCount": 0
     },
@@ -593,7 +593,7 @@
       "priority": "高",
       "fetchMethod": "Scrape",
       "lookback": "72h",
-      "last": "09-05 13:26",
+      "last": "09-06 11:57",
       "perDay": 0,
       "briefCount": 0
     },
@@ -611,9 +611,9 @@
       "priority": "高",
       "fetchMethod": "Scrape",
       "lookback": "7d",
-      "last": "09-05 13:26",
+      "last": "09-06 11:57",
       "perDay": 0,
-      "briefCount": 7
+      "briefCount": 6
     },
     {
       "id": "stepfun-modelscope",
@@ -629,7 +629,7 @@
       "priority": "高",
       "fetchMethod": "Scrape",
       "lookback": "7d",
-      "last": "09-05 13:26",
+      "last": "09-06 11:57",
       "perDay": 0,
       "briefCount": 0
     },
@@ -647,9 +647,9 @@
       "priority": "中",
       "fetchMethod": "RSS",
       "lookback": "24h",
-      "last": "09-05 13:26",
-      "perDay": 8,
-      "briefCount": 12
+      "last": "09-06 11:57",
+      "perDay": 0,
+      "briefCount": 11
     },
     {
       "id": "amd-instinct",
@@ -665,7 +665,7 @@
       "priority": "中",
       "fetchMethod": "RSS",
       "lookback": "24h",
-      "last": "09-05 13:26",
+      "last": "09-06 11:57",
       "perDay": 0,
       "briefCount": 0
     },
@@ -683,7 +683,7 @@
       "priority": "中",
       "fetchMethod": "RSS",
       "lookback": "7d",
-      "last": "09-05 13:26",
+      "last": "09-06 11:57",
       "perDay": 0,
       "briefCount": 0
     },
@@ -701,7 +701,7 @@
       "priority": "中",
       "fetchMethod": "RSS",
       "lookback": "7d",
-      "last": "09-05 13:26",
+      "last": "09-06 11:57",
       "perDay": 0,
       "briefCount": 0
     },
@@ -719,7 +719,7 @@
       "priority": "中",
       "fetchMethod": "Scrape",
       "lookback": "24h",
-      "last": "09-05 13:26",
+      "last": "09-06 11:57",
       "perDay": 0,
       "briefCount": 0
     },
@@ -755,9 +755,9 @@
       "priority": "中",
       "fetchMethod": "Scrape",
       "lookback": "7d",
-      "last": "09-05 13:26",
-      "perDay": 2,
-      "briefCount": 0
+      "last": "09-06 11:57",
+      "perDay": 0,
+      "briefCount": 2
     },
     {
       "id": "lambda-labs",
@@ -773,7 +773,7 @@
       "priority": "中",
       "fetchMethod": "RSS",
       "lookback": "24h",
-      "last": "09-05 13:26",
+      "last": "09-06 11:57",
       "perDay": 0,
       "briefCount": 0
     },
@@ -791,7 +791,7 @@
       "priority": "中",
       "fetchMethod": "RSS",
       "lookback": "7d",
-      "last": "09-05 13:26",
+      "last": "09-06 11:57",
       "perDay": 0,
       "briefCount": 0
     },
@@ -827,7 +827,7 @@
       "priority": "中",
       "fetchMethod": "RSS",
       "lookback": "48h",
-      "last": "09-05 13:26",
+      "last": "09-06 11:57",
       "perDay": 0,
       "briefCount": 0
     },
@@ -845,7 +845,7 @@
       "priority": "中",
       "fetchMethod": "RSS",
       "lookback": "24h",
-      "last": "09-05 13:26",
+      "last": "09-06 11:57",
       "perDay": 0,
       "briefCount": 0
     },
@@ -863,7 +863,7 @@
       "priority": "中",
       "fetchMethod": "RSS",
       "lookback": "7d",
-      "last": "09-05 13:26",
+      "last": "09-06 11:57",
       "perDay": 0,
       "briefCount": 0
     },
@@ -881,7 +881,7 @@
       "priority": "中",
       "fetchMethod": "RSS",
       "lookback": "7d",
-      "last": "09-05 13:26",
+      "last": "09-06 11:57",
       "perDay": 0,
       "briefCount": 0
     },
@@ -899,7 +899,7 @@
       "priority": "中",
       "fetchMethod": "RSS",
       "lookback": "7d",
-      "last": "09-05 13:26",
+      "last": "09-06 11:57",
       "perDay": 0,
       "briefCount": 0
     },
@@ -935,7 +935,7 @@
       "priority": "中",
       "fetchMethod": "RSS",
       "lookback": "24h",
-      "last": "09-05 13:26",
+      "last": "09-06 11:57",
       "perDay": 0,
       "briefCount": 0
     },
@@ -971,7 +971,7 @@
       "priority": "中",
       "fetchMethod": "RSS",
       "lookback": "24h",
-      "last": "09-05 13:26",
+      "last": "09-06 11:57",
       "perDay": 0,
       "briefCount": 0
     },
@@ -989,9 +989,9 @@
       "priority": "中",
       "fetchMethod": "Scrape",
       "lookback": "24h",
-      "last": "09-05 13:26",
-      "perDay": 3,
-      "briefCount": 13
+      "last": "09-06 11:57",
+      "perDay": 1,
+      "briefCount": 12
     },
     {
       "id": "pingwest",
@@ -1007,9 +1007,9 @@
       "priority": "中",
       "fetchMethod": "Scrape",
       "lookback": "24h",
-      "last": "09-05 13:26",
-      "perDay": 0,
-      "briefCount": 6
+      "last": "09-06 11:57",
+      "perDay": 1,
+      "briefCount": 7
     },
     {
       "id": "zhidx",
@@ -1025,9 +1025,9 @@
       "priority": "中",
       "fetchMethod": "RSS",
       "lookback": "24h",
-      "last": "09-05 13:26",
-      "perDay": 1,
-      "briefCount": 5
+      "last": "09-06 11:57",
+      "perDay": 2,
+      "briefCount": 7
     },
     {
       "id": "geekpark",
@@ -1043,7 +1043,7 @@
       "priority": "中",
       "fetchMethod": "Scrape",
       "lookback": "24h",
-      "last": "09-05 13:26",
+      "last": "09-06 11:57",
       "perDay": 0,
       "briefCount": 0
     },
@@ -1061,8 +1061,8 @@
       "priority": "中",
       "fetchMethod": "Scrape",
       "lookback": "24h",
-      "last": "09-05 13:26",
-      "perDay": 2,
+      "last": "09-06 11:57",
+      "perDay": 1,
       "briefCount": 3
     },
     {
@@ -1079,7 +1079,7 @@
       "priority": "中",
       "fetchMethod": "Scrape",
       "lookback": "24h",
-      "last": "09-05 13:26",
+      "last": "09-06 11:57",
       "perDay": 0,
       "briefCount": 0
     },
@@ -1097,7 +1097,7 @@
       "priority": "中",
       "fetchMethod": "RSS",
       "lookback": "24h",
-      "last": "09-05 13:26",
+      "last": "09-06 11:57",
       "perDay": 0,
       "briefCount": 0
     },
@@ -1115,9 +1115,9 @@
       "priority": "中",
       "fetchMethod": "Scrape",
       "lookback": "24h",
-      "last": "09-05 13:26",
-      "perDay": 4,
-      "briefCount": 20
+      "last": "09-06 11:57",
+      "perDay": 3,
+      "briefCount": 21
     },
     {
       "id": "caixin",
@@ -1133,7 +1133,7 @@
       "priority": "中",
       "fetchMethod": "Scrape",
       "lookback": "24h",
-      "last": "09-05 13:26",
+      "last": "09-06 11:57",
       "perDay": 0,
       "briefCount": 0
     },
@@ -1151,7 +1151,7 @@
       "priority": "中",
       "fetchMethod": "RSS",
       "lookback": "24h",
-      "last": "09-05 13:26",
+      "last": "09-06 11:57",
       "perDay": 0,
       "briefCount": 0
     },
@@ -1169,7 +1169,7 @@
       "priority": "低",
       "fetchMethod": "Podcast",
       "lookback": "7d",
-      "last": "09-05 05:59",
+      "last": "09-06 11:57",
       "perDay": 0,
       "briefCount": 0
     },
@@ -1187,7 +1187,7 @@
       "priority": "低",
       "fetchMethod": "Podcast",
       "lookback": "7d",
-      "last": "09-05 05:59",
+      "last": "09-06 11:57",
       "perDay": 0,
       "briefCount": 0
     },
@@ -1205,7 +1205,7 @@
       "priority": "低",
       "fetchMethod": "Podcast",
       "lookback": "7d",
-      "last": "09-05 05:59",
+      "last": "09-06 11:57",
       "perDay": 0,
       "briefCount": 0
     },
@@ -1223,7 +1223,7 @@
       "priority": "低",
       "fetchMethod": "Podcast",
       "lookback": "7d",
-      "last": "09-05 05:59",
+      "last": "09-06 11:57",
       "perDay": 0,
       "briefCount": 0
     },
@@ -1241,9 +1241,9 @@
       "priority": "低",
       "fetchMethod": "RSS",
       "lookback": "7d",
-      "last": "09-05 13:26",
+      "last": "09-06 11:57",
       "perDay": 0,
-      "briefCount": 0
+      "briefCount": 1
     },
     {
       "id": "podcast-cognitive-revolution",
@@ -1259,7 +1259,7 @@
       "priority": "低",
       "fetchMethod": "Podcast",
       "lookback": "7d",
-      "last": "09-05 05:59",
+      "last": "09-06 11:57",
       "perDay": 0,
       "briefCount": 0
     },
@@ -1277,7 +1277,7 @@
       "priority": "低",
       "fetchMethod": "Podcast",
       "lookback": "7d",
-      "last": "09-05 05:59",
+      "last": "09-06 11:57",
       "perDay": 0,
       "briefCount": 0
     },
@@ -1295,7 +1295,7 @@
       "priority": "低",
       "fetchMethod": "Podcast",
       "lookback": "7d",
-      "last": "09-05 05:59",
+      "last": "09-06 11:57",
       "perDay": 0,
       "briefCount": 0
     },
@@ -1313,9 +1313,9 @@
       "priority": "低",
       "fetchMethod": "RSS",
       "lookback": "7d",
-      "last": "09-05 13:26",
-      "perDay": 1,
-      "briefCount": 0
+      "last": "09-06 11:57",
+      "perDay": 0,
+      "briefCount": 4
     },
     {
       "id": "podcast-crossing",
@@ -1331,7 +1331,7 @@
       "priority": "低",
       "fetchMethod": "Podcast",
       "lookback": "7d",
-      "last": "09-05 05:59",
+      "last": "09-06 11:57",
       "perDay": 0,
       "briefCount": 0
     },
@@ -1349,7 +1349,7 @@
       "priority": "低",
       "fetchMethod": "Podcast",
       "lookback": "7d",
-      "last": "09-05 05:59",
+      "last": "09-06 11:57",
       "perDay": 0,
       "briefCount": 0
     },
