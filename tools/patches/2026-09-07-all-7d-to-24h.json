@@ -1,0 +1,164 @@
+{
+  "modelscope-home": {
+    "lookback_window": "24h"
+  },
+  "bytedance-seed": {
+    "lookback_window": "24h"
+  },
+  "hf-papers-trending": {
+    "lookback_window": "24h"
+  },
+  "papers-with-code-trending": {
+    "lookback_window": "24h"
+  },
+  "papers-with-code-sota": {
+    "lookback_window": "24h"
+  },
+  "github-trending": {
+    "lookback_window": "24h"
+  },
+  "lab-stanford-crfm": {
+    "lookback_window": "24h"
+  },
+  "lab-berkeley-bair": {
+    "lookback_window": "24h"
+  },
+  "lab-mit-csail": {
+    "lookback_window": "24h"
+  },
+  "lab-nyu-cilvr": {
+    "lookback_window": "24h"
+  },
+  "lab-berkeley-rdi": {
+    "lookback_window": "24h"
+  },
+  "lab-berkeley-sky": {
+    "lookback_window": "24h"
+  },
+  "lab-caltech-cms": {
+    "lookback_window": "24h"
+  },
+  "artificial-analysis": {
+    "lookback_window": "24h"
+  },
+  "stanford-helm": {
+    "lookback_window": "24h"
+  },
+  "opencompass": {
+    "lookback_window": "24h"
+  },
+  "mckinsey-state-of-ai": {
+    "lookback_window": "24h"
+  },
+  "consulting-ai-reports": {
+    "lookback_window": "24h"
+  },
+  "gartner-ai": {
+    "lookback_window": "24h"
+  },
+  "salesforce-ai": {
+    "lookback_window": "24h"
+  },
+  "ms-copilot": {
+    "lookback_window": "24h"
+  },
+  "vertical-ai-cases": {
+    "lookback_window": "24h"
+  },
+  "sifted": {
+    "lookback_window": "24h"
+  },
+  "ai-gov-us": {
+    "lookback_window": "24h"
+  },
+  "nist-ai-rmf": {
+    "lookback_window": "24h"
+  },
+  "eu-ai-act": {
+    "lookback_window": "24h"
+  },
+  "oecd-ai": {
+    "lookback_window": "24h"
+  },
+  "singapore-nais": {
+    "lookback_window": "24h"
+  },
+  "litigation-tracker": {
+    "lookback_window": "24h"
+  },
+  "ai-incident-db": {
+    "lookback_window": "24h"
+  },
+  "podcast-dwarkesh": {
+    "lookback_window": "24h"
+  },
+  "utility-dive": {
+    "lookback_window": "24h"
+  },
+  "youtube-yannic-kilcher": {
+    "lookback_window": "24h"
+  },
+  "youtube-two-minute-papers": {
+    "lookback_window": "24h"
+  },
+  "youtube-mit-csail": {
+    "lookback_window": "24h"
+  },
+  "youtube-stanford-online": {
+    "lookback_window": "24h"
+  },
+  "youtube-deeplearning-ai": {
+    "lookback_window": "24h"
+  },
+  "social-media": {
+    "lookback_window": "24h"
+  },
+  "podcast-silicon-valley-101": {
+    "lookback_window": "24h"
+  },
+  "podcast-latent-space": {
+    "lookback_window": "24h"
+  },
+  "podcast-crossing": {
+    "lookback_window": "24h"
+  },
+  "podcast-ai-alchemy": {
+    "lookback_window": "24h"
+  },
+  "podcast-no-priors": {
+    "lookback_window": "24h"
+  },
+  "epoch-compute": {
+    "lookback_window": "24h"
+  },
+  "zhipu-modelscope": {
+    "lookback_window": "24h"
+  },
+  "stepfun-modelscope": {
+    "lookback_window": "24h"
+  },
+  "podcast-practical-ai": {
+    "lookback_window": "24h"
+  },
+  "podcast-cognitive-revolution": {
+    "lookback_window": "24h"
+  },
+  "podcast-twiml": {
+    "lookback_window": "24h"
+  },
+  "podcast-gradient-dissent": {
+    "lookback_window": "24h"
+  },
+  "podcast-training-data": {
+    "lookback_window": "24h"
+  },
+  "podcast-eye-on-ai": {
+    "lookback_window": "24h"
+  },
+  "podcast-last-week-in-ai": {
+    "lookback_window": "24h"
+  },
+  "podcast-nvidia-ai": {
+    "lookback_window": "24h"
+  }
+}
