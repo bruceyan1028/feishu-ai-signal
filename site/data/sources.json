@@ -484,7 +484,7 @@
       "tier": "L1",
       "priority": "高",
       "fetchMethod": "RSS",
-      "lookback": "7d",
+      "lookback": "24h",
       "last": "09-07 10:29",
       "perDay": 0,
       "briefCount": 0

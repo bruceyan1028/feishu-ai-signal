@@ -1,5 +1,8 @@
 {
   "whitehouse-tech-releases": {
     "lookback_window": "24h"
+  },
+  "whitehouse-tech-actions": {
+    "lookback_window": "24h"
   }
 }
