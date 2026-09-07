@@ -6,7 +6,7 @@ name: spec-recheck
 
 on:
   schedule:
-    # UTC 04:05（北京 12:05），晚于 daily-brief（北京 10:45）的构建
+    # UTC 04:05（北京 12:05），排在日报 10:30 首轮之后
     - cron: "5 4 * * *"
   workflow_dispatch:
     inputs:

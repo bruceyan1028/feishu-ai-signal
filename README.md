@@ -435,7 +435,7 @@ python -m src.sources_api    # http://127.0.0.1:8787 ，只绑回环
 
 `python -m src.notify --input site/data/brief-latest.json`
 
-**先部署 Pages，再发卡片。** 群里点的是公网站；本机 `site/` 写好不等于别人打得开。`notify` 会请求 `{PUBLIC_BASE_URL}/data/brief-YYYY-MM-DD.json`，确认 `date` 对上才发送，否则拒绝。
+定时日报只生成网页、不发群。确认 Pages 上 `data/brief-YYYY-MM-DD.json` 的 `date` 已是当天后再跑上面这条。群里点的是公网站；本机 `site/` 写好不等于别人打得开。`notify` 会请求 `{PUBLIC_BASE_URL}/data/brief-YYYY-MM-DD.json`，确认 `date` 对上才发送，否则拒绝。
 
 - 接收群：`FEISHU_RECIPIENT_CHAT_IDS`（逗号分隔，优先）。配置后不再逐人私聊
 - 接收人回退：`FEISHU_RECIPIENT_OPEN_IDS`（仅未配置群聊时使用），名称 `FEISHU_RECIPIENT_NAMES` 按序对应
@@ -510,11 +510,11 @@ python -m src.sources_api    # http://127.0.0.1:8787 ，只绑回环
 
 日报 / 周报的 **build** 跑在自建 Runner：`[self-hosted, macOS, ARM64, feishu-ai-signal]`。原因：LLM 网关（如 `llm-center.modelbest.co`）只允许办公网，GitHub 托管出口会被拦。
 
-部署 Pages 和发卡片在 `ubuntu-latest`，不再从公网打 LLM。
+部署 Pages 在 `ubuntu-latest`，不再从公网打 LLM。群卡片不在定时里发。
 
 | 工作流 | 触发 | 做什么 |
 | --- | --- | --- |
-| `daily-brief.yml` | 每天 UTC 02:45（北京 10:45），可手动 | 测试 → `main` → `daily` → `publish`（含看板重拉） → `timeline` → 话题打标/热力图 → 回写 `site/` → Pages → `notify` |
+| `daily-brief.yml` | 每天北京 10:30 起，到 13:30 每半小时重试；仓库已有当日简报则跳过。可手动 | 测试 → `main` → `daily` → `publish`（含看板重拉） → `timeline` → 话题打标/热力图 → 回写 `site/` → Pages。不发飞书卡片 |
 | `weekly-report.yml` | 周一 UTC 03:30 | 周报 + 部署 + 推送 |
 | `pages-preview.yml` | 推送 `site/**` 或 `index.html` | 只部署当前仓库里的 `site/` |
 | `ingest.yml` | 仅手动 | 单独采集 |

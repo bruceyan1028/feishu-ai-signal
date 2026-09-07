@@ -2,14 +2,11 @@ name: Daily AI Signal Brief
 
 on:
   schedule:
-    # 北京时间每天 10:45（UTC 02:45）。GitHub 定时可能再晚几分钟。
-    - cron: "45 2 * * *"
-  workflow_dispatch:
-    inputs:
-      force_send:
-        description: "即使今天已发送也重新推送"
-        type: boolean
-        default: false
+    # 北京 10:30 开工。GitHub 定时可能再晚几分钟。
+    # 若本轮没把当日简报写进仓库，11:00–13:30 每半小时再试，已有当日简报则秒过。
+    - cron: "30 2 * * *"
+    - cron: "0,30 3,4,5 * * *"
+  workflow_dispatch: {}
 
 permissions:
   # 生成的简报数据要回写仓库，否则只存在于本次 run 的 Pages 产物里
@@ -26,7 +23,9 @@ jobs:
     # LLM Center 仅允许本机飞连网络访问；使用专用 Mac Runner，
     # 避免 GitHub 托管 Runner 的动态公网出口被 WAF 拦截。
     runs-on: [self-hosted, macOS, ARM64, feishu-ai-signal]
-    timeout-minutes: 45
+    timeout-minutes: 90
+    outputs:
+      need_brief: ${{ steps.gate.outputs.need_brief }}
     # 所有步骤共享的配置：一处集中，避免各步骤漏传导致新库回退到旧库默认表 ID。
     env:
       FEISHU_APP_ID: ${{ secrets.FEISHU_APP_ID }}
@@ -65,44 +64,80 @@ jobs:
           GIT_CONFIG_KEY_0: http.version
           GIT_CONFIG_VALUE_0: HTTP/1.1
 
+      - name: Skip if today's brief is already in the repo
+        id: gate
+        run: |
+          /Users/batlap/Projects/feishu-ai-signal/.venv/bin/python - <<'PY'
+          import json
+          import os
+          from datetime import datetime
+          from pathlib import Path
+          from zoneinfo import ZoneInfo
+
+          today = datetime.now(ZoneInfo("Asia/Shanghai")).date().isoformat()
+          path = Path(f"site/data/brief-{today}.json")
+          need = True
+          if path.is_file():
+              try:
+                  payload = json.loads(path.read_text(encoding="utf-8"))
+              except (OSError, ValueError):
+                  payload = {}
+              if str(payload.get("date") or "") == today:
+                  need = False
+                  print(f"仓库已有 {today} 简报，跳过本轮采集")
+          with open(os.environ["GITHUB_OUTPUT"], "a", encoding="utf-8") as fh:
+              fh.write(f"need_brief={'true' if need else 'false'}\n")
+          PY
+
       - name: Use prebuilt local Python environment
+        if: steps.gate.outputs.need_brief == 'true'
         run: |
           test -x /Users/batlap/Projects/feishu-ai-signal/.venv/bin/python
           echo "/Users/batlap/Projects/feishu-ai-signal/.venv/bin" >> "$GITHUB_PATH"
 
       - name: Verify dependencies
+        if: steps.gate.outputs.need_brief == 'true'
         run: python -m pip check
 
       - name: Run tests
+        if: steps.gate.outputs.need_brief == 'true'
         run: python -m unittest discover -s tests -v
 
       - name: Ingest real RSS signals
+        if: steps.gate.outputs.need_brief == 'true'
         run: python -m src.main
 
       - name: Check capture_spec violations (deterministic, no LLM)
+        if: steps.gate.outputs.need_brief == 'true'
         continue-on-error: true
         run: python -m src.spec_check --exit-code
 
       - name: Analyze and write daily brief
+        if: steps.gate.outputs.need_brief == 'true'
         run: python -m src.daily --output output/daily-brief.json
 
       - name: Build static site from Feishu
+        if: steps.gate.outputs.need_brief == 'true'
         run: python -m src.publish --input output/daily-brief.json
 
       - name: Update tracked entity timelines
+        if: steps.gate.outputs.need_brief == 'true'
         run: python -m src.timeline --output site/data/timeline-latest.json
 
       - name: Refresh Google / X topic trends
+        if: steps.gate.outputs.need_brief == 'true'
         continue-on-error: true
         run: python -m src.trends --output site/data/heatmap-trends.json
 
       - name: Tag today's brief and refresh topic heatmap
+        if: steps.gate.outputs.need_brief == 'true'
         continue-on-error: true
         run: |
           python -m src.tag_topics --ingest-brief site/data/brief-latest.json
           python -m src.aggregate
 
       - name: Upload generated site
+        if: steps.gate.outputs.need_brief == 'true'
         uses: actions/upload-artifact@v4
         with:
           name: generated-site
@@ -110,26 +145,17 @@ jobs:
           include-hidden-files: true
           retention-days: 1
 
-  deploy-send:
+  deploy:
     # Pages 官方上传 action 在 macOS 上依赖额外的 gtar。Mac 只生成并上传产物，
-    # 托管 Runner 负责回写仓库、静态部署和通知，不再从公网调用 LLM Center。
+    # 托管 Runner 负责回写仓库、静态部署，不再从公网调用 LLM Center。
+    # 群卡片不在定时里发，需要时本机 python -m src.notify。
     needs: build
+    if: needs.build.outputs.need_brief == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 20
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
-    env:
-      FEISHU_APP_ID: ${{ secrets.FEISHU_APP_ID }}
-      FEISHU_APP_SECRET: ${{ secrets.FEISHU_APP_SECRET }}
-      FEISHU_BASE_ID: ${{ secrets.FEISHU_BASE_ID }}
-      FEISHU_BRIEF_TABLE_ID: ${{ secrets.FEISHU_BRIEF_TABLE_ID }}
-      FEISHU_RECIPIENT_OPEN_ID: ${{ secrets.FEISHU_RECIPIENT_OPEN_ID }}
-      FEISHU_RECIPIENT_OPEN_IDS: ${{ secrets.FEISHU_RECIPIENT_OPEN_IDS }}
-      FEISHU_RECIPIENT_CHAT_IDS: ${{ secrets.FEISHU_RECIPIENT_CHAT_IDS }}
-      FEISHU_RECIPIENT_CHAT_NAMES: ${{ secrets.FEISHU_RECIPIENT_CHAT_NAMES }}
-      FEISHU_RECIPIENT_NAMES: ${{ secrets.FEISHU_RECIPIENT_NAMES }}
-      FEISHU_DELIVERY_REPORT_OPEN_ID: ${{ secrets.FEISHU_DELIVERY_REPORT_OPEN_ID }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -162,14 +188,6 @@ jobs:
             git push origin HEAD:main
           fi
 
-      - uses: actions/setup-python@v5
-        with:
-          python-version: "3.12"
-          cache: pip
-
-      - name: Install dependencies
-        run: pip install -r requirements.txt
-
       - uses: actions/configure-pages@v5
         with:
           enablement: true
@@ -181,10 +199,3 @@ jobs:
       - name: Deploy GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
-
-      - name: Send Feishu card
-        env:
-          PUBLIC_BASE_URL: ${{ steps.deployment.outputs.page_url }}
-          FORCE_FLAG: ${{ inputs.force_send && '--force' || '' }}
-        # notify 会轮询公网 brief-YYYY-MM-DD.json，确认 Pages 已是当日简报才发卡片
-        run: python -m src.notify --input site/data/brief-latest.json $FORCE_FLAG
