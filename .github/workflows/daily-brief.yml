@@ -59,6 +59,11 @@ jobs:
       PAPER_ENRICH_ENABLED: "0"
     steps:
       - uses: actions/checkout@v4
+        env:
+          # 本机飞连下 HTTP/2 容易 framing layer 失败，checkout 三次重试仍会挂
+          GIT_CONFIG_COUNT: "1"
+          GIT_CONFIG_KEY_0: http.version
+          GIT_CONFIG_VALUE_0: HTTP/1.1
 
       - name: Use prebuilt local Python environment
         run: |

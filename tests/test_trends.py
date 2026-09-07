@@ -345,7 +345,8 @@ class BuildPayloadTest(_NoRawMixin):
         row = payload["google-trends"]["matrix"]["raw"][0]
         self.assertEqual(payload["google-trends"]["error"], "Trends blocked")
         self.assertEqual(row[0], 5.0)
-        self.assertEqual(row[-1], 0.0)
+        # 新窗口末日不在旧数据里；失败时沿用旧窗口最后一天，避免热力条断更
+        self.assertEqual(row[-1], 5.0)
         self.assertEqual(payload["days"], new_days)
 
     def test_empty_trending_list_reuses_previous_topics(self):

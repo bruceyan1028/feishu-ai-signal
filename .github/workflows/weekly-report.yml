@@ -38,6 +38,10 @@ jobs:
       PAPER_ENRICH_ENABLED: "0"
     steps:
       - uses: actions/checkout@v4
+        env:
+          GIT_CONFIG_COUNT: "1"
+          GIT_CONFIG_KEY_0: http.version
+          GIT_CONFIG_VALUE_0: HTTP/1.1
 
       - name: Use prebuilt local Python environment
         run: |
