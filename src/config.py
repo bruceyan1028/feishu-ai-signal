@@ -123,8 +123,7 @@ DAILY_MAX_PAPERS = int(os.environ.get("DAILY_MAX_PAPERS", "4"))
 DAILY_MAX_VIDEOS = int(os.environ.get("DAILY_MAX_VIDEOS", "4"))
 DAILY_MIN_VIDEOS = int(os.environ.get("DAILY_MIN_VIDEOS", "1"))
 DAILY_VIDEO_WEIGHT = float(os.environ.get("DAILY_VIDEO_WEIGHT", "0.9"))
-# 播客是深度补充材料：单独限额并轻度降权，避免长访谈挤占时效新闻。
-DAILY_MAX_PODCASTS = int(os.environ.get("DAILY_MAX_PODCASTS", "2"))
+# 播客轻度降权，与新闻同池竞争，不再单独限额。
 DAILY_PODCAST_WEIGHT = float(os.environ.get("DAILY_PODCAST_WEIGHT", "0.85"))
 # 榜单类每天变化很小，长期霸榜项目会反复占位，故单独限额。
 DAILY_MAX_GITHUB = int(os.environ.get("DAILY_MAX_GITHUB", "5"))

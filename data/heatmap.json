@@ -4,7 +4,8 @@
     "2026-W33",
     "2026-W34",
     "2026-W35",
-    "2026-W36"
+    "2026-W36",
+    "2026-W37"
   ],
   "topics": [
     "agent",
@@ -39,156 +40,178 @@
         3,
         6,
         14,
-        42
+        49,
+        3
       ],
       [
         0,
         2,
         3,
         12,
-        13
+        15,
+        1
       ],
       [
         0,
         2,
         0,
         9,
-        20
+        23,
+        1
       ],
       [
         0,
         0,
         3,
         7,
-        8
+        9,
+        0
       ],
       [
         0,
         0,
         2,
         0,
-        12
+        13,
+        1
       ],
       [
         5,
         5,
         6,
         6,
-        22
+        26,
+        2
       ],
       [
         0,
         0,
         0,
         4,
-        8
+        11,
+        0
       ],
       [
         2,
         0,
         0,
         0,
-        18
+        21,
+        2
       ],
       [
         4,
         3,
         4,
         5,
-        25
+        29,
+        1
       ],
       [
         8,
         6,
         3,
         1,
-        16
+        16,
+        0
       ],
       [
         0,
         0,
         0,
         0,
-        23
+        24,
+        1
       ]
     ],
     "normalized": [
       [
-        0.0238,
-        0.0714,
-        0.1429,
-        0.3333,
-        1.0
+        0.0204,
+        0.0612,
+        0.1224,
+        0.2857,
+        1.0,
+        0.0612
       ],
       [
+        0.0,
+        0.1333,
+        0.2,
+        0.8,
+        1.0,
+        0.0667
+      ],
+      [
+        0.0,
+        0.087,
+        0.0,
+        0.3913,
+        1.0,
+        0.0435
+      ],
+      [
+        0.0,
+        0.0,
+        0.3333,
+        0.7778,
+        1.0,
+        0.0
+      ],
+      [
+        0.0,
         0.0,
         0.1538,
+        0.0,
+        1.0,
+        0.0769
+      ],
+      [
+        0.1923,
+        0.1923,
         0.2308,
-        0.9231,
-        1.0
-      ],
-      [
-        0.0,
-        0.1,
-        0.0,
-        0.45,
-        1.0
-      ],
-      [
-        0.0,
-        0.0,
-        0.375,
-        0.875,
-        1.0
-      ],
-      [
-        0.0,
-        0.0,
-        0.1667,
-        0.0,
-        1.0
-      ],
-      [
-        0.2273,
-        0.2273,
-        0.2727,
-        0.2727,
-        1.0
+        0.2308,
+        1.0,
+        0.0769
       ],
       [
         0.0,
         0.0,
         0.0,
-        0.5,
-        1.0
+        0.3636,
+        1.0,
+        0.0
       ],
       [
-        0.1111,
+        0.0952,
         0.0,
         0.0,
         0.0,
-        1.0
+        1.0,
+        0.0952
       ],
       [
-        0.16,
-        0.12,
-        0.16,
-        0.2,
-        1.0
+        0.1379,
+        0.1034,
+        0.1379,
+        0.1724,
+        1.0,
+        0.0345
       ],
       [
         0.5,
         0.375,
         0.1875,
         0.0625,
-        1.0
+        1.0,
+        0.0
       ],
       [
         0.0,
         0.0,
         0.0,
         0.0,
-        1.0
+        1.0,
+        0.0417
       ]
     ]
   },
@@ -400,7 +423,12 @@
       "recvupqJtiDMvx",
       "recvupqJticraQ",
       "recvupqJtiFHRL",
-      "recvupqJtiRHJA"
+      "recvupqJtiRHJA",
+      "recvuuUXqShbkU",
+      "recvu8ON0OOhqg",
+      "recvuuUXqS5wMV",
+      "recvuuUXqS2Zr2",
+      "recvuuUXqSNRHp"
     ],
     "infra|2026-W36": [
       "recvtW9WBRPQmp",
@@ -421,7 +449,8 @@
       "recvujWsa2parM",
       "recvujWsa2vQFs",
       "recvupqJtiFHRL",
-      "recvupqJtivOTT"
+      "recvupqJtivOTT",
+      "recvuuUXqSAOnw"
     ],
     "funding|2026-W36": [
       "recvtW9WBRSx2a",
@@ -465,7 +494,11 @@
       "recvudLnQxEdGP",
       "recvupqJtidVub",
       "recvupqJtiuSlT",
-      "recvupqJtiDCQ6"
+      "recvupqJtiDCQ6",
+      "recvuuUXqS2kbA",
+      "recvuuUXqS5wMV",
+      "recvuuUXqS2Zr2",
+      "recvuuUXqSSymI"
     ],
     "other|2026-W36": [
       "recvtW9WBRRLop",
@@ -498,7 +531,9 @@
       "recvudLnQx6dAU",
       "recvudLnQxNdMh",
       "recvujWsa28XQF",
-      "recvupqJtiDCQ6"
+      "recvupqJtiDCQ6",
+      "recvuuUXqS2kbA",
+      "recvuuUXqShbkU"
     ],
     "open-source-model|2026-W36": [
       "recvtW9WBRobE2",
@@ -511,7 +546,10 @@
       "recvu1S4qSMFXB",
       "recvu1S4qSqy3r",
       "recvujWsa2pApy",
-      "recvupqJtidVub"
+      "recvupqJtidVub",
+      "recvuuUXqSoPD6",
+      "recvuuUXqSmHjU",
+      "recvuuUXqSAOnw"
     ],
     "rag-search|2026-W36": [
       "recvtW9WBRXxbq",
@@ -540,7 +578,9 @@
       "recvudLnQxMf5u",
       "recvupqJtiDMvx",
       "recvupqJtiRHJA",
-      "recvudLnQxjiJJ"
+      "recvudLnQxjiJJ",
+      "recvuuUXqSoPD6",
+      "recvuuUXqSmHjU"
     ],
     "reasoning|2026-W36": [
       "recvu1S4qSbYtM",
@@ -551,7 +591,37 @@
       "recvu1S4qSULKN",
       "recvu1S4qSrg0l",
       "recvudLnQx7mnN",
-      "recvujWsa2nKDo"
+      "recvujWsa2nKDo",
+      "recvu1S4qStLTg",
+      "recvuv2dZ1YID0"
+    ],
+    "product|2026-W37": [
+      "recvuuUXqS8tEf"
+    ],
+    "agent|2026-W37": [
+      "recvuuUXqSmsEC",
+      "recvuuUXqSYPmZ",
+      "recvuuUXqS6Nz7"
+    ],
+    "safety-policy|2026-W37": [
+      "recvuuUXqSmsEC",
+      "recvuuUXqS6Nz7"
+    ],
+    "infra|2026-W37": [
+      "recvuuUXqSTLbf",
+      "recvuuUXqSZ2am"
+    ],
+    "multimodal|2026-W37": [
+      "recvuuUXqSYPmZ"
+    ],
+    "other|2026-W37": [
+      "recvuuUXqSbY98"
+    ],
+    "rag-search|2026-W37": [
+      "recvuuUXqSfqX5"
+    ],
+    "reasoning|2026-W37": [
+      "recvuv2dZ1iTFS"
     ]
   },
   "itemIndex": {
@@ -1679,20 +1749,125 @@
       "title": "CISA取消面向关键基础设施运营方的六项免费网络安全评估",
       "source": "Utility Dive",
       "url": "https://www.utilitydive.com/news/cisa-scraps-6-free-cybersecurity-assessments-for-critical-infrastructure-op/829570"
+    },
+    "recvuuUXqSoPD6": {
+      "title": "从每月10架到接近10万架：乌克兰大型无人机制造商内部",
+      "source": "Eye On AI",
+      "url": "https://aneyeonai.libsyn.com/from-10-drones-a-month-to-nearly-100000-inside-ukraines-largest-drone-manufacturer-marko-kushnir-general-cherry"
+    },
+    "recvuuUXqS2kbA": {
+      "title": "对卷卷的3小时访谈：从抖音到AI 3D与制造业OS",
+      "source": "十字路口 Crossing",
+      "url": "https://www.xiaoyuzhoufm.com/episode/6a97a9daa0210c197dcc1ba0"
+    },
+    "recvuuUXqSmHjU": {
+      "title": "未来5至10年，不使用AI的武器或将被视为不道德｜Yaroslav Azhnyuk（Fourth Law）",
+      "source": "Eye On AI",
+      "url": "https://aneyeonai.libsyn.com/in-5-to-10-years-using-weapons-without-ai-will-be-considered-unethical-yaroslav-azhnyuk-the-fourth-law"
+    },
+    "recvuuUXqS8tEf": {
+      "title": "陈安妮：在AI时代继续冒险",
+      "source": "十字路口 Crossing",
+      "url": "https://www.xiaoyuzhoufm.com/episode/6a9abd3df03e74ee6b052a28"
+    },
+    "recvuuUXqSAOnw": {
+      "title": "重定义芯片架构：Arm CEO Rene Haas",
+      "source": "No Priors",
+      "url": "https://traffic.megaphone.fm/pdp3024512727.mp3"
+    },
+    "recvuuUXqShbkU": {
+      "title": "可编辑视觉设计：结合视觉模拟与代码智能体的结构化设计生成",
+      "source": "HF Papers Trending",
+      "url": "https://huggingface.co/papers/2609.04034"
+    },
+    "recvu8ON0OOhqg": {
+      "title": "Repo-To-Skill：将 GitHub 仓库蒸馏为 AI4AI 技能",
+      "source": "PwC Trending",
+      "url": "https://huggingface.co/papers/2609.02749"
+    },
+    "recvu1S4qStLTg": {
+      "title": "用脑信号引导机器推理",
+      "source": "Nature Machine Intelligence",
+      "url": "https://www.nature.com/articles/s42256-026-01302-z"
+    },
+    "recvuuUXqSmsEC": {
+      "title": "OpenAI披露内部RSI进展：智能体工作量已达人类研究员3.1倍",
+      "source": "华尔街见闻",
+      "url": "https://wallstreetcn.com/articles/3781192"
+    },
+    "recvuuUXqSTLbf": {
+      "title": "IPO前的算力军备竞赛：Anthropic锁定5170亿美元容量仍落后OpenAI",
+      "source": "华尔街见闻",
+      "url": "https://wallstreetcn.com/articles/3781199"
+    },
+    "recvuuUXqSYPmZ": {
+      "title": "GPT-6 Astra首轮测试：空间理解与代理能力突出，但写作退步且价格上涨",
+      "source": "华尔街见闻",
+      "url": "https://wallstreetcn.com/articles/3781193"
+    },
+    "recvuuUXqS5wMV": {
+      "title": "千问办公上线一个月用户破3000万，企业用户占比过半",
+      "source": "AI科技评论 / 雷峰网",
+      "url": "https://www.leiphone.com/category/industrynews/kaqukrryiiqho1m2.html"
+    },
+    "recvuuUXqS6Nz7": {
+      "title": "OpenAI承认智能体突破隔离环境并“劫持”德国网站，拟制定失配披露标准",
+      "source": "品玩 / 硅星人",
+      "url": "https://www.pingwest.com/w/317123"
+    },
+    "recvuuUXqS2Zr2": {
+      "title": "daily_stock_analysis v3.32.0：扩展多市场股票智能分析与研究产物能力",
+      "source": "GitHub Trending",
+      "url": "https://github.com/zhulinsen/daily_stock_analysis/releases/tag/v3.32.0"
+    },
+    "recvuuUXqSZ2am": {
+      "title": "高盛称AI存储芯片需求被低估，韩国股市或上涨近80%",
+      "source": "华尔街见闻",
+      "url": "https://wallstreetcn.com/articles/3781196"
+    },
+    "recvuuUXqSbY98": {
+      "title": "城市更新转向“引人思维”：情绪经济规模达2.72万亿元",
+      "source": "虎嗅",
+      "url": "https://www.huxiu.com/article/4889007.html"
+    },
+    "recvuuUXqSfqX5": {
+      "title": "Firecrawl 发布 v2.11.310 API 镜像版本",
+      "source": "GitHub Trending",
+      "url": "https://github.com/firecrawl/firecrawl/releases/tag/v2.11.310"
+    },
+    "recvuuUXqSNRHp": {
+      "title": "研究加速：OpenAI 内部视角",
+      "source": "OpenAI News",
+      "url": "https://openai.com/index/research-acceleration-view-inside-openai"
+    },
+    "recvuv2dZ1YID0": {
+      "title": "GPT-6 Astra：并行研究分支助力攻克复杂 DEF CON 谜题",
+      "source": "OpenAI YouTube",
+      "url": "https://www.youtube.com/watch?v=b-jjnydci50"
+    },
+    "recvuv2dZ1iTFS": {
+      "title": "GPT-6 Astra：Peter Gostev 的初步体验",
+      "source": "OpenAI YouTube",
+      "url": "https://www.youtube.com/watch?v=a4bubpkdenc"
+    },
+    "recvuuUXqSSymI": {
+      "title": "AOSEED X-MAKER JOY AI+儿童3D打印机体验与功能介绍",
+      "source": "果壳",
+      "url": "https://www.guokr.com/article/470131"
     }
   },
   "trend": {
-    "agent": 8.4,
-    "reasoning": 7.5,
-    "multimodal": 21.75,
-    "open-source-model": 7.5,
-    "rag-search": 9.0,
-    "infra": 2.625,
-    "embodied": 2.0,
-    "safety-policy": 13.5,
-    "product": 4.091,
-    "funding": 1.5,
+    "agent": 4.333,
+    "reasoning": 1.882,
+    "multimodal": 4.364,
+    "open-source-model": 1.8,
+    "rag-search": 14.0,
+    "infra": 2.545,
+    "embodied": 5.5,
+    "safety-policy": 23.0,
+    "product": 3.75,
+    "funding": 1.778,
     "other": 2.0
   },
-  "window_end": "2026-W36"
+  "window_end": "2026-W37"
 }

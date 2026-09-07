@@ -636,7 +636,6 @@ def select_candidates(
     arxiv_count = 0
     paper_count = 0
     video_count = 0
-    podcast_count = 0
     github_count = 0
     p0_count = 0
     per_source: Counter[str] = Counter()
@@ -650,15 +649,12 @@ def select_candidates(
             continue
         is_paper = item_type == "论文"
         is_video = item_type == "视频"
-        is_podcast = item_type == "播客"
         is_github = item_type == "Github热榜"
         is_p0 = item["priority"] == "P0"
         # 论文总数硬上限：避免论文挤占「快速读新闻」的名额
         if is_paper and paper_count >= config.DAILY_MAX_PAPERS:
             continue
         if is_video and video_count >= config.DAILY_MAX_VIDEOS:
-            continue
-        if is_podcast and podcast_count >= config.DAILY_MAX_PODCASTS:
             continue
         if is_github and github_count >= config.DAILY_MAX_GITHUB:
             continue
@@ -672,7 +668,6 @@ def select_candidates(
         arxiv_count += int(is_arxiv)
         paper_count += int(is_paper)
         video_count += int(is_video)
-        podcast_count += int(is_podcast)
         github_count += int(is_github)
         p0_count += int(is_p0)
         per_source[item["source_id"]] += 1

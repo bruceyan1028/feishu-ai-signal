@@ -1,189 +1,86 @@
 {
-  "generatedAt": "2026-09-05T15:39:35+08:00",
+  "generatedAt": "2026-09-07T11:57:37+08:00",
   "days": [
-    "2026-08-30",
-    "2026-08-31",
     "2026-09-01",
     "2026-09-02",
     "2026-09-03",
     "2026-09-04",
-    "2026-09-05"
+    "2026-09-05",
+    "2026-09-06",
+    "2026-09-07"
   ],
   "topics": [
-    "happy-janmashtami",
-    "gpt-6",
-    "sam-altman",
-    "hugging-face"
+    "chatgpt-gpt-astra"
   ],
   "labels": {
-    "happy-janmashtami": "happy janmashtami",
-    "gpt-6": "gpt 6",
-    "sam-altman": "sam altman",
-    "hugging-face": "hugging face"
+    "chatgpt-gpt-astra": "chatgpt gpt astra"
   },
   "queries": {
-    "happy-janmashtami": {
-      "g": "happy janmashtami",
-      "x": "\"happy janmashtami\" -is:retweet"
-    },
-    "gpt-6": {
-      "g": "gpt 6",
-      "x": "\"gpt 6\" -is:retweet"
-    },
-    "sam-altman": {
-      "g": "sam altman",
-      "x": "\"sam altman\" -is:retweet"
-    },
-    "hugging-face": {
-      "g": "hugging face",
-      "x": "\"hugging face\" -is:retweet"
+    "chatgpt-gpt-astra": {
+      "g": "chatgpt gpt astra",
+      "x": "\"chatgpt gpt astra\" -is:retweet"
     }
   },
   "scopes": {
-    "happy-janmashtami": "global",
-    "gpt-6": "global",
-    "sam-altman": "global",
-    "hugging-face": "global"
+    "chatgpt-gpt-astra": "global"
   },
   "marks": {
-    "happy-janmashtami": "🌐",
-    "gpt-6": "🌐",
-    "sam-altman": "🌐",
-    "hugging-face": "🌐"
+    "chatgpt-gpt-astra": "🌐"
   },
   "breakouts": [
-    "happy-janmashtami",
-    "gpt-6",
-    "sam-altman",
-    "hugging-face"
+    "chatgpt-gpt-astra"
   ],
   "selection": {
     "method": "google-trending-ai",
     "volumes": {
-      "happy-janmashtami": 100000,
-      "gpt-6": 200000,
-      "sam-altman": 100000,
-      "hugging-face": 10000
+      "chatgpt-gpt-astra": 5000
     },
     "geos": {
-      "happy-janmashtami": [
+      "chatgpt-gpt-astra": [
         "IN"
-      ],
-      "gpt-6": [
-        "US",
-        "DE",
-        "AU"
-      ],
-      "sam-altman": [
-        "GB",
-        "DE",
-        "AU",
-        "CA"
-      ],
-      "hugging-face": [
-        "US",
-        "GB",
-        "AU",
-        "CA"
       ]
     },
     "plot_geo": {
-      "happy-janmashtami": "",
-      "gpt-6": "",
-      "sam-altman": "",
-      "hugging-face": ""
+      "chatgpt-gpt-astra": ""
     },
     "breakouts": [
-      "happy-janmashtami",
-      "gpt-6",
-      "sam-altman",
-      "hugging-face"
+      "chatgpt-gpt-astra"
     ]
   },
   "google-trends": {
-    "error": "'NoneType' object has no attribute 'raise_for_status'",
+    "error": "",
     "topics": [
-      "happy-janmashtami",
-      "gpt-6",
-      "sam-altman",
-      "hugging-face"
+      "chatgpt-gpt-astra"
     ],
     "labels": {
-      "happy-janmashtami": "happy janmashtami",
-      "gpt-6": "gpt 6",
-      "sam-altman": "sam altman",
-      "hugging-face": "hugging face"
+      "chatgpt-gpt-astra": "chatgpt gpt astra"
     },
     "queries": {
-      "happy-janmashtami": {
-        "g": "happy janmashtami",
-        "x": "\"happy janmashtami\" -is:retweet"
-      },
-      "gpt-6": {
-        "g": "gpt 6",
-        "x": "\"gpt 6\" -is:retweet"
-      },
-      "sam-altman": {
-        "g": "sam altman",
-        "x": "\"sam altman\" -is:retweet"
-      },
-      "hugging-face": {
-        "g": "hugging face",
-        "x": "\"hugging face\" -is:retweet"
+      "chatgpt-gpt-astra": {
+        "g": "chatgpt gpt astra",
+        "x": "\"chatgpt gpt astra\" -is:retweet"
       }
     },
     "scopes": {
-      "happy-janmashtami": "global",
-      "gpt-6": "global",
-      "sam-altman": "global",
-      "hugging-face": "global"
+      "chatgpt-gpt-astra": "global"
     },
     "marks": {
-      "happy-janmashtami": "🌐",
-      "gpt-6": "🌐",
-      "sam-altman": "🌐",
-      "hugging-face": "🌐"
+      "chatgpt-gpt-astra": "🌐"
     },
     "breakouts": [
-      "happy-janmashtami",
-      "gpt-6",
-      "sam-altman",
-      "hugging-face"
+      "chatgpt-gpt-astra"
     ],
     "selection": {
       "volumes": {
-        "happy-janmashtami": 100000,
-        "gpt-6": 200000,
-        "sam-altman": 100000,
-        "hugging-face": 10000
+        "chatgpt-gpt-astra": 5000
       },
       "geos": {
-        "happy-janmashtami": [
+        "chatgpt-gpt-astra": [
           "IN"
-        ],
-        "gpt-6": [
-          "US",
-          "DE",
-          "AU"
-        ],
-        "sam-altman": [
-          "GB",
-          "DE",
-          "AU",
-          "CA"
-        ],
-        "hugging-face": [
-          "US",
-          "GB",
-          "AU",
-          "CA"
         ]
       },
       "plot_geo": {
-        "happy-janmashtami": "",
-        "gpt-6": "",
-        "sam-altman": "",
-        "hugging-face": ""
+        "chatgpt-gpt-astra": ""
       },
       "method": "google-trending-ai"
     },
@@ -192,196 +89,61 @@
         [
           0.0,
           1.0,
-          1.0,
-          2.0,
           10.0,
-          100.0,
-          100.0
-        ],
-        [
-          4.0,
-          5.0,
-          5.0,
-          6.0,
-          31.0,
-          100.0,
-          100.0
-        ],
-        [
-          7.0,
-          10.0,
-          9.0,
-          11.0,
-          50.0,
-          100.0,
-          100.0
-        ],
-        [
-          35.0,
+          34.0,
+          40.0,
           38.0,
-          39.0,
-          44.0,
-          100.0,
-          95.0,
-          95.0
+          100.0
         ]
       ],
       "normalized": [
         [
           0.0,
           0.01,
-          0.01,
-          0.02,
           0.1,
-          1.0,
-          0.0
-        ],
-        [
-          0.04,
-          0.05,
-          0.05,
-          0.06,
-          0.31,
-          1.0,
-          0.0
-        ],
-        [
-          0.07,
-          0.1,
-          0.09,
-          0.11,
-          0.5,
-          1.0,
-          0.0
-        ],
-        [
-          0.35,
+          0.34,
+          0.4,
           0.38,
-          0.39,
-          0.44,
-          1.0,
-          0.95,
-          0.0
+          1.0
         ]
       ]
     },
     "trend": {
-      "happy-janmashtami": 0.0,
-      "gpt-6": 0.0,
-      "sam-altman": 0.0,
-      "hugging-face": 0.0
+      "chatgpt-gpt-astra": 4.878
     },
     "items": {
-      "happy-janmashtami|2026-08-30": [
-        "g-happy-janmashtami"
+      "chatgpt-gpt-astra|2026-09-01": [
+        "g-chatgpt-gpt-astra"
       ],
-      "happy-janmashtami|2026-08-31": [
-        "g-happy-janmashtami"
+      "chatgpt-gpt-astra|2026-09-02": [
+        "g-chatgpt-gpt-astra"
       ],
-      "happy-janmashtami|2026-09-01": [
-        "g-happy-janmashtami"
+      "chatgpt-gpt-astra|2026-09-03": [
+        "g-chatgpt-gpt-astra"
       ],
-      "happy-janmashtami|2026-09-02": [
-        "g-happy-janmashtami"
+      "chatgpt-gpt-astra|2026-09-04": [
+        "g-chatgpt-gpt-astra"
       ],
-      "happy-janmashtami|2026-09-03": [
-        "g-happy-janmashtami"
+      "chatgpt-gpt-astra|2026-09-05": [
+        "g-chatgpt-gpt-astra"
       ],
-      "happy-janmashtami|2026-09-04": [
-        "g-happy-janmashtami"
+      "chatgpt-gpt-astra|2026-09-06": [
+        "g-chatgpt-gpt-astra"
       ],
-      "happy-janmashtami|2026-09-05": [
-        "g-happy-janmashtami"
-      ],
-      "gpt-6|2026-08-30": [
-        "g-gpt-6"
-      ],
-      "gpt-6|2026-08-31": [
-        "g-gpt-6"
-      ],
-      "gpt-6|2026-09-01": [
-        "g-gpt-6"
-      ],
-      "gpt-6|2026-09-02": [
-        "g-gpt-6"
-      ],
-      "gpt-6|2026-09-03": [
-        "g-gpt-6"
-      ],
-      "gpt-6|2026-09-04": [
-        "g-gpt-6"
-      ],
-      "gpt-6|2026-09-05": [
-        "g-gpt-6"
-      ],
-      "sam-altman|2026-08-30": [
-        "g-sam-altman"
-      ],
-      "sam-altman|2026-08-31": [
-        "g-sam-altman"
-      ],
-      "sam-altman|2026-09-01": [
-        "g-sam-altman"
-      ],
-      "sam-altman|2026-09-02": [
-        "g-sam-altman"
-      ],
-      "sam-altman|2026-09-03": [
-        "g-sam-altman"
-      ],
-      "sam-altman|2026-09-04": [
-        "g-sam-altman"
-      ],
-      "sam-altman|2026-09-05": [
-        "g-sam-altman"
-      ],
-      "hugging-face|2026-08-30": [
-        "g-hugging-face"
-      ],
-      "hugging-face|2026-08-31": [
-        "g-hugging-face"
-      ],
-      "hugging-face|2026-09-01": [
-        "g-hugging-face"
-      ],
-      "hugging-face|2026-09-02": [
-        "g-hugging-face"
-      ],
-      "hugging-face|2026-09-03": [
-        "g-hugging-face"
-      ],
-      "hugging-face|2026-09-04": [
-        "g-hugging-face"
-      ],
-      "hugging-face|2026-09-05": [
-        "g-hugging-face"
+      "chatgpt-gpt-astra|2026-09-07": [
+        "g-chatgpt-gpt-astra"
       ]
     },
     "itemIndex": {
-      "g-happy-janmashtami": {
-        "title": "Google Trends · happy janmashtami",
+      "g-chatgpt-gpt-astra": {
+        "title": "Google Trends · chatgpt gpt astra",
         "source": "Google Trends",
-        "url": "https://trends.google.com/trends/explore?date=now%207-d&q=happy%20janmashtami"
-      },
-      "g-gpt-6": {
-        "title": "Google Trends · gpt 6",
-        "source": "Google Trends",
-        "url": "https://trends.google.com/trends/explore?date=now%207-d&q=gpt%206"
-      },
-      "g-sam-altman": {
-        "title": "Google Trends · sam altman",
-        "source": "Google Trends",
-        "url": "https://trends.google.com/trends/explore?date=now%207-d&q=sam%20altman"
-      },
-      "g-hugging-face": {
-        "title": "Google Trends · hugging face",
-        "source": "Google Trends",
-        "url": "https://trends.google.com/trends/explore?date=now%207-d&q=hugging%20face"
+        "url": "https://trends.google.com/trends/explore?date=now%207-d&q=chatgpt%20gpt%20astra"
       }
     }
   },
   "x": {
-    "error": "gemini-start-the-adventure: HTTPSConnectionPool(host='api.x.com', port=443): Max retries exceeded with url: /2/tweets/counts/recent?query=%22GEMINI+START+THE+ADVENTURE%22+-is%3Aretweet&granularity=day&start_time=2026-08-29T16%3A00%3A00Z (Caused by NameResolutionError(\"HTTPSConnection(host='api.x.com', port=443): Failed to resolve 'api.x.com' ([Errno 8] nodename nor servname provided, or not known)\"))",
+    "error": "",
     "topics": [
       "gemini-start-the-adventure",
       "gpt-6-astra"
@@ -437,19 +199,19 @@
           0.0,
           0.0,
           0.0,
-          0.0,
-          0.0,
-          8022.0,
-          8022.0
+          37146.0,
+          3463.0,
+          114.0,
+          12.0
         ],
         [
-          62.0,
-          94.0,
-          94.0,
+          125.0,
           295.0,
-          7876.0,
-          6669.0,
-          6669.0
+          7842.0,
+          13968.0,
+          13397.0,
+          9766.0,
+          1683.0
         ]
       ],
       "normalized": [
@@ -457,33 +219,27 @@
           0.0,
           0.0,
           0.0,
-          0.0,
-          0.0,
           1.0,
-          0.0
+          0.0932,
+          0.0031,
+          0.0003
         ],
         [
-          0.0079,
-          0.0119,
-          0.0119,
-          0.0375,
+          0.0089,
+          0.0211,
+          0.5614,
           1.0,
-          0.8467,
-          0.0
+          0.9591,
+          0.6992,
+          0.1205
         ]
       ]
     },
     "trend": {
-      "gemini-start-the-adventure": 0.0,
-      "gpt-6-astra": 0.0
+      "gemini-start-the-adventure": 0.002,
+      "gpt-6-astra": 0.222
     },
     "items": {
-      "gemini-start-the-adventure|2026-08-30": [
-        "x-gemini-start-the-adventure"
-      ],
-      "gemini-start-the-adventure|2026-08-31": [
-        "x-gemini-start-the-adventure"
-      ],
       "gemini-start-the-adventure|2026-09-01": [
         "x-gemini-start-the-adventure"
       ],
@@ -499,11 +255,11 @@
       "gemini-start-the-adventure|2026-09-05": [
         "x-gemini-start-the-adventure"
       ],
-      "gpt-6-astra|2026-08-30": [
-        "x-gpt-6-astra"
+      "gemini-start-the-adventure|2026-09-06": [
+        "x-gemini-start-the-adventure"
       ],
-      "gpt-6-astra|2026-08-31": [
-        "x-gpt-6-astra"
+      "gemini-start-the-adventure|2026-09-07": [
+        "x-gemini-start-the-adventure"
       ],
       "gpt-6-astra|2026-09-01": [
         "x-gpt-6-astra"
@@ -518,6 +274,12 @@
         "x-gpt-6-astra"
       ],
       "gpt-6-astra|2026-09-05": [
+        "x-gpt-6-astra"
+      ],
+      "gpt-6-astra|2026-09-06": [
+        "x-gpt-6-astra"
+      ],
+      "gpt-6-astra|2026-09-07": [
         "x-gpt-6-astra"
       ]
     },
