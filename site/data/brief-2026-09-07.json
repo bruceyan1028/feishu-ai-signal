@@ -361,7 +361,7 @@
       "bodyTruncated": false,
       "bodyVerbatim": true,
       "eventAggregation": {
-        "total": 2,
+        "total": 3,
         "groups": [
           {
             "key": "官方来源",
@@ -380,6 +380,13 @@
             "key": "相关报道",
             "tone": "#2b6cb0",
             "items": [
+              {
+                "source": "The Cognitive Revolution",
+                "title": "AI：AM精选：欢迎进入AGI时代",
+                "url": "https://www.cognitiverevolution.ai/ai-am-highlights-welcome-to-the-agi-era",
+                "note": "同事件的其它源头报道。",
+                "text": "AI：AM精选：欢迎进入AGI时代 —— 同事件的其它源头报道。"
+              },
               {
                 "source": "OpenAI YouTube",
                 "title": "OpenAI推出面向开发者的GPT-6 Astra",

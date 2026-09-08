@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-08 12:16",
+  "generatedAt": "2026-09-08 14:19",
   "origin": "feishu",
   "briefWindowDays": 7,
   "sources": [
@@ -521,7 +521,7 @@
       "priority": "高",
       "fetchMethod": "Social",
       "lookback": "24h",
-      "last": "09-07 10:58",
+      "last": "09-08 13:41",
       "perDay": 2,
       "briefCount": 0
     },
@@ -1168,7 +1168,7 @@
       "tier": "L4",
       "priority": "低",
       "fetchMethod": "Podcast",
-      "lookback": "24h",
+      "lookback": "72h",
       "last": "09-08 05:37",
       "perDay": 0,
       "briefCount": 0
@@ -1186,7 +1186,7 @@
       "tier": "L4",
       "priority": "低",
       "fetchMethod": "Podcast",
-      "lookback": "24h",
+      "lookback": "72h",
       "last": "09-08 05:37",
       "perDay": 0,
       "briefCount": 0
@@ -1204,7 +1204,7 @@
       "tier": "L4",
       "priority": "低",
       "fetchMethod": "Podcast",
-      "lookback": "24h",
+      "lookback": "72h",
       "last": "09-08 05:37",
       "perDay": 0,
       "briefCount": 0
@@ -1222,7 +1222,7 @@
       "tier": "L4",
       "priority": "低",
       "fetchMethod": "Podcast",
-      "lookback": "24h",
+      "lookback": "72h",
       "last": "09-08 05:37",
       "perDay": 0,
       "briefCount": 0
@@ -1258,7 +1258,7 @@
       "tier": "L4",
       "priority": "低",
       "fetchMethod": "Podcast",
-      "lookback": "24h",
+      "lookback": "72h",
       "last": "09-08 05:37",
       "perDay": 0,
       "briefCount": 0
@@ -1276,7 +1276,7 @@
       "tier": "L4",
       "priority": "低",
       "fetchMethod": "Podcast",
-      "lookback": "24h",
+      "lookback": "72h",
       "last": "09-08 05:37",
       "perDay": 0,
       "briefCount": 0
@@ -1294,7 +1294,7 @@
       "tier": "L4",
       "priority": "低",
       "fetchMethod": "Podcast",
-      "lookback": "24h",
+      "lookback": "72h",
       "last": "09-08 05:37",
       "perDay": 0,
       "briefCount": 0
@@ -1330,7 +1330,7 @@
       "tier": "L4",
       "priority": "低",
       "fetchMethod": "Podcast",
-      "lookback": "24h",
+      "lookback": "72h",
       "last": "09-08 05:37",
       "perDay": 0,
       "briefCount": 1
@@ -1348,7 +1348,7 @@
       "tier": "L4",
       "priority": "低",
       "fetchMethod": "Podcast",
-      "lookback": "24h",
+      "lookback": "72h",
       "last": "09-08 05:37",
       "perDay": 0,
       "briefCount": 0
@@ -1690,7 +1690,7 @@
       "tier": "L4",
       "priority": "低",
       "fetchMethod": "Podcast",
-      "lookback": "24h",
+      "lookback": "72h",
       "last": "",
       "perDay": 0,
       "briefCount": 0
@@ -1708,7 +1708,7 @@
       "tier": "L4",
       "priority": "低",
       "fetchMethod": "Podcast",
-      "lookback": "24h",
+      "lookback": "72h",
       "last": "08-18 17:12",
       "perDay": 0,
       "briefCount": 0
@@ -1726,7 +1726,7 @@
       "tier": "L4",
       "priority": "低",
       "fetchMethod": "Podcast",
-      "lookback": "24h",
+      "lookback": "72h",
       "last": "",
       "perDay": 0,
       "briefCount": 0
@@ -1744,7 +1744,7 @@
       "tier": "L4",
       "priority": "低",
       "fetchMethod": "Podcast",
-      "lookback": "24h",
+      "lookback": "72h",
       "last": "08-18 17:12",
       "perDay": 0,
       "briefCount": 0
@@ -1762,7 +1762,7 @@
       "tier": "L4",
       "priority": "低",
       "fetchMethod": "Podcast",
-      "lookback": "24h",
+      "lookback": "72h",
       "last": "08-18 17:12",
       "perDay": 0,
       "briefCount": 0

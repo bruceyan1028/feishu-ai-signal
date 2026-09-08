@@ -192,21 +192,9 @@
         "多模态",
         "产品"
       ],
-      "imageUrl": "media/huxiu/recvujWsa28XQF-1.gif",
+      "imageUrl": "media/huxiu/recvujWsa28XQF-4.gif",
       "mediaAssets": {
         "images": [
-          {
-            "url": "media/huxiu/recvujWsa28XQF-1.gif",
-            "alt": "Astra生成动态河流场景",
-            "kind": "article-figure",
-            "afterHeading": "Astra学会了「造世界」"
-          },
-          {
-            "url": "media/huxiu/recvujWsa28XQF-3.gif",
-            "alt": "多模型生成火箭发射场景",
-            "kind": "article-figure",
-            "afterHeading": "Astra学会了「造世界」"
-          },
           {
             "url": "media/huxiu/recvujWsa28XQF-4.gif",
             "alt": "平面名画延展为3D宇宙",
@@ -1074,9 +1062,15 @@
         "产品",
         "其他"
       ],
-      "imageUrl": "media/huxiu/recvujWsa2ilal-2.png",
+      "imageUrl": "media/huxiu/recvujWsa2ilal-1.png",
       "mediaAssets": {
         "images": [
+          {
+            "url": "media/huxiu/recvujWsa2ilal-1.png",
+            "alt": "产品经理洞察用户需求",
+            "kind": "article-figure",
+            "afterHeading": ""
+          },
           {
             "url": "media/huxiu/recvujWsa2ilal-2.png",
             "alt": "恩格尔系数与消费结构变化",

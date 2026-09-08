@@ -2158,12 +2158,6 @@
             "afterHeading": "一个后缀，撑起手机厂商的万元梦想"
           },
           {
-            "url": "media/huxiu/recvuAVZd2fCvl-2.png",
-            "alt": "多款Pro Max旗舰机型",
-            "kind": "article-figure",
-            "afterHeading": "一个后缀，撑起手机厂商的万元梦想"
-          },
-          {
             "url": "media/huxiu/recvuAVZd2fCvl-3.png",
             "alt": "OpenAI模型命名演变",
             "kind": "article-figure",
@@ -2531,7 +2525,310 @@
       }
     }
   ],
-  "socialPosts": [],
+  "socialPosts": [
+    {
+      "recordId": "recvuBxNAJ6Bvy",
+      "sourceId": "social-media",
+      "title": "ChatGPT Work for your personal writing style: https://t.co/IvKKSMeAoM",
+      "titleCn": "ChatGPT Work for your personal writing style: https://t.co/IvKKSMeAoM",
+      "source": "X · @gdb",
+      "url": "https://x.com/gdb/status/2097082100268802188",
+      "category": "其他",
+      "contentType": "社交媒体帖子",
+      "publishedDate": "2026-09-08",
+      "publishedAtMs": 1788818309000,
+      "summary": "",
+      "deepAnalysis": "",
+      "why": "",
+      "impact": 0,
+      "novelty": 0,
+      "actionability": 0,
+      "urgency": "中",
+      "tags": [],
+      "imageUrl": "",
+      "mediaAssets": {
+        "images": [],
+        "videos": []
+      },
+      "editorialStructure": "",
+      "socialMetrics": {
+        "platform": "x",
+        "post_id": "2097082100268802188",
+        "canonical_post_id": "2097082100268802188",
+        "conversation_id": "2097082100268802188",
+        "account": "gdb",
+        "account_name": "Greg Brockman",
+        "account_avatar": "https://pbs.twimg.com/profile_images/1347621377503711233/bHg3ipfD_400x400.jpg",
+        "account_verified": true,
+        "followers": 1042208,
+        "likes": 888,
+        "replies": 68,
+        "reposts": 33,
+        "quotes": 8,
+        "bookmarks": 197,
+        "impressions": 96744,
+        "engagement": 1303,
+        "is_retweet": false,
+        "is_reply": false,
+        "is_quote": true,
+        "thread_count": 1,
+        "thread_segments": [],
+        "edit_history_tweet_ids": [
+          "2097082100268802188"
+        ],
+        "own_text": "ChatGPT Work for your personal writing style:",
+        "own_chars": 45,
+        "quoted_text": "ChatGPT Work can now pick up on what makes your writing sound like… you. Your favorite phrases. Your very specific sign-off. your capitalizations quirks. Connect the tools you use every day, like Gmail, Google Drive, Slack, and SharePoint, and ChatGPT Work will learn your writing style from your emails, messages, and files—and carry it into whatever you write next.",
+        "quoted_chars": 367,
+        "quoted": {
+          "post_id": "2097018264048251309",
+          "text": "ChatGPT Work can now pick up on what makes your writing sound like… you. Your favorite phrases. Your very specific sign-off. your capitalizations quirks.\n\nConnect the tools you use every day, like Gmail, Google Drive, Slack, and SharePoint, and ChatGPT Work will learn your writing style from your emails, messages, and files—and carry it into whatever you write next.",
+          "created_at": "2026-09-07T17:44:49.000Z",
+          "account": "chatgpt",
+          "account_name": "ChatGPT",
+          "avatar": "https://pbs.twimg.com/profile_images/2081980424666935296/qU5G7mQg_400x400.jpg",
+          "verified": true,
+          "media_assets": {
+            "images": [
+              {
+                "id": "3_2097017069208539136",
+                "platform": "x",
+                "type": "photo",
+                "url": "https://pbs.twimg.com/media/HRoZ6fobEAAUhcN.jpg",
+                "width": 3840,
+                "height": 2160
+              }
+            ],
+            "videos": [],
+            "articles": []
+          }
+        },
+        "has_article": false,
+        "has_media": false,
+        "has_event": false,
+        "has_hard_evidence": false,
+        "event_and_evidence": false,
+        "strong_signal": false,
+        "account_tier": "P0",
+        "social_score": 55,
+        "llm_core_fact": "ChatGPT Work 新增了根据用户连接的 Gmail、Google Drive、Slack 和 SharePoint 中的邮件、消息及文件学习个人写作风格，并将其应用于后续写作的能力。",
+        "llm_event_type": "产品功能更新",
+        "llm_confidence": 0,
+        "gate": "llm"
+      },
+      "socialText": "ChatGPT Work for your personal writing style: https://t.co/IvKKSMeAoM"
+    },
+    {
+      "recordId": "recvuBxNAJJOjx",
+      "sourceId": "social-media",
+      "title": "Astra for spectrogram -&gt; sound identification https://t.co/zyOFJE25M1",
+      "titleCn": "Astra for spectrogram -&gt; sound identification https://t.co/zyOFJE25M1",
+      "source": "X · @gdb",
+      "url": "https://x.com/gdb/status/2097055132009861234",
+      "category": "其他",
+      "contentType": "社交媒体帖子",
+      "publishedDate": "2026-09-08",
+      "publishedAtMs": 1788811879000,
+      "summary": "",
+      "deepAnalysis": "",
+      "why": "",
+      "impact": 0,
+      "novelty": 0,
+      "actionability": 0,
+      "urgency": "中",
+      "tags": [],
+      "imageUrl": "",
+      "mediaAssets": {
+        "images": [],
+        "videos": []
+      },
+      "editorialStructure": "",
+      "socialMetrics": {
+        "platform": "x",
+        "post_id": "2097055132009861234",
+        "canonical_post_id": "2097055132009861234",
+        "conversation_id": "2097055132009861234",
+        "account": "gdb",
+        "account_name": "Greg Brockman",
+        "account_avatar": "https://pbs.twimg.com/profile_images/1347621377503711233/bHg3ipfD_400x400.jpg",
+        "account_verified": true,
+        "followers": 1042208,
+        "likes": 897,
+        "replies": 67,
+        "reposts": 39,
+        "quotes": 9,
+        "bookmarks": 214,
+        "impressions": 89879,
+        "engagement": 1341,
+        "is_retweet": false,
+        "is_reply": false,
+        "is_quote": true,
+        "thread_count": 1,
+        "thread_segments": [],
+        "edit_history_tweet_ids": [
+          "2097055132009861234"
+        ],
+        "own_text": "Astra for spectrogram -&gt; sound identification",
+        "own_chars": 48,
+        "quoted_text": "So Astra is able to identify sounds from mel spectrograms zero-shot. I don't think we've scratched the surface of what this model can do (and this is light reasoning btw)",
+        "quoted_chars": 170,
+        "quoted": {
+          "post_id": "2096892510241268094",
+          "text": "So Astra is able to identify sounds from mel spectrograms\n\nzero-shot.\n\nI don't think we've scratched the surface of what this model can do (and this is light reasoning btw) https://t.co/eYQecO55sD",
+          "created_at": "2026-09-07T09:25:07.000Z",
+          "account": "maxxrubin_",
+          "account_name": "Max",
+          "avatar": "https://pbs.twimg.com/profile_images/2045073530128371712/BPzEJom8_400x400.jpg",
+          "verified": false,
+          "media_assets": {
+            "images": [
+              {
+                "id": "3_2096889517072691200",
+                "platform": "x",
+                "type": "photo",
+                "url": "https://pbs.twimg.com/media/HRml5-5bsAA4fiC.jpg",
+                "width": 1390,
+                "height": 1008
+              },
+              {
+                "id": "3_2096889532398628864",
+                "platform": "x",
+                "type": "photo",
+                "url": "https://pbs.twimg.com/media/HRml63_a8AAfk-i.jpg",
+                "width": 1396,
+                "height": 1860
+              }
+            ],
+            "videos": [
+              {
+                "id": "13_2096890488947441665",
+                "platform": "x",
+                "type": "video",
+                "url": "https://pbs.twimg.com/amplify_video_thumb/2096890488947441665/img/q8a9uEj2JJVFQJ0C.jpg",
+                "width": 1920,
+                "height": 768,
+                "playbackUrl": "https://video.twimg.com/amplify_video/2096890488947441665/vid/avc1/1920x768/ET6U4bYnWJaYHY4m.mp4",
+                "thumbnailUrl": "https://pbs.twimg.com/amplify_video_thumb/2096890488947441665/img/q8a9uEj2JJVFQJ0C.jpg",
+                "durationSec": 5.2
+              },
+              {
+                "id": "13_2096890499202494464",
+                "platform": "x",
+                "type": "video",
+                "url": "https://pbs.twimg.com/amplify_video_thumb/2096890499202494464/img/GvUdx74rO3kUs22x.jpg",
+                "width": 1920,
+                "height": 768,
+                "playbackUrl": "https://video.twimg.com/amplify_video/2096890499202494464/vid/avc1/1920x768/SPW4qxu3u-EI-ED_.mp4",
+                "thumbnailUrl": "https://pbs.twimg.com/amplify_video_thumb/2096890499202494464/img/GvUdx74rO3kUs22x.jpg",
+                "durationSec": 8.8
+              }
+            ],
+            "articles": []
+          }
+        },
+        "has_article": false,
+        "has_media": false,
+        "has_event": false,
+        "has_hard_evidence": false,
+        "event_and_evidence": false,
+        "strong_signal": false,
+        "account_tier": "P0",
+        "social_score": 64,
+        "llm_core_fact": "Astra 能够对梅尔频谱图中的声音进行零样本识别。",
+        "llm_event_type": "模型能力",
+        "llm_confidence": 0,
+        "gate": "llm"
+      },
+      "socialText": "Astra for spectrogram -> sound identification https://t.co/zyOFJE25M1"
+    },
+    {
+      "recordId": "recvuv2dZ1YMt3",
+      "sourceId": "social-media",
+      "title": "Astra for checking scientific papers https://t.co/LynFCfuVKX",
+      "titleCn": "用于检查科学论文的 Astra",
+      "source": "X · @gdb",
+      "url": "https://x.com/gdb/status/2096486220918657164",
+      "category": "其他",
+      "contentType": "社交媒体帖子",
+      "publishedDate": "2026-09-06",
+      "publishedAtMs": 1788676240000,
+      "summary": "来源账号仅发布了“Astra for checking scientific papers”及一个链接，指向一款用于检查科学论文的 Astra。原文未提供其功能细节、技术方案、适用对象或实测结果。",
+      "deepAnalysis": "【帖子信号】\n账号@ gdb在X上发布了“Astra for checking scientific papers”，并附有链接：https://t.co/LynFCfuVKX。现有原文仅披露产品名称Astra及其用于检查科学论文这一用途，未说明发布方、功能范围、技术架构、支持的论文格式、使用方式、性能指标或是否已开放使用。\n\n【价值与边界】\n如果Astra能够辅助论文检查，潜在价值可能包括支持科研人员进行文本审阅、内容核对或质量控制，但这些仅属于基于名称和用途的可能推断，并非原文已证实事实。当前无法判断其是否使用AI、是否具备引用核验、事实核查、方法审查或同行评审辅助能力，也无法据此评估准确率、误报漏报、隐私风险及实际科研影响。因此，不能将其视为已验证的论文审查方案。\n\n【跟进行动】\n1. 打开链接核验Astra的开发者、产品页面、功能说明及可用性。\n2. 查找演示、技术文档或论文，确认其检查对象、评测数据和准确性指标。\n3. 在涉及未发表论文时，进一步核验数据存储、隐私和版权政策。",
+      "why": "该信息可能涉及科学论文检查工具，但当前披露内容极少，无法判断其实际创新性、可靠性和应用价值。",
+      "impact": 20,
+      "novelty": 15,
+      "actionability": 10,
+      "urgency": "低",
+      "tags": [
+        "AI",
+        "产品",
+        "其他"
+      ],
+      "imageUrl": "",
+      "mediaAssets": {
+        "images": [],
+        "videos": []
+      },
+      "editorialStructure": "",
+      "socialMetrics": {
+        "platform": "x",
+        "post_id": "2096486220918657164",
+        "canonical_post_id": "2096486220918657164",
+        "conversation_id": "2096486220918657164",
+        "account": "gdb",
+        "account_name": "Greg Brockman",
+        "account_avatar": "https://pbs.twimg.com/profile_images/1347621377503711233/bHg3ipfD_400x400.jpg",
+        "account_verified": true,
+        "followers": 1042208,
+        "likes": 1472,
+        "replies": 95,
+        "reposts": 62,
+        "quotes": 7,
+        "bookmarks": 215,
+        "impressions": 176388,
+        "engagement": 2015,
+        "is_retweet": false,
+        "is_reply": false,
+        "is_quote": true,
+        "thread_count": 1,
+        "thread_segments": [],
+        "edit_history_tweet_ids": [
+          "2096486220918657164"
+        ],
+        "own_text": "Astra for checking scientific papers",
+        "own_chars": 36,
+        "quoted_text": "I sicced Astra on a bunch of replication packages, and it found a huge number of coding errors. Most of these were inconsequential, but some of them overturn central results for papers in high-ranking journals. Astra also discovered that many models weren't even run properly.",
+        "quoted_chars": 276,
+        "quoted": {
+          "post_id": "2096313266901270548",
+          "text": "I sicced Astra on a bunch of replication packages, and it found a huge number of coding errors.\n\nMost of these were inconsequential, but some of them overturn central results for papers in high-ranking journals.\n\nAstra also discovered that many models weren't even run properly.",
+          "created_at": "2026-09-05T19:03:25.000Z",
+          "account": "cremieuxrecueil",
+          "account_name": "Crémieux",
+          "avatar": "https://pbs.twimg.com/profile_images/1637507712983375875/EQHiqVq8_400x400.jpg",
+          "verified": false,
+          "media_assets": {
+            "images": [],
+            "videos": [],
+            "articles": []
+          }
+        },
+        "has_article": false,
+        "has_media": false,
+        "has_event": false,
+        "has_hard_evidence": false,
+        "event_and_evidence": false,
+        "strong_signal": false,
+        "account_tier": "P0",
+        "social_score": 53,
+        "llm_core_fact": "Astra 被用于检查科学论文的复现材料，并发现了大量代码错误，其中部分错误足以推翻高排名期刊论文的核心结论，还有一些模型实际上未被正确运行。",
+        "llm_event_type": "产品能力/科研应用",
+        "llm_confidence": 0,
+        "gate": "llm"
+      },
+      "socialText": "Astra for checking scientific papers https://t.co/LynFCfuVKX"
+    }
+  ],
   "briefRecordId": "recvuB5qHN1Pwa",
   "briefTableId": "tblL72CwS6RcQ41Z"
 }

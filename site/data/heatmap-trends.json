@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-08T12:48:17+08:00",
+  "generatedAt": "2026-09-08T14:19:30+08:00",
   "days": [
     "2026-09-02",
     "2026-09-03",
@@ -10,31 +10,27 @@
     "2026-09-08"
   ],
   "topics": [
-    "harrison-ai",
     "openai-chief-scientist-ai-warning",
-    "artificial-intelligence-news",
+    "harrison-ai",
     "bernie-sanders-ai-legislation",
-    "trump-ai-generated-images-social-media"
+    "trump-ai-generated-images-social-media",
+    "artificial-intelligence-news"
   ],
   "labels": {
-    "harrison-ai": "harrison ai",
     "openai-chief-scientist-ai-warning": "openai chief scientist ai warning",
-    "artificial-intelligence-news": "artificial intelligence news",
+    "harrison-ai": "harrison ai",
     "bernie-sanders-ai-legislation": "bernie sanders ai legislation",
-    "trump-ai-generated-images-social-media": "trump ai generated images social media"
+    "trump-ai-generated-images-social-media": "trump ai generated images social media",
+    "artificial-intelligence-news": "artificial intelligence news"
   },
   "queries": {
-    "harrison-ai": {
-      "g": "harrison ai",
-      "x": "\"harrison ai\" -is:retweet"
-    },
     "openai-chief-scientist-ai-warning": {
       "g": "openai chief scientist ai warning",
       "x": "\"openai chief scientist ai warning\" -is:retweet"
     },
-    "artificial-intelligence-news": {
-      "g": "artificial intelligence news",
-      "x": "\"artificial intelligence news\" -is:retweet"
+    "harrison-ai": {
+      "g": "harrison ai",
+      "x": "\"harrison ai\" -is:retweet"
     },
     "bernie-sanders-ai-legislation": {
       "g": "bernie sanders ai legislation",
@@ -43,98 +39,98 @@
     "trump-ai-generated-images-social-media": {
       "g": "trump ai generated images social media",
       "x": "\"trump ai generated images social media\" -is:retweet"
+    },
+    "artificial-intelligence-news": {
+      "g": "artificial intelligence news",
+      "x": "\"artificial intelligence news\" -is:retweet"
     }
   },
   "scopes": {
-    "harrison-ai": "global",
     "openai-chief-scientist-ai-warning": "global",
-    "artificial-intelligence-news": "global",
+    "harrison-ai": "global",
     "bernie-sanders-ai-legislation": "global",
-    "trump-ai-generated-images-social-media": "global"
+    "trump-ai-generated-images-social-media": "global",
+    "artificial-intelligence-news": "global"
   },
   "marks": {
-    "harrison-ai": "🌐",
     "openai-chief-scientist-ai-warning": "🌐",
-    "artificial-intelligence-news": "🌐",
+    "harrison-ai": "🌐",
     "bernie-sanders-ai-legislation": "🌐",
-    "trump-ai-generated-images-social-media": "🌐"
+    "trump-ai-generated-images-social-media": "🌐",
+    "artificial-intelligence-news": "🌐"
   },
   "breakouts": [
-    "harrison-ai",
     "openai-chief-scientist-ai-warning",
-    "artificial-intelligence-news",
+    "harrison-ai",
     "bernie-sanders-ai-legislation",
-    "trump-ai-generated-images-social-media"
+    "trump-ai-generated-images-social-media",
+    "artificial-intelligence-news"
   ],
   "selection": {
     "method": "google-trending-ai",
     "volumes": {
-      "harrison-ai": 1000,
       "openai-chief-scientist-ai-warning": 1000,
-      "artificial-intelligence-news": 200,
+      "harrison-ai": 1000,
       "bernie-sanders-ai-legislation": 20000,
-      "trump-ai-generated-images-social-media": 2000
+      "trump-ai-generated-images-social-media": 2000,
+      "artificial-intelligence-news": 200
     },
     "geos": {
-      "harrison-ai": [
-        "AU"
-      ],
       "openai-chief-scientist-ai-warning": [
         "GB"
       ],
-      "artificial-intelligence-news": [
-        "US"
+      "harrison-ai": [
+        "AU"
       ],
       "bernie-sanders-ai-legislation": [
         "US"
       ],
       "trump-ai-generated-images-social-media": [
         "US"
+      ],
+      "artificial-intelligence-news": [
+        "US"
       ]
     },
     "plot_geo": {
-      "harrison-ai": "",
       "openai-chief-scientist-ai-warning": "",
-      "artificial-intelligence-news": "",
+      "harrison-ai": "",
       "bernie-sanders-ai-legislation": "",
-      "trump-ai-generated-images-social-media": ""
+      "trump-ai-generated-images-social-media": "",
+      "artificial-intelligence-news": ""
     },
     "breakouts": [
-      "harrison-ai",
       "openai-chief-scientist-ai-warning",
-      "artificial-intelligence-news",
+      "harrison-ai",
       "bernie-sanders-ai-legislation",
-      "trump-ai-generated-images-social-media"
+      "trump-ai-generated-images-social-media",
+      "artificial-intelligence-news"
     ]
   },
   "google-trends": {
     "error": "",
     "topics": [
-      "harrison-ai",
       "openai-chief-scientist-ai-warning",
-      "artificial-intelligence-news",
+      "harrison-ai",
       "bernie-sanders-ai-legislation",
-      "trump-ai-generated-images-social-media"
+      "trump-ai-generated-images-social-media",
+      "artificial-intelligence-news"
     ],
     "labels": {
-      "harrison-ai": "harrison ai",
       "openai-chief-scientist-ai-warning": "openai chief scientist ai warning",
-      "artificial-intelligence-news": "artificial intelligence news",
+      "harrison-ai": "harrison ai",
       "bernie-sanders-ai-legislation": "bernie sanders ai legislation",
-      "trump-ai-generated-images-social-media": "trump ai generated images social media"
+      "trump-ai-generated-images-social-media": "trump ai generated images social media",
+      "artificial-intelligence-news": "artificial intelligence news"
     },
     "queries": {
-      "harrison-ai": {
-        "g": "harrison ai",
-        "x": "\"harrison ai\" -is:retweet"
-      },
       "openai-chief-scientist-ai-warning": {
         "g": "openai chief scientist ai warning",
         "x": "\"openai chief scientist ai warning\" -is:retweet"
       },
-      "artificial-intelligence-news": {
-        "g": "artificial intelligence news",
-        "x": "\"artificial intelligence news\" -is:retweet"
+      "harrison-ai": {
+        "g": "harrison ai",
+        "x": "\"harrison ai\" -is:retweet"
       },
       "bernie-sanders-ai-legislation": {
         "g": "bernie sanders ai legislation",
@@ -143,72 +139,85 @@
       "trump-ai-generated-images-social-media": {
         "g": "trump ai generated images social media",
         "x": "\"trump ai generated images social media\" -is:retweet"
+      },
+      "artificial-intelligence-news": {
+        "g": "artificial intelligence news",
+        "x": "\"artificial intelligence news\" -is:retweet"
       }
     },
     "scopes": {
-      "harrison-ai": "global",
       "openai-chief-scientist-ai-warning": "global",
-      "artificial-intelligence-news": "global",
+      "harrison-ai": "global",
       "bernie-sanders-ai-legislation": "global",
-      "trump-ai-generated-images-social-media": "global"
+      "trump-ai-generated-images-social-media": "global",
+      "artificial-intelligence-news": "global"
     },
     "marks": {
-      "harrison-ai": "🌐",
       "openai-chief-scientist-ai-warning": "🌐",
-      "artificial-intelligence-news": "🌐",
+      "harrison-ai": "🌐",
       "bernie-sanders-ai-legislation": "🌐",
-      "trump-ai-generated-images-social-media": "🌐"
+      "trump-ai-generated-images-social-media": "🌐",
+      "artificial-intelligence-news": "🌐"
     },
     "breakouts": [
-      "harrison-ai",
       "openai-chief-scientist-ai-warning",
-      "artificial-intelligence-news",
+      "harrison-ai",
       "bernie-sanders-ai-legislation",
-      "trump-ai-generated-images-social-media"
+      "trump-ai-generated-images-social-media",
+      "artificial-intelligence-news"
     ],
     "selection": {
       "volumes": {
-        "harrison-ai": 1000,
         "openai-chief-scientist-ai-warning": 1000,
-        "artificial-intelligence-news": 200,
+        "harrison-ai": 1000,
         "bernie-sanders-ai-legislation": 20000,
-        "trump-ai-generated-images-social-media": 2000
+        "trump-ai-generated-images-social-media": 2000,
+        "artificial-intelligence-news": 200
       },
       "geos": {
-        "harrison-ai": [
-          "AU"
-        ],
         "openai-chief-scientist-ai-warning": [
           "GB"
         ],
-        "artificial-intelligence-news": [
-          "US"
+        "harrison-ai": [
+          "AU"
         ],
         "bernie-sanders-ai-legislation": [
           "US"
         ],
         "trump-ai-generated-images-social-media": [
           "US"
+        ],
+        "artificial-intelligence-news": [
+          "US"
         ]
       },
       "plot_geo": {
-        "harrison-ai": "",
         "openai-chief-scientist-ai-warning": "",
-        "artificial-intelligence-news": "",
+        "harrison-ai": "",
         "bernie-sanders-ai-legislation": "",
-        "trump-ai-generated-images-social-media": ""
+        "trump-ai-generated-images-social-media": "",
+        "artificial-intelligence-news": ""
       },
       "method": "google-trending-ai"
     },
     "matrix": {
       "raw": [
         [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          100.0,
+          68.0
+        ],
+        [
+          26.0,
+          22.0,
           24.0,
-          20.0,
           22.0,
-          19.0,
-          22.0,
-          31.0,
+          25.0,
+          36.0,
           100.0
         ],
         [
@@ -216,46 +225,46 @@
           0.0,
           0.0,
           0.0,
-          0.0,
-          100.0,
-          42.0
-        ],
-        [
-          70.0,
-          65.0,
-          56.0,
-          55.0,
-          61.0,
-          76.0,
-          100.0
-        ],
-        [
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          29.0,
-          100.0,
-          22.0
-        ],
-        [
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          0.0,
+          36.0,
           100.0,
           21.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          100.0,
+          10.0
+        ],
+        [
+          72.0,
+          69.0,
+          59.0,
+          59.0,
+          70.0,
+          80.0,
+          100.0
         ]
       ],
       "normalized": [
         [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          1.0,
+          0.68
+        ],
+        [
+          0.26,
+          0.22,
           0.24,
-          0.2,
           0.22,
-          0.19,
-          0.22,
-          0.31,
+          0.25,
+          0.36,
           1.0
         ],
         [
@@ -263,68 +272,38 @@
           0.0,
           0.0,
           0.0,
-          0.0,
-          1.0,
-          0.42
-        ],
-        [
-          0.7,
-          0.65,
-          0.56,
-          0.55,
-          0.61,
-          0.76,
-          1.0
-        ],
-        [
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          0.29,
-          1.0,
-          0.22
-        ],
-        [
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          0.0,
+          0.36,
           1.0,
           0.21
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          1.0,
+          0.1
+        ],
+        [
+          0.72,
+          0.69,
+          0.59,
+          0.59,
+          0.7,
+          0.8,
+          1.0
         ]
       ]
     },
     "trend": {
-      "harrison-ai": 4.348,
-      "openai-chief-scientist-ai-warning": 2.52,
-      "artificial-intelligence-news": 1.567,
-      "bernie-sanders-ai-legislation": 1.023,
-      "trump-ai-generated-images-social-media": 1.26
+      "openai-chief-scientist-ai-warning": 4.08,
+      "harrison-ai": 3.871,
+      "bernie-sanders-ai-legislation": 0.926,
+      "trump-ai-generated-images-social-media": 0.6,
+      "artificial-intelligence-news": 1.467
     },
     "items": {
-      "harrison-ai|2026-09-02": [
-        "g-harrison-ai"
-      ],
-      "harrison-ai|2026-09-03": [
-        "g-harrison-ai"
-      ],
-      "harrison-ai|2026-09-04": [
-        "g-harrison-ai"
-      ],
-      "harrison-ai|2026-09-05": [
-        "g-harrison-ai"
-      ],
-      "harrison-ai|2026-09-06": [
-        "g-harrison-ai"
-      ],
-      "harrison-ai|2026-09-07": [
-        "g-harrison-ai"
-      ],
-      "harrison-ai|2026-09-08": [
-        "g-harrison-ai"
-      ],
       "openai-chief-scientist-ai-warning|2026-09-02": [
         "g-openai-chief-scientist-ai-warning"
       ],
@@ -346,26 +325,26 @@
       "openai-chief-scientist-ai-warning|2026-09-08": [
         "g-openai-chief-scientist-ai-warning"
       ],
-      "artificial-intelligence-news|2026-09-02": [
-        "g-artificial-intelligence-news"
+      "harrison-ai|2026-09-02": [
+        "g-harrison-ai"
       ],
-      "artificial-intelligence-news|2026-09-03": [
-        "g-artificial-intelligence-news"
+      "harrison-ai|2026-09-03": [
+        "g-harrison-ai"
       ],
-      "artificial-intelligence-news|2026-09-04": [
-        "g-artificial-intelligence-news"
+      "harrison-ai|2026-09-04": [
+        "g-harrison-ai"
       ],
-      "artificial-intelligence-news|2026-09-05": [
-        "g-artificial-intelligence-news"
+      "harrison-ai|2026-09-05": [
+        "g-harrison-ai"
       ],
-      "artificial-intelligence-news|2026-09-06": [
-        "g-artificial-intelligence-news"
+      "harrison-ai|2026-09-06": [
+        "g-harrison-ai"
       ],
-      "artificial-intelligence-news|2026-09-07": [
-        "g-artificial-intelligence-news"
+      "harrison-ai|2026-09-07": [
+        "g-harrison-ai"
       ],
-      "artificial-intelligence-news|2026-09-08": [
-        "g-artificial-intelligence-news"
+      "harrison-ai|2026-09-08": [
+        "g-harrison-ai"
       ],
       "bernie-sanders-ai-legislation|2026-09-02": [
         "g-bernie-sanders-ai-legislation"
@@ -386,12 +365,7 @@
         "g-bernie-sanders-ai-legislation"
       ],
       "bernie-sanders-ai-legislation|2026-09-08": [
-        "g-bernie-sanders-ai-legislation",
-        "g-bernie-sanders-ai-legislation-q1",
-        "g-bernie-sanders-ai-legislation-q2",
-        "g-bernie-sanders-ai-legislation-q3",
-        "g-bernie-sanders-ai-legislation-q4",
-        "g-bernie-sanders-ai-legislation-q5"
+        "g-bernie-sanders-ai-legislation"
       ],
       "trump-ai-generated-images-social-media|2026-09-02": [
         "g-trump-ai-generated-images-social-media"
@@ -413,58 +387,54 @@
       ],
       "trump-ai-generated-images-social-media|2026-09-08": [
         "g-trump-ai-generated-images-social-media"
+      ],
+      "artificial-intelligence-news|2026-09-02": [
+        "g-artificial-intelligence-news"
+      ],
+      "artificial-intelligence-news|2026-09-03": [
+        "g-artificial-intelligence-news"
+      ],
+      "artificial-intelligence-news|2026-09-04": [
+        "g-artificial-intelligence-news"
+      ],
+      "artificial-intelligence-news|2026-09-05": [
+        "g-artificial-intelligence-news"
+      ],
+      "artificial-intelligence-news|2026-09-06": [
+        "g-artificial-intelligence-news"
+      ],
+      "artificial-intelligence-news|2026-09-07": [
+        "g-artificial-intelligence-news"
+      ],
+      "artificial-intelligence-news|2026-09-08": [
+        "g-artificial-intelligence-news"
       ]
     },
     "itemIndex": {
-      "g-harrison-ai": {
-        "title": "Google Trends · harrison ai",
-        "source": "Google Trends",
-        "url": "https://trends.google.com/trends/explore?date=now%207-d&q=harrison%20ai"
-      },
       "g-openai-chief-scientist-ai-warning": {
         "title": "Google Trends · openai chief scientist ai warning",
         "source": "Google Trends",
         "url": "https://trends.google.com/trends/explore?date=now%207-d&q=openai%20chief%20scientist%20ai%20warning"
       },
-      "g-artificial-intelligence-news": {
-        "title": "Google Trends · artificial intelligence news",
+      "g-harrison-ai": {
+        "title": "Google Trends · harrison ai",
         "source": "Google Trends",
-        "url": "https://trends.google.com/trends/explore?date=now%207-d&q=artificial%20intelligence%20news"
+        "url": "https://trends.google.com/trends/explore?date=now%207-d&q=harrison%20ai"
       },
       "g-bernie-sanders-ai-legislation": {
         "title": "Google Trends · bernie sanders ai legislation",
         "source": "Google Trends",
         "url": "https://trends.google.com/trends/explore?date=now%207-d&q=bernie%20sanders%20ai%20legislation"
       },
-      "g-bernie-sanders-ai-legislation-q1": {
-        "title": "pete hegseth defense leak probe",
-        "source": "Google Trends",
-        "url": "https://trends.google.com/trends/explore?date=now%207-d&q=pete%20hegseth%20defense%20leak%20probe"
-      },
-      "g-bernie-sanders-ai-legislation-q2": {
-        "title": "mamdani",
-        "source": "Google Trends",
-        "url": "https://trends.google.com/trends/explore?date=now%207-d&q=mamdani"
-      },
-      "g-bernie-sanders-ai-legislation-q3": {
-        "title": "ballot",
-        "source": "Google Trends",
-        "url": "https://trends.google.com/trends/explore?date=now%207-d&q=ballot"
-      },
-      "g-bernie-sanders-ai-legislation-q4": {
-        "title": "ua1011",
-        "source": "Google Trends",
-        "url": "https://trends.google.com/trends/explore?date=now%207-d&q=ua1011"
-      },
-      "g-bernie-sanders-ai-legislation-q5": {
-        "title": "germany public pool solar shade",
-        "source": "Google Trends",
-        "url": "https://trends.google.com/trends/explore?date=now%207-d&q=germany%20public%20pool%20solar%20shade"
-      },
       "g-trump-ai-generated-images-social-media": {
         "title": "Google Trends · trump ai generated images social media",
         "source": "Google Trends",
         "url": "https://trends.google.com/trends/explore?date=now%207-d&q=trump%20ai%20generated%20images%20social%20media"
+      },
+      "g-artificial-intelligence-news": {
+        "title": "Google Trends · artificial intelligence news",
+        "source": "Google Trends",
+        "url": "https://trends.google.com/trends/explore?date=now%207-d&q=artificial%20intelligence%20news"
       }
     }
   },
@@ -528,7 +498,7 @@
           3463.0,
           114.0,
           37.0,
-          6.0
+          9.0
         ],
         [
           316.0,
@@ -536,8 +506,8 @@
           13968.0,
           13397.0,
           9722.0,
-          10539.0,
-          1618.0
+          10533.0,
+          2121.0
         ]
       ],
       "normalized": [
@@ -556,14 +526,14 @@
           1.0,
           0.9591,
           0.696,
-          0.7545,
-          0.1158
+          0.7541,
+          0.1518
         ]
       ]
     },
     "trend": {
       "gemini-start-the-adventure": 0.001,
-      "gpt-6-astra": 0.174
+      "gpt-6-astra": 0.228
     },
     "items": {
       "gemini-start-the-adventure|2026-09-02": [
