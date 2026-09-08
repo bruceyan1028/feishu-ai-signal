@@ -53,6 +53,35 @@ _EDGE_TOPIC_RE = re.compile(
 )
 
 
+# 中文与拉丁缩写相邻时 \b 不成立（「因AI裁员」），改用非字母数字的前后瞻。
+_AI_ACRONYM = r"(?<![A-Za-z0-9])(?:AI|LLMs?|GPUs?|NPU|MCP|RAG|agents?|agentic|GPT|SDK)(?![A-Za-z0-9])"
+_AI_TOPIC_RE = re.compile(
+    _AI_ACRONYM
+    + r"|(?:人工智能|智能体|大模型|大语言模型|语言模型|生成式|AIGC|多模态|具身|世界模型|扩散模型|"
+    r"机器学习|深度学习|神经网络|强化学习|微调|预训练|提示词|prompt|token|推理|训练|开源模型|模型|"
+    r"算力|芯片|数据中心|机器人|自动驾驶|智能驾驶|端侧|算法|"
+    r"Claude|Gemini|DeepSeek|Llama|Qwen|通义|千问|文心|豆包|Kimi|GLM|Mistral|Grok|Sora|Copilot|"
+    r"OpenAI|Anthropic|DeepMind|英伟达|NVIDIA|Hugging ?Face|Ollama|LangChain|vLLM|Transformer)",
+    re.I,
+)
+
+
+def is_ai_relevant(fields: dict[str, Any], analysis: dict[str, Any] | None = None) -> bool:
+    """判断这条信号本身是不是在讲 AI，而不只是正文顺带提到几个关键词。
+
+    只看标题和中文摘要：正文里的「算法推荐」「芯片供应」多是行文顺带，
+    真正以 AI 为主题的信号，标题或一两句话的摘要必然会说出来。
+    """
+    text = " ".join(
+        [
+            str(scalar(fields.get("标题")) or ""),
+            str((analysis or {}).get("title_cn") or scalar(fields.get("中文标题")) or ""),
+            str((analysis or {}).get("summary_cn") or scalar(fields.get("中文摘要")) or ""),
+        ]
+    )
+    return bool(_AI_TOPIC_RE.search(text))
+
+
 def is_edge_signal(fields: dict[str, Any]) -> bool:
     """确定性识别端侧信号，避免完全依赖 LLM 自由选标签。"""
     text = "\n".join(
@@ -563,6 +592,30 @@ def _active_source_ids(param_records: list[dict[str, Any]]) -> set[str]:
             "Podcast",
         }
     } - {""}
+
+
+def _body_admitted_source_ids(param_records: list[dict[str, Any]]) -> set[str]:
+    """找出「靠正文关键词命中放行」的源：keyword_min_hits >= 2 的泛内容站点。
+
+    这些源本身不是 AI 专栏，一篇商业或消费文章只要正文里两次提到「算法」「芯片」
+    就能通过清洗入库，是跑题信号唯一的入口。AI 原生源没有这个问题，
+    对它们做主题词校验只会误杀（论文标题、仓库 release note 常常不含泛 AI 词）。
+    """
+    result: set[str] = set()
+    for record in param_records:
+        fields = record.get("fields") or {}
+        source_id = str(sources.cell(fields.get("source_id")) or "")
+        if not source_id or not sources.cell(fields.get("keyword_regex")):
+            continue
+        try:
+            extra = json.loads(str(sources.cell(fields.get("extra_config")) or "") or "{}")
+        except (TypeError, ValueError):
+            extra = {}
+        if not isinstance(extra, dict):
+            extra = {}
+        if int(extra.get("keyword_min_hits") or 1) >= 2:
+            result.add(source_id)
+    return result
 
 
 def _lookback_hours_map(param_records: list[dict[str, Any]]) -> dict[str, int]:
@@ -1127,6 +1180,8 @@ def generate(day: str | None = None) -> dict[str, Any]:
     analyzed: list[dict[str, Any]] = []
     attempted = 0
     failed: list[str] = []
+    off_topic: list[str] = []
+    body_admitted_sources = _body_admitted_source_ids(params)
     for index, item in enumerate(candidates, 1):
         fields = item["fields"]
         analysis = _existing_analysis(fields)
@@ -1197,6 +1252,10 @@ def generate(day: str | None = None) -> dict[str, Any]:
             if len(updates) >= 3:
                 feishu.batch_update_records(token, config.FEISHU_ENTRY_TABLE_ID, updates)
                 updates.clear()
+        # 解读写回后再判主题：条目留在条目表里，但跑题的不进简报。
+        if item.get("source_id") in body_admitted_sources and not is_ai_relevant(fields, analysis):
+            off_topic.append(analysis.get("title_cn") or str(scalar(fields.get("标题")) or ""))
+            continue
         signal = _signal_from_fields(
             str(item["record_id"]),
             fields,
@@ -1237,6 +1296,8 @@ def generate(day: str | None = None) -> dict[str, Any]:
         analyzed.append(signal)
     feishu.batch_update_records(token, config.FEISHU_ENTRY_TABLE_ID, updates)
 
+    if off_topic:
+        log.info("主题不相关剔除 %d 条：%s", len(off_topic), "；".join(off_topic[:5]))
     if failed:
         log.warning("本轮 %d/%d 条分析失败：%s", len(failed), attempted, "；".join(failed[:5]))
     if analysis_failure_is_systemic(len(failed), attempted):
