@@ -102,8 +102,8 @@ def _prepare_scrape_sources(
 
 
 def run(methods: set[str] | None = None) -> int:
-    # X / Social 暂停自动采集；仍保留显式 `--method Social` 供后续手动验收。
-    enabled = methods or {"RSS", "Scrape", "Media"}
+    # Podcast 仍走 podcast-ingest.yml 单独跑：转写音频要一个多小时，塞进日报会撞超时。
+    enabled = methods or {"RSS", "Scrape", "Media", "Social"}
     config.validate()
     run_id = health.new_run_id()
 

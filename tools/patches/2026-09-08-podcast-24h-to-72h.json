@@ -1,0 +1,16 @@
+{
+ "podcast-dwarkesh": {"lookback_window": "72h"},
+ "podcast-silicon-valley-101": {"lookback_window": "72h"},
+ "podcast-latent-space": {"lookback_window": "72h"},
+ "podcast-crossing": {"lookback_window": "72h"},
+ "podcast-ai-alchemy": {"lookback_window": "72h"},
+ "podcast-no-priors": {"lookback_window": "72h"},
+ "podcast-practical-ai": {"lookback_window": "72h"},
+ "podcast-cognitive-revolution": {"lookback_window": "72h"},
+ "podcast-twiml": {"lookback_window": "72h"},
+ "podcast-gradient-dissent": {"lookback_window": "72h"},
+ "podcast-training-data": {"lookback_window": "72h"},
+ "podcast-eye-on-ai": {"lookback_window": "72h"},
+ "podcast-last-week-in-ai": {"lookback_window": "72h"},
+ "podcast-nvidia-ai": {"lookback_window": "72h"}
+}

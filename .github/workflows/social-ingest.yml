@@ -1,7 +1,8 @@
 name: X Social Signal Ingest
 
 on:
-  # X 筛选策略已落地，但账户尚无 API credits：不挂 schedule，也不进日报默认采集。
+  # X 已随 credits 恢复接回日报默认采集（src.main）。这里只留手动入口，
+  # 供单独补跑或验收账号白名单改动，不挂 schedule 以免和日报重复读配额。
   workflow_dispatch: {}
 
 concurrency:
