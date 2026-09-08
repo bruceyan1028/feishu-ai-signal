@@ -1360,6 +1360,23 @@ class VerbatimBodyTest(unittest.TestCase):
         middle = "本内容由作者授权发布，仅供参考。\n\n真正的正文段落。"
         self.assertEqual(daily.clean_body(middle, "虎嗅"), middle)
 
+    def test_footer_contact_block_is_dropped(self):
+        body = "\n\n".join(
+            [
+                "正文最后一段结论。",
+                "The End",
+                "举报这篇文章",
+                "联系我们",
+                "电话",
+                "+86 010-85805342",
+                "邮箱",
+                "service@guokr.com",
+                "违法和不良信息举报邮箱： jubao@guokr.com",
+                "未成年人专项举报热线： 15513123670",
+            ]
+        )
+        self.assertEqual(daily.clean_body(body, "果壳"), "正文最后一段结论。")
+
     def test_html_extraction_keeps_heading_levels(self):
         html = (
             "<h2>一级小节</h2><p>段落一。</p>"
@@ -1373,6 +1390,112 @@ class VerbatimBodyTest(unittest.TestCase):
         self.assertIn("#### 三级小节", text)
         # h5/h6 罕见，并到四级，不再生出更深的层级
         self.assertIn("#### 更深一层", text)
+
+
+class PolishVerbatimBodyTest(unittest.TestCase):
+    """照抄原文之前的 LLM 清理排版：只许删减与分段，不许改写。"""
+
+    RAW = (
+        "这是一段交代事件本身的导语，用来说明来龙去脉。\n\n"
+        "AI聊天框里的谋杀案 故事的起点，是一场持续了大约六个月的恋情。\n\n"
+        "果壳网官方帐号\n\n"
+        "科技有意思 · 果壳走着瞧"
+    )
+    POLISHED = (
+        "这是一段交代事件本身的导语，用来说明来龙去脉。\n\n"
+        "## AI聊天框里的谋杀案\n\n"
+        "故事的起点，是一场持续了大约六个月的恋情。"
+    )
+
+    def _fields(self, body: str) -> dict:
+        return {
+            "标题": "ChatGPT和美国“杀人犯”聊天后报警了！",
+            "中文标题": "ChatGPT主动向FBI上报谋杀计划引发隐私与法律边界争议",
+            "来源": "果壳",
+            "来源类型": "公众号",
+            "source_id": "guokr",
+            "分类": "中文媒体",
+            "原文": body,
+        }
+
+    def test_drops_account_footer_and_lifts_the_inline_heading(self):
+        with mock.patch.object(
+            daily.report, "_llm_json", return_value={"body": self.POLISHED}
+        ) as llm:
+            polished = daily.polish_verbatim_body(self.RAW, "果壳", "AI 报警")
+        self.assertEqual(polished, self.POLISHED)
+        self.assertNotIn("果壳网官方帐号", polished)
+        prompt = llm.call_args.args[0]
+        self.assertIn("逐字一致", prompt)
+
+    def test_rewritten_output_is_rejected_in_favour_of_the_original(self):
+        rewritten = "一名分析师把谋杀计划告诉了聊天机器人，平台随后通知了执法部门并促成抓捕。"
+        self.assertLess(daily.verbatim_fidelity(rewritten, self.RAW), 0.8)
+        with mock.patch.object(daily.report, "_llm_json", return_value={"body": rewritten}):
+            self.assertEqual(daily.polish_verbatim_body(self.RAW, "果壳"), "")
+
+    def test_a_failed_chunk_keeps_that_chunk_as_is(self):
+        long_raw = "\n\n".join(f"第{index}段落的完整内容在这里。" * 40 for index in range(4))
+        calls = {"n": 0}
+
+        def flaky(prompt: str) -> dict[str, str]:
+            calls["n"] += 1
+            snippet = prompt.split("正文：\n", 1)[1]
+            if "第2段落" in snippet:
+                raise RuntimeError("rate limited")
+            return {"body": snippet}
+
+        with mock.patch.object(daily.config, "BODY_POLISH_CHUNK", 1200), mock.patch.object(
+            daily.report, "_llm_json", side_effect=flaky
+        ):
+            polished = daily.polish_verbatim_body(long_raw, "果壳")
+        self.assertGreater(calls["n"], 1)
+        for index in range(4):
+            self.assertIn(f"第{index}段落的完整内容在这里。", polished)
+
+    def test_long_body_keeps_the_tail_beyond_the_polish_limit(self):
+        head = "这是需要清理的正文段落。" * 30
+        tail = "这是超出上限之后原样附回的尾巴。"
+        with mock.patch.object(daily.config, "BODY_POLISH_LIMIT", len(head)), mock.patch.object(
+            daily.report, "_llm_json", side_effect=lambda p: {"body": p.split("正文：\n", 1)[1]}
+        ):
+            polished = daily.polish_verbatim_body(f"{head}\n\n{tail}", "果壳")
+        self.assertTrue(polished.endswith(tail))
+
+    def test_display_body_prefers_the_polished_version(self):
+        fields = self._fields(self.RAW)
+        fields[daily.READABLE_BODY_FIELD] = self.POLISHED
+        self.assertEqual(daily.display_body(fields)["body"], self.POLISHED)
+        self.assertFalse(daily.display_body(fields)["bodyTruncated"])
+
+    def test_polish_runs_once_and_is_reused_from_the_table(self):
+        fields = self._fields("这是一段足够长的中文正文。" * 30)
+        with mock.patch.object(
+            daily.report, "_llm_json", side_effect=lambda p: {"body": p.split("正文：\n", 1)[1]}
+        ) as llm:
+            updates = daily._ensure_readable_body(fields)
+        self.assertEqual(llm.call_count, 1)
+        self.assertEqual(updates[daily.READABLE_BODY_VERSION_FIELD], daily.READABLE_BODY_VERSION)
+        self.assertIn("这是一段足够长的中文正文。", updates[daily.READABLE_BODY_FIELD])
+        with mock.patch.object(daily.report, "_llm_json") as again:
+            self.assertEqual(daily._ensure_readable_body(fields), {})
+        again.assert_not_called()
+
+    def test_stale_cached_version_is_refreshed(self):
+        fields = self._fields("这是一段足够长的中文正文。" * 30)
+        fields[daily.READABLE_BODY_FIELD] = "上一版清理结果。"
+        fields[daily.READABLE_BODY_VERSION_FIELD] = daily.READABLE_BODY_VERSION - 1
+        with mock.patch.object(
+            daily.report, "_llm_json", side_effect=lambda p: {"body": p.split("正文：\n", 1)[1]}
+        ) as llm:
+            self.assertTrue(daily._ensure_readable_body(fields))
+        llm.assert_called()
+
+    def test_english_and_analysis_entries_are_left_alone(self):
+        english = self._fields("The company restructured its model team. " * 60)
+        with mock.patch.object(daily.report, "_llm_json") as llm:
+            self.assertEqual(daily._ensure_readable_body(english), {})
+        llm.assert_not_called()
 
 
 if __name__ == "__main__":

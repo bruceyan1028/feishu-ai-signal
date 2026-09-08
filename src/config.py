@@ -149,6 +149,10 @@ BODY_TRANSLATE_LIMIT_FULL = int(os.environ.get("BODY_TRANSLATE_LIMIT_FULL", "160
 BODY_TRANSLATE_CHUNK = int(os.environ.get("BODY_TRANSLATE_CHUNK", "3000"))
 # 走全译档的影响分门槛
 BODY_TRANSLATE_FULL_IMPACT = int(os.environ.get("BODY_TRANSLATE_FULL_IMPACT", "80"))
+# 照抄原文的中文稿在上屏前做一次 LLM 清理排版，超出这个字数的尾部按原样附回
+BODY_POLISH_LIMIT = int(os.environ.get("BODY_POLISH_LIMIT", "20000"))
+# 单次清理的片段大小：片段越长，模型越容易顺手改写而不是只做删减
+BODY_POLISH_CHUNK = int(os.environ.get("BODY_POLISH_CHUNK", "3500"))
 
 FEISHU_HOST = "https://open.feishu.cn"
 

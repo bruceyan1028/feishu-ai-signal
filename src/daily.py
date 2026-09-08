@@ -218,7 +218,17 @@ _TAIL_NOTICE_RE = re.compile(
     r"|如对本(?:稿件|文).{0,8}(?:异议|疑问|投诉)"
     r"|(?:未经授权|禁止|谢绝)转载"
     r"|[^\n]{0,16}频道\s*[:：]\s*\S{1,12}$"
-    r"|(?:关注|扫码).{0,12}公众号)"
+    r"|(?:关注|扫码).{0,12}公众号"
+    # 门户站的文末模板：版权行、举报入口、账号名片与联系方式
+    r"|发布于\s*\d{4}[-/年].{0,40}版权"
+    r"|本文版权(?:属于|归)"
+    r"|举报(?:这篇文章|电话|邮箱|专区)"
+    r"|违法和不良信息举报"
+    r"|未成年人(?:专项举报|保护)"
+    r"|(?:联系我们|更多联系方式|关于我们|电话|邮箱|地址)$"
+    r"|The\s*End$"
+    r"|\+?\d[\d\s\-()]{7,}$"
+    r"|[\w.+-]+@[\w-]+\.[\w.]+$)"
 )
 
 
@@ -362,6 +372,101 @@ def _translated_chars(fields: dict[str, Any]) -> int:
     return _LEGACY_TRANSLATE_LIMIT if str(scalar(fields.get("中文正文")) or "").strip() else 0
 
 
+READABLE_BODY_FIELD = "正文排版"
+READABLE_BODY_VERSION_FIELD = "正文排版版本"
+# 清理规则或提示词有实质改动时 +1，存量条目下次入选简报时会重跑一遍
+READABLE_BODY_VERSION = 1
+
+_POLISH_PROMPT = """你在给一篇中文稿件做上屏前的清理与排版。这是编辑工作，不是改写：
+保留下来的每一句都必须与原文逐字一致，不许改写、概括、翻译、补写或调换顺序。
+
+删掉这些页面模板，它们不是文章内容：
+1. 版权与免责声明、举报与投诉入口、备案号；
+2. 站点导航、栏目名、账号名片与简介、slogan、关注/下载/加群/打赏/点赞引导、二维码说明；
+3. 电话、邮箱、地址、举报热线等联系方式；
+4. “The End”“点个在看”一类的收尾符号，以及与本文无关的相关阅读、推荐文章列表。
+保留作者署名和“本文经授权转载自 X”这类出处说明，也保留正文里的全部事实、数字、引述与作者判断。
+
+排版要求：
+1. 原文小标题常被抓取工具并进段首（例如“AI聊天框里的谋杀案 故事的起点，是一场恋情。”），
+   把小标题切出来单独成行写作“## 小标题”，剩下的文字作为下一段正文，一个字都不要改；
+2. 已经是“## / ### / ####”的行原样保留，层级不变；
+3. 一段里塞了多个话题时（常见于“一方面……另一方面……”），在原有句号处拆成多段，只拆不改；
+4. 段落之间空一行。
+
+只输出严格 JSON：{{"body":"清理排版后的正文"}}
+
+标题：{title}
+来源：{source}
+正文：
+{snippet}"""
+
+_HEADING_MARK_RE = re.compile(r"(?m)^#{1,6}\s*")
+_SENTENCE_SPLIT_RE = re.compile(r"(?<=[。！？])")
+
+
+def _flatten(text: str) -> str:
+    return re.sub(r"\s+", "", str(text or ""))
+
+
+def verbatim_fidelity(polished: str, raw: str) -> float:
+    """精编结果里有多大比例的句子能在原文中原样找到。
+
+    这一步只允许删除和分段。模型一旦开始改写，读者看到的就是二手转述，
+    而详情页对外宣称的是原文，所以宁可退回未清理的原文也不放改写稿上屏。
+    """
+    flat = _flatten(raw)
+    sentences = [
+        _flatten(part)
+        for part in _SENTENCE_SPLIT_RE.split(_HEADING_MARK_RE.sub("", polished))
+    ]
+    sentences = [part for part in sentences if len(part) >= 12]
+    if not sentences:
+        return 0.0
+    return sum(part in flat for part in sentences) / len(sentences)
+
+
+def _polish_chunk(args: tuple[str, str, str]) -> str:
+    snippet, title, source = args
+    try:
+        raw = report._llm_json(
+            _POLISH_PROMPT.format(snippet=snippet, title=title, source=source)
+        )
+    except Exception as exc:  # noqa: BLE001
+        log.warning("正文清理失败，本段保留原文：%s", exc)
+        return ""
+    polished = clean_body(str(raw.get("body") or "").strip())
+    if not polished:
+        return ""
+    if verbatim_fidelity(polished, snippet) < 0.8:
+        log.warning("正文清理偏离原文，本段保留原文：%s", snippet[:40])
+        return ""
+    return polished
+
+
+def polish_verbatim_body(text: str, source: str = "", title: str = "") -> str:
+    """照抄原文之前先让模型删掉页脚模板并补回小标题分段；失败返回空串。
+
+    分片处理：整篇塞进去，模型会从中段开始偷偷概括；单片失败时该片保留原文，
+    宁可留几段页脚，也不能让正文中间缺一块。
+    """
+    raw = clean_body(text, source)
+    if not raw:
+        return ""
+    head, tail = raw[: config.BODY_POLISH_LIMIT], raw[config.BODY_POLISH_LIMIT :]
+    chunks = split_for_translation(head, config.BODY_POLISH_CHUNK)
+    if not chunks:
+        return ""
+    with ThreadPoolExecutor(max_workers=min(4, len(chunks))) as pool:
+        pieces = list(pool.map(_polish_chunk, [(c, title, source) for c in chunks]))
+    if not any(pieces):
+        return ""
+    kept = [polished or chunks[index] for index, polished in enumerate(pieces)]
+    if tail.strip():
+        kept.append(tail.strip())
+    return clean_body("\n\n".join(kept), source)
+
+
 # 线程各段之间采集端写的是 `---` 分隔行，卡片按段落连续渲染就够，不需要这条横线
 _THREAD_SEP_RE = re.compile(r"(?m)^\s*-{3,}\s*$")
 
@@ -375,9 +480,13 @@ def social_full_text(fields: dict[str, Any]) -> str:
 
 
 def display_body(fields: dict[str, Any]) -> dict[str, Any]:
-    """给前端的正文：中文源直接用原文，英文源用缓存译文。"""
+    """给前端的正文：中文源用清理排版后的原文，英文源用缓存译文。"""
     source = str(scalar(fields.get("来源")) or "")
     raw = clean_body(str(scalar(fields.get("原文")) or ""), source)
+    polished = clean_body(str(scalar(fields.get(READABLE_BODY_FIELD)) or ""), source)
+    if polished:
+        # 清理只做删减与分段，页脚删掉不算截断，读者看到的就是完整正文
+        return {"body": polished, "bodyTruncated": False}
     translated = clean_body(str(scalar(fields.get("中文正文")) or ""), source)
     if translated:
         # 译文按上限截断过，原文更长时告诉前端还有后续内容
@@ -950,6 +1059,39 @@ def _ensure_body_cn(
     return {"中文正文": translated, TRANSLATED_CHARS_FIELD: covered}
 
 
+def _readable_body_version(fields: dict[str, Any]) -> int:
+    try:
+        return int(float(scalar(fields.get(READABLE_BODY_VERSION_FIELD)) or 0))
+    except (TypeError, ValueError):
+        return 0
+
+
+def _ensure_readable_body(fields: dict[str, Any]) -> dict[str, Any]:
+    """照抄原文的条目在首次入选时清理一次正文，写回 fields 并返回待落库字段。
+
+    抓下来的中文稿尾部普遍挂着版权、举报、联系方式和账号名片，小标题又常被并进
+    段首。清理结果按版本号缓存，同一条不会每天重跑。
+    """
+    if not verbatim_body_mode(fields):
+        return {}
+    cached = str(scalar(fields.get(READABLE_BODY_FIELD)) or "").strip()
+    if cached and _readable_body_version(fields) >= READABLE_BODY_VERSION:
+        return {}
+    polished = polish_verbatim_body(
+        str(scalar(fields.get("原文")) or ""),
+        str(scalar(fields.get("来源")) or ""),
+        str(scalar(fields.get("中文标题")) or scalar(fields.get("标题")) or ""),
+    )
+    if not polished:
+        return {}
+    fields[READABLE_BODY_FIELD] = polished
+    fields[READABLE_BODY_VERSION_FIELD] = READABLE_BODY_VERSION
+    return {
+        READABLE_BODY_FIELD: polished,
+        READABLE_BODY_VERSION_FIELD: READABLE_BODY_VERSION,
+    }
+
+
 def _ensure_deep_analysis(
     fields: dict[str, Any], analysis: dict[str, Any]
 ) -> dict[str, Any]:
@@ -1242,6 +1384,8 @@ def generate(day: str | None = None) -> dict[str, Any]:
             update_fields["主题"] = normalized_topics
         # 详情页展示深度解读而不是整篇译文；存量条目在首次入选时补齐。
         update_fields.update(_ensure_deep_analysis(fields, analysis))
+        # 照抄原文的中文稿改为展示清理排版后的版本，页脚模板不进详情页。
+        update_fields.update(_ensure_readable_body(fields))
         if update_fields:
             updates.append(
                 {
