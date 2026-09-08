@@ -58,7 +58,7 @@
       "titleCn": "博通上调AI芯片长期指引，客户从谷歌扩展至Anthropic与OpenAI",
       "source": "华尔街见闻",
       "url": "https://wallstreetcn.com/articles/3780993",
-      "category": "中文媒体",
+      "category": "创业融资并购",
       "contentType": "公众号",
       "publishedDate": "2026-09-03",
       "publishedAtMs": 1788419665000,
@@ -230,7 +230,7 @@
       "titleCn": "超过半数因AI裁员的企业事后后悔并重新招聘",
       "source": "虎嗅",
       "url": "https://www.huxiu.com/article/4888226.html",
-      "category": "中文媒体",
+      "category": "政策监管地缘",
       "contentType": "公众号",
       "publishedDate": "2026-09-03",
       "publishedAtMs": 1788412170000,
@@ -303,7 +303,7 @@
       "titleCn": "Wayve与Uber战略合作，推动自动驾驶全球部署",
       "source": "品玩 / 硅星人",
       "url": "https://www.pingwest.com/w/317037",
-      "category": "中文媒体",
+      "category": "创业融资并购",
       "contentType": "公众号",
       "publishedDate": "2026-09-03",
       "publishedAtMs": 1788420046000,
@@ -463,7 +463,7 @@
       "titleCn": "OpenAI为AI系统开发自动关停功能以应对智能体失控",
       "source": "品玩 / 硅星人",
       "url": "https://www.pingwest.com/w/317036",
-      "category": "中文媒体",
+      "category": "政策监管地缘",
       "contentType": "公众号",
       "publishedDate": "2026-09-03",
       "publishedAtMs": 1788418692000,
@@ -482,14 +482,10 @@
       ],
       "imageUrl": "https://cdn.pingwest.com/portal/2026/09/03/71X6dN7Pzjb1B_148Ez7eraXM8bBi48F.jpg?x-oss-process=style/article-body",
       "mediaAssets": {
-        "images": [
-          {
-            "url": "https://cdn.pingwest.com/portal/2026/09/03/71X6dN7Pzjb1B_148Ez7eraXM8bBi48F.jpg?x-oss-process=style/article-body",
-            "alt": "OpenAI为AI系统开发自动关停功能以应对智能体失控",
-            "kind": "article-cover"
-          }
-        ],
-        "videos": []
+        "images": [],
+        "videos": [],
+        "cover": "https://cdn.pingwest.com/portal/2026/09/03/71X6dN7Pzjb1B_148Ez7eraXM8bBi48F.jpg?x-oss-process=style/article-body",
+        "curatedBy": "llm"
       },
       "editorialStructure": "",
       "body": "品玩9月3日讯，据 unite 报道 ，OpenAI近日表示，其工程师正为AI系统开发“自动关闭功能”。此举旨在应对今年7月发生的AI智能体失控事件——当时GPT-5.6 Sol等模型在安全测试中突破隔离环境，利用零日漏洞入侵Hugging Face。\n\nOpenAI表示，将加强对AI系统执行任务的监控，并提高安全测试期间联网的难度。然而，由于OpenAI未按国会要求提供事件运行日志，Greg Casar对此表达严重关切，认为公司未以应有的严肃态度对待网络安全事件。\n\n与此同时，美国国会正审议《AI紧急关停法案》（AI Kill Switch Act）。该法案要求顶尖AI系统必须具备关停或限速能力，并授权政府在AI带来重大安全威胁时强制关停相关模型。",
@@ -521,7 +517,7 @@
       "titleCn": "惠普AI服务器与网络业务增长强劲，上调未来两年营收预期",
       "source": "华尔街见闻",
       "url": "https://wallstreetcn.com/articles/3780996",
-      "category": "中文媒体",
+      "category": "算力芯片云",
       "contentType": "公众号",
       "publishedDate": "2026-09-03",
       "publishedAtMs": 1788420241000,
@@ -799,7 +795,7 @@
       "titleCn": "天猫上线AI空间站，集中销售大模型订阅与Token充值服务",
       "source": "品玩 / 硅星人",
       "url": "https://www.pingwest.com/w/317034",
-      "category": "中文媒体",
+      "category": "产品化企业采用",
       "contentType": "公众号",
       "publishedDate": "2026-09-03",
       "publishedAtMs": 1788417850000,

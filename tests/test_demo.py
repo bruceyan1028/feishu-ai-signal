@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import re
 import tempfile
 import unittest
 from datetime import datetime, timedelta, timezone
@@ -816,12 +817,13 @@ class DeliveryTests(unittest.TestCase):
         self.assertIn("在 YouTube 打开 ↗", template)
         self.assertNotIn("ytPosterLoaded", template)
 
-    def test_chinese_media_is_a_single_frontend_filter_with_visible_tags(self) -> None:
+    def test_chinese_media_is_not_a_frontend_topic_filter(self) -> None:
         template = Path("index.html").read_text(encoding="utf-8")
-        self.assertRegex(template, r"const filters = \[[^\]]*'中文媒体'")
+        filters = re.search(r"const filters = \[([^\]]*)\]", template)
+        self.assertIsNotNone(filters)
+        self.assertNotIn("'中文媒体'", filters.group(1))
+        # 信号源台仍可按来源属性展示中文媒体，不能把源配置也抹掉。
         self.assertRegex(template, r"const TYPE_ORDER = \[[^\]]*'中文媒体'")
-        self.assertNotRegex(template, r"const TYPE_ORDER = \[[^\]]*'中文科技媒体'")
-        self.assertNotRegex(template, r"const filters = \[[^\]]*'中文科技媒体'")
         self.assertIn("function normalizeCategory", template)
         self.assertIn("visibleTags", template)
 

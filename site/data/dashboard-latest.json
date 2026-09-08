@@ -1,10 +1,10 @@
 {
-  "generatedAt": "2026-09-08T14:52:22+08:00",
+  "generatedAt": "2026-09-08T15:48:25+08:00",
   "leaderboard": {
     "source": "Artificial Analysis",
     "sourceUrl": "https://artificialanalysis.ai/",
     "metric": "智能指数",
-    "updatedAt": "2026-09-08T14:52:24+08:00",
+    "updatedAt": "2026-09-08T15:48:26+08:00",
     "error": "",
     "models": [
       {
@@ -182,7 +182,7 @@
         "label": "小模型",
         "note": "4B–40B",
         "sourceUrl": "https://artificialanalysis.ai/models/open-source/small",
-        "updatedAt": "2026-09-08T14:52:26+08:00",
+        "updatedAt": "2026-09-08T15:48:27+08:00",
         "error": "",
         "models": [
           {
@@ -336,7 +336,7 @@
         "label": "微型",
         "note": "≤4B",
         "sourceUrl": "https://artificialanalysis.ai/models/open-source/tiny",
-        "updatedAt": "2026-09-08T14:52:28+08:00",
+        "updatedAt": "2026-09-08T15:48:28+08:00",
         "error": "",
         "models": [
           {
@@ -491,14 +491,14 @@
     "source": "Hugging Face",
     "sourceUrl": "https://huggingface.co/",
     "metric": "热度分",
-    "updatedAt": "2026-09-08T14:52:42+08:00",
+    "updatedAt": "2026-09-08T15:48:41+08:00",
     "error": "",
     "sections": [
       {
         "key": "models",
         "label": "Models",
         "sourceUrl": "https://huggingface.co/models",
-        "updatedAt": "2026-09-08T14:52:42+08:00",
+        "updatedAt": "2026-09-08T15:48:41+08:00",
         "error": "",
         "items": [
           {
@@ -506,8 +506,8 @@
             "repo": "XHToken/Spark-X2.5-4B",
             "name": "Spark-X2.5-4B",
             "owner": "XHToken",
-            "trending": 641,
-            "likes": 769,
+            "trending": 644,
+            "likes": 778,
             "downloads": 7216,
             "updatedAt": "2026-09-03",
             "url": "https://huggingface.co/XHToken/Spark-X2.5-4B",
@@ -521,8 +521,8 @@
             "repo": "Qwen/Qwen3.8-27B",
             "name": "Qwen3.8-27B",
             "owner": "Qwen",
-            "trending": 528,
-            "likes": 14301,
+            "trending": 526,
+            "likes": 14307,
             "downloads": 6416358,
             "updatedAt": "2026-08-14",
             "url": "https://huggingface.co/Qwen/Qwen3.8-27B",
@@ -536,8 +536,8 @@
             "repo": "ISTA-DASLab/Qwen3.8-27B-GSQ-RCO-GGUF",
             "name": "Qwen3.8-27B-GSQ-RCO-GGUF",
             "owner": "ISTA-DASLab",
-            "trending": 467,
-            "likes": 583,
+            "trending": 473,
+            "likes": 589,
             "downloads": 403292,
             "updatedAt": "2026-09-02",
             "url": "https://huggingface.co/ISTA-DASLab/Qwen3.8-27B-GSQ-RCO-GGUF",
@@ -551,8 +551,8 @@
             "repo": "google/timesfm-3.0-pytorch",
             "name": "timesfm-3.0-pytorch",
             "owner": "google",
-            "trending": 449,
-            "likes": 589,
+            "trending": 448,
+            "likes": 592,
             "downloads": 271713,
             "updatedAt": "2026-09-02",
             "url": "https://huggingface.co/google/timesfm-3.0-pytorch",
@@ -563,17 +563,17 @@
           },
           {
             "rank": 5,
-            "repo": "Lightricks/LTX-2.5",
-            "name": "LTX-2.5",
-            "owner": "Lightricks",
-            "trending": 361,
-            "likes": 3099,
-            "downloads": 1584382,
-            "updatedAt": "2026-09-01",
-            "url": "https://huggingface.co/Lightricks/LTX-2.5",
-            "logoDomain": "",
-            "params": null,
-            "task": "图生视频",
+            "repo": "openbmb/MiniCPM5-2B",
+            "name": "MiniCPM5-2B",
+            "owner": "openbmb",
+            "trending": 379,
+            "likes": 453,
+            "downloads": 13,
+            "updatedAt": "2026-09-08",
+            "url": "https://huggingface.co/openbmb/MiniCPM5-2B",
+            "logoDomain": "openbmb.cn",
+            "params": 2.5,
+            "task": "文本生成",
             "inference": false
           }
         ]
@@ -582,7 +582,7 @@
         "key": "spaces",
         "label": "Spaces",
         "sourceUrl": "https://huggingface.co/spaces",
-        "updatedAt": "2026-09-08T14:52:46+08:00",
+        "updatedAt": "2026-09-08T15:48:57+08:00",
         "error": "",
         "items": [
           {
@@ -590,8 +590,8 @@
             "repo": "pollen-robotics/microduck-simulator",
             "name": "Microduck Sandbox",
             "owner": "pollen-robotics",
-            "trending": 167,
-            "likes": 459,
+            "trending": 165,
+            "likes": 460,
             "downloads": null,
             "updatedAt": "2026-09-04",
             "url": "https://huggingface.co/spaces/pollen-robotics/microduck-simulator",
@@ -607,7 +607,7 @@
             "repo": "kulkas2pintu/wan555",
             "name": "Wan2.2 14B Fast Preview",
             "owner": "kulkas2pintu",
-            "trending": 142,
+            "trending": 140,
             "likes": 1864,
             "downloads": null,
             "updatedAt": "2026-07-19",
@@ -624,8 +624,8 @@
             "repo": "kulkas2pintu/QWEN_EDIT_IMAGE",
             "name": "Qwen-Image-Edit-2511-LoRAs-Fast",
             "owner": "kulkas2pintu",
-            "trending": 87,
-            "likes": 200,
+            "trending": 86,
+            "likes": 201,
             "downloads": null,
             "updatedAt": "2026-07-30",
             "url": "https://huggingface.co/spaces/kulkas2pintu/QWEN_EDIT_IMAGE",
@@ -676,7 +676,7 @@
         "key": "datasets",
         "label": "Datasets",
         "sourceUrl": "https://huggingface.co/datasets",
-        "updatedAt": "2026-09-08T14:52:50+08:00",
+        "updatedAt": "2026-09-08T15:49:12+08:00",
         "error": "",
         "items": [
           {
@@ -684,8 +684,8 @@
             "repo": "kuben-developer/tiktok-videos-4b",
             "name": "tiktok-videos-4b",
             "owner": "kuben-developer",
-            "trending": 222,
-            "likes": 230,
+            "trending": 228,
+            "likes": 236,
             "downloads": 6488,
             "updatedAt": "2026-09-02",
             "url": "https://huggingface.co/datasets/kuben-developer/tiktok-videos-4b",
@@ -696,8 +696,8 @@
             "repo": "stanfordnlp/imdb",
             "name": "imdb",
             "owner": "stanfordnlp",
-            "trending": 175,
-            "likes": 710,
+            "trending": 176,
+            "likes": 711,
             "downloads": 191564,
             "updatedAt": "2024-01-04",
             "url": "https://huggingface.co/datasets/stanfordnlp/imdb",
@@ -732,7 +732,7 @@
             "repo": "markov-ai/cad-1000-hours",
             "name": "cad-1000-hours",
             "owner": "markov-ai",
-            "trending": 106,
+            "trending": 105,
             "likes": 392,
             "downloads": 112449,
             "updatedAt": "2026-08-21",
@@ -746,7 +746,7 @@
   "market": {
     "source": "腾讯财经",
     "sourceUrl": "https://stockapp.finance.qq.com/",
-    "updatedAt": "2026-09-08T14:52:50+08:00",
+    "updatedAt": "2026-09-08T15:49:12+08:00",
     "error": "",
     "quotes": [
       {
@@ -1081,15 +1081,15 @@
         "logoDomain": "cambricon.com",
         "url": "https://www.sse.com.cn/assortment/stock/list/info/company/index.shtml?COMPANY_CODE=688256",
         "currency": "CNY",
-        "price": 1059.81,
-        "change": -32.57,
-        "changePct": -2.98,
+        "price": 1058.99,
+        "change": -33.39,
+        "changePct": -3.06,
         "open": 1093.0,
         "high": 1100.5,
         "low": 1050.56,
         "prevClose": 1092.38,
-        "marketCap": 6664.7,
-        "quotedAt": "20260908145248"
+        "marketCap": 6659.5,
+        "quotedAt": "20260908154903"
       },
       {
         "code": "sh688836",
@@ -1099,15 +1099,15 @@
         "logoDomain": "unitree.com",
         "url": "https://www.sse.com.cn/assortment/stock/list/info/company/index.shtml?COMPANY_CODE=688836",
         "currency": "CNY",
-        "price": 523.51,
-        "change": -12.84,
-        "changePct": -2.39,
+        "price": 523.68,
+        "change": -12.67,
+        "changePct": -2.36,
         "open": 535.8,
         "high": 539.91,
         "low": 522.8,
         "prevClose": 536.35,
-        "marketCap": 2117.4,
-        "quotedAt": "20260908145248"
+        "marketCap": 2118.1,
+        "quotedAt": "20260908154900"
       },
       {
         "code": "sh688041",
@@ -1117,15 +1117,15 @@
         "logoDomain": "",
         "url": "https://www.sse.com.cn/assortment/stock/list/info/company/index.shtml?COMPANY_CODE=688041",
         "currency": "CNY",
-        "price": 236.99,
-        "change": -5.72,
-        "changePct": -2.36,
+        "price": 236.9,
+        "change": -5.81,
+        "changePct": -2.39,
         "open": 246.0,
         "high": 247.99,
         "low": 236.28,
         "prevClose": 242.71,
-        "marketCap": 5508.4,
-        "quotedAt": "20260908145248"
+        "marketCap": 5506.4,
+        "quotedAt": "20260908154909"
       },
       {
         "code": "sh688795",
@@ -1135,15 +1135,15 @@
         "logoDomain": "",
         "url": "https://www.sse.com.cn/assortment/stock/list/info/company/index.shtml?COMPANY_CODE=688795",
         "currency": "CNY",
-        "price": 396.99,
-        "change": -18.5,
-        "changePct": -4.45,
+        "price": 400.11,
+        "change": -15.38,
+        "changePct": -3.7,
         "open": 395.76,
         "high": 407.85,
         "low": 371.17,
         "prevClose": 415.49,
-        "marketCap": 1866.0,
-        "quotedAt": "20260908145247"
+        "marketCap": 1880.6,
+        "quotedAt": "20260908154847"
       },
       {
         "code": "sh688802",
@@ -1153,15 +1153,15 @@
         "logoDomain": "",
         "url": "https://www.sse.com.cn/assortment/stock/list/info/company/index.shtml?COMPANY_CODE=688802",
         "currency": "CNY",
-        "price": 555.62,
-        "change": -14.46,
-        "changePct": -2.54,
+        "price": 555.99,
+        "change": -14.09,
+        "changePct": -2.47,
         "open": 562.75,
         "high": 566.0,
         "low": 540.0,
         "prevClose": 570.08,
-        "marketCap": 2223.0,
-        "quotedAt": "20260908145247"
+        "marketCap": 2224.5,
+        "quotedAt": "20260908154908"
       },
       {
         "code": "sh688981",
@@ -1171,15 +1171,15 @@
         "logoDomain": "",
         "url": "https://www.sse.com.cn/assortment/stock/list/info/company/index.shtml?COMPANY_CODE=688981",
         "currency": "CNY",
-        "price": 121.56,
-        "change": -2.56,
-        "changePct": -2.06,
+        "price": 121.52,
+        "change": -2.6,
+        "changePct": -2.09,
         "open": 124.25,
         "high": 124.44,
-        "low": 121.53,
+        "low": 121.5,
         "prevClose": 124.12,
-        "marketCap": 10406.9,
-        "quotedAt": "20260908145247"
+        "marketCap": 10403.5,
+        "quotedAt": "20260908154850"
       },
       {
         "code": "sz300308",
@@ -1189,15 +1189,15 @@
         "logoDomain": "innolight.com",
         "url": "https://www.szse.cn/certificate/individual/index.html?code=300308",
         "currency": "CNY",
-        "price": 901.88,
-        "change": 3.42,
-        "changePct": 0.38,
+        "price": 902.37,
+        "change": 3.91,
+        "changePct": 0.44,
         "open": 899.2,
         "high": 933.98,
         "low": 894.0,
         "prevClose": 898.46,
-        "marketCap": 10623.3,
-        "quotedAt": "20260908145248"
+        "marketCap": 10629.1,
+        "quotedAt": "20260908154830"
       },
       {
         "code": "sz300502",
@@ -1207,15 +1207,15 @@
         "logoDomain": "eoptolink.com",
         "url": "https://www.szse.cn/certificate/individual/index.html?code=300502",
         "currency": "CNY",
-        "price": 416.36,
-        "change": -0.84,
-        "changePct": -0.2,
+        "price": 416.4,
+        "change": -0.8,
+        "changePct": -0.19,
         "open": 419.33,
         "high": 431.34,
         "low": 413.86,
         "prevClose": 417.2,
-        "marketCap": 5805.1,
-        "quotedAt": "20260908145248"
+        "marketCap": 5805.7,
+        "quotedAt": "20260908154809"
       },
       {
         "code": "sz000977",
@@ -1225,15 +1225,15 @@
         "logoDomain": "inspur.com",
         "url": "https://www.szse.cn/certificate/individual/index.html?code=000977",
         "currency": "CNY",
-        "price": 72.34,
-        "change": -2.4,
-        "changePct": -3.21,
+        "price": 72.32,
+        "change": -2.42,
+        "changePct": -3.24,
         "open": 74.88,
         "high": 74.89,
         "low": 72.16,
         "prevClose": 74.74,
-        "marketCap": 1062.3,
-        "quotedAt": "20260908145248"
+        "marketCap": 1062.0,
+        "quotedAt": "20260908154903"
       },
       {
         "code": "sh601138",
@@ -1243,15 +1243,15 @@
         "logoDomain": "fii-foxconn.com",
         "url": "https://www.sse.com.cn/assortment/stock/list/info/company/index.shtml?COMPANY_CODE=601138",
         "currency": "CNY",
-        "price": 64.72,
-        "change": -1.85,
-        "changePct": -2.78,
+        "price": 64.75,
+        "change": -1.82,
+        "changePct": -2.73,
         "open": 66.3,
         "high": 66.7,
         "low": 64.55,
         "prevClose": 66.57,
-        "marketCap": 12843.1,
-        "quotedAt": "20260908145247"
+        "marketCap": 12849.0,
+        "quotedAt": "20260908154902"
       },
       {
         "code": "sz002230",
@@ -1261,15 +1261,15 @@
         "logoDomain": "iflytek.com",
         "url": "https://www.szse.cn/certificate/individual/index.html?code=002230",
         "currency": "CNY",
-        "price": 39.26,
-        "change": -0.18,
-        "changePct": -0.46,
+        "price": 39.27,
+        "change": -0.17,
+        "changePct": -0.43,
         "open": 39.36,
         "high": 39.57,
         "low": 39.2,
         "prevClose": 39.44,
-        "marketCap": 943.1,
-        "quotedAt": "20260908145248"
+        "marketCap": 943.3,
+        "quotedAt": "20260908154827"
       },
       {
         "code": "sh688111",
@@ -1279,15 +1279,15 @@
         "logoDomain": "",
         "url": "https://www.sse.com.cn/assortment/stock/list/info/company/index.shtml?COMPANY_CODE=688111",
         "currency": "CNY",
-        "price": 235.61,
-        "change": -3.92,
-        "changePct": -1.64,
+        "price": 235.27,
+        "change": -4.26,
+        "changePct": -1.78,
         "open": 239.0,
         "high": 239.1,
         "low": 234.02,
         "prevClose": 239.53,
-        "marketCap": 1093.3,
-        "quotedAt": "20260908145246"
+        "marketCap": 1091.7,
+        "quotedAt": "20260908154852"
       },
       {
         "code": "sz300418",
@@ -1297,15 +1297,15 @@
         "logoDomain": "",
         "url": "https://www.szse.cn/certificate/individual/index.html?code=300418",
         "currency": "CNY",
-        "price": 46.12,
-        "change": -0.48,
-        "changePct": -1.03,
+        "price": 46.09,
+        "change": -0.51,
+        "changePct": -1.09,
         "open": 46.03,
         "high": 47.88,
         "low": 45.89,
         "prevClose": 46.6,
-        "marketCap": 592.7,
-        "quotedAt": "20260908145248"
+        "marketCap": 592.3,
+        "quotedAt": "20260908154812"
       },
       {
         "code": "sh601360",
@@ -1323,7 +1323,7 @@
         "low": 8.9,
         "prevClose": 8.97,
         "marketCap": 627.9,
-        "quotedAt": "20260908145247"
+        "quotedAt": "20260908154844"
       },
       {
         "code": "hk02513",
@@ -1333,15 +1333,15 @@
         "logoDomain": "z.ai",
         "url": "https://www.hkex.com.hk/Market-Data/Securities-Prices/Equities/Equities-Quote?sc_lang=zh-HK&sym=2513",
         "currency": "HKD",
-        "price": 902.0,
-        "change": -116.0,
-        "changePct": -11.39,
+        "price": 914.0,
+        "change": -104.0,
+        "changePct": -10.22,
         "open": 1008.0,
         "high": 1020.0,
         "low": 893.5,
         "prevClose": 1018.0,
-        "marketCap": 4199.9,
-        "quotedAt": "2026/09/08 14:37:48"
+        "marketCap": 4255.8,
+        "quotedAt": "2026/09/08 15:34:06"
       },
       {
         "code": "hk00100",
@@ -1351,15 +1351,15 @@
         "logoDomain": "minimaxi.com",
         "url": "https://www.hkex.com.hk/Market-Data/Securities-Prices/Equities/Equities-Quote?sc_lang=zh-HK&sym=100",
         "currency": "HKD",
-        "price": 325.4,
-        "change": -25.4,
-        "changePct": -7.24,
+        "price": 330.2,
+        "change": -20.6,
+        "changePct": -5.87,
         "open": 350.0,
         "high": 360.6,
         "low": 319.6,
         "prevClose": 350.8,
-        "marketCap": 1136.4,
-        "quotedAt": "2026/09/08 14:37:45"
+        "marketCap": 1153.2,
+        "quotedAt": "2026/09/08 15:34:08"
       },
       {
         "code": "hk06082",
@@ -1369,15 +1369,15 @@
         "logoDomain": "",
         "url": "https://www.hkex.com.hk/Market-Data/Securities-Prices/Equities/Equities-Quote?sc_lang=zh-HK&sym=6082",
         "currency": "HKD",
-        "price": 38.46,
-        "change": -2.7,
-        "changePct": -6.56,
+        "price": 38.22,
+        "change": -2.94,
+        "changePct": -7.14,
         "open": 41.26,
         "high": 41.26,
-        "low": 38.22,
+        "low": 38.0,
         "prevClose": 41.16,
-        "marketCap": 996.8,
-        "quotedAt": "2026/09/08 14:37:46"
+        "marketCap": 990.6,
+        "quotedAt": "2026/09/08 15:34:07"
       },
       {
         "code": "hk09903",
@@ -1387,15 +1387,15 @@
         "logoDomain": "",
         "url": "https://www.hkex.com.hk/Market-Data/Securities-Prices/Equities/Equities-Quote?sc_lang=zh-HK&sym=9903",
         "currency": "HKD",
-        "price": 339.2,
-        "change": -0.6,
-        "changePct": -0.18,
+        "price": 337.2,
+        "change": -2.6,
+        "changePct": -0.77,
         "open": 340.0,
         "high": 352.8,
         "low": 332.8,
         "prevClose": 339.8,
-        "marketCap": 913.0,
-        "quotedAt": "2026/09/08 14:37:45"
+        "marketCap": 907.7,
+        "quotedAt": "2026/09/08 15:33:41"
       }
     ]
   }

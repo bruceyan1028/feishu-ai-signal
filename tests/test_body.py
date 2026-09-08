@@ -1498,5 +1498,56 @@ class PolishVerbatimBodyTest(unittest.TestCase):
         llm.assert_not_called()
 
 
+class ContentCategoryTest(unittest.TestCase):
+    def _media_fields(self) -> dict:
+        return {
+            "标题": "天机智能完成B++轮融资，蚂蚁集团与SOFINA联合领投",
+            "中文标题": "天机智能完成B++轮融资，蚂蚁集团与SOFINA联合领投",
+            "中文摘要": "资金将用于具身智能研发、量产和全球市场布局。",
+            "来源": "品玩 / 硅星人",
+            "来源类型": "公众号",
+            "分类": "中文媒体",
+            "主题": ["AI", "融资"],
+            "原文": "天机智能宣布完成B++轮战略融资，蚂蚁集团与SOFINA联合领投。" * 8,
+        }
+
+    def test_chinese_media_financing_story_gets_thematic_category(self):
+        fields = self._media_fields()
+        analysis = {"title_cn": fields["中文标题"], "summary_cn": fields["中文摘要"], "topics": ["AI", "融资"]}
+        with mock.patch.object(
+            daily.report, "_llm_json", return_value={"category": "创业融资并购"}
+        ):
+            updates = daily._ensure_content_category(fields, analysis)
+        self.assertEqual(updates, {"内容分类": "创业融资并购"})
+        self.assertEqual(daily.signal_category(fields, analysis), "创业融资并购")
+
+    def test_cached_content_category_avoids_another_llm_call(self):
+        fields = self._media_fields()
+        fields["内容分类"] = "创业融资并购"
+        analysis = {"topics": ["融资"]}
+        with mock.patch.object(daily.report, "_llm_json") as llm:
+            self.assertEqual(daily._ensure_content_category(fields, analysis), {})
+        llm.assert_not_called()
+        self.assertEqual(analysis["category"], "创业融资并购")
+
+    def test_non_media_source_keeps_source_dimension(self):
+        fields = self._media_fields()
+        fields["分类"] = "算力芯片云"
+        analysis = {"topics": ["融资"]}
+        with mock.patch.object(daily.report, "_llm_json") as llm:
+            self.assertEqual(daily._ensure_content_category(fields, analysis), {})
+        llm.assert_not_called()
+        self.assertEqual(daily.signal_category(fields, analysis), "算力芯片云")
+
+    def test_invalid_llm_category_falls_back_to_existing_topics(self):
+        fields = self._media_fields()
+        analysis = {"topics": ["AI", "融资"]}
+        with mock.patch.object(
+            daily.report, "_llm_json", return_value={"category": "中文媒体"}
+        ):
+            updates = daily._ensure_content_category(fields, analysis)
+        self.assertEqual(updates["内容分类"], "创业融资并购")
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -281,6 +281,7 @@ def ensure_entry_enrichment_fields(token: str) -> None:
     headers = {"Authorization": f"Bearer {token}", "Content-Type": "application/json; charset=utf-8"}
     for field_name, field_type in (
         ("中文标题", 1),
+        ("内容分类", 3),
         ("中文正文", 1),
         ("译文覆盖字数", 2),
         ("AI深度解读", 1),
@@ -295,10 +296,15 @@ def ensure_entry_enrichment_fields(token: str) -> None:
     ):
         if field_name in existing:
             continue
+        field_payload: dict[str, Any] = {"field_name": field_name, "type": field_type}
+        if field_name == "内容分类":
+            field_payload["property"] = {
+                "options": [{"name": name} for name in THEMATIC_CATEGORY_OPTIONS]
+            }
         created = _SESSION.post(
             base,
             headers=headers,
-            json={"field_name": field_name, "type": field_type},
+            json=field_payload,
             timeout=30,
         ).json()
         if created.get("code") != 0:
@@ -405,6 +411,19 @@ def update_social_cursor_states(
 
 
 SIGNAL_FORMAT_OPTIONS = ("论文", "纯网页", "视频", "社交媒体", "公众号", "播客", "Github热榜", "其他")
+
+# 简报内容主题。来源参数里的 dimension 仍可为「中文媒体」，但那描述的是来源属性，
+# 不能直接拿来当文章主题；中文媒体条目由 LLM 另写「内容分类」。
+THEMATIC_CATEGORY_OPTIONS = (
+    "前沿模型公司",
+    "技术研究开源",
+    "算力芯片云",
+    "政策监管地缘",
+    "模型评测基准",
+    "产品化企业采用",
+    "创业融资并购",
+    "其他",
+)
 
 
 def _list_fields(token: str, table_id: str) -> list[dict[str, Any]]:

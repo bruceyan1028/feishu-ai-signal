@@ -28,6 +28,7 @@ from . import (
 log = logging.getLogger("daily")
 CN_TZ = timezone(timedelta(hours=8))
 TOPIC_OPTIONS = {"AI", "LLM", "Agent", "RAG", "推理", "多模态", "开源", "硬件", "端侧", "监管", "融资", "产品", "其他"}
+THEMATIC_CATEGORIES = set(feishu.THEMATIC_CATEGORY_OPTIONS)
 URGENCY_TO_TABLE = {"高": "High", "中": "Medium", "低": "Low"}
 URGENCY_TO_CN = {value: key for key, value in URGENCY_TO_TABLE.items()}
 PAPER_ANALYSIS_VERSION = 2
@@ -115,6 +116,53 @@ def normalize_topics(fields: dict[str, Any], topics: list[Any]) -> list[str]:
         pinned = [topic for topic in ("端侧", "监管") if topic in result]
         result = [topic for topic in result if topic not in pinned][: 4 - len(pinned)] + pinned
     return result or ["其他"]
+
+
+def source_category(fields: dict[str, Any]) -> str:
+    """采集源的维度；「中文媒体」只在这里表示来源属性。"""
+    return sources.normalize_category(scalar(fields.get("分类")) or "其他")
+
+
+def normalize_thematic_category(value: Any) -> str:
+    category = str(scalar(value) or "").strip()
+    return category if category in THEMATIC_CATEGORIES else ""
+
+
+def fallback_thematic_category(fields: dict[str, Any], analysis: dict[str, Any]) -> str:
+    """LLM 不可用时用已有主题作保守兜底，至少不再把媒体形态当主题。"""
+    topics = set(analysis.get("topics") or fields.get("主题") or [])
+    title = " ".join(
+        str(value or "")
+        for value in (
+            analysis.get("title_cn"),
+            scalar(fields.get("中文标题")),
+            scalar(fields.get("标题")),
+        )
+    )
+    if "融资" in topics or re.search(r"融资|领投|并购|收购|IPO|创投", title, re.I):
+        return "创业融资并购"
+    if "监管" in topics:
+        return "政策监管地缘"
+    if "硬件" in topics:
+        return "算力芯片云"
+    if "开源" in topics:
+        return "技术研究开源"
+    if "产品" in topics:
+        return "产品化企业采用"
+    return "其他"
+
+
+def signal_category(fields: dict[str, Any], analysis: dict[str, Any]) -> str:
+    """详情卡片的内容主题，与来源是中文媒体还是官方博客无关。"""
+    category = source_category(fields)
+    if category != "中文媒体":
+        return category
+    thematic = normalize_thematic_category(
+        analysis.get("category") or fields.get("内容分类")
+    )
+    if thematic:
+        return thematic
+    return fallback_thematic_category(fields, analysis)
 
 
 def analysis_requirement(
@@ -924,12 +972,14 @@ def analyze_signal(fields: dict[str, Any]) -> dict[str, Any]:
 字段：title_cn（准确简洁的中文标题）、summary_cn（中文1-2句）、why（中文1句）、impact/novelty/actionability（0-100整数）、
 urgency（高/中/低）、topics（从 AI、LLM、Agent、RAG、推理、多模态、开源、硬件、端侧、监管、融资、产品、其他中选2-4个；
 手机/设备本地运行、NPU、边缘推理、on-device 模型必须包含“端侧”）、
+category（按文章内容本身从前沿模型公司、技术研究开源、算力芯片云、政策监管地缘、模型评测基准、
+产品化企业采用、创业融资并购、其他中只选1个；媒体名称、语言和发布渠道不影响分类）、
 deep_analysis_cn（中文分析）。
 论文的 actionability 表示可复现、可验证和可转化价值，不要求正文给出行动清单。
 {analysis_format}
 {paper_extra}{policy_extra}标题：{scalar(fields.get("标题"))}
 来源：{scalar(fields.get("来源"))}
-分类：{sources.normalize_category(scalar(fields.get("分类")) or "其他")}
+来源维度：{source_category(fields)}
 分析依据：{"论文 PDF 全文及图表页" if is_paper and paper_full_text.get("source") == "pdf" else policy_basis}
 原文/论文证据：{analysis_text}"""
     raw = report._llm_json(prompt, image_urls=image_urls)
@@ -947,6 +997,7 @@ deep_analysis_cn（中文分析）。
         "actionability": max(0, min(100, int(raw.get("actionability") or 0))),
         "urgency": str(raw.get("urgency")) if raw.get("urgency") in URGENCY_TO_TABLE else "中",
         "topics": topics or ["其他"],
+        "category": normalize_thematic_category(raw.get("category")),
     }
     if preserve_structure:
         result["editorial_structure"] = "source"
@@ -990,7 +1041,7 @@ def _signal_from_fields(record_id: str, fields: dict[str, Any], analysis: dict[s
         "titleCn": analysis["title_cn"],
         "source": str(scalar(fields.get("来源"))),
         "url": link(fields.get("链接")),
-        "category": sources.normalize_category(scalar(fields.get("分类")) or "其他"),
+        "category": signal_category(fields, analysis),
         "contentType": content_type(fields),
         "tier": tier or str(scalar(fields.get("层级")) or ""),
         "priority": priority,
@@ -1090,6 +1141,39 @@ def _ensure_readable_body(fields: dict[str, Any]) -> dict[str, Any]:
         READABLE_BODY_FIELD: polished,
         READABLE_BODY_VERSION_FIELD: READABLE_BODY_VERSION,
     }
+
+
+def _ensure_content_category(
+    fields: dict[str, Any], analysis: dict[str, Any]
+) -> dict[str, Any]:
+    """给中文媒体稿补内容主题；来源维度仍留在「分类」，二者不再混用。"""
+    if source_category(fields) != "中文媒体":
+        return {}
+    cached = normalize_thematic_category(fields.get("内容分类"))
+    if cached:
+        analysis["category"] = cached
+        return {}
+    category = normalize_thematic_category(analysis.get("category"))
+    if not category:
+        prompt = f"""只判断下面这篇 AI 资讯的内容主题，输出严格 JSON：
+{{"category":"..."}}。
+category 必须从前沿模型公司、技术研究开源、算力芯片云、政策监管地缘、模型评测基准、
+产品化企业采用、创业融资并购、其他中只选一个。
+按事件本身分类，不要按媒体名称、语言或发布渠道分类。
+公司融资、投资方领投、收购与 IPO 一律归“创业融资并购”。
+
+标题：{analysis.get("title_cn") or scalar(fields.get("标题"))}
+摘要：{analysis.get("summary_cn") or scalar(fields.get("中文摘要"))}
+正文：{clean_body(str(scalar(fields.get("原文")) or ""), str(scalar(fields.get("来源")) or ""))[:3000]}"""
+        try:
+            result = report._llm_json(prompt)
+            category = normalize_thematic_category(result.get("category"))
+        except Exception as exc:  # noqa: BLE001
+            log.warning("内容分类失败，使用主题兜底：%s", exc)
+    category = category or fallback_thematic_category(fields, analysis)
+    analysis["category"] = category
+    fields["内容分类"] = category
+    return {"内容分类": category}
 
 
 def _ensure_deep_analysis(
@@ -1230,6 +1314,7 @@ def _existing_analysis(fields: dict[str, Any]) -> dict[str, Any] | None:
         "actionability": int(float(scalar(fields.get("可行动性")) or 0)),
         "urgency": URGENCY_TO_CN.get(table_urgency, "中"),
         "topics": [str(scalar(x)) for x in topics] or ["其他"],
+        "category": normalize_thematic_category(fields.get("内容分类")),
     }
 
 
@@ -1352,6 +1437,10 @@ def generate(day: str | None = None) -> dict[str, Any]:
                 "主题": analysis["topics"],
                 "状态": "已分析",
             }
+            if source_category(fields) == "中文媒体" and normalize_thematic_category(
+                analysis.get("category")
+            ):
+                update_fields["内容分类"] = analysis["category"]
             if analysis.get("llm_quality") is not None:
                 base_q = float(scalar(fields.get("质量分")) or 0)
                 final_q = round(0.6 * base_q + 0.4 * float(analysis["llm_quality"]), 1) if base_q else float(analysis["llm_quality"])
@@ -1386,6 +1475,8 @@ def generate(day: str | None = None) -> dict[str, Any]:
         update_fields.update(_ensure_deep_analysis(fields, analysis))
         # 照抄原文的中文稿改为展示清理排版后的版本，页脚模板不进详情页。
         update_fields.update(_ensure_readable_body(fields))
+        # 「中文媒体」是来源属性；卡片需要另按文章内容归入主题板块。
+        update_fields.update(_ensure_content_category(fields, analysis))
         if update_fields:
             updates.append(
                 {

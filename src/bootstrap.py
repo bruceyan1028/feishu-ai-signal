@@ -110,6 +110,7 @@ _ENTRY_FIELDS = [
     _f("来源类型", SELECT, feishu.SIGNAL_FORMAT_OPTIONS),
     _f("路由来源", SELECT, _FETCH_METHODS),
     _f("分类", SELECT),
+    _f("内容分类", SELECT, feishu.THEMATIC_CATEGORY_OPTIONS),
     _f("层级", SELECT, _TIERS),
     _f("采集时间", DATETIME),
     _f("发布时间", DATETIME),

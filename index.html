@@ -758,14 +758,15 @@ function heatNewsUrl(topic){
 
 applyHeatDemo('google-trends');
 
-const filters = ['全部', '端侧模型', '前沿模型公司', '技术研究开源', '算力芯片云', '政策监管地缘', '模型评测基准', '产品化企业采用', '创业融资并购', '中文媒体', '其他'];
+const filters = ['全部', '端侧模型', '前沿模型公司', '技术研究开源', '算力芯片云', '政策监管地缘', '模型评测基准', '产品化企业采用', '创业融资并购', '其他'];
 const SOCIAL_FILTER = '社交媒体帖子';
 const FORMAT_FILTERS = ['论文', '视频', '播客', SOCIAL_FILTER, '公众号', 'Github热榜'];
 // 「端侧模型」是标签驱动的横切专题,不是领域分类:按 tags 匹配
 const EDGE_FILTER = '端侧模型';
 function normalizeCategory(cat){
   const raw = String(cat || '').trim();
-  if(raw==='中文科技媒体' || raw==='中文综合媒体') return '中文媒体';
+  // 中文媒体是来源属性，不是内容主题；旧简报未回填主题时保守落到「其他」。
+  if(raw==='中文媒体' || raw==='中文科技媒体' || raw==='中文综合媒体') return '其他';
   return raw || '其他';
 }
 function keepOriginalTitle(s){
