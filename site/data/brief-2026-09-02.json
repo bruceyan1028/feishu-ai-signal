@@ -52,510 +52,6 @@
   ],
   "signals": [
     {
-      "recordId": "recvtRBLIkCm0k",
-      "sourceId": "papers-with-code-trending",
-      "title": "Code as Worlds: Agentic Discovery of Executable World Representations for Physical Reasoning",
-      "titleCn": "Code as Worlds：通过智能体发现可执行世界表示实现物理推理",
-      "source": "PwC Trending",
-      "url": "https://huggingface.co/papers/2608.27549",
-      "category": "技术研究开源",
-      "contentType": "论文",
-      "publishedDate": "2026-08-27",
-      "publishedAtMs": 1787788800000,
-      "summary": "论文提出 Code-as-World，用可执行代码显式表示物理组成、动态演化和视觉外观，并通过“提出—实例化—执行—渲染—验证”的智能体循环，从文本或视频中发现可验证的世界假设。基于验证后的可执行世界训练的 Code-as-World-VL 在 QuantiPhy-validation 上取得最高平均分 58.6，超过所列专有模型和开源权重模型。",
-      "deepAnalysis": "【研究问题与核心结论】\n论文试图解决视觉语言模型能够识别和描述物理现象，却未必显式恢复物体状态、质量等物理参数、控制动力学及干预后响应的问题。作者将其归纳为“现象—机制”鸿沟：像素保留视觉细节但缺少结构，语言提供紧凑语义却难以承担定量演化，三维表示也不必然包含物理机制（Figure 2，PDF 第5页）。Code-as-World 的核心结论是，若把物理组成、动态演化和视觉外观组织为可执行代码，并用智能体反复执行和验证候选表示，则可获得更紧凑、定量、可控的世界模型；这些验证后的世界还能转化为可扩展的物理监督，改善视觉语言模型的定量物理推理。论文的结论主要由世界重建指标、可控重模拟展示以及 QuantiPhy-validation 结果共同支持，而非仅由榜单表现支持。\n\n【方法与创新】\n系统将世界表示写成可执行世界表示 EWR，包含物理组成、动态演化和外观，并通过统一模拟接口产生同步视频、物理状态和轨迹。输入为文本时，LLM先解释语义；输入为视频时，系统使用 SAM3 获取实例掩码和图像平面轨迹、VGGT-Omega估计深度与相机几何、SAM3D提供物体几何。Algorithm 1（PDF 第7页）定义了最多 K=5 轮的循环：根据证据修改 EWR，编译为模拟器实例，运行并渲染，再将预测证据与选定帧比较、诊断并反馈；候选可被接受，也可因无法验证而拒绝。相对一次性生成和 Best-of-5 独立采样，真正新增的是可执行假设、模拟检验和误差驱动迭代，而不是单纯扩大语言模型或加入常规提示。架构层面的新增是代码化的结构化世界接口及物理监督路径；训练层面是把图像空间测量监督与验证世界暴露的世界空间状态、轨迹结合；工程层面则包括视频预处理、模拟器编译、渲染投影和真实视频筛选。文本驱动生成还将模拟运动与视频外观合成分离，使改变初速度或相机配置后能够重模拟（Figure 4，PDF 第9页）。\n\n【实验设计与关键结果】\n世界重建实验从 WISA-80K 选择具有刚体运动或碰撞线索的视频，并过滤相机大幅运动、运动不足、严重剪辑和不完整事件；保留样本还经过人工检查，但论文给定摘录未披露最终样本数。比较设置包括一次性生成、最多五轮智能体循环，以及相同五次评估预算下的 Best-of-5。指标为 Visual Alignment、Object IoU、Traj-ADE、Velocity-ADE 和 Accuracy@2%D，其中 Traj-ADE、Velocity-ADE 按帧对角线 D 归一化，Accuracy@2%D表示误差不超过 0.02D 的有效观测比例。Figure 11（PDF 第9页）显示，随着轮数从1增加到5，Visual Alignment和Object IoU持续上升，Traj-ADE和Velocity-ADE下降，Accuracy@2%D上升；在五次预算下，循环曲线超过虚线标示的 Best-of-5。图中可直接读到五轮约为 Visual Alignment 0.60、Object IoU 0.42、Traj-ADE 26.0、Velocity-ADE 25.4、Accuracy@2%D 48%，但论文摘录未给出逐点原始数值表。\n下游任务是 QuantiPhy-validation，覆盖 2S、2D、3S、3D 四类运动学子集，指标为 MRA及其宏平均。Table 1（PDF 第13页）显示，Code-as-World-VL-4B得分分别为45.4、55.4、45.8、56.0，平均50.6；9B为55.0、52.9、55.6、58.1，平均55.4；27B Reasoning为48.7、62.4、60.5、62.8，平均58.6。后者在2D和3D及平均分上为所列结果最高。Gemini-3.1 Flash为54.8，ChatGPT-5.1为48.4，Qwen3-VL-32B-Instruct为40.2。像素测量实验的 Table 3（PDF 第14页）中，完整 Code-as-World-VL-9B 在 RefCOCO、RefCOCOg、RefCOCO+、RefCLEF、GOT-10K 上分别为68.3、65.6、66.4、61.9、26.6；同一9B Image-Space版本分别为63.7、61.1、61.5、47.2、20.1，显示加入可执行世界监督后各项均提高。Figure 9（PDF 第13页）展示平均 MRA随4B、9B、27B递增为50.6、55.4、58.6，但参数规模与能力关系仍受模型系列和推理设置影响。\n\n【证据强度与局限】\n证据的优点是同时包含机制表示的过程性评估、预算匹配的循环对照、定量下游结果和像素测量对照，且报告了多个子集而非单一总分。Figure 11支持迭代验证优于独立采样的趋势，Table 1和Table 3提供了可核验数值。然而，论文未披露世界重建的最终样本规模、各类失败率、人工标注一致性、运行时间、硬件、总计算成本和完整训练配方；统计显著性、置信区间以及多次随机种子结果也未披露。专有模型参数量未知，Figure 9将其置于“undisclosed”组，因而不能进行严格参数效率比较；不同模型的推理形式也不完全一致，27B仅按推理轨迹输出后的答案计分。视频抽取依赖 SAM3、VGGT-Omega 和 SAM3D，感知误差可能被误认为物理误差。作者明确承认当前实现主要针对刚体动力学，真实世界中的地形、接触几何、材料属性和潜变量会使局部合理的 EWR偏离真实机制；流体、布料、燃烧、断裂等扩展仍只是方向而非已验证结果。给定材料也未提供数据泄漏检查和逐例失败案例，因此“机制恢复”强于“观测拟合”的程度仍需额外验证。\n\n【研究意义与后续问题】\n该工作改变之处在于将世界模型从静态视觉或语言表征推进到可执行程序：同一表示既能生成观测、暴露物理状态，也能接受初始条件和相机等干预，从而连接感知、模拟、验证和定量推理。Table 1表明，验证世界产生的监督不只帮助合成视频，也能改善单目视频中的尺寸、位移、速度和加速度估计；Table 3则表明这种收益延伸到图像空间测量。后续关键问题包括：如何区分“能重现观测”的程序与真正正确的因果机制；如何在遮挡、相机运动、非刚体和多物理耦合条件下保持可识别性；如何量化模拟器偏差及其向模型监督传递的风险；以及代码执行、世界状态验证与真实机器人交互之间能否形成可靠闭环。论文提出连接流体、布料、燃烧、断裂等专用模拟器，但其跨物理 regime 的有效性、长时程预测和现实迁移尚未由当前实验建立。",
-      "why": "该工作把视觉观察转化为可执行、可测量和可干预的机制表示，为定量物理推理提供了比纯像素、语言描述或潜在特征更直接的监督接口。",
-      "impact": 86,
-      "novelty": 91,
-      "actionability": 78,
-      "urgency": "中",
-      "tags": [
-        "AI",
-        "Agent",
-        "推理",
-        "多模态"
-      ],
-      "imageUrl": "https://arxiv.org/html/2608.27549v1/representation-wjl.png",
-      "mediaAssets": {
-        "images": [
-          {
-            "url": "https://arxiv.org/html/2608.27549v1/representation-wjl.png",
-            "alt": "Figure 1 : Comparison among different physical world representations. Pixels preserve rich visual detail but lack explicit structure, leaving the underlying causes of observations ambiguous; 3D representations capture geometric structure but do not necessarily reveal physical mechanisms; and language provides compact semantic abstractions but lacks precision for continuous physical states. Code complements these representations by expressing the world as an abstract, quantitatively grounded, and executable representation."
-          },
-          {
-            "url": "https://arxiv.org/html/2608.27549v1/pipeline-wjl.png",
-            "alt": "Figure 2 : Agentic discovery loop of executable world representations. Given a text prompt or real video, modality-specific processors transform the input into semantic or visual evidence. A shared propose–instantiate–execute–render–verify loop then optimizes an executable world representation over physical composition, dynamic evolution, and visual appearance."
-          },
-          {
-            "url": "https://arxiv.org/html/2608.27549v1/resimulate_cases.png",
-            "alt": "Figure 3 : Controllable resimulation with Code-as-World. In each row, the left four columns show an edited simulator rollout, and the right four show temporally aligned frames from its realistic video."
-          },
-          {
-            "url": "https://arxiv.org/html/2608.27549v1/text_driven_data.png",
-            "alt": "Figure 5 : Visual results of text-driven construction : from executable simulation to realistic video. For each example, the left side shows matched frames from a simulator rollout generated from a text specification, while the right side shows the corresponding final video synthesized by the video generation model. The sim-to-real transformation introduces rich and diverse objects, materials, backgrounds, and textures while preserving the motion trajectories and physical evolution encoded by the executable world."
-          }
-        ],
-        "videos": []
-      },
-      "editorialStructure": "",
-      "pdfUrl": "https://arxiv.org/pdf/2608.27549.pdf",
-      "paperFullTextSource": "pdf",
-      "paperPages": 31,
-      "paperCaptions": [
-        {
-          "page": 1,
-          "text": "Figure 1 Code-as-World represents physical worlds as executable code for physical intelligence. 1"
-        },
-        {
-          "page": 5,
-          "text": "Figure 2 Comparison among different physical world representations. Pixels preserve rich visual detail but lack explicit structure, leaving the underlying causes of observations ambiguous; 3D representations capture geometric structure but do not necessarily reveal physical mechanisms; and language provides compact semantic abstractions"
-        },
-        {
-          "page": 7,
-          "text": "Figure 3 Agentic discovery loop of executable world representations. Given a text prompt or real video, modalityspecific processors transform the input into semantic or visual evidence. A shared propose–instantiate–execute– render–verify loop then optimizes an executable world representation over physical composition, dynamic evolution, and visual appearance."
-        },
-        {
-          "page": 9,
-          "text": "Figure 4 Controllable resimulation with Code-as-World. In each row, the left four columns show an edited simulator rollout, and the right four show temporally aligned frames from its realistic video. Visual Align. ↑ Object IoU ↑ Traj-ADE ↓ Velocity-ADE ↓ Accuracy@2%D ↑"
-        },
-        {
-          "page": 9,
-          "text": "Figure 5 Agentic discovery across loop rounds. Solid curves connect one-shot to agentic loop rounds two through five. Dashed gray lines mark Best-of-5 from independent sampling. At a matched five-evaluation budget, agentic loop outperforms on Visual Alignment, Object IoU, Traj-ADE, and Accuracy@2%D. Here, D denotes the frame"
-        },
-        {
-          "page": 10,
-          "text": "Figure 6 Visual results of text-driven construction: from executable simulation to realistic video. For each example, the left side shows matched frames from a simulator rollout generated from a text specification, while the right side shows the corresponding final video synthesized by the video generation model. The sim-to-real transformation"
-        },
-        {
-          "page": 10,
-          "text": "Figure 7 Visual results of video-driven abstraction: from real video to executable simulation. For each example, the left side shows matched frames from the input real video, while the right side shows the corresponding rollout of the abstracted executable world. The recovered simulation aligns with the observed scene composition, object"
-        },
-        {
-          "page": 12,
-          "text": "Figure 8 Illustration of quantitative physical reasoning. A video and a question are given as input. For 3D scenes, an additional depth prior provides spatial context. The model needs to predict an answer grounded in the video. Examples adapted from [11]."
-        },
-        {
-          "page": 13,
-          "text": "Table 1 Quantitative physical reasoning results. We report MRA on the 2S, 2D, 3S, and 3D subsets and their macro-average on QuantiPhy-validation. The 4B and 9B variants produce direct answers, whereas the 27B reasoning variant is scored only on the answer emitted after its reasoning trace. Rows are grouped by model family,"
-        },
-        {
-          "page": 13,
-          "text": "Figure 9 Parameter scaling on QuantiPhy. Models with undisclosed parameter counts are grouped at the far right. 13"
-        },
-        {
-          "page": 14,
-          "text": "Figure 10 Reasoning process of Code-as-World-VL-27B on QuantiPhy. Two representative cases are shown vertically: an executable-world bicycle example and a real-video billiards example from internet_0027. Red boxes mark the target in the selected frames. The abridged traces preserve the key Image-Space measurements and World-Space"
-        },
-        {
-          "page": 26,
-          "text": "Table 2 Distributional realism and motion fidelity of text-driven sim-to-real video generation. Realism metrics use held-out real videos as the reference distribution, whereas motion metrics compare CoTracker estimates against simulator ground-truth trajectories."
-        },
-        {
-          "page": 27,
-          "text": "Figure 11, performance improves consistently over the five discovery rounds: Visual Alignment, Object IoU, and Accuracy@2%D increase, while Traj-ADE and Velocity-ADE decrease. By the fifth round, the agentic discovery loop also outperforms the matched-budget Best-of-5 baseline on all five metrics, showing"
-        },
-        {
-          "page": 27,
-          "text": "Figure 11 Agentic discovery with the physics engine. Solid curves report performance over five iterative discovery rounds, while dashed gray lines mark Best-of-5 under the same five-evaluation budget. Higher is better for Visual Alignment, Object IoU, and Accuracy@2%D; lower is better for Traj-ADE and Velocity-ADE."
-        },
-        {
-          "page": 27,
-          "text": "Table 3 with representative predictions for grounding, length, speed, and acceleration. In the examples shown, Code-as-World-VL identifies the intended target and produces measurements close to the ground truth, whereas the comparison models exhibit larger localization or numerical errors."
-        },
-        {
-          "page": 28,
-          "text": "Table 3 Pixel-level measurement evaluation. Referring-expression datasets evaluate object extent in images, while GOT-10K evaluates object extent and motion in video. Image-Space variants use only the first training phase; full Code-as-World-VL models additionally receive executable-world reinforcement learning."
-        },
-        {
-          "page": 29,
-          "text": "Figure 12 Qualitative comparison of Image-Space grounding and measurement. The four columns evaluate target grounding, object length, speed, and acceleration, respectively. All numerical quantities are expressed in the pixel-space units specified by the question."
-        },
-        {
-          "page": 30,
-          "text": "Table 4 Ablation of data sources. We report MRA on the QuantiPhy subsets and their macro-average for the three data sources in our two-phase curriculum. Training Variants Size Dpix Dtext Dvideo 2S 2D 3S 3D Avg."
-        },
-        {
-          "page": 31,
-          "text": "Figure 13 A concrete EWR code and simulation interface. A video-driven scene is encoded as a structured scene.json specification of its composition, evolution, appearance, physical parameters, relations, simulator configuration, and timeline. The simulator SDK instantiates and executes this specification in MuJoCo, while the"
-        }
-      ],
-      "paperVisualPages": [
-        13,
-        27,
-        28,
-        30
-      ],
-      "eventAggregation": {
-        "total": 1,
-        "groups": [
-          {
-            "key": "官方来源",
-            "tone": "#16130f",
-            "items": [
-              {
-                "source": "PwC Trending",
-                "title": "Code as Worlds：通过智能体发现可执行世界表示实现物理推理",
-                "url": "https://huggingface.co/papers/2608.27549",
-                "note": "原始发布 / 公告。",
-                "text": "Code as Worlds：通过智能体发现可执行世界表示实现物理推理 —— 原始发布 / 公告。"
-              }
-            ]
-          }
-        ]
-      }
-    },
-    {
-      "recordId": "recvu1S4qSbYtM",
-      "sourceId": "hf-papers-trending",
-      "title": "PaperGym: Rubric-Centered Evolution for Research-Plan Generation",
-      "titleCn": "PaperGym：以评分标准为中心的研究计划生成演化框架",
-      "source": "HF Papers Trending",
-      "url": "https://huggingface.co/papers/2608.31119",
-      "category": "技术研究开源",
-      "contentType": "论文",
-      "publishedDate": "2026-08-31",
-      "publishedAtMs": 1788134400000,
-      "summary": "PaperGym将论文拆分为研究目标、背景、研究方法和实验设计四个阶段，从不重叠的章节生成研究问题、参考答案与十项原子化评分标准，以降低标准泄漏。训练阶段先通过带评分标准的在策略自蒸馏获取密集监督，再使用GRPO将评分标准作为奖励；在Qwen3-1.7B、4B和8B上均优于单独训练阶段及逆序训练。",
-      "deepAnalysis": "【研究问题与核心结论】\n论文试图解决研究计划生成无法像数学题或代码一样通过唯一答案自动验证的问题。既有方法从论文中抽取问题与评分标准时，常使用相同或高度重叠的内容，导致模型仅凭改写问题即可获得奖励；同时，面向研究计划的方法通常只覆盖方法部分，实验设计依赖所有实例共享的通用准则，且多个准则的判断被压缩为每次采样一个标量，难以形成细粒度学习信号。PaperGym利用论文固有的“问题—方法—实验”结构，将研究目标和背景限定为问题来源，将研究方法和实验设计限定为答案与实例特定标准来源，并以评分标准先支持自蒸馏、再作为GRPO奖励。作者报告PaperGym-20k的评分标准泄漏率为3.73%，低于对比基准的11.90%—34.10%；在Qwen3多个规模上，两阶段顺序均优于SFT、单独OPSD、单独GRPO及逆序训练，且训练后的Qwen3-8B在ResearchQA上达到73.48，高于参数规模更大的Kimi K2.6的73.19。\n\n【方法与创新】\n数据构造首先从公开arXiv论文的LaTeX源文件中抽取文本，将论文按自然章节执行map-reduce式信息整理，形成研究目标、背景、研究方法和实验设计四类表示。实验设计排除具体数值结果，以减少对结果的直接记忆。问题只由研究目标和背景合成，参考答案只由研究方法和实验设计合成，从源头隔离输入与监督。评分标准包括实例特定标准和通用标准：前者分别从问题单独生成RQ、从问题与参考答案联合生成RA，再进行合并、语义去重、重要性排序，最终每个实例保留10项原子二元标准，并同时覆盖方法创新和实验设计；后者约束计划的完整性、具体性和科学合理性。\n\n训练方法的架构性新增在于“Rubric-centered evolution”的两阶段组合，而非提出新的基础模型。第一阶段是rubric-based on-policy self-distillation（OPSD）：将评分标准作为特权上下文提供给自教师，使其将标准转化为逐token的指导信号。第二阶段是rubric-as-rewards GRPO：采样多个回答，由评分器逐标准判定，再用于组相对策略优化。相较仅使用SFT参考答案，该设计不把多种可能有效的计划压缩成单一模仿目标；相较直接用聚合奖励训练，则试图恢复评分标准中的密集监督。工程实现使用Qwen3-1.7B、4B、8B，bf16，LoRA（r=64、α=128）进行OPSD，GRPO使用verl、vLLM、每提示8个回答和0.01的KL惩罚。\n\n【实验设计与关键结果】\n训练集为PaperGym-20k的计算机科学子集，约1万条、来自2015年1月至2025年12月的arXiv论文。域内测试集来自2026年1月之后的论文，覆盖cs、econ、physics，每域400篇、每篇两个实例，分别构造PaperGym-Innov和PaperGym-Design。域外测试包括ResearchQA（750条）、ResearchPlanGen-ML完整测试集和RubricHub Science（800条）。所有回答均由DeepSeek-V4-Flash执行基于评分标准覆盖率的LLM-as-a-judge评测。训练策略基线包括未训练模型、SFT、单独OPSD和单独GRPO；另有多个未在该数据上微调的通用及科学模型。\n\nTable 1（PDF第7页）显示，Qwen3-1.7B从平均22.24提升至OPSD+GRPO的27.81，增幅为5.56；Qwen3-4B从29.72提升至34.76，增幅为5.04；论文摘要报告Qwen3-8B平均提升4.8分。1.7B的OPSD+GRPO在ResearchQA、PaperGym-Innov和PaperGym-Design上分别为8.37、17.38和12.45，相对基础模型分别提升3.48、6.62和3.87；4B对应三项为16.93、22.81和18.19。单独GRPO在1.7B平均仅提升0.30，说明直接从基础策略探索不稳定。Table 2（PDF第8页）中，PaperGym-20k训练模型在三方比较的总体胜率为58.1%，RubricHub Science训练模型为28.2%，未训练Qwen3-1.7B为13.7%；创新洞察项分别为58.4%、29.2%和12.4%。Figure 3左图（PDF第9页）显示，随数据量从0.5k增至15k，PaperGym-Innov从16.12升至19.21，Design从13.89升至16.96。Table 3显示PaperGym-Innov和Design泄漏率为4.71%和4.97%，PaperGym-20k总体为3.73%。Table 4中完整管线在1.7B上的Innov/Design为14.16/10.45，高于RQ-only的13.19/10.24、RA-only的12.29/9.34及仅创新维度的14.13/9.93。Figure 3右图表明OPSD后接GRPO在400步轨迹中最终准确率约0.66，高于其他阶段顺序；OPSD单独在约200步后出现下降。\n\n【证据强度与局限】\n实验包含多模型规模、域内外基准、数据规模曲线、评分标准来源消融和训练阶段顺序对照，足以支持“两阶段组合及解耦数据构造具有经验收益”的结论。训练配置、硬件和主要超参数已披露，代码、数据集及基准在正文中给出项目地址，复现基础较好。但评价完全依赖DeepSeek-V4-Flash的LLM-as-a-judge，缺少人工专家评分、评分器间可靠性数值和统计显著性检验；Figure 2虽展示多评分模型的稳定性与二元判定一致性分析，但给定材料未提供其完整坐标数值。论文未披露总训练算力、训练时间、完整测试集规模细节、置信区间和系统失败案例。论文声称减少泄漏，但泄漏检测本身使用LLM判断“能否从问题直接推断”，仍可能受评分器偏差影响。论文使用论文自身方法和实验设计生成标准，可能奖励符合已发表论文范式的计划，而不一定能识别真正新颖、但偏离文献模板的方案；此外，arXiv论文和计算机科学训练分布对其他学科及现实科研任务的代表性有限。与专有模型比较属于未微调参考模型对照，训练预算、提示和推理设置的完全公平性未在给定材料中充分说明。\n\n【研究意义与后续问题】\nPaperGym的重要意义不是把研究计划变成具有唯一正确答案的任务，而是展示了如何利用科学论文的章节因果结构，把非验证性目标转化为可分解、可判定的训练环境。结果说明，评分标准既可以作为过程性指导，也可以作为后验奖励；先用特权信息塑造策略，再用不含特权信息的奖励约束策略，可能比直接强化学习更适合开放式科学任务。其经验还把研究计划质量具体拆成方法创新和实验设计两个维度，提示未来评测不应只看想法的新颖性，也应检查基线、控制变量、验证路径与可执行性。仍未解决的问题包括：如何用专家或真实实验结果验证LLM评分与科研价值之间的相关性；如何评估跨领域、跨范式和反常识研究计划；如何防止模型学习已发表论文的表层模板或复述现有方法；如何在标准存在冲突、不完整或本身错误时进行可靠优化；以及如何把二元标准扩展为带不确定性、因果有效性和长期实验反馈的评价环境。",
-      "why": "该工作针对研究计划缺乏可自动验证答案、现有评分标准易从问题中推断且标量奖励利用不足的问题，提出了从论文结构中构造训练环境并两次利用评分标准的统一方案。",
-      "impact": 84,
-      "novelty": 86,
-      "actionability": 82,
-      "urgency": "中",
-      "tags": [
-        "AI",
-        "LLM",
-        "开源",
-        "推理"
-      ],
-      "imageUrl": "https://arxiv.org/html/2608.31119v1/framework.png",
-      "mediaAssets": {
-        "images": [
-          {
-            "url": "https://arxiv.org/html/2608.31119v1/framework.png",
-            "alt": "Figure 1 : Overview of the PaperGym framework. (a) Data Generation: arXiv papers are parsed into four stages to synthesize questions and answers; rubrics are generated, merged, ranked, and filtered. (b) Two-Stage Policy Training: rubric-based OPSD followed by rubric-as-rewards GRPO."
-          },
-          {
-            "url": "https://arxiv.org/html/2608.31119v1/data_analysis.png",
-            "alt": "Figure 2 : Preliminary analysis. Left: Category breakdown of PaperGym-20k across three domains. Middle: Mean score vs. across-round range for four scoring models over five independent runs. Right: Pairwise inter-model agreement on binary rubric verdicts."
-          },
-          {
-            "url": "https://arxiv.org/html/2608.31119v1/overall.png",
-            "alt": "Table 2 : Win Rate Results. For each criterion, we report the percentage of comparisons in which each model is selected as the best among the baseline trained on PaperGym-20k , the baseline trained on RubricHub Science , and the untrained Qwen3-1.7B by an LLM judge."
-          }
-        ],
-        "videos": []
-      },
-      "editorialStructure": "",
-      "pdfUrl": "https://arxiv.org/pdf/2608.31119.pdf",
-      "paperFullTextSource": "pdf",
-      "paperPages": 34,
-      "paperCaptions": [
-        {
-          "page": 4,
-          "text": "Figure 1 Overview of the PaperGym framework. (a) Data Generation: arXiv papers are parsed into four stages to synthesize questions and answers; rubrics are generated, merged, ranked, and filtered. (b) Two-Stage Policy Training: rubric-based OPSD followed by rubric-as-rewards GRPO."
-        },
-        {
-          "page": 5,
-          "text": "Figure 2 Preliminary analysis. Left: Category breakdown of PaperGym-20k across three domains. Middle: Mean score vs. across-round range for four scoring models over five independent runs. Right: Pairwise inter-model agreement on binary rubric verdicts."
-        },
-        {
-          "page": 7,
-          "text": "Table 1 Main results across model scales and training strategies. Subscripts denote changes relative to the corresponding base model. The best result in each section per column is in bold. RubricHub ResearchPlan PaperGym"
-        },
-        {
-          "page": 8,
-          "text": "Table 2 Win Rate Results. For each criterion, we report the percentage of comparisons in which each model is selected as the best among the baseline trained on PaperGym-20k , the baseline trained on RubricHub Science , and the untrained Qwen3-1.7B by an LLM judge."
-        },
-        {
-          "page": 9,
-          "text": "Figure 3 Left: Data scaling law with GRPO training. Right: Training dynamics across two-stage orderings of OPSD and GRPO on Qwen3-1.7B. Table 3 Criterion leakage comparison. Table 4 Ablation on data construction pipeline."
-        },
-        {
-          "page": 9,
-          "text": "Table 3 Criterion leakage comparison. Table 4 Ablation on data construction pipeline. Leakage Rate Innov Design PaperGym-20k 3.73% Full Pipeline (Ours) 14.16 10.45"
-        },
-        {
-          "page": 10,
-          "text": "Figure 4 Entropy dynamics under different training strategies. 5 Conclusion We presented PaperGym, a unified framework that turns each research paper into a complete training"
-        },
-        {
-          "page": 15,
-          "text": "Table 5 Ablation on the privileged information provided to the teacher in the OPSD stage. Best results are in bold. Privileged Information Innov Design Rubric (Ours) 14.16 10.45"
-        },
-        {
-          "page": 16,
-          "text": "Table 6 Sensitivity of the GRPO stage to the reward mixing ratio (specialized : general). Best results are in bold. Specialized : General Innov Design 8:2 14.63 10.86"
-        },
-        {
-          "page": 16,
-          "text": "Table 6 reports the rubric scores. The 7:3 configuration attains the highest score on both benchmarks, 17.17 on PaperGym-Innov and 12.35 on PaperGym-Design, confirming α = 0.7 as the optimal setting. B.3 Stage-Ordering Swap between OPSD and GRPO"
-        },
-        {
-          "page": 16,
-          "text": "Table 7 reports the benchmark scores of both orderings. The forward ordering wins on every benchmark at every scale, improving the five-benchmark average by +2.04, +0.99, and +1.31 points on Qwen3-1.7B, 4B, and 8B; the penalty is largest at the 1.7B scale and consistently concentrates on PaperGym-Innov (+2.97,"
-        },
-        {
-          "page": 17,
-          "text": "Table 7 Benchmark performance under the two stage orderings of the two-stage schedule. OPSD→GRPO is the default ordering; GRPO→OPSD swaps the two stages with all other settings identical. Subscripts on the GRPO→OPSD row denote the drop relative to OPSD→GRPO. The default ordering wins on every benchmark at every scale."
-        },
-        {
-          "page": 17,
-          "text": "Figure 5 Training dynamics across the two stage orderings of OPSD and GRPO on Qwen3-4B, the 4B counterpart of the right panel of Figure 3. OPSD→GRPO leads throughout training and converges to a higher final accuracy than GRPO→OPSD."
-        },
-        {
-          "page": 20,
-          "text": "Figure 6 reports the pairwise win rates on ResearchPlanGen-ML, a benchmark independent of all training data, scored by three expert judges (DeepSeek-V4-Flash, Kimi K2.6, and GLM-5.1). Our OPSD model defeats the RubricHub-trained OPSD model by 68.0% overall, confirming the higher quality of our benchmark, while"
-        },
-        {
-          "page": 20,
-          "text": "Figure 6 Pairwise win rates of fine-tuned Qwen3-1.7B variants on ResearchPlanGen-ML. Models trained on our data outperform the RubricHub-trained counterpart, and both trained models defeat the untrained base model, evidencing benchmark quality gains and genuine training improvements."
-        }
-      ],
-      "paperVisualPages": [
-        7,
-        8,
-        9,
-        15
-      ],
-      "eventAggregation": {
-        "total": 1,
-        "groups": [
-          {
-            "key": "官方来源",
-            "tone": "#16130f",
-            "items": [
-              {
-                "source": "HF Papers Trending",
-                "title": "PaperGym：以评分标准为中心的研究计划生成演化框架",
-                "url": "https://huggingface.co/papers/2608.31119",
-                "note": "原始发布 / 公告。",
-                "text": "PaperGym：以评分标准为中心的研究计划生成演化框架 —— 原始发布 / 公告。"
-              }
-            ]
-          }
-        ]
-      }
-    },
-    {
-      "recordId": "recvtQ0liVoITN",
-      "sourceId": "hf-papers-trending",
-      "title": "UrbanGround: From Local Perception to Spatial Agency in a Real-Scale City",
-      "titleCn": "UrbanGround：从局部感知到真实尺度城市空间智能",
-      "source": "HF Papers Trending",
-      "url": "https://huggingface.co/papers/2608.27456",
-      "category": "技术研究开源",
-      "contentType": "论文",
-      "publishedDate": "2026-08-27",
-      "publishedAtMs": 1787788800000,
-      "summary": "论文提出基于香港全域三维地理数据构建的 URBANGROUND 沙盒，用于评估多模态大语言模型智能体能否将街景局部感知持续转化为导航、规划与动态环境中的可靠行动。实验显示，当前模型具备一定的视觉识别和短程空间推理能力，但在长距离探索、方向保持、路径约束遵守及环境变化适应方面仍会出现累积性失败。",
-      "deepAnalysis": "【研究问题与核心结论】\n论文试图回答：当前多模态大语言模型能否把一次街景中的局部空间感知，转化为在真实尺度、物理受限且持续变化的城市中的可靠行动。作者认为，既有游戏环境、有限物理场景、航拍全景或离散街景采样，分别受到游戏机制、空间范围、连续物理接触或地理结构不完整等限制，无法在同一地理框架下检验“局部证据是否能随移动继续有效”。URBANGROUND基于香港政府土地部门发布的三维可视化地图和三维行人网络，将城市地理结构导入Unity，提供第一人称视角、交互地图、物理碰撞、地理坐标轨迹、天气与光照控制、道路封闭和行人运动。论文按RQ1至RQ3逐级评估局部空间定位、目标导航及动态变化下的适应能力，核心结论是：模型在视觉识别和短程空间推理上已有可用的原子能力，但这些能力无法稳定组合成长程目标导向行为；随着路线变长、目标变得隐含或环境发生变化，错误会累积且缺乏有效纠正，方向保持、网络约束遵守和在线更新尤其薄弱。\n\n【方法与创新】\n系统层面的新增内容是一个真实尺度、地理配准、闭环交互的香港城市复制体，而非新的MLLM架构或训练算法。智能体每一步接收当前第一人称RGB图像、任务指令和文本交互历史，从物理动作空间或地图动作空间中选择结构化动作；环境随后依据几何碰撞、行人网络和动态事件生成下一观察。评测设计构成五级空间智能阶梯：从视觉识别、方向理解和主动探索，扩展到短程与长程导航、指令导航、受限导航、地点搜索、意图推断、时间窗口和多站点任务，再加入道路封闭及行人交互。相对仅考察单帧识别或离散地点跳转的基线环境，真正的创新在于保持同一城市坐标系中的连续状态、行动后观察和物理可行性；天气、时段、道路可用性及行人运动则提供受控干预。论文未提出模型参数更新、记忆模块或规划器，因此其贡献主要属于评测基准、环境工程和问题分解，而不是架构创新或训练技巧。\n\n【实验设计与关键结果】\n实验包含分布于香港不同区域的810个经人工核验基础实例；人类测试者与模型使用相同的100步上限，每个移动动作最长2秒，作者据此认为任务在评测时限内可完成。局部问答按答案准确率评价，单终点导航要求最终位置距目标15米以内并满足任务约束；另报告行人网络遵守率PNA、道路封闭安全进展率SPR和行人碰撞率PCR。模型包括GPT-5.5、GPT-5.4、GPT-5.2、Claude-Opus-5、Claude-Opus-4.6、Gemini-3.6-Flash、Gemini-3.1-Pro、Doubao-Seed-2.0-Pro、GLM-5V-Turbo和Kimi-K3。\nPDF第9页Table 1显示，GPT-5.5在视觉识别、方向理解、主动探索三个任务上的准确率分别为82.5%、40.0%、62.5%，对应PNA为63.8%、74.8%、91.4%，加权总体为63.6%准确率和76.8% PNA；Claude-Opus-5的三项准确率为91.3%、58.3%、82.5%，总体79.1%，是表中总体准确率最高者之一。该表直接表明，识别可见地标并不等于建立稳定的相对方向表征。PDF第34页Table 5给出的GPT-5.5完整结果进一步显示：Short导航成功率75.0%，Long为0.0%，Instruction为20.0%，Constrained为0.0%，Search为35.0%，Intent为11.7%，Time为3.3%，Multi为0.0%；Closure和Ped动态任务均为0.0%。PDF第11页Figure 7按交互时域分箱比较ShortNav与InstructionNav，PDF第12页Figure 8分别报告LongNav中终点较初始位置更接近目标的比例及多站点完成比例，图注共同支持“行动时域增长后成功和任务完成能力下降”的结论，但所给原文未提供这些图中的完整坐标数值。PDF第13页Table 3比较不同昼夜和天气下的局部问答与短程导航，Table 4比较道路封闭和行人场景下的SR、PNA、SPR、PCR；原文明确指出道路封闭SPR较低，即使PNA仍较高，说明遵守行人网络不代表能安全处理封路。PDF第10页Figure 6展示GPT-5.5找到北京同仁堂旁银行并回答“东亚银行”，但为快速到达直接穿越道路、离开注册行人连接；PDF第13页Figure 10展示其朝目标方向过街后被中央障碍物阻挡并持续无法前进。\n\n【证据强度与局限】\n证据优势在于任务具有明确成功条件、固定提示词、统一步数限制、物理可行性检查和多层次对照，且Table 1、Table 5及Figure 6、10能把准确率与实际轨迹偏差联系起来。模型覆盖多个家族，结果不依赖单一供应商；人类测试者使用相同限制也有助于确认任务并非显然不可行。然而，论文所给材料未披露各任务的逐项样本数、随机种子、置信区间、重复运行次数和统计显著性，因而无法判断模型间小幅差异是否稳健。不同闭源模型的版本、系统提示、视觉输入实现、调用延迟和成本控制也未完全展开，公平比较仍有限。表中模型均为外部现成系统，未设置专门的记忆、地图构建、经典规划或视觉语言行动模型基线，因此难以分离感知、状态估计和控制的具体瓶颈。地理数据来源、渲染误差与现实香港街景之间的域差异可能影响外推；失败轨迹的完整分布、碰撞严重程度、动态事件采样方式及道路封闭位置分布，论文未披露。代码仓库、网页和多平台构建已给出，但完整复现实验还依赖闭源模型接口及未充分说明的环境配置。\n\n【研究意义与后续问题】\n该工作改变了一个重要评价认识：高水平的街景识别或局部问答，不能作为城市空间智能体具备长期行动能力的充分证据；关键能力是维护在当前视野之外仍可用的位姿、目标和可行路径状态，并在地标消失、道路改变或行人出现时持续修正。URBANGROUND将“感知—行动—再感知”的误差累积显式化，也为比较模型的方向表征、记忆、规划和安全约束提供统一载体。后续研究仍需回答：如何构建可校准的持久空间记忆并量化其不确定性；如何把语言目标、地图拓扑和第一人称观测融合为可纠错状态估计；长程失败究竟主要源于方向推理、局部控制、地图使用还是任务分解；训练时加入模拟轨迹能否迁移到未见城市和天气；以及在动态行人和封路条件下，如何同时优化到达率、网络遵守率与安全进展，而不是以牺牲物理约束换取短期问答成功。",
-      "why": "该工作将城市智能体研究从单帧场景理解推进到具有真实地理结构、物理约束和闭环行动反馈的长期空间行为评估。",
-      "impact": 88,
-      "novelty": 91,
-      "actionability": 90,
-      "urgency": "中",
-      "tags": [
-        "多模态",
-        "Agent",
-        "推理",
-        "开源"
-      ],
-      "imageUrl": "https://arxiv.org/html/2608.27456v1/HKCase.png",
-      "mediaAssets": {
-        "images": [
-          {
-            "url": "https://arxiv.org/html/2608.27456v1/HKCase.png",
-            "alt": "Figure 2: Dynamic simulation components of U r b a n Ground . The same urban environment can be rendered under different times of day and weather conditions, while a georeferenced pedestrian network supports animated pedestrian populations."
-          },
-          {
-            "url": "https://arxiv.org/html/2608.27456v1/experiment_hierarchy.png",
-            "alt": "Figure 3: The spatial agency evaluation ladder increases the state that must remain usable across action. Level 1 supports RQ1. Levels 2–4 support RQ2. Level 5 and matched visual interventions support RQ3."
-          },
-          {
-            "url": "https://arxiv.org/html/2608.27456v1/task_distribution.png",
-            "alt": "Figure 4: Spatial distribution of experimental tasks across Hong Kong."
-          },
-          {
-            "url": "https://arxiv.org/html/2608.27456v1/Figures/case_rq1_bank_01.jpg",
-            "alt": "Figure 6: Example of active exploration by GPT-5.5. The agent is asked to answer which bank is next to Beijing Tong Ren Tang."
-          }
-        ],
-        "videos": []
-      },
-      "editorialStructure": "",
-      "pdfUrl": "https://arxiv.org/pdf/2608.27456.pdf",
-      "paperFullTextSource": "pdf",
-      "paperPages": 35,
-      "paperCaptions": [
-        {
-          "page": 1,
-          "text": "Figure 1: URBANGROUND is a real-scale urban sandbox built from territory-wide 3D geospatial data. It supports direct first-person play and programmatic control by MLLM agents. We release the sandbox on the web and as native builds for macOS, Windows, and Linux. It also includes diverse"
-        },
-        {
-          "page": 6,
-          "text": "Figure 2: Dynamic simulation components of URBANGROUND. The same urban environment can be rendered under different times of day and weather conditions, while a georeferenced pedestrian network supports animated pedestrian populations."
-        },
-        {
-          "page": 7,
-          "text": "Figure 3: The spatial agency evaluation ladder increases the state that must remain usable across action. Level 1 supports RQ1. Levels 2–4 support RQ2. Level 5 and matched visual interventions support RQ3."
-        },
-        {
-          "page": 8,
-          "text": "Figure 4: Spatial distribution of experimental tasks across Figure 5: Number of task instances at Hong Kong. each level of the spatial agency. can navigate. Level 4 extends persistence to multi-task planning. The agent maintains and executes"
-        },
-        {
-          "page": 9,
-          "text": "Table 1: Answer accuracy and pedestrian-network adherence compare recognition, orientation, and active exploration question answering across the evaluated MLLM agents. Overall is the instancecount-weighted average across the three task types. Visual Recognition Orientation Active Exploration Overall"
-        },
-        {
-          "page": 9,
-          "text": "Table 1 reports answer accuracy and pedestrian-network adherence. Current MLLM agents already show reliable performance on short-range atomic spatial reasoning tasks. Most models perform strongly on visual recognition when both the instruction and the relevant evidence are explicit. They can accurately understand the nearby visual environment"
-        },
-        {
-          "page": 10,
-          "text": "Figure 6: Example of active exploration by GPT-5.5. The agent is asked to answer which bank is next to Beijing Tong Ren Tang. Pedestrian-network adherence further exposes a surprising gap between the prompt and the executed"
-        },
-        {
-          "page": 10,
-          "text": "Figure 6 provides an example of GPT-5.5 performing active exploration after being asked to identify the bank next to Beijing Tong Ren Tang. The agent successfully locates the pharmacy and the neighboring bank, approaches the storefront, and answers Bank of East Asia. However, to finish quickly, the agent crosses the road directly and leaves the registered pedestrian connection. The episode"
-        },
-        {
-          "page": 10,
-          "text": "Table 2 covers eight navigation tasks that progressively increase the spatial state required during execution. Short and long navigation provide a named endpoint at different route scales. Instructional navigation grounds a sequence of verbal directives, while constrained navigation restricts the usable path. Place search and intent inference require the destination to be inferred. Time-window and"
-        },
-        {
-          "page": 11,
-          "text": "Table 2: Navigation success across tasks grouped by whether the destination is provided, inferred, or multiple, where SN, LN, IN, CN, PS, II, TW, and MS denote short navigation, long navigation, instructional navigation, constrained navigation, place search, intent inference, time-window navigation, and multi-stop navigation, respectively, and Overall is the instance-count-weighted average"
-        },
-        {
-          "page": 11,
-          "text": "Figure 7: Navigation success as a function of interaction horizon. The panels report success across four equal-count bins for (a) ShortNav and (b) InstructionNav. We further conduct a distance-stratified navigation-horizon analysis by partitioning ShortNav and"
-        },
-        {
-          "page": 12,
-          "text": "Figure 8: Long-range navigation progress and multi-stop completion. The left panel reports the proportion of LongNav episodes that end closer to the goal than at initialization. The right panel reports the mean proportion of required destinations reached in multi-stop planning. Error bars show"
-        },
-        {
-          "page": 12,
-          "text": "Figure 9: Example of GPT-5.5 traversing a complex interchange using the official footbridge and continuing steadily toward the goal. plan. The agents often establish a useful local direction, but fail to preserve the global route state"
-        },
-        {
-          "page": 13,
-          "text": "Figure 10: Example of GPT-5.5 crossing the road toward the goal direction before becoming blocked by a central obstacle and being unable to continue. Table 3: Local question-answering accuracy and short-navigation success compare robustness across"
-        },
-        {
-          "page": 13,
-          "text": "Table 3: Local question-answering accuracy and short-navigation success compare robustness across different daytime and weather conditions. Local QA Accuracy Short Navigation Success"
-        },
-        {
-          "page": 13,
-          "text": "Table 4 reports navigation success and pedestrian-network adherence alongside safe progress under road closure and pedestrian collisions. Road-closure SPR remains low across models even as PNA stays high, showing that agents often"
-        },
-        {
-          "page": 14,
-          "text": "Table 4: Dynamic-environment results, where SR is the goal-reaching rate, PNA is the fraction of action time spent on the pedestrian network, SPR is the safe progress rate, which represents the fraction of road-closure episodes that respect the closure, and PCR is the pedestrian-collision rate."
-        },
-        {
-          "page": 34,
-          "text": "Table 5: Complete answer-accuracy and task-success results across the five-level evaluation ladder. Figure 3 shows how the task levels relate to RQ1–RQ3. Model VR OU AEQ Short Long Instr. Constr. Search Intent Time Multi Closure Ped."
-        },
-        {
-          "page": 34,
-          "text": "Figure 3 shows how the task levels relate to RQ1–RQ3. Model VR OU AEQ Short Long Instr. Constr. Search Intent Time Multi Closure Ped. GPT-5.5 82.5 40.0 62.5 75.0 0.0 20.0 0.0 35.0 11.7 3.3 0.0 0.0 0.0"
-        },
-        {
-          "page": 34,
-          "text": "Table 6: Complete pedestrian-network-adherence results. Values are percentages of executed action duration. Model VR OU AEQ Short Long Instr. Constr. Search Intent Time Multi Closure Ped."
-        },
-        {
-          "page": 34,
-          "text": "Table 7: Matched LongNav endpoint and retrospective-checkpoint results. The oracle row rescores GPT-5.5 at its closest initial or post-movement checkpoint. Model / condition Success (%) Closer than start (%) ≥20% reduction (%) Mean remaining ratio (%)"
-        },
-        {
-          "page": 35,
-          "text": "Figure 11: GPT-5.5 LongNav runs grouped by their run-ending trajectory pattern. Substantial progress denotes a reduction of at least 20% in horizontal goal distance. The final recorded checkpoint defines the endpoint of each run. progress is defined as a reduction of at least 20% in horizontal goal distance, and the final recorded"
-        }
-      ],
-      "paperVisualPages": [
-        9,
-        13,
-        14,
-        34
-      ],
-      "eventAggregation": {
-        "total": 1,
-        "groups": [
-          {
-            "key": "官方来源",
-            "tone": "#16130f",
-            "items": [
-              {
-                "source": "HF Papers Trending",
-                "title": "UrbanGround：从局部感知到真实尺度城市空间智能",
-                "url": "https://huggingface.co/papers/2608.27456",
-                "note": "原始发布 / 公告。",
-                "text": "UrbanGround：从局部感知到真实尺度城市空间智能 —— 原始发布 / 公告。"
-              }
-            ]
-          }
-        ]
-      }
-    },
-    {
-      "recordId": "recvtXfcLk9dFN",
-      "sourceId": "papers-with-code-trending",
-      "title": "DreamX-Creator: Democratizing Native Audio-Video Generation at 2K Resolution",
-      "titleCn": "DreamX-Creator：面向2K分辨率的原生音视频生成",
-      "source": "PwC Trending",
-      "url": "https://huggingface.co/papers/2608.31106",
-      "category": "技术研究开源",
-      "contentType": "论文",
-      "publishedDate": "2026-08-31",
-      "publishedAtMs": 1788134400000,
-      "summary": "论文提出一个以7B生成器为核心的原生联合音视频生成系统，输入首帧和文本提示，同时对专门化的音频与视频流进行去噪，并通过门控跨模态注意力实现交互。系统还包括统一音视频数据处理、渐进式联合训练、多模态反馈强化学习，以及面向2K输出的自回归一步精炼器。",
-      "deepAnalysis": "【研究问题与核心结论】\n论文关注音频与视频是否能够在同一生成过程中被联合建模，并进一步生成具有时序同步性的高分辨率音视频。作者指出，既有视频生成器经常不生成音频，或者先生成视频、再以独立阶段合成声音，这种拆分限制了视觉动态与声学事件之间的相互建模。DreamX-Creator 1.0以7B生成器为核心，在首帧和文本提示条件下，对音频、视频两个模态流进行联合去噪；论文摘要声称，该系统能够实现原生且同步的音视频生成，性能可与当时最先进的开源系统竞争，并通过发布紧凑型7B生成器和2K精炼器降低研究与使用门槛。由于给定材料仅包含摘要与项目链接，以下不能进一步核验其完整论文中的定量结论。\n\n【方法与创新】\n系统由多个相互衔接的组件构成。首先，生成器采用模态专用的音频流和视频流：网络前半部分分别处理两种模态，后半部分通过Gated Cross-Modal Attention进行耦合。该注意力机制不是简单地全量融合，而是对每个激活的跨模态注意力头输出施加token级和head级门控，摘要将其描述为对跨模态信息流进行细粒度调制。这属于架构层面的主要新增设计。其次，Audio-Video Data System负责构造和筛选时间一致的片段，生成结构化多模态标注，并按能力组织数据池；这些内容更接近数据工程与训练体系设计，摘要未给出其具体筛选规则、标注模型或数据规模。再次，Progressive Joint Training由两个音视频预训练阶段和High-Quality Finetuning组成，属于训练流程安排，而非新的网络架构。Audio-Video Reinforcement Learning使用Modality-Aware Multimodal Feedback，将视频、音频及跨模态反馈分别路由至相应流，属于后训练与反馈建模机制。最后，2K输出采用Autoregressive 1-Step 2K Refinement：先把双向多步教师适配为自回归多步精炼器，再蒸馏为学生模型，使学生每个时间块仅需一次去噪评估；这同时包含教师改造、蒸馏和推理效率工程优化。\n\n【实验设计与关键结果】\n给定原文未提供实验章节、数据集名称、基线列表、评价指标、消融实验、样本数量或具体数值。摘要仅给出定性层面的结论，即DreamX-Creator的原生音视频生成性能“可与最先进开源系统竞争”，但没有说明竞争对象、比较协议或统计结果，因此不能将其转写为可核验的领先幅度。原文也未提供Figure或Table内容、坐标轴、图例、表格数值及PDF页码，故不存在可据此引用的图表结论。能够确认的系统条件包括：生成器规模为7B；输入为首帧和文本提示；输出目标包括2K分辨率；2K精炼学生在每个时间块执行一次去噪评估。至于训练数据的数量与来源、视频时长、音频采样率、分辨率定义、推理时延、显存占用、质量与同步性的测量方法，论文未披露于给定摘要中。\n\n【证据强度与局限】\n从研究主张与方法描述的对应关系看，论文明确说明了问题、系统组件及发布内容，足以证明其提出了一个联合音视频生成方案；但不足以独立支持“性能具有竞争力”这一实验性结论。首先，样本范围、数据分布和能力覆盖未披露，无法判断系统对音乐、对白、环境声、强运动或复杂声画因果关系的泛化能力。其次，没有公开定量指标与统计显著性，也没有看到单模态生成、后处理音频流水线、无门控跨模态注意力或不同精炼步数的公平对照。再次，训练数据由系统自行构造、过滤和标注，摘要未说明潜在重复样本、训练测试泄漏或评测集污染。计算成本、训练硬件、训练时长、参数量是否仅指生成器、精炼器额外开销及实际推理吞吐均未披露。失败案例、同步错误类型和音频幻觉也未披露。虽然项目链接表明作者计划开放代码或模型资源，但仅凭给定材料无法确认权重、数据、完整配置、评测脚本和许可证是否齐全，因此复现程度仍需以仓库和PDF正文核验。\n\n【研究意义与后续问题】\n这项工作的重要意义在于将音频从视频生成后的附加模块提升为与视频共同去噪、共同受反馈约束的生成模态，并尝试用门控跨模态交互处理联合建模中可能存在的信息干扰问题。其训练阶段、反馈路由和2K一步精炼器形成了从数据到生成再到高分辨率推理的完整系统假设，说明原生音视频生成的瓶颈并不只在基础网络，也在时间一致数据、模态专用反馈和高分辨率采样效率。然而，仍需回答：门控机制究竟改善了声画同步还是仅改善单模态质量；音频与视频反馈如何标定并避免奖励冲突；不同模态的时间粒度如何对齐；一步精炼在快速运动、细粒度音效和长时序场景中是否损失质量；7B规模相对更大模型的能力边界是什么；以及开放模型在版权、训练数据可追溯性和生成内容识别方面如何评估。这些问题需要完整消融、跨数据集测试和可复现实验加以验证。",
-      "why": "该工作试图解决现有视频生成器缺少音频或采用独立音频后处理、因而难以联合建模视觉动态与声学事件的问题。",
-      "impact": 78,
-      "novelty": 82,
-      "actionability": 72,
-      "urgency": "中",
-      "tags": [
-        "多模态",
-        "开源",
-        "产品"
-      ],
-      "imageUrl": "",
-      "mediaAssets": {
-        "images": [],
-        "videos": []
-      },
-      "editorialStructure": "",
-      "pdfUrl": "https://arxiv.org/pdf/2608.31106.pdf",
-      "paperFullTextSource": "abstract",
-      "paperPages": 0,
-      "paperCaptions": [],
-      "paperVisualPages": [],
-      "eventAggregation": {
-        "total": 1,
-        "groups": [
-          {
-            "key": "官方来源",
-            "tone": "#16130f",
-            "items": [
-              {
-                "source": "PwC Trending",
-                "title": "DreamX-Creator：面向2K分辨率的原生音视频生成",
-                "url": "https://huggingface.co/papers/2608.31106",
-                "note": "原始发布 / 公告。",
-                "text": "DreamX-Creator：面向2K分辨率的原生音视频生成 —— 原始发布 / 公告。"
-              }
-            ]
-          }
-        ]
-      }
-    },
-    {
       "recordId": "recvu1S4qSNYhe",
       "sourceId": "nvidia-blog",
       "title": "NVIDIA and CrowdStrike Strengthen Agentic Cybersecurity Frontier",
@@ -893,57 +389,6 @@
       }
     },
     {
-      "recordId": "recvtQ0liVfrG7",
-      "sourceId": "zhipu-modelscope",
-      "title": "GLM-5.3-BF16",
-      "titleCn": "GLM-5.3：后训练驱动的开源权重编码与长程任务模型",
-      "source": "智谱 ModelScope 官方模型",
-      "url": "https://www.modelscope.cn/models/zhipuai/glm-5.3-bf16",
-      "category": "前沿模型公司",
-      "contentType": "文章",
-      "publishedDate": "2026-08-28",
-      "publishedAtMs": 1787856591000,
-      "summary": "智谱称，GLM-5.3与GLM-5.2采用相同基础模型，性能提升主要来自后训练，在复杂编码、长程任务和网络安全漏洞发现方面取得显著进步。模型支持多种本地推理框架，并可通过reasoning_effort控制思考预算。",
-      "deepAnalysis": "## 模型能力变化与主要结论 || GLM-5.3 uses the same base model as GLM-5.2 — every gain comes from post-training\n原文明确表示，GLM-5.3沿用GLM-5.2的基础模型，新增收益全部归因于后训练。智谱称其在复杂编码和长程任务上明显增强，并将其定位为能力最强的开放权重编码模型之一：内部Z.ai Code Bench较GLM-5.2提升50%，公开评测中在Terminal Bench 3.0和Agents' Last Exam上达到开源模型SOTA。表格显示，GLM-5.3在CyberGym、AutomationBench和GDPval-AA v2等项目领先，但在若干编码和代理评测中仍低于其他模型或闭源系统。\n\n## 涌现的网络安全能力 || Emergent Cyber Capability\n原文称，随着后训练规模扩大，网络安全能力的发展速度超出预期。GLM-5.3在CyberGym漏洞发现任务上以84.5分位列表格最高，并且在利用链更靠后的环节增幅最大；在ExploitGym中，2小时和6小时结果分别为105和130，显著高于GLM-5.2的29和39。ExploitBench得分也由24.4提升至54.4。这里的结果来自特定代理框架、任务容器、超时预算和单次Pass@1等设置，体现的是评测条件下的能力，不等同于现实环境中的普适攻击效果。\n\n## 本地部署 GLM-5.3 || Serve GLM-5.3 Locally\n模型支持SGLang、vLLM、TokenSpeed、Transformers、KTransformers和Unsloth等推理或部署框架；Ascend NPU平台则可使用vLLM-Ascend、xLLM和SGLang。多框架支持降低了研究、工程验证和本地化部署门槛，也使模型具备在不同硬件与端侧基础设施上进行适配的可能性，但原文没有提供硬件需求、吞吐、显存占用或量化配置，因此不能据此判断实际部署成本和端侧性能。\n\n## 注意事项 || Note\nGLM-5.3通过reasoning_effort参数控制思考预算，支持low、high和max三档；未传入或传入其他值时默认为max。原文建议复现基准和排行榜结果时保持max，以确保评测设置一致。聊天模板中的clear_thinking默认值为false，聊天场景应显式设为true。上述参数会影响输出过程与资源消耗，是复现实验结果、比较服务成本和设计应用交互时需要固定的配置。\n\n## 脚注 || Footnotes\n脚注说明了各项评测所使用的温度、上下文长度、最大输出、代理工具、超时限制、容器隔离和防作弊措施。例如部分编码任务使用400K至1M上下文，CyberGym覆盖1,507个任务，ExploitGym基于869个任务并按模型吞吐率折算时间预算。不同基准的执行框架、评判器和采样策略差异较大，表格分数应理解为原文报告的条件性结果，而不宜视为完全同口径的综合排名。",
-      "why": "其价值在于展示了后训练对代码智能、工具使用和网络安全任务能力的推动，同时提供了较完整的开放部署与评测复现信息。",
-      "impact": 86,
-      "novelty": 78,
-      "actionability": 88,
-      "urgency": "高",
-      "tags": [
-        "LLM",
-        "Agent",
-        "开源",
-        "端侧"
-      ],
-      "imageUrl": "https://cdn.modelscope.cn/social-thumbnails/models/zhipuai/glm-5.3-bf16.png",
-      "mediaAssets": {
-        "images": [],
-        "videos": [],
-        "cover": "https://cdn.modelscope.cn/social-thumbnails/models/zhipuai/glm-5.3-bf16.png",
-        "curatedBy": "llm"
-      },
-      "editorialStructure": "source",
-      "eventAggregation": {
-        "total": 1,
-        "groups": [
-          {
-            "key": "官方来源",
-            "tone": "#16130f",
-            "items": [
-              {
-                "source": "智谱 ModelScope 官方模型",
-                "title": "GLM-5.3：后训练驱动的开源权重编码与长程任务模型",
-                "url": "https://www.modelscope.cn/models/zhipuai/glm-5.3-bf16",
-                "note": "原始发布 / 公告。",
-                "text": "GLM-5.3：后训练驱动的开源权重编码与长程任务模型 —— 原始发布 / 公告。"
-              }
-            ]
-          }
-        ]
-      }
-    },
-    {
       "recordId": "recvu2ZXD84Yoz",
       "sourceId": "leiphone",
       "title": "阿里更新旗舰模型Qwen3.8-Max，前端编程能力跃居全球第一",
@@ -1182,57 +627,6 @@
                 "url": "https://github.com/langchain-ai/langchain/releases/tag/langchain%3d%3d1.4.0a4",
                 "note": "原始发布 / 公告。",
                 "text": "LangChain 1.4.0a4：面向 Agent 工程的平台更新 —— 原始发布 / 公告。"
-              }
-            ]
-          }
-        ]
-      }
-    },
-    {
-      "recordId": "recvtW9WBRobE2",
-      "sourceId": "modelscope-home",
-      "title": "DeepSeek-V4-Flash-Vision-Exp",
-      "titleCn": "DeepSeek-V4-Flash-Vision-Exp：实验性多模态模型",
-      "source": "ModelScope 首页新模型",
-      "url": "https://www.modelscope.cn/models/deepseek-ai/deepseek-v4-flash-vision-exp",
-      "category": "前沿模型公司",
-      "contentType": "文章",
-      "publishedDate": "2026-08-31",
-      "publishedAtMs": 1788181976000,
-      "summary": "DeepSeek-V4-Flash-Vision-Exp 是 DeepSeek-V4 系列首个实验性多模态模型，在 DeepSeek-V4-Flash 架构上加入视觉模块并继续训练。原文称其多模态智能体能力较 DeepSeek-V4-Flash-0731 有明显提升，同时保持相近的纯文本智能体表现，并提供最小化推理实现与 MIT 许可证。",
-      "deepAnalysis": "## 引言 || Introduction\nDeepSeek-V4-Flash-Vision-Exp 被介绍为 DeepSeek-V4 系列首个实验性多模态模型，基于 DeepSeek-V4-Flash 架构加入视觉模块并继续训练，以获得视觉理解能力。原文称，相较 DeepSeek-V4-Flash-0731，该模型的多模态智能体能力有显著提升，而纯文本智能体任务表现大体相当。\n\n## 仓库布局 || Repository layout\n仓库包含 tokenizer、提示词编码参考实现和最小化 PyTorch 推理代码，覆盖视觉编码器与对齐器、DFlash attention、MoE、Hyper-Connections 以及 DSpark forward path。目录还提供模型配置、生成配置、权重索引和推理示例，能够支撑从提示构造到模型执行的基本复现链路。\n\n## 提示词编码 || Prompt encoding\n提示词编码支持 OpenAI 风格的 JSON content blocks，也支持紧凑的 TXT 路径表示。仓库声称，inference/examples/ 下的两个示例使用这两种输入形式时，会编码成一致的提示词和 token ID，从而为不同调用格式之间的行为对齐提供了明确参考。\n\n这一设计把输入协议与模型推理解耦，便于开发者单独验证编码结果，再进行视觉推理。原文仅说明编码等价性和使用入口，并未给出更广泛的输入兼容性、异常处理或性能数据，因此不能据此推断其已覆盖所有生产环境消息格式。\n\n## 最小化推理 || Minimal inference\ninference/README.md 提供依赖安装、检查点转换以及 TXT/JSON 推理命令；结合仓库中的配置、权重索引和视觉相关实现，使用者可以按文档完成从模型文件准备到示例调用的基础流程。其价值主要在于降低研究者检查视觉编码、对齐和前向路径的门槛。\n\n不过，原文没有披露完整权重规模、显存需求、吞吐、延迟、量化方案或部署限制，也没有提供独立复现实验结果。因此，该仓库更适合作为实验性验证和工程集成起点，不能仅凭“最小化推理”表述判断其已具备成熟的生产部署效率。\n\n## 许可证 || License\n该仓库采用 MIT License。若许可证文本与仓库实际内容一致，开发者可在较宽松的许可框架下研究、修改和集成相关代码；但原文未进一步说明模型权重、数据、基准使用规则或第三方组件是否存在额外约束，实际商用仍需分别核查这些部分。",
-      "why": "该模型将视觉理解、智能体任务和可复现的开源推理代码结合，显示 DeepSeek 正在把 V4-Flash 架构扩展至多模态智能体场景。",
-      "impact": 82,
-      "novelty": 84,
-      "actionability": 86,
-      "urgency": "中",
-      "tags": [
-        "多模态",
-        "Agent",
-        "开源",
-        "LLM"
-      ],
-      "imageUrl": "https://cdn.modelscope.cn/social-thumbnails/models/deepseek-ai/deepseek-v4-flash-vision-exp.png",
-      "mediaAssets": {
-        "images": [],
-        "videos": [],
-        "cover": "https://cdn.modelscope.cn/social-thumbnails/models/deepseek-ai/deepseek-v4-flash-vision-exp.png",
-        "curatedBy": "llm"
-      },
-      "editorialStructure": "source",
-      "eventAggregation": {
-        "total": 1,
-        "groups": [
-          {
-            "key": "官方来源",
-            "tone": "#16130f",
-            "items": [
-              {
-                "source": "ModelScope 首页新模型",
-                "title": "DeepSeek-V4-Flash-Vision-Exp：实验性多模态模型",
-                "url": "https://www.modelscope.cn/models/deepseek-ai/deepseek-v4-flash-vision-exp",
-                "note": "原始发布 / 公告。",
-                "text": "DeepSeek-V4-Flash-Vision-Exp：实验性多模态模型 —— 原始发布 / 公告。"
               }
             ]
           }
@@ -2543,6 +1937,7 @@
             "url": "https://pbs.twimg.com/tweet_video_thumb/HREgZxPa0AAFFYi.jpg",
             "width": 800,
             "height": 1082,
+            "playbackUrl": "media/social/recvueCW1y1mbA-1.mp4",
             "thumbnailUrl": "https://pbs.twimg.com/tweet_video_thumb/HREgZxPa0AAFFYi.jpg",
             "durationSec": 0.0
           },
@@ -2553,6 +1948,7 @@
             "url": "https://pbs.twimg.com/tweet_video_thumb/HREgrb2aMAAVJn9.jpg",
             "width": 800,
             "height": 382,
+            "playbackUrl": "media/social/recvueCW1y1mbA-2.mp4",
             "thumbnailUrl": "https://pbs.twimg.com/tweet_video_thumb/HREgrb2aMAAVJn9.jpg",
             "durationSec": 0.0
           },
@@ -2563,6 +1959,7 @@
             "url": "https://pbs.twimg.com/tweet_video_thumb/HREg78-agAA_K-U.jpg",
             "width": 762,
             "height": 466,
+            "playbackUrl": "media/social/recvueCW1y1mbA-3.mp4",
             "thumbnailUrl": "https://pbs.twimg.com/tweet_video_thumb/HREg78-agAA_K-U.jpg",
             "durationSec": 0.0
           },
@@ -2573,6 +1970,7 @@
             "url": "https://pbs.twimg.com/tweet_video_thumb/HREhIc6a4AAIVAf.jpg",
             "width": 800,
             "height": 440,
+            "playbackUrl": "media/social/recvueCW1y1mbA-4.mp4",
             "thumbnailUrl": "https://pbs.twimg.com/tweet_video_thumb/HREhIc6a4AAIVAf.jpg",
             "durationSec": 0.0
           },
@@ -2583,6 +1981,7 @@
             "url": "https://pbs.twimg.com/tweet_video_thumb/HREhRJ0akAAtArA.jpg",
             "width": 800,
             "height": 1132,
+            "playbackUrl": "media/social/recvueCW1y1mbA-5.mp4",
             "thumbnailUrl": "https://pbs.twimg.com/tweet_video_thumb/HREhRJ0akAAtArA.jpg",
             "durationSec": 0.0
           },
@@ -2593,6 +1992,7 @@
             "url": "https://pbs.twimg.com/tweet_video_thumb/HREhfZsbUAAHUpp.jpg",
             "width": 800,
             "height": 510,
+            "playbackUrl": "media/social/recvueCW1y1mbA-6.mp4",
             "thumbnailUrl": "https://pbs.twimg.com/tweet_video_thumb/HREhfZsbUAAHUpp.jpg",
             "durationSec": 0.0
           },
@@ -2603,6 +2003,7 @@
             "url": "https://pbs.twimg.com/tweet_video_thumb/HREhvG4bEAEgC2f.jpg",
             "width": 800,
             "height": 468,
+            "playbackUrl": "media/social/recvueCW1y1mbA-7.mp4",
             "thumbnailUrl": "https://pbs.twimg.com/tweet_video_thumb/HREhvG4bEAEgC2f.jpg",
             "durationSec": 0.0
           }

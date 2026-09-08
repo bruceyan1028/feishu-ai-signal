@@ -41,7 +41,7 @@
         6,
         14,
         49,
-        3
+        7
       ],
       [
         0,
@@ -49,7 +49,7 @@
         3,
         12,
         15,
-        1
+        4
       ],
       [
         0,
@@ -57,7 +57,7 @@
         0,
         9,
         23,
-        1
+        7
       ],
       [
         0,
@@ -73,7 +73,7 @@
         2,
         0,
         13,
-        1
+        2
       ],
       [
         5,
@@ -81,7 +81,7 @@
         6,
         6,
         26,
-        2
+        7
       ],
       [
         0,
@@ -89,7 +89,7 @@
         0,
         4,
         11,
-        0
+        2
       ],
       [
         2,
@@ -97,7 +97,7 @@
         0,
         0,
         21,
-        2
+        3
       ],
       [
         4,
@@ -105,7 +105,7 @@
         4,
         5,
         29,
-        1
+        12
       ],
       [
         8,
@@ -113,7 +113,7 @@
         3,
         1,
         16,
-        0
+        4
       ],
       [
         0,
@@ -121,7 +121,7 @@
         0,
         0,
         24,
-        1
+        4
       ]
     ],
     "normalized": [
@@ -131,7 +131,7 @@
         0.1224,
         0.2857,
         1.0,
-        0.0612
+        0.1429
       ],
       [
         0.0,
@@ -139,7 +139,7 @@
         0.2,
         0.8,
         1.0,
-        0.0667
+        0.2667
       ],
       [
         0.0,
@@ -147,7 +147,7 @@
         0.0,
         0.3913,
         1.0,
-        0.0435
+        0.3043
       ],
       [
         0.0,
@@ -163,7 +163,7 @@
         0.1538,
         0.0,
         1.0,
-        0.0769
+        0.1538
       ],
       [
         0.1923,
@@ -171,7 +171,7 @@
         0.2308,
         0.2308,
         1.0,
-        0.0769
+        0.2692
       ],
       [
         0.0,
@@ -179,7 +179,7 @@
         0.0,
         0.3636,
         1.0,
-        0.0
+        0.1818
       ],
       [
         0.0952,
@@ -187,7 +187,7 @@
         0.0,
         0.0,
         1.0,
-        0.0952
+        0.1429
       ],
       [
         0.1379,
@@ -195,7 +195,7 @@
         0.1379,
         0.1724,
         1.0,
-        0.0345
+        0.4138
       ],
       [
         0.5,
@@ -203,7 +203,7 @@
         0.1875,
         0.0625,
         1.0,
-        0.0
+        0.25
       ],
       [
         0.0,
@@ -211,7 +211,7 @@
         0.0,
         0.0,
         1.0,
-        0.0417
+        0.1667
       ]
     ]
   },
@@ -596,32 +596,75 @@
       "recvuv2dZ1YID0"
     ],
     "product|2026-W37": [
-      "recvuuUXqS8tEf"
+      "recvuuUXqS8tEf",
+      "recvuAVZd2YMBd",
+      "recvuAVZd262fm",
+      "recvuAVZd2tCf5",
+      "recvuAVZd2y2gA",
+      "recvuAVZd2V5E1",
+      "recvuAVZd2ceVK",
+      "recvuAVZd2TFU9",
+      "recvuAVZd2jNJt",
+      "recvuAVZd2HvkN",
+      "recvuAVZd2fCvl",
+      "recvuAVZd2EsTR"
     ],
     "agent|2026-W37": [
       "recvuuUXqSmsEC",
       "recvuuUXqSYPmZ",
-      "recvuuUXqS6Nz7"
+      "recvuuUXqS6Nz7",
+      "recvuAVZd2o1ik",
+      "recvuAVZd262fm",
+      "recvuAVZd2V5E1",
+      "recvuAVZd2Tpj6"
     ],
     "safety-policy|2026-W37": [
       "recvuuUXqSmsEC",
-      "recvuuUXqS6Nz7"
+      "recvuuUXqS6Nz7",
+      "recvuAVZd2PjX2"
     ],
     "infra|2026-W37": [
       "recvuuUXqSTLbf",
-      "recvuuUXqSZ2am"
+      "recvuuUXqSZ2am",
+      "recvuAVZd2C0TT",
+      "recvuAVZd2XtAY",
+      "recvuAVZd2QxwN",
+      "recvuAVZd2pCFz",
+      "recvuAVZd2Y2Kk"
     ],
     "multimodal|2026-W37": [
-      "recvuuUXqSYPmZ"
+      "recvuuUXqSYPmZ",
+      "recvuAVZd2tCf5",
+      "recvuAVZd2y2gA",
+      "recvuAVZd2ceVK",
+      "recvuAVZd2jNJt",
+      "recvuv2dZ1iTFS",
+      "recvuAVZd2EsTR"
     ],
     "other|2026-W37": [
-      "recvuuUXqSbY98"
+      "recvuuUXqSbY98",
+      "recvuAVZd2Sclr",
+      "recvuAVZd2RIvl",
+      "recvuAVZd28amM"
     ],
     "rag-search|2026-W37": [
-      "recvuuUXqSfqX5"
+      "recvuuUXqSfqX5",
+      "recvuAVZd2DZ5V"
     ],
     "reasoning|2026-W37": [
-      "recvuv2dZ1iTFS"
+      "recvuv2dZ1iTFS",
+      "recvuAVZd2FKGE",
+      "recvuv2dZ1an7Q"
+    ],
+    "funding|2026-W37": [
+      "recvuAVZd2VRFc",
+      "recvuAVZd2mDfs",
+      "recvuAVZd2Tpj6",
+      "recvuAVZd2Y2Kk"
+    ],
+    "embodied|2026-W37": [
+      "recvuAVZd2mDfs",
+      "recvuAVZd2pCFz"
     ]
   },
   "itemIndex": {
@@ -1854,19 +1897,154 @@
       "title": "AOSEED X-MAKER JOY AI+儿童3D打印机体验与功能介绍",
       "source": "果壳",
       "url": "https://www.guokr.com/article/470131"
+    },
+    "recvuAVZd2Sclr": {
+      "title": "用于因果发现验证的DAG自适应洋葱均匀模拟方法",
+      "source": "JMLR",
+      "url": "http://jmlr.org/papers/v27/24-0711.html"
+    },
+    "recvuAVZd2YMBd": {
+      "title": "AgentPEN：以大模型融合新闻与价格的可解释股票涨跌预测网络",
+      "source": "JMLR",
+      "url": "http://jmlr.org/papers/v27/25-2175.html"
+    },
+    "recvuAVZd2C0TT": {
+      "title": "面向十亿级参数高斯混合模型的次线性变分优化",
+      "source": "JMLR",
+      "url": "http://jmlr.org/papers/v27/25-0639.html"
+    },
+    "recvuAVZd2RIvl": {
+      "title": "torchgfn：模块化 PyTorch GFlowNet 开源库",
+      "source": "JMLR",
+      "url": "http://jmlr.org/papers/v27/23-1095.html"
+    },
+    "recvuAVZd2o1ik": {
+      "title": "Nous Research 发布 Hermes Agent v0.21.1，整合模块化、性能与多平台代理能力更新",
+      "source": "GitHub Trending",
+      "url": "https://github.com/nousresearch/hermes-agent/releases/tag/v2026.9.7"
+    },
+    "recvuAVZd2XtAY": {
+      "title": "腾讯预付逾500亿元锁定内存芯片，Harness付费推理毛利率追平MaaS",
+      "source": "华尔街见闻",
+      "url": "https://wallstreetcn.com/articles/3781274"
+    },
+    "recvuAVZd2QxwN": {
+      "title": "AI算力紧缺重塑数据中心议价权，芯片厂商入场提供信用担保",
+      "source": "华尔街见闻",
+      "url": "https://wallstreetcn.com/articles/3781275"
+    },
+    "recvuAVZd262fm": {
+      "title": "千问办公上线“多人工作台”，一句话生成百人协作系统",
+      "source": "智东西",
+      "url": "https://zhidx.com/p/591478.html"
+    },
+    "recvuAVZd2PjX2": {
+      "title": "ChatGPT主动向FBI上报谋杀计划引发隐私与法律边界争议",
+      "source": "果壳",
+      "url": "https://www.guokr.com/article/470144"
+    },
+    "recvuAVZd2tCf5": {
+      "title": "小米发布澎程汽车、玄戒O3终端及MiMo端侧大模型",
+      "source": "品玩 / 硅星人",
+      "url": "https://www.pingwest.com/w/317166"
+    },
+    "recvuAVZd2VRFc": {
+      "title": "国内AI人才三次迁徙：从百度与六小虎流向字节腾讯",
+      "source": "AI科技评论 / 雷峰网",
+      "url": "https://www.leiphone.com/category/industrynews/iftsnhdqbaxeteu6.html"
+    },
+    "recvuAVZd2y2gA": {
+      "title": "vivo升级蓝图影像战略，X500系列将于9月21日发布",
+      "source": "品玩 / 硅星人",
+      "url": "https://www.pingwest.com/w/317169"
+    },
+    "recvuAVZd2V5E1": {
+      "title": "千问办公推出支持百人协作的“多人工作台”",
+      "source": "AI科技评论 / 雷峰网",
+      "url": "https://www.leiphone.com/category/industrynews/bv6up9hompcjjrhl.html"
+    },
+    "recvuAVZd2ceVK": {
+      "title": "Google扩展Gemini语音功能，科大讯飞发布Spark-X2.5，华为推出麒麟9050 Pro与HarmonyOS 7",
+      "source": "果壳",
+      "url": "https://www.guokr.com/article/470142"
+    },
+    "recvuAVZd2mDfs": {
+      "title": "天机智能完成B++轮融资，蚂蚁集团与SOFINA联合领投",
+      "source": "品玩 / 硅星人",
+      "url": "https://www.pingwest.com/w/317168"
+    },
+    "recvuAVZd2Tpj6": {
+      "title": "DeepSeek开放150个后端岗位，加码Agent弹性计算与基础设施",
+      "source": "华尔街见闻",
+      "url": "https://wallstreetcn.com/articles/3781276"
+    },
+    "recvuAVZd28amM": {
+      "title": "AI提效未减工时：周末加班时长反增40%",
+      "source": "虎嗅",
+      "url": "https://www.huxiu.com/article/4889331.html"
+    },
+    "recvuAVZd2DZ5V": {
+      "title": "Firecrawl 发布 v2.11.316 API 镜像版本",
+      "source": "GitHub Trending",
+      "url": "https://github.com/firecrawl/firecrawl/releases/tag/v2.11.316"
+    },
+    "recvuAVZd2TFU9": {
+      "title": "启境GX7开启预售：全系搭载L3架构，售价24.99万至31.19万元",
+      "source": "AI科技评论 / 雷峰网",
+      "url": "https://www.leiphone.com/category/industrynews/deylzoeez448ihk3.html"
+    },
+    "recvuAVZd2pCFz": {
+      "title": "安努智能发布六项具身智能成果，打通工业机器人部署闭环",
+      "source": "智东西",
+      "url": "https://zhidx.com/p/591267.html"
+    },
+    "recvuAVZd2Y2Kk": {
+      "title": "中科类脑完成数亿元B+轮融资，加码算电协同Token工厂",
+      "source": "智东西",
+      "url": "https://zhidx.com/p/591436.html"
+    },
+    "recvuAVZd2FKGE": {
+      "title": "黄仁勋称GPT-6 Astra标志AGI到来，业界质疑其技术依据",
+      "source": "品玩 / 硅星人",
+      "url": "https://www.pingwest.com/w/317165"
+    },
+    "recvuAVZd2jNJt": {
+      "title": "vivo X500系列将发布，主打端侧AI影像与4K高帧率视频",
+      "source": "智东西",
+      "url": "https://zhidx.com/p/591699.html"
+    },
+    "recvuAVZd2HvkN": {
+      "title": "速卖通Brand+携中国科技品牌亮相IFA并升级出海服务",
+      "source": "AI科技评论 / 雷峰网",
+      "url": "https://www.leiphone.com/category/industrynews/m9vdzr4bvhymla7s.html"
+    },
+    "recvuAVZd2fCvl": {
+      "title": "从“Pro Max”到神话名称：手机与AI产品命名逻辑分化",
+      "source": "虎嗅",
+      "url": "https://www.huxiu.com/article/4889367.html"
+    },
+    "recvuAVZd2EsTR": {
+      "title": "Tom Krcha 展示 GPT-6 Astra 辅助设计与交互原型开发",
+      "source": "OpenAI YouTube",
+      "url": "https://www.youtube.com/watch?v=qdllq5il2bk"
+    },
+    "recvuv2dZ1an7Q": {
+      "title": "GPT-6 Astra 在 DEF CON 魔方谜题中连续三次解题成功",
+      "source": "OpenAI YouTube",
+      "url": "https://www.youtube.com/watch?v=j2nv3d_a1f0"
     }
   },
   "trend": {
-    "agent": 4.333,
-    "reasoning": 1.882,
-    "multimodal": 4.364,
+    "agent": 4.667,
+    "reasoning": 2.235,
+    "multimodal": 5.455,
     "open-source-model": 1.8,
-    "rag-search": 14.0,
-    "infra": 2.545,
-    "embodied": 5.5,
-    "safety-policy": 23.0,
-    "product": 3.75,
-    "funding": 1.778,
+    "rag-search": 15.0,
+    "infra": 3.0,
+    "embodied": 6.5,
+    "safety-policy": 24.0,
+    "product": 5.125,
+    "funding": 2.222,
     "other": 2.0
   },
   "window_end": "2026-W37"

@@ -52,485 +52,6 @@
   ],
   "signals": [
     {
-      "recordId": "recvu1S4qSbYtM",
-      "sourceId": "hf-papers-trending",
-      "title": "PaperGym: Rubric-Centered Evolution for Research-Plan Generation",
-      "titleCn": "PaperGym：以评分标准为中心的研究计划生成演化框架",
-      "source": "HF Papers Trending",
-      "url": "https://huggingface.co/papers/2608.31119",
-      "category": "技术研究开源",
-      "contentType": "论文",
-      "publishedDate": "2026-08-31",
-      "publishedAtMs": 1788134400000,
-      "summary": "PaperGym将论文拆分为研究目标、背景、研究方法和实验设计四个阶段，从不重叠的章节生成研究问题、参考答案与十项原子化评分标准，以降低标准泄漏。训练阶段先通过带评分标准的在策略自蒸馏获取密集监督，再使用GRPO将评分标准作为奖励；在Qwen3-1.7B、4B和8B上均优于单独训练阶段及逆序训练。",
-      "deepAnalysis": "【研究问题与核心结论】\n论文试图解决研究计划生成无法像数学题或代码一样通过唯一答案自动验证的问题。既有方法从论文中抽取问题与评分标准时，常使用相同或高度重叠的内容，导致模型仅凭改写问题即可获得奖励；同时，面向研究计划的方法通常只覆盖方法部分，实验设计依赖所有实例共享的通用准则，且多个准则的判断被压缩为每次采样一个标量，难以形成细粒度学习信号。PaperGym利用论文固有的“问题—方法—实验”结构，将研究目标和背景限定为问题来源，将研究方法和实验设计限定为答案与实例特定标准来源，并以评分标准先支持自蒸馏、再作为GRPO奖励。作者报告PaperGym-20k的评分标准泄漏率为3.73%，低于对比基准的11.90%—34.10%；在Qwen3多个规模上，两阶段顺序均优于SFT、单独OPSD、单独GRPO及逆序训练，且训练后的Qwen3-8B在ResearchQA上达到73.48，高于参数规模更大的Kimi K2.6的73.19。\n\n【方法与创新】\n数据构造首先从公开arXiv论文的LaTeX源文件中抽取文本，将论文按自然章节执行map-reduce式信息整理，形成研究目标、背景、研究方法和实验设计四类表示。实验设计排除具体数值结果，以减少对结果的直接记忆。问题只由研究目标和背景合成，参考答案只由研究方法和实验设计合成，从源头隔离输入与监督。评分标准包括实例特定标准和通用标准：前者分别从问题单独生成RQ、从问题与参考答案联合生成RA，再进行合并、语义去重、重要性排序，最终每个实例保留10项原子二元标准，并同时覆盖方法创新和实验设计；后者约束计划的完整性、具体性和科学合理性。\n\n训练方法的架构性新增在于“Rubric-centered evolution”的两阶段组合，而非提出新的基础模型。第一阶段是rubric-based on-policy self-distillation（OPSD）：将评分标准作为特权上下文提供给自教师，使其将标准转化为逐token的指导信号。第二阶段是rubric-as-rewards GRPO：采样多个回答，由评分器逐标准判定，再用于组相对策略优化。相较仅使用SFT参考答案，该设计不把多种可能有效的计划压缩成单一模仿目标；相较直接用聚合奖励训练，则试图恢复评分标准中的密集监督。工程实现使用Qwen3-1.7B、4B、8B，bf16，LoRA（r=64、α=128）进行OPSD，GRPO使用verl、vLLM、每提示8个回答和0.01的KL惩罚。\n\n【实验设计与关键结果】\n训练集为PaperGym-20k的计算机科学子集，约1万条、来自2015年1月至2025年12月的arXiv论文。域内测试集来自2026年1月之后的论文，覆盖cs、econ、physics，每域400篇、每篇两个实例，分别构造PaperGym-Innov和PaperGym-Design。域外测试包括ResearchQA（750条）、ResearchPlanGen-ML完整测试集和RubricHub Science（800条）。所有回答均由DeepSeek-V4-Flash执行基于评分标准覆盖率的LLM-as-a-judge评测。训练策略基线包括未训练模型、SFT、单独OPSD和单独GRPO；另有多个未在该数据上微调的通用及科学模型。\n\nTable 1（PDF第7页）显示，Qwen3-1.7B从平均22.24提升至OPSD+GRPO的27.81，增幅为5.56；Qwen3-4B从29.72提升至34.76，增幅为5.04；论文摘要报告Qwen3-8B平均提升4.8分。1.7B的OPSD+GRPO在ResearchQA、PaperGym-Innov和PaperGym-Design上分别为8.37、17.38和12.45，相对基础模型分别提升3.48、6.62和3.87；4B对应三项为16.93、22.81和18.19。单独GRPO在1.7B平均仅提升0.30，说明直接从基础策略探索不稳定。Table 2（PDF第8页）中，PaperGym-20k训练模型在三方比较的总体胜率为58.1%，RubricHub Science训练模型为28.2%，未训练Qwen3-1.7B为13.7%；创新洞察项分别为58.4%、29.2%和12.4%。Figure 3左图（PDF第9页）显示，随数据量从0.5k增至15k，PaperGym-Innov从16.12升至19.21，Design从13.89升至16.96。Table 3显示PaperGym-Innov和Design泄漏率为4.71%和4.97%，PaperGym-20k总体为3.73%。Table 4中完整管线在1.7B上的Innov/Design为14.16/10.45，高于RQ-only的13.19/10.24、RA-only的12.29/9.34及仅创新维度的14.13/9.93。Figure 3右图表明OPSD后接GRPO在400步轨迹中最终准确率约0.66，高于其他阶段顺序；OPSD单独在约200步后出现下降。\n\n【证据强度与局限】\n实验包含多模型规模、域内外基准、数据规模曲线、评分标准来源消融和训练阶段顺序对照，足以支持“两阶段组合及解耦数据构造具有经验收益”的结论。训练配置、硬件和主要超参数已披露，代码、数据集及基准在正文中给出项目地址，复现基础较好。但评价完全依赖DeepSeek-V4-Flash的LLM-as-a-judge，缺少人工专家评分、评分器间可靠性数值和统计显著性检验；Figure 2虽展示多评分模型的稳定性与二元判定一致性分析，但给定材料未提供其完整坐标数值。论文未披露总训练算力、训练时间、完整测试集规模细节、置信区间和系统失败案例。论文声称减少泄漏，但泄漏检测本身使用LLM判断“能否从问题直接推断”，仍可能受评分器偏差影响。论文使用论文自身方法和实验设计生成标准，可能奖励符合已发表论文范式的计划，而不一定能识别真正新颖、但偏离文献模板的方案；此外，arXiv论文和计算机科学训练分布对其他学科及现实科研任务的代表性有限。与专有模型比较属于未微调参考模型对照，训练预算、提示和推理设置的完全公平性未在给定材料中充分说明。\n\n【研究意义与后续问题】\nPaperGym的重要意义不是把研究计划变成具有唯一正确答案的任务，而是展示了如何利用科学论文的章节因果结构，把非验证性目标转化为可分解、可判定的训练环境。结果说明，评分标准既可以作为过程性指导，也可以作为后验奖励；先用特权信息塑造策略，再用不含特权信息的奖励约束策略，可能比直接强化学习更适合开放式科学任务。其经验还把研究计划质量具体拆成方法创新和实验设计两个维度，提示未来评测不应只看想法的新颖性，也应检查基线、控制变量、验证路径与可执行性。仍未解决的问题包括：如何用专家或真实实验结果验证LLM评分与科研价值之间的相关性；如何评估跨领域、跨范式和反常识研究计划；如何防止模型学习已发表论文的表层模板或复述现有方法；如何在标准存在冲突、不完整或本身错误时进行可靠优化；以及如何把二元标准扩展为带不确定性、因果有效性和长期实验反馈的评价环境。",
-      "why": "该工作针对研究计划缺乏可自动验证答案、现有评分标准易从问题中推断且标量奖励利用不足的问题，提出了从论文结构中构造训练环境并两次利用评分标准的统一方案。",
-      "impact": 84,
-      "novelty": 86,
-      "actionability": 82,
-      "urgency": "中",
-      "tags": [
-        "AI",
-        "LLM",
-        "开源",
-        "推理"
-      ],
-      "imageUrl": "https://arxiv.org/html/2608.31119v1/framework.png",
-      "mediaAssets": {
-        "images": [
-          {
-            "url": "https://arxiv.org/html/2608.31119v1/framework.png",
-            "alt": "Figure 1 : Overview of the PaperGym framework. (a) Data Generation: arXiv papers are parsed into four stages to synthesize questions and answers; rubrics are generated, merged, ranked, and filtered. (b) Two-Stage Policy Training: rubric-based OPSD followed by rubric-as-rewards GRPO."
-          },
-          {
-            "url": "https://arxiv.org/html/2608.31119v1/data_analysis.png",
-            "alt": "Figure 2 : Preliminary analysis. Left: Category breakdown of PaperGym-20k across three domains. Middle: Mean score vs. across-round range for four scoring models over five independent runs. Right: Pairwise inter-model agreement on binary rubric verdicts."
-          },
-          {
-            "url": "https://arxiv.org/html/2608.31119v1/overall.png",
-            "alt": "Table 2 : Win Rate Results. For each criterion, we report the percentage of comparisons in which each model is selected as the best among the baseline trained on PaperGym-20k , the baseline trained on RubricHub Science , and the untrained Qwen3-1.7B by an LLM judge."
-          }
-        ],
-        "videos": []
-      },
-      "editorialStructure": "",
-      "pdfUrl": "https://arxiv.org/pdf/2608.31119.pdf",
-      "paperFullTextSource": "pdf",
-      "paperPages": 34,
-      "paperCaptions": [
-        {
-          "page": 4,
-          "text": "Figure 1 Overview of the PaperGym framework. (a) Data Generation: arXiv papers are parsed into four stages to synthesize questions and answers; rubrics are generated, merged, ranked, and filtered. (b) Two-Stage Policy Training: rubric-based OPSD followed by rubric-as-rewards GRPO."
-        },
-        {
-          "page": 5,
-          "text": "Figure 2 Preliminary analysis. Left: Category breakdown of PaperGym-20k across three domains. Middle: Mean score vs. across-round range for four scoring models over five independent runs. Right: Pairwise inter-model agreement on binary rubric verdicts."
-        },
-        {
-          "page": 7,
-          "text": "Table 1 Main results across model scales and training strategies. Subscripts denote changes relative to the corresponding base model. The best result in each section per column is in bold. RubricHub ResearchPlan PaperGym"
-        },
-        {
-          "page": 8,
-          "text": "Table 2 Win Rate Results. For each criterion, we report the percentage of comparisons in which each model is selected as the best among the baseline trained on PaperGym-20k , the baseline trained on RubricHub Science , and the untrained Qwen3-1.7B by an LLM judge."
-        },
-        {
-          "page": 9,
-          "text": "Figure 3 Left: Data scaling law with GRPO training. Right: Training dynamics across two-stage orderings of OPSD and GRPO on Qwen3-1.7B. Table 3 Criterion leakage comparison. Table 4 Ablation on data construction pipeline."
-        },
-        {
-          "page": 9,
-          "text": "Table 3 Criterion leakage comparison. Table 4 Ablation on data construction pipeline. Leakage Rate Innov Design PaperGym-20k 3.73% Full Pipeline (Ours) 14.16 10.45"
-        },
-        {
-          "page": 10,
-          "text": "Figure 4 Entropy dynamics under different training strategies. 5 Conclusion We presented PaperGym, a unified framework that turns each research paper into a complete training"
-        },
-        {
-          "page": 15,
-          "text": "Table 5 Ablation on the privileged information provided to the teacher in the OPSD stage. Best results are in bold. Privileged Information Innov Design Rubric (Ours) 14.16 10.45"
-        },
-        {
-          "page": 16,
-          "text": "Table 6 Sensitivity of the GRPO stage to the reward mixing ratio (specialized : general). Best results are in bold. Specialized : General Innov Design 8:2 14.63 10.86"
-        },
-        {
-          "page": 16,
-          "text": "Table 6 reports the rubric scores. The 7:3 configuration attains the highest score on both benchmarks, 17.17 on PaperGym-Innov and 12.35 on PaperGym-Design, confirming α = 0.7 as the optimal setting. B.3 Stage-Ordering Swap between OPSD and GRPO"
-        },
-        {
-          "page": 16,
-          "text": "Table 7 reports the benchmark scores of both orderings. The forward ordering wins on every benchmark at every scale, improving the five-benchmark average by +2.04, +0.99, and +1.31 points on Qwen3-1.7B, 4B, and 8B; the penalty is largest at the 1.7B scale and consistently concentrates on PaperGym-Innov (+2.97,"
-        },
-        {
-          "page": 17,
-          "text": "Table 7 Benchmark performance under the two stage orderings of the two-stage schedule. OPSD→GRPO is the default ordering; GRPO→OPSD swaps the two stages with all other settings identical. Subscripts on the GRPO→OPSD row denote the drop relative to OPSD→GRPO. The default ordering wins on every benchmark at every scale."
-        },
-        {
-          "page": 17,
-          "text": "Figure 5 Training dynamics across the two stage orderings of OPSD and GRPO on Qwen3-4B, the 4B counterpart of the right panel of Figure 3. OPSD→GRPO leads throughout training and converges to a higher final accuracy than GRPO→OPSD."
-        },
-        {
-          "page": 20,
-          "text": "Figure 6 reports the pairwise win rates on ResearchPlanGen-ML, a benchmark independent of all training data, scored by three expert judges (DeepSeek-V4-Flash, Kimi K2.6, and GLM-5.1). Our OPSD model defeats the RubricHub-trained OPSD model by 68.0% overall, confirming the higher quality of our benchmark, while"
-        },
-        {
-          "page": 20,
-          "text": "Figure 6 Pairwise win rates of fine-tuned Qwen3-1.7B variants on ResearchPlanGen-ML. Models trained on our data outperform the RubricHub-trained counterpart, and both trained models defeat the untrained base model, evidencing benchmark quality gains and genuine training improvements."
-        }
-      ],
-      "paperVisualPages": [
-        7,
-        8,
-        9,
-        15
-      ],
-      "eventAggregation": {
-        "total": 1,
-        "groups": [
-          {
-            "key": "官方来源",
-            "tone": "#16130f",
-            "items": [
-              {
-                "source": "HF Papers Trending",
-                "title": "PaperGym：以评分标准为中心的研究计划生成演化框架",
-                "url": "https://huggingface.co/papers/2608.31119",
-                "note": "原始发布 / 公告。",
-                "text": "PaperGym：以评分标准为中心的研究计划生成演化框架 —— 原始发布 / 公告。"
-              }
-            ]
-          }
-        ]
-      }
-    },
-    {
-      "recordId": "recvu1S4qSqy3r",
-      "sourceId": "papers-with-code-trending",
-      "title": "LightNav-0: Eliciting VLM Spatial Intelligence for Generalist Embodied Navigation",
-      "titleCn": "LightNav-0：通过显式空间智能实现通用具身导航",
-      "source": "PwC Trending",
-      "url": "https://huggingface.co/papers/2608.30935",
-      "category": "技术研究开源",
-      "contentType": "论文",
-      "publishedDate": "2026-08-31",
-      "publishedAtMs": 1788134400000,
-      "summary": "论文提出紧凑型通用具身导航模型 LightNav-0，以双通道指向表示空间意图，并用残差向量量化轨迹统一指令跟随、目标导航和视觉跟踪。作者报告其在多个公开仿真设置中取得单目导航领先结果，并展示跨机器人形态与真实场景的零样本迁移。",
-      "deepAnalysis": "【研究问题与核心结论】\n论文关注如何让预训练视觉语言模型已有的视觉定位、空间推理和指向能力直接服务于具身导航，并同时覆盖自然语言指令跟随、开放词汇目标导航和动态目标跟踪。现有方法通常为不同任务或机器人形态配置独立预测头、感知模块和动作接口，导致系统碎片化，跨环境与跨具身迁移能力有限。作者的核心结论是：通过显式空间指向、统一轨迹 token 化和具身无关的自回归接口，紧凑 VLM 可以成为通用导航骨干。论文摘要及 Fig. 1（PDF 第1页）称，LightNav-0 在覆盖三类任务的 10 个公开仿真设置中取得单目成功率领先，并可零样本迁移到人形、四足、空中和轮式机器人；这些结论主要由表格中的公开基准结果和真实世界展示支撑，而非仅由模型规模推断。\n\n【方法与创新】\n系统结构见 Fig. 2（PDF 第4页）：紧凑预训练 VLM 接收时间压缩的自中心 RGB 历史与自然语言目标，先生成空间推理痕迹，再输出三个残差向量量化（RVQ）动作 token；token 解码为未来 10 个 SE(2) 航点，最终由具身相关低层控制器执行。Fig. 3（PDF 第4页）的双通道指向标注区分 affordance 通道和 object 通道：前者表示可行局部方向、自由空间或航点，后者定位任务目标或目标位置。相对仅直接预测动作的导航基线，新增的架构核心是显式双通道空间意图接口和统一 token 接口，而不是任务专用预测头。Fig. 4（PDF 第5页）显示，10 步轨迹先由 256 项粗码本量化，再由两个 256 项残差码本逐级细化；非空 token 前缀即可解码为可执行的粗轨迹，这同时承担几何压缩和精度恢复功能。\n训练方面，Fig. 5（PDF 第7页）给出两阶段 embodied-reasoning 课程，涵盖空间推理、VQA、图像指向、视频问答、多图推理、 situated 3D QA、可供性与失败理解等；Fig. 6（PDF 第8页）显示监督微调混合了 VQA、指令跟随、目标导航、跟踪、VLN-CE、ScaleVLN、SRDF 和 INSIGHT-Bench。作者还使用 ER 中训、监督微调及在线多任务强化学习；Fig. 11（PDF 第13页）说明 GRPO 根据不同任务的可见性、到达、发现、效率和持续跟踪奖励计算优势。训练数据规模在 Fig. 1 中概括为 2K+ 场景、4K+ 小时 embodied data、742K+ 预训练样本和 15.2M+ 后续数据，但各阶段精确配比并未在给定证据中完整披露。\n\n【实验设计与关键结果】\n主要导航指标包括导航误差 NE、成功率 SR、SPL 和 nDTW。给定表格中的 Table IV（PDF 页码未随原文明确标注，内容为 ObjectNav）显示，在单目设置下，LightNav-0 在 MP3D 上 SR/SPL 为 73.7/62.8，在 HM3D v1 上为 73.6/64.5，在 HM3D v2 上为 67.4；同表中 Qwen-RobotNav-4B 在 MP3D 为 73.6/60.5、HM3D v2 为 68.6，8B 为 72.7/59.6、69.9，说明 LightNav-0 在 MP3D SR 略高且 SPL 更高，但在 HM3D v2 的 SR 低于两种 Qwen 模型。表中多视角结果不能与单目结果直接视为公平同类比较。\nFig. 1（PDF 第1页）汇总的柱状数值显示，LightNav-0 在 VLN-CE R2R Val-Unseen 的 SR 为 79.5，超过 Qwen-RobotNav-4B 的 75.6 和 8B 的 71.2；在 RxR Val-Unseen 中为 74.5，超过 8B 的 72.5、4B 的 71.2。图中还给出 HM3D-OVON Val Seen 为 55.3、Val Seen Synonyms 为 55.0、Val Unseen 为 53.3，以及 EVT-Bench 单目标跟踪（STT）SR 91.7、分心跟踪（DT）SR 82.6。正文进一步报告，在 EVT-Bench 上，STT 相对 ReferTrack 的 89.4 提升至 91.7，DT 相对 73.3 提升至 82.6，分心跟踪碰撞率从 5.51 降至 4.62；ReferTrack 在跟踪率指标上仍有优势。\nINSIGHT-Bench 的 Fig. 10（PDF 第10页）给出训练集 1,683 个场景、53,090 个 episode，评估集 210 个场景、1,097 个 episode；Fig. 12（PDF 第18页）的总体 SR 为 43.66%。正文给出的分组结果包括 House–Direction 74.0%（37/50）和 Institution–Extremum 18.0%（9/50），场景类型跨度 31.9 个百分点、指令类型跨度 20.5 个百分点，说明组合式语言歧义显著影响性能。Fig. 16（PDF 第21页）表明 2B 到 4B 骨干在连续 VLN 的 SR 和 SPL 均改善，8B 变化不一致；增加训练数据带来单调但递减的收益。\n\n【证据强度与局限】\n证据强度较高之处在于任务覆盖广、同时报告公开仿真基准、细分诊断和跨形态示例，并提供了场景及 episode 数量。其不足是给定原文未提供完整论文页码、所有表格、逐项消融数值、置信区间或统计显著性，因此“领先”在部分任务上只能依据汇总图和所给表格核验。不同基线使用的观测模态并不一致，深度、全景和里程计方法与单目 LightNav-0 的比较存在公平性边界；Table IV 也显示 LightNav-0 并非所有数据集指标都优于 Qwen-RobotNav。数据由 HM3D、MP3D、Habitat-GS、InteriorGS 和 VLNVerse 等来源生成，自动标注流程见 Fig. 7–9（PDF 第9—10页），但论文未披露的内容包括完整数据清洗规则、与预训练语料的去重和潜在泄漏检查、训练总算力、推理延迟、参数量精确值、随机种子以及失败案例分布。真实世界结果见 Fig. 15（PDF 第20页），但给定证据未提供真实部署的样本量、成功率、硬件配置和统计对照，因而更适合视为迁移示例而非充分的现实性能证明。\n\n【研究意义与后续问题】\nLightNav-0 的主要意义不是单纯扩大 VLM，而是证明显式空间指向可以作为视觉语言推理与动作生成之间的中间接口，并通过 RVQ 将连续几何轨迹转化为统一离散协议。INSIGHT-Bench 的交叉矩阵说明，场景结构与指令机制存在组合效应：熟悉住宅拓扑和明确自中心方向较易处理，而机构空间中的重复实例与 Extremum 比较更脆弱，这表明总体 SR 不能代表空间推理能力的均衡性。后续研究仍需回答：双通道指向究竟贡献多少，RVQ、时序压缩、ER 课程和 GRPO 各自的边际收益如何；训练场景与真实世界之间的几何、视觉和动力学差异能否通过严格分布外测试刻画；统一模型在不同控制频率、传感器噪声和执行器约束下是否保持稳定；以及如何降低自动生成轨迹和伪标注带来的偏差。对于真实机器人，还需要公开可重复的延迟、能耗、失败恢复和长期任务指标，才能将仿真领先结果转化为可靠的通用导航能力。",
-      "why": "该工作试图以单一自回归 VLM 和统一 token 接口替代任务及具身专用导航组件，为通用具身智能中的感知、空间推理与动作执行一体化提供了可验证范式。",
-      "impact": 88,
-      "novelty": 87,
-      "actionability": 82,
-      "urgency": "中",
-      "tags": [
-        "AI",
-        "多模态",
-        "Agent",
-        "开源"
-      ],
-      "imageUrl": "https://arxiv.org/html/2608.30935v1/pipeline.png",
-      "mediaAssets": {
-        "images": [
-          {
-            "url": "https://arxiv.org/html/2608.30935v1/pipeline.png",
-            "alt": "Fig. 2 : Overview of LightNav-0 . A compact pretrained VLM consumes a temporally compressed egocentric RGB history and a natural-language goal. It first emits pointing as an explicit spatial reasoning trace, followed by three residual vector-quantized (RVQ) action tokens. The action tokens decode to 10 future SE ⁡ ( 2 ) \\mathrm{SE}(2) waypoints and are executed by an embodiment-specific low-level controller. The same backbone, token interface, and objective are used for all navigation tasks."
-          },
-          {
-            "url": "https://arxiv.org/html/2608.30935v1/pointing.png",
-            "alt": "Fig. 3 : Automatic dual-channel pointing annotation. The affordance channel indicates a feasible local direction or free-space waypoint, whereas the object channel localizes the task goal, either a target object or a goal location."
-          },
-          {
-            "url": "https://arxiv.org/html/2608.30935v1/rvq.png",
-            "alt": "Fig. 4 : Hierarchical residual vector-quantized action tokenizer. A 10-step SE ⁡ ( 2 ) \\mathrm{SE}(2) trajectory is quantized by a coarse 256-entry codebook and two residual 256-entry codebooks. Each level visualizes all 256 candidates and highlights the selected codeword. Any non-empty token prefix decodes into an executable coarse trajectory, while successive residual levels progressively refine geometric precision."
-          },
-          {
-            "url": "https://arxiv.org/html/2608.30935v1/two_stage_vqa.png",
-            "alt": "Fig. 5 : 2-stage embodied-reasoning data curriculum. Stage I covers spatial reasoning, general VQA, image pointing, video QA, multi-image reasoning, situated 3D QA, affordance and failure understanding, and scene description. Stage II retains these capabilities through a rebalanced ER mixture during supervised co-training."
-          }
-        ],
-        "videos": []
-      },
-      "editorialStructure": "",
-      "pdfUrl": "https://arxiv.org/pdf/2608.30935.pdf",
-      "paperFullTextSource": "pdf",
-      "paperPages": 26,
-      "paperCaptions": [
-        {
-          "page": 1,
-          "text": "Fig. 1. LightNav-0: a compact generalist embodied navigation model. A single autoregressive model expresses spatial intent through affordance and object points and predicts RVQ-tokenized trajectories without task- or embodiment-specific prediction heads. The single model achieves state-of-the-art monocular success rates across 10 public simulation settings spanning instruction following, object goal navigation,"
-        },
-        {
-          "page": 4,
-          "text": "Fig. 2. Overview of LightNav-0. A compact pretrained VLM consumes a temporally compressed egocentric RGB history and a naturallanguage goal. It first emits pointing as an explicit spatial reasoning trace, followed by three residual vector-quantized (RVQ) action tokens. The action tokens decode to 10 future SE(2) waypoints and are executed by an embodiment-specific low-level controller. The same backbone, token interface, and objective are used for all navigation tasks."
-        },
-        {
-          "page": 4,
-          "text": "Fig. 3. Automatic dual-channel pointing annotation. The affordance channel indicates a feasible local direction or free-space ∆Ti waypoint, whereas the object channel localizes the task goal, either si = max 1, exp τp (2)a target object or a goal location."
-        },
-        {
-          "page": 5,
-          "text": "Fig. 4. Hierarchical residual vector-quantized action tokenizer. A 10-step SE(2) trajectory is quantized by a coarse 256-entry codebook and two residual 256-entry codebooks. Each level visualizes all 256 candidates and highlights the selected codeword. Any non-empty token prefix decodes into an executable coarse trajectory, while successive residual levels progressively refine geometric precision."
-        },
-        {
-          "page": 7,
-          "text": "Fig. 5. 2-stage embodied-reasoning data curriculum. Stage I covers spatial reasoning, general VQA, image pointing, video QA, multiimage reasoning, situated 3D QA, affordance and failure understanding, and scene description. Stage II retains these capabilities through a rebalanced ER mixture during supervised co-training. and quantitative cues needed to distinguish traversable free estimate camera motion, and preserve spatial relations when"
-        },
-        {
-          "page": 8,
-          "text": "Fig. 6. Composition of the supervised fine-tuning corpus. The task-balanced optimization mixture combines VQA with instruction following, object navigation, tracking, VLN-CE, ScaleVLN [72], SRDF [73], and INSIGHT-Bench data. The task proportions and instruction word cloud illustrate the diversity of the unified training corpus."
-        },
-        {
-          "page": 9,
-          "text": "Fig. 7. Automatic pre-annotation pipeline for INSIGHT-Bench. The pipeline first samples navigable viewpoints (orange dots) and renders RGB and metric-depth observations in 4 headings. Molmo2 then produces open-set image-space pointing predictions, which are lifted into 3D and merged across views. The green dots denote the resulting spatially consistent 3D target instances."
-        },
-        {
-          "page": 9,
-          "text": "Fig. 8. Automatic data-generation and instruction-labeling pipeline for INSIGHT-Bench. All scene sources are converted to a common 3D target inventory; we then draw a target and a start pose from which it is visible in at least one offline inventory view, plan a route on the navigation mesh, anchor the stop, and render an egocentric clip with action labels. The evaluated policy remains monocular, and the"
-        },
-        {
-          "page": 10,
-          "text": "Fig. 9. Two-axis diagnostic taxonomy of INSIGHT-Bench. The scene axis groups environments by dominant function and layout, independent of their source dataset. The instruction axis identifies the spatial mechanism required to resolve the goal. INSIGHT-Bench-Training INSIGHT-Bench-Eval"
-        },
-        {
-          "page": 10,
-          "text": "Fig. 10. Composition of INSIGHT-Bench. The training split contains 1,683 scenes and 53,090 episodes collected from HM3D/MP3D, Habitat-GS, InteriorGS, and VLNVerse, whereas the evaluation split contains 210 scenes and 1,097 episodes from Habitat-GS, InteriorGS, HM3D, and MP3D. The lower histograms show the Top-50 navigation-target frequencies on a logarithmic scale."
-        },
-        {
-          "page": 13,
-          "text": "Fig. 11. Online multi-task reinforcement-learning pipeline. We initialize online optimization from the supervised policy and collect largescale rollouts for all navigation tasks. Task-specific rewards evaluate visibility, position, and persistence for EVT; alignment, arrival, and termination for instruction following; and discovery, efficiency, and progress for object goal navigation. Rewards are normalized within each rollout group to compute advantages for GRPO policy updates."
-        },
-        {
-          "page": 18,
-          "text": "Fig. 12. Joint scene–instruction capability matrix of LightNav-0 on the INSIGHT-Bench evaluation split. Each cell reports SR and successful episodes over evaluated episodes. Warm cells fall below the overall SR of 43.66%, whereas cool cells exceed it; saturation encodes the magnitude of this deviation on the colorbar scale, and thin borders mark row, column, and overall totals."
-        },
-        {
-          "page": 19,
-          "text": "Fig. 13. Zero-shot generalization across game domains. The same LightNav-0 checkpoint follows language instructions in Counter-Strike 1.6 and VizDoom, tracks a moving target in Minecraft, and performs checkpoint-conditioned driving in Trigger Rally. Cyan and magenta markers visualize the predicted affordance and object points, respectively."
-        },
-        {
-          "page": 20,
-          "text": "Fig. 15. Zero-shot real-world generalization across tasks and scenes. LightNav-0 follows people and robotic targets, executes indoor and outdoor navigation instructions, and searches for open-vocabulary objects without model adaptation. Each rollout combines external views of the robot with the corresponding egocentric observations used by the policy."
-        },
-        {
-          "page": 21,
-          "text": "Fig. 16. Model, data, and environment scaling on continuous VLN. The left and right vertical axes report SR and SPL, respectively. (a) Scaling the backbone from 2B to 4B parameters improves both metrics on R2R and RxR, whereas the 8B checkpoint produces mixed changes. (b) Increasing the fraction of training data yields monotonic gains with diminishing returns near the full-data regime. (c) Expanding"
-        }
-      ],
-      "paperVisualPages": [
-        9,
-        10,
-        13,
-        18
-      ],
-      "eventAggregation": {
-        "total": 1,
-        "groups": [
-          {
-            "key": "官方来源",
-            "tone": "#16130f",
-            "items": [
-              {
-                "source": "PwC Trending",
-                "title": "LightNav-0：通过显式空间智能实现通用具身导航",
-                "url": "https://huggingface.co/papers/2608.30935",
-                "note": "原始发布 / 公告。",
-                "text": "LightNav-0：通过显式空间智能实现通用具身导航 —— 原始发布 / 公告。"
-              }
-            ]
-          }
-        ]
-      }
-    },
-    {
-      "recordId": "recvu2ZXD8ymcY",
-      "sourceId": "papers-with-code-trending",
-      "title": "StudentSim: Training LLM-based Student Simulators",
-      "titleCn": "StudentSim：训练基于大语言模型的个性化学生模拟器",
-      "source": "PwC Trending",
-      "url": "https://huggingface.co/papers/2609.01591",
-      "category": "技术研究开源",
-      "contentType": "论文",
-      "publishedDate": "2026-09-01",
-      "publishedAtMs": 1788220800000,
-      "summary": "论文提出两阶段 StudentSim 框架，先在多学生数据上进行 pooled training，再利用单个学生的稀疏记录进行个性化专门训练，同时评估行为保真度与指导响应性。基于涵盖棋类、二语英语写作和数学的 60 名学生基准，作者报告其个性化模拟器在三个领域均优于 GPT-5.4，并在棋类导师强化学习验证中改善了导师质量。",
-      "deepAnalysis": "【研究问题与核心结论】\n论文试图解决个性化 AI 导师缺少低成本、可扩展学生反馈的问题。既有知识追踪或状态跟踪模型能够拟合学生的历史行为，却通常没有接收自然语言解释和纠正的路径；提示式 LLM 学生则能流畅回应导师，但不一定保持目标学生真实的能力、错误模式和个体风格。因此，作者把学生模拟器定义为必须同时具备两项能力：行为保真度 F，即复现学生在独立作答时的真实响应；指导响应性 R，即在看到导师指导后，按照该指导更新初始错误响应。核心结论是，先进行跨学生 pooled training、再进行单学生 specialization 的 StudentSim，能够在三个领域同时取得较强 F 和 R；其固定模拟器还可以作为棋类导师强化学习的奖励来源，并获得专家对准确性、指导质量和个性化程度的更高评价。\n\n【方法与创新】\n方法采用两阶段训练管线（Figure 3，PDF 第5页）。Stage 1 汇聚同一领域多个学生的单轮记录与多轮记录，学习共享的错误模式以及学生接受指导后的修正规律；Stage 2 仅使用某一学生的少量记录，对基础模拟器进行专门化，从而形成每名学生一个模拟器。数据被统一整理为单轮问题—学生响应和多轮问题—错误响应—导师指导—规范修正响应的 schema。相对状态跟踪基线，新增了自然语言指导输入和修正响应建模；相对提示式角色扮演，新增了基于真实学生记录的参数化个体适配。这里的主要创新是训练范式和评测协议，而不是提出新的基础模型架构；摘要和给定方法证据未说明使用了新的 Transformer 架构。棋类导师 proof of concept 中，冻结 Stage-1 模拟器，并只训练风格与棋盘感知两个线性探针，将 move-quality、风格门控和感知门控相乘形成奖励。GRPO 使用 4 个 rollout、AdamW 学习率 1×10^-6、20 steps；StudentSim 奖励在本地模型上计算，属于工程部署设计而非核心算法创新。\n\n【实验设计与关键结果】\nSTUDENTSIMEVAL 覆盖 60 名学生：棋类 30 人、L2 英语写作 15 人、数学 15 人。数据来自 Lichess、EFCAMDAT 和数学基础辅导语料；每个学生都有与训练隔离的 held-out 记录。Table 1（PDF 第6页）显示，棋类 Stage 1/Stage 2 分别为 100,000/1,000 条实例，L2 为 7,800/73 条，数学为 23,400/153 条；三域多轮训练比例均为 0.20。每名测试学生的 held-out 单轮/多轮数量分别为：棋类 5,000/4,000，L2 26/40，数学 66/59（数学多轮范围 21–99）。\n\n评价指标为 F 和 R，所有方法在同一 per-student 训练记录上拟合，并在相同 held-out 记录上评分。基线包括棋类 Maia2、GPT-5.4，以及 L2 和数学中的未进行领域训练的 Qwen3-4B-Instruct；Table 2（PDF 第7页）报告 F，Table 3（PDF 第8页）报告 R。摘要给出的棋类数值为：StudentSim F=0.51、R=0.91；GPT-5.4 为 F=0.23、R=0.72；Maia2 为 F=0.45、R=0.27。Figure 4（PDF 第7页）展示同一盘面上三名真实玩家分别选择 e4、e3 和 Bg5，Maia2 将其坍缩为 ELO 模态的 e4，而个性化模拟器分别复现三种选择。Figure 5（PDF 第8页）展示 Socratic 指导：玩家错误走 1.g5g6、损失 8638 centipawn，模拟器在不直接给出目标格的提问式指导后推断出强制后将 f8b4。给定材料未提供 Table 2、Table 3 中 L2 与数学的具体数值，因此不能据此补充。棋类导师的人评见 Table 4（PDF 第10页），指标为无主动误导事实错误的准确率，以及 1–5 分的 guidance 和 personalization；均值来自 74 条标注和 8 名评审，摘要只明确报告 StudentSim 奖励条件优于无 RL 和 GPT-5.4 模拟器奖励条件，未提供三组具体均值。\n\n【证据强度与局限】\n证据强度主要来自统一协议、学生级训练/测试隔离、跨三个领域的比较，以及明确的消融式基线族，能够支持“同时提升 F 与 R”的方向性结论。棋类 Figure 4 和 Figure 5 还提供了个体差异复现及严格 Socratic 指导的实例证据。但样本仅 60 名学生，且每域学生数量不均；L2 与数学测试规模较小，数学多轮样本范围不一致。棋类和数学多轮指导由 LLM 按固定模板生成，L2 才使用真实教师纠正，这可能影响跨域外推和指导真实性。摘要称各方法在同一记录上训练和测试，但给定材料未披露完整随机种子、置信区间、统计显著性、所有运行标准差、失败案例和不同模型规模下的敏感性。GPT-5.4 角色扮演基线依赖外部 API，Maia2 不具备自然语言输入，因此比较揭示能力边界，却不完全等价。奖励实验使用 Stockfish depth-15 查表和特定 Socratic 风格，且人评仅 74 条标注；长期学习、遗忘、迁移及模拟器与真实学生之间的分布偏差仍未验证。\n\n【研究意义与后续问题】\n该工作的重要认识是，面向导师优化的学生模拟不能只追求“像学生”，还必须能在指导后以符合该学生特征的方式变化；F/R 双轴因此比单一行为预测更贴近教学控制需求。公开 STUDENTSIMEVAL 构造与评测代码，以及 GitHub 开源实现，使不同模拟器能够在固定学生级划分上复核。后续关键问题包括：如何从一步响应扩展到多轮知识获得、保持和遗忘；如何校准模拟器的不确定性并识别其与真实学生的系统性偏差；LLM 生成指导语料是否会导致奖励模型偏向模板化教学；以及在更多学科、真实教师互动和更大、更多样学生群体上，模拟器驱动的导师改进是否仍保持人类评审优势。",
-      "why": "该研究将学生模拟从单纯复现行为或流畅跟随指导，推进到同时建模个体能力差异与接受指导后的响应变化，为自适应 AI 导师训练提供了可复用的评测和奖励模型框架。",
-      "impact": 86,
-      "novelty": 88,
-      "actionability": 84,
-      "urgency": "中",
-      "tags": [
-        "AI",
-        "LLM",
-        "Agent",
-        "开源"
-      ],
-      "imageUrl": "",
-      "mediaAssets": {
-        "images": [],
-        "videos": []
-      },
-      "editorialStructure": "",
-      "pdfUrl": "https://arxiv.org/pdf/2609.01591.pdf",
-      "paperFullTextSource": "pdf",
-      "paperPages": 45,
-      "paperCaptions": [
-        {
-          "page": 2,
-          "text": "Figure 2 Scoring a student simulator. Education tracks a learner’s progress through what they produce independently and how far they advance once support arrives, the zone of proximal development [VYGOTSKY, 1980] that dynamic assessment operationalizes [Grigorenko and Sternberg, 1998]. We score whether a student simulator can serve as a feedback source for a tutor, which rests on"
-        },
-        {
-          "page": 5,
-          "text": "Figure 3 Two-stage training pipeline for STUDENTSIM. Stage 1 pools the sparse records of many students in a domain and trains one base simulator on what they share. Stage 2 specializes that base to a single student on that student’s own records, yielding one simulator per student."
-        },
-        {
-          "page": 6,
-          "text": "Table 1 Per-domain training data scale: Stage 1 (pooled training), Stage 2 (per-student specialization), and held-out evaluation per Stage-2 student. Stage 1 / Stage 2 instances count training records (single-turn plus multi-turn pooled); the multi-turn ratio is the fraction of multi-turn records (Ti) sampled into training batches, with the remainder single-turn (Si). The held-out columns count"
-        },
-        {
-          "page": 6,
-          "text": "Table 1 summarizes the per-domain Stage 1 and Stage 2 training data scale. Construction of the multi-turn corpora (real-teacher-annotated for L2, controllable LLM-tutor-generated for chess and math under fixed style templates) is detailed in Appendix F.2; for chess and math, the LLM determines only the wording of the guidance, while the response"
-        },
-        {
-          "page": 7,
-          "text": "Table 2 Behavioral fidelity (F) by domain. F is how well the simulator’s response to a problem matches the student’s own recorded response. Naive baseline is Maia2 for chess (a chess-specific human-style move predictor), and Qwen3-4B-Instruct without per-domain training for L2 and math; chess Qwen3-4B-Instruct is omitted because the untrained model cannot reliably predict"
-        },
-        {
-          "page": 7,
-          "text": "Figure 4 Behavior fidelity on a held-out chess position. Three real players in our held-out set choose three different moves at this board (panel a): Player A plays e4 (gold, central push), Player B plays e3 (rose, solid), Player C plays Bg5 (teal, pin on Nf6). Maia2 (panel b) collapses all three onto the ELO-modal e4. GPT-5.4 (panel c), prompted in-context with each player’s recent history, misses"
-        },
-        {
-          "page": 7,
-          "text": "Fig. 4 shows one held-out position where three real players in our test set choose three different moves. Each move reflects a different style: center push, solid, and tactical pin. The trained simulators reproduce all three actual moves, one per player. This is the capability per-student training is meant to add: at a fixed input, the simulator’s output reflects"
-        },
-        {
-          "page": 8,
-          "text": "Table 3 Guidance responsiveness (R) by domain. R is how well the simulator revises its initial wrong response to the canonical correction after reading the tutor’s guidance. Naive baseline is Maia2 for chess (no natural-language input pathway, so its score is a zero-guidance lower bound); Qwen3-4B-Instruct without per-domain training for L2 and math. Run-to-run standard deviations across"
-        },
-        {
-          "page": 8,
-          "text": "Figure 5 Guidance-following capability on a held-out chess position. The held-out player blundered with 1.g5g6 (centipawn loss = 8638), missing a forced queen check on f8b4. The tutor’s socratic prompt contrasts the pawn push with “a forcing queen move that gives check from the queenside” but never names a destination square. Arrows on the board show each source’s predicted move."
-        },
-        {
-          "page": 8,
-          "text": "Fig. 5 examines the strictest of the four chess guidance modes, Socratic. Here the tutor leads the student toward the fix through a chain of questions and does not state the corrected move, so the simulator must infer the canonical correction from that reasoning. The position is held out from both pooled training and per-player training. The player’s actual"
-        },
-        {
-          "page": 9,
-          "text": "Figure 6 Tutor RL with a frozen student simulator as the reward source. Each episode replays a real student’s wrong answer, the tutor policy proposes guidance, the frozen simulator revises, and the improvement in move quality drives the RL update. of questions and outputs the engine best move f8b4. That a 4B trained simulator solves the Socratic case where"
-        },
-        {
-          "page": 10,
-          "text": "Table 4 Human evaluation of the AI chess tutors. Accuracy is the percentage of responses with no actively misleading factual error; guidance and personalization are 1–5 ratings. Scores are means over the study’s 74 annotations from 8 annotators. The triply-annotated and 2000+ elo expert subsets in Appendix E.5 give the same ordering."
-        },
-        {
-          "page": 21,
-          "text": "Figure 7 The position behind the four-style example. Black to move, FEN 8/6p1/p2Pp1k1/1p2P3/4K3/8/P7/8 b - - 0 41. Red marks the move the player actually made (b5b4); green marks the engine best move m∗(g6f7). Listing 3The same position under all four guidance styles, Player B"
-        },
-        {
-          "page": 23,
-          "text": "Table 5 Chess corpus statistics. Stage-1 / Stage-2 training counts and per-student held-out evaluation counts (F test, R test) are reported in Table 1. Field Value"
-        },
-        {
-          "page": 25,
-          "text": "Table 6 Second-language English writing corpus statistics. Stage-1 / Stage-2 training counts and per-student held-out evaluation counts (F test, R test) are reported in Table 1. Shaded rows are the subcorpus we use and the learners we train on; the two unshaded scale rows describe the full release for context."
-        },
-        {
-          "page": 27,
-          "text": "Table 7 Mathematics corpus statistics. Stage-1 / Stage-2 training counts and per-student held-out evaluation counts (F test, R test) are reported in Table 1. The shaded row is the population our simulators are trained on; the rows above it describe the release it is drawn from."
-        },
-        {
-          "page": 31,
-          "text": "Table 3. The closed-source baselines (GPT-4o, GPT-5.4) are queried with API temperature 0 and are much less sensitive to within-checkpoint jitter. For faithful comparison the headline math number is reported on the full no-cap 879-record set; we recommend reproducing on the same set rather than on a downsample."
-        },
-        {
-          "page": 31,
-          "text": "Table 8 Chess: R by guidance mode across the four chess tutor modes. Population mean across the 30 chess players’ held-out multi-turn records, equal records per mode within each player; subscripts are standard deviations across the three training seeds of Table 22. Maia2 reads only the board position and the player rating, so the four modes present it with the same input and its R does"
-        },
-        {
-          "page": 31,
-          "text": "Table 22. Maia2 reads only the board position and the player rating, so the four modes present it with the same input and its R does not decompose by mode. mode Maia2 GPT-4o GPT-5.4 STUDENTSIM"
-        },
-        {
-          "page": 31,
-          "text": "Table 9 L2: R by guidance mode across the two L2 tutor modes (point-based, rule-based). Population mean across the 15 L2 learners’ held-out multi-turn records, 20 records per mode within each learner. mode base (Qwen3-4B) GPT-4o GPT-5.4 STUDENTSIM"
-        },
-        {
-          "page": 31,
-          "text": "Table 10 Math: R by guidance mode across the three math tutor modes (error remediation, Socratic, conceptual). Population mean across the 15 math students’ held-out multi-turn records, 293 records per mode in the 879-record total (modes evenly represented within each per-student Ti)."
-        },
-        {
-          "page": 32,
-          "text": "Table 11 Ablation of cross-student pooling in chess Stage 1. The reference arm uses the default pooled Stage-1 corpus of 100,000 records from 100 players. The matched ablation replaces this with one player’s own 1,000 records repeated 100 times, which preserves the Stage-1 optimizer budget (391 steps) and all training hyperparameters. Both arms then run the same Stage-2 specialization on that"
-        },
-        {
-          "page": 33,
-          "text": "Table 12 Modality sweep on chess. The board image adds 0.001 to F and requires a vision tower in the training loop; the two arms are matched on effective batch size. Modality F training cost (relative)"
-        },
-        {
-          "page": 33,
-          "text": "Table 12 shows that the visual board does not improve F in any meaningful sense. The textual board encoding (FEN plus the candidate-move and history features described in Section 4) already specifies the full game state relevant to move selection, so the rendered image adds little new information beyond what the text encoding already carries. We"
-        }
-      ],
-      "paperVisualPages": [
-        6,
-        10,
-        23,
-        25
-      ],
-      "eventAggregation": {
-        "total": 1,
-        "groups": [
-          {
-            "key": "官方来源",
-            "tone": "#16130f",
-            "items": [
-              {
-                "source": "PwC Trending",
-                "title": "StudentSim：训练基于大语言模型的个性化学生模拟器",
-                "url": "https://huggingface.co/papers/2609.01591",
-                "note": "原始发布 / 公告。",
-                "text": "StudentSim：训练基于大语言模型的个性化学生模拟器 —— 原始发布 / 公告。"
-              }
-            ]
-          }
-        ]
-      }
-    },
-    {
-      "recordId": "recvtXfcLk9dFN",
-      "sourceId": "papers-with-code-trending",
-      "title": "DreamX-Creator: Democratizing Native Audio-Video Generation at 2K Resolution",
-      "titleCn": "DreamX-Creator：面向2K分辨率的原生音视频生成",
-      "source": "PwC Trending",
-      "url": "https://huggingface.co/papers/2608.31106",
-      "category": "技术研究开源",
-      "contentType": "论文",
-      "publishedDate": "2026-08-31",
-      "publishedAtMs": 1788134400000,
-      "summary": "论文提出一个以7B生成器为核心的原生联合音视频生成系统，输入首帧和文本提示，同时对专门化的音频与视频流进行去噪，并通过门控跨模态注意力实现交互。系统还包括统一音视频数据处理、渐进式联合训练、多模态反馈强化学习，以及面向2K输出的自回归一步精炼器。",
-      "deepAnalysis": "【研究问题与核心结论】\n论文关注音频与视频是否能够在同一生成过程中被联合建模，并进一步生成具有时序同步性的高分辨率音视频。作者指出，既有视频生成器经常不生成音频，或者先生成视频、再以独立阶段合成声音，这种拆分限制了视觉动态与声学事件之间的相互建模。DreamX-Creator 1.0以7B生成器为核心，在首帧和文本提示条件下，对音频、视频两个模态流进行联合去噪；论文摘要声称，该系统能够实现原生且同步的音视频生成，性能可与当时最先进的开源系统竞争，并通过发布紧凑型7B生成器和2K精炼器降低研究与使用门槛。由于给定材料仅包含摘要与项目链接，以下不能进一步核验其完整论文中的定量结论。\n\n【方法与创新】\n系统由多个相互衔接的组件构成。首先，生成器采用模态专用的音频流和视频流：网络前半部分分别处理两种模态，后半部分通过Gated Cross-Modal Attention进行耦合。该注意力机制不是简单地全量融合，而是对每个激活的跨模态注意力头输出施加token级和head级门控，摘要将其描述为对跨模态信息流进行细粒度调制。这属于架构层面的主要新增设计。其次，Audio-Video Data System负责构造和筛选时间一致的片段，生成结构化多模态标注，并按能力组织数据池；这些内容更接近数据工程与训练体系设计，摘要未给出其具体筛选规则、标注模型或数据规模。再次，Progressive Joint Training由两个音视频预训练阶段和High-Quality Finetuning组成，属于训练流程安排，而非新的网络架构。Audio-Video Reinforcement Learning使用Modality-Aware Multimodal Feedback，将视频、音频及跨模态反馈分别路由至相应流，属于后训练与反馈建模机制。最后，2K输出采用Autoregressive 1-Step 2K Refinement：先把双向多步教师适配为自回归多步精炼器，再蒸馏为学生模型，使学生每个时间块仅需一次去噪评估；这同时包含教师改造、蒸馏和推理效率工程优化。\n\n【实验设计与关键结果】\n给定原文未提供实验章节、数据集名称、基线列表、评价指标、消融实验、样本数量或具体数值。摘要仅给出定性层面的结论，即DreamX-Creator的原生音视频生成性能“可与最先进开源系统竞争”，但没有说明竞争对象、比较协议或统计结果，因此不能将其转写为可核验的领先幅度。原文也未提供Figure或Table内容、坐标轴、图例、表格数值及PDF页码，故不存在可据此引用的图表结论。能够确认的系统条件包括：生成器规模为7B；输入为首帧和文本提示；输出目标包括2K分辨率；2K精炼学生在每个时间块执行一次去噪评估。至于训练数据的数量与来源、视频时长、音频采样率、分辨率定义、推理时延、显存占用、质量与同步性的测量方法，论文未披露于给定摘要中。\n\n【证据强度与局限】\n从研究主张与方法描述的对应关系看，论文明确说明了问题、系统组件及发布内容，足以证明其提出了一个联合音视频生成方案；但不足以独立支持“性能具有竞争力”这一实验性结论。首先，样本范围、数据分布和能力覆盖未披露，无法判断系统对音乐、对白、环境声、强运动或复杂声画因果关系的泛化能力。其次，没有公开定量指标与统计显著性，也没有看到单模态生成、后处理音频流水线、无门控跨模态注意力或不同精炼步数的公平对照。再次，训练数据由系统自行构造、过滤和标注，摘要未说明潜在重复样本、训练测试泄漏或评测集污染。计算成本、训练硬件、训练时长、参数量是否仅指生成器、精炼器额外开销及实际推理吞吐均未披露。失败案例、同步错误类型和音频幻觉也未披露。虽然项目链接表明作者计划开放代码或模型资源，但仅凭给定材料无法确认权重、数据、完整配置、评测脚本和许可证是否齐全，因此复现程度仍需以仓库和PDF正文核验。\n\n【研究意义与后续问题】\n这项工作的重要意义在于将音频从视频生成后的附加模块提升为与视频共同去噪、共同受反馈约束的生成模态，并尝试用门控跨模态交互处理联合建模中可能存在的信息干扰问题。其训练阶段、反馈路由和2K一步精炼器形成了从数据到生成再到高分辨率推理的完整系统假设，说明原生音视频生成的瓶颈并不只在基础网络，也在时间一致数据、模态专用反馈和高分辨率采样效率。然而，仍需回答：门控机制究竟改善了声画同步还是仅改善单模态质量；音频与视频反馈如何标定并避免奖励冲突；不同模态的时间粒度如何对齐；一步精炼在快速运动、细粒度音效和长时序场景中是否损失质量；7B规模相对更大模型的能力边界是什么；以及开放模型在版权、训练数据可追溯性和生成内容识别方面如何评估。这些问题需要完整消融、跨数据集测试和可复现实验加以验证。",
-      "why": "该工作试图解决现有视频生成器缺少音频或采用独立音频后处理、因而难以联合建模视觉动态与声学事件的问题。",
-      "impact": 78,
-      "novelty": 82,
-      "actionability": 72,
-      "urgency": "中",
-      "tags": [
-        "多模态",
-        "开源",
-        "产品"
-      ],
-      "imageUrl": "",
-      "mediaAssets": {
-        "images": [],
-        "videos": []
-      },
-      "editorialStructure": "",
-      "pdfUrl": "https://arxiv.org/pdf/2608.31106.pdf",
-      "paperFullTextSource": "abstract",
-      "paperPages": 0,
-      "paperCaptions": [],
-      "paperVisualPages": [],
-      "eventAggregation": {
-        "total": 1,
-        "groups": [
-          {
-            "key": "官方来源",
-            "tone": "#16130f",
-            "items": [
-              {
-                "source": "PwC Trending",
-                "title": "DreamX-Creator：面向2K分辨率的原生音视频生成",
-                "url": "https://huggingface.co/papers/2608.31106",
-                "note": "原始发布 / 公告。",
-                "text": "DreamX-Creator：面向2K分辨率的原生音视频生成 —— 原始发布 / 公告。"
-              }
-            ]
-          }
-        ]
-      }
-    },
-    {
       "recordId": "recvu8ON0Oui0t",
       "sourceId": "wallstreetcn",
       "title": "博通史上最强指引的底气：AI巨头集体“抢芯”，谷歌不再是唯一答案 - 华尔街见闻",
@@ -643,7 +164,7 @@
       },
       "editorialStructure": "source",
       "eventAggregation": {
-        "total": 8,
+        "total": 6,
         "groups": [
           {
             "key": "官方来源",
@@ -696,122 +217,6 @@
                 "url": "https://www.guokr.com/article/470109",
                 "note": "同事件的其它源头报道。",
                 "text": "谷歌发布 Gemini 3.8 Flash；淘宝App突发大面积故障；我国主导的腿式机器人国际标准正式发布| 果壳 科技有意思 —— 同事件的其它源头报道。"
-              },
-              {
-                "source": "X · @officiallogank",
-                "title": "Gemini 3.8 Flash发布：Agent与编程能力再提升",
-                "url": "https://x.com/officiallogank/status/2095175881690173885",
-                "note": "同事件的其它源头报道。",
-                "text": "Gemini 3.8 Flash发布：Agent与编程能力再提升 —— 同事件的其它源头报道。"
-              },
-              {
-                "source": "X · @officiallogank",
-                "title": "Gemini 3.8 Flash 在 DeepSWE 1.1 上得分 73.7%",
-                "url": "https://x.com/officiallogank/status/2095178478505328918",
-                "note": "同事件的其它源头报道。",
-                "text": "Gemini 3.8 Flash 在 DeepSWE 1.1 上得分 73.7% —— 同事件的其它源头报道。"
-              }
-            ]
-          }
-        ]
-      }
-    },
-    {
-      "recordId": "recvtKTMDQs1rG",
-      "sourceId": "modelscope-home",
-      "title": "GLM-5.3",
-      "titleCn": "GLM-5.3：后训练驱动的代码与网络安全能力提升",
-      "source": "ModelScope 首页新模型",
-      "url": "https://www.modelscope.cn/models/zhipuai/glm-5.3",
-      "category": "前沿模型公司",
-      "contentType": "文章",
-      "publishedDate": "2026-08-28",
-      "publishedAtMs": 1787856468000,
-      "summary": "GLM-5.3沿用GLM-5.2基础模型，官方称其全部增益来自后训练，并在复杂编程、长程任务和网络安全漏洞发现方面取得显著提升。模型支持通过多种推理框架本地部署，并可调节推理预算。",
-      "deepAnalysis": "## 基准测试 || Benchmark\nGLM-5.3与GLM-5.2使用相同基础模型，原文将性能提升归因于后训练。官方称其在复杂编程和长程任务上明显增强，并宣称是代码能力最强的开放权重模型之一：相较GLM-5.2，内部Z.ai Code Bench提升50%；公开测试中，Terminal Bench 3.0为28.3，对比GLM-5.2的4.6，Agents' Last Exam为28.5，对比23.8，AutomationBench为48.2，对比26.2，GDPval-AA v2为1769，对比1508。\n\n## 本地部署 GLM-5.3 || Serve GLM-5.3 Locally\n原文列出SGLang、vLLM、TokenSpeed、Transformers、KTransformers和Unsloth等部署框架，并提供对应教程或文档；Ascend NPU平台则支持vLLM-Ascend、xLLM和SGLang。这表明模型不仅面向托管接口，也具备开放权重生态中的本地推理适配路径，但原文未给出参数规模、显存要求、吞吐、许可证或实际硬件成本，不能据此推断其部署门槛。\n\n## 注意事项 || Note\nGLM-5.3可通过reasoning_effort控制思考预算，参数接受low、high和max三档；未传入或填写其他值时默认max。官方要求复现基准和排行榜结果时保持max。聊天模板中的clear_thinking默认值为false，聊天场景需显式传入clear_thinking=true，以控制是否清除思考内容。上述设置会直接影响推理行为与评测可比性。\n\n## 脚注 || Footnotes\n官方披露了较细的评测环境：HLE w/ Tools最多使用163,840个输出token和300,000上下文，NL2Repo使用1M上下文，DeepSWE使用400K上下文并设置6小时超时；Terminal Bench 3.0采用Claude Code运行器、400K上下文、最多600轮交互和每次任务10小时上限，报告三次rollout的平均结果。CyberGym覆盖1,507个任务，采用单次Pass@1；ExploitGym覆盖869个任务，按2小时和6小时预算报告单次Pass@1。",
-      "why": "其亮点不只是代码基准提升，还包括在CyberGym漏洞发现及ExploitGym利用任务中呈现的网络安全能力增长，且官方提供了较完整的复现参数和本地部署路径。",
-      "impact": 87,
-      "novelty": 82,
-      "actionability": 88,
-      "urgency": "高",
-      "tags": [
-        "LLM",
-        "Agent",
-        "开源",
-        "端侧"
-      ],
-      "imageUrl": "https://cdn.modelscope.cn/social-thumbnails/models/zhipuai/glm-5.3.png",
-      "mediaAssets": {
-        "images": [],
-        "videos": [],
-        "cover": "https://cdn.modelscope.cn/social-thumbnails/models/zhipuai/glm-5.3.png",
-        "curatedBy": "llm"
-      },
-      "editorialStructure": "source",
-      "eventAggregation": {
-        "total": 1,
-        "groups": [
-          {
-            "key": "官方来源",
-            "tone": "#16130f",
-            "items": [
-              {
-                "source": "ModelScope 首页新模型",
-                "title": "GLM-5.3：后训练驱动的代码与网络安全能力提升",
-                "url": "https://www.modelscope.cn/models/zhipuai/glm-5.3",
-                "note": "原始发布 / 公告。",
-                "text": "GLM-5.3：后训练驱动的代码与网络安全能力提升 —— 原始发布 / 公告。"
-              }
-            ]
-          }
-        ]
-      }
-    },
-    {
-      "recordId": "recvtQ0liVfrG7",
-      "sourceId": "zhipu-modelscope",
-      "title": "GLM-5.3-BF16",
-      "titleCn": "GLM-5.3：后训练驱动的开源权重编码与长程任务模型",
-      "source": "智谱 ModelScope 官方模型",
-      "url": "https://www.modelscope.cn/models/zhipuai/glm-5.3-bf16",
-      "category": "前沿模型公司",
-      "contentType": "文章",
-      "publishedDate": "2026-08-28",
-      "publishedAtMs": 1787856591000,
-      "summary": "智谱称，GLM-5.3与GLM-5.2采用相同基础模型，性能提升主要来自后训练，在复杂编码、长程任务和网络安全漏洞发现方面取得显著进步。模型支持多种本地推理框架，并可通过reasoning_effort控制思考预算。",
-      "deepAnalysis": "## 模型能力变化与主要结论 || GLM-5.3 uses the same base model as GLM-5.2 — every gain comes from post-training\n原文明确表示，GLM-5.3沿用GLM-5.2的基础模型，新增收益全部归因于后训练。智谱称其在复杂编码和长程任务上明显增强，并将其定位为能力最强的开放权重编码模型之一：内部Z.ai Code Bench较GLM-5.2提升50%，公开评测中在Terminal Bench 3.0和Agents' Last Exam上达到开源模型SOTA。表格显示，GLM-5.3在CyberGym、AutomationBench和GDPval-AA v2等项目领先，但在若干编码和代理评测中仍低于其他模型或闭源系统。\n\n## 涌现的网络安全能力 || Emergent Cyber Capability\n原文称，随着后训练规模扩大，网络安全能力的发展速度超出预期。GLM-5.3在CyberGym漏洞发现任务上以84.5分位列表格最高，并且在利用链更靠后的环节增幅最大；在ExploitGym中，2小时和6小时结果分别为105和130，显著高于GLM-5.2的29和39。ExploitBench得分也由24.4提升至54.4。这里的结果来自特定代理框架、任务容器、超时预算和单次Pass@1等设置，体现的是评测条件下的能力，不等同于现实环境中的普适攻击效果。\n\n## 本地部署 GLM-5.3 || Serve GLM-5.3 Locally\n模型支持SGLang、vLLM、TokenSpeed、Transformers、KTransformers和Unsloth等推理或部署框架；Ascend NPU平台则可使用vLLM-Ascend、xLLM和SGLang。多框架支持降低了研究、工程验证和本地化部署门槛，也使模型具备在不同硬件与端侧基础设施上进行适配的可能性，但原文没有提供硬件需求、吞吐、显存占用或量化配置，因此不能据此判断实际部署成本和端侧性能。\n\n## 注意事项 || Note\nGLM-5.3通过reasoning_effort参数控制思考预算，支持low、high和max三档；未传入或传入其他值时默认为max。原文建议复现基准和排行榜结果时保持max，以确保评测设置一致。聊天模板中的clear_thinking默认值为false，聊天场景应显式设为true。上述参数会影响输出过程与资源消耗，是复现实验结果、比较服务成本和设计应用交互时需要固定的配置。\n\n## 脚注 || Footnotes\n脚注说明了各项评测所使用的温度、上下文长度、最大输出、代理工具、超时限制、容器隔离和防作弊措施。例如部分编码任务使用400K至1M上下文，CyberGym覆盖1,507个任务，ExploitGym基于869个任务并按模型吞吐率折算时间预算。不同基准的执行框架、评判器和采样策略差异较大，表格分数应理解为原文报告的条件性结果，而不宜视为完全同口径的综合排名。",
-      "why": "其价值在于展示了后训练对代码智能、工具使用和网络安全任务能力的推动，同时提供了较完整的开放部署与评测复现信息。",
-      "impact": 86,
-      "novelty": 78,
-      "actionability": 88,
-      "urgency": "高",
-      "tags": [
-        "LLM",
-        "Agent",
-        "开源",
-        "端侧"
-      ],
-      "imageUrl": "https://cdn.modelscope.cn/social-thumbnails/models/zhipuai/glm-5.3-bf16.png",
-      "mediaAssets": {
-        "images": [],
-        "videos": [],
-        "cover": "https://cdn.modelscope.cn/social-thumbnails/models/zhipuai/glm-5.3-bf16.png",
-        "curatedBy": "llm"
-      },
-      "editorialStructure": "source",
-      "eventAggregation": {
-        "total": 1,
-        "groups": [
-          {
-            "key": "官方来源",
-            "tone": "#16130f",
-            "items": [
-              {
-                "source": "智谱 ModelScope 官方模型",
-                "title": "GLM-5.3：后训练驱动的开源权重编码与长程任务模型",
-                "url": "https://www.modelscope.cn/models/zhipuai/glm-5.3-bf16",
-                "note": "原始发布 / 公告。",
-                "text": "GLM-5.3：后训练驱动的开源权重编码与长程任务模型 —— 原始发布 / 公告。"
               }
             ]
           }
@@ -885,57 +290,6 @@
                 "url": "https://www.huxiu.com/article/4888226.html",
                 "note": "原始发布 / 公告。",
                 "text": "超过半数因AI裁员的企业事后后悔并重新招聘 —— 原始发布 / 公告。"
-              }
-            ]
-          }
-        ]
-      }
-    },
-    {
-      "recordId": "recvtW9WBRobE2",
-      "sourceId": "modelscope-home",
-      "title": "DeepSeek-V4-Flash-Vision-Exp",
-      "titleCn": "DeepSeek-V4-Flash-Vision-Exp：实验性多模态模型",
-      "source": "ModelScope 首页新模型",
-      "url": "https://www.modelscope.cn/models/deepseek-ai/deepseek-v4-flash-vision-exp",
-      "category": "前沿模型公司",
-      "contentType": "文章",
-      "publishedDate": "2026-08-31",
-      "publishedAtMs": 1788181976000,
-      "summary": "DeepSeek-V4-Flash-Vision-Exp 是 DeepSeek-V4 系列首个实验性多模态模型，在 DeepSeek-V4-Flash 架构上加入视觉模块并继续训练。原文称其多模态智能体能力较 DeepSeek-V4-Flash-0731 有明显提升，同时保持相近的纯文本智能体表现，并提供最小化推理实现与 MIT 许可证。",
-      "deepAnalysis": "## 引言 || Introduction\nDeepSeek-V4-Flash-Vision-Exp 被介绍为 DeepSeek-V4 系列首个实验性多模态模型，基于 DeepSeek-V4-Flash 架构加入视觉模块并继续训练，以获得视觉理解能力。原文称，相较 DeepSeek-V4-Flash-0731，该模型的多模态智能体能力有显著提升，而纯文本智能体任务表现大体相当。\n\n## 仓库布局 || Repository layout\n仓库包含 tokenizer、提示词编码参考实现和最小化 PyTorch 推理代码，覆盖视觉编码器与对齐器、DFlash attention、MoE、Hyper-Connections 以及 DSpark forward path。目录还提供模型配置、生成配置、权重索引和推理示例，能够支撑从提示构造到模型执行的基本复现链路。\n\n## 提示词编码 || Prompt encoding\n提示词编码支持 OpenAI 风格的 JSON content blocks，也支持紧凑的 TXT 路径表示。仓库声称，inference/examples/ 下的两个示例使用这两种输入形式时，会编码成一致的提示词和 token ID，从而为不同调用格式之间的行为对齐提供了明确参考。\n\n这一设计把输入协议与模型推理解耦，便于开发者单独验证编码结果，再进行视觉推理。原文仅说明编码等价性和使用入口，并未给出更广泛的输入兼容性、异常处理或性能数据，因此不能据此推断其已覆盖所有生产环境消息格式。\n\n## 最小化推理 || Minimal inference\ninference/README.md 提供依赖安装、检查点转换以及 TXT/JSON 推理命令；结合仓库中的配置、权重索引和视觉相关实现，使用者可以按文档完成从模型文件准备到示例调用的基础流程。其价值主要在于降低研究者检查视觉编码、对齐和前向路径的门槛。\n\n不过，原文没有披露完整权重规模、显存需求、吞吐、延迟、量化方案或部署限制，也没有提供独立复现实验结果。因此，该仓库更适合作为实验性验证和工程集成起点，不能仅凭“最小化推理”表述判断其已具备成熟的生产部署效率。\n\n## 许可证 || License\n该仓库采用 MIT License。若许可证文本与仓库实际内容一致，开发者可在较宽松的许可框架下研究、修改和集成相关代码；但原文未进一步说明模型权重、数据、基准使用规则或第三方组件是否存在额外约束，实际商用仍需分别核查这些部分。",
-      "why": "该模型将视觉理解、智能体任务和可复现的开源推理代码结合，显示 DeepSeek 正在把 V4-Flash 架构扩展至多模态智能体场景。",
-      "impact": 82,
-      "novelty": 84,
-      "actionability": 86,
-      "urgency": "中",
-      "tags": [
-        "多模态",
-        "Agent",
-        "开源",
-        "LLM"
-      ],
-      "imageUrl": "https://cdn.modelscope.cn/social-thumbnails/models/deepseek-ai/deepseek-v4-flash-vision-exp.png",
-      "mediaAssets": {
-        "images": [],
-        "videos": [],
-        "cover": "https://cdn.modelscope.cn/social-thumbnails/models/deepseek-ai/deepseek-v4-flash-vision-exp.png",
-        "curatedBy": "llm"
-      },
-      "editorialStructure": "source",
-      "eventAggregation": {
-        "total": 1,
-        "groups": [
-          {
-            "key": "官方来源",
-            "tone": "#16130f",
-            "items": [
-              {
-                "source": "ModelScope 首页新模型",
-                "title": "DeepSeek-V4-Flash-Vision-Exp：实验性多模态模型",
-                "url": "https://www.modelscope.cn/models/deepseek-ai/deepseek-v4-flash-vision-exp",
-                "note": "原始发布 / 公告。",
-                "text": "DeepSeek-V4-Flash-Vision-Exp：实验性多模态模型 —— 原始发布 / 公告。"
               }
             ]
           }
@@ -1084,7 +438,7 @@
       },
       "editorialStructure": "",
       "eventAggregation": {
-        "total": 3,
+        "total": 1,
         "groups": [
           {
             "key": "官方来源",
@@ -1096,26 +450,6 @@
                 "url": "https://github.com/firecrawl/firecrawl/releases/tag/v2.11.290",
                 "note": "原始发布 / 公告。",
                 "text": "Firecrawl v2.11.290：面向智能体的可扩展网页搜索、抓取与交互 API —— 原始发布 / 公告。"
-              }
-            ]
-          },
-          {
-            "key": "相关报道",
-            "tone": "#2b6cb0",
-            "items": [
-              {
-                "source": "GitHub Trending",
-                "title": "Firecrawl v2.11.278：面向 AI Agent 的可交互网页数据 API",
-                "url": "https://github.com/firecrawl/firecrawl/releases/tag/v2.11.278",
-                "note": "同事件的其它源头报道。",
-                "text": "Firecrawl v2.11.278：面向 AI Agent 的可交互网页数据 API —— 同事件的其它源头报道。"
-              },
-              {
-                "source": "GitHub Trending",
-                "title": "Firecrawl 发布 v2.11.281：面向 Agent 的规模化网页搜索与抓取上下文 API",
-                "url": "https://github.com/firecrawl/firecrawl/releases/tag/v2.11.281",
-                "note": "同事件的其它源头报道。",
-                "text": "Firecrawl 发布 v2.11.281：面向 Agent 的规模化网页搜索与抓取上下文 API —— 同事件的其它源头报道。"
               }
             ]
           }
@@ -1230,55 +564,6 @@
       }
     },
     {
-      "recordId": "recvu7Bcb3NH05",
-      "sourceId": "github-trending",
-      "title": "harry0703/MoneyPrinterTurbo v1.3.6",
-      "titleCn": "MoneyPrinterTurbo v1.3.6：支持多模型视频生成与批量自动化",
-      "source": "GitHub Trending",
-      "url": "https://github.com/harry0703/moneyprinterturbo/releases/tag/v1.3.6",
-      "category": "技术研究开源",
-      "contentType": "Github热榜",
-      "publishedDate": "2026-09-02",
-      "publishedAtMs": 1788359561000,
-      "summary": "开源项目 MoneyPrinterTurbo 于 2026 年 9 月 2 日发布 v1.3.6，可根据主题或关键词通过自动化 AI 工作流生成高清短视频。本次更新接入 Volcano Engine Ark Seedance、OFox、Metaso MiniMax H3 等视频生成能力，并增强了图像、LLM、CLI 批处理和自动发布配置。",
-      "deepAnalysis": "【核心内容】\nMoneyPrinterTurbo 是一个基于 Python 的开源短视频自动化项目，目标是利用 AI 大模型和自动化工作流，根据主题或关键词一键生成高清短视频。v1.3.6 于 2026 年 9 月 2 日发布。截至原文页面，该项目有 119,960 个 Stars、18,371 个 Forks，创建于 2024 年 3 月 11 日，最近提交时间同为 2026 年 9 月 2 日。此次版本的核心变化是支持原生调用 Volcano Engine Ark Seedance，根据脚本片段直接生成源视频；同时增加 OFox 多模型文生视频支持，以及 Metaso MiniMax H3 文生视频支持。\n\n【关键细节】\nOFox 支持让 Seedance、Wan 等模型共享一个 API Key；MiniMax H3 支持 768P 和 2K 输出，单个片段时长为 4—15 秒，并支持 9:16、16:9、1:1 三种画幅。项目还增加了兼容 OpenAI 接口的文生图素材源，可用于云端中继或本地网关，并新增 OpenRouter、APIMart 两个兼容 OpenAI 接口的 LLM 提供商。工作流侧新增 CLI 批量 manifest 模式；当命令行未提供参数时，CLI 会使用已保存的 WebUI 设置作为默认值。源视频适配增加 cover 和 contain 两种模式，前者通过裁剪多余边缘填满画面，后者保留完整源画面并使用留边。WebUI 新增 Upload-Post 自动发布设置页，补充 API Key 和账号配置说明，并完成法语、韩语翻译；素材源设置也进行了重组，按能力归类视频来源，并将 AI 视频服务商凭据集中到 WebUI 设置中。\n\n【价值与影响】\n该版本的主要价值不在于提出新的生成模型，而在于把脚本片段生成、图片素材、LLM 服务、视频拼接、批量执行和发布配置连接成更完整的生产链路。对开发者而言，OpenAI 兼容接口、CLI manifest 和保存配置作为默认值，降低了接入不同云服务及重复运行任务的工程成本；对内容团队而言，多模型和多画幅支持有助于针对不同短视频渠道尝试不同输出组合。原文显示项目同时覆盖 Instagram Reels、TikTok、YouTube Shorts 等短视频场景，但未提供生成质量、耗时、成功率或单位视频成本的对比数据，因此其实际生产效率仍需在具体模型、网络和账号条件下验证。较高的 Stars 和 Forks 反映出项目具有较强社区关注度，但不能直接等同于稳定性或商业可用性。\n\n【局限与风险】\n原文未披露 Seedance、Wan、MiniMax H3 及各兼容平台的具体计费、配额、地区可用性、服务等级和数据处理方式，也未说明本地网关的部署要求。视频生成质量、脚本遵循度、画面一致性、字幕和语音效果、批量任务吞吐量均缺少基准测试。项目依赖外部模型和 API，实际结果可能受服务商接口变更、网络、密钥权限和限流影响；自动发布功能还涉及账号凭据、平台规则以及内容合规责任。版本页面虽然列出 Security 区域，但没有给出具体安全修复内容。社区热门 Issue 包括 ImageMagick 安全策略阻止临时文件操作、datetime.UTC 属性错误、运行速度较慢及维护状态疑问、moviepy.editor 模块缺失，说明安装兼容性、运行速度和维护连续性仍是需要关注的问题。原文未披露许可证、隐私保护和生成内容版权处理细节。\n\n【行动建议】\n1. 按项目文档和目标服务商分别部署 v1.3.6，使用同一脚本测试 Seedance、Wan 与 MiniMax H3 的画质、时长、成功率、耗时和成本。\n2. 用 CLI manifest 重复执行一组固定任务，核对 WebUI 默认配置、批处理稳定性、失败重试和输出文件命名是否符合生产要求。\n3. 在隔离环境检查 ImageMagick、moviepy、Python 版本及临时文件权限，完成依赖锁定和最小权限配置后再接入真实账号。\n4. 在启用 Upload-Post 自动发布前，核验 API Key 保存方式、平台授权范围、内容审核流程和账号风控要求。",
-      "why": "该版本将多个视频生成模型、素材来源、脚本到视频流程和发布配置整合进同一开源工作流，提升了短视频自动化生产的集成度与可尝试性。",
-      "impact": 78,
-      "novelty": 72,
-      "actionability": 84,
-      "urgency": "中",
-      "tags": [
-        "AI",
-        "开源",
-        "多模态",
-        "产品"
-      ],
-      "imageUrl": "",
-      "mediaAssets": {
-        "images": [],
-        "videos": []
-      },
-      "editorialStructure": "",
-      "eventAggregation": {
-        "total": 1,
-        "groups": [
-          {
-            "key": "官方来源",
-            "tone": "#16130f",
-            "items": [
-              {
-                "source": "GitHub Trending",
-                "title": "MoneyPrinterTurbo v1.3.6：支持多模型视频生成与批量自动化",
-                "url": "https://github.com/harry0703/moneyprinterturbo/releases/tag/v1.3.6",
-                "note": "原始发布 / 公告。",
-                "text": "MoneyPrinterTurbo v1.3.6：支持多模型视频生成与批量自动化 —— 原始发布 / 公告。"
-              }
-            ]
-          }
-        ]
-      }
-    },
-    {
       "recordId": "recvu7Bcb3AdwT",
       "sourceId": "techcrunch-ai",
       "title": "We’re ‘dangerously close’ to dead internet theory, says Pangram’s CEO",
@@ -1377,7 +662,7 @@
       },
       "editorialStructure": "",
       "eventAggregation": {
-        "total": 2,
+        "total": 1,
         "groups": [
           {
             "key": "官方来源",
@@ -1389,19 +674,6 @@
                 "url": "https://github.com/ollama/ollama/releases/tag/v0.33.3-rc2",
                 "note": "原始发布 / 公告。",
                 "text": "Ollama v0.33.3 发布：新增缓存提示词令牌报告并更新多后端 —— 原始发布 / 公告。"
-              }
-            ]
-          },
-          {
-            "key": "相关报道",
-            "tone": "#2b6cb0",
-            "items": [
-              {
-                "source": "GitHub Trending",
-                "title": "Ollama v0.33.3 发布：改进 GGUF 默认参数并更新 MLX 与 llama.cpp",
-                "url": "https://github.com/ollama/ollama/releases/tag/v0.33.3-rc0",
-                "note": "同事件的其它源头报道。",
-                "text": "Ollama v0.33.3 发布：改进 GGUF 默认参数并更新 MLX 与 llama.cpp —— 同事件的其它源头报道。"
               }
             ]
           }
@@ -1439,7 +711,7 @@
       },
       "editorialStructure": "",
       "eventAggregation": {
-        "total": 2,
+        "total": 1,
         "groups": [
           {
             "key": "官方来源",
@@ -1451,19 +723,6 @@
                 "url": "https://github.com/firecrawl/firecrawl/releases/tag/v2.11.289",
                 "note": "原始发布 / 公告。",
                 "text": "Firecrawl 发布 v2.11.289 API 镜像版本 —— 原始发布 / 公告。"
-              }
-            ]
-          },
-          {
-            "key": "相关报道",
-            "tone": "#2b6cb0",
-            "items": [
-              {
-                "source": "GitHub Trending",
-                "title": "Firecrawl v2.11.267：面向规模化网页搜索、抓取与交互的上下文 API",
-                "url": "https://github.com/firecrawl/firecrawl/releases/tag/v2.11.267",
-                "note": "同事件的其它源头报道。",
-                "text": "Firecrawl v2.11.267：面向规模化网页搜索、抓取与交互的上下文 API —— 同事件的其它源头报道。"
               }
             ]
           }
@@ -1924,7 +1183,7 @@
       },
       "editorialStructure": "",
       "eventAggregation": {
-        "total": 5,
+        "total": 4,
         "groups": [
           {
             "key": "官方来源",
@@ -1963,13 +1222,6 @@
                 "url": "https://github.com/langchain-ai/langchain/releases/tag/langchain-anthropic%3d%3d1.7.1",
                 "note": "同事件的其它源头报道。",
                 "text": "LangChain Anthropic 1.7.1 发布，新增 Claude Fable 5.1 支持并优化追踪性能 —— 同事件的其它源头报道。"
-              },
-              {
-                "source": "X · @_catwu",
-                "title": "Fable 5.1 宣称助力团队承接以往需数月的大胆项目",
-                "url": "https://x.com/_catwu/status/2094933602228416603",
-                "note": "同事件的其它源头报道。",
-                "text": "Fable 5.1 宣称助力团队承接以往需数月的大胆项目 —— 同事件的其它源头报道。"
               }
             ]
           }
@@ -2561,6 +1813,7 @@
             "url": "https://pbs.twimg.com/tweet_video_thumb/HREgZxPa0AAFFYi.jpg",
             "width": 800,
             "height": 1082,
+            "playbackUrl": "media/social/recvueCW1y1mbA-1.mp4",
             "thumbnailUrl": "https://pbs.twimg.com/tweet_video_thumb/HREgZxPa0AAFFYi.jpg",
             "durationSec": 0.0
           },
@@ -2571,6 +1824,7 @@
             "url": "https://pbs.twimg.com/tweet_video_thumb/HREgrb2aMAAVJn9.jpg",
             "width": 800,
             "height": 382,
+            "playbackUrl": "media/social/recvueCW1y1mbA-2.mp4",
             "thumbnailUrl": "https://pbs.twimg.com/tweet_video_thumb/HREgrb2aMAAVJn9.jpg",
             "durationSec": 0.0
           },
@@ -2581,6 +1835,7 @@
             "url": "https://pbs.twimg.com/tweet_video_thumb/HREg78-agAA_K-U.jpg",
             "width": 762,
             "height": 466,
+            "playbackUrl": "media/social/recvueCW1y1mbA-3.mp4",
             "thumbnailUrl": "https://pbs.twimg.com/tweet_video_thumb/HREg78-agAA_K-U.jpg",
             "durationSec": 0.0
           },
@@ -2591,6 +1846,7 @@
             "url": "https://pbs.twimg.com/tweet_video_thumb/HREhIc6a4AAIVAf.jpg",
             "width": 800,
             "height": 440,
+            "playbackUrl": "media/social/recvueCW1y1mbA-4.mp4",
             "thumbnailUrl": "https://pbs.twimg.com/tweet_video_thumb/HREhIc6a4AAIVAf.jpg",
             "durationSec": 0.0
           },
@@ -2601,6 +1857,7 @@
             "url": "https://pbs.twimg.com/tweet_video_thumb/HREhRJ0akAAtArA.jpg",
             "width": 800,
             "height": 1132,
+            "playbackUrl": "media/social/recvueCW1y1mbA-5.mp4",
             "thumbnailUrl": "https://pbs.twimg.com/tweet_video_thumb/HREhRJ0akAAtArA.jpg",
             "durationSec": 0.0
           },
@@ -2611,6 +1868,7 @@
             "url": "https://pbs.twimg.com/tweet_video_thumb/HREhfZsbUAAHUpp.jpg",
             "width": 800,
             "height": 510,
+            "playbackUrl": "media/social/recvueCW1y1mbA-6.mp4",
             "thumbnailUrl": "https://pbs.twimg.com/tweet_video_thumb/HREhfZsbUAAHUpp.jpg",
             "durationSec": 0.0
           },
@@ -2621,6 +1879,7 @@
             "url": "https://pbs.twimg.com/tweet_video_thumb/HREhvG4bEAEgC2f.jpg",
             "width": 800,
             "height": 468,
+            "playbackUrl": "media/social/recvueCW1y1mbA-7.mp4",
             "thumbnailUrl": "https://pbs.twimg.com/tweet_video_thumb/HREhvG4bEAEgC2f.jpg",
             "durationSec": 0.0
           }
