@@ -120,9 +120,11 @@
   .nav-block.formats { margin-top: 12px; }
   .nav-block .nav-item { background: transparent; color: #faf7f0; }
   .nav-block .nav-item.is-empty { background: #5a564f; color: #c4bfb6; }
+  .nav-block .nav-item.off { background: #3a3732; color: #8a847c; }
   .nav-block .nav-item:hover { background: #fff; color: #16130f; }
   .nav-block .nav-item.on { background: var(--ds-accent); color: #fff; }
   .nav-block .nav-item.on:hover { background: #fff; color: #16130f; }
+  .nav-block .nav-item.off:hover { background: #fff; color: #16130f; }
   .feed-main { grid-area: feed; min-width: 0; }
   .feed-data { grid-area: data; min-width: 0; display: flex; flex-direction: column; gap: 18px; position: sticky; top: 76px; max-height: calc(100vh - 92px); overflow-x: hidden; overflow-y: auto; overscroll-behavior: contain; scrollbar-width: thin; scrollbar-color: rgba(255,255,255,.32) transparent; }
   .feed-data > * { flex: none; }
@@ -444,7 +446,7 @@
 // ============ State (mirrors the DCLogic component) ============
 const state = {
   page: 'brief',
-  filter: '全部',
+  hidden: {},
   srcTab: '全部',
   srcFormat: '全部',
   srcQuery: '',
@@ -763,6 +765,7 @@ const SOCIAL_FILTER = '社交媒体帖子';
 const FORMAT_FILTERS = ['论文', '视频', '播客', SOCIAL_FILTER, '公众号', 'Github热榜'];
 // 「端侧模型」是标签驱动的横切专题,不是领域分类:按 tags 匹配
 const EDGE_FILTER = '端侧模型';
+const SECTION_FILTERS = filters.filter(f => f !== '全部');
 function normalizeCategory(cat){
   const raw = String(cat || '').trim();
   // 中文媒体是来源属性，不是内容主题；旧简报未回填主题时保守落到「其他」。
@@ -781,6 +784,19 @@ function matchesFilter(s, f){
   if(f===EDGE_FILTER) return s.tags.includes('端侧');
   if(FORMAT_FILTERS.includes(f)) return s.contentType===f;
   return s.cat===f;
+}
+function isTagOn(f){ return !state.hidden[f]; }
+function allTagsOn(){
+  return SECTION_FILTERS.concat(FORMAT_FILTERS).every(isTagOn);
+}
+function hideOtherFormats(keep){
+  FORMAT_FILTERS.forEach(f => { state.hidden[f] = f !== keep; });
+}
+function matchesFeed(s){
+  if(state.hidden[EDGE_FILTER] && (s.tags || []).includes('端侧')) return false;
+  if(s.cat && state.hidden[s.cat]) return false;
+  if(FORMAT_FILTERS.includes(s.contentType) && state.hidden[s.contentType]) return false;
+  return true;
 }
 // 按「主体」分类,而非按格式(网页/RSS…)。端侧模型为横切维度(edge 标记)
 // 源状态三态与飞书参数表一致：配置存在不等于链路已验证，「待测」不能被静默当成启用。
@@ -1502,7 +1518,13 @@ const App = {
     state.timelineEntity=Object.keys(timelineData)[0]||'';
     render();
   },
-  setFilter(f){ state.filter=f; render(); },
+  toggleFilter(f){
+    if(f === '全部'){ state.hidden = {}; render(); return; }
+    state.hidden[f] = !state.hidden[f];
+    render();
+  },
+  clearFilters(){ state.hidden = {}; render(); },
+  setFilter(f){ this.toggleFilter(f); },
   logoFallback(img){
     if(!img) return;
     const parent = img.parentNode;
@@ -2650,13 +2672,16 @@ function heatmapHtml(A){
 
 function feedNavHtml(A, counts){
   const mono = "'Geist Mono', ui-monospace, Menlo, monospace";
-  const cats = filters.filter(f => f !== '全部');
+  const cats = SECTION_FILTERS;
 
   const navItem = (f, empty) => {
-    const active = state.filter === f;
+    const active = isTagOn(f);
     const isEdge = f === EDGE_FILTER;
+    const title = isEdge
+      ? (active ? '专题:按「端侧」标签聚合,跨领域 · 再次点击可隐藏' : '显示端侧条目')
+      : (active ? `隐藏「${f}」` : `显示「${f}」`);
     return `
-      <button class="nav-item${active?' on':''}${empty?' is-empty':''}" onclick="App.setFilter('${f}')" title="${isEdge?'专题:按「端侧」标签聚合,跨领域':`只看${f}`}" style="display: flex; align-items: center; width: 100%; padding: 6px 8px; border: 1px ${isEdge?'dashed':'solid'} ${active?A.accent:'transparent'}; font-size: 12px; font-weight: ${active?700:550}; font-family: inherit; text-align: left; cursor: pointer;">
+      <button class="nav-item${active?' on':' off'}${empty?' is-empty':''}" onclick="App.toggleFilter('${f}')" title="${title}" style="display: flex; align-items: center; width: 100%; padding: 6px 8px; border: 1px ${isEdge?'dashed':'solid'} ${active?A.accent:'transparent'}; font-size: 12px; font-weight: ${active?700:550}; font-family: inherit; text-align: left; cursor: pointer;">
         <span style="min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${isEdge?'✦ ':''}${esc(f)}</span>
       </button>`;
   };
@@ -2664,8 +2689,8 @@ function feedNavHtml(A, counts){
   return `
   <aside class="feed-nav">
     <div class="nav-all">
-      <button type="button" class="nav-all-btn${state.filter==='全部'?' on':''}" onclick="App.setFilter('全部')">全部 · ${counts['全部']||0}</button>
-      <button type="button" class="nav-clear" onclick="App.setFilter('全部')">清除筛选</button>
+      <button type="button" class="nav-all-btn${allTagsOn()?' on':''}" onclick="App.clearFilters()">全部 · ${counts['全部']||0}</button>
+      <button type="button" class="nav-clear" onclick="App.clearFilters()">清除筛选</button>
     </div>
     <div class="nav-block sections">
       <div style="height: 3px; background: ${A.accent};"></div>
@@ -2719,7 +2744,7 @@ function briefHtml(A){
     date: (a,b)=>b.date.localeCompare(a.date),
   };
 
-  const visible = signals.filter(s => matchesFilter(s, state.filter)).slice().sort(sortFns[state.sortKey]);
+  const visible = signals.filter(matchesFeed).slice().sort(sortFns[state.sortKey]);
 
   const counts = { 全部: signals.length };
   filters.concat(FORMAT_FILTERS).forEach(f => {
@@ -2728,7 +2753,9 @@ function briefHtml(A){
   });
   // 社媒不在 signals 里，计数走它自己那份
   counts[SOCIAL_FILTER] = socialPosts.length;
-  const socialMode = state.filter === SOCIAL_FILTER;
+  const socialOn = isTagOn(SOCIAL_FILTER);
+  const otherFormatsOn = FORMAT_FILTERS.some(f => f !== SOCIAL_FILTER && isTagOn(f));
+  const socialMode = socialOn && !otherFormatsOn;
 
   const cardsHtml = visible.map((s, idx) => {
     // 「待分析」是真会写进周报待纳入表的动作，公开站只读时按钮置灰而不是藏起来，
@@ -2812,7 +2839,7 @@ function briefHtml(A){
         <h3 style="margin: 0 0 10px; font-size: 20px; font-weight: 700; letter-spacing: -.01em; color: var(--ds-text);">${esc(briefMeta.title)}</h3>
         <p style="margin: 0; font-size: 14.5px; line-height: 1.7; color: ${UI.text2};">${esc(briefMeta.intro)}</p>
       </div>`}
-      ${socialMode || !signals.length || visible.length ? '' : `<p style="padding: 28px 0; font-size: 13px; color: ${UI.text3};">「${esc(state.filter)}」今天没有信号，换个板块或点左栏「清除筛选」。</p>`}
+      ${socialMode || !signals.length || visible.length ? '' : `<p style="padding: 28px 0; font-size: 13px; color: ${UI.text3};">当前筛选没有信号，点左栏「清除筛选」恢复全部条目。</p>`}
       ${socialMode ? socialStreamHtml(A) : `<div style="display: flex; flex-direction: column; gap: 20px;">${cardsHtml}</div>`}
 
       <div style="margin-top: 34px; padding: 16px 18px; border: 1.5px solid var(--ds-ink-line); background: #fff; box-shadow: 4px 4px 0 rgba(22,19,15,.06);">
@@ -4426,8 +4453,8 @@ function renderDetailLayer(){
 
 window.addEventListener('keydown', (e)=>{ if(e.key==='Escape'){ App.closeDetail(); } });
 window.addEventListener('resize', ()=>{ applyPointsShift(); });
-// #social 直接落到社媒筛选，方便分享和回看
-if(location.hash === '#social') state.filter = SOCIAL_FILTER;
+// #social 关掉其它格式，只看社媒帖子
+if(location.hash === '#social') hideOtherFormats(SOCIAL_FILTER);
 render();
 loadBrief();
 loadSources();
