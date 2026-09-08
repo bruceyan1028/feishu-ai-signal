@@ -192,9 +192,15 @@
         "多模态",
         "产品"
       ],
-      "imageUrl": "media/huxiu/recvujWsa28XQF-4.gif",
+      "imageUrl": "media/huxiu/recvujWsa28XQF-3.gif",
       "mediaAssets": {
         "images": [
+          {
+            "url": "media/huxiu/recvujWsa28XQF-3.gif",
+            "alt": "多模型生成火箭发射场景",
+            "kind": "article-figure",
+            "afterHeading": "Astra学会了「造世界」"
+          },
           {
             "url": "media/huxiu/recvujWsa28XQF-4.gif",
             "alt": "平面名画延展为3D宇宙",

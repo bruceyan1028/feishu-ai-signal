@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-08 14:19",
+  "generatedAt": "2026-09-08 14:52",
   "origin": "feishu",
   "briefWindowDays": 7,
   "sources": [
@@ -649,7 +649,7 @@
       "lookback": "24h",
       "last": "09-08 11:10",
       "perDay": 4,
-      "briefCount": 8
+      "briefCount": 4
     },
     {
       "id": "amd-instinct",
@@ -1027,7 +1027,7 @@
       "lookback": "24h",
       "last": "09-08 11:10",
       "perDay": 7,
-      "briefCount": 7
+      "briefCount": 3
     },
     {
       "id": "geekpark",
@@ -1063,7 +1063,7 @@
       "lookback": "24h",
       "last": "09-08 11:10",
       "perDay": 2,
-      "briefCount": 2
+      "briefCount": 0
     },
     {
       "id": "thepaper",
@@ -1261,7 +1261,7 @@
       "lookback": "72h",
       "last": "09-08 05:37",
       "perDay": 0,
-      "briefCount": 0
+      "briefCount": 1
     },
     {
       "id": "podcast-twiml",
@@ -1333,7 +1333,7 @@
       "lookback": "72h",
       "last": "09-08 05:37",
       "perDay": 0,
-      "briefCount": 1
+      "briefCount": 2
     },
     {
       "id": "podcast-silicon-valley-101",
