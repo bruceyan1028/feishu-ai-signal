@@ -183,18 +183,16 @@
   .heat-legend i { width: 14px; height: 8px; display: inline-block; border: 1px solid rgba(255,255,255,.22); }
   .heat-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; padding: 4px 10px 10px; }
   .heat-table { border-collapse: separate; border-spacing: 2px; font-size: 11px; min-width: 100%; }
-  .heat-table thead th { font-family: "Geist Mono", ui-monospace, Menlo, monospace; font-size: 9px; font-weight: 600; color: #8f887a; padding: 0 1px 5px; text-align: center; }
+  .heat-table thead th { font-family: "Geist Mono", ui-monospace, Menlo, monospace; font-size: 9px; font-weight: 600; color: #8f887a; padding: 0 0 5px; text-align: center; }
   .heat-table tbody th { position: sticky; left: 0; z-index: 1; background: #0a0a0a; text-align: left; font-weight: 600; padding: 0 8px 0 4px; white-space: nowrap; color: #faf7f0; }
   .heat-table td { padding: 0; }
-  .heat-mark { flex: none; font-size: 12px; line-height: 1; margin-right: 4px; }
-  .heat-news { display: inline-flex; align-items: baseline; max-width: 100px; color: inherit; text-decoration: none; cursor: pointer; }
+  .heat-news { display: inline-flex; align-items: baseline; max-width: 138px; color: inherit; text-decoration: none; cursor: pointer; }
   .heat-news:hover .heat-topic { text-decoration: underline; }
-  .heat-topic { font-size: 11.5px; max-width: 66px; display: inline-block; overflow: hidden; text-overflow: ellipsis; vertical-align: bottom; }
-  .heat-badge { margin-left: 3px; font-size: 10px; }
+  .heat-topic { font-size: 11.5px; max-width: 138px; display: inline-block; overflow: hidden; text-overflow: ellipsis; vertical-align: bottom; }
   /* 正方形,且七列要在 304px 的右栏里排完:话题名列 ≈108px + 7×20px + 列间距 18px
      + 左右内边距 20px ≈ 286px。格子宽过高时这一行放不下,只能横向滑,近 7 日就
      没法一眼看完。改话题名列宽度前先按这条算一遍。 */
-  .heat-cell { width: 20px; height: 20px; border: 1px solid rgba(22,19,15,.16); padding: 0; cursor: pointer; font-family: "Geist Mono", ui-monospace, Menlo, monospace; font-size: 8px; font-weight: 700; }
+  .heat-cell { display: block; width: 14px; height: 14px; box-sizing: border-box; border: 1px solid rgba(22,19,15,.16); padding: 0; cursor: pointer; font-family: "Geist Mono", ui-monospace, Menlo, monospace; font-size: 8px; font-weight: 700; }
   .heat-cell.is-on { outline: 2px solid var(--ds-accent); outline-offset: -2px; }
   .heat-panel { margin: 0 10px 10px; padding: 8px 10px 10px; border: 1px solid rgba(255,255,255,.10); background: rgba(255,255,255,.04); }
   .heat-panel-h { display: flex; align-items: baseline; gap: 8px; margin-bottom: 6px; font-size: 12px; font-weight: 700; color: #faf7f0; }
@@ -239,6 +237,7 @@
   .personal-viewport.is-static + .points-bar { display: none; }
   .points-bar-track { position: relative; height: 6px; background: rgba(22,19,15,.12); border: 1px solid var(--ds-ink-line); }
   .points-bar-thumb { position: absolute; top: -5px; width: 42px; height: 16px; background: var(--ds-accent); border: 1.5px solid var(--ds-ink-line); pointer-events: none; }
+  /* 220px × 6 + gap 能在常见桌面宽度排进一行，避免进无缝跑马灯后看起来像「超过 6 张」 */
   .personal-card { flex: 0 0 220px; width: 220px; min-width: 0; box-sizing: border-box; display: flex; flex-direction: column; background: #fff; border: 1px solid rgba(22,19,15,.10); border-radius: 14px; overflow: hidden; box-shadow: 0 10px 24px -14px rgba(22,19,15,.28); transition: transform .16s ease, box-shadow .16s ease; }
   .personal-card:hover { transform: translateY(-3px); box-shadow: 0 16px 32px -16px rgba(22,19,15,.38); }
   .pc-media { position: relative; aspect-ratio: 16 / 10; overflow: hidden; background: #111; }
@@ -2561,11 +2560,6 @@ function heatmapHtml(A){
 
   const rows = ordered.map(topic=>{
     const i = topicIdx[topic];
-    const tr = Number(trends[topic]||0);
-    const breakouts = heatmap.breakouts || [];
-    const hasBreakouts = Array.isArray(breakouts) && breakouts.length;
-    const isBreakout = hasBreakouts && breakouts.includes(topic);
-    const badge = isBreakout ? '🔥' : (!hasBreakouts && tr > 1.5 ? '🔥' : (tr < 0.5 ? '❄️' : ''));
     const cells = days.map((day, j)=>{
       const raw = (rawM[i] && rawM[i][j]) || 0;
       const norm = (normM[i] && normM[i][j]) || 0;
@@ -2579,15 +2573,10 @@ function heatmapHtml(A){
         onmouseleave="App.hideHeatTip()"
         onclick="App.pickHeatmapCell(${tArg},${dArg},event)"></button></td>`;
     }).join('');
-    const mark = (heatmap.marks && heatmap.marks[topic]) || '🌐';
-    const scope = (heatmap.scopes && heatmap.scopes[topic]) || (mark==='🌐'?'global':'country');
-    const markTitle = src==='x'
-      ? (scope==='country' ? 'X 上榜地区；格子为全球讨论量' : 'X 全球热搜；格子为全球讨论量')
-      : (scope==='country' ? '上榜国家近 7 日' : '全球近 7 日');
     const newsQ = heatNewsQuery(topic);
     const newsUrl = heatNewsUrl(topic);
     return `<tr>
-      <th scope="row"><a class="heat-news" href="${esc(newsUrl)}" target="_blank" rel="noopener noreferrer" title="Google 搜索：${esc(newsQ)}"><span class="heat-mark">${mark}</span><span class="heat-topic">${esc(labels[topic]||topic)}</span></a>${badge?`<span class="heat-badge" title="${isBreakout?'破线入选 · ':''}今日 / 近6日均 ${tr.toFixed(2)}">${badge}</span>`:''}</th>
+      <th scope="row"><a class="heat-news" href="${esc(newsUrl)}" target="_blank" rel="noopener noreferrer" title="Google 搜索：${esc(newsQ)}"><span class="heat-topic">${esc(labels[topic]||topic)}</span></a></th>
       ${cells}
     </tr>`;
   }).join('');
