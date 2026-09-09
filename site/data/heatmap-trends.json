@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-09T11:29:40+08:00",
+  "generatedAt": "2026-09-09T19:28:18+08:00",
   "days": [
     "2026-09-03",
     "2026-09-04",
@@ -10,286 +10,342 @@
     "2026-09-09"
   ],
   "topics": [
-    "trump-ai-posts",
+    "meta-muse-ai-agent",
     "navier-stokes",
-    "muse",
-    "harrison-ai"
+    "trump-ai-posts",
+    "jacob-coxon",
+    "anthropic"
   ],
   "labels": {
-    "trump-ai-posts": "trump ai posts",
+    "meta-muse-ai-agent": "meta muse ai agent",
     "navier-stokes": "navier stokes",
-    "muse": "muse",
-    "harrison-ai": "harrison ai"
+    "trump-ai-posts": "trump ai posts",
+    "jacob-coxon": "jacob coxon",
+    "anthropic": "anthropic"
   },
   "queries": {
-    "trump-ai-posts": {
-      "g": "trump ai posts",
-      "x": "\"trump ai posts\" -is:retweet"
+    "meta-muse-ai-agent": {
+      "g": "meta muse ai agent",
+      "x": "\"meta muse ai agent\" -is:retweet"
     },
     "navier-stokes": {
       "g": "navier stokes",
       "x": "\"navier stokes\" -is:retweet"
     },
-    "muse": {
-      "g": "muse",
-      "x": "\"muse\" -is:retweet"
+    "trump-ai-posts": {
+      "g": "trump ai posts",
+      "x": "\"trump ai posts\" -is:retweet"
     },
-    "harrison-ai": {
-      "g": "harrison ai",
-      "x": "\"harrison ai\" -is:retweet"
+    "jacob-coxon": {
+      "g": "jacob coxon",
+      "x": "\"jacob coxon\" -is:retweet"
+    },
+    "anthropic": {
+      "g": "anthropic",
+      "x": "\"anthropic\" -is:retweet"
     }
   },
   "scopes": {
-    "trump-ai-posts": "global",
+    "meta-muse-ai-agent": "global",
     "navier-stokes": "global",
-    "muse": "global",
-    "harrison-ai": "global"
+    "trump-ai-posts": "global",
+    "jacob-coxon": "global",
+    "anthropic": "global"
   },
   "marks": {
-    "trump-ai-posts": "🌐",
+    "meta-muse-ai-agent": "🌐",
     "navier-stokes": "🌐",
-    "muse": "🌐",
-    "harrison-ai": "🌐"
+    "trump-ai-posts": "🌐",
+    "jacob-coxon": "🌐",
+    "anthropic": "🌐"
   },
   "breakouts": [
-    "trump-ai-posts",
+    "meta-muse-ai-agent",
     "navier-stokes",
-    "muse",
-    "harrison-ai"
+    "trump-ai-posts",
+    "jacob-coxon",
+    "anthropic"
   ],
   "selection": {
     "method": "google-trending-ai",
     "volumes": {
-      "trump-ai-posts": 5000,
+      "meta-muse-ai-agent": 20000,
       "navier-stokes": 50000,
-      "muse": 10000,
-      "harrison-ai": 1000
+      "trump-ai-posts": 5000,
+      "jacob-coxon": 10000,
+      "anthropic": 2000
     },
     "geos": {
-      "trump-ai-posts": [
-        "US"
+      "meta-muse-ai-agent": [
+        "IN"
       ],
       "navier-stokes": [
-        "US",
-        "GB",
-        "DE",
-        "CA"
-      ],
-      "muse": [
         "US",
         "GB",
         "DE",
         "AU",
         "CA"
       ],
-      "harrison-ai": [
-        "AU"
+      "trump-ai-posts": [
+        "US",
+        "GB"
+      ],
+      "jacob-coxon": [
+        "US",
+        "CA"
+      ],
+      "anthropic": [
+        "GB",
+        "IN",
+        "DE",
+        "JP",
+        "AU",
+        "CA"
       ]
     },
     "plot_geo": {
-      "trump-ai-posts": "",
+      "meta-muse-ai-agent": "",
       "navier-stokes": "",
-      "muse": "",
-      "harrison-ai": ""
+      "trump-ai-posts": "",
+      "jacob-coxon": "",
+      "anthropic": ""
     },
     "breakouts": [
-      "trump-ai-posts",
+      "meta-muse-ai-agent",
       "navier-stokes",
-      "muse",
-      "harrison-ai"
+      "trump-ai-posts",
+      "jacob-coxon",
+      "anthropic"
     ]
   },
   "google-trends": {
     "error": "",
     "topics": [
-      "trump-ai-posts",
+      "meta-muse-ai-agent",
       "navier-stokes",
-      "muse",
-      "harrison-ai"
+      "trump-ai-posts",
+      "jacob-coxon",
+      "anthropic"
     ],
     "labels": {
-      "trump-ai-posts": "trump ai posts",
+      "meta-muse-ai-agent": "meta muse ai agent",
       "navier-stokes": "navier stokes",
-      "muse": "muse",
-      "harrison-ai": "harrison ai"
+      "trump-ai-posts": "trump ai posts",
+      "jacob-coxon": "jacob coxon",
+      "anthropic": "anthropic"
     },
     "queries": {
-      "trump-ai-posts": {
-        "g": "trump ai posts",
-        "x": "\"trump ai posts\" -is:retweet"
+      "meta-muse-ai-agent": {
+        "g": "meta muse ai agent",
+        "x": "\"meta muse ai agent\" -is:retweet"
       },
       "navier-stokes": {
         "g": "navier stokes",
         "x": "\"navier stokes\" -is:retweet"
       },
-      "muse": {
-        "g": "muse",
-        "x": "\"muse\" -is:retweet"
+      "trump-ai-posts": {
+        "g": "trump ai posts",
+        "x": "\"trump ai posts\" -is:retweet"
       },
-      "harrison-ai": {
-        "g": "harrison ai",
-        "x": "\"harrison ai\" -is:retweet"
+      "jacob-coxon": {
+        "g": "jacob coxon",
+        "x": "\"jacob coxon\" -is:retweet"
+      },
+      "anthropic": {
+        "g": "anthropic",
+        "x": "\"anthropic\" -is:retweet"
       }
     },
     "scopes": {
-      "trump-ai-posts": "global",
+      "meta-muse-ai-agent": "global",
       "navier-stokes": "global",
-      "muse": "global",
-      "harrison-ai": "global"
+      "trump-ai-posts": "global",
+      "jacob-coxon": "global",
+      "anthropic": "global"
     },
     "marks": {
-      "trump-ai-posts": "🌐",
+      "meta-muse-ai-agent": "🌐",
       "navier-stokes": "🌐",
-      "muse": "🌐",
-      "harrison-ai": "🌐"
+      "trump-ai-posts": "🌐",
+      "jacob-coxon": "🌐",
+      "anthropic": "🌐"
     },
     "breakouts": [
-      "trump-ai-posts",
+      "meta-muse-ai-agent",
       "navier-stokes",
-      "muse",
-      "harrison-ai"
+      "trump-ai-posts",
+      "jacob-coxon",
+      "anthropic"
     ],
     "selection": {
       "volumes": {
-        "trump-ai-posts": 5000,
+        "meta-muse-ai-agent": 20000,
         "navier-stokes": 50000,
-        "muse": 10000,
-        "harrison-ai": 1000
+        "trump-ai-posts": 5000,
+        "jacob-coxon": 10000,
+        "anthropic": 2000
       },
       "geos": {
-        "trump-ai-posts": [
-          "US"
+        "meta-muse-ai-agent": [
+          "IN"
         ],
         "navier-stokes": [
-          "US",
-          "GB",
-          "DE",
-          "CA"
-        ],
-        "muse": [
           "US",
           "GB",
           "DE",
           "AU",
           "CA"
         ],
-        "harrison-ai": [
-          "AU"
+        "trump-ai-posts": [
+          "US",
+          "GB"
+        ],
+        "jacob-coxon": [
+          "US",
+          "CA"
+        ],
+        "anthropic": [
+          "GB",
+          "IN",
+          "DE",
+          "JP",
+          "AU",
+          "CA"
         ]
       },
       "plot_geo": {
-        "trump-ai-posts": "",
+        "meta-muse-ai-agent": "",
         "navier-stokes": "",
-        "muse": "",
-        "harrison-ai": ""
+        "trump-ai-posts": "",
+        "jacob-coxon": "",
+        "anthropic": ""
       },
       "method": "google-trending-ai"
     },
     "matrix": {
       "raw": [
         [
-          2.0,
-          1.0,
-          2.0,
-          3.0,
-          16.0,
-          29.0,
-          100.0
-        ],
-        [
-          7.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
           5.0,
+          100.0
+        ],
+        [
           8.0,
-          3.0,
+          6.0,
+          8.0,
+          4.0,
           2.0,
-          37.0,
-          100.0
-        ],
-        [
-          48.0,
-          42.0,
-          42.0,
-          41.0,
           40.0,
-          44.0,
           100.0
         ],
         [
-          49.0,
-          52.0,
-          46.0,
-          54.0,
-          82.0,
-          100.0,
-          95.0
+          3.0,
+          3.0,
+          3.0,
+          6.0,
+          31.0,
+          55.0,
+          100.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          100.0
+        ],
+        [
+          71.0,
+          66.0,
+          55.0,
+          53.0,
+          69.0,
+          70.0,
+          100.0
         ]
       ],
       "normalized": [
         [
-          0.02,
-          0.01,
-          0.02,
-          0.03,
-          0.16,
-          0.29,
-          1.0
-        ],
-        [
-          0.07,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
           0.05,
+          1.0
+        ],
+        [
           0.08,
-          0.03,
+          0.06,
+          0.08,
+          0.04,
           0.02,
-          0.37,
-          1.0
-        ],
-        [
-          0.48,
-          0.42,
-          0.42,
-          0.41,
           0.4,
-          0.44,
           1.0
         ],
         [
-          0.49,
-          0.52,
-          0.46,
-          0.54,
-          0.82,
-          1.0,
-          0.95
+          0.03,
+          0.03,
+          0.03,
+          0.06,
+          0.31,
+          0.55,
+          1.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ],
+        [
+          0.71,
+          0.66,
+          0.55,
+          0.53,
+          0.69,
+          0.7,
+          1.0
         ]
       ]
     },
     "trend": {
-      "trump-ai-posts": 11.321,
-      "navier-stokes": 9.677,
-      "muse": 2.335,
-      "harrison-ai": 1.488
+      "meta-muse-ai-agent": 120.0,
+      "navier-stokes": 8.824,
+      "trump-ai-posts": 5.941,
+      "jacob-coxon": 2.0,
+      "anthropic": 1.562
     },
     "items": {
-      "trump-ai-posts|2026-09-03": [
-        "g-trump-ai-posts"
+      "meta-muse-ai-agent|2026-09-03": [
+        "g-meta-muse-ai-agent"
       ],
-      "trump-ai-posts|2026-09-04": [
-        "g-trump-ai-posts"
+      "meta-muse-ai-agent|2026-09-04": [
+        "g-meta-muse-ai-agent"
       ],
-      "trump-ai-posts|2026-09-05": [
-        "g-trump-ai-posts"
+      "meta-muse-ai-agent|2026-09-05": [
+        "g-meta-muse-ai-agent"
       ],
-      "trump-ai-posts|2026-09-06": [
-        "g-trump-ai-posts"
+      "meta-muse-ai-agent|2026-09-06": [
+        "g-meta-muse-ai-agent"
       ],
-      "trump-ai-posts|2026-09-07": [
-        "g-trump-ai-posts"
+      "meta-muse-ai-agent|2026-09-07": [
+        "g-meta-muse-ai-agent"
       ],
-      "trump-ai-posts|2026-09-08": [
-        "g-trump-ai-posts"
+      "meta-muse-ai-agent|2026-09-08": [
+        "g-meta-muse-ai-agent"
       ],
-      "trump-ai-posts|2026-09-09": [
-        "g-trump-ai-posts"
+      "meta-muse-ai-agent|2026-09-09": [
+        "g-meta-muse-ai-agent"
       ],
       "navier-stokes|2026-09-03": [
         "g-navier-stokes"
@@ -312,223 +368,247 @@
       "navier-stokes|2026-09-09": [
         "g-navier-stokes"
       ],
-      "muse|2026-09-03": [
-        "g-muse"
+      "trump-ai-posts|2026-09-03": [
+        "g-trump-ai-posts"
       ],
-      "muse|2026-09-04": [
-        "g-muse"
+      "trump-ai-posts|2026-09-04": [
+        "g-trump-ai-posts"
       ],
-      "muse|2026-09-05": [
-        "g-muse"
+      "trump-ai-posts|2026-09-05": [
+        "g-trump-ai-posts"
       ],
-      "muse|2026-09-06": [
-        "g-muse"
+      "trump-ai-posts|2026-09-06": [
+        "g-trump-ai-posts"
       ],
-      "muse|2026-09-07": [
-        "g-muse"
+      "trump-ai-posts|2026-09-07": [
+        "g-trump-ai-posts"
       ],
-      "muse|2026-09-08": [
-        "g-muse"
+      "trump-ai-posts|2026-09-08": [
+        "g-trump-ai-posts"
       ],
-      "muse|2026-09-09": [
-        "g-muse"
+      "trump-ai-posts|2026-09-09": [
+        "g-trump-ai-posts"
       ],
-      "harrison-ai|2026-09-03": [
-        "g-harrison-ai"
+      "jacob-coxon|2026-09-03": [
+        "g-jacob-coxon"
       ],
-      "harrison-ai|2026-09-04": [
-        "g-harrison-ai"
+      "jacob-coxon|2026-09-04": [
+        "g-jacob-coxon"
       ],
-      "harrison-ai|2026-09-05": [
-        "g-harrison-ai"
+      "jacob-coxon|2026-09-05": [
+        "g-jacob-coxon"
       ],
-      "harrison-ai|2026-09-06": [
-        "g-harrison-ai"
+      "jacob-coxon|2026-09-06": [
+        "g-jacob-coxon"
       ],
-      "harrison-ai|2026-09-07": [
-        "g-harrison-ai"
+      "jacob-coxon|2026-09-07": [
+        "g-jacob-coxon"
       ],
-      "harrison-ai|2026-09-08": [
-        "g-harrison-ai"
+      "jacob-coxon|2026-09-08": [
+        "g-jacob-coxon"
       ],
-      "harrison-ai|2026-09-09": [
-        "g-harrison-ai"
+      "jacob-coxon|2026-09-09": [
+        "g-jacob-coxon"
+      ],
+      "anthropic|2026-09-03": [
+        "g-anthropic"
+      ],
+      "anthropic|2026-09-04": [
+        "g-anthropic"
+      ],
+      "anthropic|2026-09-05": [
+        "g-anthropic"
+      ],
+      "anthropic|2026-09-06": [
+        "g-anthropic"
+      ],
+      "anthropic|2026-09-07": [
+        "g-anthropic"
+      ],
+      "anthropic|2026-09-08": [
+        "g-anthropic"
+      ],
+      "anthropic|2026-09-09": [
+        "g-anthropic"
       ]
     },
     "itemIndex": {
-      "g-trump-ai-posts": {
-        "title": "Google Trends · trump ai posts",
+      "g-meta-muse-ai-agent": {
+        "title": "Google Trends · meta muse ai agent",
         "source": "Google Trends",
-        "url": "https://trends.google.com/trends/explore?date=now%207-d&q=trump%20ai%20posts"
+        "url": "https://trends.google.com/trends/explore?date=now%207-d&q=meta%20muse%20ai%20agent"
       },
       "g-navier-stokes": {
         "title": "Google Trends · navier stokes",
         "source": "Google Trends",
         "url": "https://trends.google.com/trends/explore?date=now%207-d&q=navier%20stokes"
       },
-      "g-muse": {
-        "title": "Google Trends · muse",
+      "g-trump-ai-posts": {
+        "title": "Google Trends · trump ai posts",
         "source": "Google Trends",
-        "url": "https://trends.google.com/trends/explore?date=now%207-d&q=muse"
+        "url": "https://trends.google.com/trends/explore?date=now%207-d&q=trump%20ai%20posts"
       },
-      "g-harrison-ai": {
-        "title": "Google Trends · harrison ai",
+      "g-jacob-coxon": {
+        "title": "Google Trends · jacob coxon",
         "source": "Google Trends",
-        "url": "https://trends.google.com/trends/explore?date=now%207-d&q=harrison%20ai"
+        "url": "https://trends.google.com/trends/explore?date=now%207-d&q=jacob%20coxon"
+      },
+      "g-anthropic": {
+        "title": "Google Trends · anthropic",
+        "source": "Google Trends",
+        "url": "https://trends.google.com/trends/explore?date=now%207-d&q=anthropic"
       }
     }
   },
   "x": {
     "error": "",
     "topics": [
-      "gemini-start-the-adventure",
-      "gpt-6-astra"
+      "anthropic",
+      "openai"
     ],
     "labels": {
-      "gemini-start-the-adventure": "GEMINI START THE ADVENTURE",
-      "gpt-6-astra": "GPT-6 Astra"
+      "anthropic": "Anthropic",
+      "openai": "OpenAI"
     },
     "queries": {
-      "gemini-start-the-adventure": {
-        "g": "GEMINI START THE ADVENTURE",
-        "x": "\"GEMINI START THE ADVENTURE\" -is:retweet"
+      "anthropic": {
+        "g": "Anthropic",
+        "x": "\"Anthropic\" -is:retweet"
       },
-      "gpt-6-astra": {
-        "g": "GPT-6 Astra",
-        "x": "\"GPT-6 Astra\" -is:retweet"
+      "openai": {
+        "g": "OpenAI",
+        "x": "\"OpenAI\" -is:retweet"
       }
     },
     "scopes": {
-      "gemini-start-the-adventure": "global",
-      "gpt-6-astra": "country"
+      "anthropic": "global",
+      "openai": "country"
     },
     "marks": {
-      "gemini-start-the-adventure": "🌐",
-      "gpt-6-astra": "🇺🇸"
+      "anthropic": "🌐",
+      "openai": "🇬🇧"
     },
     "breakouts": [],
     "selection": {
       "volumes": {
-        "gemini-start-the-adventure": 42,
-        "gpt-6-astra": 5
+        "anthropic": 39,
+        "openai": 19
       },
       "geos": {
-        "gemini-start-the-adventure": [
-          "WORLD",
+        "anthropic": [
           "US",
-          "IN",
-          "DE"
+          "GB"
         ],
-        "gpt-6-astra": [
-          "US"
+        "openai": [
+          "GB"
         ]
       },
       "plot_geo": {
-        "gemini-start-the-adventure": "",
-        "gpt-6-astra": "US"
+        "anthropic": "",
+        "openai": "GB"
       },
       "method": "x-trends-by-woeid"
     },
     "matrix": {
       "raw": [
         [
-          0.0,
-          37146.0,
-          3463.0,
-          114.0,
-          37.0,
-          39.0,
-          0.0
+          14166.0,
+          8396.0,
+          6837.0,
+          5394.0,
+          6237.0,
+          9092.0,
+          11482.0
         ],
         [
-          8084.0,
-          13968.0,
-          13397.0,
-          9722.0,
-          10472.0,
-          8964.0,
-          968.0
+          37471.0,
+          34307.0,
+          21279.0,
+          17433.0,
+          20256.0,
+          36572.0,
+          23511.0
         ]
       ],
       "normalized": [
         [
-          0.0,
           1.0,
-          0.0932,
-          0.0031,
-          0.001,
-          0.001,
-          0.0
+          0.5927,
+          0.4826,
+          0.3808,
+          0.4403,
+          0.6418,
+          0.8105
         ],
         [
-          0.5788,
           1.0,
-          0.9591,
-          0.696,
-          0.7497,
-          0.6418,
-          0.0693
+          0.9156,
+          0.5679,
+          0.4652,
+          0.5406,
+          0.976,
+          0.6274
         ]
       ]
     },
     "trend": {
-      "gemini-start-the-adventure": 0.0,
-      "gpt-6-astra": 0.09
+      "anthropic": 1.374,
+      "openai": 0.843
     },
     "items": {
-      "gemini-start-the-adventure|2026-09-03": [
-        "x-gemini-start-the-adventure"
+      "anthropic|2026-09-03": [
+        "x-anthropic"
       ],
-      "gemini-start-the-adventure|2026-09-04": [
-        "x-gemini-start-the-adventure"
+      "anthropic|2026-09-04": [
+        "x-anthropic"
       ],
-      "gemini-start-the-adventure|2026-09-05": [
-        "x-gemini-start-the-adventure"
+      "anthropic|2026-09-05": [
+        "x-anthropic"
       ],
-      "gemini-start-the-adventure|2026-09-06": [
-        "x-gemini-start-the-adventure"
+      "anthropic|2026-09-06": [
+        "x-anthropic"
       ],
-      "gemini-start-the-adventure|2026-09-07": [
-        "x-gemini-start-the-adventure"
+      "anthropic|2026-09-07": [
+        "x-anthropic"
       ],
-      "gemini-start-the-adventure|2026-09-08": [
-        "x-gemini-start-the-adventure"
+      "anthropic|2026-09-08": [
+        "x-anthropic"
       ],
-      "gemini-start-the-adventure|2026-09-09": [
-        "x-gemini-start-the-adventure"
+      "anthropic|2026-09-09": [
+        "x-anthropic"
       ],
-      "gpt-6-astra|2026-09-03": [
-        "x-gpt-6-astra"
+      "openai|2026-09-03": [
+        "x-openai"
       ],
-      "gpt-6-astra|2026-09-04": [
-        "x-gpt-6-astra"
+      "openai|2026-09-04": [
+        "x-openai"
       ],
-      "gpt-6-astra|2026-09-05": [
-        "x-gpt-6-astra"
+      "openai|2026-09-05": [
+        "x-openai"
       ],
-      "gpt-6-astra|2026-09-06": [
-        "x-gpt-6-astra"
+      "openai|2026-09-06": [
+        "x-openai"
       ],
-      "gpt-6-astra|2026-09-07": [
-        "x-gpt-6-astra"
+      "openai|2026-09-07": [
+        "x-openai"
       ],
-      "gpt-6-astra|2026-09-08": [
-        "x-gpt-6-astra"
+      "openai|2026-09-08": [
+        "x-openai"
       ],
-      "gpt-6-astra|2026-09-09": [
-        "x-gpt-6-astra"
+      "openai|2026-09-09": [
+        "x-openai"
       ]
     },
     "itemIndex": {
-      "x-gemini-start-the-adventure": {
-        "title": "X 热搜 · \"GEMINI START THE ADVENTURE\" -is:retweet",
+      "x-anthropic": {
+        "title": "X 热搜 · \"Anthropic\" -is:retweet",
         "source": "X",
-        "url": "https://x.com/search?q=%22GEMINI%20START%20THE%20ADVENTURE%22%20-is%3Aretweet&src=typed_query&f=live"
+        "url": "https://x.com/search?q=%22Anthropic%22%20-is%3Aretweet&src=typed_query&f=live"
       },
-      "x-gpt-6-astra": {
-        "title": "X 热搜 · \"GPT-6 Astra\" -is:retweet",
+      "x-openai": {
+        "title": "X 热搜 · \"OpenAI\" -is:retweet",
         "source": "X",
-        "url": "https://x.com/search?q=%22GPT-6%20Astra%22%20-is%3Aretweet&src=typed_query&f=live"
+        "url": "https://x.com/search?q=%22OpenAI%22%20-is%3Aretweet&src=typed_query&f=live"
       }
     }
   }

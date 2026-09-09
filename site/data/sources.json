@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-09 11:12",
+  "generatedAt": "2026-09-09 19:27",
   "origin": "feishu",
   "briefWindowDays": 7,
   "sources": [
@@ -520,7 +520,7 @@
       "tier": "L4",
       "priority": "高",
       "fetchMethod": "Social",
-      "lookback": "24h",
+      "lookback": "72h",
       "last": "09-09 10:27",
       "perDay": 0,
       "briefCount": 0
@@ -649,7 +649,7 @@
       "lookback": "24h",
       "last": "09-09 10:27",
       "perDay": 6,
-      "briefCount": 5
+      "briefCount": 2
     },
     {
       "id": "amd-instinct",
@@ -1009,7 +1009,7 @@
       "lookback": "24h",
       "last": "09-09 10:27",
       "perDay": 3,
-      "briefCount": 12
+      "briefCount": 11
     },
     {
       "id": "zhidx",
@@ -1315,7 +1315,7 @@
       "lookback": "24h",
       "last": "09-09 10:27",
       "perDay": 6,
-      "briefCount": 0
+      "briefCount": 4
     },
     {
       "id": "podcast-crossing",
@@ -1333,7 +1333,7 @@
       "lookback": "72h",
       "last": "09-09 05:30",
       "perDay": 0,
-      "briefCount": 2
+      "briefCount": 3
     },
     {
       "id": "podcast-silicon-valley-101",
@@ -1349,7 +1349,7 @@
       "priority": "低",
       "fetchMethod": "Podcast",
       "lookback": "72h",
-      "last": "09-09 05:30",
+      "last": "09-09 17:30",
       "perDay": 0,
       "briefCount": 0
     },

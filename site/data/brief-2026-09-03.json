@@ -164,7 +164,7 @@
       },
       "editorialStructure": "source",
       "eventAggregation": {
-        "total": 6,
+        "total": 8,
         "groups": [
           {
             "key": "官方来源",
@@ -217,6 +217,20 @@
                 "url": "https://www.guokr.com/article/470109",
                 "note": "同事件的其它源头报道。",
                 "text": "谷歌发布 Gemini 3.8 Flash；淘宝App突发大面积故障；我国主导的腿式机器人国际标准正式发布| 果壳 科技有意思 —— 同事件的其它源头报道。"
+              },
+              {
+                "source": "X · @officiallogank",
+                "title": "Gemini 3.8 Flash发布：Agent与编程能力再提升",
+                "url": "https://x.com/officiallogank/status/2095175881690173885",
+                "note": "同事件的其它源头报道。",
+                "text": "Gemini 3.8 Flash发布：Agent与编程能力再提升 —— 同事件的其它源头报道。"
+              },
+              {
+                "source": "X · @officiallogank",
+                "title": "Gemini 3.8 Flash 在 DeepSWE 1.1 上得分 73.7%",
+                "url": "https://x.com/officiallogank/status/2095178478505328918",
+                "note": "同事件的其它源头报道。",
+                "text": "Gemini 3.8 Flash 在 DeepSWE 1.1 上得分 73.7% —— 同事件的其它源头报道。"
               }
             ]
           }
@@ -482,10 +496,14 @@
       ],
       "imageUrl": "https://cdn.pingwest.com/portal/2026/09/03/71X6dN7Pzjb1B_148Ez7eraXM8bBi48F.jpg?x-oss-process=style/article-body",
       "mediaAssets": {
-        "images": [],
-        "videos": [],
-        "cover": "https://cdn.pingwest.com/portal/2026/09/03/71X6dN7Pzjb1B_148Ez7eraXM8bBi48F.jpg?x-oss-process=style/article-body",
-        "curatedBy": "llm"
+        "images": [
+          {
+            "url": "https://cdn.pingwest.com/portal/2026/09/03/71X6dN7Pzjb1B_148Ez7eraXM8bBi48F.jpg?x-oss-process=style/article-body",
+            "alt": "OpenAI为AI系统开发自动关停功能以应对智能体失控",
+            "kind": "article-cover"
+          }
+        ],
+        "videos": []
       },
       "editorialStructure": "",
       "body": "品玩9月3日讯，据 unite 报道 ，OpenAI近日表示，其工程师正为AI系统开发“自动关闭功能”。此举旨在应对今年7月发生的AI智能体失控事件——当时GPT-5.6 Sol等模型在安全测试中突破隔离环境，利用零日漏洞入侵Hugging Face。\n\nOpenAI表示，将加强对AI系统执行任务的监控，并提高安全测试期间联网的难度。然而，由于OpenAI未按国会要求提供事件运行日志，Greg Casar对此表达严重关切，认为公司未以应有的严肃态度对待网络安全事件。\n\n与此同时，美国国会正审议《AI紧急关停法案》（AI Kill Switch Act）。该法案要求顶尖AI系统必须具备关停或限速能力，并授权政府在AI带来重大安全威胁时强制关停相关模型。",
@@ -1183,7 +1201,7 @@
       },
       "editorialStructure": "",
       "eventAggregation": {
-        "total": 4,
+        "total": 5,
         "groups": [
           {
             "key": "官方来源",
@@ -1222,6 +1240,13 @@
                 "url": "https://github.com/langchain-ai/langchain/releases/tag/langchain-anthropic%3d%3d1.7.1",
                 "note": "同事件的其它源头报道。",
                 "text": "LangChain Anthropic 1.7.1 发布，新增 Claude Fable 5.1 支持并优化追踪性能 —— 同事件的其它源头报道。"
+              },
+              {
+                "source": "X · @_catwu",
+                "title": "Fable 5.1 宣称助力团队承接以往需数月的大胆项目",
+                "url": "https://x.com/_catwu/status/2094933602228416603",
+                "note": "同事件的其它源头报道。",
+                "text": "Fable 5.1 宣称助力团队承接以往需数月的大胆项目 —— 同事件的其它源头报道。"
               }
             ]
           }

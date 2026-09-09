@@ -229,7 +229,7 @@
       "bodyTruncated": false,
       "bodyVerbatim": true,
       "eventAggregation": {
-        "total": 2,
+        "total": 3,
         "groups": [
           {
             "key": "官方来源",
@@ -254,6 +254,13 @@
                 "url": "https://www.youtube.com/watch?v=-ttyyy3vwh8",
                 "note": "同事件的其它源头报道。",
                 "text": "开发者分享 GPT-6 Astra 的初步体验 —— 同事件的其它源头报道。"
+              },
+              {
+                "source": "X · @gdb",
+                "title": "GPT-6 Astra 介绍",
+                "url": "https://x.com/gdb/status/2095598855073255644",
+                "note": "同事件的其它源头报道。",
+                "text": "GPT-6 Astra 介绍 —— 同事件的其它源头报道。"
               }
             ]
           }
