@@ -33,8 +33,6 @@ URGENCY_TO_TABLE = {"高": "High", "中": "Medium", "低": "Low"}
 URGENCY_TO_CN = {value: key for key, value in URGENCY_TO_TABLE.items()}
 PAPER_ANALYSIS_VERSION = 2
 SOCIAL_CONTENT_TYPE = "社交媒体帖子"
-# 社媒是独立一栏，只受自己的条数上限约束
-SOCIAL_POST_LIMIT = 40
 
 
 _CJK_RE = re.compile(r"[\u4e00-\u9fff]")
@@ -845,26 +843,30 @@ def select_candidates(
     selected: list[dict[str, Any]] = []
     arxiv_count = 0
     paper_count = 0
-    video_count = 0
     github_count = 0
     p0_count = 0
     per_source: Counter[str] = Counter()
+    # 视频、播客、社媒帖子独立成栏：各有自己的上限，不参与排序也不挤占候选池总量
     social: list[dict[str, Any]] = []
+    video: list[dict[str, Any]] = []
+    podcast: list[dict[str, Any]] = []
     for item in candidates:
         is_arxiv = _is_arxiv(item)
         item_type = content_type(item["fields"])
-        # 社媒帖子独立成栏，不参与排序也不占用简报名额
         if item_type == SOCIAL_CONTENT_TYPE:
             social.append(item)
             continue
+        if item_type == "视频":
+            video.append(item)
+            continue
+        if item_type == "播客":
+            podcast.append(item)
+            continue
         is_paper = item_type == "论文"
-        is_video = item_type == "视频"
         is_github = item_type == "Github热榜"
         is_p0 = item["priority"] == "P0"
         # 论文总数硬上限：避免论文挤占「快速读新闻」的名额
         if is_paper and paper_count >= config.DAILY_MAX_PAPERS:
-            continue
-        if is_video and video_count >= config.DAILY_MAX_VIDEOS:
             continue
         if is_github and github_count >= config.DAILY_MAX_GITHUB:
             continue
@@ -877,13 +879,14 @@ def select_candidates(
         selected.append(item)
         arxiv_count += int(is_arxiv)
         paper_count += int(is_paper)
-        video_count += int(is_video)
         github_count += int(is_github)
         p0_count += int(is_p0)
         per_source[item["source_id"]] += 1
         if len(selected) >= total_limit:
             break
-    return selected + social[:SOCIAL_POST_LIMIT]
+    # 播客、社媒帖子（X）不设每日候选上限：72h 回看窗口本身已经约束了体量，
+    # 且这两个源要求独立展示，不与视频/新闻共享名额。
+    return selected + video[: config.DAILY_MAX_VIDEOS] + podcast + social
 
 
 def analyze_signal(fields: dict[str, Any]) -> dict[str, Any]:
@@ -1385,22 +1388,24 @@ def generate(day: str | None = None) -> dict[str, Any]:
         raise RuntimeError("近七日没有可用于简报的信号")
 
     # 同事件折叠：标题近似者只保留最优主条目进分析，其它源留给事件聚合。
-    # 社媒不参与折叠，也不占 DAILY_CANDIDATE_LIMIT，折完再原样接回去。
-    social_candidates = [
-        item for item in candidates if content_type(item["fields"]) == SOCIAL_CONTENT_TYPE
+    # 视频、播客、社媒不参与折叠，也不占 DAILY_CANDIDATE_LIMIT，折完再原样接回去，
+    # 否则它们会在这里被 collapse_for_brief 的 limit 二次挤占，等于白加了独立配额。
+    independent_types = {SOCIAL_CONTENT_TYPE, "视频", "播客"}
+    independent_candidates = [
+        item for item in candidates if content_type(item["fields"]) in independent_types
     ]
     news_candidates = [
-        item for item in candidates if content_type(item["fields"]) != SOCIAL_CONTENT_TYPE
+        item for item in candidates if content_type(item["fields"]) not in independent_types
     ]
     candidates = cluster.collapse_for_brief(
         news_candidates,
         threshold=0.85,
         limit=config.DAILY_CANDIDATE_LIMIT,
-    ) + social_candidates
+    ) + independent_candidates
     log.info(
-        "同事件折叠后候选 %d 条（其中社媒 %d 条独立成栏）",
+        "同事件折叠后候选 %d 条（其中视频/播客/社媒 %d 条独立成栏）",
         len(candidates),
-        len(social_candidates),
+        len(independent_candidates),
     )
 
     updates: list[dict[str, Any]] = []

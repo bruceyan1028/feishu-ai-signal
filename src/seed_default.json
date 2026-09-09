@@ -1541,7 +1541,7 @@
    },
    "extra_config": "{\"platform\":\"x\",\"max_pages\":20}",
    "fetch_method": "Social",
-   "lookback_window": "24h",
+   "lookback_window": "72h",
    "min_content_chars": 30,
    "name": "X 白名单账号",
    "notes": "个人号白名单；gdb/karpathy/OfficialLoganK/_catwu/dawnsongtweets/steipete。已充值 credits，每日一次采集。",

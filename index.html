@@ -444,7 +444,7 @@
 // ============ State (mirrors the DCLogic component) ============
 const state = {
   page: 'brief',
-  hidden: {},
+  activeFilter: null,
   srcTab: '全部',
   srcFormat: '全部',
   srcQuery: '',
@@ -783,18 +783,14 @@ function matchesFilter(s, f){
   if(FORMAT_FILTERS.includes(f)) return s.contentType===f;
   return s.cat===f;
 }
-function isTagOn(f){ return !state.hidden[f]; }
-function allTagsOn(){
-  return SECTION_FILTERS.concat(FORMAT_FILTERS).every(isTagOn);
-}
-function hideOtherFormats(keep){
-  FORMAT_FILTERS.forEach(f => { state.hidden[f] = f !== keep; });
-}
+function isTagOn(f){ return state.activeFilter === f; }
+function allTagsOn(){ return !state.activeFilter; }
 function matchesFeed(s){
-  if(state.hidden[EDGE_FILTER] && (s.tags || []).includes('端侧')) return false;
-  if(s.cat && state.hidden[s.cat]) return false;
-  if(FORMAT_FILTERS.includes(s.contentType) && state.hidden[s.contentType]) return false;
-  return true;
+  const f = state.activeFilter;
+  if(!f) return true;
+  if(f === EDGE_FILTER) return (s.tags || []).includes('端侧');
+  if(FORMAT_FILTERS.includes(f)) return s.contentType === f;
+  return s.cat === f;
 }
 // 按「主体」分类,而非按格式(网页/RSS…)。端侧模型为横切维度(edge 标记)
 // 源状态三态与飞书参数表一致：配置存在不等于链路已验证，「待测」不能被静默当成启用。
@@ -1517,11 +1513,11 @@ const App = {
     render();
   },
   toggleFilter(f){
-    if(f === '全部'){ state.hidden = {}; render(); return; }
-    state.hidden[f] = !state.hidden[f];
+    if(f === '全部'){ state.activeFilter = null; render(); return; }
+    state.activeFilter = state.activeFilter === f ? null : f;
     render();
   },
-  clearFilters(){ state.hidden = {}; render(); },
+  clearFilters(){ state.activeFilter = null; render(); },
   setFilter(f){ this.toggleFilter(f); },
   logoFallback(img){
     if(!img) return;
@@ -2678,8 +2674,8 @@ function feedNavHtml(A, counts){
     const on = active && !empty;
     const isEdge = f === EDGE_FILTER;
     const title = isEdge
-      ? (active ? '专题:按「端侧」标签聚合,跨领域 · 再次点击可隐藏' : '显示端侧条目')
-      : (active ? `隐藏「${f}」` : `显示「${f}」`);
+      ? (active ? '再次点击可取消「端侧」筛选' : '只看「端侧」标签的信号')
+      : (active ? `取消「${f}」筛选` : `只看「${f}」`);
     return `
       <button class="nav-item${on?' on':''}${empty?' is-empty':''}" onclick="App.toggleFilter('${f}')" title="${title}" style="display: flex; align-items: center; width: 100%; padding: 6px 8px; border: 1px ${isEdge?'dashed':'solid'} ${on?A.accent:'transparent'}; font-size: 12px; font-weight: ${on?700:550}; font-family: inherit; text-align: left; cursor: pointer;">
         <span style="min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${isEdge?'✦ ':''}${esc(f)}</span>
@@ -2753,9 +2749,7 @@ function briefHtml(A){
   });
   // 社媒不在 signals 里，计数走它自己那份
   counts[SOCIAL_FILTER] = socialPosts.length;
-  const socialOn = isTagOn(SOCIAL_FILTER);
-  const otherFormatsOn = FORMAT_FILTERS.some(f => f !== SOCIAL_FILTER && isTagOn(f));
-  const socialMode = socialOn && !otherFormatsOn;
+  const socialMode = state.activeFilter === SOCIAL_FILTER;
 
   const cardsHtml = visible.map((s, idx) => {
     // 「待分析」是真会写进周报待纳入表的动作，公开站只读时按钮置灰而不是藏起来，
@@ -4454,7 +4448,7 @@ function renderDetailLayer(){
 window.addEventListener('keydown', (e)=>{ if(e.key==='Escape'){ App.closeDetail(); } });
 window.addEventListener('resize', ()=>{ applyPointsShift(); });
 // #social 关掉其它格式，只看社媒帖子
-if(location.hash === '#social') hideOtherFormats(SOCIAL_FILTER);
+if(location.hash === '#social') state.activeFilter = SOCIAL_FILTER;
 render();
 loadBrief();
 loadSources();
