@@ -1,332 +1,337 @@
 {
-  "generatedAt": "2026-09-08T15:49:38+08:00",
+  "generatedAt": "2026-09-09T11:29:40+08:00",
   "days": [
-    "2026-09-02",
     "2026-09-03",
     "2026-09-04",
     "2026-09-05",
     "2026-09-06",
     "2026-09-07",
-    "2026-09-08"
+    "2026-09-08",
+    "2026-09-09"
   ],
   "topics": [
-    "openai-chief-scientist-ai-warning",
-    "harrison-ai",
-    "artificial-intelligence-news",
-    "bernie-sanders-ai-legislation",
-    "trump-ai-generated-images-social-media"
+    "trump-ai-posts",
+    "navier-stokes",
+    "muse",
+    "harrison-ai"
   ],
   "labels": {
-    "openai-chief-scientist-ai-warning": "openai chief scientist ai warning",
-    "harrison-ai": "harrison ai",
-    "artificial-intelligence-news": "artificial intelligence news",
-    "bernie-sanders-ai-legislation": "bernie sanders ai legislation",
-    "trump-ai-generated-images-social-media": "trump ai generated images social media"
+    "trump-ai-posts": "trump ai posts",
+    "navier-stokes": "navier stokes",
+    "muse": "muse",
+    "harrison-ai": "harrison ai"
   },
   "queries": {
-    "openai-chief-scientist-ai-warning": {
-      "g": "openai chief scientist ai warning",
-      "x": "\"openai chief scientist ai warning\" -is:retweet"
+    "trump-ai-posts": {
+      "g": "trump ai posts",
+      "x": "\"trump ai posts\" -is:retweet"
+    },
+    "navier-stokes": {
+      "g": "navier stokes",
+      "x": "\"navier stokes\" -is:retweet"
+    },
+    "muse": {
+      "g": "muse",
+      "x": "\"muse\" -is:retweet"
     },
     "harrison-ai": {
       "g": "harrison ai",
       "x": "\"harrison ai\" -is:retweet"
-    },
-    "artificial-intelligence-news": {
-      "g": "artificial intelligence news",
-      "x": "\"artificial intelligence news\" -is:retweet"
-    },
-    "bernie-sanders-ai-legislation": {
-      "g": "bernie sanders ai legislation",
-      "x": "\"bernie sanders ai legislation\" -is:retweet"
-    },
-    "trump-ai-generated-images-social-media": {
-      "g": "trump ai generated images social media",
-      "x": "\"trump ai generated images social media\" -is:retweet"
     }
   },
   "scopes": {
-    "openai-chief-scientist-ai-warning": "global",
-    "harrison-ai": "global",
-    "artificial-intelligence-news": "global",
-    "bernie-sanders-ai-legislation": "global",
-    "trump-ai-generated-images-social-media": "global"
+    "trump-ai-posts": "global",
+    "navier-stokes": "global",
+    "muse": "global",
+    "harrison-ai": "global"
   },
   "marks": {
-    "openai-chief-scientist-ai-warning": "🌐",
-    "harrison-ai": "🌐",
-    "artificial-intelligence-news": "🌐",
-    "bernie-sanders-ai-legislation": "🌐",
-    "trump-ai-generated-images-social-media": "🌐"
+    "trump-ai-posts": "🌐",
+    "navier-stokes": "🌐",
+    "muse": "🌐",
+    "harrison-ai": "🌐"
   },
   "breakouts": [
-    "openai-chief-scientist-ai-warning",
-    "harrison-ai",
-    "artificial-intelligence-news",
-    "bernie-sanders-ai-legislation",
-    "trump-ai-generated-images-social-media"
+    "trump-ai-posts",
+    "navier-stokes",
+    "muse",
+    "harrison-ai"
   ],
   "selection": {
     "method": "google-trending-ai",
     "volumes": {
-      "openai-chief-scientist-ai-warning": 1000,
-      "harrison-ai": 1000,
-      "artificial-intelligence-news": 200,
-      "bernie-sanders-ai-legislation": 20000,
-      "trump-ai-generated-images-social-media": 2000
+      "trump-ai-posts": 5000,
+      "navier-stokes": 50000,
+      "muse": 10000,
+      "harrison-ai": 1000
     },
     "geos": {
-      "openai-chief-scientist-ai-warning": [
-        "GB"
+      "trump-ai-posts": [
+        "US"
+      ],
+      "navier-stokes": [
+        "US",
+        "GB",
+        "DE",
+        "CA"
+      ],
+      "muse": [
+        "US",
+        "GB",
+        "DE",
+        "AU",
+        "CA"
       ],
       "harrison-ai": [
         "AU"
-      ],
-      "artificial-intelligence-news": [
-        "US"
-      ],
-      "bernie-sanders-ai-legislation": [
-        "US"
-      ],
-      "trump-ai-generated-images-social-media": [
-        "US"
       ]
     },
     "plot_geo": {
-      "openai-chief-scientist-ai-warning": "",
-      "harrison-ai": "",
-      "artificial-intelligence-news": "",
-      "bernie-sanders-ai-legislation": "",
-      "trump-ai-generated-images-social-media": ""
+      "trump-ai-posts": "",
+      "navier-stokes": "",
+      "muse": "",
+      "harrison-ai": ""
     },
     "breakouts": [
-      "openai-chief-scientist-ai-warning",
-      "harrison-ai",
-      "artificial-intelligence-news",
-      "bernie-sanders-ai-legislation",
-      "trump-ai-generated-images-social-media"
+      "trump-ai-posts",
+      "navier-stokes",
+      "muse",
+      "harrison-ai"
     ]
   },
   "google-trends": {
     "error": "",
     "topics": [
-      "openai-chief-scientist-ai-warning",
-      "harrison-ai",
-      "artificial-intelligence-news",
-      "bernie-sanders-ai-legislation",
-      "trump-ai-generated-images-social-media"
+      "trump-ai-posts",
+      "navier-stokes",
+      "muse",
+      "harrison-ai"
     ],
     "labels": {
-      "openai-chief-scientist-ai-warning": "openai chief scientist ai warning",
-      "harrison-ai": "harrison ai",
-      "artificial-intelligence-news": "artificial intelligence news",
-      "bernie-sanders-ai-legislation": "bernie sanders ai legislation",
-      "trump-ai-generated-images-social-media": "trump ai generated images social media"
+      "trump-ai-posts": "trump ai posts",
+      "navier-stokes": "navier stokes",
+      "muse": "muse",
+      "harrison-ai": "harrison ai"
     },
     "queries": {
-      "openai-chief-scientist-ai-warning": {
-        "g": "openai chief scientist ai warning",
-        "x": "\"openai chief scientist ai warning\" -is:retweet"
+      "trump-ai-posts": {
+        "g": "trump ai posts",
+        "x": "\"trump ai posts\" -is:retweet"
+      },
+      "navier-stokes": {
+        "g": "navier stokes",
+        "x": "\"navier stokes\" -is:retweet"
+      },
+      "muse": {
+        "g": "muse",
+        "x": "\"muse\" -is:retweet"
       },
       "harrison-ai": {
         "g": "harrison ai",
         "x": "\"harrison ai\" -is:retweet"
-      },
-      "artificial-intelligence-news": {
-        "g": "artificial intelligence news",
-        "x": "\"artificial intelligence news\" -is:retweet"
-      },
-      "bernie-sanders-ai-legislation": {
-        "g": "bernie sanders ai legislation",
-        "x": "\"bernie sanders ai legislation\" -is:retweet"
-      },
-      "trump-ai-generated-images-social-media": {
-        "g": "trump ai generated images social media",
-        "x": "\"trump ai generated images social media\" -is:retweet"
       }
     },
     "scopes": {
-      "openai-chief-scientist-ai-warning": "global",
-      "harrison-ai": "global",
-      "artificial-intelligence-news": "global",
-      "bernie-sanders-ai-legislation": "global",
-      "trump-ai-generated-images-social-media": "global"
+      "trump-ai-posts": "global",
+      "navier-stokes": "global",
+      "muse": "global",
+      "harrison-ai": "global"
     },
     "marks": {
-      "openai-chief-scientist-ai-warning": "🌐",
-      "harrison-ai": "🌐",
-      "artificial-intelligence-news": "🌐",
-      "bernie-sanders-ai-legislation": "🌐",
-      "trump-ai-generated-images-social-media": "🌐"
+      "trump-ai-posts": "🌐",
+      "navier-stokes": "🌐",
+      "muse": "🌐",
+      "harrison-ai": "🌐"
     },
     "breakouts": [
-      "openai-chief-scientist-ai-warning",
-      "harrison-ai",
-      "artificial-intelligence-news",
-      "bernie-sanders-ai-legislation",
-      "trump-ai-generated-images-social-media"
+      "trump-ai-posts",
+      "navier-stokes",
+      "muse",
+      "harrison-ai"
     ],
     "selection": {
       "volumes": {
-        "openai-chief-scientist-ai-warning": 1000,
-        "harrison-ai": 1000,
-        "artificial-intelligence-news": 200,
-        "bernie-sanders-ai-legislation": 20000,
-        "trump-ai-generated-images-social-media": 2000
+        "trump-ai-posts": 5000,
+        "navier-stokes": 50000,
+        "muse": 10000,
+        "harrison-ai": 1000
       },
       "geos": {
-        "openai-chief-scientist-ai-warning": [
-          "GB"
+        "trump-ai-posts": [
+          "US"
+        ],
+        "navier-stokes": [
+          "US",
+          "GB",
+          "DE",
+          "CA"
+        ],
+        "muse": [
+          "US",
+          "GB",
+          "DE",
+          "AU",
+          "CA"
         ],
         "harrison-ai": [
           "AU"
-        ],
-        "artificial-intelligence-news": [
-          "US"
-        ],
-        "bernie-sanders-ai-legislation": [
-          "US"
-        ],
-        "trump-ai-generated-images-social-media": [
-          "US"
         ]
       },
       "plot_geo": {
-        "openai-chief-scientist-ai-warning": "",
-        "harrison-ai": "",
-        "artificial-intelligence-news": "",
-        "bernie-sanders-ai-legislation": "",
-        "trump-ai-generated-images-social-media": ""
+        "trump-ai-posts": "",
+        "navier-stokes": "",
+        "muse": "",
+        "harrison-ai": ""
       },
       "method": "google-trending-ai"
     },
     "matrix": {
       "raw": [
         [
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          100.0,
-          76.0
+          2.0,
+          1.0,
+          2.0,
+          3.0,
+          16.0,
+          29.0,
+          100.0
         ],
         [
-          30.0,
-          25.0,
-          27.0,
-          23.0,
-          27.0,
+          7.0,
+          5.0,
+          8.0,
+          3.0,
+          2.0,
+          37.0,
+          100.0
+        ],
+        [
+          48.0,
+          42.0,
+          42.0,
           41.0,
+          40.0,
+          44.0,
           100.0
         ],
         [
-          73.0,
-          68.0,
-          57.0,
-          57.0,
-          68.0,
-          77.0,
-          100.0
-        ],
-        [
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          36.0,
+          49.0,
+          52.0,
+          46.0,
+          54.0,
+          82.0,
           100.0,
-          17.0
-        ],
-        [
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          100.0,
-          8.0
+          95.0
         ]
       ],
       "normalized": [
         [
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          1.0,
-          0.76
+          0.02,
+          0.01,
+          0.02,
+          0.03,
+          0.16,
+          0.29,
+          1.0
         ],
         [
-          0.3,
-          0.25,
-          0.27,
-          0.23,
-          0.27,
+          0.07,
+          0.05,
+          0.08,
+          0.03,
+          0.02,
+          0.37,
+          1.0
+        ],
+        [
+          0.48,
+          0.42,
+          0.42,
           0.41,
+          0.4,
+          0.44,
           1.0
         ],
         [
-          0.73,
-          0.68,
-          0.57,
-          0.57,
-          0.68,
-          0.77,
-          1.0
-        ],
-        [
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          0.36,
+          0.49,
+          0.52,
+          0.46,
+          0.54,
+          0.82,
           1.0,
-          0.17
-        ],
-        [
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          0.0,
-          1.0,
-          0.08
+          0.95
         ]
       ]
     },
     "trend": {
-      "openai-chief-scientist-ai-warning": 4.56,
-      "harrison-ai": 3.468,
-      "artificial-intelligence-news": 1.5,
-      "bernie-sanders-ai-legislation": 0.75,
-      "trump-ai-generated-images-social-media": 0.48
+      "trump-ai-posts": 11.321,
+      "navier-stokes": 9.677,
+      "muse": 2.335,
+      "harrison-ai": 1.488
     },
     "items": {
-      "openai-chief-scientist-ai-warning|2026-09-02": [
-        "g-openai-chief-scientist-ai-warning"
+      "trump-ai-posts|2026-09-03": [
+        "g-trump-ai-posts"
       ],
-      "openai-chief-scientist-ai-warning|2026-09-03": [
-        "g-openai-chief-scientist-ai-warning"
+      "trump-ai-posts|2026-09-04": [
+        "g-trump-ai-posts"
       ],
-      "openai-chief-scientist-ai-warning|2026-09-04": [
-        "g-openai-chief-scientist-ai-warning"
+      "trump-ai-posts|2026-09-05": [
+        "g-trump-ai-posts"
       ],
-      "openai-chief-scientist-ai-warning|2026-09-05": [
-        "g-openai-chief-scientist-ai-warning"
+      "trump-ai-posts|2026-09-06": [
+        "g-trump-ai-posts"
       ],
-      "openai-chief-scientist-ai-warning|2026-09-06": [
-        "g-openai-chief-scientist-ai-warning"
+      "trump-ai-posts|2026-09-07": [
+        "g-trump-ai-posts"
       ],
-      "openai-chief-scientist-ai-warning|2026-09-07": [
-        "g-openai-chief-scientist-ai-warning"
+      "trump-ai-posts|2026-09-08": [
+        "g-trump-ai-posts"
       ],
-      "openai-chief-scientist-ai-warning|2026-09-08": [
-        "g-openai-chief-scientist-ai-warning"
+      "trump-ai-posts|2026-09-09": [
+        "g-trump-ai-posts"
       ],
-      "harrison-ai|2026-09-02": [
-        "g-harrison-ai"
+      "navier-stokes|2026-09-03": [
+        "g-navier-stokes"
+      ],
+      "navier-stokes|2026-09-04": [
+        "g-navier-stokes"
+      ],
+      "navier-stokes|2026-09-05": [
+        "g-navier-stokes"
+      ],
+      "navier-stokes|2026-09-06": [
+        "g-navier-stokes"
+      ],
+      "navier-stokes|2026-09-07": [
+        "g-navier-stokes"
+      ],
+      "navier-stokes|2026-09-08": [
+        "g-navier-stokes"
+      ],
+      "navier-stokes|2026-09-09": [
+        "g-navier-stokes"
+      ],
+      "muse|2026-09-03": [
+        "g-muse"
+      ],
+      "muse|2026-09-04": [
+        "g-muse"
+      ],
+      "muse|2026-09-05": [
+        "g-muse"
+      ],
+      "muse|2026-09-06": [
+        "g-muse"
+      ],
+      "muse|2026-09-07": [
+        "g-muse"
+      ],
+      "muse|2026-09-08": [
+        "g-muse"
+      ],
+      "muse|2026-09-09": [
+        "g-muse"
       ],
       "harrison-ai|2026-09-03": [
         "g-harrison-ai"
@@ -346,95 +351,30 @@
       "harrison-ai|2026-09-08": [
         "g-harrison-ai"
       ],
-      "artificial-intelligence-news|2026-09-02": [
-        "g-artificial-intelligence-news"
-      ],
-      "artificial-intelligence-news|2026-09-03": [
-        "g-artificial-intelligence-news"
-      ],
-      "artificial-intelligence-news|2026-09-04": [
-        "g-artificial-intelligence-news"
-      ],
-      "artificial-intelligence-news|2026-09-05": [
-        "g-artificial-intelligence-news"
-      ],
-      "artificial-intelligence-news|2026-09-06": [
-        "g-artificial-intelligence-news"
-      ],
-      "artificial-intelligence-news|2026-09-07": [
-        "g-artificial-intelligence-news"
-      ],
-      "artificial-intelligence-news|2026-09-08": [
-        "g-artificial-intelligence-news"
-      ],
-      "bernie-sanders-ai-legislation|2026-09-02": [
-        "g-bernie-sanders-ai-legislation"
-      ],
-      "bernie-sanders-ai-legislation|2026-09-03": [
-        "g-bernie-sanders-ai-legislation"
-      ],
-      "bernie-sanders-ai-legislation|2026-09-04": [
-        "g-bernie-sanders-ai-legislation"
-      ],
-      "bernie-sanders-ai-legislation|2026-09-05": [
-        "g-bernie-sanders-ai-legislation"
-      ],
-      "bernie-sanders-ai-legislation|2026-09-06": [
-        "g-bernie-sanders-ai-legislation"
-      ],
-      "bernie-sanders-ai-legislation|2026-09-07": [
-        "g-bernie-sanders-ai-legislation"
-      ],
-      "bernie-sanders-ai-legislation|2026-09-08": [
-        "g-bernie-sanders-ai-legislation"
-      ],
-      "trump-ai-generated-images-social-media|2026-09-02": [
-        "g-trump-ai-generated-images-social-media"
-      ],
-      "trump-ai-generated-images-social-media|2026-09-03": [
-        "g-trump-ai-generated-images-social-media"
-      ],
-      "trump-ai-generated-images-social-media|2026-09-04": [
-        "g-trump-ai-generated-images-social-media"
-      ],
-      "trump-ai-generated-images-social-media|2026-09-05": [
-        "g-trump-ai-generated-images-social-media"
-      ],
-      "trump-ai-generated-images-social-media|2026-09-06": [
-        "g-trump-ai-generated-images-social-media"
-      ],
-      "trump-ai-generated-images-social-media|2026-09-07": [
-        "g-trump-ai-generated-images-social-media"
-      ],
-      "trump-ai-generated-images-social-media|2026-09-08": [
-        "g-trump-ai-generated-images-social-media"
+      "harrison-ai|2026-09-09": [
+        "g-harrison-ai"
       ]
     },
     "itemIndex": {
-      "g-openai-chief-scientist-ai-warning": {
-        "title": "Google Trends · openai chief scientist ai warning",
+      "g-trump-ai-posts": {
+        "title": "Google Trends · trump ai posts",
         "source": "Google Trends",
-        "url": "https://trends.google.com/trends/explore?date=now%207-d&q=openai%20chief%20scientist%20ai%20warning"
+        "url": "https://trends.google.com/trends/explore?date=now%207-d&q=trump%20ai%20posts"
+      },
+      "g-navier-stokes": {
+        "title": "Google Trends · navier stokes",
+        "source": "Google Trends",
+        "url": "https://trends.google.com/trends/explore?date=now%207-d&q=navier%20stokes"
+      },
+      "g-muse": {
+        "title": "Google Trends · muse",
+        "source": "Google Trends",
+        "url": "https://trends.google.com/trends/explore?date=now%207-d&q=muse"
       },
       "g-harrison-ai": {
         "title": "Google Trends · harrison ai",
         "source": "Google Trends",
         "url": "https://trends.google.com/trends/explore?date=now%207-d&q=harrison%20ai"
-      },
-      "g-artificial-intelligence-news": {
-        "title": "Google Trends · artificial intelligence news",
-        "source": "Google Trends",
-        "url": "https://trends.google.com/trends/explore?date=now%207-d&q=artificial%20intelligence%20news"
-      },
-      "g-bernie-sanders-ai-legislation": {
-        "title": "Google Trends · bernie sanders ai legislation",
-        "source": "Google Trends",
-        "url": "https://trends.google.com/trends/explore?date=now%207-d&q=bernie%20sanders%20ai%20legislation"
-      },
-      "g-trump-ai-generated-images-social-media": {
-        "title": "Google Trends · trump ai generated images social media",
-        "source": "Google Trends",
-        "url": "https://trends.google.com/trends/explore?date=now%207-d&q=trump%20ai%20generated%20images%20social%20media"
       }
     }
   },
@@ -493,52 +433,49 @@
       "raw": [
         [
           0.0,
-          0.0,
           37146.0,
           3463.0,
           114.0,
           37.0,
-          10.0
+          39.0,
+          0.0
         ],
         [
-          316.0,
-          7842.0,
+          8084.0,
           13968.0,
           13397.0,
           9722.0,
-          10527.0,
-          2646.0
+          10472.0,
+          8964.0,
+          968.0
         ]
       ],
       "normalized": [
         [
           0.0,
-          0.0,
           1.0,
           0.0932,
           0.0031,
           0.001,
-          0.0003
+          0.001,
+          0.0
         ],
         [
-          0.0226,
-          0.5614,
+          0.5788,
           1.0,
           0.9591,
           0.696,
-          0.7537,
-          0.1894
+          0.7497,
+          0.6418,
+          0.0693
         ]
       ]
     },
     "trend": {
-      "gemini-start-the-adventure": 0.001,
-      "gpt-6-astra": 0.285
+      "gemini-start-the-adventure": 0.0,
+      "gpt-6-astra": 0.09
     },
     "items": {
-      "gemini-start-the-adventure|2026-09-02": [
-        "x-gemini-start-the-adventure"
-      ],
       "gemini-start-the-adventure|2026-09-03": [
         "x-gemini-start-the-adventure"
       ],
@@ -557,8 +494,8 @@
       "gemini-start-the-adventure|2026-09-08": [
         "x-gemini-start-the-adventure"
       ],
-      "gpt-6-astra|2026-09-02": [
-        "x-gpt-6-astra"
+      "gemini-start-the-adventure|2026-09-09": [
+        "x-gemini-start-the-adventure"
       ],
       "gpt-6-astra|2026-09-03": [
         "x-gpt-6-astra"
@@ -576,6 +513,9 @@
         "x-gpt-6-astra"
       ],
       "gpt-6-astra|2026-09-08": [
+        "x-gpt-6-astra"
+      ],
+      "gpt-6-astra|2026-09-09": [
         "x-gpt-6-astra"
       ]
     },

@@ -1115,7 +1115,7 @@
       "bodyTruncated": false,
       "bodyVerbatim": true,
       "eventAggregation": {
-        "total": 1,
+        "total": 3,
         "groups": [
           {
             "key": "官方来源",
@@ -1127,6 +1127,26 @@
                 "url": "https://wallstreetcn.com/articles/3781276",
                 "note": "原始发布 / 公告。",
                 "text": "DeepSeek开放150个后端岗位，加码Agent弹性计算与基础设施 —— 原始发布 / 公告。"
+              }
+            ]
+          },
+          {
+            "key": "相关报道",
+            "tone": "#2b6cb0",
+            "items": [
+              {
+                "source": "智东西",
+                "title": "DeepSeek急招150人，会用Agent成了硬性要求",
+                "url": "https://zhidx.com/p/591756.html",
+                "note": "同事件的其它源头报道。",
+                "text": "DeepSeek急招150人，会用Agent成了硬性要求 —— 同事件的其它源头报道。"
+              },
+              {
+                "source": "品玩 / 硅星人",
+                "title": "DeepSeek扩招150人 战略重心或转向Agent工程化-品玩",
+                "url": "https://www.pingwest.com/w/317193",
+                "note": "同事件的其它源头报道。",
+                "text": "DeepSeek扩招150人 战略重心或转向Agent工程化-品玩 —— 同事件的其它源头报道。"
               }
             ]
           }

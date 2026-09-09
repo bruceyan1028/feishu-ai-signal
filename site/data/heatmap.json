@@ -41,7 +41,7 @@
         6,
         14,
         49,
-        7
+        19
       ],
       [
         0,
@@ -49,7 +49,7 @@
         3,
         12,
         15,
-        4
+        5
       ],
       [
         0,
@@ -57,7 +57,7 @@
         0,
         9,
         23,
-        7
+        12
       ],
       [
         0,
@@ -65,7 +65,7 @@
         3,
         7,
         9,
-        0
+        1
       ],
       [
         0,
@@ -73,7 +73,7 @@
         2,
         0,
         13,
-        2
+        3
       ],
       [
         5,
@@ -81,7 +81,7 @@
         6,
         6,
         26,
-        7
+        10
       ],
       [
         0,
@@ -89,7 +89,7 @@
         0,
         4,
         11,
-        2
+        4
       ],
       [
         2,
@@ -97,7 +97,7 @@
         0,
         0,
         21,
-        3
+        6
       ],
       [
         4,
@@ -105,7 +105,7 @@
         4,
         5,
         29,
-        12
+        19
       ],
       [
         8,
@@ -113,7 +113,7 @@
         3,
         1,
         16,
-        4
+        7
       ],
       [
         0,
@@ -121,7 +121,7 @@
         0,
         0,
         24,
-        4
+        9
       ]
     ],
     "normalized": [
@@ -131,7 +131,7 @@
         0.1224,
         0.2857,
         1.0,
-        0.1429
+        0.3878
       ],
       [
         0.0,
@@ -139,7 +139,7 @@
         0.2,
         0.8,
         1.0,
-        0.2667
+        0.3333
       ],
       [
         0.0,
@@ -147,7 +147,7 @@
         0.0,
         0.3913,
         1.0,
-        0.3043
+        0.5217
       ],
       [
         0.0,
@@ -155,7 +155,7 @@
         0.3333,
         0.7778,
         1.0,
-        0.0
+        0.1111
       ],
       [
         0.0,
@@ -163,7 +163,7 @@
         0.1538,
         0.0,
         1.0,
-        0.1538
+        0.2308
       ],
       [
         0.1923,
@@ -171,7 +171,7 @@
         0.2308,
         0.2308,
         1.0,
-        0.2692
+        0.3846
       ],
       [
         0.0,
@@ -179,7 +179,7 @@
         0.0,
         0.3636,
         1.0,
-        0.1818
+        0.3636
       ],
       [
         0.0952,
@@ -187,7 +187,7 @@
         0.0,
         0.0,
         1.0,
-        0.1429
+        0.2857
       ],
       [
         0.1379,
@@ -195,7 +195,7 @@
         0.1379,
         0.1724,
         1.0,
-        0.4138
+        0.6552
       ],
       [
         0.5,
@@ -203,7 +203,7 @@
         0.1875,
         0.0625,
         1.0,
-        0.25
+        0.4375
       ],
       [
         0.0,
@@ -211,7 +211,7 @@
         0.0,
         0.0,
         1.0,
-        0.1667
+        0.375
       ]
     ]
   },
@@ -607,7 +607,14 @@
       "recvuAVZd2jNJt",
       "recvuAVZd2HvkN",
       "recvuAVZd2fCvl",
-      "recvuAVZd2EsTR"
+      "recvuAVZd2EsTR",
+      "recvuGBG2G1NEt",
+      "recvuGBG2G1wlq",
+      "recvuGBG2Gt3MH",
+      "recvuGBG2Gzk0y",
+      "recvuGBG2GeoR7",
+      "recvuGBG2GgPtw",
+      "recvuGBG2GHUtL"
     ],
     "agent|2026-W37": [
       "recvuuUXqSmsEC",
@@ -616,12 +623,27 @@
       "recvuAVZd2o1ik",
       "recvuAVZd262fm",
       "recvuAVZd2V5E1",
-      "recvuAVZd2Tpj6"
+      "recvuAVZd2Tpj6",
+      "recvuGBG2G2wbe",
+      "recvuGBG2GCcoo",
+      "recvuGBG2G1NEt",
+      "recvuGBG2Gz6jP",
+      "recvuGBG2GzSmj",
+      "recvuGBG2Gt3MH",
+      "recvuGBG2Gzk0y",
+      "recvuGBG2G4wcR",
+      "recvuGBG2GqZE6",
+      "recvuGBG2GhKrF",
+      "recvuGBG2GHmXI",
+      "recvuGBG2GQMFO"
     ],
     "safety-policy|2026-W37": [
       "recvuuUXqSmsEC",
       "recvuuUXqS6Nz7",
-      "recvuAVZd2PjX2"
+      "recvuAVZd2PjX2",
+      "recvuGBG2GzSmj",
+      "recvuGBG2G4wcR",
+      "recvuGBG2GHmXI"
     ],
     "infra|2026-W37": [
       "recvuuUXqSTLbf",
@@ -630,7 +652,9 @@
       "recvuAVZd2XtAY",
       "recvuAVZd2QxwN",
       "recvuAVZd2pCFz",
-      "recvuAVZd2Y2Kk"
+      "recvuAVZd2Y2Kk",
+      "recvuGBG2GXNHu",
+      "recvuGBG2GHhIa"
     ],
     "multimodal|2026-W37": [
       "recvuuUXqSYPmZ",
@@ -639,32 +663,50 @@
       "recvuAVZd2ceVK",
       "recvuAVZd2jNJt",
       "recvuv2dZ1iTFS",
-      "recvuAVZd2EsTR"
+      "recvuAVZd2EsTR",
+      "recvuGBG2GZKSO",
+      "recvuGBG2GeoR7",
+      "recvuGBG2GgPtw",
+      "recvuGBG2GHUtL",
+      "recvuGBG2GHhIa"
     ],
     "other|2026-W37": [
       "recvuuUXqSbY98",
       "recvuAVZd2Sclr",
       "recvuAVZd2RIvl",
-      "recvuAVZd28amM"
+      "recvuAVZd28amM",
+      "recvuAVZd2YMBd",
+      "recvuGBG2GOMWc",
+      "recvuGBG2GhbI0"
     ],
     "rag-search|2026-W37": [
       "recvuuUXqSfqX5",
-      "recvuAVZd2DZ5V"
+      "recvuAVZd2DZ5V",
+      "recvuGBG2Gz6jP"
     ],
     "reasoning|2026-W37": [
       "recvuv2dZ1iTFS",
       "recvuAVZd2FKGE",
-      "recvuv2dZ1an7Q"
+      "recvuv2dZ1an7Q",
+      "recvuGBG2G2wbe"
     ],
     "funding|2026-W37": [
       "recvuAVZd2VRFc",
       "recvuAVZd2mDfs",
       "recvuAVZd2Tpj6",
-      "recvuAVZd2Y2Kk"
+      "recvuAVZd2Y2Kk",
+      "recvuGBG2GJTlm",
+      "recvuGBG2GvRka",
+      "recvuGBG2G7DNH"
     ],
     "embodied|2026-W37": [
       "recvuAVZd2mDfs",
-      "recvuAVZd2pCFz"
+      "recvuAVZd2pCFz",
+      "recvuGBG2GZKSO",
+      "recvuGBG2G1wlq"
+    ],
+    "open-source-model|2026-W37": [
+      "recvuGBG2GCcoo"
     ]
   },
   "itemIndex": {
@@ -2032,19 +2074,139 @@
       "title": "GPT-6 Astra 在 DEF CON 魔方谜题中连续三次解题成功",
       "source": "OpenAI YouTube",
       "url": "https://www.youtube.com/watch?v=j2nv3d_a1f0"
+    },
+    "recvuGBG2G2wbe": {
+      "title": "OpenAI称内部多智能体系统攻克纳维–斯托克斯问题，陷研究路线争议",
+      "source": "智东西",
+      "url": "https://zhidx.com/p/592180.html"
+    },
+    "recvuGBG2GZKSO": {
+      "title": "大晓发布HSImul3R：将人类视频交互重建为可执行机器人技能",
+      "source": "品玩 / 硅星人",
+      "url": "https://www.pingwest.com/w/317202"
+    },
+    "recvuGBG2GCcoo": {
+      "title": "MiniCPM5-2B开源：2B参数端侧模型主打Agent能力",
+      "source": "智东西",
+      "url": "https://zhidx.com/p/591922.html"
+    },
+    "recvuGBG2G1NEt": {
+      "title": "推出 Muse：面向所有人的全球首款个人 AI Agent",
+      "source": "Meta Newsroom AI",
+      "url": "https://about.fb.com/news/2026/09/introducing-muse-personal-ai-agent"
+    },
+    "recvuGBG2GJTlm": {
+      "title": "Mistral获30亿欧元融资，主攻欧洲主权AI",
+      "source": "TechCrunch AI",
+      "url": "https://techcrunch.com/2026/09/08/mistral-raises-e3b-as-sovereign-ai-becomes-big-business"
+    },
+    "recvuGBG2GXNHu": {
+      "title": "Arm发布移动CSS for Mobile 2：CPU加速端侧AI，GPU首次集成神经网络加速器",
+      "source": "AI科技评论 / 雷峰网",
+      "url": "https://www.leiphone.com/category/chipdesign/e3zbypzis817q2g8.html"
+    },
+    "recvuGBG2GvRka": {
+      "title": "Cognition获20亿美元融资，估值升至480亿美元",
+      "source": "TechCrunch AI",
+      "url": "https://techcrunch.com/2026/09/08/cognition-hits-48b-valuation-signaling-investors-believe-ai-coding-is-far-from-a-winner-take-all-market"
+    },
+    "recvuGBG2Gz6jP": {
+      "title": "KDDI 如何打造更快速可靠的消费者 RAG 应用 Buffmee",
+      "source": "Google Cloud AI Blog",
+      "url": "https://cloud.google.com/blog/topics/customers/how-kddi-optimized-rag-performance-with-agent-development-kit"
+    },
+    "recvuGBG2G7DNH": {
+      "title": "2026年上半年中国AI创企融资超3000亿元，资金加速流向头部与应用",
+      "source": "智东西",
+      "url": "https://zhidx.com/p/572575.html"
+    },
+    "recvuGBG2G1wlq": {
+      "title": "中国清洁机器人品牌出海：从代工到技术立品牌",
+      "source": "AI科技评论 / 雷峰网",
+      "url": "https://www.leiphone.com/category/weiwu/n2l3zx3xv4mzk2cr.html"
+    },
+    "recvuGBG2GzSmj": {
+      "title": "OpenAI智能体劫持德国网站，最高法发布AI司法规则，多款国产芯片与产品亮相",
+      "source": "果壳",
+      "url": "https://www.guokr.com/article/470157"
+    },
+    "recvuGBG2Gt3MH": {
+      "title": "百度搭子全面接入小度硬件，推动家庭智能体落地",
+      "source": "AI科技评论 / 雷峰网",
+      "url": "https://www.leiphone.com/category/industrynews/pcuoyleiaqbo1j0l.html"
+    },
+    "recvuGBG2Gzk0y": {
+      "title": "联想：AI PC需求回升，Qira打造跨设备系统级AI",
+      "source": "智东西",
+      "url": "https://zhidx.com/p/592131.html"
+    },
+    "recvuGBG2G4wcR": {
+      "title": "ECC v2.2.1：面向代码智能体的性能与安全补丁",
+      "source": "GitHub Trending",
+      "url": "https://github.com/affaan-m/ecc/releases/tag/v2.2.1"
+    },
+    "recvuGBG2GeoR7": {
+      "title": "GPT Image 2.5提升图像编辑能力，但主要是补齐竞品短板",
+      "source": "虎嗅",
+      "url": "https://www.huxiu.com/article/4889685.html"
+    },
+    "recvuGBG2GqZE6": {
+      "title": "GPT-5.6 Sol 如何协助开展量子计算实验",
+      "source": "OpenAI News",
+      "url": "https://openai.com/index/codex-quantum-computing-experiments"
+    },
+    "recvuGBG2GhKrF": {
+      "title": "Ollama v0.34.0：接入 ChatGPT Desktop 并增强工具调用与结构化输出",
+      "source": "GitHub Trending",
+      "url": "https://github.com/ollama/ollama/releases/tag/v0.34.0-rc3"
+    },
+    "recvuGBG2GHmXI": {
+      "title": "Gemini CLI v0.59.0 发布：修复 MCP 安全问题并强化受限工作区",
+      "source": "GitHub Trending",
+      "url": "https://github.com/google-gemini/gemini-cli/releases/tag/v0.59.0"
+    },
+    "recvuGBG2GOMWc": {
+      "title": "AlphaGenome Atlas：覆盖人类基因组全部单碱基变异的预测图谱",
+      "source": "Google DeepMind YouTube",
+      "url": "https://www.youtube.com/watch?v=u0atol5c-bq"
+    },
+    "recvuGBG2GQMFO": {
+      "title": "Langflow 1.12.1：修复多项 Agent 工作流与 MCP 集成问题",
+      "source": "GitHub Trending",
+      "url": "https://github.com/langflow-ai/langflow/releases/tag/v1.12.1"
+    },
+    "recvuGBG2GgPtw": {
+      "title": "OpenAI发布GPT-Image-2.5 API图像模型：Sunburst与Flare",
+      "source": "OpenAI YouTube",
+      "url": "https://www.youtube.com/watch?v=a7mswdxj86k"
+    },
+    "recvuGBG2GHUtL": {
+      "title": "OpenAI推出ChatGPT Images 2.5",
+      "source": "OpenAI News",
+      "url": "https://openai.com/index/introducing-chatgpt-images-2-5"
+    },
+    "recvuGBG2GhbI0": {
+      "title": "中国8月CPI、PPI同比涨幅扩大，算力需求推高部分电子设备价格",
+      "source": "华尔街见闻",
+      "url": "https://wallstreetcn.com/articles/3781380"
+    },
+    "recvuGBG2GHhIa": {
+      "title": "NVIDIA RTX 加速 Adobe Premiere 视频剪辑工作流",
+      "source": "NVIDIA YouTube",
+      "url": "https://www.youtube.com/watch?v=v0hx37eqcmi"
     }
   },
   "trend": {
-    "agent": 4.667,
-    "reasoning": 2.235,
-    "multimodal": 5.455,
-    "open-source-model": 1.8,
-    "rag-search": 15.0,
-    "infra": 3.0,
-    "embodied": 6.5,
-    "safety-policy": 24.0,
-    "product": 5.125,
-    "funding": 2.222,
+    "agent": 5.667,
+    "reasoning": 2.353,
+    "multimodal": 6.364,
+    "open-source-model": 2.0,
+    "rag-search": 16.0,
+    "infra": 3.273,
+    "embodied": 7.5,
+    "safety-policy": 27.0,
+    "product": 6.0,
+    "funding": 2.556,
     "other": 2.0
   },
   "window_end": "2026-W37"
