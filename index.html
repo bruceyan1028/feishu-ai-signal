@@ -778,7 +778,8 @@ function keepOriginalTitle(s){
   return /[A-Za-z]/.test(original);
 }
 function matchesFilter(s, f){
-  if(f==='全部') return true;
+  if(f==='全部') return s.contentType !== '论文';
+  if(s.contentType === '论文') return f === '论文';
   if(f===EDGE_FILTER) return s.tags.includes('端侧');
   if(FORMAT_FILTERS.includes(f)) return s.contentType===f;
   return s.cat===f;
@@ -787,7 +788,8 @@ function isTagOn(f){ return state.activeFilter === f; }
 function allTagsOn(){ return !state.activeFilter; }
 function matchesFeed(s){
   const f = state.activeFilter;
-  if(!f) return true;
+  if(!f) return s.contentType !== '论文';
+  if(s.contentType === '论文') return f === '论文';
   if(f === EDGE_FILTER) return (s.tags || []).includes('端侧');
   if(FORMAT_FILTERS.includes(f)) return s.contentType === f;
   return s.cat === f;
@@ -1000,7 +1002,8 @@ async function loadBrief(){
       mediaAssets: s.mediaAssets || {images:[], videos:[]},
       metrics: s.socialMetrics || {},
     })).filter(p=>p.account);
-    signals = (data.signals || []).map((s, index)=>({
+    const rawSignals = [...(data.signals || []), ...(data.paperSignals || [])];
+    signals = rawSignals.map((s, index)=>({
       rank: index + 1,
       // 要点里的 refs 用的是这个原始序号，rank 下面会按影响分重排，别拿 rank 去对
       srcIndex: index + 1,
@@ -1059,7 +1062,7 @@ async function loadBrief(){
       else seenImages.add(imageKey);
     });
     const relatedDocs = ['模型选型评测表', '技术决策记录库', 'AI 团队知识库'];
-    personal = signals.slice(0,3).map((s,index)=>({
+    personal = signals.filter(s => s.contentType !== '论文').slice(0,3).map((s,index)=>({
       ref:s.rank,
       match:Math.max(82, 96-index*5),
       title:s.zhTitle,
@@ -2742,7 +2745,8 @@ function briefHtml(A){
 
   const visible = signals.filter(matchesFeed).slice().sort(sortFns[state.sortKey]);
 
-  const counts = { 全部: signals.length };
+  const mainSignals = signals.filter(s => s.contentType !== '论文');
+  const counts = { 全部: mainSignals.length };
   filters.concat(FORMAT_FILTERS).forEach(f => {
     if(f === '全部') return;
     counts[f] = signals.filter(s => matchesFilter(s, f)).length;
@@ -2750,13 +2754,14 @@ function briefHtml(A){
   // 社媒不在 signals 里，计数走它自己那份
   counts[SOCIAL_FILTER] = socialPosts.length;
   const socialMode = state.activeFilter === SOCIAL_FILTER;
+  const paperMode = state.activeFilter === '论文';
 
   const cardsHtml = visible.map((s, idx) => {
     // 「待分析」是真会写进周报待纳入表的动作，公开站只读时按钮置灰而不是藏起来，
     // 否则读者不知道这条能不能被排进下期周报。
     const queued = state.pending.includes(s.recordId);
     const canQueue = state.pendingWritable;
-    const num = String(s.rank).padStart(2,'0');
+    const num = String(idx + 1).padStart(2,'0');
     const tp = topicFor(s);
     const imgUrl = topicImageUrl(s);
     const isEdge = s.tags.includes('端侧');
@@ -2827,7 +2832,9 @@ function briefHtml(A){
     <div class="feed-main">
       ${socialMode
         ? techDivider(A, '02', '社媒帖子', `${briefMeta.date || ''} · ${visibleSocialPosts().length}/${socialPosts.length} · 不计入简报信号`)
-        : techDivider(A, '02', '全部信号', `${briefMeta.date || ''} · ${visible.length}/${signals.length}`)}
+        : paperMode
+          ? techDivider(A, '02', '论文', `${briefMeta.date || ''} · ${visible.length} · 不计入日报 30 条`)
+          : techDivider(A, '02', '全部信号', `${briefMeta.date || ''} · ${visible.length}/${mainSignals.length}`)}
       ${socialMode ? '' : signals.length ? '' : `
       <div style="padding: 8px 0 26px;">
         <h3 style="margin: 0 0 10px; font-size: 20px; font-weight: 700; letter-spacing: -.01em; color: var(--ds-text);">${esc(briefMeta.title)}</h3>

@@ -266,6 +266,12 @@ def load_recent_briefs(
                 if _within_source_window(signal, date, lookback_hours)
             ]
         signals = cluster.enrich_with_pool(signals, pool, threshold=0.85)
+        paper_signals = [
+            signal for signal in signals if signal.get("contentType") == "论文"
+        ]
+        signals = [
+            signal for signal in signals if signal.get("contentType") != "论文"
+        ]
         briefs.append(
             {
                 "date": date,
@@ -273,6 +279,7 @@ def load_recent_briefs(
                 "intro": str(daily.scalar(fields.get("导语")) or ""),
                 "bullets": _json_cell(fields.get("关键要点"), []),
                 "signals": signals,
+                "paperSignals": paper_signals,
                 "socialPosts": recent_social_posts(entries, date),
                 "briefRecordId": str(record.get("record_id") or ""),
                 "briefTableId": table_id,
@@ -531,7 +538,10 @@ def build_site(
     mirror_social_videos(briefs, social_media_dir)
     rendered: dict[str, list[dict[str, str]]] = {}
     for brief in briefs:
-        for signal in brief.get("signals") or []:
+        published_signals = (brief.get("signals") or []) + (
+            brief.get("paperSignals") or []
+        )
+        for signal in published_signals:
             pdf_url = str(signal.get("pdfUrl") or "")
             pages = list(signal.get("paperVisualPages") or [])
             if signal.get("paperFullTextSource") != "pdf" or not pdf_url or not pages:
@@ -695,6 +705,9 @@ def run() -> int:
         ]
         current["signals"] = cluster.enrich_with_pool(
             current.get("signals") or [], pool, threshold=0.85
+        )
+        current["paperSignals"] = cluster.enrich_with_pool(
+            current.get("paperSignals") or [], pool, threshold=0.85
         )
         briefs = [current, *[item for item in briefs if item["date"] != current["date"]]][:7]
     curate_web_media(briefs)

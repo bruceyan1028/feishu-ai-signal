@@ -266,7 +266,7 @@ python -m src.health --days 30
   → 仍在各源 lookback（且不超过 7 天）内的候选
   → 白宫非 AI 文再滤一遍
   → 按 P0 优先、质量分、时间排序；给非 P0 留 DAILY_MIN_NON_P0
-  → 论文/视频/播客/GitHub/每源上限
+  → 论文独立板块；视频/播客/GitHub/每源上限
   → cluster.collapse_for_brief 标题近似折叠
   → 无存量分析则 analyze_signal（中文标题/摘要/解读/打分）
   → 文章配图、论文图表
@@ -274,7 +274,7 @@ python -m src.health --days 30
   → upsert 每日简报表
 ```
 
-规模默认：候选 30、输出信号 30、论文最多 4、视频 1–4、播客最多 2、GitHub 最多 5、每源最多 4。
+规模默认：主候选 30、主输出信号 30；论文独立收录且默认隐藏，最多 4；视频 1–4、播客最多 2、GitHub 最多 5、每源最多 4。
 
 分析字段：`title_cn`、`summary_cn`、`why`、`deep_analysis_cn`、`impact` / `novelty` / `actionability`（0–100）、`urgency`（高/中/低）、`topics`（从固定集合选 2–4 个）。端侧主题由规则强制补「端侧」；白宫政策强制补「监管」。
 
@@ -638,8 +638,8 @@ python -m tools.export_seed
 **白宫又进了非 AI 政策**  
 不要放宽 `science and technology`。改 `process.is_ai_policy_text` / 种子里的 `keyword_regex` 与 `title_exclude_regex`，并写回飞书两行 `whitehouse-tech-*`。已发布简报 JSON 要改站点数据才会从网页消失。
 
-**简报论文太多**  
-调 `DAILY_MAX_PAPERS`、`MAX_ARXIV_ITEMS`、`ARXIV_QUALITY_WEIGHT` 或论文二级表阈值。
+**论文板块内容太多**
+调 `DAILY_MAX_PAPERS`、`MAX_ARXIV_ITEMS`、`ARXIV_QUALITY_WEIGHT` 或论文二级表阈值。论文不计入日报 30 条，网页默认隐藏，点击「论文」板块后显示。
 
 **卡片没人收到**  
 查机器人是否已进群、`chat_id` 是否当前应用可见、Runner/本机能否访问 `open.feishu.cn`、当日是否已发送需 `--force`。未配群聊时才查 `open_id` 是否当前应用签发。

@@ -540,7 +540,7 @@ class DailyTests(unittest.TestCase):
             limit=50,
         )
         self.assertEqual(selected[0]["record_id"], "official")
-        # arXiv 条目均为论文，受论文上限 DAILY_MAX_PAPERS 约束（比 MAX_ARXIV_ITEMS 更紧）
+        # arXiv 条目进入独立论文板块，受论文上限约束但不占主候选名额。
         arxiv_selected = [item for item in selected if item["source_id"].startswith("arxiv-")]
         self.assertEqual(len(arxiv_selected), config.DAILY_MAX_PAPERS)
         self.assertLessEqual(len(arxiv_selected), config.MAX_ARXIV_ITEMS)
@@ -569,6 +569,62 @@ class DailyTests(unittest.TestCase):
             limit=50,
         )
         self.assertEqual(len(selected), config.DAILY_MAX_GITHUB)
+
+    def test_papers_do_not_stop_collection_of_main_candidates(self) -> None:
+        now = datetime.now(timezone.utc)
+        stamp = int(now.timestamp() * 1000)
+        limit = 6
+        records = [
+            {
+                "record_id": f"paper-{index}",
+                "fields": {
+                    "source_id": f"paper-source-{index}",
+                    "来源类型": "论文",
+                    "发布时间": stamp - index,
+                },
+            }
+            for index in range(config.DAILY_MAX_PAPERS + 2)
+        ] + [
+            {
+                "record_id": f"article-{index}",
+                "fields": {
+                    "source_id": f"article-source-{index}",
+                    "来源类型": "纯网页",
+                    "发布时间": stamp - 100 - index,
+                },
+            }
+            for index in range(limit)
+        ]
+        source_ids = {record["fields"]["source_id"] for record in records}
+
+        selected = daily.select_candidates(
+            records,
+            {source_id: "P0" for source_id in source_ids},
+            source_ids,
+            now=now,
+            limit=limit,
+        )
+
+        self.assertEqual(
+            len(
+                [
+                    item
+                    for item in selected
+                    if daily.content_type(item["fields"]) != "论文"
+                ]
+            ),
+            limit,
+        )
+        self.assertEqual(
+            len(
+                [
+                    item
+                    for item in selected
+                    if daily.content_type(item["fields"]) == "论文"
+                ]
+            ),
+            config.DAILY_MAX_PAPERS,
+        )
 
     def test_single_source_cannot_flood_candidates(self) -> None:
         now = datetime.now(timezone.utc)
@@ -623,6 +679,24 @@ class DailyTests(unittest.TestCase):
 
         self.assertEqual(len(selected), 3)
         self.assertIn("video-1", [item["recordId"] for item in selected])
+
+    def test_papers_do_not_count_toward_daily_output_limit(self) -> None:
+        ranked = [
+            {"recordId": f"paper-{index}", "contentType": "论文"}
+            for index in range(config.DAILY_MAX_PAPERS + 2)
+        ] + [
+            {"recordId": f"article-{index}", "contentType": "文章"}
+            for index in range(5)
+        ]
+
+        main, papers, social = daily.partition_output_signals(ranked, 3)
+
+        self.assertEqual(
+            [item["recordId"] for item in main],
+            ["article-0", "article-1", "article-2"],
+        )
+        self.assertEqual(len(papers), config.DAILY_MAX_PAPERS)
+        self.assertEqual(social, [])
 
     def test_candidate_does_not_use_collection_time_as_publish_time(self) -> None:
         now = datetime.now(timezone.utc)
@@ -872,6 +946,15 @@ class DeliveryTests(unittest.TestCase):
         self.assertIn("afterHeading", template)
         self.assertIn("flushHeading", template)
         self.assertIn("pendingImages", template)
+
+    def test_papers_are_hidden_until_the_paper_section_is_selected(self) -> None:
+        template = Path("index.html").read_text(encoding="utf-8")
+        self.assertIn("...(data.paperSignals || [])", template)
+        self.assertIn("if(!f) return s.contentType !== '论文'", template)
+        self.assertIn("if(s.contentType === '论文') return f === '论文'", template)
+        self.assertIn("signals.filter(s => s.contentType !== '论文').slice(0,3)", template)
+        self.assertIn("String(idx + 1).padStart(2,'0')", template)
+        self.assertIn("不计入日报 30 条", template)
 
     def test_homepage_is_three_columns_with_data_on_both_sides(self) -> None:
         template = Path("index.html").read_text(encoding="utf-8")
