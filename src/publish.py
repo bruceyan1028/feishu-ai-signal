@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import logging
 import re
@@ -17,6 +18,7 @@ import requests
 from . import (
     cluster,
     config,
+    cover_image,
     daily,
     feishu,
     openai_charts,
@@ -40,8 +42,6 @@ def _call_with_timeout(fn, timeout: float, *args, **kwargs):
     pool = ThreadPoolExecutor(max_workers=1)
     try:
         future = pool.submit(fn, *args, **kwargs)
-        for thread in getattr(pool, "_threads", ()):
-            thread.daemon = True
         return future.result(timeout=timeout)
     finally:
         pool.shutdown(wait=False)
@@ -88,6 +88,38 @@ def restore_persistent_site_data(site: Path, kept: dict[str, bytes]) -> None:
         dest.parent.mkdir(parents=True, exist_ok=True)
         if not dest.exists():
             dest.write_bytes(content)
+
+
+def stash_generated_covers(site: Path) -> dict[str, bytes]:
+    directory = Path(site) / "media" / "generated"
+    if not directory.is_dir():
+        return {}
+    return {path.name: path.read_bytes() for path in directory.iterdir() if path.is_file()}
+
+
+def restore_generated_covers(site: Path, kept: dict[str, bytes]) -> Path:
+    directory = Path(site) / "media" / "generated"
+    if kept:
+        directory.mkdir(parents=True, exist_ok=True)
+        for name, content in kept.items():
+            (directory / name).write_bytes(content)
+    return directory
+
+
+def stash_article_images(site: Path) -> dict[str, bytes]:
+    directory = Path(site) / "media" / "articles"
+    if not directory.is_dir():
+        return {}
+    return {path.name: path.read_bytes() for path in directory.iterdir() if path.is_file()}
+
+
+def restore_article_images(site: Path, kept: dict[str, bytes]) -> Path:
+    directory = Path(site) / "media" / "articles"
+    if kept:
+        directory.mkdir(parents=True, exist_ok=True)
+        for name, content in kept.items():
+            (directory / name).write_bytes(content)
+    return directory
 
 
 def _json_cell(value: Any, fallback: Any) -> Any:
@@ -307,7 +339,10 @@ def curate_web_media(briefs: list[dict[str, Any]]) -> None:
         for signal in signals
         if signal.get("contentType") in {"文章", "公众号"}
         and str(signal.get("url") or "").startswith(("http://", "https://"))
-        and (signal.get("mediaAssets") or {}).get("curatedBy") != "llm"
+        and (
+            (signal.get("mediaAssets") or {}).get("curatedBy") not in {"llm", "vision"}
+            or int((signal.get("mediaAssets") or {}).get("curationVersion") or 0) < 2
+        )
     }
     article_urls = sorted(article_titles)
     article_media: dict[str, dict[str, Any]] = {}
@@ -324,7 +359,10 @@ def curate_web_media(briefs: list[dict[str, Any]]) -> None:
                 if bundle.get("cover") or bundle.get("images") or bundle.get("candidates")
             }
     for signal in signals:
-        if (signal.get("mediaAssets") or {}).get("curatedBy") == "llm":
+        media_state = signal.get("mediaAssets") or {}
+        if media_state.get("curatedBy") in {"llm", "vision"} and int(
+            media_state.get("curationVersion") or 0
+        ) >= 2:
             continue
         media, cover = rss.select_pushed_article_images(
             signal,
@@ -399,6 +437,79 @@ def mirror_huxiu_images(
             signal["imageUrl"] = new_primary or (
                 str(mirrored[0].get("url") or "") if mirrored else ""
             )
+
+
+def mirror_selected_article_images(
+    briefs: list[dict[str, Any]], output_dir: Path | str
+) -> None:
+    """Mirror selected article covers/figures so CDN hotlink rules cannot break the site."""
+    destination = Path(output_dir)
+    downloaded: dict[tuple[str, str], str] = {}
+
+    def mirror(source_url: str, referer: str, prefix: str) -> str:
+        if not source_url.startswith(("http://", "https://")):
+            return source_url
+        cache_key = (source_url, referer)
+        if cache_key in downloaded:
+            return downloaded[cache_key]
+        digest = hashlib.sha256(source_url.encode("utf-8")).hexdigest()[:12]
+        existing = next(destination.glob(f"{prefix}-{digest}.*"), None) if destination.exists() else None
+        if existing and existing.stat().st_size > 0:
+            relative = f"media/articles/{existing.name}"
+            downloaded[cache_key] = relative
+            return relative
+        try:
+            response = requests.get(
+                source_url,
+                headers={
+                    "User-Agent": (
+                        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
+                        "AppleWebKit/537.36 Chrome/138 Safari/537.36"
+                    ),
+                    "Referer": referer,
+                    "Accept": "image/avif,image/webp,image/apng,image/*,*/*;q=0.8",
+                },
+                timeout=30,
+            )
+            response.raise_for_status()
+            content_type = response.headers.get("content-type", "").split(";", 1)[0].lower()
+            extension = _IMAGE_EXTENSIONS.get(content_type)
+            if not extension or len(response.content) < 1_000 or len(response.content) > 12_000_000:
+                return source_url
+            destination.mkdir(parents=True, exist_ok=True)
+            path = destination / f"{prefix}-{digest}{extension}"
+            path.write_bytes(response.content)
+            relative = f"media/articles/{path.name}"
+            downloaded[cache_key] = relative
+            return relative
+        except requests.RequestException as exc:
+            log.info("文章图片镜像失败 %s: %s", source_url, exc)
+            return source_url
+
+    for brief in briefs:
+        for signal in brief.get("signals") or []:
+            if signal.get("contentType") not in {"文章", "公众号"}:
+                continue
+            referer = str(signal.get("url") or "")
+            prefix = _SAFE_FILENAME_RE.sub(
+                "-", str(signal.get("recordId") or "article")
+            ).strip("-")
+            media = dict(signal.get("mediaAssets") or {})
+            original_cover = str(media.get("cover") or signal.get("imageUrl") or "")
+            local_cover = mirror(original_cover, referer, prefix) if original_cover else ""
+            mirrored_images = []
+            for image in media.get("images") or []:
+                if not isinstance(image, dict):
+                    continue
+                source_url = str(image.get("url") or "")
+                mirrored_images.append(
+                    {**image, "url": mirror(source_url, referer, prefix)}
+                )
+            media["images"] = mirrored_images
+            if local_cover:
+                media["cover"] = local_cover
+                signal["imageUrl"] = local_cover
+            signal["mediaAssets"] = media
 
 
 def mirror_social_videos(
@@ -492,6 +603,8 @@ def build_site(
         raise RuntimeError("没有可发布的已发布简报")
     site = Path(site_dir)
     kept = stash_persistent_site_data(site)
+    kept_generated_covers = stash_generated_covers(site)
+    kept_article_images = stash_article_images(site)
     if site.exists():
         shutil.rmtree(site)
     data_dir = site / "data"
@@ -501,6 +614,8 @@ def build_site(
     openai_chart_dir = site / "media" / "openai-charts"
     huxiu_media_dir = site / "media" / "huxiu"
     social_media_dir = site / "media" / "social"
+    generated_media_dir = restore_generated_covers(site, kept_generated_covers)
+    article_media_dir = restore_article_images(site, kept_article_images)
     shutil.copy2(TEMPLATE, site / "index.html")
     rendered_openai_charts: dict[str, list[dict[str, str]]] = {}
     for brief in briefs:
@@ -519,6 +634,7 @@ def build_site(
                         "url": f"media/openai-charts/{item['filename']}",
                         "alt": item["alt"],
                         "kind": "openai-vega-chart",
+                        "layout": "wide",
                     }
                     for item in files
                 ]
@@ -535,6 +651,7 @@ def build_site(
             signal["mediaAssets"] = media
             signal["imageUrl"] = chart_images[0]["url"]
     mirror_huxiu_images(briefs, huxiu_media_dir)
+    mirror_selected_article_images(briefs, article_media_dir)
     mirror_social_videos(briefs, social_media_dir)
     rendered: dict[str, list[dict[str, str]]] = {}
     for brief in briefs:
@@ -566,6 +683,7 @@ def build_site(
                         "url": f"media/papers/{item['filename']}",
                         "alt": item["alt"],
                         "kind": "pdf-page",
+                        "layout": "wide",
                     }
                     for item in files
                 ]
@@ -576,6 +694,9 @@ def build_site(
                 media["images"] = rendered[key] + [
                     item for item in existing if str(item.get("url") or "") not in known
                 ]
+                if not signal.get("imageUrl"):
+                    signal["imageUrl"] = rendered[key][0]["url"]
+                    media["cover"] = rendered[key][0]["url"]
                 signal["mediaAssets"] = media
     rendered_policy_documents: dict[str, list[dict[str, str]]] = {}
     for brief in briefs:
@@ -608,6 +729,7 @@ def build_site(
                         {
                             "url": f"media/policies/{item['filename']}",
                             "alt": item["alt"],
+                            "layout": "wide",
                         }
                         for item in files
                     ]
@@ -622,6 +744,7 @@ def build_site(
                     and not str(item.get("url") or "").startswith("media/policies/")
                 ]
                 signal["mediaAssets"] = media
+    cover_image.fill_missing_covers(briefs, generated_media_dir)
     for brief in briefs:
         content = json.dumps(brief, ensure_ascii=False, indent=2)
         (data_dir / f'brief-{brief["date"]}.json').write_text(content, encoding="utf-8")

@@ -547,9 +547,11 @@ GitHub Pages：仓库 Settings → Pages → Source = GitHub Actions。公网形
 - `FEISHU_APP_ID` / `FEISHU_APP_SECRET` / `FEISHU_BASE_ID`
 - `FEISHU_PARAM_TABLE_ID` / `FEISHU_ENTRY_TABLE_ID`（bootstrap 打印）
 - 生成简报：`LLM_API_KEY`（`LLM_BASE_URL` / `LLM_MODEL` 可选，默认 DeepSeek）
+- 视觉选图：`VISION_MODEL`（密钥与地址默认复用 `LLM_*`；真正读取候选图并输出置信度、正文位置和版式）
+- 缺图生图：`IMAGE_GENERATION_ENABLED=1`（默认模型 `gemini-3.1-flash-image`，密钥与地址继续复用；生成图会标注为 AI 配图）
 - 发卡片：`FEISHU_RECIPIENT_CHAT_IDS`（优先）或 `FEISHU_RECIPIENT_OPEN_IDS`、`PUBLIC_BASE_URL`
 
-常用可选：各表 ID、`JINA_API_KEY`、`YOUTUBE_API_KEY`、`X_BEARER_TOKEN`、`ASR_*`、`DAILY_*`、`PAPER_*`、`MAX_ARXIV_ITEMS`。
+常用可选：各表 ID、`JINA_API_KEY`、`YOUTUBE_API_KEY`、`X_BEARER_TOKEN`、`ASR_*`、`VISION_*`、`IMAGE_GENERATION_*`、`DAILY_*`、`PAPER_*`、`MAX_ARXIV_ITEMS`。
 
 `config.py` 在 **import 时**读环境。`bootstrap` 会先灌 `.env`；`python -m src.main` 等多数入口不会，请：
 

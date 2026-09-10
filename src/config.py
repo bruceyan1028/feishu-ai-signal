@@ -103,6 +103,45 @@ DIFY_WEBHOOK_URL = os.environ.get("DIFY_WEBHOOK_URL", "").strip()
 LLM_API_KEY = os.environ.get("LLM_API_KEY", "").strip()
 LLM_BASE_URL = _env("LLM_BASE_URL", "https://api.deepseek.com/v1").rstrip("/")
 LLM_MODEL = _env("LLM_MODEL", "deepseek-chat")
+# 图片筛选默认复用文本模型的网关和密钥，只单独指定模型；必要时仍可覆盖。
+VISION_API_KEY = os.environ.get("VISION_API_KEY", "").strip() or LLM_API_KEY
+VISION_BASE_URL = os.environ.get("VISION_BASE_URL", "").strip().rstrip("/") or LLM_BASE_URL
+VISION_MODEL = _env("VISION_MODEL", "gpt-5.6-luna")
+VISION_MAX_CANDIDATES = int(os.environ.get("VISION_MAX_CANDIDATES", "12"))
+VISION_COVER_MIN_CONFIDENCE = float(
+    os.environ.get("VISION_COVER_MIN_CONFIDENCE", "0.72")
+)
+VISION_COVER_MIN_QUALITY = float(os.environ.get("VISION_COVER_MIN_QUALITY", "0.72"))
+VISION_BODY_MIN_CONFIDENCE = float(
+    os.environ.get("VISION_BODY_MIN_CONFIDENCE", "0.62")
+)
+VISION_BODY_MIN_TOPIC_RELEVANCE = float(
+    os.environ.get("VISION_BODY_MIN_TOPIC_RELEVANCE", "0.72")
+)
+# 对聚合页、日报页等混合内容的候选图做主线过滤。上下文不足时保持宽容，
+# 完整上下文与标题/摘要没有交集时才在送入视觉模型前排除。
+VISION_STORY_CONTEXT_MIN_CHARS = int(
+    os.environ.get("VISION_STORY_CONTEXT_MIN_CHARS", "24")
+)
+VISION_STORY_MIN_SHARED_NGRAMS = int(
+    os.environ.get("VISION_STORY_MIN_SHARED_NGRAMS", "2")
+)
+# 缺图时的生成式兜底默认关闭，显式开启才会产生图片 API 费用。
+IMAGE_GENERATION_ENABLED = os.environ.get(
+    "IMAGE_GENERATION_ENABLED", "0"
+).strip().lower() in {"1", "true", "yes", "on"}
+IMAGE_GENERATION_API_KEY = (
+    os.environ.get("IMAGE_GENERATION_API_KEY", "").strip() or VISION_API_KEY
+)
+IMAGE_GENERATION_BASE_URL = _env(
+    "IMAGE_GENERATION_BASE_URL", VISION_BASE_URL
+).rstrip("/")
+IMAGE_GENERATION_MODEL = _env("IMAGE_GENERATION_MODEL", "gemini-3.1-flash-image")
+IMAGE_GENERATION_ENDPOINT = _env("IMAGE_GENERATION_ENDPOINT", "auto").lower()
+IMAGE_GENERATION_MAX_ATTEMPTS = int(os.environ.get("IMAGE_GENERATION_MAX_ATTEMPTS", "3"))
+IMAGE_GENERATION_MIN_CONFIDENCE = float(
+    os.environ.get("IMAGE_GENERATION_MIN_CONFIDENCE", "0.72")
+)
 # 播客托管语音转写。单独配置，不能假设文本 LLM 服务也实现 audio/transcriptions。
 ASR_API_KEY = os.environ.get("ASR_API_KEY", "").strip()
 ASR_BASE_URL = _env("ASR_BASE_URL", "https://api.openai.com/v1").rstrip("/")

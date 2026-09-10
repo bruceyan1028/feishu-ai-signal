@@ -129,13 +129,23 @@ ANALYSIS_PROMPT = """你是资深 AI 行业分析师。请阅读下面这条 AI 
 """
 
 
-def _llm_json(prompt: str, image_urls: list[str] | None = None) -> dict[str, Any]:
+def _llm_json(
+    prompt: str,
+    image_urls: list[str] | None = None,
+    *,
+    api_key: str | None = None,
+    base_url: str | None = None,
+    model: str | None = None,
+    prefer_responses: bool = False,
+) -> dict[str, Any]:
     """调用统一 LLM；传图时使用 OpenAI 兼容的多模态消息格式。"""
     import time
 
     import requests
 
-    base = config.LLM_BASE_URL.rstrip("/")
+    key = api_key or config.LLM_API_KEY
+    base = (base_url or config.LLM_BASE_URL).rstrip("/")
+    selected_model = model or config.LLM_MODEL
     if base.endswith("/chat/completions"):
         endpoints = [
             ("chat", base),
@@ -151,11 +161,13 @@ def _llm_json(prompt: str, image_urls: list[str] | None = None) -> dict[str, Any
             ("chat", chat_url),
             ("responses", chat_url.replace("/chat/completions", "/responses")),
         ]
+    if prefer_responses:
+        endpoints.sort(key=lambda item: item[0] != "responses")
 
     resp = None
     response_mode = "chat"
     for mode, url in endpoints:
-        body: dict[str, Any] = {"model": config.LLM_MODEL}
+        body: dict[str, Any] = {"model": selected_model}
         if mode == "responses":
             if image_urls:
                 body["input"] = [
@@ -197,7 +209,7 @@ def _llm_json(prompt: str, image_urls: list[str] | None = None) -> dict[str, Any
                 resp = requests.post(
                     url,
                     headers={
-                        "Authorization": f"Bearer {config.LLM_API_KEY}",
+                        "Authorization": f"Bearer {key}",
                         "Content-Type": "application/json",
                     },
                     json=body,

@@ -5,6 +5,7 @@
 """
 from __future__ import annotations
 
+import base64
 import json
 import logging
 import re
@@ -43,6 +44,7 @@ _DISPLAY_IMAGE_NOISE_RE = re.compile(
     r"author[-_/ ]?(?:avatar|photo|bio)|byline|contributor|profile[-_/ ]?(?:image|photo)"
     r"|avatar|headshot|gravatar|newsletter|subscribe|advertis(?:e|ement)|sponsor"
     r"|qrcode|qr[-_ ]?code|wechat|weixin|公众号|二维码|扫码|赞赏|打赏|联系(?:我们|作者)"
+    r"|果壳有意思|点赞|小爱心|收藏|like|favorite|reaction"
     r")"
 )
 
@@ -328,7 +330,10 @@ def image_asset_is_noise(asset: dict[str, Any]) -> bool:
     url = str(asset.get("url") or "").strip()
     alt = str(asset.get("alt") or "").strip()
     kind = str(asset.get("kind") or "").strip()
-    return not _image_ok(url) or bool(_DISPLAY_IMAGE_NOISE_RE.search(f"{url} {alt} {kind}"))
+    context = str(asset.get("context") or "").strip()
+    return not _image_ok(url) or bool(
+        _DISPLAY_IMAGE_NOISE_RE.search(f"{url} {alt} {kind} {context}")
+    )
 
 
 def curate_display_media(
@@ -402,7 +407,14 @@ def curate_display_media(
 
 
 _ANALYSIS_HEADING_RE = re.compile(r"【([^】]+)】|^#{2,4}\s+(.+)$", re.M)
-_MAX_PUSHED_BODY_IMAGES = 4
+_MAX_PUSHED_BODY_IMAGES = 6
+_IMAGE_CURATION_VERSION = 2
+_VISION_IMAGE_MAX_BYTES = 5_000_000
+_EMPTY_IMAGE_DATA_URL = (
+    "data:image/png;base64,"
+    "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII="
+)
+_VISION_INLINE_HOSTS = frozenset({"guokr.com", "pingwest.com"})
 
 
 def analysis_section_headings(text: str) -> list[str]:
@@ -492,6 +504,86 @@ def _match_heading(label: str, headings: list[str]) -> str:
     return ""
 
 
+def _text_ngrams(text: str, size: int = 3) -> set[str]:
+    normalized = re.sub(r"\s+", "", str(text or ""))
+    if len(normalized) < size:
+        return {normalized} if normalized else set()
+    return {normalized[index : index + size] for index in range(len(normalized) - size + 1)}
+
+
+def _paragraph_anchor(body: str, context: str) -> str:
+    """Find the source paragraph nearest an image so heading-less articles still place figures."""
+    context_grams = _text_ngrams(context)
+    if not context_grams:
+        return ""
+    best = ""
+    best_score = 0
+    for paragraph in (part.strip() for part in str(body or "").split("\n\n")):
+        if len(paragraph) < 12:
+            continue
+        score = len(context_grams & _text_ngrams(paragraph))
+        if score > best_score:
+            best = paragraph
+            best_score = score
+    if best_score < 3:
+        return ""
+    plain = re.sub(r"^#{2,4}\s+", "", best).strip()
+    return plain[:48]
+
+
+def _candidate_matches_story(signal: dict[str, Any], candidate: dict[str, str]) -> bool:
+    """Keep candidates on the selected story across ordinary and aggregated sources.
+
+    Source pages can combine several briefs. We only reject a candidate when its nearby
+    text is substantial yet has no meaningful overlap with the selected title and summary;
+    sparse captions remain available for the visual model to judge.
+    """
+    story = " ".join(
+        str(signal.get(key) or "") for key in ("titleCn", "title", "summary", "summary_cn")
+    )
+    context = re.sub(r"\s+", "", str(candidate.get("context") or ""))
+    if (
+        len(re.sub(r"\s+", "", story)) < config.VISION_STORY_CONTEXT_MIN_CHARS
+        or len(context) < config.VISION_STORY_CONTEXT_MIN_CHARS
+        or context == "原文声明的封面"
+    ):
+        return True
+    shared = _text_ngrams(story, 2) & _text_ngrams(context, 2)
+    return len(shared) >= config.VISION_STORY_MIN_SHARED_NGRAMS
+
+
+def _inline_vision_image(url: str, referer: str) -> str:
+    """Inline remote candidates when the model provider cannot fetch hotlinked URLs."""
+    try:
+        response = requests.get(
+            url,
+            headers={"User-Agent": _RSS_UA, "Referer": referer},
+            timeout=(5, 15),
+        )
+        response.raise_for_status()
+    except requests.RequestException:
+        return _EMPTY_IMAGE_DATA_URL
+    content_type = str(response.headers.get("Content-Type") or "").split(";", 1)[0].lower()
+    content = response.content
+    if (
+        content_type not in {"image/jpeg", "image/png", "image/webp", "image/gif"}
+        or not content
+        or len(content) > _VISION_IMAGE_MAX_BYTES
+    ):
+        return _EMPTY_IMAGE_DATA_URL
+    return f"data:{content_type};base64,{base64.b64encode(content).decode('ascii')}"
+
+
+def _inline_vision_images(candidates: list[dict[str, str]], referer: str) -> list[str]:
+    with ThreadPoolExecutor(max_workers=min(6, len(candidates))) as executor:
+        return list(
+            executor.map(
+                lambda item: _inline_vision_image(item["url"], referer),
+                candidates,
+            )
+        )
+
+
 def _llm_pick_article_images(
     signal: dict[str, Any],
     excerpt: str,
@@ -499,8 +591,12 @@ def _llm_pick_article_images(
 ) -> dict[str, Any] | None:
     from . import config, report
 
-    if not config.LLM_API_KEY or not candidates:
+    if not candidates:
         return None
+    use_vision = bool(config.VISION_API_KEY)
+    if not use_vision and not config.LLM_API_KEY:
+        return None
+    candidates = candidates[: max(1, config.VISION_MAX_CANDIDATES)]
     headings = _signal_section_headings(signal)
     lines = []
     for index, item in enumerate(candidates):
@@ -509,15 +605,20 @@ def _llm_pick_article_images(
             f"附近文字={item.get('context') or '（无）'}"
         )
     heading_hint = "、".join(headings) if headings else "（暂无小节标题）"
-    prompt = f"""你在为已入选的 AI 新闻简报选图。只依据原文节选和候选图，输出 JSON，禁止编造 URL。
+    prompt = f"""你在为已入选的 AI 新闻简报选图。候选图片按输入顺序与编号严格对应。请同时观察图片内容并阅读文字信息，输出 JSON，禁止编造 URL。
 字段：
 - cover_index: 封面候选下标，没有合适封面则 null
-- body: 最多 {_MAX_PUSHED_BODY_IMAGES} 项，每项 {{"index": 下标, "after_heading": "分析小节标题或空串", "alt": "不超过 24 字的中文图注"}}
+- cover_confidence: 0 到 1，表示封面确实代表新闻主体的置信度
+- cover_visual_quality: 0 到 1，表示图片作为新闻卡片封面的构图、信息密度和观感
+- body: 最多 {_MAX_PUSHED_BODY_IMAGES} 项，每项 {{"index": 下标, "after_heading": "分析小节标题或空串", "alt": "不超过 24 字的中文图注", "confidence": 0到1, "topic_relevance": 0到1, "visual_quality": 0到1, "cover_suitable": true或false, "layout": "wide|normal|portrait"}}
 
 规则：
-- 封面必须能代表这条新闻的主体（现场、产品、关键图表）。作者头像、logo、广告、相关推荐缩略图、二维码一律不要。
-- 正文插图只选能帮助理解论述的图，插在最相关的分析小节之后。after_heading 必须是下列标题之一，没有合适小节就留空（放到文末）。
-- 正文图不要与封面重复。候选不够就少选。
+- 封面必须能代表新闻主体，并且本身是视觉完整的图片。优先真实现场、产品实物、人物场景或完整的编辑主视觉；只有缺少合适主视觉时，才用有明确结论的关键图表作封面。相关性相近时，选择更适合横向新闻卡片、主体清晰且有视觉吸引力的图片，把表格和性能曲线留在正文。
+- 大面积文字截图、社交帖子截图、网页截屏、空白界面、点赞/收藏图标、logo 墙、只有品牌字样的海报，不得作为封面；除非新闻主体就是该产品界面，否则普通 UI 截图也不适合作封面。
+- 正文插图只选同时与标题/摘要主线相关、且能帮助理解论述的图。单主题长文应覆盖概念背景、核心证据、关键人物和影响讨论等主要叙事阶段，候选充足时通常保留 4 到 {_MAX_PUSHED_BODY_IMAGES} 张，不要只挑最前面的几张。合集文章中，摘要未提及的后续快讯即使出现在原文中也不要选。
+- 正文图插在最相关的分析小节之后。after_heading 必须是下列标题之一；没有匹配标题时留空，系统会按原文相邻段落定位。
+- 正文图不要与封面重复；同一小节最多一张。看不清、与主题弱相关或只是装饰时不要选。
+- 图表、产品界面和横向照片用 wide；普通插图用 normal；明显竖长图用 portrait。
 
 标题：{signal.get("titleCn") or signal.get("title") or ""}
 摘要：{str(signal.get("summary") or signal.get("summary_cn") or "")[:400]}
@@ -526,12 +627,46 @@ def _llm_pick_article_images(
 候选图：
 {chr(10).join(lines)}
 """
+    request_kwargs = {
+        "api_key": config.VISION_API_KEY or None,
+        "base_url": config.VISION_BASE_URL if use_vision else None,
+        "model": config.VISION_MODEL if use_vision else None,
+        "prefer_responses": use_vision,
+    }
+    page_url = str(signal.get("url") or "")
+    inline_first = use_vision and _normalized_host(page_url) in _VISION_INLINE_HOSTS
+    image_urls = (
+        _inline_vision_images(candidates, page_url)
+        if inline_first
+        else [item["url"] for item in candidates]
+    ) if use_vision else None
     try:
-        raw = report._llm_json(prompt)
+        raw = report._llm_json(
+            prompt,
+            image_urls=image_urls,
+            **request_kwargs,
+        )
     except Exception as exc:  # noqa: BLE001 - 选图失败回退启发式，不阻断简报
-        log.info("入选条目 LLM 选图失败 %s: %s", signal.get("url"), exc)
-        return None
-    return raw if isinstance(raw, dict) else None
+        if not use_vision:
+            log.info("入选条目 LLM 选图失败 %s: %s", signal.get("url"), exc)
+            return None
+        if inline_first:
+            log.info("入选条目视觉选图失败 %s: %s", signal.get("url"), exc)
+            return None
+        log.info("视觉模型直连候选图失败，改用内联图片 %s: %s", signal.get("url"), exc)
+        try:
+            raw = report._llm_json(
+                prompt,
+                image_urls=_inline_vision_images(candidates, str(signal.get("url") or "")),
+                **request_kwargs,
+            )
+        except Exception as retry_exc:  # noqa: BLE001 - 仍失败则保持现有封面
+            log.info("入选条目视觉选图失败 %s: %s", signal.get("url"), retry_exc)
+            return None
+    if isinstance(raw, dict):
+        raw["_curator"] = "vision" if use_vision else "llm"
+        return raw
+    return None
 
 
 def select_pushed_article_images(
@@ -568,6 +703,7 @@ def select_pushed_article_images(
         list(bundle.get("images") or []),
         existing,
     )
+    candidates = [item for item in candidates if _candidate_matches_story(signal, item)]
     picked = _llm_pick_article_images(signal, str(bundle.get("excerpt") or ""), candidates)
     if not picked or (
         picked.get("cover_index") in (None, "") and not picked.get("body")
@@ -578,6 +714,19 @@ def select_pushed_article_images(
     media = dict(signal.get("mediaAssets") or signal.get("media_assets") or {})
     cover_url = ""
     cover_index = picked.get("cover_index")
+    try:
+        cover_confidence = float(picked.get("cover_confidence", 1.0))
+    except (TypeError, ValueError):
+        cover_confidence = 0.0
+    try:
+        cover_quality = float(picked.get("cover_visual_quality", 1.0))
+    except (TypeError, ValueError):
+        cover_quality = 0.0
+    if (
+        cover_confidence < config.VISION_COVER_MIN_CONFIDENCE
+        or cover_quality < config.VISION_COVER_MIN_QUALITY
+    ):
+        cover_index = None
     if cover_index is not None and str(cover_index).strip() != "":
         try:
             idx = int(cover_index)
@@ -588,6 +737,7 @@ def select_pushed_article_images(
     cover_key = cover_url.split("?", 1)[0].lower()
     body: list[dict[str, str]] = []
     used = {cover_key} if cover_key else set()
+    used_headings: set[str] = set()
     for item in picked.get("body") or []:
         if not isinstance(item, dict) or len(body) >= _MAX_PUSHED_BODY_IMAGES:
             continue
@@ -597,28 +747,73 @@ def select_pushed_article_images(
             continue
         if not 0 <= idx < len(candidates):
             continue
+        try:
+            confidence = float(item.get("confidence", 1.0))
+        except (TypeError, ValueError):
+            confidence = 0.0
+        try:
+            topic_relevance = float(item.get("topic_relevance", confidence))
+        except (TypeError, ValueError):
+            topic_relevance = 0.0
+        try:
+            visual_quality = float(item.get("visual_quality", confidence))
+        except (TypeError, ValueError):
+            visual_quality = 0.0
+        if (
+            confidence < config.VISION_BODY_MIN_CONFIDENCE
+            or topic_relevance < config.VISION_BODY_MIN_TOPIC_RELEVANCE
+        ):
+            continue
         chosen = candidates[idx]
         key = chosen["url"].split("?", 1)[0].lower()
         if key in used:
             continue
         used.add(key)
+        heading = _match_heading(str(item.get("after_heading") or ""), headings)
+        anchor = _paragraph_anchor(str(signal.get("body") or ""), chosen.get("context") or "")
+        heading_key = heading or anchor
+        if heading_key and heading_key in used_headings:
+            continue
+        if heading_key:
+            used_headings.add(heading_key)
         alt = str(item.get("alt") or chosen.get("alt") or title).strip()
+        layout = str(item.get("layout") or "normal").strip().lower()
+        if layout not in {"wide", "normal", "portrait"}:
+            layout = "normal"
         body.append(
             {
                 "url": chosen["url"],
                 "alt": alt[:80],
                 "kind": "article-figure",
-                "afterHeading": _match_heading(str(item.get("after_heading") or ""), headings),
+                "afterHeading": heading,
+                "afterText": anchor,
+                "layout": layout,
+                "confidence": round(confidence, 3),
+                "topicRelevance": round(topic_relevance, 3),
+                "visualQuality": round(visual_quality, 3),
+                "coverSuitable": bool(item.get("cover_suitable")),
             }
         )
-    if not cover_url and not body:
-        return curate_display_media(signal, article_media)
     media["images"] = body
     media["cover"] = cover_url
-    media["curatedBy"] = "llm"
-    if not cover_url and body:
-        cover_url = body[0]["url"]
-        media["cover"] = cover_url
+    media["curatedBy"] = str(picked.get("_curator") or "llm")
+    media["curationVersion"] = _IMAGE_CURATION_VERSION
+    media["coverConfidence"] = round(cover_confidence, 3)
+    media["coverVisualQuality"] = round(cover_quality, 3)
+    if not cover_url:
+        promoted = next(
+            (
+                image
+                for image in body
+                if image.get("coverSuitable")
+                and float(image.get("visualQuality") or 0) >= config.VISION_COVER_MIN_QUALITY
+                and float(image.get("topicRelevance") or 0) >= config.VISION_COVER_MIN_CONFIDENCE
+            ),
+            None,
+        )
+        if promoted:
+            cover_url = str(promoted["url"])
+            media["cover"] = cover_url
     return media, cover_url
 
 

@@ -2,7 +2,9 @@
 from __future__ import annotations
 
 import json
+import tempfile
 import unittest
+from pathlib import Path
 from unittest import mock
 
 from src import config, daily, process, publish, rss, scrape
@@ -741,6 +743,26 @@ class ArticleMediaTest(unittest.TestCase):
             ["发生了什么", "关键结果"],
         )
 
+    def test_story_context_filter_applies_to_every_web_source(self):
+        signal = {
+            "url": "https://example.com/daily/42",
+            "titleCn": "Meta 发布个人 AI 智能体 Muse",
+            "summary": "该智能体可接入第三方服务并执行复杂任务。",
+        }
+        self.assertTrue(
+            rss._candidate_matches_story(
+                signal,
+                {"context": "Meta 发布个人 AI 智能体 Muse，可接入多个第三方服务执行任务。"},
+            )
+        )
+        self.assertFalse(
+            rss._candidate_matches_story(
+                signal,
+                {"context": "空间站课堂展示微重力烤蛋糕实验，学生观看直播并介绍航天知识。"},
+            )
+        )
+        self.assertTrue(rss._candidate_matches_story(signal, {"context": "配图"}))
+
     @mock.patch.object(rss, "_llm_pick_article_images")
     def test_pushed_article_uses_llm_cover_and_section_figures(self, pick):
         pick.return_value = {
@@ -778,9 +800,157 @@ class ArticleMediaTest(unittest.TestCase):
                     "alt": "评测曲线",
                     "kind": "article-figure",
                     "afterHeading": "关键结果",
+                    "afterText": "",
+                    "layout": "normal",
+                    "confidence": 1.0,
+                    "topicRelevance": 1.0,
+                    "visualQuality": 1.0,
+                    "coverSuitable": False,
                 }
             ],
         )
+
+    @mock.patch("src.report._llm_json")
+    def test_visual_picker_sends_candidate_images_to_separate_model(self, llm_json):
+        llm_json.return_value = {"cover_index": 0, "cover_confidence": 0.9, "body": []}
+        candidates = [
+            {"url": "https://example.com/a.jpg", "alt": "产品图", "context": "发布现场"},
+            {"url": "https://example.com/b.jpg", "alt": "图表", "context": "性能对比"},
+        ]
+        with mock.patch.object(config, "VISION_API_KEY", "vision-key"):
+            result = rss._llm_pick_article_images(
+                {"titleCn": "新产品发布", "summary": "摘要"}, "原文", candidates
+            )
+        self.assertEqual(result["_curator"], "vision")
+        self.assertEqual(
+            llm_json.call_args.kwargs["image_urls"],
+            ["https://example.com/a.jpg", "https://example.com/b.jpg"],
+        )
+        self.assertTrue(llm_json.call_args.kwargs["prefer_responses"])
+
+    @mock.patch.object(rss, "_inline_vision_images", return_value=["data:image/png;base64,a"])
+    @mock.patch("src.report._llm_json")
+    def test_visual_picker_retries_with_inlined_images(self, llm_json, inline):
+        llm_json.side_effect = [RuntimeError("provider could not download"), {"body": []}]
+        candidates = [{"url": "https://example.com/a.jpg", "alt": "图", "context": "正文"}]
+        with mock.patch.object(config, "VISION_API_KEY", "vision-key"):
+            result = rss._llm_pick_article_images(
+                {"url": "https://example.com/article", "titleCn": "测试"}, "原文", candidates
+            )
+        self.assertEqual(result["_curator"], "vision")
+        self.assertEqual(llm_json.call_count, 2)
+        inline.assert_called_once_with(candidates, "https://example.com/article")
+        self.assertEqual(llm_json.call_args.kwargs["image_urls"], ["data:image/png;base64,a"])
+
+    @mock.patch.object(rss, "_llm_pick_article_images")
+    def test_visual_picker_rejects_low_confidence_and_limits_one_image_per_section(self, pick):
+        pick.return_value = {
+            "_curator": "vision",
+            "cover_index": 0,
+            "cover_confidence": 0.2,
+            "body": [
+                {"index": 1, "after_heading": "关键结果", "alt": "主图", "confidence": 0.9, "visual_quality": 0.9, "cover_suitable": True, "layout": "wide"},
+                {"index": 2, "after_heading": "关键结果", "alt": "重复小节", "confidence": 0.95},
+                {"index": 3, "after_heading": "局限", "alt": "弱相关", "confidence": 0.2},
+            ],
+        }
+        signal = {
+            "contentType": "文章",
+            "titleCn": "新模型发布",
+            "deepAnalysis": "【关键结果】提升。\n【局限】仍需验证。",
+            "mediaAssets": {"images": [], "videos": []},
+        }
+        bundle = {
+            "cover": "https://example.com/cover.jpg",
+            "candidates": [
+                {"url": "https://example.com/cover.jpg"},
+                {"url": "https://example.com/a.jpg"},
+                {"url": "https://example.com/b.jpg"},
+                {"url": "https://example.com/c.jpg"},
+            ],
+        }
+        media, cover = rss.select_pushed_article_images(signal, bundle)
+        self.assertEqual(cover, "https://example.com/a.jpg")
+        self.assertEqual(media["curatedBy"], "vision")
+        self.assertEqual(len(media["images"]), 1)
+        self.assertEqual(media["images"][0]["layout"], "wide")
+
+    @mock.patch.object(rss, "_llm_pick_article_images")
+    def test_visual_picker_rejects_text_heavy_cover_without_restoring_fallback(self, pick):
+        pick.return_value = {
+            "_curator": "vision",
+            "cover_index": 0,
+            "cover_confidence": 0.95,
+            "cover_visual_quality": 0.2,
+            "body": [],
+        }
+        signal = {"contentType": "文章", "titleCn": "测试", "mediaAssets": {}}
+        media, cover = rss.select_pushed_article_images(
+            signal, {"cover": "https://example.com/text-heavy.jpg"}
+        )
+        self.assertEqual(cover, "")
+        self.assertEqual(media["cover"], "")
+        self.assertEqual(media["curatedBy"], "vision")
+
+    @mock.patch.object(rss, "_llm_pick_article_images")
+    def test_headingless_article_uses_source_paragraph_anchor(self, pick):
+        pick.return_value = {
+            "_curator": "vision",
+            "cover_index": None,
+            "body": [
+                {
+                    "index": 0,
+                    "after_heading": "",
+                    "alt": "实验结果",
+                    "confidence": 0.92,
+                    "topic_relevance": 0.95,
+                }
+            ],
+        }
+        paragraph = "研究团队在一张 B200 显卡上限制每个方案训练三百秒，并比较最终结果。"
+        signal = {
+            "contentType": "公众号",
+            "titleCn": "AI 优化训练",
+            "body": f"开头介绍。\n\n{paragraph}\n\n结论。",
+            "mediaAssets": {},
+        }
+        media, _cover = rss.select_pushed_article_images(
+            signal,
+            {
+                "candidates": [
+                    {
+                        "url": "https://example.com/chart.jpg",
+                        "context": "在一张 B200 显卡上限制每个方案训练三百秒，并比较最终结果",
+                    }
+                ]
+            },
+        )
+        self.assertTrue(media["images"][0]["afterText"].startswith("研究团队在一张 B200"))
+
+    @mock.patch.object(publish.requests, "get")
+    def test_selected_article_images_are_mirrored_locally(self, get):
+        response = mock.Mock()
+        response.content = b"x" * 1001
+        response.headers = {"content-type": "image/png"}
+        response.raise_for_status.return_value = None
+        get.return_value = response
+        signal = {
+            "recordId": "record-1",
+            "contentType": "公众号",
+            "url": "https://example.com/article",
+            "imageUrl": "https://cdn.example.com/cover.png",
+            "mediaAssets": {
+                "cover": "https://cdn.example.com/cover.png",
+                "images": [{"url": "https://cdn.example.com/figure.png"}],
+            },
+        }
+        with tempfile.TemporaryDirectory() as directory:
+            publish.mirror_selected_article_images(
+                [{"signals": [signal]}], Path(directory)
+            )
+            self.assertEqual(len(list(Path(directory).glob("*.png"))), 2)
+        self.assertTrue(signal["imageUrl"].startswith("media/articles/"))
+        self.assertTrue(signal["mediaAssets"]["images"][0]["url"].startswith("media/articles/"))
 
     @mock.patch.object(rss, "_llm_pick_article_images", return_value=None)
     def test_pushed_article_falls_back_to_heuristic_when_llm_unavailable(self, _pick):
@@ -805,6 +975,7 @@ class ArticleMediaTest(unittest.TestCase):
             "imageUrl": "https://example.com/cover.jpg",
             "mediaAssets": {
                 "curatedBy": "llm",
+                "curationVersion": 2,
                 "cover": "https://example.com/cover.jpg",
                 "images": [
                     {
