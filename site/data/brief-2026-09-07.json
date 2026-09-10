@@ -114,66 +114,6 @@
       }
     },
     {
-      "recordId": "recvu1S4qStLTg",
-      "sourceId": "nature-machine-intelligence",
-      "title": "Steering machine reasoning with brain signals",
-      "titleCn": "用脑信号引导机器推理",
-      "source": "Nature Machine Intelligence",
-      "url": "https://www.nature.com/articles/s42256-026-01302-z",
-      "category": "技术研究开源",
-      "contentType": "论文",
-      "publishedDate": "2026-09-01",
-      "publishedAtMs": 1788220800000,
-      "summary": "论文提出将人脑活动与语言模型的表征对齐从被动分析推进到主动指导学习，以提升人工推理的可靠性。现有公开原文仅为 Nature Machine Intelligence 的预览页面，未提供方法、数据集、实验结果或具体改进数值。",
-      "deepAnalysis": "【研究问题与核心结论】\n论文试图解决的问题是：人脑活动与语言模型表征之间的相似性，能否从用于比较和解释模型的“被动对齐”，进一步转化为指导模型学习的信号，从而提高人工推理的可靠性。给定原文仅称“Representational alignment can reveal similarities between human brain activity and language models”，并概括该工作“demonstrates that it can also guide learning, improving the reliability of artificial reasoning”。因此，能够核验的核心结论只有两点：研究方向从被动表征对齐扩展到了主动神经指导；作者声称这种指导能够改善人工推理的可靠性。原文没有说明“可靠性”的操作性定义，也没有给出具体推理任务、模型、脑信号类型或改进幅度，不能据此推导更具体的性能结论。\n\n【方法与创新】\n从公开页面可确认的概念框架是“From passive alignment to active neural guidance”，该表述出现在 Fig. 1 的图题中。相对传统表征对齐研究，论文声称新增的是将脑活动与语言模型表征之间的对应关系用于学习引导，而不只是事后测量二者相似性。这可以被谨慎地归为潜在的学习范式或监督信号创新，但原文没有披露引导信号如何构造、脑信号来自何种实验模态、如何与文本或推理轨迹配对、在哪个训练阶段注入，以及是否改变模型架构。因而无法区分架构创新、训练技巧与工程优化，也无法判断其是否使用额外的编码器、对齐损失、正则化项或推理时控制机制。页面列出“Neural encoding”和“Machine learning”主题，但这不是方法细节，也不能替代论文正文。\n\n【实验设计与关键结果】\n给定材料没有提供 PDF 正文、补充材料或可读取的图表页，因此无法可靠列出数据集、脑信号样本、参与者数量、语言模型规模、训练/测试划分、基线、评价指标、消融实验或统计检验。可核验的图表信息仅有 Fig. 1 的标题“From passive alignment to active neural guidance”，页面没有显示该图的坐标轴、图例、表格数值、实验流程细节或性能曲线；因此不能把 Fig. 1 解读为定量实验结果，也无法提供 PDF 页码。原文没有给出准确率、推理可靠性、错误率、置信度、泛化性能或任何效应量。页面中的参考文献包括表征学习、语言理解、推理和脑信号相关工作，但参考文献列表本身不能证明本文采用了这些工作中的具体基线。基于现有证据，唯一可报告的结果是作者在摘要性介绍中声称脑信号指导学习可改善人工推理可靠性，具体数值和显著性均未披露。\n\n【证据强度与局限】\n证据强度较弱，原因不是论文结论必然错误，而是所给材料属于订阅内容预览，只包含概述、图题、参考文献和作者信息。样本范围、参与者异质性、脑信号质量、跨被试泛化、训练数据来源、模型与基线公平性、是否存在数据泄漏、计算成本、失败案例、随机种子、代码和权重均未披露。统计显著性、置信区间及多重比较校正也未披露，因此无法判断所谓“可靠性提升”是否具有统计稳定性。尤其需要区分表征相关性与因果指导效果：即使脑活动和模型内部表征存在对齐，也不自动说明利用该对齐信号能够改善推理，更不能证明脑信号提供了超越文本监督或普通正则化的独立信息。给定原文没有呈现对照实验，所以无法排除收益来自额外监督、数据规模变化、模型选择或训练预算增加。论文未披露上述复现所需信息。\n\n【研究意义与后续问题】\n若完整论文确实证明脑信号在严格对照下能够提升推理可靠性，其意义在于把神经科学中的表征对齐从解释性分析推进为可用于模型学习的外部指导，并为脑启发机器学习提供可检验的训练信号来源。但现有材料尚不足以判断该信号是否真正反映人类推理过程，还是仅提供与任务标签相关的统计线索。后续研究仍需回答：不同脑成像或神经记录模态是否产生一致收益；指导信号是否跨个体、跨任务和跨语言泛化；收益能否在相同数据、参数量和计算预算下超过行为监督、蒸馏或普通表征正则化；对齐是否改善校准、长链推理错误和分布外可靠性；以及在脑信号噪声、缺失和隐私约束下是否仍然有效。只有公开完整实验、消融、失败案例和代码后，才能评估该方向的学术新颖度与工程可转化性。",
-      "why": "其潜在价值在于探索脑信号表征是否不仅能够解释语言模型，还能作为训练或推理过程中的指导信号，但当前证据不足以判断方法有效性和可复现性。",
-      "impact": 55,
-      "novelty": 68,
-      "actionability": 18,
-      "urgency": "低",
-      "tags": [
-        "AI",
-        "LLM",
-        "推理",
-        "其他"
-      ],
-      "imageUrl": "https://media.springernature.com/m312/springer-static/image/art%3A10.1038%2Fs42256-026-01302-z/MediaObjects/42256_2026_1302_Fig1_HTML.png",
-      "mediaAssets": {
-        "images": [
-          {
-            "url": "https://media.springernature.com/m312/springer-static/image/art%3A10.1038%2Fs42256-026-01302-z/MediaObjects/42256_2026_1302_Fig1_HTML.png",
-            "alt": ""
-          }
-        ],
-        "videos": [],
-        "documents": []
-      },
-      "editorialStructure": "",
-      "pdfUrl": "https://www.nature.com/articles/s42256-026-01302-z.pdf",
-      "paperFullTextSource": "abstract",
-      "paperPages": 0,
-      "paperCaptions": [],
-      "paperVisualPages": [],
-      "eventAggregation": {
-        "total": 1,
-        "groups": [
-          {
-            "key": "官方来源",
-            "tone": "#16130f",
-            "items": [
-              {
-                "source": "Nature Machine Intelligence",
-                "title": "用脑信号引导机器推理",
-                "url": "https://www.nature.com/articles/s42256-026-01302-z",
-                "note": "原始发布 / 公告。",
-                "text": "用脑信号引导机器推理 —— 原始发布 / 公告。"
-              }
-            ]
-          }
-        ]
-      }
-    },
-    {
       "recordId": "recvuuUXqSmsEC",
       "sourceId": "wallstreetcn",
       "title": "OpenAI首度公布“内部RSI进展”：已实现“自动化研究实习生” - 华尔街见闻",
@@ -845,6 +785,68 @@
                 "url": "https://www.youtube.com/watch?v=a4bubpkdenc",
                 "note": "原始发布 / 公告。",
                 "text": "GPT-6 Astra：Peter Gostev 的初步体验 —— 原始发布 / 公告。"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ],
+  "paperSignals": [
+    {
+      "recordId": "recvu1S4qStLTg",
+      "sourceId": "nature-machine-intelligence",
+      "title": "Steering machine reasoning with brain signals",
+      "titleCn": "用脑信号引导机器推理",
+      "source": "Nature Machine Intelligence",
+      "url": "https://www.nature.com/articles/s42256-026-01302-z",
+      "category": "技术研究开源",
+      "contentType": "论文",
+      "publishedDate": "2026-09-01",
+      "publishedAtMs": 1788220800000,
+      "summary": "论文提出将人脑活动与语言模型的表征对齐从被动分析推进到主动指导学习，以提升人工推理的可靠性。现有公开原文仅为 Nature Machine Intelligence 的预览页面，未提供方法、数据集、实验结果或具体改进数值。",
+      "deepAnalysis": "【研究问题与核心结论】\n论文试图解决的问题是：人脑活动与语言模型表征之间的相似性，能否从用于比较和解释模型的“被动对齐”，进一步转化为指导模型学习的信号，从而提高人工推理的可靠性。给定原文仅称“Representational alignment can reveal similarities between human brain activity and language models”，并概括该工作“demonstrates that it can also guide learning, improving the reliability of artificial reasoning”。因此，能够核验的核心结论只有两点：研究方向从被动表征对齐扩展到了主动神经指导；作者声称这种指导能够改善人工推理的可靠性。原文没有说明“可靠性”的操作性定义，也没有给出具体推理任务、模型、脑信号类型或改进幅度，不能据此推导更具体的性能结论。\n\n【方法与创新】\n从公开页面可确认的概念框架是“From passive alignment to active neural guidance”，该表述出现在 Fig. 1 的图题中。相对传统表征对齐研究，论文声称新增的是将脑活动与语言模型表征之间的对应关系用于学习引导，而不只是事后测量二者相似性。这可以被谨慎地归为潜在的学习范式或监督信号创新，但原文没有披露引导信号如何构造、脑信号来自何种实验模态、如何与文本或推理轨迹配对、在哪个训练阶段注入，以及是否改变模型架构。因而无法区分架构创新、训练技巧与工程优化，也无法判断其是否使用额外的编码器、对齐损失、正则化项或推理时控制机制。页面列出“Neural encoding”和“Machine learning”主题，但这不是方法细节，也不能替代论文正文。\n\n【实验设计与关键结果】\n给定材料没有提供 PDF 正文、补充材料或可读取的图表页，因此无法可靠列出数据集、脑信号样本、参与者数量、语言模型规模、训练/测试划分、基线、评价指标、消融实验或统计检验。可核验的图表信息仅有 Fig. 1 的标题“From passive alignment to active neural guidance”，页面没有显示该图的坐标轴、图例、表格数值、实验流程细节或性能曲线；因此不能把 Fig. 1 解读为定量实验结果，也无法提供 PDF 页码。原文没有给出准确率、推理可靠性、错误率、置信度、泛化性能或任何效应量。页面中的参考文献包括表征学习、语言理解、推理和脑信号相关工作，但参考文献列表本身不能证明本文采用了这些工作中的具体基线。基于现有证据，唯一可报告的结果是作者在摘要性介绍中声称脑信号指导学习可改善人工推理可靠性，具体数值和显著性均未披露。\n\n【证据强度与局限】\n证据强度较弱，原因不是论文结论必然错误，而是所给材料属于订阅内容预览，只包含概述、图题、参考文献和作者信息。样本范围、参与者异质性、脑信号质量、跨被试泛化、训练数据来源、模型与基线公平性、是否存在数据泄漏、计算成本、失败案例、随机种子、代码和权重均未披露。统计显著性、置信区间及多重比较校正也未披露，因此无法判断所谓“可靠性提升”是否具有统计稳定性。尤其需要区分表征相关性与因果指导效果：即使脑活动和模型内部表征存在对齐，也不自动说明利用该对齐信号能够改善推理，更不能证明脑信号提供了超越文本监督或普通正则化的独立信息。给定原文没有呈现对照实验，所以无法排除收益来自额外监督、数据规模变化、模型选择或训练预算增加。论文未披露上述复现所需信息。\n\n【研究意义与后续问题】\n若完整论文确实证明脑信号在严格对照下能够提升推理可靠性，其意义在于把神经科学中的表征对齐从解释性分析推进为可用于模型学习的外部指导，并为脑启发机器学习提供可检验的训练信号来源。但现有材料尚不足以判断该信号是否真正反映人类推理过程，还是仅提供与任务标签相关的统计线索。后续研究仍需回答：不同脑成像或神经记录模态是否产生一致收益；指导信号是否跨个体、跨任务和跨语言泛化；收益能否在相同数据、参数量和计算预算下超过行为监督、蒸馏或普通表征正则化；对齐是否改善校准、长链推理错误和分布外可靠性；以及在脑信号噪声、缺失和隐私约束下是否仍然有效。只有公开完整实验、消融、失败案例和代码后，才能评估该方向的学术新颖度与工程可转化性。",
+      "why": "其潜在价值在于探索脑信号表征是否不仅能够解释语言模型，还能作为训练或推理过程中的指导信号，但当前证据不足以判断方法有效性和可复现性。",
+      "impact": 55,
+      "novelty": 68,
+      "actionability": 18,
+      "urgency": "低",
+      "tags": [
+        "AI",
+        "LLM",
+        "推理",
+        "其他"
+      ],
+      "imageUrl": "https://media.springernature.com/m312/springer-static/image/art%3A10.1038%2Fs42256-026-01302-z/MediaObjects/42256_2026_1302_Fig1_HTML.png",
+      "mediaAssets": {
+        "images": [
+          {
+            "url": "https://media.springernature.com/m312/springer-static/image/art%3A10.1038%2Fs42256-026-01302-z/MediaObjects/42256_2026_1302_Fig1_HTML.png",
+            "alt": ""
+          }
+        ],
+        "videos": [],
+        "documents": []
+      },
+      "editorialStructure": "",
+      "pdfUrl": "https://www.nature.com/articles/s42256-026-01302-z.pdf",
+      "paperFullTextSource": "abstract",
+      "paperPages": 0,
+      "paperCaptions": [],
+      "paperVisualPages": [],
+      "eventAggregation": {
+        "total": 1,
+        "groups": [
+          {
+            "key": "官方来源",
+            "tone": "#16130f",
+            "items": [
+              {
+                "source": "Nature Machine Intelligence",
+                "title": "用脑信号引导机器推理",
+                "url": "https://www.nature.com/articles/s42256-026-01302-z",
+                "note": "原始发布 / 公告。",
+                "text": "用脑信号引导机器推理 —— 原始发布 / 公告。"
               }
             ]
           }

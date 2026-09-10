@@ -49,7 +49,7 @@
         3,
         12,
         15,
-        5
+        7
       ],
       [
         0,
@@ -57,7 +57,7 @@
         0,
         9,
         23,
-        12
+        11
       ],
       [
         0,
@@ -65,7 +65,7 @@
         3,
         7,
         9,
-        1
+        2
       ],
       [
         0,
@@ -81,7 +81,7 @@
         6,
         6,
         26,
-        10
+        13
       ],
       [
         0,
@@ -89,7 +89,7 @@
         0,
         4,
         11,
-        4
+        3
       ],
       [
         2,
@@ -105,7 +105,7 @@
         4,
         5,
         29,
-        19
+        23
       ],
       [
         8,
@@ -113,7 +113,7 @@
         3,
         1,
         16,
-        7
+        6
       ],
       [
         0,
@@ -121,7 +121,7 @@
         0,
         0,
         24,
-        9
+        6
       ]
     ],
     "normalized": [
@@ -139,7 +139,7 @@
         0.2,
         0.8,
         1.0,
-        0.3333
+        0.4667
       ],
       [
         0.0,
@@ -147,7 +147,7 @@
         0.0,
         0.3913,
         1.0,
-        0.5217
+        0.4783
       ],
       [
         0.0,
@@ -155,7 +155,7 @@
         0.3333,
         0.7778,
         1.0,
-        0.1111
+        0.2222
       ],
       [
         0.0,
@@ -171,7 +171,7 @@
         0.2308,
         0.2308,
         1.0,
-        0.3846
+        0.5
       ],
       [
         0.0,
@@ -179,7 +179,7 @@
         0.0,
         0.3636,
         1.0,
-        0.3636
+        0.2727
       ],
       [
         0.0952,
@@ -195,7 +195,7 @@
         0.1379,
         0.1724,
         1.0,
-        0.6552
+        0.7931
       ],
       [
         0.5,
@@ -203,7 +203,7 @@
         0.1875,
         0.0625,
         1.0,
-        0.4375
+        0.375
       ],
       [
         0.0,
@@ -211,7 +211,7 @@
         0.0,
         0.0,
         1.0,
-        0.375
+        0.25
       ]
     ]
   },
@@ -608,13 +608,17 @@
       "recvuAVZd2HvkN",
       "recvuAVZd2fCvl",
       "recvuAVZd2EsTR",
-      "recvuGBG2G1NEt",
-      "recvuGBG2G1wlq",
-      "recvuGBG2Gt3MH",
-      "recvuGBG2Gzk0y",
-      "recvuGBG2GeoR7",
-      "recvuGBG2GgPtw",
-      "recvuGBG2GHUtL"
+      "recvuMBkvfFL4d",
+      "recvuMBkvfdcYn",
+      "recvuMBkvfsQmE",
+      "recvuMBkvfmfDq",
+      "recvuMBkvfz9IT",
+      "recvuMBkvfX80h",
+      "recvuMBkvfXVy6",
+      "recvuMBkvfL5YY",
+      "recvuMBkvfqSED",
+      "recvuGBG2GOMWc",
+      "recvuMBkvf4Tih"
     ],
     "agent|2026-W37": [
       "recvuuUXqSmsEC",
@@ -624,26 +628,26 @@
       "recvuAVZd262fm",
       "recvuAVZd2V5E1",
       "recvuAVZd2Tpj6",
-      "recvuGBG2G2wbe",
-      "recvuGBG2GCcoo",
-      "recvuGBG2G1NEt",
-      "recvuGBG2Gz6jP",
-      "recvuGBG2GzSmj",
-      "recvuGBG2Gt3MH",
-      "recvuGBG2Gzk0y",
-      "recvuGBG2G4wcR",
-      "recvuGBG2GqZE6",
-      "recvuGBG2GhKrF",
-      "recvuGBG2GHmXI",
-      "recvuGBG2GQMFO"
+      "recvuMBkvf4kfM",
+      "recvuMBkvfcCck",
+      "recvuMBkvf3Wc1",
+      "recvuMBkvfFL4d",
+      "recvuMBkvfQOF1",
+      "recvuMBkvfmfDq",
+      "recvuMBkvf67ZZ",
+      "recvuMBkvfL5YY",
+      "recvuMBkvfqSED",
+      "recvuMBkvf4Tih",
+      "recvuMBkvfHvjV",
+      "recvuMBkvfksVV"
     ],
     "safety-policy|2026-W37": [
       "recvuuUXqSmsEC",
       "recvuuUXqS6Nz7",
       "recvuAVZd2PjX2",
-      "recvuGBG2GzSmj",
-      "recvuGBG2G4wcR",
-      "recvuGBG2GHmXI"
+      "recvuMBkvf4kfM",
+      "recvuMBkvfxRCz",
+      "recvuMBkvfftOS"
     ],
     "infra|2026-W37": [
       "recvuuUXqSTLbf",
@@ -653,8 +657,12 @@
       "recvuAVZd2QxwN",
       "recvuAVZd2pCFz",
       "recvuAVZd2Y2Kk",
-      "recvuGBG2GXNHu",
-      "recvuGBG2GHhIa"
+      "recvuMBkvfR97D",
+      "recvuMBkvfsQmE",
+      "recvuMBkvfIhme",
+      "recvuMBkvfQOF1",
+      "recvuMBkvf67ZZ",
+      "recvuMBkvfX80h"
     ],
     "multimodal|2026-W37": [
       "recvuuUXqSYPmZ",
@@ -664,49 +672,48 @@
       "recvuAVZd2jNJt",
       "recvuv2dZ1iTFS",
       "recvuAVZd2EsTR",
-      "recvuGBG2GZKSO",
-      "recvuGBG2GeoR7",
-      "recvuGBG2GgPtw",
-      "recvuGBG2GHUtL",
-      "recvuGBG2GHhIa"
+      "recvuMBkvfcCck",
+      "recvuMBkvfxRCz",
+      "recvuMBkvfdcYn",
+      "recvuMBkvfs9X2"
     ],
     "other|2026-W37": [
       "recvuuUXqSbY98",
       "recvuAVZd2Sclr",
       "recvuAVZd2RIvl",
       "recvuAVZd28amM",
-      "recvuAVZd2YMBd",
-      "recvuGBG2GOMWc",
-      "recvuGBG2GhbI0"
+      "recvuMBkvf1Exg",
+      "recvuMBkvfijHZ"
     ],
     "rag-search|2026-W37": [
       "recvuuUXqSfqX5",
       "recvuAVZd2DZ5V",
-      "recvuGBG2Gz6jP"
+      "recvuMBkvfHvjV"
     ],
     "reasoning|2026-W37": [
       "recvuv2dZ1iTFS",
       "recvuAVZd2FKGE",
       "recvuv2dZ1an7Q",
-      "recvuGBG2G2wbe"
+      "recvuMBkvf3Wc1",
+      "recvuMBkvfs9X2",
+      "recvuMBkvfksVV"
     ],
     "funding|2026-W37": [
       "recvuAVZd2VRFc",
       "recvuAVZd2mDfs",
       "recvuAVZd2Tpj6",
       "recvuAVZd2Y2Kk",
-      "recvuGBG2GJTlm",
-      "recvuGBG2GvRka",
-      "recvuGBG2G7DNH"
+      "recvuMBkvfIhme",
+      "recvuMBkvfwtoz"
     ],
     "embodied|2026-W37": [
       "recvuAVZd2mDfs",
       "recvuAVZd2pCFz",
-      "recvuGBG2GZKSO",
-      "recvuGBG2G1wlq"
+      "recvuMBkvfcUT6"
     ],
     "open-source-model|2026-W37": [
-      "recvuGBG2GCcoo"
+      "recvuMBkvfcUT6",
+      "recvuMBkvfz9IT"
     ]
   },
   "itemIndex": {
@@ -2075,138 +2082,153 @@
       "source": "OpenAI YouTube",
       "url": "https://www.youtube.com/watch?v=j2nv3d_a1f0"
     },
-    "recvuGBG2G2wbe": {
-      "title": "OpenAI称内部多智能体系统攻克纳维–斯托克斯问题，陷研究路线争议",
-      "source": "智东西",
-      "url": "https://zhidx.com/p/592180.html"
-    },
-    "recvuGBG2GZKSO": {
-      "title": "大晓发布HSImul3R：将人类视频交互重建为可执行机器人技能",
-      "source": "品玩 / 硅星人",
-      "url": "https://www.pingwest.com/w/317202"
-    },
-    "recvuGBG2GCcoo": {
-      "title": "MiniCPM5-2B开源：2B参数端侧模型主打Agent能力",
-      "source": "智东西",
-      "url": "https://zhidx.com/p/591922.html"
-    },
-    "recvuGBG2G1NEt": {
-      "title": "推出 Muse：面向所有人的全球首款个人 AI Agent",
-      "source": "Meta Newsroom AI",
-      "url": "https://about.fb.com/news/2026/09/introducing-muse-personal-ai-agent"
-    },
-    "recvuGBG2GJTlm": {
-      "title": "Mistral获30亿欧元融资，主攻欧洲主权AI",
-      "source": "TechCrunch AI",
-      "url": "https://techcrunch.com/2026/09/08/mistral-raises-e3b-as-sovereign-ai-becomes-big-business"
-    },
-    "recvuGBG2GXNHu": {
-      "title": "Arm发布移动CSS for Mobile 2：CPU加速端侧AI，GPU首次集成神经网络加速器",
-      "source": "AI科技评论 / 雷峰网",
-      "url": "https://www.leiphone.com/category/chipdesign/e3zbypzis817q2g8.html"
-    },
-    "recvuGBG2GvRka": {
-      "title": "Cognition获20亿美元融资，估值升至480亿美元",
-      "source": "TechCrunch AI",
-      "url": "https://techcrunch.com/2026/09/08/cognition-hits-48b-valuation-signaling-investors-believe-ai-coding-is-far-from-a-winner-take-all-market"
-    },
-    "recvuGBG2Gz6jP": {
-      "title": "KDDI 如何打造更快速可靠的消费者 RAG 应用 Buffmee",
-      "source": "Google Cloud AI Blog",
-      "url": "https://cloud.google.com/blog/topics/customers/how-kddi-optimized-rag-performance-with-agent-development-kit"
-    },
-    "recvuGBG2G7DNH": {
-      "title": "2026年上半年中国AI创企融资超3000亿元，资金加速流向头部与应用",
-      "source": "智东西",
-      "url": "https://zhidx.com/p/572575.html"
-    },
-    "recvuGBG2G1wlq": {
-      "title": "中国清洁机器人品牌出海：从代工到技术立品牌",
-      "source": "AI科技评论 / 雷峰网",
-      "url": "https://www.leiphone.com/category/weiwu/n2l3zx3xv4mzk2cr.html"
-    },
-    "recvuGBG2GzSmj": {
-      "title": "OpenAI智能体劫持德国网站，最高法发布AI司法规则，多款国产芯片与产品亮相",
+    "recvuMBkvf4kfM": {
+      "title": "OpenAI称多智能体攻克纳维-斯托克斯难题，引发未公开成果使用争议",
       "source": "果壳",
-      "url": "https://www.guokr.com/article/470157"
+      "url": "https://www.guokr.com/article/470167"
     },
-    "recvuGBG2Gt3MH": {
-      "title": "百度搭子全面接入小度硬件，推动家庭智能体落地",
-      "source": "AI科技评论 / 雷峰网",
-      "url": "https://www.leiphone.com/category/industrynews/pcuoyleiaqbo1j0l.html"
+    "recvuMBkvfcCck": {
+      "title": "OpenAI宣称AI攻克纳维-斯托克斯难题，Meta发布个人智能体Muse",
+      "source": "果壳",
+      "url": "https://www.guokr.com/article/470166"
     },
-    "recvuGBG2Gzk0y": {
-      "title": "联想：AI PC需求回升，Qira打造跨设备系统级AI",
-      "source": "智东西",
-      "url": "https://zhidx.com/p/592131.html"
+    "recvuMBkvfxRCz": {
+      "title": "实时 AI 换脸与大模型推动电诈工业化",
+      "source": "果壳",
+      "url": "https://www.guokr.com/article/470160"
     },
-    "recvuGBG2G4wcR": {
-      "title": "ECC v2.2.1：面向代码智能体的性能与安全补丁",
-      "source": "GitHub Trending",
-      "url": "https://github.com/affaan-m/ecc/releases/tag/v2.2.1"
+    "recvuMBkvfftOS": {
+      "title": "Anthropic对齐负责人称十年内AI灭绝人类概率超10%",
+      "source": "华尔街见闻",
+      "url": "https://wallstreetcn.com/articles/3781465"
     },
-    "recvuGBG2GeoR7": {
-      "title": "GPT Image 2.5提升图像编辑能力，但主要是补齐竞品短板",
+    "recvuMBkvf3Wc1": {
+      "title": "OpenAI GPT-6 Astra正式登陆Amazon Bedrock",
+      "source": "品玩 / 硅星人",
+      "url": "https://www.pingwest.com/w/317260"
+    },
+    "recvuMBkvfFL4d": {
+      "title": "OpenAI Codex主管：意图表达、架构品味与系统把控力是AI时代工程师的核心价值",
+      "source": "华尔街见闻",
+      "url": "https://wallstreetcn.com/articles/3781458"
+    },
+    "recvuMBkvfcUT6": {
+      "title": "兰德调查1181家企业：中美AI架构趋同，应用生态分化",
       "source": "虎嗅",
-      "url": "https://www.huxiu.com/article/4889685.html"
+      "url": "https://www.huxiu.com/article/4889973.html"
     },
-    "recvuGBG2GqZE6": {
-      "title": "GPT-5.6 Sol 如何协助开展量子计算实验",
-      "source": "OpenAI News",
-      "url": "https://openai.com/index/codex-quantum-computing-experiments"
-    },
-    "recvuGBG2GhKrF": {
-      "title": "Ollama v0.34.0：接入 ChatGPT Desktop 并增强工具调用与结构化输出",
+    "recvuMBkvfR97D": {
+      "title": "Transformers 5.17.0 新增 HYV4 7800亿参数 MoE 模型支持",
       "source": "GitHub Trending",
-      "url": "https://github.com/ollama/ollama/releases/tag/v0.34.0-rc3"
+      "url": "https://github.com/huggingface/transformers/releases/tag/v5.17.0"
     },
-    "recvuGBG2GHmXI": {
-      "title": "Gemini CLI v0.59.0 发布：修复 MCP 安全问题并强化受限工作区",
+    "recvuMBkvfdcYn": {
+      "title": "英伟达在 IBC 将实时 AI 引入广播、体育与全球流媒体",
+      "source": "NVIDIA Blog",
+      "url": "https://blogs.nvidia.com/blog/ibc-news-2026"
+    },
+    "recvuMBkvf1Exg": {
+      "title": "苹果首款折叠屏iPhone发布前爆料汇总",
+      "source": "智东西",
+      "url": "https://zhidx.com/p/591822.html"
+    },
+    "recvuMBkvfsQmE": {
+      "title": "苹果发布折叠屏iPhone Duo与2nm A20 Pro，强化端侧AI布局",
+      "source": "智东西",
+      "url": "https://zhidx.com/p/592688.html"
+    },
+    "recvuMBkvfIhme": {
+      "title": "Besxar借助SpaceX火箭推进轨道半导体工厂",
+      "source": "TechCrunch AI",
+      "url": "https://techcrunch.com/2026/09/09/besxar-is-strapping-advanced-chip-fabs-onto-spacexs-falcon-9-rockets"
+    },
+    "recvuMBkvfQOF1": {
+      "title": "超衍智能用 AI 自动优化模型训练与 GPU 计算",
+      "source": "品玩 / 硅星人",
+      "url": "https://www.pingwest.com/w/317244"
+    },
+    "recvuMBkvfmfDq": {
+      "title": "阿里国际站CoCreate峰会吸引1.5万家美国中小企业，Accio开源电商Agent基准",
+      "source": "AI科技评论 / 雷峰网",
+      "url": "https://www.leiphone.com/category/industrynews/yloqp1plexaxs32b.html"
+    },
+    "recvuMBkvf67ZZ": {
+      "title": "Arm上线AI Portal，支持按硬件性能对比和部署预优化模型",
+      "source": "智东西",
+      "url": "https://zhidx.com/p/592247.html"
+    },
+    "recvuMBkvfz9IT": {
+      "title": "Ollama v0.34.0 支持在 ChatGPT Desktop 中直接使用本地开放模型",
       "source": "GitHub Trending",
-      "url": "https://github.com/google-gemini/gemini-cli/releases/tag/v0.59.0"
+      "url": "https://github.com/ollama/ollama/releases/tag/v0.34.0"
+    },
+    "recvuMBkvfX80h": {
+      "title": "高盛TMT大会：AI商业化提速，NAND供给或长期受限",
+      "source": "华尔街见闻",
+      "url": "https://wallstreetcn.com/articles/3781463"
+    },
+    "recvuMBkvfXVy6": {
+      "title": "万人参与AI Coding大赛，11家平台共发技术规范",
+      "source": "AI科技评论 / 雷峰网",
+      "url": "https://www.leiphone.com/category/industrynews/qyzjyfvo8zwuf0yc.html"
+    },
+    "recvuMBkvfL5YY": {
+      "title": "Google 获评 2026 年 Gartner 企业 AI 助手魔力象限领导者",
+      "source": "Google Cloud AI Blog",
+      "url": "https://cloud.google.com/blog/products/ai-machine-learning/google-is-a-leader-in-2026-gartner-magic-quadrant-for-enterprise-ai-assistants"
+    },
+    "recvuMBkvfqSED": {
+      "title": "百度发布擎舵3.0营销智能体与升级版智能投放产品",
+      "source": "AI科技评论 / 雷峰网",
+      "url": "https://www.leiphone.com/category/industrynews/yuowpaikqhm2tifi.html"
     },
     "recvuGBG2GOMWc": {
       "title": "AlphaGenome Atlas：覆盖人类基因组全部单碱基变异的预测图谱",
       "source": "Google DeepMind YouTube",
       "url": "https://www.youtube.com/watch?v=u0atol5c-bq"
     },
-    "recvuGBG2GQMFO": {
-      "title": "Langflow 1.12.1：修复多项 Agent 工作流与 MCP 集成问题",
+    "recvuMBkvfwtoz": {
+      "title": "Listen Labs因Salesforce收购洽谈放弃15亿美元估值融资",
+      "source": "TechCrunch AI",
+      "url": "https://techcrunch.com/2026/09/09/ai-research-startup-listen-labs-scrubbed-a-1-5b-funding-round-for-salesforce-talks"
+    },
+    "recvuMBkvf4Tih": {
+      "title": "蓝色光标与AhaCreator合作，以AI智能体规模化全球达人营销",
+      "source": "AI科技评论 / 雷峰网",
+      "url": "https://www.leiphone.com/category/industrynews/srybdmcg0ezbrvqk.html"
+    },
+    "recvuMBkvfHvjV": {
+      "title": "Firecrawl v2.11.322 发布：面向规模化网页搜索、抓取与交互的 Context API",
       "source": "GitHub Trending",
-      "url": "https://github.com/langflow-ai/langflow/releases/tag/v1.12.1"
+      "url": "https://github.com/firecrawl/firecrawl/releases/tag/v2.11.322"
     },
-    "recvuGBG2GgPtw": {
-      "title": "OpenAI发布GPT-Image-2.5 API图像模型：Sunburst与Flare",
-      "source": "OpenAI YouTube",
-      "url": "https://www.youtube.com/watch?v=a7mswdxj86k"
+    "recvuMBkvfs9X2": {
+      "title": "匿名模型 Omen Alpha 实测：开发速度快、价格低，但推理能力较弱",
+      "source": "智东西",
+      "url": "https://zhidx.com/p/592441.html"
     },
-    "recvuGBG2GHUtL": {
-      "title": "OpenAI推出ChatGPT Images 2.5",
-      "source": "OpenAI News",
-      "url": "https://openai.com/index/introducing-chatgpt-images-2-5"
+    "recvuMBkvfijHZ": {
+      "title": "研究：表前光储可满足加州2032年32%的夏季峰值负荷",
+      "source": "Utility Dive",
+      "url": "https://www.utilitydive.com/news/front-of-meter-solar-storage-could-serve-32-of-californias-2032-peak-loa/829935"
     },
-    "recvuGBG2GhbI0": {
-      "title": "中国8月CPI、PPI同比涨幅扩大，算力需求推高部分电子设备价格",
-      "source": "华尔街见闻",
-      "url": "https://wallstreetcn.com/articles/3781380"
-    },
-    "recvuGBG2GHhIa": {
-      "title": "NVIDIA RTX 加速 Adobe Premiere 视频剪辑工作流",
-      "source": "NVIDIA YouTube",
-      "url": "https://www.youtube.com/watch?v=v0hx37eqcmi"
+    "recvuMBkvfksVV": {
+      "title": "LangChain 发布 langchain-openai 1.6.2，新增 GPT-6 Astra 推理强度支持",
+      "source": "GitHub Trending",
+      "url": "https://github.com/langchain-ai/langchain/releases/tag/langchain-openai%3d%3d1.6.2"
     }
   },
   "trend": {
     "agent": 5.667,
-    "reasoning": 2.353,
-    "multimodal": 6.364,
-    "open-source-model": 2.0,
+    "reasoning": 2.588,
+    "multimodal": 6.182,
+    "open-source-model": 2.2,
     "rag-search": 16.0,
-    "infra": 3.273,
-    "embodied": 7.5,
+    "infra": 3.545,
+    "embodied": 7.0,
     "safety-policy": 27.0,
-    "product": 6.0,
-    "funding": 2.556,
+    "product": 6.5,
+    "funding": 2.444,
     "other": 2.0
   },
   "window_end": "2026-W37"

@@ -177,516 +177,6 @@
       }
     },
     {
-      "recordId": "recvuAVZd2Sclr",
-      "sourceId": "jmlr",
-      "title": "Better Simulations for Validating Causal Discovery with the DAG-Adaptation of the Onion Method",
-      "titleCn": "用于因果发现验证的DAG自适应洋葱均匀模拟方法",
-      "source": "JMLR",
-      "url": "http://jmlr.org/papers/v27/24-0711.html",
-      "category": "技术研究开源",
-      "contentType": "论文",
-      "publishedDate": "2026-09-08",
-      "publishedAtMs": 1788825600000,
-      "summary": "论文提出DAG-adaptation of the Onion（DaO）方法，在给定DAG后均匀采样满足其全局马尔可夫性质的相关矩阵，再构造线性递归结构方程模型。实验显示，常用ZARX和Tetrad模拟会引入近确定性、R²可排序性等偏差，并可能实质性改变不同因果发现算法的相对表现。",
-      "deepAnalysis": "【研究问题与核心结论】\n论文研究如何在缺少真实因果真值数据时，为因果发现算法构造公平、完整且可解释的线性模拟基准。现有研究通常先随机生成DAG，再以人工指定区间抽取结构方程系数和误差方差；不同设定会改变相关强度、近确定性和变量可排序性，使同一算法在不同论文中得到冲突结果。作者的核心结论是：给定DAG后，应优先均匀采样所有满足该DAG全局马尔可夫性质的正定相关矩阵，而不是人为规定线性效应分布。DaO据此覆盖相应相关矩阵空间，不偏好特定矩阵且不提供可调参数，并可由相关矩阵和DAG恢复递归线性SEM。作者因此主张其适合作为无特定应用领域假设的通用基准，但明确承认这种均匀分布不等同于真实科学系统的分布。\n\n【方法与创新】\nDaO以DAG G为输入，对经典Onion相关矩阵采样法作DAG约束适配，输出满足G所蕴含条件独立关系的正定相关矩阵R；R与G随后确定标准化线性递归SEM的边系数及加性误差方差，并可使用任意有限方差的误差分布生成样本。其架构性创新是把采样对象由独立边系数改为“与指定DAG马尔可夫相容的相关矩阵空间”，并给出均匀性和覆盖性的正确性论证。相对ZARX和Tetrad，新增内容不是调参或训练技巧，而是模拟目标分布的重新定义；工程部分则提供R、Python实现及PyPI包daosim。非高斯误差不会一般地产生对应族的多元分布，例如逐节点Student’s t误差并不意味着联合分布是多元t，这一边界被作者明确区分。\n\n【实验设计与关键结果】\n验证使用ER、入度无标度SFi和出度无标度SFo三类DAG，对比ZARX、Tetrad和DaO。主要设置包括|V|=100、α=10、模型表征实验100次重复；附录还给出|V|=20的100次重复。Figure 1（PDF第13页）在三个|V|=3、|E|=2的最小非平凡DAG上各采样100次，以相关系数坐标展示可行空间覆盖。Figures 2-5（第19-20页）比较标准化β、误差标准差和绝对相关的经验分布：图注与正文指出ZARX产生最高绝对相关和最小误差标准差，部分误差标准差接近0，即近确定性；DaO的绝对相关最低、误差标准差最大。Table 1及Figures 6-8（第21-22页）以R²秩相关衡量R²-sortability，三种图结构中ZARX均最高，Tetrad较弱，DaO最低；给定材料未包含Table 1的具体数值，不能据此补写。算法实验覆盖DAGMA、sDAGMA、BOSS、fGES、PC、dLiNGAM、itMCMC、MMHC及R²-sort等，指标为邻接与方向的precision、recall和F1。Figure 9（第26页）在DaO生成的ER-DAG、α=10、20次重复上显示，样本量由约2^7增加到2^12时多数方法召回率上升；dLiNGAM在图示条件下的方向召回与F1总体处于高位，而DAGMA方向指标明显偏低。Figure 10（第26页）对20变量ER-DAG的ZARX与Tetrad模拟进行对照，同一算法的排序和幅度明显改变，尤其DAGMA与sDAGMA。图中无误差条，以上数值关系只能按坐标近似读取，不能视为精确统计量。\n\n【证据强度与局限】\n理论部分对采样空间、正定性和均匀性进行了形式化刻画，且开源双语言实现，使核心构造具有较强可复现性；多图结构、两种变量规模及多类因果发现算法也支持“模拟设计影响测评结论”的判断。但算法性能实验仅20次重复，图中未给出置信区间、方差或显著性检验，论文给定证据不足以证明所有算法排序差异均具有统计稳定性。计算时间、内存开销、随节点数和稠密度扩展的定量结果、随机种子及完整硬件配置在所给原文中未披露。实验完全基于模拟数据，不涉及真实真值数据；均匀相关矩阵也可能把大量概率质量放在现实领域罕见区域。方法限于无环、无潜在混杂、横截面和线性相关结构，不能直接覆盖反馈环、时间序列或非线性因果机制。非高斯联合分布的语义亦受误差叠加限制。数据泄漏不属于该纯模拟设计的主要风险，但不同算法是否获得完全一致的调参与计算预算，论文给定材料未披露。\n\n【研究意义与后续问题】\n论文改变的关键认识是，因果发现模拟的主要偏差未必来自DAG拓扑，而可能来自参数化方式隐式制造的高相关、近确定性和R²可排序信号；所谓“系数必须远离零”也可能反而造成近违反faithfulness。DaO提供了一个可证明覆盖完整相关空间的中性参照，使研究者能够区分算法能力与模拟器伪特征。不过，“均匀”只定义了数学上的不偏好，并不自动意味着科学现实性。后续核心问题包括：如何在保持可刻画性的同时限制到领域相关子空间，如何处理潜变量、混杂、时间依赖、反馈环和非线性，以及不同相关矩阵测度下的均匀性是否导致不同结论。还需更大规模、带不确定性统计和计算成本报告的独立复现实验，检验DaO下观察到的算法排序能否跨图规模、密度和误差分布稳定成立。",
-      "why": "该研究把因果发现基准中的模拟分布选择从任意系数设定转化为有理论刻画的相关矩阵均匀采样问题，有助于减少基准偏置。",
-      "impact": 78,
-      "novelty": 84,
-      "actionability": 89,
-      "urgency": "中",
-      "tags": [
-        "AI",
-        "开源",
-        "其他"
-      ],
-      "imageUrl": "",
-      "mediaAssets": {
-        "images": [],
-        "videos": []
-      },
-      "editorialStructure": "",
-      "pdfUrl": "http://jmlr.org/papers/volume27/24-0711/24-0711.pdf",
-      "paperFullTextSource": "pdf",
-      "paperPages": 42,
-      "paperCaptions": [
-        {
-          "page": 12,
-          "text": "Figure 1 depicts the results of generating random correlation matrices using the DaO method for three DAGs. The DAGs make up the simplest non-trivial cases for the DaO Method and the dimensions of the plots represent the correlations in the matrix:"
-        },
-        {
-          "page": 13,
-          "text": "Figure 1: Uniformly sampled correlation matrices from DAGs with |V | = 3 and |E| = 2 with 100 repetition for each case. 13"
-        },
-        {
-          "page": 18,
-          "text": "Figure 2 plots the magnitude of the standardized betas against the standard deviation of the additive error term for every edge, with kernel density estimates for contours. Figures 3, 4, and 5 depict empirical cumulative distribution functions (ECDFs) of the absolute beta"
-        },
-        {
-          "page": 19,
-          "text": "Figure 2: Properties of 10 models generated from ER/SFi/SFo-DAGs with |V | = 100 and α = 10. Simulation: ZARX Tetrad DaO"
-        },
-        {
-          "page": 19,
-          "text": "Figure 3: Properties of 100 models generated from ER-DAGs with |V | = 100 and α = 10. correlation values, while DaO produces the lowest absolute correlation values. Correspondingly, the standard deviations of the error terms in ZARX models are the smallest, while the standard deviations of error terms in DaO models are the largest."
-        },
-        {
-          "page": 20,
-          "text": "Figure 4: Properties of 100 models generated from SFi-DAGs with |V | = 100 and α = 10. Simulation: ZARX Tetrad DaO 1.0"
-        },
-        {
-          "page": 20,
-          "text": "Figure 5: Properties of 100 models generated from SFo-DAGs with |V | = 100 and α = 10. with a standard deviation of approximately zero—this near determinism will induce (near- )violations of faithfulness."
-        },
-        {
-          "page": 21,
-          "text": "Table 1: R2 rank correlation on DAGs with |V | = 100 and α = 10 over 100 repetitions Simulation: ZARX Tetrad DaO 100"
-        },
-        {
-          "page": 21,
-          "text": "Figure 6: R2-sortability of models generated from ER-DAGs with |V | = 100 and α = 10 over 100 repetitions. Table 1 tabulates the levels of R2-sortability for the three simulation methods while"
-        },
-        {
-          "page": 21,
-          "text": "Table 1 tabulates the levels of R2-sortability for the three simulation methods while varying model structure. The ZARX simulations have the highest R2-sortability for all model structures, while R2-sortability appears to be present in Tetrad simulations but at a"
-        },
-        {
-          "page": 21,
-          "text": "Figure 7: R2-sortability of models generated from SFi-DAGs with |V | = 100 and α = 10 over 100 repetitions. 21"
-        },
-        {
-          "page": 22,
-          "text": "Figure 8: R2-sortability of models generated from SFo-DAGs with |V | = 100 and α = 10 over 100 repetitions. 4.4 Summary of Characterization Findings"
-        },
-        {
-          "page": 26,
-          "text": "Figure 9: Mean performance of CDAs on data generated from ER-DAGs with α = 10 using the DaO method for DAG Models over 20 repetitions. ZARX Simulation Tetrad Simulation"
-        },
-        {
-          "page": 26,
-          "text": "Figure 10: Mean performance of CDAs on data generated from ER-DAGs with 20 variables and α = 10 over 20 repetitions. 26"
-        },
-        {
-          "page": 37,
-          "text": "Figure 11: Vertex in/out-degree distributions for 100 DAGs with |V | = 100 and α = 10. Figure 12: Edge matrices for ER/SFi/SFo-DAGs with |V | = 100 and α = 992 (density 12). 8. Applying SFi-DAG before SFo-DAG versus SFo-DAG before SFi-DAG results in different in/out-degree dis-"
-        },
-        {
-          "page": 37,
-          "text": "Figure 12: Edge matrices for ER/SFi/SFo-DAGs with |V | = 100 and α = 992 (density 12). 8. Applying SFi-DAG before SFo-DAG versus SFo-DAG before SFi-DAG results in different in/out-degree dis- tributions. Their application may be iterated in an alternating manner until convergence if identical"
-        },
-        {
-          "page": 39,
-          "text": "Figure 13: Properties of 100 models generated from ER-DAGs with |V | = 100 and α = 10. Simulation: ZARX Tetrad DaO 1.0"
-        },
-        {
-          "page": 39,
-          "text": "Figure 14: Properties of 100 models generated from SFi-DAGs with |V | = 100 and α = 10. Simulated R2-sortable data will have correlations approaching plus or minus one, while, simulated non-R2-sortable data will have correlations closer to zero."
-        },
-        {
-          "page": 39,
-          "text": "Table 3: R2 rank correlation on DAGs with |V | = 20 and α = 10 over 100 repetitions Table 3 tabulates the levels of R2-sortability for the three simulation methods while varying model structure. ZARX simulations have the highest R2-sortability for all model"
-        },
-        {
-          "page": 39,
-          "text": "Table 3 tabulates the levels of R2-sortability for the three simulation methods while varying model structure. ZARX simulations have the highest R2-sortability for all model structures, while R2-sortability appears to be present in Tetrad simulations but at a weaker"
-        },
-        {
-          "page": 40,
-          "text": "Figure 15: Properties of 100 models generated from SFo-DAGs with |V | = 100 and α = 10. Simulation: ZARX Tetrad DaO 20"
-        },
-        {
-          "page": 40,
-          "text": "Figure 16: R2-sortability of models generated from ER-DAGs with |V | = 20 and α = 10 over 100 repetitions. A.6 Scale-free Simulation Results"
-        },
-        {
-          "page": 41,
-          "text": "Figure 17: R2-sortability of models generated from SFi-DAGs with |V | = 20 and α = 10 over 100 repetitions. Simulation: ZARX Tetrad DaO"
-        },
-        {
-          "page": 41,
-          "text": "Figure 18: R2-sortability of models generated from SFo-DAGs with |V | = 20 and α = 10 over 100 repetitions. 41"
-        }
-      ],
-      "paperVisualPages": [
-        12,
-        26,
-        37,
-        40
-      ],
-      "eventAggregation": {
-        "total": 1,
-        "groups": [
-          {
-            "key": "官方来源",
-            "tone": "#16130f",
-            "items": [
-              {
-                "source": "JMLR",
-                "title": "用于因果发现验证的DAG自适应洋葱均匀模拟方法",
-                "url": "http://jmlr.org/papers/v27/24-0711.html",
-                "note": "原始发布 / 公告。",
-                "text": "用于因果发现验证的DAG自适应洋葱均匀模拟方法 —— 原始发布 / 公告。"
-              }
-            ]
-          }
-        ]
-      }
-    },
-    {
-      "recordId": "recvuAVZd2YMBd",
-      "sourceId": "jmlr",
-      "title": "AgentPEN: A Prediction-Explanation Network for Sequential Stock Movement via LLMs and Recurrent Generation",
-      "titleCn": "AgentPEN：以大模型融合新闻与价格的可解释股票涨跌预测网络",
-      "source": "JMLR",
-      "url": "http://jmlr.org/papers/v27/25-2175.html",
-      "category": "技术研究开源",
-      "contentType": "论文",
-      "publishedDate": "2026-09-08",
-      "publishedAtMs": 1788825600000,
-      "summary": "AgentPEN通过大模型驱动的新闻筛选、时空记忆与跨注意力，将异步且含噪的金融新闻同价格序列对齐，再以变分循环生成模块预测次日涨跌。在三个美股和中国股票数据集上，其ACC与MCC均超过十种基线，但论文所称的解释能力缺少充分的定量验证证据。",
-      "deepAnalysis": "【研究问题与核心结论】\n论文研究含噪、影响持续时间不定且跨股票传播的金融新闻，如何与价格序列对齐，并同时用于次日涨跌预测和结果解释。作者认为，BERT、RoBERTa等传统编码器难以判断新闻与目标股票的相关性、影响期限及影响对象，而简单拼接文本与价格嵌入也不能显式刻画模态交互。AgentPEN据此把新闻处理拆成选择、时空记忆和融合，再用条件变分循环生成过程描述市场运动的不确定性。可核验的核心结论是：在AgentPEN-US、CMIN-US和CMIN-CN上，完整模型的ACC分别为56.91%、58.09%和57.09%，MCC分别为0.118、0.130和0.128，均高于表列基线；组件移除实验也显示新闻相关性评分、记忆、跨注意力及随机潜变量均有贡献。不过，“预测性能更高”的证据明显强于“解释性更好”的证据。\n\n【方法与创新】\n架构由Representation Fusion Agent、Deep Recurrent Generation（DRG）和Temporal Attention Prediction（TAP）组成，整体见Figure 1（PDF第6页），生成与预测结构见Figure 3、Figure 4（第10、13页）。Agent先让LLM为新闻与目标股票计算相关性分数，以阈值筛除噪声；随后分别估计新闻影响期限和受影响股票集合，写入Temporal Memory与Spatial Memory，并在预测日按有效期、股票覆盖和相关性检索Top-K新闻。新闻嵌入和三维价格特征投影后，以价格为query、新闻为key/value执行多头交叉注意力。DRG使用GRU及条件VAE式先验、后验网络逐时刻采样潜变量并产生辅助涨跌预测，TAP再利用解码状态和此前辅助预测输出目标日结果。真正的架构新增点是LLM控制的选择—记忆—融合链路及其与循环生成模块的组合；随机潜变量和KL约束属于生成式训练设计，网格搜索窗口、学习率、批量大小等属于工程配置，并非新的学习原理。\n\n【实验设计与关键结果】\nTable 1（PDF第16页）给出按时间切分的三个数据集：AgentPEN-US覆盖88只股票，测试集984个样本；CMIN-US覆盖110只股票，测试集862个样本；CMIN-CN覆盖沪深300成分股，测试集1040个样本。评价指标为ACC和适合类别不均衡二分类的MCC；基线共十个，包括ALSTM、StockNet、PEN、CMIN、FinMA、MagicNet和ExPred。Table 2（第18页）显示AgentPEN在三组数据上的最佳基线ACC分别为55.14%、55.85%、55.67%，对应AgentPEN为56.91%、58.09%、57.09%；MCC最佳基线分别为0.109、0.121、0.126，对应结果为0.118、0.130、0.128。Figure 5（第19页）报告五个随机种子：ACC为56.91±0.71、58.09±0.64、57.09±0.28，MCC为0.1178±0.0137、0.1296±0.0157、0.1282±0.0045。Table 3（第20页）的消融中，CMIN-US移除文本选择或改用随机相关性后，ACC由58.09%降至53.71%和53.61%；确定性DRG使三个数据集MCC降至0.070、0.076、0.048，MLP版本则降至0.009、0.010、0.051，支持相关性选择和随机潜变量的作用。\n\n【证据强度与局限】\n实验包含跨中美市场、十个基线、时间切分、五随机种子和较完整组件消融，且ACC与MCC方向一致，预测结论具有中上强度。但绝对优势有限：相对最佳基线的ACC仅增加1.42至2.24个百分点，CMIN-CN的MCC仅增加0.002。论文给出均值与标准差，却未披露显著性检验或置信区间；也未在给定证据中说明所有基线是否按相同数据、调参预算和LLM资源重训。新闻抓取、清洗、去重及潜在前视泄漏防护细节不足，LLM调用成本、延迟、版本稳定性和完整算力消耗亦未披露。消融能证明模块对预测有用，但不能直接证明生成解释真实、忠实或可审计；给定材料未提供人工评价者一致性、事实性、因果忠实度等解释指标。Table 6和Figure 8涉及投资回测，但所给图页未展示具体数值，不能据此确认交易成本、换手率和风险调整收益。\n\n【研究意义与后续问题】\n该工作最有价值的认识是：LLM不必直接承担最终数值预测，而可作为结构化信息处理器，显式判断新闻相关性、时间有效区间和跨股票影响，再由可训练的时序生成模型完成预测；随机相关性对照也削弱了“仅因减少新闻数量而提升”的替代解释。其工程价值主要在模块可分解、数据切分和消融路径较清楚，并发布了AgentPEN-US数据集。尚待解决的问题包括LLM评分是否能跨模型和跨时期校准，记忆内容是否受到新闻重复与事后叙事影响，潜变量是否真正表征市场不确定性，以及解释文本能否通过忠实度、稳定性和金融专家盲评。还需要包含交易摩擦的滚动回测、市场状态外推和严格泄漏审计，才能判断统计预测增益能否转化为稳定的现实效用。",
-      "why": "该研究将大模型用于金融文本的相关性筛选和影响范围建模，并以多数据集消融实验验证了这些机制对股票方向预测的增益。",
-      "impact": 78,
-      "novelty": 76,
-      "actionability": 79,
-      "urgency": "中",
-      "tags": [
-        "LLM",
-        "Agent",
-        "推理",
-        "开源"
-      ],
-      "imageUrl": "",
-      "mediaAssets": {
-        "images": [],
-        "videos": []
-      },
-      "editorialStructure": "",
-      "pdfUrl": "http://jmlr.org/papers/volume27/25-2175/25-2175.pdf",
-      "paperFullTextSource": "pdf",
-      "paperPages": 37,
-      "paperCaptions": [
-        {
-          "page": 6,
-          "text": "Figure 1: The overall architecture of the proposed stock Prediction-Explanation Network, including the Representation Fusion Agent, the Deep Recurrent Generation Mod- ule and the Temporal Attention Prediction Module."
-        },
-        {
-          "page": 10,
-          "text": "Figure 3: The graphic illustration of AgentPEN. AgentPEN leverages the fused market information representation P f to infer the latent variable set Z and then predict the stock movement y. The forecasting process pθ y | P f, Z is drawn with solid"
-        },
-        {
-          "page": 13,
-          "text": "Figure 4: The architecture of the Deep Recurrent Generation (DRG) and the Temporal Attention Prediction (TAP) Modules. the former auxiliary movement predictions y<T = {yt}T−1T−L+1 to enhance the performance"
-        },
-        {
-          "page": 16,
-          "text": "Table 1: Statistics of the three datasets. Up and Down columns report the label distribution (next-day movement). Price News"
-        },
-        {
-          "page": 17,
-          "text": "Table 2 summarizes the experimental results on three different datasets using various baseline models and the proposed method, AgentPEN. From the results, we observe that AgentPEN consistently outperforms existing baselines across all three datasets in terms of both ACC and MCC. To further evaluate the robustness of AgentPEN, we additionally run the 4. https://huggingface.co/thenlper/gte-large"
-        },
-        {
-          "page": 18,
-          "text": "Table 2: Performance comparison of AgentPEN and baselines. model with five different random seeds and report the corresponding distributions in Figure 5. The left part of the figure shows the ACC distributions, while the right part presents the MCC distributions. AgentPEN achieves average ACC values of 56.91±0.71, 58.09±0.64,"
-        },
-        {
-          "page": 19,
-          "text": "Figure 5: Performance distributions of AgentPEN over five random seeds on three datasets. The left panel reports ACC, and the right panel reports MCC. Horizontal dashed lines indicate the performance of two strong baselines, MagicNet and ExPred."
-        },
-        {
-          "page": 20,
-          "text": "Table 3: Ablation study results. retrieved news, while AgentPEN-Random keeps approximately the same filtering ratio as AgentPEN but replaces the LLM-produced correlation scores with random scores. Both"
-        },
-        {
-          "page": 21,
-          "text": "Figure 6: The parameter sensitivity study for four important parameters: (a) Correlation threshold τc in Text Selection Module; (b) Learning rate; (c) Look-back window; (d) Max number of retrieved news."
-        },
-        {
-          "page": 24,
-          "text": "Figure 7: Quantitative evaluation of the Text Selection Module. Test samples are grouped by the maximum correlation score among their look-back news, and the y-axis reports the mean absolute next-day return. Samples with higher correlation scores"
-        },
-        {
-          "page": 27,
-          "text": "Table 6: Investment results of AgentPEN on CMIN-CN from 2021-06 to 2021-12. AgentPEN-based strategies are averaged over 5 seeds. The long-short strategy takes long positions on stocks predicted to rise and short positions on stocks pre-"
-        },
-        {
-          "page": 27,
-          "text": "Figure 8 further visualizes the cumulative returns of the three strategies during the CMIN-CN test window. We shade four COVID-related sub-periods, including the reopening period, the Delta-surge period, the mid-recovery period, and the Omicron period. The performance difference across these periods suggests that AgentPEN’s trading value"
-        },
-        {
-          "page": 28,
-          "text": "Figure 8: Cumulative returns of different investment strategies on CMIN-CN during the 2021-06 to 2021-12 test window. The shaded regions indicate four COVID-related market sub-periods."
-        },
-        {
-          "page": 28,
-          "text": "Table 7. In total, AgentPEN processes 519,291 news items, corresponding to 268.3M input tokens and 31.1M output tokens. Based on the public gpt-3.5-turbo price of $0.50/M input tokens and $1.50/M output tokens at the time of our experiments, the total estimated"
-        },
-        {
-          "page": 29,
-          "text": "Table 7: LLM-call statistics and estimated API cost for LLM-based agent. It is important to distinguish historical evaluation from real-time deployment. For historical evaluation and repeated backtesting, LLM annotations and text embeddings can"
-        },
-        {
-          "page": 33,
-          "text": "Table 8: Prompts used for LLMselection, LLMtemporal, and LLMspatial. Component Content System prompt As a stock trading news analyst, you are a helpful and precise assistant."
-        }
-      ],
-      "paperVisualPages": [
-        17,
-        18,
-        20,
-        27
-      ],
-      "eventAggregation": {
-        "total": 1,
-        "groups": [
-          {
-            "key": "官方来源",
-            "tone": "#16130f",
-            "items": [
-              {
-                "source": "JMLR",
-                "title": "AgentPEN：以大模型融合新闻与价格的可解释股票涨跌预测网络",
-                "url": "http://jmlr.org/papers/v27/25-2175.html",
-                "note": "原始发布 / 公告。",
-                "text": "AgentPEN：以大模型融合新闻与价格的可解释股票涨跌预测网络 —— 原始发布 / 公告。"
-              }
-            ]
-          }
-        ]
-      }
-    },
-    {
-      "recordId": "recvuAVZd2C0TT",
-      "sourceId": "jmlr",
-      "title": "Sublinear Variational Optimization of Gaussian Mixture Models with Millions to Billions of Parameters",
-      "titleCn": "面向十亿级参数高斯混合模型的次线性变分优化",
-      "source": "JMLR",
-      "url": "http://jmlr.org/papers/v27/25-0639.html",
-      "category": "技术研究开源",
-      "contentType": "论文",
-      "publishedDate": "2026-09-08",
-      "publishedAtMs": 1788825600000,
-      "summary": "论文提出截断变分混合因子分析算法 v-MFA，通过仅评估每个样本对应的一小组候选混合分量，将一般 GMM/MFA 每轮优化的计算量由 O(NCD²) 降至对 D 线性、对 NC 次线性。实验报告该方法可在单台高端 CPU 上用不足 9 小时、约 1 亿张图像训练超过 100 亿参数的模型，并用于高效零样本图像去噪。",
-      "deepAnalysis": "【研究问题与核心结论】\n论文研究如何在样本数 N、维度 D 和混合分量数 C 均很大时训练能够表达分量内相关性的高斯混合模型。一般协方差 GMM 的常规 EM 每轮复杂度为 O(NCD²)；对角协方差虽可降至 O(NCD)，却不能表达维度间相关性。核心结论是：将截断变分后验与混合因子分析模型结合后，v-MFA 可使复杂度对 D 线性、对 NC 呈经验次线性，同时获得与常规 MFA 优化相近的负对数似然；作者进一步在约 1 亿张图像上以单台高端 CPU、不到 9 小时训练了超过 100 亿参数的模型。\n\n【方法与创新】\nv-MFA 为每个样本 xn 维护仅含 C′ 个高后验分量的集合 Kn，而非计算全部 C 个分量的联合概率。算法为每个当前分量 c 构造大小为 G 的邻域 gc，将这些邻域的并集及一个随机分量组成搜索集 Sn，再依据联合概率更新 Kn。Figure 1（PDF 第9页）给出的示例中 C′=3、G=3，Kn={35,87,42}，合并邻域和随机分量后得到 10 个候选；这说明计算被限制在局部候选集，但仍以随机候选保留跳出局部搜索的机会。Figure 2（PDF 第9页）说明一般协方差下最近欧氏中心不一定具有最大联合概率，因此算法不能简单以欧氏近邻替代概率搜索。架构层面的变化是以低维因子分析器参数化各分量协方差，保留主要相关结构；算法创新是截断变分分布及基于分量邻域的候选更新。C′、G 和因子维度 H 属于精度与成本的控制参数，而并行运行及 CPU 利用率属于工程实现，不应与复杂度创新混为一谈。\n\n【实验设计与关键结果】\n实验覆盖复杂度缩放、四个高维基准、YFCC100M 大规模训练和零样本去噪。基线包括常规 em-MFA、k-means+FA、torch-mfa、em-DIAG、v-DIAG，以及使用欧氏候选的变体；主要指标为每个样本直至收敛所需的联合概率计算次数、测试集 NLL、墙钟时间，以及去噪 PSNR、SSIM 和每图运行时间。Figure 4（PDF 第16页）以联合概率评估次数检验随 C 增长的复杂度，支持 v-MFA 对 NC 的经验次线性缩放，但给定材料没有提供拟合指数或置信区间。Figure 5（PDF 第18页）显示 C′=3、G=5 的 v-MFA 在四个数据集上均为最快配置，且所有给出的 C′、G 组合都快于 em-MFA；图中完整坐标数值未随原文提供。Figure 6（PDF 第21页）对应 YFCC100M，摘要报告约 1 亿图像、超过 100 亿参数、单台高端 CPU 训练不足 9 小时。去噪实验固定 C=1000，并与 N2F、S2S、BM3D 等方法比较；Table 1（PDF 第24页）将 v-MFA列为最快的盲零样本方法，约比 N2F 快两倍、比 S2S 快超过 2000 倍，只有非盲 BM3D 更快，但所给表格图像未包含具体 PSNR、SSIM 数值。Figure 8（PDF 第26页）把 C 从 1000 增至 10000，在参数量约十倍增长时去噪时间不足两倍，并报告 PSNR、SSIM 随规模改善。\n\n【证据强度与局限】\n证据链覆盖理论复杂度、受控缩放、标准数据集、大规模训练和下游任务，且附录列出硬件、数据集及更多基线，强于只报告单一速度点。不过“次线性”主要由经验缩放支持，给定证据未提供斜率估计、误差区间或统计检验；最坏情况是否仍可能接近全分量搜索也未明确。MFA 以低秩子空间近似一般协方差，因此并非无条件等价于任意满协方差 GMM，其质量依赖 H。硬件比较可能受实现语言、并行方式和优化程度影响；Table B1（PDF 第45页）还说明部分实验以四个各占 16 核的实例并行，跨方法墙钟比较需结合完整配置解释。初始化敏感性、失败案例、内存峰值、能耗及百亿参数实验的重复次数和方差，论文未披露于给定材料。代码仓库、随机种子和完整复现命令也未披露于给定材料。\n\n【研究意义与后续问题】\n论文改变的关键认识不是 GMM 能取得新的任务质量上限，而是大规模、相关性可表达的混合模型未必必须承担 O(NC) 级全分量评分。候选邻域与截断后验的组合也与稀疏混合专家的 Top-K 路由存在形式联系，可能启发避免计算全部专家路由分数的概率化搜索。仍待解决的问题包括次线性性质的理论条件与最坏情况界、C′和G对收敛及偏差的系统影响、不同 H 下表达能力与成本的定量关系，以及方法能否扩展至非高斯观测、时序潜变量模型和没有闭式 M 步的模型。",
-      "why": "该研究为保留分量内相关性的大规模概率密度模型提供了可验证的次线性训练路径，并展示了百亿参数模型的单机 CPU 可行性。",
-      "impact": 86,
-      "novelty": 85,
-      "actionability": 82,
-      "urgency": "中",
-      "tags": [
-        "AI",
-        "推理",
-        "开源",
-        "其他"
-      ],
-      "imageUrl": "",
-      "mediaAssets": {
-        "images": [],
-        "videos": []
-      },
-      "editorialStructure": "",
-      "pdfUrl": "http://jmlr.org/papers/volume27/25-0639/25-0639.pdf",
-      "paperFullTextSource": "pdf",
-      "paperPages": 70,
-      "paperCaptions": [
-        {
-          "page": 8,
-          "text": "Figure 1 offers an illustration of the sets gc and the construction of Sn. Figure 1A shows a schematic representation, Figure 1B visualize Kn and gc, and Figure 1C illustrates Sn in data space. Figure 1 also demonstrates that |Sn| is larger than |Kn|, but significantly"
-        },
-        {
-          "page": 9,
-          "text": "Figure 1: Construction of Sn for a data point xn. Subfigure A shows a schematic repre- sentation while B visualizes Kn and gc, and C visualizes Sn in data space. In this example, the set Kn = {35, 87, 42} contains C′ = 3 component indices for"
-        },
-        {
-          "page": 9,
-          "text": "Figure 2: Comparison of Euclidean distances and joints. In A and B, the component centers are identical and the same data point is marked with a red cross. For isotropic, equally weighted components (A), the smallest Euclidean distance correspond to"
-        },
-        {
-          "page": 13,
-          "text": "Figure 3: Update of Kn over two iterations. In A1, a red cross marks a data point xn with an initial suboptimal Kn = {35, 87} (for simplicity, we use only C′ = 2 here) and G = 3 replacement candidates for each of those components: g35 = {98, 35, 23}"
-        },
-        {
-          "page": 16,
-          "text": "Figure 4: Scaling behavior of v-MFA and em-MFA. One measurement point shows, for a given GMM with C components, the number of joint probabilities computed per data point until the convergence criterion is reached. The number of compo-"
-        },
-        {
-          "page": 17,
-          "text": "Figure 5 shows the measured NLLtest values vs. wall-clock runtimes for all algorithms. As can be observed, v-MFA (with C′ = 3 and G = 5) was the fastest among the algorithms evaluated on all four data sets (excluding Initialization). Across all settings of hyperparameters C′ and G, v-MFA consistently outperformed em-MFA, achieving substantial"
-        },
-        {
-          "page": 18,
-          "text": "Figure 5: Effectiveness and efficiency in terms of negative log-likelihood (NLL) and runtime of v-MFA compared to em-MFA, k-means+FA and the parameters after initial- ization. Each of the four subfigures refers to experiments on one benchmark data"
-        },
-        {
-          "page": 21,
-          "text": "Figure 6: Evaluation of v-MFA and em-MFA on the YFCC100M data set. A shows for different numbers of components C the total number of joint evaluations required for one v-MFA optimization run. The number of v-MFA model parameters is"
-        },
-        {
-          "page": 23,
-          "text": "Figure 7. To account for the varying PSNR values of the noisy images across data sets, the PSNR gain (∆PSNR), defined as the PSNR difference of the denoised and noisy image, is reported in Figure 7A. To normalize for differences in image size across data sets, we"
-        },
-        {
-          "page": 24,
-          "text": "Table 1: Quality and runtime of several zero-shot denoising algorithms, measured by PSNR, SSIM and average runtime per image in seconds. The reported errors denote standard deviations across images in the respective dataset. The best result within"
-        },
-        {
-          "page": 25,
-          "text": "Figure 7: Denoising benchmark. A Results of B different blind zero-shot denoising al- gorithms are shown for two images."
-        },
-        {
-          "page": 26,
-          "text": "Figure 8: The effect of scaling v-MFA for denois- ing. A shows a visual comparison for different numbers of components C for"
-        },
-        {
-          "page": 41,
-          "text": "Figure A1: Illustration of patch-based blind zero-shot image denoising using probabilistic generative models. A noisy image serves as input (top left). Patches extracted from the noisy image (bottom left) are used to learn a probabilistic represen-"
-        },
-        {
-          "page": 45,
-          "text": "Table B1: Details on the utilized hardware for the different algorithms and experiments. The asterisk (∗) marks execution of four instances in parallel, with each instance using 16 of the 64 available cores, i.e., four independent runs were executed at"
-        },
-        {
-          "page": 45,
-          "text": "Table B1 provides a detailed description of the hardware used for the various algorithms and experimental setups. To achieve high utilization, we executed four instances of v-MFA, em-MFA, or k-means+FA in parallel, with each instance using 16 of the 64 available cores,"
-        },
-        {
-          "page": 47,
-          "text": "Table B2: High-dimensional data sets used in our experiments in Sections 3.1 to 3.3. The data dimension is given in pixel width × pixel height × color channels. data set samples data dimension D"
-        },
-        {
-          "page": 47,
-          "text": "Table B3: Data sets used in the denoising experiments in Section 3.4. The data dimension is given in pixel width × pixel height × color channels. Div2K: As an example of a high resolution image, we include one image of the Div2K data"
-        },
-        {
-          "page": 48,
-          "text": "Figure B1: Effectiveness and efficiency of v-MFA and v-MFAEucl. in terms of NLLtest (rel- ative to em-MFA) and the runtime. Triangles refer to v-MFA, while pluses denote v-MFAEucl.. Each of the four subfigures corresponds to experiments on"
-        },
-        {
-          "page": 49,
-          "text": "Figure B2: Effectiveness and efficiency of v-ISO and v-ISOEucl. in terms of NLLtest (relative to em-MFA) and the runtime. Triangles refer to v-ISO, while pluses denote v- ISOEucl.. Each of the four subfigures corresponds to experiments on one bench-"
-        },
-        {
-          "page": 51,
-          "text": "Table B4: Comparison of em-MFA, v-MFA, k-means+FA,torch-mfa, em-DIAG with C = 1000 and multiple v-DIAG variants with C ∈{1000, 6000, 10 000, 20 000} on CelebA. To ensure consistency with the other methods, we define an iteration"
-        },
-        {
-          "page": 53,
-          "text": "Figure B3: Scaling behavior accounting for quality. Depicted is the number of joint evalua- tions per data point for increasingly large numbers of components C. The values for v-MFA and em-MFA are the same as in Figure 4 in the main text. em-MFA†"
-        },
-        {
-          "page": 54,
-          "text": "Figure B4: Effectiveness in terms of negative log-likelihood (NLL) of v-MFA for different configurations of C′ and G, as well as for a variant of v-MFA optimized using the optimal variational parameters Koptn (as defined in Equation 7). Each of the"
-        },
-        {
-          "page": 56,
-          "text": "Figure B5: Comparison of different initialization strategies. Each of the four subfigures refers to experiments on one benchmark data set. The y-axes denote the rela- tive NLL on the test set w.r.t. em-MFA initialized which AFK-MC2, given by"
-        },
-        {
-          "page": 57,
-          "text": "Figure 8, where we increased the number of components up to C = 10 000. A low hyperplane dimensionality (we chose H = 5 for the experiments in Section 3.4) was observed to result in a favorable trade-off between optimization qualities and runtimes. Here we further investigate the effect of the hyperplane dimensionality H. Concretely, we repeated the experiment"
-        }
-      ],
-      "paperVisualPages": [
-        9,
-        18,
-        24,
-        51
-      ],
-      "eventAggregation": {
-        "total": 1,
-        "groups": [
-          {
-            "key": "官方来源",
-            "tone": "#16130f",
-            "items": [
-              {
-                "source": "JMLR",
-                "title": "面向十亿级参数高斯混合模型的次线性变分优化",
-                "url": "http://jmlr.org/papers/v27/25-0639.html",
-                "note": "原始发布 / 公告。",
-                "text": "面向十亿级参数高斯混合模型的次线性变分优化 —— 原始发布 / 公告。"
-              }
-            ]
-          }
-        ]
-      }
-    },
-    {
-      "recordId": "recvuAVZd2RIvl",
-      "sourceId": "jmlr",
-      "title": "torchgfn: A PyTorch GFlowNet Library",
-      "titleCn": "torchgfn：模块化 PyTorch GFlowNet 开源库",
-      "source": "JMLR",
-      "url": "http://jmlr.org/papers/v27/23-1095.html",
-      "category": "技术研究开源",
-      "contentType": "论文",
-      "publishedDate": "2026-09-08",
-      "publishedAtMs": 1788825600000,
-      "summary": "论文提出通用 GFlowNet 库 torchgfn，以解耦环境、采样器、函数估计器和训练目标，支持离散、连续、图结构及扩散采样任务。复现实验表明，它较既有 PyTorch gflownet 实现通常更快，但仍明显慢于采用 JAX/JIT 的 gfnx。",
-      "deepAnalysis": "【研究问题与核心结论】\n论文关注 GFlowNet 研究缺少通用、易扩展且可用于公平比较的实现基础设施这一问题。既有开源代码多与单篇项目绑定，或局限于分子与图任务，或嵌入复杂实验框架，另一些实现则优先追求性能而牺牲可修改性。作者的核心结论是：通过严格分离环境、采样过程、数据容器、神经网络估计器和训练目标，torchgfn 能以统一 PyTorch API 覆盖多类离散与连续 GFlowNet 场景，并在模块可替换性和运行效率之间取得折中。论文展示了已发表任务的统一复现以及跨库计时，但证据主要支持软件架构与工程效率，不等同于提出了新的 GFlowNet 学习理论或生成质量优势。\n\n【方法与创新】\nFigure 1（PDF 第2页）给出了核心架构：无状态 Envs 通过顶层 States 与 Actions 抽象执行状态转移；Sampler 从策略中采样并生成 Trajectories、Transitions 或 StatesPairs 等 Containers；PolicyMixin 将容器连接到实现特定目标的 GFlowNet 子类，如 TrajectoryBalanceGFlowNet 和 DetailedBalanceGFlowNet；一个或多个 Estimator 封装 PyTorch nn.Module，分别表示策略、状态流等函数近似器，再由损失训练。真正新增的是这些接口之间的严格解耦及可交换设计，而不是新的网络架构。Gym 同时覆盖 HyperGrid、DiscreteEBM、BitSequence、连续 Box、BayesianStructure、Ring 和 DiffusionSampling 等环境。就性质而言，主要贡献属于软件架构和 API 设计；论文给定证据没有提出新的训练损失、优化算法或专用硬件工程。\n\n【实验设计与关键结果】\nTable 1（PDF 第4页）将 torchgfn 与 recursion、gflownet、gfnx 对照：前三者基于 PyTorch，gfnx 基于 JAX；torchgfn 被定位为模块化、解耦、通用且使用无状态环境，区别于 recursion 的图与分子导向、gflownet 的环境中心设计及 gfnx 的低层高性能取向。Table 3（PDF 第14页）在批量128下报告分阶段耗时、峰值内存和参数量。torchgfn 对 gflownet 的总耗时为：Box 42.3 对60.7毫秒，Box uniform-pb 18.4对60.8毫秒，Ising 6×6为78.3对3635.0毫秒，Ising 10×10为208.0对15849.0毫秒；HyperGrid small、medium、large 分别为30.8对141.4、77.8对223.0、113.3对364.7毫秒。其代价是部分设置参数或内存略高，例如 HyperGrid large 为101130个参数、55MB，而 gflownet 为100101个参数、37MB。gfnx 仍更快：Ising 10×10总耗时9.8毫秒，torchgfn 为208.0毫秒。Figure 3（PDF 第15页）用100次迭代、50次预热、3个种子比较批量32/128/512；在批量128时，torchgfn 相对 gflownet 在 Ising 6×6 快47.0倍，在 Ising 10×10快76.8倍，但相对 gfnx 在这两项分别慢16.1倍和19.9倍。图中 gflownet 的 Ising 10×10、批量512因计算时间不可接受而缺失。Figure 3与Table 3的绝对总耗时口径并不完全一致，例如 bitseq small 的批量128分别约32和22.1毫秒，给定材料未解释差异。\n\n【证据强度与局限】\n架构图、组件对照和逐场景性能表为工程主张提供了可核验证据，Figure 3还报告3个种子的均值与方差，优于仅给单次计时。然而实验任务数量有限，且跨 PyTorch 与JAX/JIT比较同时混入框架、编译和实现成熟度差异；Table 3中gfnx的JIT步骤无法拆分，也削弱了分阶段归因。论文给定证据未披露硬件型号、软件版本、统计显著性检验、置信区间、端到端收敛时间、相同计算预算下的生成质量，以及各库是否达到等价目标分布拟合精度。除参数量和峰值内存外，也未系统报告编译成本。已发表结果的“复现”缺少给定材料中的逐任务误差、奖励或分布距离数值，因此不能据此确认科学结果完全等价。代码与PyPI公开提升了复现可能性，但长期维护性和外部贡献质量尚不能由论文实验验证。\n\n【研究意义与后续问题】\n该工作的主要意义是把 GFlowNet 方法研究从项目级代码迁移到组件级实验：研究者可以在保持环境和估计器不变时替换训练目标或采样策略，从而减少实现差异对算法比较的干扰。结果也表明，模块化 PyTorch 实现可以显著优于既有 PyTorch 基线，但通用性仍与JAX/JIT吞吐量存在明显交换。后续问题包括：不同组件组合是否保持语义一致与数值稳定；连续空间、图生成和扩散采样能否用统一指标验证正确性；编译、向量化或分布式执行能否缩小与gfnx的性能差距而不破坏接口；以及跨任务复现是否能加入固定版本、完整硬件配置、收敛曲线和目标分布误差测试。",
-      "why": "该工作把分散且面向特定任务的 GFlowNet 实现统一为可替换组件，并通过公开代码、示例环境和跨库性能对照降低算法复现与扩展成本。",
-      "impact": 76,
-      "novelty": 65,
-      "actionability": 89,
-      "urgency": "中",
-      "tags": [
-        "AI",
-        "推理",
-        "开源"
-      ],
-      "imageUrl": "",
-      "mediaAssets": {
-        "images": [],
-        "videos": []
-      },
-      "editorialStructure": "",
-      "pdfUrl": "http://jmlr.org/papers/volume27/23-1095/23-1095.pdf",
-      "paperFullTextSource": "pdf",
-      "paperPages": 15,
-      "paperCaptions": [
-        {
-          "page": 2,
-          "text": "Figure 1: A schematic of the modular torchgfn repository structure. States and Actions are top- level abstractions used to interface between the stateless Envs. Containers are generic objects which hold States-Actions sequences drawn from Samplers. These interface"
-        },
-        {
-          "page": 4,
-          "text": "Table 1: High-level comparison of GFlowNet libraries. Library torchgfn recursion gflownet gfnx PyTorch PyTorch PyTorch JAX"
-        },
-        {
-          "page": 14,
-          "text": "Table 3: Per-phase iteration time (ms, batch size 128), peak memory, and parameter count. Phase times averaged over seeds; “—” indicates JIT-compiled step (not decom- posable into individual timings)."
-        },
-        {
-          "page": 15,
-          "text": "Figure 3: Comparison of the torchgfn library per-iteration time (ms) against the gflownet and gfnx library, across 100 iterations with a 50 iteration burn-in, with variance across 3 seeds. Ising 10 × 10 is not shown for gflownet due to untenable com-"
-        }
-      ],
-      "paperVisualPages": [
-        2,
-        4,
-        14,
-        15
-      ],
-      "eventAggregation": {
-        "total": 1,
-        "groups": [
-          {
-            "key": "官方来源",
-            "tone": "#16130f",
-            "items": [
-              {
-                "source": "JMLR",
-                "title": "torchgfn：模块化 PyTorch GFlowNet 开源库",
-                "url": "http://jmlr.org/papers/v27/23-1095.html",
-                "note": "原始发布 / 公告。",
-                "text": "torchgfn：模块化 PyTorch GFlowNet 开源库 —— 原始发布 / 公告。"
-              }
-            ]
-          }
-        ]
-      }
-    },
-    {
       "recordId": "recvuAVZd2o1ik",
       "sourceId": "github-trending",
       "title": "NousResearch/hermes-agent Hermes Agent v0.21.1 (v2026.9.7)",
@@ -1726,6 +1216,518 @@
                 "url": "https://www.youtube.com/watch?v=j2nv3d_a1f0",
                 "note": "原始发布 / 公告。",
                 "text": "GPT-6 Astra 在 DEF CON 魔方谜题中连续三次解题成功 —— 原始发布 / 公告。"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ],
+  "paperSignals": [
+    {
+      "recordId": "recvuAVZd2Sclr",
+      "sourceId": "jmlr",
+      "title": "Better Simulations for Validating Causal Discovery with the DAG-Adaptation of the Onion Method",
+      "titleCn": "用于因果发现验证的DAG自适应洋葱均匀模拟方法",
+      "source": "JMLR",
+      "url": "http://jmlr.org/papers/v27/24-0711.html",
+      "category": "技术研究开源",
+      "contentType": "论文",
+      "publishedDate": "2026-09-08",
+      "publishedAtMs": 1788825600000,
+      "summary": "论文提出DAG-adaptation of the Onion（DaO）方法，在给定DAG后均匀采样满足其全局马尔可夫性质的相关矩阵，再构造线性递归结构方程模型。实验显示，常用ZARX和Tetrad模拟会引入近确定性、R²可排序性等偏差，并可能实质性改变不同因果发现算法的相对表现。",
+      "deepAnalysis": "【研究问题与核心结论】\n论文研究如何在缺少真实因果真值数据时，为因果发现算法构造公平、完整且可解释的线性模拟基准。现有研究通常先随机生成DAG，再以人工指定区间抽取结构方程系数和误差方差；不同设定会改变相关强度、近确定性和变量可排序性，使同一算法在不同论文中得到冲突结果。作者的核心结论是：给定DAG后，应优先均匀采样所有满足该DAG全局马尔可夫性质的正定相关矩阵，而不是人为规定线性效应分布。DaO据此覆盖相应相关矩阵空间，不偏好特定矩阵且不提供可调参数，并可由相关矩阵和DAG恢复递归线性SEM。作者因此主张其适合作为无特定应用领域假设的通用基准，但明确承认这种均匀分布不等同于真实科学系统的分布。\n\n【方法与创新】\nDaO以DAG G为输入，对经典Onion相关矩阵采样法作DAG约束适配，输出满足G所蕴含条件独立关系的正定相关矩阵R；R与G随后确定标准化线性递归SEM的边系数及加性误差方差，并可使用任意有限方差的误差分布生成样本。其架构性创新是把采样对象由独立边系数改为“与指定DAG马尔可夫相容的相关矩阵空间”，并给出均匀性和覆盖性的正确性论证。相对ZARX和Tetrad，新增内容不是调参或训练技巧，而是模拟目标分布的重新定义；工程部分则提供R、Python实现及PyPI包daosim。非高斯误差不会一般地产生对应族的多元分布，例如逐节点Student’s t误差并不意味着联合分布是多元t，这一边界被作者明确区分。\n\n【实验设计与关键结果】\n验证使用ER、入度无标度SFi和出度无标度SFo三类DAG，对比ZARX、Tetrad和DaO。主要设置包括|V|=100、α=10、模型表征实验100次重复；附录还给出|V|=20的100次重复。Figure 1（PDF第13页）在三个|V|=3、|E|=2的最小非平凡DAG上各采样100次，以相关系数坐标展示可行空间覆盖。Figures 2-5（第19-20页）比较标准化β、误差标准差和绝对相关的经验分布：图注与正文指出ZARX产生最高绝对相关和最小误差标准差，部分误差标准差接近0，即近确定性；DaO的绝对相关最低、误差标准差最大。Table 1及Figures 6-8（第21-22页）以R²秩相关衡量R²-sortability，三种图结构中ZARX均最高，Tetrad较弱，DaO最低；给定材料未包含Table 1的具体数值，不能据此补写。算法实验覆盖DAGMA、sDAGMA、BOSS、fGES、PC、dLiNGAM、itMCMC、MMHC及R²-sort等，指标为邻接与方向的precision、recall和F1。Figure 9（第26页）在DaO生成的ER-DAG、α=10、20次重复上显示，样本量由约2^7增加到2^12时多数方法召回率上升；dLiNGAM在图示条件下的方向召回与F1总体处于高位，而DAGMA方向指标明显偏低。Figure 10（第26页）对20变量ER-DAG的ZARX与Tetrad模拟进行对照，同一算法的排序和幅度明显改变，尤其DAGMA与sDAGMA。图中无误差条，以上数值关系只能按坐标近似读取，不能视为精确统计量。\n\n【证据强度与局限】\n理论部分对采样空间、正定性和均匀性进行了形式化刻画，且开源双语言实现，使核心构造具有较强可复现性；多图结构、两种变量规模及多类因果发现算法也支持“模拟设计影响测评结论”的判断。但算法性能实验仅20次重复，图中未给出置信区间、方差或显著性检验，论文给定证据不足以证明所有算法排序差异均具有统计稳定性。计算时间、内存开销、随节点数和稠密度扩展的定量结果、随机种子及完整硬件配置在所给原文中未披露。实验完全基于模拟数据，不涉及真实真值数据；均匀相关矩阵也可能把大量概率质量放在现实领域罕见区域。方法限于无环、无潜在混杂、横截面和线性相关结构，不能直接覆盖反馈环、时间序列或非线性因果机制。非高斯联合分布的语义亦受误差叠加限制。数据泄漏不属于该纯模拟设计的主要风险，但不同算法是否获得完全一致的调参与计算预算，论文给定材料未披露。\n\n【研究意义与后续问题】\n论文改变的关键认识是，因果发现模拟的主要偏差未必来自DAG拓扑，而可能来自参数化方式隐式制造的高相关、近确定性和R²可排序信号；所谓“系数必须远离零”也可能反而造成近违反faithfulness。DaO提供了一个可证明覆盖完整相关空间的中性参照，使研究者能够区分算法能力与模拟器伪特征。不过，“均匀”只定义了数学上的不偏好，并不自动意味着科学现实性。后续核心问题包括：如何在保持可刻画性的同时限制到领域相关子空间，如何处理潜变量、混杂、时间依赖、反馈环和非线性，以及不同相关矩阵测度下的均匀性是否导致不同结论。还需更大规模、带不确定性统计和计算成本报告的独立复现实验，检验DaO下观察到的算法排序能否跨图规模、密度和误差分布稳定成立。",
+      "why": "该研究把因果发现基准中的模拟分布选择从任意系数设定转化为有理论刻画的相关矩阵均匀采样问题，有助于减少基准偏置。",
+      "impact": 78,
+      "novelty": 84,
+      "actionability": 89,
+      "urgency": "中",
+      "tags": [
+        "AI",
+        "开源",
+        "其他"
+      ],
+      "imageUrl": "",
+      "mediaAssets": {
+        "images": [],
+        "videos": []
+      },
+      "editorialStructure": "",
+      "pdfUrl": "http://jmlr.org/papers/volume27/24-0711/24-0711.pdf",
+      "paperFullTextSource": "pdf",
+      "paperPages": 42,
+      "paperCaptions": [
+        {
+          "page": 12,
+          "text": "Figure 1 depicts the results of generating random correlation matrices using the DaO method for three DAGs. The DAGs make up the simplest non-trivial cases for the DaO Method and the dimensions of the plots represent the correlations in the matrix:"
+        },
+        {
+          "page": 13,
+          "text": "Figure 1: Uniformly sampled correlation matrices from DAGs with |V | = 3 and |E| = 2 with 100 repetition for each case. 13"
+        },
+        {
+          "page": 18,
+          "text": "Figure 2 plots the magnitude of the standardized betas against the standard deviation of the additive error term for every edge, with kernel density estimates for contours. Figures 3, 4, and 5 depict empirical cumulative distribution functions (ECDFs) of the absolute beta"
+        },
+        {
+          "page": 19,
+          "text": "Figure 2: Properties of 10 models generated from ER/SFi/SFo-DAGs with |V | = 100 and α = 10. Simulation: ZARX Tetrad DaO"
+        },
+        {
+          "page": 19,
+          "text": "Figure 3: Properties of 100 models generated from ER-DAGs with |V | = 100 and α = 10. correlation values, while DaO produces the lowest absolute correlation values. Correspondingly, the standard deviations of the error terms in ZARX models are the smallest, while the standard deviations of error terms in DaO models are the largest."
+        },
+        {
+          "page": 20,
+          "text": "Figure 4: Properties of 100 models generated from SFi-DAGs with |V | = 100 and α = 10. Simulation: ZARX Tetrad DaO 1.0"
+        },
+        {
+          "page": 20,
+          "text": "Figure 5: Properties of 100 models generated from SFo-DAGs with |V | = 100 and α = 10. with a standard deviation of approximately zero—this near determinism will induce (near- )violations of faithfulness."
+        },
+        {
+          "page": 21,
+          "text": "Table 1: R2 rank correlation on DAGs with |V | = 100 and α = 10 over 100 repetitions Simulation: ZARX Tetrad DaO 100"
+        },
+        {
+          "page": 21,
+          "text": "Figure 6: R2-sortability of models generated from ER-DAGs with |V | = 100 and α = 10 over 100 repetitions. Table 1 tabulates the levels of R2-sortability for the three simulation methods while"
+        },
+        {
+          "page": 21,
+          "text": "Table 1 tabulates the levels of R2-sortability for the three simulation methods while varying model structure. The ZARX simulations have the highest R2-sortability for all model structures, while R2-sortability appears to be present in Tetrad simulations but at a"
+        },
+        {
+          "page": 21,
+          "text": "Figure 7: R2-sortability of models generated from SFi-DAGs with |V | = 100 and α = 10 over 100 repetitions. 21"
+        },
+        {
+          "page": 22,
+          "text": "Figure 8: R2-sortability of models generated from SFo-DAGs with |V | = 100 and α = 10 over 100 repetitions. 4.4 Summary of Characterization Findings"
+        },
+        {
+          "page": 26,
+          "text": "Figure 9: Mean performance of CDAs on data generated from ER-DAGs with α = 10 using the DaO method for DAG Models over 20 repetitions. ZARX Simulation Tetrad Simulation"
+        },
+        {
+          "page": 26,
+          "text": "Figure 10: Mean performance of CDAs on data generated from ER-DAGs with 20 variables and α = 10 over 20 repetitions. 26"
+        },
+        {
+          "page": 37,
+          "text": "Figure 11: Vertex in/out-degree distributions for 100 DAGs with |V | = 100 and α = 10. Figure 12: Edge matrices for ER/SFi/SFo-DAGs with |V | = 100 and α = 992 (density 12). 8. Applying SFi-DAG before SFo-DAG versus SFo-DAG before SFi-DAG results in different in/out-degree dis-"
+        },
+        {
+          "page": 37,
+          "text": "Figure 12: Edge matrices for ER/SFi/SFo-DAGs with |V | = 100 and α = 992 (density 12). 8. Applying SFi-DAG before SFo-DAG versus SFo-DAG before SFi-DAG results in different in/out-degree dis- tributions. Their application may be iterated in an alternating manner until convergence if identical"
+        },
+        {
+          "page": 39,
+          "text": "Figure 13: Properties of 100 models generated from ER-DAGs with |V | = 100 and α = 10. Simulation: ZARX Tetrad DaO 1.0"
+        },
+        {
+          "page": 39,
+          "text": "Figure 14: Properties of 100 models generated from SFi-DAGs with |V | = 100 and α = 10. Simulated R2-sortable data will have correlations approaching plus or minus one, while, simulated non-R2-sortable data will have correlations closer to zero."
+        },
+        {
+          "page": 39,
+          "text": "Table 3: R2 rank correlation on DAGs with |V | = 20 and α = 10 over 100 repetitions Table 3 tabulates the levels of R2-sortability for the three simulation methods while varying model structure. ZARX simulations have the highest R2-sortability for all model"
+        },
+        {
+          "page": 39,
+          "text": "Table 3 tabulates the levels of R2-sortability for the three simulation methods while varying model structure. ZARX simulations have the highest R2-sortability for all model structures, while R2-sortability appears to be present in Tetrad simulations but at a weaker"
+        },
+        {
+          "page": 40,
+          "text": "Figure 15: Properties of 100 models generated from SFo-DAGs with |V | = 100 and α = 10. Simulation: ZARX Tetrad DaO 20"
+        },
+        {
+          "page": 40,
+          "text": "Figure 16: R2-sortability of models generated from ER-DAGs with |V | = 20 and α = 10 over 100 repetitions. A.6 Scale-free Simulation Results"
+        },
+        {
+          "page": 41,
+          "text": "Figure 17: R2-sortability of models generated from SFi-DAGs with |V | = 20 and α = 10 over 100 repetitions. Simulation: ZARX Tetrad DaO"
+        },
+        {
+          "page": 41,
+          "text": "Figure 18: R2-sortability of models generated from SFo-DAGs with |V | = 20 and α = 10 over 100 repetitions. 41"
+        }
+      ],
+      "paperVisualPages": [
+        12,
+        26,
+        37,
+        40
+      ],
+      "eventAggregation": {
+        "total": 1,
+        "groups": [
+          {
+            "key": "官方来源",
+            "tone": "#16130f",
+            "items": [
+              {
+                "source": "JMLR",
+                "title": "用于因果发现验证的DAG自适应洋葱均匀模拟方法",
+                "url": "http://jmlr.org/papers/v27/24-0711.html",
+                "note": "原始发布 / 公告。",
+                "text": "用于因果发现验证的DAG自适应洋葱均匀模拟方法 —— 原始发布 / 公告。"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "recordId": "recvuAVZd2YMBd",
+      "sourceId": "jmlr",
+      "title": "AgentPEN: A Prediction-Explanation Network for Sequential Stock Movement via LLMs and Recurrent Generation",
+      "titleCn": "AgentPEN：以大模型融合新闻与价格的可解释股票涨跌预测网络",
+      "source": "JMLR",
+      "url": "http://jmlr.org/papers/v27/25-2175.html",
+      "category": "技术研究开源",
+      "contentType": "论文",
+      "publishedDate": "2026-09-08",
+      "publishedAtMs": 1788825600000,
+      "summary": "AgentPEN通过大模型驱动的新闻筛选、时空记忆与跨注意力，将异步且含噪的金融新闻同价格序列对齐，再以变分循环生成模块预测次日涨跌。在三个美股和中国股票数据集上，其ACC与MCC均超过十种基线，但论文所称的解释能力缺少充分的定量验证证据。",
+      "deepAnalysis": "【研究问题与核心结论】\n论文研究含噪、影响持续时间不定且跨股票传播的金融新闻，如何与价格序列对齐，并同时用于次日涨跌预测和结果解释。作者认为，BERT、RoBERTa等传统编码器难以判断新闻与目标股票的相关性、影响期限及影响对象，而简单拼接文本与价格嵌入也不能显式刻画模态交互。AgentPEN据此把新闻处理拆成选择、时空记忆和融合，再用条件变分循环生成过程描述市场运动的不确定性。可核验的核心结论是：在AgentPEN-US、CMIN-US和CMIN-CN上，完整模型的ACC分别为56.91%、58.09%和57.09%，MCC分别为0.118、0.130和0.128，均高于表列基线；组件移除实验也显示新闻相关性评分、记忆、跨注意力及随机潜变量均有贡献。不过，“预测性能更高”的证据明显强于“解释性更好”的证据。\n\n【方法与创新】\n架构由Representation Fusion Agent、Deep Recurrent Generation（DRG）和Temporal Attention Prediction（TAP）组成，整体见Figure 1（PDF第6页），生成与预测结构见Figure 3、Figure 4（第10、13页）。Agent先让LLM为新闻与目标股票计算相关性分数，以阈值筛除噪声；随后分别估计新闻影响期限和受影响股票集合，写入Temporal Memory与Spatial Memory，并在预测日按有效期、股票覆盖和相关性检索Top-K新闻。新闻嵌入和三维价格特征投影后，以价格为query、新闻为key/value执行多头交叉注意力。DRG使用GRU及条件VAE式先验、后验网络逐时刻采样潜变量并产生辅助涨跌预测，TAP再利用解码状态和此前辅助预测输出目标日结果。真正的架构新增点是LLM控制的选择—记忆—融合链路及其与循环生成模块的组合；随机潜变量和KL约束属于生成式训练设计，网格搜索窗口、学习率、批量大小等属于工程配置，并非新的学习原理。\n\n【实验设计与关键结果】\nTable 1（PDF第16页）给出按时间切分的三个数据集：AgentPEN-US覆盖88只股票，测试集984个样本；CMIN-US覆盖110只股票，测试集862个样本；CMIN-CN覆盖沪深300成分股，测试集1040个样本。评价指标为ACC和适合类别不均衡二分类的MCC；基线共十个，包括ALSTM、StockNet、PEN、CMIN、FinMA、MagicNet和ExPred。Table 2（第18页）显示AgentPEN在三组数据上的最佳基线ACC分别为55.14%、55.85%、55.67%，对应AgentPEN为56.91%、58.09%、57.09%；MCC最佳基线分别为0.109、0.121、0.126，对应结果为0.118、0.130、0.128。Figure 5（第19页）报告五个随机种子：ACC为56.91±0.71、58.09±0.64、57.09±0.28，MCC为0.1178±0.0137、0.1296±0.0157、0.1282±0.0045。Table 3（第20页）的消融中，CMIN-US移除文本选择或改用随机相关性后，ACC由58.09%降至53.71%和53.61%；确定性DRG使三个数据集MCC降至0.070、0.076、0.048，MLP版本则降至0.009、0.010、0.051，支持相关性选择和随机潜变量的作用。\n\n【证据强度与局限】\n实验包含跨中美市场、十个基线、时间切分、五随机种子和较完整组件消融，且ACC与MCC方向一致，预测结论具有中上强度。但绝对优势有限：相对最佳基线的ACC仅增加1.42至2.24个百分点，CMIN-CN的MCC仅增加0.002。论文给出均值与标准差，却未披露显著性检验或置信区间；也未在给定证据中说明所有基线是否按相同数据、调参预算和LLM资源重训。新闻抓取、清洗、去重及潜在前视泄漏防护细节不足，LLM调用成本、延迟、版本稳定性和完整算力消耗亦未披露。消融能证明模块对预测有用，但不能直接证明生成解释真实、忠实或可审计；给定材料未提供人工评价者一致性、事实性、因果忠实度等解释指标。Table 6和Figure 8涉及投资回测，但所给图页未展示具体数值，不能据此确认交易成本、换手率和风险调整收益。\n\n【研究意义与后续问题】\n该工作最有价值的认识是：LLM不必直接承担最终数值预测，而可作为结构化信息处理器，显式判断新闻相关性、时间有效区间和跨股票影响，再由可训练的时序生成模型完成预测；随机相关性对照也削弱了“仅因减少新闻数量而提升”的替代解释。其工程价值主要在模块可分解、数据切分和消融路径较清楚，并发布了AgentPEN-US数据集。尚待解决的问题包括LLM评分是否能跨模型和跨时期校准，记忆内容是否受到新闻重复与事后叙事影响，潜变量是否真正表征市场不确定性，以及解释文本能否通过忠实度、稳定性和金融专家盲评。还需要包含交易摩擦的滚动回测、市场状态外推和严格泄漏审计，才能判断统计预测增益能否转化为稳定的现实效用。",
+      "why": "该研究将大模型用于金融文本的相关性筛选和影响范围建模，并以多数据集消融实验验证了这些机制对股票方向预测的增益。",
+      "impact": 78,
+      "novelty": 76,
+      "actionability": 79,
+      "urgency": "中",
+      "tags": [
+        "LLM",
+        "Agent",
+        "推理",
+        "开源"
+      ],
+      "imageUrl": "",
+      "mediaAssets": {
+        "images": [],
+        "videos": []
+      },
+      "editorialStructure": "",
+      "pdfUrl": "http://jmlr.org/papers/volume27/25-2175/25-2175.pdf",
+      "paperFullTextSource": "pdf",
+      "paperPages": 37,
+      "paperCaptions": [
+        {
+          "page": 6,
+          "text": "Figure 1: The overall architecture of the proposed stock Prediction-Explanation Network, including the Representation Fusion Agent, the Deep Recurrent Generation Mod- ule and the Temporal Attention Prediction Module."
+        },
+        {
+          "page": 10,
+          "text": "Figure 3: The graphic illustration of AgentPEN. AgentPEN leverages the fused market information representation P f to infer the latent variable set Z and then predict the stock movement y. The forecasting process pθ y | P f, Z is drawn with solid"
+        },
+        {
+          "page": 13,
+          "text": "Figure 4: The architecture of the Deep Recurrent Generation (DRG) and the Temporal Attention Prediction (TAP) Modules. the former auxiliary movement predictions y<T = {yt}T−1T−L+1 to enhance the performance"
+        },
+        {
+          "page": 16,
+          "text": "Table 1: Statistics of the three datasets. Up and Down columns report the label distribution (next-day movement). Price News"
+        },
+        {
+          "page": 17,
+          "text": "Table 2 summarizes the experimental results on three different datasets using various baseline models and the proposed method, AgentPEN. From the results, we observe that AgentPEN consistently outperforms existing baselines across all three datasets in terms of both ACC and MCC. To further evaluate the robustness of AgentPEN, we additionally run the 4. https://huggingface.co/thenlper/gte-large"
+        },
+        {
+          "page": 18,
+          "text": "Table 2: Performance comparison of AgentPEN and baselines. model with five different random seeds and report the corresponding distributions in Figure 5. The left part of the figure shows the ACC distributions, while the right part presents the MCC distributions. AgentPEN achieves average ACC values of 56.91±0.71, 58.09±0.64,"
+        },
+        {
+          "page": 19,
+          "text": "Figure 5: Performance distributions of AgentPEN over five random seeds on three datasets. The left panel reports ACC, and the right panel reports MCC. Horizontal dashed lines indicate the performance of two strong baselines, MagicNet and ExPred."
+        },
+        {
+          "page": 20,
+          "text": "Table 3: Ablation study results. retrieved news, while AgentPEN-Random keeps approximately the same filtering ratio as AgentPEN but replaces the LLM-produced correlation scores with random scores. Both"
+        },
+        {
+          "page": 21,
+          "text": "Figure 6: The parameter sensitivity study for four important parameters: (a) Correlation threshold τc in Text Selection Module; (b) Learning rate; (c) Look-back window; (d) Max number of retrieved news."
+        },
+        {
+          "page": 24,
+          "text": "Figure 7: Quantitative evaluation of the Text Selection Module. Test samples are grouped by the maximum correlation score among their look-back news, and the y-axis reports the mean absolute next-day return. Samples with higher correlation scores"
+        },
+        {
+          "page": 27,
+          "text": "Table 6: Investment results of AgentPEN on CMIN-CN from 2021-06 to 2021-12. AgentPEN-based strategies are averaged over 5 seeds. The long-short strategy takes long positions on stocks predicted to rise and short positions on stocks pre-"
+        },
+        {
+          "page": 27,
+          "text": "Figure 8 further visualizes the cumulative returns of the three strategies during the CMIN-CN test window. We shade four COVID-related sub-periods, including the reopening period, the Delta-surge period, the mid-recovery period, and the Omicron period. The performance difference across these periods suggests that AgentPEN’s trading value"
+        },
+        {
+          "page": 28,
+          "text": "Figure 8: Cumulative returns of different investment strategies on CMIN-CN during the 2021-06 to 2021-12 test window. The shaded regions indicate four COVID-related market sub-periods."
+        },
+        {
+          "page": 28,
+          "text": "Table 7. In total, AgentPEN processes 519,291 news items, corresponding to 268.3M input tokens and 31.1M output tokens. Based on the public gpt-3.5-turbo price of $0.50/M input tokens and $1.50/M output tokens at the time of our experiments, the total estimated"
+        },
+        {
+          "page": 29,
+          "text": "Table 7: LLM-call statistics and estimated API cost for LLM-based agent. It is important to distinguish historical evaluation from real-time deployment. For historical evaluation and repeated backtesting, LLM annotations and text embeddings can"
+        },
+        {
+          "page": 33,
+          "text": "Table 8: Prompts used for LLMselection, LLMtemporal, and LLMspatial. Component Content System prompt As a stock trading news analyst, you are a helpful and precise assistant."
+        }
+      ],
+      "paperVisualPages": [
+        17,
+        18,
+        20,
+        27
+      ],
+      "eventAggregation": {
+        "total": 1,
+        "groups": [
+          {
+            "key": "官方来源",
+            "tone": "#16130f",
+            "items": [
+              {
+                "source": "JMLR",
+                "title": "AgentPEN：以大模型融合新闻与价格的可解释股票涨跌预测网络",
+                "url": "http://jmlr.org/papers/v27/25-2175.html",
+                "note": "原始发布 / 公告。",
+                "text": "AgentPEN：以大模型融合新闻与价格的可解释股票涨跌预测网络 —— 原始发布 / 公告。"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "recordId": "recvuAVZd2C0TT",
+      "sourceId": "jmlr",
+      "title": "Sublinear Variational Optimization of Gaussian Mixture Models with Millions to Billions of Parameters",
+      "titleCn": "面向十亿级参数高斯混合模型的次线性变分优化",
+      "source": "JMLR",
+      "url": "http://jmlr.org/papers/v27/25-0639.html",
+      "category": "技术研究开源",
+      "contentType": "论文",
+      "publishedDate": "2026-09-08",
+      "publishedAtMs": 1788825600000,
+      "summary": "论文提出截断变分混合因子分析算法 v-MFA，通过仅评估每个样本对应的一小组候选混合分量，将一般 GMM/MFA 每轮优化的计算量由 O(NCD²) 降至对 D 线性、对 NC 次线性。实验报告该方法可在单台高端 CPU 上用不足 9 小时、约 1 亿张图像训练超过 100 亿参数的模型，并用于高效零样本图像去噪。",
+      "deepAnalysis": "【研究问题与核心结论】\n论文研究如何在样本数 N、维度 D 和混合分量数 C 均很大时训练能够表达分量内相关性的高斯混合模型。一般协方差 GMM 的常规 EM 每轮复杂度为 O(NCD²)；对角协方差虽可降至 O(NCD)，却不能表达维度间相关性。核心结论是：将截断变分后验与混合因子分析模型结合后，v-MFA 可使复杂度对 D 线性、对 NC 呈经验次线性，同时获得与常规 MFA 优化相近的负对数似然；作者进一步在约 1 亿张图像上以单台高端 CPU、不到 9 小时训练了超过 100 亿参数的模型。\n\n【方法与创新】\nv-MFA 为每个样本 xn 维护仅含 C′ 个高后验分量的集合 Kn，而非计算全部 C 个分量的联合概率。算法为每个当前分量 c 构造大小为 G 的邻域 gc，将这些邻域的并集及一个随机分量组成搜索集 Sn，再依据联合概率更新 Kn。Figure 1（PDF 第9页）给出的示例中 C′=3、G=3，Kn={35,87,42}，合并邻域和随机分量后得到 10 个候选；这说明计算被限制在局部候选集，但仍以随机候选保留跳出局部搜索的机会。Figure 2（PDF 第9页）说明一般协方差下最近欧氏中心不一定具有最大联合概率，因此算法不能简单以欧氏近邻替代概率搜索。架构层面的变化是以低维因子分析器参数化各分量协方差，保留主要相关结构；算法创新是截断变分分布及基于分量邻域的候选更新。C′、G 和因子维度 H 属于精度与成本的控制参数，而并行运行及 CPU 利用率属于工程实现，不应与复杂度创新混为一谈。\n\n【实验设计与关键结果】\n实验覆盖复杂度缩放、四个高维基准、YFCC100M 大规模训练和零样本去噪。基线包括常规 em-MFA、k-means+FA、torch-mfa、em-DIAG、v-DIAG，以及使用欧氏候选的变体；主要指标为每个样本直至收敛所需的联合概率计算次数、测试集 NLL、墙钟时间，以及去噪 PSNR、SSIM 和每图运行时间。Figure 4（PDF 第16页）以联合概率评估次数检验随 C 增长的复杂度，支持 v-MFA 对 NC 的经验次线性缩放，但给定材料没有提供拟合指数或置信区间。Figure 5（PDF 第18页）显示 C′=3、G=5 的 v-MFA 在四个数据集上均为最快配置，且所有给出的 C′、G 组合都快于 em-MFA；图中完整坐标数值未随原文提供。Figure 6（PDF 第21页）对应 YFCC100M，摘要报告约 1 亿图像、超过 100 亿参数、单台高端 CPU 训练不足 9 小时。去噪实验固定 C=1000，并与 N2F、S2S、BM3D 等方法比较；Table 1（PDF 第24页）将 v-MFA列为最快的盲零样本方法，约比 N2F 快两倍、比 S2S 快超过 2000 倍，只有非盲 BM3D 更快，但所给表格图像未包含具体 PSNR、SSIM 数值。Figure 8（PDF 第26页）把 C 从 1000 增至 10000，在参数量约十倍增长时去噪时间不足两倍，并报告 PSNR、SSIM 随规模改善。\n\n【证据强度与局限】\n证据链覆盖理论复杂度、受控缩放、标准数据集、大规模训练和下游任务，且附录列出硬件、数据集及更多基线，强于只报告单一速度点。不过“次线性”主要由经验缩放支持，给定证据未提供斜率估计、误差区间或统计检验；最坏情况是否仍可能接近全分量搜索也未明确。MFA 以低秩子空间近似一般协方差，因此并非无条件等价于任意满协方差 GMM，其质量依赖 H。硬件比较可能受实现语言、并行方式和优化程度影响；Table B1（PDF 第45页）还说明部分实验以四个各占 16 核的实例并行，跨方法墙钟比较需结合完整配置解释。初始化敏感性、失败案例、内存峰值、能耗及百亿参数实验的重复次数和方差，论文未披露于给定材料。代码仓库、随机种子和完整复现命令也未披露于给定材料。\n\n【研究意义与后续问题】\n论文改变的关键认识不是 GMM 能取得新的任务质量上限，而是大规模、相关性可表达的混合模型未必必须承担 O(NC) 级全分量评分。候选邻域与截断后验的组合也与稀疏混合专家的 Top-K 路由存在形式联系，可能启发避免计算全部专家路由分数的概率化搜索。仍待解决的问题包括次线性性质的理论条件与最坏情况界、C′和G对收敛及偏差的系统影响、不同 H 下表达能力与成本的定量关系，以及方法能否扩展至非高斯观测、时序潜变量模型和没有闭式 M 步的模型。",
+      "why": "该研究为保留分量内相关性的大规模概率密度模型提供了可验证的次线性训练路径，并展示了百亿参数模型的单机 CPU 可行性。",
+      "impact": 86,
+      "novelty": 85,
+      "actionability": 82,
+      "urgency": "中",
+      "tags": [
+        "AI",
+        "推理",
+        "开源",
+        "其他"
+      ],
+      "imageUrl": "",
+      "mediaAssets": {
+        "images": [],
+        "videos": []
+      },
+      "editorialStructure": "",
+      "pdfUrl": "http://jmlr.org/papers/volume27/25-0639/25-0639.pdf",
+      "paperFullTextSource": "pdf",
+      "paperPages": 70,
+      "paperCaptions": [
+        {
+          "page": 8,
+          "text": "Figure 1 offers an illustration of the sets gc and the construction of Sn. Figure 1A shows a schematic representation, Figure 1B visualize Kn and gc, and Figure 1C illustrates Sn in data space. Figure 1 also demonstrates that |Sn| is larger than |Kn|, but significantly"
+        },
+        {
+          "page": 9,
+          "text": "Figure 1: Construction of Sn for a data point xn. Subfigure A shows a schematic repre- sentation while B visualizes Kn and gc, and C visualizes Sn in data space. In this example, the set Kn = {35, 87, 42} contains C′ = 3 component indices for"
+        },
+        {
+          "page": 9,
+          "text": "Figure 2: Comparison of Euclidean distances and joints. In A and B, the component centers are identical and the same data point is marked with a red cross. For isotropic, equally weighted components (A), the smallest Euclidean distance correspond to"
+        },
+        {
+          "page": 13,
+          "text": "Figure 3: Update of Kn over two iterations. In A1, a red cross marks a data point xn with an initial suboptimal Kn = {35, 87} (for simplicity, we use only C′ = 2 here) and G = 3 replacement candidates for each of those components: g35 = {98, 35, 23}"
+        },
+        {
+          "page": 16,
+          "text": "Figure 4: Scaling behavior of v-MFA and em-MFA. One measurement point shows, for a given GMM with C components, the number of joint probabilities computed per data point until the convergence criterion is reached. The number of compo-"
+        },
+        {
+          "page": 17,
+          "text": "Figure 5 shows the measured NLLtest values vs. wall-clock runtimes for all algorithms. As can be observed, v-MFA (with C′ = 3 and G = 5) was the fastest among the algorithms evaluated on all four data sets (excluding Initialization). Across all settings of hyperparameters C′ and G, v-MFA consistently outperformed em-MFA, achieving substantial"
+        },
+        {
+          "page": 18,
+          "text": "Figure 5: Effectiveness and efficiency in terms of negative log-likelihood (NLL) and runtime of v-MFA compared to em-MFA, k-means+FA and the parameters after initial- ization. Each of the four subfigures refers to experiments on one benchmark data"
+        },
+        {
+          "page": 21,
+          "text": "Figure 6: Evaluation of v-MFA and em-MFA on the YFCC100M data set. A shows for different numbers of components C the total number of joint evaluations required for one v-MFA optimization run. The number of v-MFA model parameters is"
+        },
+        {
+          "page": 23,
+          "text": "Figure 7. To account for the varying PSNR values of the noisy images across data sets, the PSNR gain (∆PSNR), defined as the PSNR difference of the denoised and noisy image, is reported in Figure 7A. To normalize for differences in image size across data sets, we"
+        },
+        {
+          "page": 24,
+          "text": "Table 1: Quality and runtime of several zero-shot denoising algorithms, measured by PSNR, SSIM and average runtime per image in seconds. The reported errors denote standard deviations across images in the respective dataset. The best result within"
+        },
+        {
+          "page": 25,
+          "text": "Figure 7: Denoising benchmark. A Results of B different blind zero-shot denoising al- gorithms are shown for two images."
+        },
+        {
+          "page": 26,
+          "text": "Figure 8: The effect of scaling v-MFA for denois- ing. A shows a visual comparison for different numbers of components C for"
+        },
+        {
+          "page": 41,
+          "text": "Figure A1: Illustration of patch-based blind zero-shot image denoising using probabilistic generative models. A noisy image serves as input (top left). Patches extracted from the noisy image (bottom left) are used to learn a probabilistic represen-"
+        },
+        {
+          "page": 45,
+          "text": "Table B1: Details on the utilized hardware for the different algorithms and experiments. The asterisk (∗) marks execution of four instances in parallel, with each instance using 16 of the 64 available cores, i.e., four independent runs were executed at"
+        },
+        {
+          "page": 45,
+          "text": "Table B1 provides a detailed description of the hardware used for the various algorithms and experimental setups. To achieve high utilization, we executed four instances of v-MFA, em-MFA, or k-means+FA in parallel, with each instance using 16 of the 64 available cores,"
+        },
+        {
+          "page": 47,
+          "text": "Table B2: High-dimensional data sets used in our experiments in Sections 3.1 to 3.3. The data dimension is given in pixel width × pixel height × color channels. data set samples data dimension D"
+        },
+        {
+          "page": 47,
+          "text": "Table B3: Data sets used in the denoising experiments in Section 3.4. The data dimension is given in pixel width × pixel height × color channels. Div2K: As an example of a high resolution image, we include one image of the Div2K data"
+        },
+        {
+          "page": 48,
+          "text": "Figure B1: Effectiveness and efficiency of v-MFA and v-MFAEucl. in terms of NLLtest (rel- ative to em-MFA) and the runtime. Triangles refer to v-MFA, while pluses denote v-MFAEucl.. Each of the four subfigures corresponds to experiments on"
+        },
+        {
+          "page": 49,
+          "text": "Figure B2: Effectiveness and efficiency of v-ISO and v-ISOEucl. in terms of NLLtest (relative to em-MFA) and the runtime. Triangles refer to v-ISO, while pluses denote v- ISOEucl.. Each of the four subfigures corresponds to experiments on one bench-"
+        },
+        {
+          "page": 51,
+          "text": "Table B4: Comparison of em-MFA, v-MFA, k-means+FA,torch-mfa, em-DIAG with C = 1000 and multiple v-DIAG variants with C ∈{1000, 6000, 10 000, 20 000} on CelebA. To ensure consistency with the other methods, we define an iteration"
+        },
+        {
+          "page": 53,
+          "text": "Figure B3: Scaling behavior accounting for quality. Depicted is the number of joint evalua- tions per data point for increasingly large numbers of components C. The values for v-MFA and em-MFA are the same as in Figure 4 in the main text. em-MFA†"
+        },
+        {
+          "page": 54,
+          "text": "Figure B4: Effectiveness in terms of negative log-likelihood (NLL) of v-MFA for different configurations of C′ and G, as well as for a variant of v-MFA optimized using the optimal variational parameters Koptn (as defined in Equation 7). Each of the"
+        },
+        {
+          "page": 56,
+          "text": "Figure B5: Comparison of different initialization strategies. Each of the four subfigures refers to experiments on one benchmark data set. The y-axes denote the rela- tive NLL on the test set w.r.t. em-MFA initialized which AFK-MC2, given by"
+        },
+        {
+          "page": 57,
+          "text": "Figure 8, where we increased the number of components up to C = 10 000. A low hyperplane dimensionality (we chose H = 5 for the experiments in Section 3.4) was observed to result in a favorable trade-off between optimization qualities and runtimes. Here we further investigate the effect of the hyperplane dimensionality H. Concretely, we repeated the experiment"
+        }
+      ],
+      "paperVisualPages": [
+        9,
+        18,
+        24,
+        51
+      ],
+      "eventAggregation": {
+        "total": 1,
+        "groups": [
+          {
+            "key": "官方来源",
+            "tone": "#16130f",
+            "items": [
+              {
+                "source": "JMLR",
+                "title": "面向十亿级参数高斯混合模型的次线性变分优化",
+                "url": "http://jmlr.org/papers/v27/25-0639.html",
+                "note": "原始发布 / 公告。",
+                "text": "面向十亿级参数高斯混合模型的次线性变分优化 —— 原始发布 / 公告。"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "recordId": "recvuAVZd2RIvl",
+      "sourceId": "jmlr",
+      "title": "torchgfn: A PyTorch GFlowNet Library",
+      "titleCn": "torchgfn：模块化 PyTorch GFlowNet 开源库",
+      "source": "JMLR",
+      "url": "http://jmlr.org/papers/v27/23-1095.html",
+      "category": "技术研究开源",
+      "contentType": "论文",
+      "publishedDate": "2026-09-08",
+      "publishedAtMs": 1788825600000,
+      "summary": "论文提出通用 GFlowNet 库 torchgfn，以解耦环境、采样器、函数估计器和训练目标，支持离散、连续、图结构及扩散采样任务。复现实验表明，它较既有 PyTorch gflownet 实现通常更快，但仍明显慢于采用 JAX/JIT 的 gfnx。",
+      "deepAnalysis": "【研究问题与核心结论】\n论文关注 GFlowNet 研究缺少通用、易扩展且可用于公平比较的实现基础设施这一问题。既有开源代码多与单篇项目绑定，或局限于分子与图任务，或嵌入复杂实验框架，另一些实现则优先追求性能而牺牲可修改性。作者的核心结论是：通过严格分离环境、采样过程、数据容器、神经网络估计器和训练目标，torchgfn 能以统一 PyTorch API 覆盖多类离散与连续 GFlowNet 场景，并在模块可替换性和运行效率之间取得折中。论文展示了已发表任务的统一复现以及跨库计时，但证据主要支持软件架构与工程效率，不等同于提出了新的 GFlowNet 学习理论或生成质量优势。\n\n【方法与创新】\nFigure 1（PDF 第2页）给出了核心架构：无状态 Envs 通过顶层 States 与 Actions 抽象执行状态转移；Sampler 从策略中采样并生成 Trajectories、Transitions 或 StatesPairs 等 Containers；PolicyMixin 将容器连接到实现特定目标的 GFlowNet 子类，如 TrajectoryBalanceGFlowNet 和 DetailedBalanceGFlowNet；一个或多个 Estimator 封装 PyTorch nn.Module，分别表示策略、状态流等函数近似器，再由损失训练。真正新增的是这些接口之间的严格解耦及可交换设计，而不是新的网络架构。Gym 同时覆盖 HyperGrid、DiscreteEBM、BitSequence、连续 Box、BayesianStructure、Ring 和 DiffusionSampling 等环境。就性质而言，主要贡献属于软件架构和 API 设计；论文给定证据没有提出新的训练损失、优化算法或专用硬件工程。\n\n【实验设计与关键结果】\nTable 1（PDF 第4页）将 torchgfn 与 recursion、gflownet、gfnx 对照：前三者基于 PyTorch，gfnx 基于 JAX；torchgfn 被定位为模块化、解耦、通用且使用无状态环境，区别于 recursion 的图与分子导向、gflownet 的环境中心设计及 gfnx 的低层高性能取向。Table 3（PDF 第14页）在批量128下报告分阶段耗时、峰值内存和参数量。torchgfn 对 gflownet 的总耗时为：Box 42.3 对60.7毫秒，Box uniform-pb 18.4对60.8毫秒，Ising 6×6为78.3对3635.0毫秒，Ising 10×10为208.0对15849.0毫秒；HyperGrid small、medium、large 分别为30.8对141.4、77.8对223.0、113.3对364.7毫秒。其代价是部分设置参数或内存略高，例如 HyperGrid large 为101130个参数、55MB，而 gflownet 为100101个参数、37MB。gfnx 仍更快：Ising 10×10总耗时9.8毫秒，torchgfn 为208.0毫秒。Figure 3（PDF 第15页）用100次迭代、50次预热、3个种子比较批量32/128/512；在批量128时，torchgfn 相对 gflownet 在 Ising 6×6 快47.0倍，在 Ising 10×10快76.8倍，但相对 gfnx 在这两项分别慢16.1倍和19.9倍。图中 gflownet 的 Ising 10×10、批量512因计算时间不可接受而缺失。Figure 3与Table 3的绝对总耗时口径并不完全一致，例如 bitseq small 的批量128分别约32和22.1毫秒，给定材料未解释差异。\n\n【证据强度与局限】\n架构图、组件对照和逐场景性能表为工程主张提供了可核验证据，Figure 3还报告3个种子的均值与方差，优于仅给单次计时。然而实验任务数量有限，且跨 PyTorch 与JAX/JIT比较同时混入框架、编译和实现成熟度差异；Table 3中gfnx的JIT步骤无法拆分，也削弱了分阶段归因。论文给定证据未披露硬件型号、软件版本、统计显著性检验、置信区间、端到端收敛时间、相同计算预算下的生成质量，以及各库是否达到等价目标分布拟合精度。除参数量和峰值内存外，也未系统报告编译成本。已发表结果的“复现”缺少给定材料中的逐任务误差、奖励或分布距离数值，因此不能据此确认科学结果完全等价。代码与PyPI公开提升了复现可能性，但长期维护性和外部贡献质量尚不能由论文实验验证。\n\n【研究意义与后续问题】\n该工作的主要意义是把 GFlowNet 方法研究从项目级代码迁移到组件级实验：研究者可以在保持环境和估计器不变时替换训练目标或采样策略，从而减少实现差异对算法比较的干扰。结果也表明，模块化 PyTorch 实现可以显著优于既有 PyTorch 基线，但通用性仍与JAX/JIT吞吐量存在明显交换。后续问题包括：不同组件组合是否保持语义一致与数值稳定；连续空间、图生成和扩散采样能否用统一指标验证正确性；编译、向量化或分布式执行能否缩小与gfnx的性能差距而不破坏接口；以及跨任务复现是否能加入固定版本、完整硬件配置、收敛曲线和目标分布误差测试。",
+      "why": "该工作把分散且面向特定任务的 GFlowNet 实现统一为可替换组件，并通过公开代码、示例环境和跨库性能对照降低算法复现与扩展成本。",
+      "impact": 76,
+      "novelty": 65,
+      "actionability": 89,
+      "urgency": "中",
+      "tags": [
+        "AI",
+        "推理",
+        "开源"
+      ],
+      "imageUrl": "",
+      "mediaAssets": {
+        "images": [],
+        "videos": []
+      },
+      "editorialStructure": "",
+      "pdfUrl": "http://jmlr.org/papers/volume27/23-1095/23-1095.pdf",
+      "paperFullTextSource": "pdf",
+      "paperPages": 15,
+      "paperCaptions": [
+        {
+          "page": 2,
+          "text": "Figure 1: A schematic of the modular torchgfn repository structure. States and Actions are top- level abstractions used to interface between the stateless Envs. Containers are generic objects which hold States-Actions sequences drawn from Samplers. These interface"
+        },
+        {
+          "page": 4,
+          "text": "Table 1: High-level comparison of GFlowNet libraries. Library torchgfn recursion gflownet gfnx PyTorch PyTorch PyTorch JAX"
+        },
+        {
+          "page": 14,
+          "text": "Table 3: Per-phase iteration time (ms, batch size 128), peak memory, and parameter count. Phase times averaged over seeds; “—” indicates JIT-compiled step (not decom- posable into individual timings)."
+        },
+        {
+          "page": 15,
+          "text": "Figure 3: Comparison of the torchgfn library per-iteration time (ms) against the gflownet and gfnx library, across 100 iterations with a 50 iteration burn-in, with variance across 3 seeds. Ising 10 × 10 is not shown for gflownet due to untenable com-"
+        }
+      ],
+      "paperVisualPages": [
+        2,
+        4,
+        14,
+        15
+      ],
+      "eventAggregation": {
+        "total": 1,
+        "groups": [
+          {
+            "key": "官方来源",
+            "tone": "#16130f",
+            "items": [
+              {
+                "source": "JMLR",
+                "title": "torchgfn：模块化 PyTorch GFlowNet 开源库",
+                "url": "http://jmlr.org/papers/v27/23-1095.html",
+                "note": "原始发布 / 公告。",
+                "text": "torchgfn：模块化 PyTorch GFlowNet 开源库 —— 原始发布 / 公告。"
               }
             ]
           }
