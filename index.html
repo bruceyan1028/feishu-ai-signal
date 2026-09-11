@@ -2233,13 +2233,11 @@ function topicImageUrl(s){
 function coverHtml(A, s, h){
   const tp = topicFor(s);
   const url = topicImageUrl(s);
-  const generated = s.mediaAssets?.coverKind === 'generated-cover';
   return `
   <div style="position: relative; height: ${h||300}px; overflow: hidden; border: 1.5px solid var(--ds-ink-line); background: linear-gradient(135deg, ${tp.bg}, #0b0b0e);">
     <div style="position: absolute; inset: 0; background-image: radial-gradient(rgba(255,255,255,.05) 1px, transparent 1px); background-size: 14px 14px;"></div>
     <span style="position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); font-family: 'Geist Mono', monospace; font-size: 46px; font-weight: 700; color: ${tp.color}; opacity: .55;">${tp.t}</span>
     <img src="${esc(url)}" alt="${esc(s.zhTitle)}" loading="lazy" onerror="this.remove()" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;">
-    ${generated?`<span style="position:absolute;top:10px;right:10px;padding:4px 7px;background:rgba(13,11,9,.72);border:1px solid rgba(255,255,255,.32);color:#fff;font-size:10px;font-weight:700;">AI 配图</span>`:''}
     <div style="position: absolute; left: 0; right: 0; bottom: 0; padding: 12px 14px; background: linear-gradient(180deg, transparent, rgba(0,0,0,.72)); display: flex; align-items: center; gap: 9px;">
       ${avatarHtml(s.source)}
       <span style="font-size: 12px; font-weight: 600; color: #fff;">${esc(s.source)}</span>
@@ -2735,7 +2733,6 @@ function briefHtml(A){
       <div class="pc-media" style="background: linear-gradient(135deg, ${tp.bg}, #0b0b0e);">
         <span class="pc-fallback" style="color: ${tp.color};">${esc(tp.t || '')}</span>
         ${imgUrl ? `<img src="${esc(imgUrl)}" alt="${esc(cardTitle)}" loading="lazy" onerror="this.remove()">` : ''}
-        ${s?.mediaAssets?.coverKind === 'generated-cover' ? `<span style="position:absolute;top:9px;right:9px;padding:4px 7px;background:rgba(13,11,9,.76);border:1px solid rgba(255,255,255,.4);color:#fff;font-size:10px;font-weight:700;">AI 配图</span>` : ''}
       </div>
       <h3 class="pc-title">${esc(cardTitle)}</h3>
     </article>`;
@@ -2784,7 +2781,6 @@ function briefHtml(A){
       <div class="sc-media" style="flex: none; width: 288px; height: 288px; align-self: flex-start; position: relative; border-right: 1.5px solid var(--ds-ink-line); background: linear-gradient(135deg, ${tp.bg}, #0b0b0e); overflow: hidden;">
         <span style="position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); font-family: ${mono}; font-size: 40px; font-weight: 700; color: ${tp.color}; opacity: .5;">${tp.t}</span>
         <img src="${esc(imgUrl)}" alt="${esc(s.zhTitle)}" loading="lazy" onerror="this.remove()" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;">
-        ${s.mediaAssets?.coverKind === 'generated-cover' ? `<span style="position:absolute;top:9px;right:9px;z-index:2;padding:4px 7px;background:rgba(13,11,9,.76);border:1px solid rgba(255,255,255,.4);color:#fff;font-size:10px;font-weight:700;">AI 配图</span>` : ''}
         <span style="position: absolute; top: 0; left: 0; z-index: 2; min-width: 46px; height: 46px; padding: 0 8px; background: ${A.accent}; border-right: 1.5px solid var(--ds-ink-line); border-bottom: 1.5px solid var(--ds-ink-line); display: inline-flex; align-items: center; justify-content: center; font-family: ${mono}; font-size: 18px; font-weight: 700; color: #fff;">${num}</span>
         <span style="position: absolute; bottom: 9px; left: 11px; right: 11px; display: inline-flex; align-items: center; gap: 7px;">
           ${avatarHtml(s.source)}<span style="font-size: 11px; font-weight: 600; color: #fff; text-shadow: 0 1px 3px rgba(0,0,0,.7); overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${esc(s.source)}</span>
