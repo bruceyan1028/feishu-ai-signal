@@ -1201,11 +1201,11 @@
         "硬件",
         "其他"
       ],
-      "imageUrl": "https://img.huxiucdn.com/ai/ai-general-cover/202609/11/34941-prod-kl-general-1-1789085820422.png?imageView2/1/w/788/h/444/|imageMogr2/strip/interlace/1/quality/85",
+      "imageUrl": "media/articles/recvuSoI3oodlU-83ce7bf6aef2.png",
       "mediaAssets": {
         "images": [
           {
-            "url": "https://img.huxiucdn.com/article/content/26-09-11/d3661d8a-2de7-4162-a255-936033e30b30.png?imageView2/2/w/1000/format/png/interlace/1/q/85",
+            "url": "media/articles/recvuSoI3oodlU-0b1ef46d1a9f.png",
             "alt": "美国历史四个发展阶段",
             "kind": "article-figure",
             "afterHeading": "麦肯锡到底说了什么？",
@@ -1217,7 +1217,7 @@
             "coverSuitable": false
           },
           {
-            "url": "https://img.huxiucdn.com/article/content/26-09-11/c4159d2e-6c92-4392-80e8-a8d065921607.png?imageView2/2/w/1000/format/png/interlace/1/q/85",
+            "url": "media/articles/recvuSoI3oodlU-6f8a3308d2c0.png",
             "alt": "美国收入优势集中于顶层",
             "kind": "article-figure",
             "afterHeading": "1.“我们人民”这四个字，把分配问题洗成了动员问题",
@@ -1229,7 +1229,7 @@
             "coverSuitable": false
           },
           {
-            "url": "https://img.huxiucdn.com/article/content/26-09-11/074e7348-e6aa-478e-940e-3419fb5fc47a.png?imageView2/2/w/1000/format/png/interlace/1/q/85",
+            "url": "media/articles/recvuSoI3oodlU-b0460621197e.png",
             "alt": "1900年前后的布宜诺斯艾利斯港",
             "kind": "article-figure",
             "afterHeading": "4.历史叙事里的“幸存者偏差”",
@@ -1241,7 +1241,7 @@
             "coverSuitable": false
           },
           {
-            "url": "https://img.huxiucdn.com/article/content/26-09-11/1d01ed16-0990-4a0e-a925-93cf20ebfb72.png?imageView2/2/w/1000/format/png/interlace/1/q/85",
+            "url": "media/articles/recvuSoI3oodlU-a8fc08a2a365.png",
             "alt": "美国经济流动性持续下降",
             "kind": "article-figure",
             "afterHeading": "美国的真实身体状况",
@@ -1253,7 +1253,7 @@
             "coverSuitable": false
           },
           {
-            "url": "https://img.huxiucdn.com/article/content/26-09-11/20985ae2-69a6-41d2-a116-0da473d17508.png?imageView2/2/w/1000/format/png/interlace/1/q/85",
+            "url": "media/articles/recvuSoI3oodlU-3f2018f89fcc.png",
             "alt": "中美AI路线之争",
             "kind": "article-figure",
             "afterHeading": "那中国呢？",
@@ -1266,7 +1266,7 @@
           }
         ],
         "videos": [],
-        "cover": "https://img.huxiucdn.com/ai/ai-general-cover/202609/11/34941-prod-kl-general-1-1789085820422.png?imageView2/1/w/788/h/444/|imageMogr2/strip/interlace/1/quality/85",
+        "cover": "media/articles/recvuSoI3oodlU-83ce7bf6aef2.png",
         "curatedBy": "vision",
         "curationVersion": 2,
         "coverConfidence": 0.83,
