@@ -36,7 +36,6 @@ PRIORITY_ORDER = ("高", "中", "低")
 WRITABLE_CAPABILITIES = ("status", "priority", "create", "delete", "config")
 
 FETCH_METHODS = ("RSS", "Scrape", "Bridge", "Social", "Media", "Podcast", "API", "Manual")
-TIERS = ("L1", "L2", "L3", "L4")
 FORMATS = (
     sources.SIGNAL_FORMAT_PAPER,
     sources.SIGNAL_FORMAT_WEB,
@@ -49,7 +48,7 @@ FORMATS = (
 )
 
 # 改这些字段等于改了采集链路的行为，按源状态约定必须退回「待测」重新验收。
-# name / notes / tier / dimension 只影响展示与排序，不在其中。
+# name / notes / dimension 只影响展示与排序，不在其中。
 RULE_FIELDS = frozenset(
     {
         "endpoint",
@@ -138,7 +137,6 @@ def build_source(record: dict[str, Any], *, brief_count: int = 0) -> dict[str, A
         "format": sources.normalize_signal_format(fields.get("来源类型"))
         or sources.SIGNAL_FORMAT_OTHER,
         "type": sources.normalize_category(fields.get("dimension"), default="其他"),
-        "tier": str(sources.cell(fields.get("tier")) or ""),
         "priority": normalize_priority(fields.get("priority")),
         "fetchMethod": str(sources.cell(fields.get("fetch_method")) or ""),
         "lookback": str(sources.cell(fields.get("lookback_window")) or ""),
@@ -194,7 +192,6 @@ def build_detail(record: dict[str, Any]) -> dict[str, Any]:
             "fetchMethod": _text_cell(fields, "fetch_method"),
             "format": sources.normalize_signal_format(fields.get("来源类型")) or "",
             "dimension": _text_cell(fields, "dimension"),
-            "tier": _text_cell(fields, "tier"),
             "priority": normalize_priority(fields.get("priority")),
             "status": normalize_status(fields.get("status")),
             "lookbackWindow": lookback,
@@ -222,7 +219,6 @@ def build_detail(record: dict[str, Any]) -> dict[str, Any]:
         "meta": {
             "fetchMethods": list(FETCH_METHODS),
             "formats": list(FORMATS),
-            "tiers": list(TIERS),
             "priorities": list(PRIORITY_ORDER),
             "statuses": [{"code": c, "label": STATUS_LABELS[c]} for c in STATUS_ORDER],
             "ruleFields": sorted(RULE_FIELDS),
@@ -320,7 +316,6 @@ _CONFIG_SPECS: dict[str, tuple[str, Any]] = {
     "fetchMethod": ("fetch_method", lambda v: _pick(v, FETCH_METHODS, "fetch_method")),
     "format": ("来源类型", lambda v: _pick(v, FORMATS, "来源类型")),
     "dimension": ("dimension", lambda v: _clean_text(v, "dimension", required=True)),
-    "tier": ("tier", lambda v: _pick(v, TIERS, "tier")),
     "lookbackWindow": ("lookback_window", normalize_lookback_window),
     "keywordRegex": ("keyword_regex", normalize_keyword_regex),
     "minContentChars": ("min_content_chars", normalize_min_content_chars),

@@ -659,7 +659,9 @@ python -m tools.export_seed
 
 ## 前端数据契约（给改 UI 的人）
 
-`brief-*.json` 的 `signals[]` 常用字段：`recordId`、`sourceId`、`title`、`titleCn`、`source`、`url`、`category`、`contentType`、`tier`、`priority`、`publishedDate`、`summary`、`why`、`deepAnalysis`、`impact`、`novelty`、`actionability`、`urgency`、`tags`、`imageUrl`、`mediaAssets`（`images` / `videos` / `audio` / `documents`）、`eventAggregation`、`pdfUrl`、`paperVisualPages`。
+`brief-*.json` 用五个独立数组输出：新闻 `signals[]`、技术开源 `technicalSignals[]`、视频 `videoSignals[]`、播客 `podcastSignals[]`、社媒 `socialPosts[]`。前四者常用字段为 `recordId`、`sourceId`、`title`、`titleCn`、`source`、`url`、`category`、`contentType`、`tier`、`priority`、`publishedDate`、`summary`、`why`、`deepAnalysis`、`impact`、`novelty`、`actionability`、`urgency`、`tags`、`imageUrl`、`mediaAssets`（`images` / `videos` / `audio` / `documents`）、`eventAggregation`、`pdfUrl`、`paperVisualPages`。`paperSignals[]` 仅作为旧 JSON 的兼容读取字段。
+
+技术开源板块包括 `来源类型=论文`、`Github热榜`，以及参数表 `dimension=技术研究开源` 的所有来源（例如 Hugging Face）。这些板块与视频、播客、社媒均不占日报新闻名额，也不使用来源 `priority`；P0–P2 仅影响普通新闻来源的候选排序、同事件代表选择和翻译档位。
 
 照抄原文的条目（中文媒体 / 公众号）额外带 `bodyVerbatim: true`、`body`（含各级 `#` 小标题的原文）、`bodyTruncated`，此时 `deepAnalysis` 为空，详情页只渲染 `body`。
 

@@ -2,8 +2,9 @@
 from __future__ import annotations
 
 import unittest
+from unittest.mock import patch
 
-from src import cluster
+from src import cluster, daily
 
 
 class CrossLanguageEventTest(unittest.TestCase):
@@ -79,25 +80,77 @@ class CrossLanguageEventTest(unittest.TestCase):
 
 class PreferOfficialTest(unittest.TestCase):
     def test_official_l1_outranks_public_account(self):
-        official = cluster.prefer_score(tier="L1", priority="P0", source_type="纯网页", stamp=1)
-        wechat = cluster.prefer_score(tier="", priority="P2", source_type="公众号", stamp=2)
+        official = cluster.prefer_score(priority="P0", source_type="纯网页", stamp=1)
+        wechat = cluster.prefer_score(priority="P2", source_type="公众号", stamp=2)
         self.assertGreater(official, wechat)
 
     def test_cluster_picks_official_as_primary(self):
         items = [
             {
                 "fields": {"标题": "Claude Opus 5来了，Fable 5性能、一半价格", "来源": "智东西",
-                           "来源类型": "公众号", "层级": ""},
+                           "来源类型": "公众号"},
             },
             {
                 "fields": {"标题": "Introducing Claude Opus 5", "来源": "Anthropic",
-                           "来源类型": "纯网页", "层级": "L1"},
+                           "来源类型": "纯网页"},
             },
         ]
         primaries = cluster.collapse_for_brief(items)
         self.assertEqual(len(primaries), 1)
         self.assertEqual(primaries[0]["source"], "Anthropic")
         self.assertEqual(len(primaries[0]["eventPeers"]), 1)
+
+    def test_resolver_can_promote_official_source_and_keep_media_as_peer(self):
+        items = [
+            {
+                "record_id": "media",
+                "url": "https://example.com/media",
+                "fields": {"标题": "OpenAI claims Navier-Stokes breakthrough", "来源": "MIT Technology Review China", "来源类型": "公众号"},
+                "priority": "P1",
+            },
+            {
+                "record_id": "official",
+                "url": "https://openai.example/research",
+                "fields": {"标题": "OpenAI claims Navier-Stokes breakthrough", "来源": "OpenAI", "来源类型": "纯网页"},
+                "priority": "P0",
+            },
+        ]
+
+        def resolver(cluster_items):
+            self.assertEqual({item["record_id"] for item in cluster_items}, {"media", "official"})
+            return "official", {
+                "official": {"eventRole": "official", "eventPerspective": "发布研究主张与材料"},
+                "media": {"eventRole": "commentary", "eventPerspective": "讨论署名与学术归属争议"},
+            }
+
+        primaries = cluster.collapse_for_brief(items, resolve_cluster=resolver)
+        self.assertEqual(len(primaries), 1)
+        self.assertEqual(primaries[0]["record_id"], "official")
+        self.assertEqual(primaries[0]["eventPeers"][0]["record_id"], "media")
+        self.assertEqual(primaries[0]["eventPeers"][0]["eventPerspective"], "讨论署名与学术归属争议")
+        aggregation = cluster.build_event_aggregation(primaries[0], primaries[0]["eventPeers"])
+        related = next(group for group in aggregation["groups"] if group["key"] == "相关报道")
+        self.assertIn("讨论署名与学术归属争议", related["items"][0]["note"])
+
+
+class LlmEventResolverTest(unittest.TestCase):
+    @patch("src.daily.report._llm_json")
+    def test_resolver_only_accepts_returned_candidate_ids(self, llm):
+        llm.return_value = {
+            "primary_record_id": "openai",
+            "members": [
+                {"record_id": "openai", "role": "official", "perspective": "公开研究说明"},
+                {"record_id": "media", "role": "commentary", "perspective": "讨论学术归属"},
+                {"record_id": "outside", "role": "official", "perspective": "must be ignored"},
+            ],
+        }
+        selected, metadata = daily.resolve_event_cluster_with_llm([
+            {"record_id": "openai", "source": "OpenAI", "title": "Research update", "fields": {}},
+            {"record_id": "media", "source": "MIT Technology Review China", "title": "OpenAI research controversy", "fields": {}},
+        ])
+        self.assertEqual(selected, "openai")
+        self.assertEqual(metadata["openai"]["eventRole"], "official")
+        self.assertNotIn("outside", metadata)
 
 
 class EventAggregationTest(unittest.TestCase):

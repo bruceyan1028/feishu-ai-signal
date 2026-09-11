@@ -1,4 +1,8 @@
-"""同事件聚类：标题近似匹配 + tier/priority 择优，并为详情页组装「事件聚合」。"""
+"""同事件聚类与事件聚合。
+
+候选召回保持确定性，主来源由 daily 中的 LLM 裁决；本模块只保留在
+LLM 不可用或返回无效结果时的确定性回退规则。
+"""
 from __future__ import annotations
 
 import re
@@ -10,7 +14,6 @@ _TITLE_NOISE_RE = re.compile(
     re.I,
 )
 
-TIER_SCORE = {"L1": 40, "L2": 25, "L3": 12, "L4": 5}
 PRIORITY_SCORE = {"P0": 30, "P1": 18, "P2": 8}
 
 GROUP_OFFICIAL = "官方来源"
@@ -149,33 +152,28 @@ def contextual_same_event(
     )
 
 
-def _tier_code(raw: Any) -> str:
-    text = str(raw or "").strip().upper()
-    for code in ("L1", "L2", "L3", "L4"):
-        if text.startswith(code) or code in text:
-            return code
-    return "L3"
+def _is_chinese(text: Any) -> bool:
+    return bool(re.search(r"[\u4e00-\u9fff]", str(text or "")))
 
 
 def prefer_score(
     *,
-    tier: Any = "",
     priority: str = "P2",
     source_type: str = "",
+    title: str = "",
     stamp: int = 0,
     body_len: int = 0,
-) -> tuple[int, int, int]:
-    """分数越高越优先保留；同分时更早发布、正文更长者优先。"""
-    tier_pts = TIER_SCORE.get(_tier_code(tier), 10)
+) -> tuple[int, int, int, int]:
+    """LLM 不可用时的回退：一手来源、英文、优先级、时效、正文完整度。"""
     pri_pts = PRIORITY_SCORE.get(str(priority or "P2").upper(), 8)
-    type_pts = 0
+    source_pts = 0
     st = str(source_type or "")
     if st in ("纯网页", "Company Blog") or "官方" in st:
-        type_pts += 6
+        source_pts += 12
     if st in ("论文", "Research"):
-        type_pts -= 2
-    # stamp 越大越新；择优时同级偏早发 → 用负 stamp 排序时再处理
-    return (tier_pts + pri_pts + type_pts, -int(stamp or 0), int(body_len or 0))
+        source_pts -= 2
+    language_pts = 0 if _is_chinese(title) else 1
+    return (source_pts + pri_pts, language_pts, int(stamp or 0), int(body_len or 0))
 
 
 def cluster_by_title(
@@ -211,28 +209,35 @@ def _member_payload(item: dict[str, Any], note: str) -> dict[str, str]:
     ).strip()
     summary = str(item.get("summary") or "").strip()
     headline = title or summary[:80]
+    perspective = str(item.get("eventPerspective") or "").strip()
     return {
         "source": str(item.get("source") or "未知来源"),
         "title": headline,
         "url": str(item.get("url") or ""),
-        "note": note,
-        "text": f"{headline} —— {note}" if headline else note,
+        "note": " ".join(part for part in (note, perspective) if part),
+        "text": f"{headline} —— {' '.join(part for part in (note, perspective) if part)}" if headline else note,
     }
 
 
 def classify_group(item: dict[str, Any], *, is_primary: bool) -> str:
-    tier = _tier_code(item.get("tier") or item.get("层级") or "")
+    role = str(item.get("eventRole") or "").strip()
+    if role == "official":
+        return GROUP_OFFICIAL
+    if role == "original_reporting":
+        return GROUP_RELATED
+    if role in {"secondary_reporting", "commentary"}:
+        return GROUP_RELATED
     source_type = str(item.get("source_type") or item.get("contentType") or item.get("kind") or "")
-    if is_primary or tier == "L1":
+    if is_primary:
         return GROUP_OFFICIAL
     if source_type in ("论文",) or "arxiv" in str(item.get("url") or "").lower():
         return GROUP_CROSS
-    if tier in ("L2", "L3"):
-        return GROUP_RELATED
-    return GROUP_EXTRA
+    return GROUP_RELATED
 
 
 def _role_note(group: str, *, is_primary: bool) -> str:
+    # eventRole comes from the LLM event resolver. Keep old group labels for
+    # historical payloads that do not have resolver metadata.
     if is_primary or group == GROUP_OFFICIAL:
         return "原始发布 / 公告。"
     if group == GROUP_RELATED:
@@ -292,8 +297,9 @@ def collapse_for_brief(
     *,
     threshold: float = 0.85,
     limit: int | None = None,
+    resolve_cluster: Any = None,
 ) -> list[dict[str, Any]]:
-    """对候选做同事件折叠：每簇只保留最优主条目，siblings 挂到 eventPeers。"""
+    """对候选做同事件折叠，并可由调用方为每个多源事件指定主条目。"""
     if not candidates:
         return []
 
@@ -312,7 +318,6 @@ def collapse_for_brief(
             "titleCn": str(_scalar(fields.get("中文标题")) or title),
             "source": str(_scalar(fields.get("来源")) or item.get("source") or ""),
             "url": _link(fields.get("链接")) or str(item.get("url") or ""),
-            "tier": str(_scalar(fields.get("层级")) or item.get("tier") or ""),
             "source_type": str(_scalar(fields.get("来源类型")) or item.get("source_type") or ""),
             "summary": str(_scalar(fields.get("中文摘要")) or item.get("summary") or ""),
             "stamp": int(item.get("stamp") or 0),
@@ -320,9 +325,9 @@ def collapse_for_brief(
             "body_len": len(str(_scalar(fields.get("原文")) or "")),
         }
         row["_score"] = prefer_score(
-            tier=row["tier"],
             priority=row["priority"],
             source_type=row["source_type"],
+            title=row["title"],
             stamp=row["stamp"],
             body_len=row["body_len"],
         )
@@ -332,6 +337,22 @@ def collapse_for_brief(
     primaries: list[dict[str, Any]] = []
     for cluster in clusters:
         ordered = sorted(cluster, key=lambda x: x["_score"], reverse=True)
+        selected_id = ""
+        metadata: dict[str, dict[str, str]] = {}
+        if resolve_cluster is not None and len(ordered) > 1:
+            try:
+                selected_id, metadata = resolve_cluster([dict(item) for item in ordered])
+            except Exception:  # noqa: BLE001 - event resolver must never block a brief
+                selected_id, metadata = "", {}
+        if selected_id:
+            for index, item in enumerate(ordered):
+                if str(item.get("record_id") or "") == selected_id:
+                    ordered.insert(0, ordered.pop(index))
+                    break
+        for item in ordered:
+            item_id = str(item.get("record_id") or "")
+            if item_id in metadata:
+                item.update(metadata[item_id])
         primary = dict(ordered[0])
         siblings = [dict(x) for x in ordered[1:]]
         primary["eventPeers"] = siblings
@@ -348,7 +369,6 @@ def attach_aggregations(signals: list[dict[str, Any]], *, threshold: float = 0.8
     for signal in signals:
         signal.setdefault("title", signal.get("title") or signal.get("titleCn") or "")
         signal["_score"] = prefer_score(
-            tier=signal.get("tier") or "",
             priority=signal.get("priority") or "P2",
             source_type=signal.get("contentType") or signal.get("source_type") or "",
             stamp=_date_stamp(signal.get("publishedDate") or signal.get("date") or ""),

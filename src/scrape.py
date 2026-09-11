@@ -1688,10 +1688,17 @@ def _fetch_github_items(feed: dict[str, Any]) -> list[dict[str, Any]]:
 
 
 def _is_json_api_feed(feed: dict[str, Any]) -> bool:
-    return _is_modelscope_feed(feed) or _is_seed_feed(feed) or _is_github_feed(feed)
+    return (
+        _is_modelscope_feed(feed)
+        or _is_seed_feed(feed)
+        or _is_github_feed(feed)
+        or _is_mittrchina_feed(feed)
+    )
 
 
 def _fetch_json_api_items(feed: dict[str, Any]) -> list[dict[str, Any]]:
+    if _is_mittrchina_feed(feed):
+        return _fetch_mittrchina_items(feed)
     if _is_seed_feed(feed):
         return _fetch_seed_items(feed)
     if _is_modelscope_feed(feed):
@@ -1699,6 +1706,87 @@ def _fetch_json_api_items(feed: dict[str, Any]) -> list[dict[str, Any]]:
     if _is_github_feed(feed):
         return _fetch_github_items(feed)
     return []
+
+
+def _is_mittrchina_feed(feed: dict[str, Any]) -> bool:
+    """MIT Technology Review China is a SPA backed by a public JSON API."""
+    sid = str(feed.get("id") or "").strip().lower()
+    return sid == "mittrchina" or bool(_feed_extra(feed).get("mittrchina_api"))
+
+
+def _fetch_mittrchina_items(feed: dict[str, Any]) -> list[dict[str, Any]]:
+    """Fetch MITTR China's latest articles and their public full-text payloads."""
+    extra = _feed_extra(feed)
+    limit = max(1, min(int(extra.get("max_articles") or config.DEFAULT_MAX_ARTICLES), 20))
+    api = "https://apii.web.mittrchina.com/information"
+    headers = {"User-Agent": _UA, "Accept": "application/json"}
+    try:
+        response = requests.get(
+            f"{api}/index",
+            params={"page": 1, "limit": limit, "is_ad": "false"},
+            headers=headers,
+            timeout=min(config.JINA_TIMEOUT, 30),
+        )
+        response.raise_for_status()
+        payload = response.json()
+    except Exception as exc:  # noqa: BLE001
+        log.warning("MITTR China list API failed: %s", exc)
+        return []
+
+    rows = ((payload.get("data") or {}).get("items") or []) if isinstance(payload, dict) else []
+    items: list[dict[str, Any]] = []
+    for row in rows:
+        if not isinstance(row, dict):
+            continue
+        article_id = str(row.get("id") or "").strip()
+        title = _one_line(str(row.get("name") or ""))
+        if not article_id or not title:
+            continue
+        try:
+            detail_response = requests.get(
+                f"{api}/details",
+                params={"id": article_id},
+                headers=headers,
+                timeout=min(config.JINA_TIMEOUT, 30),
+            )
+            detail_response.raise_for_status()
+            detail_payload = detail_response.json()
+            detail = detail_payload.get("data") if isinstance(detail_payload, dict) else {}
+        except Exception as exc:  # noqa: BLE001
+            log.warning("MITTR China detail API failed for %s: %s", article_id, exc)
+            continue
+        if not isinstance(detail, dict):
+            continue
+        url = f"https://www.mittrchina.com/news/detail/{article_id}"
+        html = str(detail.get("content") or "")
+        from . import rss
+
+        parsed = rss.parse_article_html(html, url, title, limit=15000)
+        body = parsed.get("text") or _one_line(str(row.get("summary") or ""))
+        if len(body) < 40:
+            continue
+        timestamp = detail.get("start_time") or row.get("start_time")
+        try:
+            published_raw = datetime.fromtimestamp(float(timestamp), timezone.utc).isoformat()
+        except (TypeError, ValueError, OSError, OverflowError):
+            published_raw = ""
+        images = list(parsed.get("images") or [])
+        cover = str(detail.get("cover") or row.get("cover") or "").strip()
+        if cover and not any(str(image.get("url") or "") == cover for image in images):
+            images.insert(0, {"url": cover, "alt": title, "kind": "article-cover"})
+        items.append(
+            {
+                "title": title[:200],
+                "url": url,
+                "body": body,
+                "image_url": cover,
+                "media_assets": {"images": images, "videos": []},
+                "published_raw": published_raw,
+                "is_html": True,
+                "feed": feed,
+            }
+        )
+    return items
 
 
 def _is_anthropic_news_feed(feed: dict[str, Any]) -> bool:
@@ -1805,27 +1893,28 @@ def _fetch_spec_error(sid: str, feed: dict[str, Any], st: dict[str, Any], links)
 
 
 def _extract_anthropic_news_links(html: str, feed: dict[str, Any]) -> list[dict[str, str]]:
-    """官网 /news 页底部 PublicationList（Date / Category / Title），按页面日期顺序抽取。
+    """合并官网 /news 的 FeaturedGrid 与 PublicationList，按发布时间抽取。
 
-    通用 href 扫描会按路径字母序截断，Claude 产品公告（/news/claude-*）会被挤出前 8 条。
+    FeaturedGrid 是首页顶部卡片，常含当天的模型发布或安全报告；PublicationList
+    是下方完整新闻表。两者并不互相包含，不能只读取后者。
     """
     from urllib.parse import urljoin
 
     src_url = str(feed.get("url") or "https://www.anthropic.com/news")
     max_n = int(feed.get("max_articles") or config.DEFAULT_MAX_ARTICLES)
+    candidates: list[dict[str, str]] = []
+
     rows = re.finditer(
         r"""<a\b(?=[^>]*listItem)[^>]*\bhref=["'](/news/[^"'#?]+)["'][^>]*>(.*?)</a>"""
         r"""|<a\b[^>]*\bhref=["'](/news/[^"'#?]+)["'](?=[^>]*listItem)[^>]*>(.*?)</a>""",
         html or "",
         re.I | re.S,
     )
-    links: list[dict[str, str]] = []
-    seen: set[str] = set()
     for match in rows:
         raw_path = match.group(1) or match.group(3) or ""
         card = match.group(2) or match.group(4) or ""
         url = urljoin(src_url, raw_path).split("#")[0]
-        if not raw_path or url in seen:
+        if not raw_path:
             continue
         title_match = re.search(
             r"""<span\b[^>]*title[^>]*>(.*?)</span>""",
@@ -1837,14 +1926,40 @@ def _extract_anthropic_news_links(html: str, feed: dict[str, Any]) -> list[dict[
         published = _one_line(_html_to_text(time_match.group(1) if time_match else ""))
         if not title:
             continue
-        seen.add(url)
         item = {"url": url, "title": title[:200]}
         if published:
             item["published_raw"] = published
-        links.append(item)
-        if len(links) >= max_n:
-            break
-    return links
+        candidates.append(item)
+
+    # 顶部 FeaturedGrid 的链接并不都在 /news/ 下：模型发布可使用站点根路径，
+    # 安全报告也可能是独立页面。因此仅在明确的 FeaturedGrid 卡片里放宽路径限制。
+    featured = re.finditer(
+        r"""<a\b[^>]*\bhref=["']([^"'#?]+)["'][^>]*\bclass=["'][^"']*FeaturedGrid[^"']*(?:gridItem|sideLink|content)[^"']*["'][^>]*>(.*?)</a>""",
+        html or "",
+        re.I | re.S,
+    )
+    for match in featured:
+        raw_path, card = match.groups()
+        url = urljoin(src_url, raw_path).split("#")[0]
+        if not url.startswith("https://www.anthropic.com/"):
+            continue
+        title_match = re.search(r"(?is)<h[1-4]\b[^>]*>(.*?)</h[1-4]>", card)
+        time_match = re.search(r"(?is)<time\b[^>]*>(.*?)</time>", card)
+        title = _one_line(_html_to_text(title_match.group(1) if title_match else ""))
+        published = _one_line(_html_to_text(time_match.group(1) if time_match else ""))
+        if not title or not published:
+            continue
+        candidates.append({"url": url, "title": title[:200], "published_raw": published})
+
+    # 同一条新闻可能同时出现在卡片区和列表区；保留有日期、标题更完整的版本。
+    links_by_url: dict[str, dict[str, str]] = {}
+    for item in candidates:
+        old = links_by_url.get(item["url"])
+        if old is None or (not old.get("published_raw") and item.get("published_raw")):
+            links_by_url[item["url"]] = item
+    links = list(links_by_url.values())
+    links.sort(key=_cand_recency_key, reverse=True)
+    return links[:max_n]
 
 
 def _extract_zhipu_news_links(html: str, feed: dict[str, Any]) -> list[dict[str, str]]:

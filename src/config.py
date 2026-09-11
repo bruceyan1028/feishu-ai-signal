@@ -187,16 +187,12 @@ DAILY_ANALYSIS_CONCURRENCY = int(os.environ.get("DAILY_ANALYSIS_CONCURRENCY", "3
 DAILY_FILL_LEGACY_DEEP_ANALYSIS = os.environ.get(
     "DAILY_FILL_LEGACY_DEEP_ANALYSIS", "0"
 ).strip().lower() in {"1", "true", "yes", "on"}
-# 每份简报里「论文」类条目的硬上限，避免论文稀释「快速读新闻」体验
+# 技术开源板块（论文、GitHub 及技术研究开源来源）独立于新闻主池。
+DAILY_TECHNICAL_LIMIT = int(os.environ.get("DAILY_TECHNICAL_LIMIT", "12"))
+# 兼容历史脚本与论文富集链路；日报选入改由 DAILY_TECHNICAL_LIMIT 控制。
 DAILY_MAX_PAPERS = int(os.environ.get("DAILY_MAX_PAPERS", "4"))
-# 视频更适合作为补充材料：候选最多 4 条，排序分轻微降权，避免同日频道更新挤占新闻。
+# 视频板块独立于新闻主池，候选最多 4 条。
 DAILY_MAX_VIDEOS = int(os.environ.get("DAILY_MAX_VIDEOS", "4"))
-DAILY_MIN_VIDEOS = int(os.environ.get("DAILY_MIN_VIDEOS", "1"))
-DAILY_VIDEO_WEIGHT = float(os.environ.get("DAILY_VIDEO_WEIGHT", "0.9"))
-# 播客独立成栏，不与新闻同池竞争，也不设条数上限；候选质量排序仍用该权重轻度降权。
-DAILY_PODCAST_WEIGHT = float(os.environ.get("DAILY_PODCAST_WEIGHT", "0.85"))
-# 榜单类每天变化很小，长期霸榜项目会反复占位，故单独限额。
-DAILY_MAX_GITHUB = int(os.environ.get("DAILY_MAX_GITHUB", "5"))
 # 单个来源在候选池中的上限：防止一个源（尤其是榜单/聚合源）刷屏。
 DAILY_MAX_PER_SOURCE = int(os.environ.get("DAILY_MAX_PER_SOURCE", "4"))
 # 给非 P0 来源保留的名额：P0 源数量多时会填满候选池，

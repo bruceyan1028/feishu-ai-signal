@@ -1037,7 +1037,6 @@ async function loadBrief(){
       topComments: Array.isArray(s.topComments) ? s.topComments : [],
       commentFetchError: s.commentFetchError || '',
       eventAggregation: s.eventAggregation || null,
-      tier: s.tier || '',
       priority: s.priority || '',
       pdfUrl: s.pdfUrl || '',
       paperFullTextSource: s.paperFullTextSource || '',
@@ -1141,7 +1140,6 @@ async function loadWeekly(){
       topComments:Array.isArray(s.topComments) ? s.topComments : [],
       commentFetchError:s.commentFetchError || '',
       eventAggregation:s.eventAggregation || null,
-      tier:s.tier || '',
       priority:s.priority || '',
       pdfUrl:s.pdfUrl || '',
       paperFullTextSource:s.paperFullTextSource || '',
@@ -1669,7 +1667,7 @@ const App = {
       if(index>=0 && body.detail){
         const cfg=body.detail.config;
         state.sources[index]={ ...state.sources[index], name:cfg.name, url:cfg.endpoint, fetchMethod:cfg.fetchMethod,
-          format:cfg.format, type:cfg.dimension, tier:cfg.tier, priority:cfg.priority, lookback:cfg.lookbackWindow,
+          format:cfg.format, type:cfg.dimension, priority:cfg.priority, lookback:cfg.lookbackWindow,
           status:cfg.status, on:cfg.status==='active', statusLabel:STATUS_LABELS[cfg.status]||cfg.status };
       }
     } catch(error) {
@@ -3736,7 +3734,6 @@ function sourceConfigPanel(A){
       ${field('fetchMethod','采集方式','',select('fetchMethod', meta.fetchMethods))}
       ${field('format','载体','',select('format', meta.formats))}
       ${field('dimension','内容维度','',text('dimension'))}
-      ${field('tier','层级','',select('tier', meta.tiers))}
       ${field('lookbackWindow','时间窗','如 24h / 7d',text('lookbackWindow', mono))}
       ${field('minContentChars','正文最少字符','0 表示用默认',text('minContentChars', mono))}
       ${field('dedupKey','去重键','',text('dedupKey', mono))}
@@ -3901,8 +3898,8 @@ function sourcesHtml(A){
   const filtered = state.sources.filter(x => matchType(x, state.srcTab) && matchFormat(x, state.srcFormat) && matchQuery(x));
   const canConfig = writable.includes('config');
   const grid = canStatus
-    ? `minmax(160px,1.6fr) 118px minmax(96px,1fr) 46px 112px minmax(78px,.9fr) 52px 60px ${canConfig?'46px ':''}34px`
-    : `minmax(160px,1.8fr) 76px minmax(96px,1fr) 46px 52px minmax(78px,.9fr) 52px 60px ${canConfig?'46px ':''}34px`;
+    ? `minmax(160px,1.6fr) 118px minmax(96px,1fr) 112px minmax(78px,.9fr) 52px 60px ${canConfig?'46px ':''}34px`
+    : `minmax(160px,1.8fr) 76px minmax(96px,1fr) 52px minmax(78px,.9fr) 52px 60px ${canConfig?'46px ':''}34px`;
 
   const rowsHtml = filtered.map(row => {
     const rowId = sourceIdArg(row.id);
@@ -3931,7 +3928,6 @@ function sourcesHtml(A){
         : `<span style="padding-right: 12px; font-size: 13.5px; font-weight: 600; color: ${UI.text};">${esc(row.name)}</span>`}
       ${statusCell}
       <span style="font-size: 12px; color: ${UI.text2}; display: inline-flex; flex-direction: column; gap: 3px; align-items: flex-start;"><span style="padding: 3px 10px; border-radius: 999px; border: 1px solid ${UI.border}; background: rgba(22,19,15,.03);">${esc(row.format)}</span><span style="font-size: 10px; color: ${UI.text3};">${esc(row.fetchMethod)}</span></span>
-      <span style="font-size: 11.5px; font-weight: 700; color: ${UI.text3}; font-family: 'Geist Mono', ui-monospace, Menlo, monospace;">${esc(row.tier||'—')}</span>
       ${priorityCell}
       <span style="font-size: 12px; color: ${UI.text3}; font-family: 'Geist Mono', ui-monospace, Menlo, monospace;">${esc(row.last||'从未')}</span>
       <span style="font-size: 12px; color: ${UI.text3}; text-align: right; font-family: 'Geist Mono', ui-monospace, Menlo, monospace;">${row.perDay}</span>
@@ -4010,7 +4006,7 @@ function sourcesHtml(A){
 
       <section class="src-table" style="border: 1px solid ${UI.border}; border-radius: 12px; overflow: hidden; background: ${UI.panel}; position: relative;">
         <div style="display: grid; grid-template-columns: ${grid}; padding: 0 20px; height: 44px; align-items: center; background: rgba(22,19,15,.03); border-bottom: 1px solid ${UI.border}; font-size: 11px; font-weight: 700; letter-spacing: .06em; color: ${UI.text3};">
-          <span>来源名称</span><span>${canStatus?'采集开关':'接入状态'}</span><span>载体 / 方式</span><span>层级</span><span>优先级</span><span>最近采集</span><span style="text-align: right;">入库</span><span style="text-align: right;">入选</span>${canConfig?'<span></span>':''}<span></span>
+          <span>来源名称</span><span>${canStatus?'采集开关':'接入状态'}</span><span>载体 / 方式</span><span>优先级</span><span>最近采集</span><span style="text-align: right;">入库</span><span style="text-align: right;">入选</span>${canConfig?'<span></span>':''}<span></span>
         </div>
         ${rowsHtml}
         ${emptyHtml}

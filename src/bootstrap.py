@@ -61,7 +61,6 @@ URL = 15
 _FETCH_METHODS = ("RSS", "Scrape", "Bridge", "Social", "Media", "Podcast", "API", "Manual")
 _STATUSES = ("active", "experimental", "paused")
 _PRIORITIES = ("P0", "P1", "P2")
-_TIERS = ("L1", "L2", "L3", "L4")
 _URGENCY = ("Pending", "高", "中", "低")
 _ENTRY_STATUS = ("待分析", "已分析", "已排除")
 
@@ -91,7 +90,6 @@ _PARAM_FIELDS = [
     _f("dimension", SELECT),
     _f("fetch_method", SELECT, _FETCH_METHODS),
     _f("endpoint", URL),
-    _f("tier", SELECT, _TIERS),
     _f("priority", SELECT, _PRIORITIES),
     _f("keyword_regex", TEXT),
     _f("min_content_chars", NUMBER),
@@ -111,7 +109,6 @@ _ENTRY_FIELDS = [
     _f("路由来源", SELECT, _FETCH_METHODS),
     _f("分类", SELECT),
     _f("内容分类", SELECT, feishu.THEMATIC_CATEGORY_OPTIONS),
-    _f("层级", SELECT, _TIERS),
     _f("采集时间", DATETIME),
     _f("发布时间", DATETIME),
     _f("原文", TEXT),

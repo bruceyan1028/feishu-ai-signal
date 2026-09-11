@@ -738,6 +738,16 @@ def _priority_map(param_records: list[dict[str, Any]]) -> dict[str, str]:
     return result
 
 
+def _technical_source_ids(param_records: list[dict[str, Any]]) -> set[str]:
+    """技术研究开源来源的稳定归类，不依赖分析后才生成的内容分类。"""
+    return {
+        str(sources.cell((record.get("fields") or {}).get("source_id")) or "")
+        for record in param_records
+        if str(sources.cell((record.get("fields") or {}).get("dimension")) or "")
+        == "技术研究开源"
+    }
+
+
 def analysis_failure_is_systemic(failed: int, attempted: int) -> bool:
     """判断本轮分析失败是「个别抽风」还是「那头整个挂了」。
 
@@ -808,8 +818,9 @@ def select_candidates(
     lookback_hours: dict[str, int] | None = None,
     now: datetime | None = None,
     limit: int | None = None,
+    technical_source_ids: set[str] | None = None,
 ) -> list[dict[str, Any]]:
-    """取仍在来源时间窗内的近七日信号；官方优先，并限制各内容类型占比。"""
+    """取仍在来源时间窗内的信号，并按新闻/独立载体分别筛选。"""
     now = now or datetime.now(timezone.utc)
     future_limit_ms = int((now + timedelta(days=2)).timestamp() * 1000)
     candidates = []
@@ -846,6 +857,14 @@ def select_candidates(
         q = float(scalar(item["fields"].get("质量分")) or 0)
         return q * config.ARXIV_QUALITY_WEIGHT if _is_arxiv(item) else q
 
+    technical_source_ids = technical_source_ids or set()
+
+    def _is_technical(item: dict[str, Any]) -> bool:
+        return item["source_id"] in technical_source_ids or content_type(item["fields"]) in {
+            "论文",
+            "Github热榜",
+        }
+
     candidates.sort(
         key=lambda item: (
             {"P0": 0, "P1": 1, "P2": 2}.get(item["priority"], 3),
@@ -854,30 +873,26 @@ def select_candidates(
         )
     )
     total_limit = limit or config.DAILY_CANDIDATE_LIMIT
-    # P0 源足够多时会独占整个候选池，先为非 P0 源留出名额，
-    # 否则中文媒体、实验室等来源永远排不到。
+    # P0 源足够多时会独占新闻候选池，先为非 P0 新闻源留出名额。
     main_candidates = [
         item
         for item in candidates
-        if content_type(item["fields"])
-        not in {SOCIAL_CONTENT_TYPE, "论文", "视频", "播客"}
+        if content_type(item["fields"]) not in {SOCIAL_CONTENT_TYPE, "视频", "播客"}
+        and not _is_technical(item)
     ]
     non_p0_available = sum(
         1 for item in main_candidates if item["priority"] != "P0"
     )
     p0_limit = max(0, total_limit - min(config.DAILY_MIN_NON_P0, non_p0_available))
     selected: list[dict[str, Any]] = []
-    arxiv_count = 0
-    github_count = 0
     p0_count = 0
     per_source: Counter[str] = Counter()
-    # 论文、视频、播客、社媒帖子独立成栏：各有自己的上限，不参与排序也不挤占候选池总量
-    papers: list[dict[str, Any]] = []
+    # 独立板块不占新闻名额，也不套用新闻的 priority / P0 配额规则。
+    technical: list[dict[str, Any]] = []
     social: list[dict[str, Any]] = []
     video: list[dict[str, Any]] = []
     podcast: list[dict[str, Any]] = []
     for item in candidates:
-        is_arxiv = _is_arxiv(item)
         item_type = content_type(item["fields"])
         if item_type == SOCIAL_CONTENT_TYPE:
             social.append(item)
@@ -888,18 +903,10 @@ def select_candidates(
         if item_type == "播客":
             podcast.append(item)
             continue
-        if item_type == "论文":
-            if len(papers) >= config.DAILY_MAX_PAPERS:
-                continue
-            if is_arxiv and arxiv_count >= config.MAX_ARXIV_ITEMS:
-                continue
-            papers.append(item)
-            arxiv_count += int(is_arxiv)
+        if _is_technical(item):
+            technical.append(item)
             continue
-        is_github = item_type == "Github热榜"
         is_p0 = item["priority"] == "P0"
-        if is_github and github_count >= config.DAILY_MAX_GITHUB:
-            continue
         if per_source[item["source_id"]] >= config.DAILY_MAX_PER_SOURCE:
             continue
         if is_p0 and p0_count >= p0_limit:
@@ -907,12 +914,12 @@ def select_candidates(
         if len(selected) >= total_limit:
             continue
         selected.append(item)
-        github_count += int(is_github)
         p0_count += int(is_p0)
         per_source[item["source_id"]] += 1
-    # 播客、社媒帖子（X）不设每日候选上限：72h 回看窗口本身已经约束了体量。
-    # 所有独立板块都不与主日报共享名额。
-    return selected + papers + video[: config.DAILY_MAX_VIDEOS] + podcast + social
+    technical.sort(key=lambda item: (-_eff_quality(item), -item["stamp"]))
+    video.sort(key=lambda item: (-_eff_quality(item), -item["stamp"]))
+    # 播客、社媒帖子不设候选上限，回看窗口和各通道自身的过滤逻辑约束体量。
+    return selected + technical[: config.DAILY_TECHNICAL_LIMIT] + video[: config.DAILY_MAX_VIDEOS] + podcast + social
 
 
 def analyze_signal(fields: dict[str, Any]) -> dict[str, Any]:
@@ -1045,7 +1052,7 @@ deep_analysis_cn（中文分析）。
     return result
 
 
-def _signal_from_fields(record_id: str, fields: dict[str, Any], analysis: dict[str, Any], *, priority: str = "P2", tier: str = "") -> dict[str, Any]:
+def _signal_from_fields(record_id: str, fields: dict[str, Any], analysis: dict[str, Any], *, priority: str = "P2") -> dict[str, Any]:
     published = int(float(scalar(fields.get("发布时间")) or 0))
     media = media_assets(fields.get("媒体资源"))
     try:
@@ -1072,7 +1079,6 @@ def _signal_from_fields(record_id: str, fields: dict[str, Any], analysis: dict[s
         "url": link(fields.get("链接")),
         "category": signal_category(fields, analysis),
         "contentType": content_type(fields),
-        "tier": tier or str(scalar(fields.get("层级")) or ""),
         "priority": priority,
         "publishedDate": datetime.fromtimestamp(published / 1000, CN_TZ).strftime("%Y-%m-%d") if published else "",
         "summary": analysis["summary_cn"],
@@ -1362,7 +1368,12 @@ def _upsert_brief(token: str, table_id: str, payload: dict[str, Any]) -> str:
         "信号记录ID": json.dumps(
             [
                 s["recordId"]
-                for s in payload["signals"] + payload.get("paperSignals", [])
+                for s in (
+                    payload["signals"]
+                    + payload.get("technicalSignals", [])
+                    + payload.get("videoSignals", [])
+                    + payload.get("podcastSignals", [])
+                )
             ],
             ensure_ascii=False,
         ),
@@ -1378,50 +1389,92 @@ def _upsert_brief(token: str, table_id: str, payload: dict[str, Any]) -> str:
     return str(feishu.create_record(token, table_id, fields).get("record_id") or "")
 
 
-def balance_output_signals(ranked: list[dict[str, Any]], limit: int) -> list[dict[str, Any]]:
-    """保留综合排序，同时保证合格视频有最低曝光且不突破候选上限。"""
-    selected = list(ranked[:limit])
-    video_pool = [item for item in ranked if item.get("contentType") == "视频"]
-    target = min(config.DAILY_MIN_VIDEOS, len(video_pool), limit)
-    present = sum(item.get("contentType") == "视频" for item in selected)
-    for video_item in video_pool:
-        if present >= target:
-            break
-        if video_item in selected:
-            continue
-        replace_at = next(
-            (
-                index
-                for index in range(len(selected) - 1, -1, -1)
-                if selected[index].get("contentType") != "视频"
-            ),
-            None,
-        )
-        if replace_at is None:
-            break
-        selected[replace_at] = video_item
-        present += 1
-    chosen = {str(item.get("recordId") or id(item)) for item in selected}
-    return [item for item in ranked if str(item.get("recordId") or id(item)) in chosen][:limit]
-
-
 def partition_output_signals(
-    ranked: list[dict[str, Any]], limit: int
-) -> tuple[list[dict[str, Any]], list[dict[str, Any]], list[dict[str, Any]]]:
-    """把主日报、论文和社媒拆开；后两者不占主日报条数。"""
-    social = [item for item in ranked if item.get("contentType") == SOCIAL_CONTENT_TYPE]
-    papers = [item for item in ranked if item.get("contentType") == "论文"][
-        : config.DAILY_MAX_PAPERS
-    ]
-    main = balance_output_signals(
-        [
-            item
-            for item in ranked
-            if item.get("contentType") not in {SOCIAL_CONTENT_TYPE, "论文"}
-        ],
-        limit,
-    )
-    return main, papers, social
+    analyzed: list[dict[str, Any]], limit: int, technical_source_ids: set[str]
+) -> tuple[list[dict[str, Any]], list[dict[str, Any]], list[dict[str, Any]], list[dict[str, Any]], list[dict[str, Any]]]:
+    """新闻与技术开源、视频、播客、社媒分别筛选、排序和输出。"""
+    def is_technical(signal: dict[str, Any]) -> bool:
+        if signal.get("contentType") in {SOCIAL_CONTENT_TYPE, "视频", "播客"}:
+            return False
+        return signal.get("sourceId") in technical_source_ids or signal.get("contentType") in {
+            "论文", "Github热榜"
+        }
+
+    def independent_key(signal: dict[str, Any]) -> tuple[float, int, int, int, str]:
+        return (
+            float(signal.get("qualityScore") or 0), int(signal.get("impact") or 0),
+            int(signal.get("novelty") or 0), int(signal.get("actionability") or 0),
+            str(signal.get("publishedDate") or ""),
+        )
+
+    technical = sorted((s for s in analyzed if is_technical(s)), key=independent_key, reverse=True)
+    video = sorted((s for s in analyzed if s.get("contentType") == "视频"), key=independent_key, reverse=True)
+    podcast = sorted((s for s in analyzed if s.get("contentType") == "播客"), key=independent_key, reverse=True)
+    social = sorted((s for s in analyzed if s.get("contentType") == SOCIAL_CONTENT_TYPE), key=lambda s: str(s.get("publishedDate") or ""), reverse=True)
+    independent_ids = {id(s) for s in technical + video + podcast + social}
+    main = [s for s in analyzed if id(s) not in independent_ids][:limit]
+    return main, technical, video, podcast, social
+
+
+_EVENT_ROLES = {"official", "original_reporting", "secondary_reporting", "commentary", "unknown"}
+
+
+def resolve_event_cluster_with_llm(items: list[dict[str, Any]]) -> tuple[str, dict[str, dict[str, str]]]:
+    """Choose one event primary and describe every source's distinct angle.
+
+    The deterministic title matcher is deliberately only a recall step. This
+    resolver is the semantic decision point, so a company announcement wins
+    over a higher-scoring repost or commentary when both describe one event.
+    """
+    if len(items) < 2:
+        return "", {}
+    candidates = []
+    valid_ids: set[str] = set()
+    for item in items:
+        record_id = str(item.get("record_id") or "").strip()
+        if not record_id:
+            continue
+        valid_ids.add(record_id)
+        fields = item.get("fields") or {}
+        candidates.append(
+            {
+                "record_id": record_id,
+                "source": str(item.get("source") or scalar(fields.get("来源")) or ""),
+                "url": str(item.get("url") or link(fields.get("链接")) or ""),
+                "title": str(item.get("titleCn") or item.get("title") or scalar(fields.get("标题")) or ""),
+                "summary": str(item.get("summary") or scalar(fields.get("中文摘要")) or ""),
+                "excerpt": clean_body(str(scalar(fields.get("原文")) or ""), str(item.get("source") or ""))[:900],
+            }
+        )
+    if len(candidates) < 2:
+        return "", {}
+    prompt = f"""你是日报编辑，正在处理一组“可能是同一事件”的多源条目。
+只使用候选条目提供的事实，不得补充外部信息。选择唯一的主条目：若候选中有事件主体的官方一手发布，必须选它；否则选最接近原始报道的条目。媒体评论、转载和解读不能作为主条目。
+
+对每个候选判断其角色：official（事件主体官方一手发布）、original_reporting（独家/原始报道）、secondary_reporting（二次报道）、commentary（评论/分析）、unknown。用中文写 8-32 字 perspective，说明该来源相对主条目的独特信息、质疑或侧重点；没有独特视角则写“复述核心事实”。
+
+严格输出 JSON：{{"primary_record_id":"...","members":[{{"record_id":"...","role":"official|original_reporting|secondary_reporting|commentary|unknown","perspective":"..."}}]}}。
+primary_record_id 和 members.record_id 必须来自候选，members 必须覆盖全部候选。
+
+候选：{json.dumps(candidates, ensure_ascii=False)}"""
+    raw = report._llm_json(prompt)
+    selected_id = str(raw.get("primary_record_id") or "").strip()
+    if selected_id not in valid_ids:
+        return "", {}
+    metadata: dict[str, dict[str, str]] = {}
+    for member in raw.get("members") or []:
+        if not isinstance(member, dict):
+            continue
+        record_id = str(member.get("record_id") or "").strip()
+        if record_id not in valid_ids:
+            continue
+        role = str(member.get("role") or "unknown").strip()
+        perspective = str(member.get("perspective") or "").strip()
+        metadata[record_id] = {
+            "eventRole": role if role in _EVENT_ROLES else "unknown",
+            "eventPerspective": perspective[:120],
+        }
+    return selected_id, metadata
 
 
 def generate(day: str | None = None) -> dict[str, Any]:
@@ -1433,32 +1486,37 @@ def generate(day: str | None = None) -> dict[str, Any]:
     params = feishu.read_param_records(token)
     entries = feishu.read_all_records_with_ids(token, config.FEISHU_ENTRY_TABLE_ID)
     priorities = _priority_map(params)
+    technical_source_ids = _technical_source_ids(params)
     candidates = select_candidates(
         entries,
         priorities,
         _active_source_ids(params),
         _lookback_hours_map(params),
+        technical_source_ids=technical_source_ids,
     )
     if not candidates:
         raise RuntimeError("近七日没有可用于简报的信号")
 
     # 同事件折叠：标题近似者只保留最优主条目进分析，其它源留给事件聚合。
-    # 论文、视频、播客、社媒不参与折叠，也不占 DAILY_CANDIDATE_LIMIT，折完再原样接回去，
+    # 技术开源、视频、播客、社媒不参与新闻折叠，也不占 DAILY_CANDIDATE_LIMIT，折完再原样接回去，
     # 否则它们会在这里被 collapse_for_brief 的 limit 二次挤占，等于白加了独立配额。
-    independent_types = {SOCIAL_CONTENT_TYPE, "论文", "视频", "播客"}
+    independent_types = {SOCIAL_CONTENT_TYPE, "论文", "Github热榜", "视频", "播客"}
     independent_candidates = [
-        item for item in candidates if content_type(item["fields"]) in independent_types
+        item for item in candidates
+        if item.get("source_id") in technical_source_ids
+        or content_type(item["fields"]) in independent_types
     ]
     news_candidates = [
-        item for item in candidates if content_type(item["fields"]) not in independent_types
+        item for item in candidates if item not in independent_candidates
     ]
     candidates = cluster.collapse_for_brief(
         news_candidates,
         threshold=0.85,
         limit=config.DAILY_CANDIDATE_LIMIT,
+        resolve_cluster=resolve_event_cluster_with_llm,
     ) + independent_candidates
     log.info(
-        "同事件折叠后候选 %d 条（其中论文/视频/播客/社媒 %d 条独立成栏）",
+        "同事件折叠后候选 %d 条（其中技术开源/视频/播客/社媒 %d 条独立成栏）",
         len(candidates),
         len(independent_candidates),
     )
@@ -1578,13 +1636,15 @@ def generate(day: str | None = None) -> dict[str, Any]:
         if item.get("source_id") in body_admitted_sources and not is_ai_relevant(fields, analysis):
             off_topic.append(analysis.get("title_cn") or str(scalar(fields.get("标题")) or ""))
             continue
+        independent = item.get("source_id") in technical_source_ids or content_type(fields) in independent_types
         signal = _signal_from_fields(
             str(item["record_id"]),
             fields,
             analysis,
-            priority=str(item.get("priority") or priorities.get(item.get("source_id") or "", "P2")),
-            tier=str(item.get("tier") or scalar(fields.get("层级")) or ""),
+            priority="" if independent else str(item.get("priority") or priorities.get(item.get("source_id") or "", "P2")),
         )
+        signal["eventRole"] = str(item.get("eventRole") or "")
+        signal["eventPerspective"] = str(item.get("eventPerspective") or "")
         # 把折叠掉的同事件其它源转成可展示 peers
         peers = []
         for peer in item.get("eventPeers") or []:
@@ -1600,15 +1660,15 @@ def generate(day: str | None = None) -> dict[str, Any]:
                 "urgency": "中",
                 "topics": [str(scalar(x)) for x in (pf.get("主题") or [])] or ["其他"],
             }
-            peers.append(
-                _signal_from_fields(
-                    str(peer.get("record_id") or ""),
-                    pf,
-                    peer_analysis,
-                    priority=str(peer.get("priority") or "P2"),
-                    tier=str(peer.get("tier") or scalar(pf.get("层级")) or ""),
-                )
+            peer_signal = _signal_from_fields(
+                str(peer.get("record_id") or ""),
+                pf,
+                peer_analysis,
+                priority=str(peer.get("priority") or "P2"),
             )
+            peer_signal["eventRole"] = str(peer.get("eventRole") or "")
+            peer_signal["eventPerspective"] = str(peer.get("eventPerspective") or "")
+            peers.append(peer_signal)
         signal["eventPeers"] = peers
         signal["qualityScore"] = float(
             analysis.get("final_quality")
@@ -1629,35 +1689,20 @@ def generate(day: str | None = None) -> dict[str, Any]:
     if not analyzed:
         raise RuntimeError("没有可用于简报的已分析信号")
 
-    def _display_quality(s: dict[str, Any]) -> float:
-        q = float(s.get("qualityScore") or 0)
-        if "arxiv.org/" in str(s.get("url") or ""):
-            q *= config.ARXIV_QUALITY_WEIGHT
-        return q
-
-    def _content_weight(signal: dict[str, Any]) -> float:
-        if signal.get("contentType") == "视频":
-            return config.DAILY_VIDEO_WEIGHT
-        if signal.get("contentType") == "播客":
-            return config.DAILY_PODCAST_WEIGHT
-        return 1.0
-
     analyzed.sort(
         key=lambda s: (
-            _display_quality(s),
-            s["impact"] * _content_weight(s),
-            s["novelty"] * _content_weight(s),
-            s["actionability"] * _content_weight(s),
+            float(s.get("qualityScore") or 0), s["impact"], s["novelty"], s["actionability"],
         ),
         reverse=True,
     )
-    signals, paper_signals, social_posts = partition_output_signals(
-        analyzed, config.DAILY_SIGNAL_LIMIT
+    signals, technical_signals, video_signals, podcast_signals, social_posts = partition_output_signals(
+        analyzed, config.DAILY_SIGNAL_LIMIT, technical_source_ids
     )
-    social_posts.sort(key=lambda s: str(s.get("publishedDate") or ""), reverse=True)
     signals = cluster.attach_aggregations(signals)
-    paper_signals = cluster.attach_aggregations(paper_signals)
-    published_signals = signals + paper_signals
+    technical_signals = cluster.attach_aggregations(technical_signals)
+    video_signals = cluster.attach_aggregations(video_signals)
+    podcast_signals = cluster.attach_aggregations(podcast_signals)
+    published_signals = signals + technical_signals + video_signals + podcast_signals
     article_targets = [
         signal
         for signal in published_signals
@@ -1779,7 +1824,9 @@ def generate(day: str | None = None) -> dict[str, Any]:
         "intro": str(synth.get("intro") or "今日 AI 信号已完成采集与分析。"),
         "bullets": bullets,
         "signals": signals,
-        "paperSignals": paper_signals,
+        "technicalSignals": technical_signals,
+        "videoSignals": video_signals,
+        "podcastSignals": podcast_signals,
         "socialPosts": social_posts,
     }
     table_id = config.FEISHU_BRIEF_TABLE_ID or feishu.ensure_daily_brief_table(token)

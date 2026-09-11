@@ -1,0 +1,1509 @@
+{
+  "date": "2026-09-10",
+  "title": "AI Signal 每日情报 · 2026-09-10",
+  "intro": "本轮信号显示，AI正同时向科研自动化、企业智能体、端侧部署和行业工作流加速渗透。多项消息来自企业自述、爆料或尚未独立验证的报道，尤其是数学突破、新模型与未发布硬件，结论需谨慎看待。",
+  "bullets": [
+    {
+      "title": "OpenAI称多智能体攻克纳维-斯托克斯难题，引发未公开成果使用争议",
+      "text": "报道称OpenAI以约一万个智能体并行构造证明并通过Lean形式化验证，但没有证据表明成果已获克雷数学研究所认可；纽约大学教授还质疑系统可能利用其未公开草稿，OpenAI否认直接接触，却未完全排除去标识化数据曾用于模型改进。",
+      "refs": [
+        1,
+        2
+      ]
+    },
+    {
+      "title": "OpenAI宣称AI攻克纳维-斯托克斯难题，Meta发布个人智能体Muse",
+      "text": "从Meta的个人任务执行工具，到阿里国际站的选品、谈判和订单管理，再到百度营销及跨国达人营销，产品形态正由单点生成转向多Agent协作、自动执行、监控优化与交付结算的一体化流程。",
+      "refs": [
+        2,
+        14,
+        20,
+        23
+      ]
+    },
+    {
+      "title": "OpenAI Codex主管：意图表达、架构品味与系统把控力是AI时代工程师的核心价值",
+      "text": "Codex主管认为，编码、审查、维护和重构将更多由AI完成，人类的核心优势会集中在准确表达需求、划定系统边界和理解复杂架构；OpenAI已对全部PR强制实施AI安全扫描。",
+      "refs": [
+        6
+      ]
+    },
+    {
+      "title": "实时 AI 换脸与大模型推动电诈工业化",
+      "text": "东南亚电诈产业已把实时换脸、大模型和自动化工具串联至身份伪造、诱导聊天及活体认证绕过等环节；与此同时，Anthropic对齐负责人给出未来十年AI致人类灭绝概率超过10%的个人判断，并称当前仍无超级智能对齐方案。",
+      "refs": [
+        3,
+        4
+      ]
+    },
+    {
+      "title": "Transformers 5.17.0 新增 HYV4 7800亿参数 MoE 模型支持",
+      "text": "Hugging Face新增对7800亿参数、百万上下文Hy4-Preview架构的实现，Arm推出可比较延迟和内存占用的模型门户，Ollama则打通macOS本地模型与ChatGPT Desktop，显示竞争重点正延伸至适配、性能评测和开发工具兼容。",
+      "refs": [
+        8,
+        15,
+        16
+      ]
+    },
+    {
+      "title": "高盛TMT大会：AI商业化提速，NAND供给或长期受限",
+      "text": "Etsy、Booking.com和Block披露AI在匹配、客服、开发及基础设施中的实际回报，但大模型给Booking.com贡献的流量仍不足1%；同时，推理需求增长被认为将继续推高存储消耗，而NAND供给扩张可能长期受限。",
+      "refs": [
+        17
+      ]
+    }
+  ],
+  "signals": [
+    {
+      "recordId": "recvuMBkvf4kfM",
+      "sourceId": "guokr",
+      "title": "OpenAI智能体一周末攻克千禧难题，纽约大学教授质问：你是不是看过我的草稿？| 果壳 科技有意思",
+      "titleCn": "OpenAI称多智能体攻克纳维-斯托克斯难题，引发未公开成果使用争议",
+      "source": "果壳",
+      "url": "https://www.guokr.com/article/470167",
+      "category": "技术研究开源",
+      "contentType": "公众号",
+      "tier": "L3 媒体研报",
+      "priority": "P1",
+      "publishedDate": "2026-09-10",
+      "summary": "报道称，OpenAI利用约一万个AI智能体构造纳维-斯托克斯方程爆破解，并通过Lean完成形式化验证，但相关证明是否获克雷数学研究所认可，原文未作说明。纽约大学教授质疑模型可能利用了其存放在OpenAI产品中的未公开研究数据，OpenAI否认智能体或研究人员看过相关工作，但未完全排除去标识化数据曾被用于模型改进的可能。",
+      "why": "若证明及其独立性得到确认，这将成为AI协同推理与形式化验证解决顶级数学问题的标志性事件，同时凸显用户研究数据治理和成果归属风险。",
+      "impact": 99,
+      "novelty": 98,
+      "actionability": 62,
+      "urgency": "高",
+      "tags": [
+        "AI",
+        "Agent",
+        "推理",
+        "监管"
+      ],
+      "imageUrl": "https://2-im.guokr.com/RmtNZFd6cTdySVpUVHpONU5YVkk1MGdCUXNRRWRvY3g4BAAAOAQAAEpQ.jpg?imageView2/1/w/555/h/555",
+      "mediaAssets": {
+        "images": [
+          {
+            "url": "https://1-im.guokr.com/Rmxhd1M3eng2MFRCb2RSblFCOThoLTdVOHAtR2RvY3jBAgAA1gEAAEpQ.jpg?imageView2/1/w/555/h/370",
+            "alt": "纳维-斯托克斯方程示意",
+            "kind": "article-figure",
+            "afterHeading": "",
+            "afterText": "2000年，克雷数学研究所拿出700万美元，悬赏7道数学难题。每解出一道，奖金100万。这7道题",
+            "layout": "wide",
+            "confidence": 0.89,
+            "topicRelevance": 0.94
+          },
+          {
+            "url": "https://2-im.guokr.com/RnNLdmk1Q1pEeDNvQkRMZVhWNVlfdmtzLVdBbmRvY3g4BAAAYAIAAEpQ.jpg?imageView2/1/w/555/h/312",
+            "alt": "相关数学家在黑板前合影",
+            "kind": "article-figure",
+            "afterHeading": "",
+            "afterText": "西班牙马德里数学科学研究所的迭戈·科尔多巴（Diego Córdoba）和他的学生路易斯·马丁内",
+            "layout": "wide",
+            "confidence": 0.87,
+            "topicRelevance": 0.82
+          },
+          {
+            "url": "https://3-im.guokr.com/RmljMVlmd29lbkFZekFDMXJJTmlUQWdNRHlOWGRvY3g4BAAAwgIAAEpQ.jpg?imageView2/1/w/555/h/362",
+            "alt": "质疑OpenAI的纽约大学教授",
+            "kind": "article-figure",
+            "afterHeading": "",
+            "afterText": "9月7日深夜， OpenAI官宣前不到12小时，美国纽约大学数学教授特里斯坦·巴克马斯特（Tri",
+            "layout": "wide",
+            "confidence": 0.83,
+            "topicRelevance": 0.9
+          }
+        ],
+        "videos": [],
+        "cover": "https://2-im.guokr.com/RmtNZFd6cTdySVpUVHpONU5YVkk1MGdCUXNRRWRvY3g4BAAAOAQAAEpQ.jpg?imageView2/1/w/555/h/555",
+        "curatedBy": "vision",
+        "curationVersion": 2,
+        "coverConfidence": 0.86,
+        "coverVisualQuality": 0.91
+      },
+      "topComments": [],
+      "deepAnalysis": "",
+      "editorialStructure": "",
+      "body": "2000年，克雷数学研究所拿出700万美元，悬赏7道数学难题。每解出一道，奖金100万。这7道题被称为千禧年大奖难题，是公认最难的数学问题。\n\n26年过去，只有一道被解开过。俄罗斯数学家佩雷尔曼2003年证明了庞加莱猜想，然后拒绝领奖，隐居至今。其余6道，纹丝不动。\n\n9月8日，第二道的答案来了。给出答案的不是哪位数学家，是OpenAI的一群AI智能体。但数学突破只是这个故事的一半，后面还有一场大瓜。\n\n纳维-斯托克斯方程丨ChatGPT生图\n\n被攻克的这道题叫 纳维-斯托克斯方程问题。\n\n纳维-斯托克斯方程大约200年前写下，是一组描述流体运动的数学公式。水从龙头里怎么流出来，气流怎么掠过机翼，洋流怎么在大洋里翻涌，全靠这组方程来算。工程师每天都在用它，航空、气象、造船、管道设计，离了它没法干活。\n\n但数学家一直被一个问题困扰： 这组方程，有没有可能算出荒谬的结果？\n\n具体来说，就是流体的速度会不会在某个点冲到无穷大。你可以想象浴缸里一个旋转的漩涡，水在涡心越转越快，越来越快，快到数学上趋向无限。现实中不可能有无限快的水流，但数学上，200年来没有人能证明这种事不会发生。这种速度飙向无穷的状况，数学家叫它“爆破”，也叫“奇点”。\n\n物理上荒谬，数学上排除不掉。方程就摆在那里，谁也说不准它在极端条件下会不会突然失控。\n\n克雷研究所悬赏的正是这个问题。要么证明爆破永远不会出现，要么找到一个会爆破的例子。两条路任选其一，资金100万美元。\n\n在AI介入之前，不少数学家已经倾向于第二条路。多年来的研究直觉和初步结果都指向同一个判断：反例应该存在。包括华人数学家周帆在内，一批研究者一直在朝这个方向推进。\n\n纳维-斯托克斯方程用于描述流体的运动，比如用来模拟图中两团染料云的对撞丨iStock\n\nOpenAI也走了第二条路。它构造出了一个会爆破的实例：在特定条件下，纳维-斯托克斯方程确实会吐出速度无穷大的结果。这等于宣告： 这组服役了200年的方程，在数学上并不完备。\n\n工程师照样可以用它来算飞机和管道。纳维-斯托克斯方程把流体当成连续的、可以无限细分的东西，但真实的水和空气是由分子构成的，细分到分子那一层就到头了，不可能出现无穷大的速度。方程在数学上的不完备，碰不到物理现实。\n\n但这个结果揭示了一件让人吃惊的事：哪怕在理想化的数学世界里，牛顿第二定律作用于流体时的后果，也比直觉诡异得多。\n\n这个证明站在两位西班牙数学家的肩膀上。\n\n西班牙马德里数学科学研究所的迭戈·科尔多巴（Diego Córdoba）和他的学生路易斯·马丁内斯-索罗亚（Luis Martínez-Zoroa），从2021年起发明了一套独特的方法。\n\n他们构造出一层一层的流体解，每一层单独看都很正常，没有爆破，然后把无穷多层像叠罗汉一样叠在一起，叠出一个含有奇点的新解。\n\n2023年，两人用这个办法证明了一个宽松版本的欧拉方程（纳维-斯托克斯方程去掉摩擦后的简化版）确实存在爆破。数学界管这套方法叫“强迫”。\n\n西班牙数学家科尔多巴（右）和马丁内斯-索罗亚（左） ｜ Laura M Iraola/ ICMAT\n\n但叠罗汉有个副作用。用来推动流体运动的外力函数会在叠加过程中变得“不光滑”，而克雷悬赏明确要求外力函数必须是光滑的。差最后一步：怎么在叠出奇点的同时，保住外力函数的光滑性。\n\n这最后一步，就是AI啃下来的。\n\nOpenAI动用了一个尚未公开的内部模型，据称能力远超刚发布的GPT-6 Astra。先用近百个AI智能体协同工作约50小时，攻克了欧拉方程的爆破问题；紧接着把智能体规模扩大到约1万个，88小时后拿下了纳维-斯托克斯方程的爆破证明，再花17小时用编程语言Lean完成了形式化验证。Lean是一种专门验证数学证明的编程工具，通过它的验证，意味着证明在逻辑上几乎无懈可击。\n\n整个过程中，智能体之间互发了将近500万条消息。OpenAI数学家塞巴斯蒂安·布贝克（Sébastien Bubeck）估计 内部算力成本达数百万美元。OpenAI在发布会上还表示，如果按零售价卖给客户，大约要花1500万美元。\n\nOpenAI 证明中构造的涡旋结构可视化，流线绕中轴螺旋盘绕，黄色代表旋转更快、蓝色更慢丨OpenAI\n\n今年夏天以来，AI在数学领域的突破已经让人有些麻木了。5月攻克了一个厄多斯几十年前提出的猜想，此后推翻了矗立近一个世纪的雅可比猜想，上周刚用11天完成了费马大定理的形式化证明。但千禧年难题是另一个量级。\n\nAI 正在数学领域快速推进丨Getty Images/iStockphoto\n\n然而数学界的注意力，很快从证明本身移开了。\n\n9月7日深夜， OpenAI官宣前不到12小时，美国纽约大学数学教授特里斯坦·巴克马斯特（Tristan Buckmaster）在社交媒体上发帖，宣布他和合作者莱文特·阿尔珀格（Levent Alpöge） 解决了通往纳维-斯托克斯问题的几个关键中间步骤，包括欧拉方程的爆破。\n\n阿尔珀格的身份让事情变得微妙：他是Anthropic的员工，OpenAI最大的竞争对手。两人在研究中大量使用了AI模型，既用了Anthropic的Claude，也用了OpenAI的Codex。\n\n也就是说，他们的部分草稿，一直存在OpenAI自家的产品里。\n\n美国纽约大学数学教授巴克马斯特，对OpenAI宣布破解纳维-斯托克斯问题提出了质疑丨克雷数学研究所\n\n巴克马斯特随帖附了一份长声明，时间线读起来像悬疑剧：他和阿尔珀格早在8月22日就拿到了Lean验证的欧拉方程证明，之后一直在打磨正式论文。\n\n但上周，他们得知自己的进展传到了OpenAI那边。巴克马斯特联系了OpenAI，才发现对方已经有了纳维-斯托克斯问题的完整证明，而且走的是同一条技术路线，正是科尔多巴和马丁内斯-索罗亚开辟的“强迫”方法。\n\n巴克马斯特在声明里写道： 几乎没有其他人在走这条路。给一个模型一道题目的描述，几天之内不可能自己摸到这个方向。\n\nOpenAI承认，他们是在听到千禧年难题可能被攻破的传言后，才决定投入大量资源的。第一个提示词，9月1日才发出去。\n\n巴克马斯特追问：他们存在Codex里的草稿和提示词，有没有被用来训练模型？对方回答，模型“不会查看用户数据”。他又追问了一次关于训练数据的问题，没有得到回答。\n\nAI在破解数学难题时，到底有没有使用人类数学家尚未发表的成果，还未有定论丨Wired\n\nOpenAI在博客里留了一句话，耐人寻味：“虽然可能性很低，但我们无法排除这样一种情况——他们使用我们产品时产生的数据，经过去标识化处理后，被用来改进了我们的模型。”\n\n巴克马斯特在社交媒体上回应：这等于公开承认，OpenAI使用了在我们取得成果之后那段时间的训练数据。\n\nOpenAI在发布会上全面否认了指控。布贝克说，无论研究人员还是AI智能体，都没有在对方公开发布前看过他们的任何工作，两边的证明“差异显著”。OpenAI还表示，不打算领取那100万美元奖金。\n\n为克雷研究所撰写了这道题目官方描述的普林斯顿大学数学家查尔斯·费弗曼（Charles Fefferman）说，这个故事真正的英雄，是找出了这条破题之道的科尔多巴和马丁内斯-索罗亚。\n\n巴克马斯特在声明里写道：我已经私下跟同行说过， 鉴于这一系列工作，马丁内斯-索罗亚应该获得菲尔兹奖，数学界的最高荣誉。\n\n马丁内斯-索罗亚本人的回应很平静：要是我们自己做出来就好了，但我也替特里斯坦高兴。\n\n并不是所有数学家都在庆祝。2022年菲尔兹奖得主、瑞士日内瓦大学教授雨果·迪米尼-科潘（Hugo Duminil-Copin）的态度就很复杂。\n\n他最近在一篇文章中表示， 一道数学猜想远不止是一个等着被证明的定理，它是黑夜中的灯塔，照亮和引领数学家的探索。\n\n他自己花了好几年进攻一个著名猜想，最终没能证出来，但那些失败的尝试催生了几十个新想法，后来被他用在别的地方，产出了一连串他做梦都没想到的发现。\n\n对于AI破解数学难题，菲尔兹奖得主迪米尼-科潘提出了自己身为人类数学家的担忧丨X截图\n\n有些AI写出的证明又短又漂亮，他承认质量没问题。让他真正担忧的是速度： AI会在一个领域还没长成之前就把它砍了头。\n\n纳维-斯托克斯问题恰好是个例子：周帆、科尔多巴、马丁内斯-索罗亚这些数学家花了多年才走到终点附近，AI用一个周末就冲了过去。\n\n人类数学家在这条路上会积累的直觉、会趟过的弯路、沿途会催生的新想法，全被跳过了。\n\n而最受冲击的是年轻人。博士生该选什么问题去研究？如果重大猜想随时可能被AI一个周末攻破，他们还能以什么为目标，花好几年去磨练数学直觉？\n\n迪米尼-科潘呼吁：“ 不要把我们最美的猜想，当成下一个AI模型的跑分测试题。”\n\n作者：Steed\n\n编辑：Steed\n\n封面图来源：urbazon/Getty Images",
+      "bodyTruncated": false,
+      "bodyVerbatim": true,
+      "qualityScore": 0.0,
+      "eventAggregation": {
+        "total": 1,
+        "groups": [
+          {
+            "key": "官方来源",
+            "tone": "#16130f",
+            "items": [
+              {
+                "source": "果壳",
+                "title": "OpenAI称多智能体攻克纳维-斯托克斯难题，引发未公开成果使用争议",
+                "url": "https://www.guokr.com/article/470167",
+                "note": "原始发布 / 公告。",
+                "text": "OpenAI称多智能体攻克纳维-斯托克斯难题，引发未公开成果使用争议 —— 原始发布 / 公告。"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "recordId": "recvuMBkvfcCck",
+      "sourceId": "guokr",
+      "title": "AI攻克纳维-斯托克斯千禧年难题；Meta发布个人AI智能体Muse；Cybercab乘客端意外出现虚拟控制杆| 果壳 科技有意思",
+      "titleCn": "OpenAI宣称AI攻克纳维-斯托克斯难题，Meta发布个人智能体Muse",
+      "source": "果壳",
+      "url": "https://www.guokr.com/article/470166",
+      "category": "其他",
+      "contentType": "公众号",
+      "tier": "L3 媒体研报",
+      "priority": "P1",
+      "publishedDate": "2026-09-09",
+      "summary": "文章汇总了OpenAI宣称由大规模并发智能体协作完成并经Lean形式化验证纳维-斯托克斯方程证明、Meta发布可执行复杂任务的个人AI智能体Muse等消息。文章还报道了ChatGPT Images 2.5发布、DeepSeek下调Flash系列模型价格，以及Cybercab乘客端误显虚拟控制界面等动态。",
+      "why": "这些消息集中体现了AI从模型推理、形式化验证和图像生成，向可自主执行任务的个人智能体及更低成本开发服务演进。",
+      "impact": 95,
+      "novelty": 96,
+      "actionability": 65,
+      "urgency": "高",
+      "tags": [
+        "AI",
+        "Agent",
+        "推理",
+        "产品"
+      ],
+      "imageUrl": "https://2-im.guokr.com/RmstcllES21uMTY1UHYtczQ2TTZUZk03S09RdWRvY3ibAgAAwAEAAEpQ.jpg?imageView2/1/w/555/h/372",
+      "mediaAssets": {
+        "images": [
+          {
+            "url": "https://2-im.guokr.com/RmstcllES21uMTY1UHYtczQ2TTZUZk03S09RdWRvY3ibAgAAwAEAAEpQ.jpg?imageView2/1/w/555/h/372",
+            "alt": "Cybercab屏幕显示虚拟控制杆",
+            "kind": "article-figure",
+            "afterHeading": "Cybercab乘客端意外出现虚拟控制杆",
+            "afterText": "近日，特斯拉Cybercab乘客在乘车时，意外发现中控屏显示了本应仅供内部人员使用的隐藏控制界面",
+            "layout": "wide",
+            "confidence": 0.99,
+            "topicRelevance": 1.0
+          },
+          {
+            "url": "https://1-im.guokr.com/RnFUWnBGa1ZXNWUxQWg1MDV5OFAzal9adFhOR2RvY3iAAgAAZwEAAEpQ.jpg?imageView2/1/w/555/h/311",
+            "alt": "航天员展示太空烘烤蛋糕",
+            "kind": "article-figure",
+            "afterHeading": "“天宫课堂”展示太空烤蛋糕",
+            "afterText": "9月7日，两系法杂交水稻超高产制种攻关现场观摩与评议会在湖南省邵阳市举行。专家组现场随机抽取3块",
+            "layout": "wide",
+            "confidence": 0.99,
+            "topicRelevance": 1.0
+          }
+        ],
+        "videos": [],
+        "cover": "https://2-im.guokr.com/RmstcllES21uMTY1UHYtczQ2TTZUZk03S09RdWRvY3ibAgAAwAEAAEpQ.jpg?imageView2/1/w/555/h/372",
+        "curatedBy": "vision",
+        "curationVersion": 2,
+        "coverConfidence": 0.0,
+        "coverVisualQuality": 0.0
+      },
+      "topComments": [],
+      "deepAnalysis": "",
+      "editorialStructure": "",
+      "body": "今天是9月9日，星期三。1940年的今天，贝尔实验室通过电传打字机向纽约的复数计算器发送指令，实现首次计算机远程操作。\n\n## 重点新闻速览\n\n1.OpenAI宣布AI攻克纳维-斯托克斯千禧年难题\n\n2.Meta发布个人AI智能体Muse\n\n3.Cybercab乘客端意外出现虚拟控制杆\n\n4.“天宫课堂”展示太空烤蛋糕\n\n5.杂交水稻大面积制种刷新高产纪录\n\n## OpenAI宣布AI攻克纳维-斯托克斯千禧年难题\n\n美东时间2026年9月8日，OpenAI宣布其内部模型组织约10000个并发智能体协作88小时，完成了纳维-斯托克斯方程存在性与光滑性千禧年难题的完整证明，并通过Lean形式化验证。研究团队发现三维不可压缩流体在特定光滑外力作用下可在有限时间内形成奇点，即流体“有限时间爆裂”。这是继庞加莱猜想后第二个被宣称解决的千禧年难题。\n\n该证明由能力远超已发布GPT-6 Astra的下一代模型生成，累计产生约270万条消息和约1300亿输出Token。（ OpenAI官方博客）\n\n## OpenAI发布ChatGPT Images 2.5\n\n9月8日，OpenAI发布新一代图像生成模型ChatGPT Images 2.5，面向所有ChatGPT、ChatGPT Work和Codex用户开放，含免费版。API端拆出GPT-Image-2.5 Flare（面向社交内容和大批量生成）和Sunburst（面向精修营销素材）两档模型，支持最高3840x2160即4K横向分辨率。\n\n新模型生成延迟较Images 2.0最高降低50%，在细节锐度、自然光照和纹理丰富度方面均有提升，参考照片中人物主体保真度更高。产品端新增Sketch草图绘制功能，用户输入@Sketch可直接在对话中绘图作为参考，不需要专业绘画功底，仅勾勒基础构图就能快速把构思转化为成品图。新增海报和商品等常见创作格式模板库，降低创作门槛；支持图上标注局部修改功能，精准锁定调整区域。（OpenAI官方博客）\n\n## Meta发布个人AI智能体Muse\n\n9月8日，Meta正式发布个人AI智能体Muse（内部代号Hatch），率先在美国上线iOS、Android和Muse.ai平台，后续将登陆Meta AI智能眼镜和WhatsApp。产品提供免费基础版和每月20美元、100美元两档订阅。\n\n产品基于Muse Spark系列基础模型运行在独立云端虚拟机Muse Secure VM中，彼此相互隔离确保数据安全。支持接入Google Workspace、Ticketmaster、OpenTable、Spotify、Apple Health等第三方服务。Muse可独立完成网购、发送邮件、卖车、预订行程、填写表单等复杂任务，用户只需设定目标即可自动制定计划、协调资源并推进执行。（IT之家）\n\n## Cybercab乘客端意外出现虚拟控制杆\n\n近日，特斯拉Cybercab乘客在乘车时，意外发现中控屏显示了本应仅供内部人员使用的隐藏控制界面，包含圆形虚拟摇杆、刹车、鸣笛和关门按钮。该界面用于在无方向盘的Cybercab上供维修人员手动挪车。至少两名乘客遇到此界面，疑为软件故障未切换回乘客模式。\n\n由于后台设有安全保护阻止未授权操控，乘客尝试操作摇杆但车辆未移动。（electrek.co）\n\n图片左下角画面即为虚拟控制杆 | X@MatthewSkrzypc1\n\n## DeepSeek宣布flash系列模型降价\n\n9月9日，DeepSeek开放平台发布公告，自北京时间9月10日12:00起调整flash系列模型定价，延续峰谷分时计费模式。目前包含deepseek-v4-flash和deepseek-v4-flash-vision-exp两款模型，执行相同调价标准。空闲时段输入缓存命中价格从每百万Token 0.05元降至0.02元，降幅60%；输入缓存未命中从1.5元降至1元，降幅33.33%；输出从4.5元降至4元，降幅11.11%。\n\n高峰时段划定为工作日9:00-12:00和14:00-18:00，价格为空闲时段的2倍。对于开发者而言，夜间或周末跑批量任务可享受空闲低价，其中缓存命中价格仅为旧价的两成左右。（DeepSeek开放平台）\n\n## Nature发表人格遗传学最大规模研究\n\n近日，《自然》杂志发表迄今规模最大的人格遗传学研究，整合全球46个研究队列、61万至114万份兼具欧洲裔和非洲裔祖先背景的基因组数据，发现1260个与“大五人格”（开放性、尽责性、外向性、宜人性、神经质）相关常见遗传变异。\n\n得克萨斯大学奥斯汀分校教授Elliot Tucker-Drob领衔团队表示，这些变异为研究性格生物学机制提供前所未有的统计能力。研究证实性格由数千个微小变异共同塑造，在不同环境下可差异化表达，而非少数特定基因决定。单纯规模使研究具备此前无法企及的统计能力来探索思维、情感和行为的生物学基础。研究发现神经质与外向性之间的遗传相关性接近零，表明这两个维度在生物学上相互独立。开放性相关的变异富集在与前额叶皮层功能相关的基因区域，而尽责性变异则更多与基底节功能相关。这些数据为人格特质的神经生物学解释提供了遗传学层面的支持。（Nature）\n\n## 杂交水稻大面积制种刷新高产纪录\n\n9月7日，两系法杂交水稻超高产制种攻关现场观摩与评议会在湖南省邵阳市举行。专家组现场随机抽取3块田开展机械实收测产，经机器脱粒、称重、水分测定和除杂等规范流程核算，1号田亩产510.7公斤，2号田亩产573.2公斤，3号田亩产507.2公斤，三块田平均亩产530.4公斤，刷新高产纪录。该成果由湖南杂交水稻研究中心历经20余年系统攻关取得。（科技日报）\n\n## “天宫课堂”展示太空烤蛋糕\n\n9月9日上午，中国空间站“天宫课堂·港澳专场”开讲。神舟二十三号乘组指令长朱杨柱、航天驾驶员张志远、香港首位载荷专家黎家盈担任太空教师，在香港荃湾公立何传耀纪念中学为200余名港澳中小学生进行天地互动授课。\n\n航天员演示了微重力环境下拧湿毛巾、水球乒乓、太空厨房烘烤蛋糕等科学实验，并介绍了由香港科研团队参与的天韵相机。（央视新闻）\n\n“天宫课堂”展示太空烤蛋糕 | 央视新闻\n\n## 全球铜价创历史新高\n\n9月8日，铜价再创纪录。沪铜主力首破11万元，收报110620元/吨，年内涨约17%，12个月涨幅达47%。美国精炼铜关税预期引发全球“抢铜”，近70%交易所铜库存集中于美国，其他地区供应收紧。\n\n供给端上半年全球铜矿产量降1.1%，智利降6.6%，铜精矿加工费跌至负201美元/吨，冶炼厂首次“倒贴加工”。（上海证券报）",
+      "bodyTruncated": false,
+      "bodyVerbatim": true,
+      "qualityScore": 0.0,
+      "eventAggregation": {
+        "total": 2,
+        "groups": [
+          {
+            "key": "官方来源",
+            "tone": "#16130f",
+            "items": [
+              {
+                "source": "果壳",
+                "title": "OpenAI宣称AI攻克纳维-斯托克斯难题，Meta发布个人智能体Muse",
+                "url": "https://www.guokr.com/article/470166",
+                "note": "原始发布 / 公告。",
+                "text": "OpenAI宣称AI攻克纳维-斯托克斯难题，Meta发布个人智能体Muse —— 原始发布 / 公告。"
+              }
+            ]
+          },
+          {
+            "key": "相关报道",
+            "tone": "#2b6cb0",
+            "items": [
+              {
+                "source": "X · @gdb",
+                "title": "ChatGPT Images 2.5 面向时尚场景",
+                "url": "https://x.com/gdb/status/2097449272996253981",
+                "note": "同事件的其它源头报道。",
+                "text": "ChatGPT Images 2.5 面向时尚场景 —— 同事件的其它源头报道。"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "recordId": "recvuMBkvfQOF1",
+      "sourceId": "pingwest",
+      "title": "人类还在研究 AI，AI 已经开始研究同行了-品玩",
+      "titleCn": "超衍智能用 AI 自动优化模型训练与 GPU 计算",
+      "source": "品玩 / 硅星人",
+      "url": "https://www.pingwest.com/w/317244",
+      "category": "技术研究开源",
+      "contentType": "公众号",
+      "tier": "L3 媒体研报",
+      "priority": "P1",
+      "publishedDate": "2026-09-09",
+      "summary": "超衍智能公布自动化 AI 研究系统评测结果，系统可依据实验反馈调整训练方案与 GPU 内核，在预测训练规模、降低显存占用和提升计算吞吐量等任务中取得改进。相关训练脚本、GPU 内核和评估材料已通过 Apex-Tune 仓库公开。",
+      "why": "该成果展示了 AI 执行“发现、验证、学习、改进”研究闭环的能力，为自动化 AI 研发及递归自我改进提供了可复现的阶段性证据。",
+      "impact": 78,
+      "novelty": 82,
+      "actionability": 92,
+      "urgency": "中",
+      "tags": [
+        "AI",
+        "Agent",
+        "开源",
+        "硬件"
+      ],
+      "imageUrl": "https://cdn.pingwest.com/portal/2026/09/09/portal/2026/09/09/3zixT9Yj7WT94e7THG73raBKrYFF8aYi?x-oss-process=style/article-body",
+      "mediaAssets": {
+        "images": [
+          {
+            "url": "https://cdn.pingwest.com/portal/2026/09/09/portal/2026/09/09/3zixT9Yj7WT94e7THG73raBKrYFF8aYi?x-oss-process=style/article-body",
+            "alt": "规模预测任务评测结果",
+            "kind": "article-figure",
+            "afterHeading": "让 AI 动手改进训练流程",
+            "afterText": "在其中一项任务里，实验曲线会出现转折。如果顺着眼前的变化一路推算，就可能把后面的方向判断错。按照",
+            "layout": "wide",
+            "confidence": 0.95,
+            "topicRelevance": 0.94
+          },
+          {
+            "url": "https://cdn.pingwest.com/portal/2026/09/09/portal/2026/09/09/F3rN17K4tnxeNRW39bwkKed18RwF1xTY?x-oss-process=style/article-body",
+            "alt": "融合注意力吞吐量对比",
+            "kind": "article-figure",
+            "afterHeading": "让一次发现，成为下一轮的起点",
+            "afterText": "在 MLS-Bench 的融合因果注意力任务中，超衍智能系统发现，评测给定的输入数值范围比较窄。",
+            "layout": "wide",
+            "confidence": 0.96,
+            "topicRelevance": 0.97
+          }
+        ],
+        "videos": [],
+        "cover": "https://cdn.pingwest.com/portal/2026/09/09/portal/2026/09/09/3zixT9Yj7WT94e7THG73raBKrYFF8aYi?x-oss-process=style/article-body",
+        "curatedBy": "vision",
+        "curationVersion": 2,
+        "coverConfidence": 0.68,
+        "coverVisualQuality": 0.9
+      },
+      "topComments": [],
+      "deepAnalysis": "",
+      "editorialStructure": "",
+      "body": "AI 正在接手一项特殊的工作：研发 AI。\n\n目前 AI 已经能帮研究者写训练代码、跑实验、压榨计算效率。但人们的野心不止于此：用这一代 AI 造出更强的下一代，下一代再接手更多研发工作，一代代往上推。\n\n这就是 RSI（Recursive Self-Improvement，递归自我改进）。它关心的不是 AI 今天能干多少活，而是这一轮研究的成果能不能带进下一个系统——能力提升之后，系统是否也更擅长制造下一次提升。\n\n9 月 6 日，OpenAI 发布内部研究加速报告，宣称已达到\"自动化研究实习生\"的目标：系统能够在人类指导下执行边界清晰的研究任务，其中一些原本需要熟练研究员花好几天完成。\n\nAnthropic 一如既往的克制。Claude 确实在接手更多工程实现和实验执行。至于那种能完全自主设计、开发后继系统的 RSI，还没到那一步。\n\n通往 RSI 的路其实已经很明确了：AI 能否找到更好的训练方法，减少计算中的浪费，并把验证过的经验留给后面的研发。\n\n每一项都可以先从一个有限的任务做起。做完再看它能走多远。\n\n## 让 AI 动手改进训练流程\n\n超衍智能（Apex Intelligence）此次发布的研究成果，就处在这条路径上。\n\n9 月 8 日，公司发布《What Happens When AI Starts Improving AI?》，公布其自动化 AI 研究系统的首批系统性评测成果。\n\n这些评测围绕三个实际问题展开：训练开始前，怎样判断钱和算力该花在哪里；训练过程中，怎样减少资源浪费；执行计算时，怎样让 GPU 跑得更快。\n\n（https://x.com/apexin_ai/status/2097179115396718698）\n\n大模型训练开始之前，研究人员就要作出一系列昂贵的决定：模型做多大，用多少数据，投入多少算力。\n\n每种组合都完整训练一遍，成本难以承受。因此，研究人员通常先做较小规模的实验，再据此预测扩大规模后的表现。预测越可靠，团队越有可能把预算用在有效的方案上。\n\n超衍参与的 SLDBench 评测，就在检验 AI 能不能把这件事做得更好。它基于超过 5000 组已发表的语言模型训练实验构建，要求系统从已知数据中找出规律，再预测未参与拟合的规模区间。\n\n难点在于，小规模实验呈现的趋势，未必会一直延续。\n\n在其中一项任务里，实验曲线会出现转折。如果顺着眼前的变化一路推算，就可能把后面的方向判断错。按照公司的技术说明，AI 将这条曲线拆开处理：一部分描述长期趋势，另一部分描述只在某个阶段出现、随后逐渐消退的影响。这样，短期变化就不会被直接当成长期规律。\n\n在采用的四项任务中，超衍披露的平均得分达到 0.8846，比报告采用的参照结果 0.8613 提高约 2.71%。\n\n进入训练阶段，问题变成了：硬件和时间都有限，怎样把模型训练得更好？\n\nNanoChat Autoresearch 给出的测试条件是：一张 B200 显卡，每个候选方案只能训练 300 秒。AI 可以修改模型架构、优化器、超参数和训练代码，最后用验证集上的表现检验改动是否有效。\n\n超衍智能发现这套训练方案使用了一张很大的 n-gram 记忆表。每批训练数据只会访问表中的少量条目，但原有实现仍承担着大范围梯度计算带来的开销。相当于一本很厚的账簿，这次只改了几页，处理更新时却仍要为整本账簿占用大量资源。\n\nAI 的改法，是把更新集中到当前批次真正访问过的条目，再合并查表和索引操作，减少重复处理。\n\n相比采用的 ScienceGuru 参照实现，这些改动将峰值训练显存从约 177.7 GiB 降至 140.6 GiB，下降约 20.9%，同时保持了接近该任务公开领先水平的模型质量。\n\n在相同的 300 秒内，它处理的 token 数量还少了约 4.5%。这说明，接近领先水平的训练效果，也可以在更低的显存占用和更少的训练 token 下实现。\n\n其初始三次不同随机种子实验的平均成绩为 0.892426，补充到十次后为 0.892792。与 Recursive SuperIntelligence、腾讯混元 Hyra 和 AutoTrust AI 的 ScienceGuru 等公开方案比较，超衍智能已经接近这一任务的前沿水平。\n\n除了改训练方案，超衍还让 AI 继续往下找，检查 GPU 执行具体计算时，有哪些步骤可以做得更快。\n\n其中一项是 TriMul，也就是 AlphaFold 类蛋白质结构模型使用的一类计算。这项任务已经有不少人类工程师和自动化研究系统参与，继续优化的空间并不好找。\n\n系统最初尝试把更多计算步骤合在一起执行，但实验发现，这会增加寄存器的使用压力，收益逐渐减小，有些输入尺寸下效果也不稳定。\n\n它随后换了一个方向：检查前一道计算产生的数据，是否方便后一道计算读取。\n\n按照官方介绍，系统在矩阵乘法与后续层归一化的衔接处找到了改进空间。新的实现沿连续的存储位置读取数据，再在寄存器中完成所需的排列调整，提高了后续处理效率。\n\n最终，在 H100 上的七种固定输入尺寸中，其几何平均延迟为 1036.1 微秒，比同机测试的人类参照实现 stashuk-olek 的 1064.9 微秒降低约 2.71%。\n\n值得一提的是其研究过程： 原来的改法效果不好，AI 根据实验结果换了方向，并找到了新的优化位置。\n\n另一项 GPU 优化，发生在大模型常用的注意力计算中。\n\n这类计算为了保证数值稳定，通常需要在计算过程中反复调整数值尺度。这些操作有明确用途，也会消耗算力。\n\n在 MLS-Bench 的融合因果注意力任务中，超衍智能系统发现，评测给定的输入数值范围比较窄。在这些条件下，可以省去反复缩放，先累计中间结果，最后再统一归一化，同时满足最大绝对误差低于 0.01 的要求。\n\n少做这些步骤，再配合调度和数据搬运优化，系统在三个指定配置下的吞吐量分别达到 430.7、468.4 和 451.7 TFLOP/s，相比报告采用的参照结果提高 27.18%、15.63% 和 17.11%。\n\n换句话说，在这三组测试条件下，同一张 GPU 每秒能完成更多计算。\n\n## 让一次发现，成为下一轮的起点\n\n四项评测共同检验了一种能力： AI 能否根据实验结果找出问题、调整方案，再验证改动是否有效。\n\n发现显存浪费，就修改更新方式。继续融合计算收效有限，就转向检查数据读取。确认输入条件允许，就尝试简化计算步骤。\n\n超衍智能将这一过程概括为 Discover → Verify → Learn → Improve：发现问题、验证方案、积累经验，再据此继续改进。这也延续了创始人陈勇超此前 CodeSteer、TUMIX 等研究的思路，让模型提出的想法接受代码执行和实验结果的检验。\n\n对研发团队而言，这种能力的价值很具体。训练前少作一次错误判断，训练中降低显存占用，执行时缩短计算耗时，都可能让同样的预算支持更多有效实验。如果一项优化能在真实任务中反复使用，最初的研究投入就有机会换来持续的资源节省。\n\n更进一步的问题是，这次研究积累的经验，下次还能不能用。\n\n超衍在报告中将下一步指向迁移：这次学会了减少大型记忆表的无效更新，换一张表能否用上。这次发现计算速度受制于数据读取，优化另一个内核时，能否更早检查这个环节。如果这些经验能帮助系统更快找到问题、减少无效尝试，一次任务的成果就能转化为后续的研究能力，逐步接近 RSI 所描述的循环。\n\n超衍已通过 Apex-Tune 仓库公开训练脚本、GPU 内核实现和评估材料，供其他研究者检查、复现和拓展\n\n当 AI 参与研发 AI，人们期待的循环是：更有效的训练方法帮助产生更强的模型，更强的模型又能找到新的改进方法。\n\n一轮实验的价值，也在于它能让下一轮少走多少弯路。",
+      "bodyTruncated": false,
+      "bodyVerbatim": true,
+      "qualityScore": 0.0,
+      "eventAggregation": {
+        "total": 1,
+        "groups": [
+          {
+            "key": "官方来源",
+            "tone": "#16130f",
+            "items": [
+              {
+                "source": "品玩 / 硅星人",
+                "title": "超衍智能用 AI 自动优化模型训练与 GPU 计算",
+                "url": "https://www.pingwest.com/w/317244",
+                "note": "原始发布 / 公告。",
+                "text": "超衍智能用 AI 自动优化模型训练与 GPU 计算 —— 原始发布 / 公告。"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ],
+  "paperSignals": [
+    {
+      "recordId": "recvuAVZd2Sclr",
+      "sourceId": "jmlr",
+      "title": "Better Simulations for Validating Causal Discovery with the DAG-Adaptation of the Onion Method",
+      "titleCn": "用于因果发现验证的DAG自适应洋葱均匀模拟方法",
+      "source": "JMLR",
+      "url": "http://jmlr.org/papers/v27/24-0711.html",
+      "category": "技术研究开源",
+      "contentType": "论文",
+      "tier": "L1 一级官方",
+      "priority": "P0",
+      "publishedDate": "2026-09-08",
+      "summary": "论文提出DAG-adaptation of the Onion（DaO）方法，在给定DAG后均匀采样满足其全局马尔可夫性质的相关矩阵，再构造线性递归结构方程模型。实验显示，常用ZARX和Tetrad模拟会引入近确定性、R²可排序性等偏差，并可能实质性改变不同因果发现算法的相对表现。",
+      "why": "该研究把因果发现基准中的模拟分布选择从任意系数设定转化为有理论刻画的相关矩阵均匀采样问题，有助于减少基准偏置。",
+      "impact": 78,
+      "novelty": 84,
+      "actionability": 89,
+      "urgency": "中",
+      "tags": [
+        "AI",
+        "开源",
+        "其他"
+      ],
+      "imageUrl": "",
+      "mediaAssets": {
+        "images": [],
+        "videos": []
+      },
+      "topComments": [],
+      "deepAnalysis": "【研究问题与核心结论】\n论文研究如何在缺少真实因果真值数据时，为因果发现算法构造公平、完整且可解释的线性模拟基准。现有研究通常先随机生成DAG，再以人工指定区间抽取结构方程系数和误差方差；不同设定会改变相关强度、近确定性和变量可排序性，使同一算法在不同论文中得到冲突结果。作者的核心结论是：给定DAG后，应优先均匀采样所有满足该DAG全局马尔可夫性质的正定相关矩阵，而不是人为规定线性效应分布。DaO据此覆盖相应相关矩阵空间，不偏好特定矩阵且不提供可调参数，并可由相关矩阵和DAG恢复递归线性SEM。作者因此主张其适合作为无特定应用领域假设的通用基准，但明确承认这种均匀分布不等同于真实科学系统的分布。\n\n【方法与创新】\nDaO以DAG G为输入，对经典Onion相关矩阵采样法作DAG约束适配，输出满足G所蕴含条件独立关系的正定相关矩阵R；R与G随后确定标准化线性递归SEM的边系数及加性误差方差，并可使用任意有限方差的误差分布生成样本。其架构性创新是把采样对象由独立边系数改为“与指定DAG马尔可夫相容的相关矩阵空间”，并给出均匀性和覆盖性的正确性论证。相对ZARX和Tetrad，新增内容不是调参或训练技巧，而是模拟目标分布的重新定义；工程部分则提供R、Python实现及PyPI包daosim。非高斯误差不会一般地产生对应族的多元分布，例如逐节点Student’s t误差并不意味着联合分布是多元t，这一边界被作者明确区分。\n\n【实验设计与关键结果】\n验证使用ER、入度无标度SFi和出度无标度SFo三类DAG，对比ZARX、Tetrad和DaO。主要设置包括|V|=100、α=10、模型表征实验100次重复；附录还给出|V|=20的100次重复。Figure 1（PDF第13页）在三个|V|=3、|E|=2的最小非平凡DAG上各采样100次，以相关系数坐标展示可行空间覆盖。Figures 2-5（第19-20页）比较标准化β、误差标准差和绝对相关的经验分布：图注与正文指出ZARX产生最高绝对相关和最小误差标准差，部分误差标准差接近0，即近确定性；DaO的绝对相关最低、误差标准差最大。Table 1及Figures 6-8（第21-22页）以R²秩相关衡量R²-sortability，三种图结构中ZARX均最高，Tetrad较弱，DaO最低；给定材料未包含Table 1的具体数值，不能据此补写。算法实验覆盖DAGMA、sDAGMA、BOSS、fGES、PC、dLiNGAM、itMCMC、MMHC及R²-sort等，指标为邻接与方向的precision、recall和F1。Figure 9（第26页）在DaO生成的ER-DAG、α=10、20次重复上显示，样本量由约2^7增加到2^12时多数方法召回率上升；dLiNGAM在图示条件下的方向召回与F1总体处于高位，而DAGMA方向指标明显偏低。Figure 10（第26页）对20变量ER-DAG的ZARX与Tetrad模拟进行对照，同一算法的排序和幅度明显改变，尤其DAGMA与sDAGMA。图中无误差条，以上数值关系只能按坐标近似读取，不能视为精确统计量。\n\n【证据强度与局限】\n理论部分对采样空间、正定性和均匀性进行了形式化刻画，且开源双语言实现，使核心构造具有较强可复现性；多图结构、两种变量规模及多类因果发现算法也支持“模拟设计影响测评结论”的判断。但算法性能实验仅20次重复，图中未给出置信区间、方差或显著性检验，论文给定证据不足以证明所有算法排序差异均具有统计稳定性。计算时间、内存开销、随节点数和稠密度扩展的定量结果、随机种子及完整硬件配置在所给原文中未披露。实验完全基于模拟数据，不涉及真实真值数据；均匀相关矩阵也可能把大量概率质量放在现实领域罕见区域。方法限于无环、无潜在混杂、横截面和线性相关结构，不能直接覆盖反馈环、时间序列或非线性因果机制。非高斯联合分布的语义亦受误差叠加限制。数据泄漏不属于该纯模拟设计的主要风险，但不同算法是否获得完全一致的调参与计算预算，论文给定材料未披露。\n\n【研究意义与后续问题】\n论文改变的关键认识是，因果发现模拟的主要偏差未必来自DAG拓扑，而可能来自参数化方式隐式制造的高相关、近确定性和R²可排序信号；所谓“系数必须远离零”也可能反而造成近违反faithfulness。DaO提供了一个可证明覆盖完整相关空间的中性参照，使研究者能够区分算法能力与模拟器伪特征。不过，“均匀”只定义了数学上的不偏好，并不自动意味着科学现实性。后续核心问题包括：如何在保持可刻画性的同时限制到领域相关子空间，如何处理潜变量、混杂、时间依赖、反馈环和非线性，以及不同相关矩阵测度下的均匀性是否导致不同结论。还需更大规模、带不确定性统计和计算成本报告的独立复现实验，检验DaO下观察到的算法排序能否跨图规模、密度和误差分布稳定成立。",
+      "editorialStructure": "",
+      "pdfUrl": "http://jmlr.org/papers/volume27/24-0711/24-0711.pdf",
+      "paperFullTextSource": "pdf",
+      "paperPages": 42,
+      "paperCaptions": [
+        {
+          "page": 12,
+          "text": "Figure 1 depicts the results of generating random correlation matrices using the DaO method for three DAGs. The DAGs make up the simplest non-trivial cases for the DaO Method and the dimensions of the plots represent the correlations in the matrix:"
+        },
+        {
+          "page": 13,
+          "text": "Figure 1: Uniformly sampled correlation matrices from DAGs with |V | = 3 and |E| = 2 with 100 repetition for each case. 13"
+        },
+        {
+          "page": 18,
+          "text": "Figure 2 plots the magnitude of the standardized betas against the standard deviation of the additive error term for every edge, with kernel density estimates for contours. Figures 3, 4, and 5 depict empirical cumulative distribution functions (ECDFs) of the absolute beta"
+        },
+        {
+          "page": 19,
+          "text": "Figure 2: Properties of 10 models generated from ER/SFi/SFo-DAGs with |V | = 100 and α = 10. Simulation: ZARX Tetrad DaO"
+        },
+        {
+          "page": 19,
+          "text": "Figure 3: Properties of 100 models generated from ER-DAGs with |V | = 100 and α = 10. correlation values, while DaO produces the lowest absolute correlation values. Correspondingly, the standard deviations of the error terms in ZARX models are the smallest, while the standard deviations of error terms in DaO models are the largest."
+        },
+        {
+          "page": 20,
+          "text": "Figure 4: Properties of 100 models generated from SFi-DAGs with |V | = 100 and α = 10. Simulation: ZARX Tetrad DaO 1.0"
+        },
+        {
+          "page": 20,
+          "text": "Figure 5: Properties of 100 models generated from SFo-DAGs with |V | = 100 and α = 10. with a standard deviation of approximately zero—this near determinism will induce (near- )violations of faithfulness."
+        },
+        {
+          "page": 21,
+          "text": "Table 1: R2 rank correlation on DAGs with |V | = 100 and α = 10 over 100 repetitions Simulation: ZARX Tetrad DaO 100"
+        },
+        {
+          "page": 21,
+          "text": "Figure 6: R2-sortability of models generated from ER-DAGs with |V | = 100 and α = 10 over 100 repetitions. Table 1 tabulates the levels of R2-sortability for the three simulation methods while"
+        },
+        {
+          "page": 21,
+          "text": "Table 1 tabulates the levels of R2-sortability for the three simulation methods while varying model structure. The ZARX simulations have the highest R2-sortability for all model structures, while R2-sortability appears to be present in Tetrad simulations but at a"
+        },
+        {
+          "page": 21,
+          "text": "Figure 7: R2-sortability of models generated from SFi-DAGs with |V | = 100 and α = 10 over 100 repetitions. 21"
+        },
+        {
+          "page": 22,
+          "text": "Figure 8: R2-sortability of models generated from SFo-DAGs with |V | = 100 and α = 10 over 100 repetitions. 4.4 Summary of Characterization Findings"
+        },
+        {
+          "page": 26,
+          "text": "Figure 9: Mean performance of CDAs on data generated from ER-DAGs with α = 10 using the DaO method for DAG Models over 20 repetitions. ZARX Simulation Tetrad Simulation"
+        },
+        {
+          "page": 26,
+          "text": "Figure 10: Mean performance of CDAs on data generated from ER-DAGs with 20 variables and α = 10 over 20 repetitions. 26"
+        },
+        {
+          "page": 37,
+          "text": "Figure 11: Vertex in/out-degree distributions for 100 DAGs with |V | = 100 and α = 10. Figure 12: Edge matrices for ER/SFi/SFo-DAGs with |V | = 100 and α = 992 (density 12). 8. Applying SFi-DAG before SFo-DAG versus SFo-DAG before SFi-DAG results in different in/out-degree dis-"
+        },
+        {
+          "page": 37,
+          "text": "Figure 12: Edge matrices for ER/SFi/SFo-DAGs with |V | = 100 and α = 992 (density 12). 8. Applying SFi-DAG before SFo-DAG versus SFo-DAG before SFi-DAG results in different in/out-degree dis- tributions. Their application may be iterated in an alternating manner until convergence if identical"
+        },
+        {
+          "page": 39,
+          "text": "Figure 13: Properties of 100 models generated from ER-DAGs with |V | = 100 and α = 10. Simulation: ZARX Tetrad DaO 1.0"
+        },
+        {
+          "page": 39,
+          "text": "Figure 14: Properties of 100 models generated from SFi-DAGs with |V | = 100 and α = 10. Simulated R2-sortable data will have correlations approaching plus or minus one, while, simulated non-R2-sortable data will have correlations closer to zero."
+        },
+        {
+          "page": 39,
+          "text": "Table 3: R2 rank correlation on DAGs with |V | = 20 and α = 10 over 100 repetitions Table 3 tabulates the levels of R2-sortability for the three simulation methods while varying model structure. ZARX simulations have the highest R2-sortability for all model"
+        },
+        {
+          "page": 39,
+          "text": "Table 3 tabulates the levels of R2-sortability for the three simulation methods while varying model structure. ZARX simulations have the highest R2-sortability for all model structures, while R2-sortability appears to be present in Tetrad simulations but at a weaker"
+        },
+        {
+          "page": 40,
+          "text": "Figure 15: Properties of 100 models generated from SFo-DAGs with |V | = 100 and α = 10. Simulation: ZARX Tetrad DaO 20"
+        },
+        {
+          "page": 40,
+          "text": "Figure 16: R2-sortability of models generated from ER-DAGs with |V | = 20 and α = 10 over 100 repetitions. A.6 Scale-free Simulation Results"
+        },
+        {
+          "page": 41,
+          "text": "Figure 17: R2-sortability of models generated from SFi-DAGs with |V | = 20 and α = 10 over 100 repetitions. Simulation: ZARX Tetrad DaO"
+        },
+        {
+          "page": 41,
+          "text": "Figure 18: R2-sortability of models generated from SFo-DAGs with |V | = 20 and α = 10 over 100 repetitions. 41"
+        }
+      ],
+      "paperVisualPages": [
+        12,
+        26,
+        37,
+        40
+      ],
+      "qualityScore": 63.7,
+      "eventAggregation": {
+        "total": 1,
+        "groups": [
+          {
+            "key": "官方来源",
+            "tone": "#16130f",
+            "items": [
+              {
+                "source": "JMLR",
+                "title": "用于因果发现验证的DAG自适应洋葱均匀模拟方法",
+                "url": "http://jmlr.org/papers/v27/24-0711.html",
+                "note": "原始发布 / 公告。",
+                "text": "用于因果发现验证的DAG自适应洋葱均匀模拟方法 —— 原始发布 / 公告。"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "recordId": "recvuAVZd2YMBd",
+      "sourceId": "jmlr",
+      "title": "AgentPEN: A Prediction-Explanation Network for Sequential Stock Movement via LLMs and Recurrent Generation",
+      "titleCn": "AgentPEN：以大模型融合新闻与价格的可解释股票涨跌预测网络",
+      "source": "JMLR",
+      "url": "http://jmlr.org/papers/v27/25-2175.html",
+      "category": "技术研究开源",
+      "contentType": "论文",
+      "tier": "L1 一级官方",
+      "priority": "P0",
+      "publishedDate": "2026-09-08",
+      "summary": "AgentPEN通过大模型驱动的新闻筛选、时空记忆与跨注意力，将异步且含噪的金融新闻同价格序列对齐，再以变分循环生成模块预测次日涨跌。在三个美股和中国股票数据集上，其ACC与MCC均超过十种基线，但论文所称的解释能力缺少充分的定量验证证据。",
+      "why": "该研究将大模型用于金融文本的相关性筛选和影响范围建模，并以多数据集消融实验验证了这些机制对股票方向预测的增益。",
+      "impact": 78,
+      "novelty": 76,
+      "actionability": 79,
+      "urgency": "中",
+      "tags": [
+        "LLM",
+        "Agent",
+        "推理",
+        "开源"
+      ],
+      "imageUrl": "",
+      "mediaAssets": {
+        "images": [],
+        "videos": []
+      },
+      "topComments": [],
+      "deepAnalysis": "【研究问题与核心结论】\n论文研究含噪、影响持续时间不定且跨股票传播的金融新闻，如何与价格序列对齐，并同时用于次日涨跌预测和结果解释。作者认为，BERT、RoBERTa等传统编码器难以判断新闻与目标股票的相关性、影响期限及影响对象，而简单拼接文本与价格嵌入也不能显式刻画模态交互。AgentPEN据此把新闻处理拆成选择、时空记忆和融合，再用条件变分循环生成过程描述市场运动的不确定性。可核验的核心结论是：在AgentPEN-US、CMIN-US和CMIN-CN上，完整模型的ACC分别为56.91%、58.09%和57.09%，MCC分别为0.118、0.130和0.128，均高于表列基线；组件移除实验也显示新闻相关性评分、记忆、跨注意力及随机潜变量均有贡献。不过，“预测性能更高”的证据明显强于“解释性更好”的证据。\n\n【方法与创新】\n架构由Representation Fusion Agent、Deep Recurrent Generation（DRG）和Temporal Attention Prediction（TAP）组成，整体见Figure 1（PDF第6页），生成与预测结构见Figure 3、Figure 4（第10、13页）。Agent先让LLM为新闻与目标股票计算相关性分数，以阈值筛除噪声；随后分别估计新闻影响期限和受影响股票集合，写入Temporal Memory与Spatial Memory，并在预测日按有效期、股票覆盖和相关性检索Top-K新闻。新闻嵌入和三维价格特征投影后，以价格为query、新闻为key/value执行多头交叉注意力。DRG使用GRU及条件VAE式先验、后验网络逐时刻采样潜变量并产生辅助涨跌预测，TAP再利用解码状态和此前辅助预测输出目标日结果。真正的架构新增点是LLM控制的选择—记忆—融合链路及其与循环生成模块的组合；随机潜变量和KL约束属于生成式训练设计，网格搜索窗口、学习率、批量大小等属于工程配置，并非新的学习原理。\n\n【实验设计与关键结果】\nTable 1（PDF第16页）给出按时间切分的三个数据集：AgentPEN-US覆盖88只股票，测试集984个样本；CMIN-US覆盖110只股票，测试集862个样本；CMIN-CN覆盖沪深300成分股，测试集1040个样本。评价指标为ACC和适合类别不均衡二分类的MCC；基线共十个，包括ALSTM、StockNet、PEN、CMIN、FinMA、MagicNet和ExPred。Table 2（第18页）显示AgentPEN在三组数据上的最佳基线ACC分别为55.14%、55.85%、55.67%，对应AgentPEN为56.91%、58.09%、57.09%；MCC最佳基线分别为0.109、0.121、0.126，对应结果为0.118、0.130、0.128。Figure 5（第19页）报告五个随机种子：ACC为56.91±0.71、58.09±0.64、57.09±0.28，MCC为0.1178±0.0137、0.1296±0.0157、0.1282±0.0045。Table 3（第20页）的消融中，CMIN-US移除文本选择或改用随机相关性后，ACC由58.09%降至53.71%和53.61%；确定性DRG使三个数据集MCC降至0.070、0.076、0.048，MLP版本则降至0.009、0.010、0.051，支持相关性选择和随机潜变量的作用。\n\n【证据强度与局限】\n实验包含跨中美市场、十个基线、时间切分、五随机种子和较完整组件消融，且ACC与MCC方向一致，预测结论具有中上强度。但绝对优势有限：相对最佳基线的ACC仅增加1.42至2.24个百分点，CMIN-CN的MCC仅增加0.002。论文给出均值与标准差，却未披露显著性检验或置信区间；也未在给定证据中说明所有基线是否按相同数据、调参预算和LLM资源重训。新闻抓取、清洗、去重及潜在前视泄漏防护细节不足，LLM调用成本、延迟、版本稳定性和完整算力消耗亦未披露。消融能证明模块对预测有用，但不能直接证明生成解释真实、忠实或可审计；给定材料未提供人工评价者一致性、事实性、因果忠实度等解释指标。Table 6和Figure 8涉及投资回测，但所给图页未展示具体数值，不能据此确认交易成本、换手率和风险调整收益。\n\n【研究意义与后续问题】\n该工作最有价值的认识是：LLM不必直接承担最终数值预测，而可作为结构化信息处理器，显式判断新闻相关性、时间有效区间和跨股票影响，再由可训练的时序生成模型完成预测；随机相关性对照也削弱了“仅因减少新闻数量而提升”的替代解释。其工程价值主要在模块可分解、数据切分和消融路径较清楚，并发布了AgentPEN-US数据集。尚待解决的问题包括LLM评分是否能跨模型和跨时期校准，记忆内容是否受到新闻重复与事后叙事影响，潜变量是否真正表征市场不确定性，以及解释文本能否通过忠实度、稳定性和金融专家盲评。还需要包含交易摩擦的滚动回测、市场状态外推和严格泄漏审计，才能判断统计预测增益能否转化为稳定的现实效用。",
+      "editorialStructure": "",
+      "pdfUrl": "http://jmlr.org/papers/volume27/25-2175/25-2175.pdf",
+      "paperFullTextSource": "pdf",
+      "paperPages": 37,
+      "paperCaptions": [
+        {
+          "page": 6,
+          "text": "Figure 1: The overall architecture of the proposed stock Prediction-Explanation Network, including the Representation Fusion Agent, the Deep Recurrent Generation Mod- ule and the Temporal Attention Prediction Module."
+        },
+        {
+          "page": 10,
+          "text": "Figure 3: The graphic illustration of AgentPEN. AgentPEN leverages the fused market information representation P f to infer the latent variable set Z and then predict the stock movement y. The forecasting process pθ y | P f, Z is drawn with solid"
+        },
+        {
+          "page": 13,
+          "text": "Figure 4: The architecture of the Deep Recurrent Generation (DRG) and the Temporal Attention Prediction (TAP) Modules. the former auxiliary movement predictions y<T = {yt}T−1T−L+1 to enhance the performance"
+        },
+        {
+          "page": 16,
+          "text": "Table 1: Statistics of the three datasets. Up and Down columns report the label distribution (next-day movement). Price News"
+        },
+        {
+          "page": 17,
+          "text": "Table 2 summarizes the experimental results on three different datasets using various baseline models and the proposed method, AgentPEN. From the results, we observe that AgentPEN consistently outperforms existing baselines across all three datasets in terms of both ACC and MCC. To further evaluate the robustness of AgentPEN, we additionally run the 4. https://huggingface.co/thenlper/gte-large"
+        },
+        {
+          "page": 18,
+          "text": "Table 2: Performance comparison of AgentPEN and baselines. model with five different random seeds and report the corresponding distributions in Figure 5. The left part of the figure shows the ACC distributions, while the right part presents the MCC distributions. AgentPEN achieves average ACC values of 56.91±0.71, 58.09±0.64,"
+        },
+        {
+          "page": 19,
+          "text": "Figure 5: Performance distributions of AgentPEN over five random seeds on three datasets. The left panel reports ACC, and the right panel reports MCC. Horizontal dashed lines indicate the performance of two strong baselines, MagicNet and ExPred."
+        },
+        {
+          "page": 20,
+          "text": "Table 3: Ablation study results. retrieved news, while AgentPEN-Random keeps approximately the same filtering ratio as AgentPEN but replaces the LLM-produced correlation scores with random scores. Both"
+        },
+        {
+          "page": 21,
+          "text": "Figure 6: The parameter sensitivity study for four important parameters: (a) Correlation threshold τc in Text Selection Module; (b) Learning rate; (c) Look-back window; (d) Max number of retrieved news."
+        },
+        {
+          "page": 24,
+          "text": "Figure 7: Quantitative evaluation of the Text Selection Module. Test samples are grouped by the maximum correlation score among their look-back news, and the y-axis reports the mean absolute next-day return. Samples with higher correlation scores"
+        },
+        {
+          "page": 27,
+          "text": "Table 6: Investment results of AgentPEN on CMIN-CN from 2021-06 to 2021-12. AgentPEN-based strategies are averaged over 5 seeds. The long-short strategy takes long positions on stocks predicted to rise and short positions on stocks pre-"
+        },
+        {
+          "page": 27,
+          "text": "Figure 8 further visualizes the cumulative returns of the three strategies during the CMIN-CN test window. We shade four COVID-related sub-periods, including the reopening period, the Delta-surge period, the mid-recovery period, and the Omicron period. The performance difference across these periods suggests that AgentPEN’s trading value"
+        },
+        {
+          "page": 28,
+          "text": "Figure 8: Cumulative returns of different investment strategies on CMIN-CN during the 2021-06 to 2021-12 test window. The shaded regions indicate four COVID-related market sub-periods."
+        },
+        {
+          "page": 28,
+          "text": "Table 7. In total, AgentPEN processes 519,291 news items, corresponding to 268.3M input tokens and 31.1M output tokens. Based on the public gpt-3.5-turbo price of $0.50/M input tokens and $1.50/M output tokens at the time of our experiments, the total estimated"
+        },
+        {
+          "page": 29,
+          "text": "Table 7: LLM-call statistics and estimated API cost for LLM-based agent. It is important to distinguish historical evaluation from real-time deployment. For historical evaluation and repeated backtesting, LLM annotations and text embeddings can"
+        },
+        {
+          "page": 33,
+          "text": "Table 8: Prompts used for LLMselection, LLMtemporal, and LLMspatial. Component Content System prompt As a stock trading news analyst, you are a helpful and precise assistant."
+        }
+      ],
+      "paperVisualPages": [
+        17,
+        18,
+        20,
+        27
+      ],
+      "qualityScore": 63.7,
+      "eventAggregation": {
+        "total": 1,
+        "groups": [
+          {
+            "key": "官方来源",
+            "tone": "#16130f",
+            "items": [
+              {
+                "source": "JMLR",
+                "title": "AgentPEN：以大模型融合新闻与价格的可解释股票涨跌预测网络",
+                "url": "http://jmlr.org/papers/v27/25-2175.html",
+                "note": "原始发布 / 公告。",
+                "text": "AgentPEN：以大模型融合新闻与价格的可解释股票涨跌预测网络 —— 原始发布 / 公告。"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "recordId": "recvuAVZd2C0TT",
+      "sourceId": "jmlr",
+      "title": "Sublinear Variational Optimization of Gaussian Mixture Models with Millions to Billions of Parameters",
+      "titleCn": "面向十亿级参数高斯混合模型的次线性变分优化",
+      "source": "JMLR",
+      "url": "http://jmlr.org/papers/v27/25-0639.html",
+      "category": "技术研究开源",
+      "contentType": "论文",
+      "tier": "L1 一级官方",
+      "priority": "P0",
+      "publishedDate": "2026-09-08",
+      "summary": "论文提出截断变分混合因子分析算法 v-MFA，通过仅评估每个样本对应的一小组候选混合分量，将一般 GMM/MFA 每轮优化的计算量由 O(NCD²) 降至对 D 线性、对 NC 次线性。实验报告该方法可在单台高端 CPU 上用不足 9 小时、约 1 亿张图像训练超过 100 亿参数的模型，并用于高效零样本图像去噪。",
+      "why": "该研究为保留分量内相关性的大规模概率密度模型提供了可验证的次线性训练路径，并展示了百亿参数模型的单机 CPU 可行性。",
+      "impact": 86,
+      "novelty": 85,
+      "actionability": 82,
+      "urgency": "中",
+      "tags": [
+        "AI",
+        "推理",
+        "开源",
+        "其他"
+      ],
+      "imageUrl": "",
+      "mediaAssets": {
+        "images": [],
+        "videos": []
+      },
+      "topComments": [],
+      "deepAnalysis": "【研究问题与核心结论】\n论文研究如何在样本数 N、维度 D 和混合分量数 C 均很大时训练能够表达分量内相关性的高斯混合模型。一般协方差 GMM 的常规 EM 每轮复杂度为 O(NCD²)；对角协方差虽可降至 O(NCD)，却不能表达维度间相关性。核心结论是：将截断变分后验与混合因子分析模型结合后，v-MFA 可使复杂度对 D 线性、对 NC 呈经验次线性，同时获得与常规 MFA 优化相近的负对数似然；作者进一步在约 1 亿张图像上以单台高端 CPU、不到 9 小时训练了超过 100 亿参数的模型。\n\n【方法与创新】\nv-MFA 为每个样本 xn 维护仅含 C′ 个高后验分量的集合 Kn，而非计算全部 C 个分量的联合概率。算法为每个当前分量 c 构造大小为 G 的邻域 gc，将这些邻域的并集及一个随机分量组成搜索集 Sn，再依据联合概率更新 Kn。Figure 1（PDF 第9页）给出的示例中 C′=3、G=3，Kn={35,87,42}，合并邻域和随机分量后得到 10 个候选；这说明计算被限制在局部候选集，但仍以随机候选保留跳出局部搜索的机会。Figure 2（PDF 第9页）说明一般协方差下最近欧氏中心不一定具有最大联合概率，因此算法不能简单以欧氏近邻替代概率搜索。架构层面的变化是以低维因子分析器参数化各分量协方差，保留主要相关结构；算法创新是截断变分分布及基于分量邻域的候选更新。C′、G 和因子维度 H 属于精度与成本的控制参数，而并行运行及 CPU 利用率属于工程实现，不应与复杂度创新混为一谈。\n\n【实验设计与关键结果】\n实验覆盖复杂度缩放、四个高维基准、YFCC100M 大规模训练和零样本去噪。基线包括常规 em-MFA、k-means+FA、torch-mfa、em-DIAG、v-DIAG，以及使用欧氏候选的变体；主要指标为每个样本直至收敛所需的联合概率计算次数、测试集 NLL、墙钟时间，以及去噪 PSNR、SSIM 和每图运行时间。Figure 4（PDF 第16页）以联合概率评估次数检验随 C 增长的复杂度，支持 v-MFA 对 NC 的经验次线性缩放，但给定材料没有提供拟合指数或置信区间。Figure 5（PDF 第18页）显示 C′=3、G=5 的 v-MFA 在四个数据集上均为最快配置，且所有给出的 C′、G 组合都快于 em-MFA；图中完整坐标数值未随原文提供。Figure 6（PDF 第21页）对应 YFCC100M，摘要报告约 1 亿图像、超过 100 亿参数、单台高端 CPU 训练不足 9 小时。去噪实验固定 C=1000，并与 N2F、S2S、BM3D 等方法比较；Table 1（PDF 第24页）将 v-MFA列为最快的盲零样本方法，约比 N2F 快两倍、比 S2S 快超过 2000 倍，只有非盲 BM3D 更快，但所给表格图像未包含具体 PSNR、SSIM 数值。Figure 8（PDF 第26页）把 C 从 1000 增至 10000，在参数量约十倍增长时去噪时间不足两倍，并报告 PSNR、SSIM 随规模改善。\n\n【证据强度与局限】\n证据链覆盖理论复杂度、受控缩放、标准数据集、大规模训练和下游任务，且附录列出硬件、数据集及更多基线，强于只报告单一速度点。不过“次线性”主要由经验缩放支持，给定证据未提供斜率估计、误差区间或统计检验；最坏情况是否仍可能接近全分量搜索也未明确。MFA 以低秩子空间近似一般协方差，因此并非无条件等价于任意满协方差 GMM，其质量依赖 H。硬件比较可能受实现语言、并行方式和优化程度影响；Table B1（PDF 第45页）还说明部分实验以四个各占 16 核的实例并行，跨方法墙钟比较需结合完整配置解释。初始化敏感性、失败案例、内存峰值、能耗及百亿参数实验的重复次数和方差，论文未披露于给定材料。代码仓库、随机种子和完整复现命令也未披露于给定材料。\n\n【研究意义与后续问题】\n论文改变的关键认识不是 GMM 能取得新的任务质量上限，而是大规模、相关性可表达的混合模型未必必须承担 O(NC) 级全分量评分。候选邻域与截断后验的组合也与稀疏混合专家的 Top-K 路由存在形式联系，可能启发避免计算全部专家路由分数的概率化搜索。仍待解决的问题包括次线性性质的理论条件与最坏情况界、C′和G对收敛及偏差的系统影响、不同 H 下表达能力与成本的定量关系，以及方法能否扩展至非高斯观测、时序潜变量模型和没有闭式 M 步的模型。",
+      "editorialStructure": "",
+      "pdfUrl": "http://jmlr.org/papers/volume27/25-0639/25-0639.pdf",
+      "paperFullTextSource": "pdf",
+      "paperPages": 70,
+      "paperCaptions": [
+        {
+          "page": 8,
+          "text": "Figure 1 offers an illustration of the sets gc and the construction of Sn. Figure 1A shows a schematic representation, Figure 1B visualize Kn and gc, and Figure 1C illustrates Sn in data space. Figure 1 also demonstrates that |Sn| is larger than |Kn|, but significantly"
+        },
+        {
+          "page": 9,
+          "text": "Figure 1: Construction of Sn for a data point xn. Subfigure A shows a schematic repre- sentation while B visualizes Kn and gc, and C visualizes Sn in data space. In this example, the set Kn = {35, 87, 42} contains C′ = 3 component indices for"
+        },
+        {
+          "page": 9,
+          "text": "Figure 2: Comparison of Euclidean distances and joints. In A and B, the component centers are identical and the same data point is marked with a red cross. For isotropic, equally weighted components (A), the smallest Euclidean distance correspond to"
+        },
+        {
+          "page": 13,
+          "text": "Figure 3: Update of Kn over two iterations. In A1, a red cross marks a data point xn with an initial suboptimal Kn = {35, 87} (for simplicity, we use only C′ = 2 here) and G = 3 replacement candidates for each of those components: g35 = {98, 35, 23}"
+        },
+        {
+          "page": 16,
+          "text": "Figure 4: Scaling behavior of v-MFA and em-MFA. One measurement point shows, for a given GMM with C components, the number of joint probabilities computed per data point until the convergence criterion is reached. The number of compo-"
+        },
+        {
+          "page": 17,
+          "text": "Figure 5 shows the measured NLLtest values vs. wall-clock runtimes for all algorithms. As can be observed, v-MFA (with C′ = 3 and G = 5) was the fastest among the algorithms evaluated on all four data sets (excluding Initialization). Across all settings of hyperparameters C′ and G, v-MFA consistently outperformed em-MFA, achieving substantial"
+        },
+        {
+          "page": 18,
+          "text": "Figure 5: Effectiveness and efficiency in terms of negative log-likelihood (NLL) and runtime of v-MFA compared to em-MFA, k-means+FA and the parameters after initial- ization. Each of the four subfigures refers to experiments on one benchmark data"
+        },
+        {
+          "page": 21,
+          "text": "Figure 6: Evaluation of v-MFA and em-MFA on the YFCC100M data set. A shows for different numbers of components C the total number of joint evaluations required for one v-MFA optimization run. The number of v-MFA model parameters is"
+        },
+        {
+          "page": 23,
+          "text": "Figure 7. To account for the varying PSNR values of the noisy images across data sets, the PSNR gain (∆PSNR), defined as the PSNR difference of the denoised and noisy image, is reported in Figure 7A. To normalize for differences in image size across data sets, we"
+        },
+        {
+          "page": 24,
+          "text": "Table 1: Quality and runtime of several zero-shot denoising algorithms, measured by PSNR, SSIM and average runtime per image in seconds. The reported errors denote standard deviations across images in the respective dataset. The best result within"
+        },
+        {
+          "page": 25,
+          "text": "Figure 7: Denoising benchmark. A Results of B different blind zero-shot denoising al- gorithms are shown for two images."
+        },
+        {
+          "page": 26,
+          "text": "Figure 8: The effect of scaling v-MFA for denois- ing. A shows a visual comparison for different numbers of components C for"
+        },
+        {
+          "page": 41,
+          "text": "Figure A1: Illustration of patch-based blind zero-shot image denoising using probabilistic generative models. A noisy image serves as input (top left). Patches extracted from the noisy image (bottom left) are used to learn a probabilistic represen-"
+        },
+        {
+          "page": 45,
+          "text": "Table B1: Details on the utilized hardware for the different algorithms and experiments. The asterisk (∗) marks execution of four instances in parallel, with each instance using 16 of the 64 available cores, i.e., four independent runs were executed at"
+        },
+        {
+          "page": 45,
+          "text": "Table B1 provides a detailed description of the hardware used for the various algorithms and experimental setups. To achieve high utilization, we executed four instances of v-MFA, em-MFA, or k-means+FA in parallel, with each instance using 16 of the 64 available cores,"
+        },
+        {
+          "page": 47,
+          "text": "Table B2: High-dimensional data sets used in our experiments in Sections 3.1 to 3.3. The data dimension is given in pixel width × pixel height × color channels. data set samples data dimension D"
+        },
+        {
+          "page": 47,
+          "text": "Table B3: Data sets used in the denoising experiments in Section 3.4. The data dimension is given in pixel width × pixel height × color channels. Div2K: As an example of a high resolution image, we include one image of the Div2K data"
+        },
+        {
+          "page": 48,
+          "text": "Figure B1: Effectiveness and efficiency of v-MFA and v-MFAEucl. in terms of NLLtest (rel- ative to em-MFA) and the runtime. Triangles refer to v-MFA, while pluses denote v-MFAEucl.. Each of the four subfigures corresponds to experiments on"
+        },
+        {
+          "page": 49,
+          "text": "Figure B2: Effectiveness and efficiency of v-ISO and v-ISOEucl. in terms of NLLtest (relative to em-MFA) and the runtime. Triangles refer to v-ISO, while pluses denote v- ISOEucl.. Each of the four subfigures corresponds to experiments on one bench-"
+        },
+        {
+          "page": 51,
+          "text": "Table B4: Comparison of em-MFA, v-MFA, k-means+FA,torch-mfa, em-DIAG with C = 1000 and multiple v-DIAG variants with C ∈{1000, 6000, 10 000, 20 000} on CelebA. To ensure consistency with the other methods, we define an iteration"
+        },
+        {
+          "page": 53,
+          "text": "Figure B3: Scaling behavior accounting for quality. Depicted is the number of joint evalua- tions per data point for increasingly large numbers of components C. The values for v-MFA and em-MFA are the same as in Figure 4 in the main text. em-MFA†"
+        },
+        {
+          "page": 54,
+          "text": "Figure B4: Effectiveness in terms of negative log-likelihood (NLL) of v-MFA for different configurations of C′ and G, as well as for a variant of v-MFA optimized using the optimal variational parameters Koptn (as defined in Equation 7). Each of the"
+        },
+        {
+          "page": 56,
+          "text": "Figure B5: Comparison of different initialization strategies. Each of the four subfigures refers to experiments on one benchmark data set. The y-axes denote the rela- tive NLL on the test set w.r.t. em-MFA initialized which AFK-MC2, given by"
+        },
+        {
+          "page": 57,
+          "text": "Figure 8, where we increased the number of components up to C = 10 000. A low hyperplane dimensionality (we chose H = 5 for the experiments in Section 3.4) was observed to result in a favorable trade-off between optimization qualities and runtimes. Here we further investigate the effect of the hyperplane dimensionality H. Concretely, we repeated the experiment"
+        }
+      ],
+      "paperVisualPages": [
+        9,
+        18,
+        24,
+        51
+      ],
+      "qualityScore": 63.2,
+      "eventAggregation": {
+        "total": 1,
+        "groups": [
+          {
+            "key": "官方来源",
+            "tone": "#16130f",
+            "items": [
+              {
+                "source": "JMLR",
+                "title": "面向十亿级参数高斯混合模型的次线性变分优化",
+                "url": "http://jmlr.org/papers/v27/25-0639.html",
+                "note": "原始发布 / 公告。",
+                "text": "面向十亿级参数高斯混合模型的次线性变分优化 —— 原始发布 / 公告。"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "recordId": "recvuAVZd2RIvl",
+      "sourceId": "jmlr",
+      "title": "torchgfn: A PyTorch GFlowNet Library",
+      "titleCn": "torchgfn：模块化 PyTorch GFlowNet 开源库",
+      "source": "JMLR",
+      "url": "http://jmlr.org/papers/v27/23-1095.html",
+      "category": "技术研究开源",
+      "contentType": "论文",
+      "tier": "L1 一级官方",
+      "priority": "P0",
+      "publishedDate": "2026-09-08",
+      "summary": "论文提出通用 GFlowNet 库 torchgfn，以解耦环境、采样器、函数估计器和训练目标，支持离散、连续、图结构及扩散采样任务。复现实验表明，它较既有 PyTorch gflownet 实现通常更快，但仍明显慢于采用 JAX/JIT 的 gfnx。",
+      "why": "该工作把分散且面向特定任务的 GFlowNet 实现统一为可替换组件，并通过公开代码、示例环境和跨库性能对照降低算法复现与扩展成本。",
+      "impact": 76,
+      "novelty": 65,
+      "actionability": 89,
+      "urgency": "中",
+      "tags": [
+        "AI",
+        "推理",
+        "开源"
+      ],
+      "imageUrl": "",
+      "mediaAssets": {
+        "images": [],
+        "videos": []
+      },
+      "topComments": [],
+      "deepAnalysis": "【研究问题与核心结论】\n论文关注 GFlowNet 研究缺少通用、易扩展且可用于公平比较的实现基础设施这一问题。既有开源代码多与单篇项目绑定，或局限于分子与图任务，或嵌入复杂实验框架，另一些实现则优先追求性能而牺牲可修改性。作者的核心结论是：通过严格分离环境、采样过程、数据容器、神经网络估计器和训练目标，torchgfn 能以统一 PyTorch API 覆盖多类离散与连续 GFlowNet 场景，并在模块可替换性和运行效率之间取得折中。论文展示了已发表任务的统一复现以及跨库计时，但证据主要支持软件架构与工程效率，不等同于提出了新的 GFlowNet 学习理论或生成质量优势。\n\n【方法与创新】\nFigure 1（PDF 第2页）给出了核心架构：无状态 Envs 通过顶层 States 与 Actions 抽象执行状态转移；Sampler 从策略中采样并生成 Trajectories、Transitions 或 StatesPairs 等 Containers；PolicyMixin 将容器连接到实现特定目标的 GFlowNet 子类，如 TrajectoryBalanceGFlowNet 和 DetailedBalanceGFlowNet；一个或多个 Estimator 封装 PyTorch nn.Module，分别表示策略、状态流等函数近似器，再由损失训练。真正新增的是这些接口之间的严格解耦及可交换设计，而不是新的网络架构。Gym 同时覆盖 HyperGrid、DiscreteEBM、BitSequence、连续 Box、BayesianStructure、Ring 和 DiffusionSampling 等环境。就性质而言，主要贡献属于软件架构和 API 设计；论文给定证据没有提出新的训练损失、优化算法或专用硬件工程。\n\n【实验设计与关键结果】\nTable 1（PDF 第4页）将 torchgfn 与 recursion、gflownet、gfnx 对照：前三者基于 PyTorch，gfnx 基于 JAX；torchgfn 被定位为模块化、解耦、通用且使用无状态环境，区别于 recursion 的图与分子导向、gflownet 的环境中心设计及 gfnx 的低层高性能取向。Table 3（PDF 第14页）在批量128下报告分阶段耗时、峰值内存和参数量。torchgfn 对 gflownet 的总耗时为：Box 42.3 对60.7毫秒，Box uniform-pb 18.4对60.8毫秒，Ising 6×6为78.3对3635.0毫秒，Ising 10×10为208.0对15849.0毫秒；HyperGrid small、medium、large 分别为30.8对141.4、77.8对223.0、113.3对364.7毫秒。其代价是部分设置参数或内存略高，例如 HyperGrid large 为101130个参数、55MB，而 gflownet 为100101个参数、37MB。gfnx 仍更快：Ising 10×10总耗时9.8毫秒，torchgfn 为208.0毫秒。Figure 3（PDF 第15页）用100次迭代、50次预热、3个种子比较批量32/128/512；在批量128时，torchgfn 相对 gflownet 在 Ising 6×6 快47.0倍，在 Ising 10×10快76.8倍，但相对 gfnx 在这两项分别慢16.1倍和19.9倍。图中 gflownet 的 Ising 10×10、批量512因计算时间不可接受而缺失。Figure 3与Table 3的绝对总耗时口径并不完全一致，例如 bitseq small 的批量128分别约32和22.1毫秒，给定材料未解释差异。\n\n【证据强度与局限】\n架构图、组件对照和逐场景性能表为工程主张提供了可核验证据，Figure 3还报告3个种子的均值与方差，优于仅给单次计时。然而实验任务数量有限，且跨 PyTorch 与JAX/JIT比较同时混入框架、编译和实现成熟度差异；Table 3中gfnx的JIT步骤无法拆分，也削弱了分阶段归因。论文给定证据未披露硬件型号、软件版本、统计显著性检验、置信区间、端到端收敛时间、相同计算预算下的生成质量，以及各库是否达到等价目标分布拟合精度。除参数量和峰值内存外，也未系统报告编译成本。已发表结果的“复现”缺少给定材料中的逐任务误差、奖励或分布距离数值，因此不能据此确认科学结果完全等价。代码与PyPI公开提升了复现可能性，但长期维护性和外部贡献质量尚不能由论文实验验证。\n\n【研究意义与后续问题】\n该工作的主要意义是把 GFlowNet 方法研究从项目级代码迁移到组件级实验：研究者可以在保持环境和估计器不变时替换训练目标或采样策略，从而减少实现差异对算法比较的干扰。结果也表明，模块化 PyTorch 实现可以显著优于既有 PyTorch 基线，但通用性仍与JAX/JIT吞吐量存在明显交换。后续问题包括：不同组件组合是否保持语义一致与数值稳定；连续空间、图生成和扩散采样能否用统一指标验证正确性；编译、向量化或分布式执行能否缩小与gfnx的性能差距而不破坏接口；以及跨任务复现是否能加入固定版本、完整硬件配置、收敛曲线和目标分布误差测试。",
+      "editorialStructure": "",
+      "pdfUrl": "http://jmlr.org/papers/volume27/23-1095/23-1095.pdf",
+      "paperFullTextSource": "pdf",
+      "paperPages": 15,
+      "paperCaptions": [
+        {
+          "page": 2,
+          "text": "Figure 1: A schematic of the modular torchgfn repository structure. States and Actions are top- level abstractions used to interface between the stateless Envs. Containers are generic objects which hold States-Actions sequences drawn from Samplers. These interface"
+        },
+        {
+          "page": 4,
+          "text": "Table 1: High-level comparison of GFlowNet libraries. Library torchgfn recursion gflownet gfnx PyTorch PyTorch PyTorch JAX"
+        },
+        {
+          "page": 14,
+          "text": "Table 3: Per-phase iteration time (ms, batch size 128), peak memory, and parameter count. Phase times averaged over seeds; “—” indicates JIT-compiled step (not decom- posable into individual timings)."
+        },
+        {
+          "page": 15,
+          "text": "Figure 3: Comparison of the torchgfn library per-iteration time (ms) against the gflownet and gfnx library, across 100 iterations with a 50 iteration burn-in, with variance across 3 seeds. Ising 10 × 10 is not shown for gflownet due to untenable com-"
+        }
+      ],
+      "paperVisualPages": [
+        2,
+        4,
+        14,
+        15
+      ],
+      "qualityScore": 62.3,
+      "eventAggregation": {
+        "total": 1,
+        "groups": [
+          {
+            "key": "官方来源",
+            "tone": "#16130f",
+            "items": [
+              {
+                "source": "JMLR",
+                "title": "torchgfn：模块化 PyTorch GFlowNet 开源库",
+                "url": "http://jmlr.org/papers/v27/23-1095.html",
+                "note": "原始发布 / 公告。",
+                "text": "torchgfn：模块化 PyTorch GFlowNet 开源库 —— 原始发布 / 公告。"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ],
+  "socialPosts": [
+    {
+      "recordId": "recvuMBkvftRlt",
+      "sourceId": "social-media",
+      "title": "we used our models to find and fix critical vulnerabilities in our own systems, as part of a 250+ person effort withi...",
+      "titleCn": "OpenAI用自有模型发现并修复内部关键漏洞",
+      "source": "X · @gdb",
+      "url": "https://x.com/gdb/status/2097789885591802350",
+      "category": "其他",
+      "contentType": "社交媒体帖子",
+      "tier": "L4 补充源",
+      "priority": "P0",
+      "publishedDate": "2026-09-10",
+      "summary": "@gdb称，OpenAI在一项超过250人参与的内部工作中，使用自有模型发现并修复了其系统中的关键漏洞。团队还发布了相关操作手册、经验和架构资料，希望帮助防守方利用当前的时间窗口。",
+      "why": "该案例显示AI模型已被用于真实内部安全防御，但其效果、方法和适用范围仍需进一步核验。",
+      "impact": 82,
+      "novelty": 72,
+      "actionability": 78,
+      "urgency": "高",
+      "tags": [
+        "AI",
+        "产品",
+        "其他"
+      ],
+      "imageUrl": "",
+      "mediaAssets": {
+        "images": [],
+        "videos": []
+      },
+      "topComments": [],
+      "deepAnalysis": "【帖子信号】\n@gdb明确表示，OpenAI在一项由250多人参与的内部工作中，使用自有模型发现并修复了自身系统里的关键漏洞；同时分享了操作手册、经验和架构，希望其他组织把握“防守方窗口”。帖子给出的资料入口为https://t.co/Lls5AnmKV2。\n\n【价值与边界】\n已披露事实是模型进入了OpenAI真实系统的漏洞发现与修复流程，且背后存在大规模人工协作，这说明其价值可能不仅是生成安全建议，还包括辅助实际防御工作。但帖子未说明具体模型、漏洞类型与数量、自动化程度、误报率、修复成功率及人工投入分布，也没有提供与传统工具或专家团队的对照，因此无法据此判断模型的独立贡献和可迁移性。\n\n【跟进行动】\n1. 打开链接核验完整操作手册、经验总结和架构细节。2. 重点确认模型权限边界、人工复核机制及漏洞验证流程。3. 在隔离环境中依据公开材料复现，并与现有扫描工具和人工审计结果对比。",
+      "editorialStructure": "",
+      "socialMetrics": {
+        "platform": "x",
+        "post_id": "2097789885591802350",
+        "canonical_post_id": "2097787892219473968",
+        "conversation_id": "2097789885591802350",
+        "account": "gdb",
+        "account_name": "Greg Brockman",
+        "account_avatar": "https://pbs.twimg.com/profile_images/1347621377503711233/bHg3ipfD_400x400.jpg",
+        "account_verified": true,
+        "followers": 1042208,
+        "likes": 795,
+        "replies": 60,
+        "reposts": 53,
+        "quotes": 8,
+        "bookmarks": 167,
+        "impressions": 75394,
+        "engagement": 1204,
+        "is_retweet": false,
+        "is_reply": false,
+        "is_quote": true,
+        "thread_count": 1,
+        "thread_segments": [],
+        "edit_history_tweet_ids": [
+          "2097787892219473968",
+          "2097788180489703638",
+          "2097789885591802350"
+        ],
+        "own_text": "we used our models to find and fix critical vulnerabilities in our own systems, as part of a 250+ person effort within openai. playbooks/learnings/architecture which we hope can be helpful for others to make the most of the defenders' window:",
+        "own_chars": 242,
+        "quoted_text": "We mobilized 250+ people to strengthen our defenses across hundreds of systems. Our latest cyber models helped us find and fix vulnerabilities we might never have discovered otherwise. We’re sharing what we learned, the architecture, and a practical playbook so you can build your own Defense Factory: a continuous loop where AI agents find vulnerabilities, validate them, and verify that fixes work.",
+        "quoted_chars": 400,
+        "quoted": {
+          "post_id": "2097786616311840853",
+          "text": "We mobilized 250+ people to strengthen our defenses across hundreds of systems. Our latest cyber models helped us find and fix vulnerabilities we might never have discovered otherwise.\n\nWe’re sharing what we learned, the architecture, and a practical playbook so you can build your own Defense Factory: a continuous loop where AI agents find vulnerabilities, validate them, and verify that fixes work.\n\nhttps://t.co/k1oWJHle8S",
+          "created_at": "2026-09-09T20:37:58.000Z",
+          "account": "openai",
+          "account_name": "OpenAI",
+          "avatar": "https://pbs.twimg.com/profile_images/1885410181409820672/ztsaR0JW_400x400.jpg",
+          "verified": true,
+          "media_assets": {
+            "images": [
+              {
+                "id": "3_2097786414796861440",
+                "platform": "x",
+                "type": "photo",
+                "url": "https://pbs.twimg.com/media/HRzVoTSbcAAWpe5.jpg",
+                "width": 1200,
+                "height": 672
+              }
+            ],
+            "videos": [],
+            "articles": []
+          }
+        },
+        "has_article": false,
+        "has_media": false,
+        "has_event": false,
+        "has_hard_evidence": true,
+        "event_and_evidence": false,
+        "strong_signal": false,
+        "account_tier": "P0",
+        "social_score": 72,
+        "llm_core_fact": "OpenAI组织了250多人，使用其网络安全模型在自身数百个系统中发现并修复漏洞，并公开了相关架构、经验和用于构建“Defense Factory”的实践手册。",
+        "llm_event_type": "正式文档/安全实践发布",
+        "llm_confidence": 96,
+        "gate": "llm"
+      },
+      "socialText": "we used our models to find and fix critical vulnerabilities in our own systems, as part of a 250+ person effort within openai. playbooks/learnings/architecture which we hope can be helpful for others to make the most of the defenders' window: https://t.co/Lls5AnmKV2",
+      "eventPeers": [],
+      "qualityScore": 72.0
+    },
+    {
+      "recordId": "recvuMBkvfVuFe",
+      "sourceId": "social-media",
+      "title": "Announcing a solution to the Navier-Stokes problem, one of the seven Millenium Prize problem. Represents a major mile...",
+      "titleCn": "账号宣称 AI 模型解决纳维-斯托克斯千禧年大奖难题",
+      "source": "X · @gdb",
+      "url": "https://x.com/gdb/status/2097377042152972398",
+      "category": "其他",
+      "contentType": "社交媒体帖子",
+      "tier": "L4 补充源",
+      "priority": "P0",
+      "publishedDate": "2026-09-09",
+      "summary": "@gdb 宣布一项针对纳维-斯托克斯问题的解决方案，并称其是 AI、数学及科学发现的重要里程碑。帖子未提供模型名称、完整证明、论文链接或独立验证结果。",
+      "why": "若该成果经严格数学审查成立，将对非线性偏微分方程研究及 AI 辅助科学发现产生重大影响。",
+      "impact": 100,
+      "novelty": 98,
+      "actionability": 38,
+      "urgency": "高",
+      "tags": [
+        "AI",
+        "推理",
+        "其他"
+      ],
+      "imageUrl": "",
+      "mediaAssets": {
+        "images": [],
+        "videos": []
+      },
+      "topComments": [],
+      "deepAnalysis": "【帖子信号】\n@gdb 明确宣称已有一项针对纳维-斯托克斯问题的“solution”，并将其称为七个千禧年大奖难题之一的解决成果。帖子表示该成果是 AI 与数学的重要里程碑，可能预示科学发现的复兴；还称“该模型”生成的知识有望帮助社区理解用于描述大量物理世界现象的非线性偏微分方程。但原文没有披露模型名称、技术路线、证明全文、论文链接、作者名单或验证机构。\n\n【价值与边界】\n已披露事实仅限于账号作出上述宣布及其影响判断。若完整证明经专家严格核验成立，其数学与科学意义将极高，也可能成为 AI 参与高难度理论研究的重要案例；但目前无法从原文判断解决的是完整问题、特定条件下的变体，还是辅助性结果，也不能确认其正确性与奖项认可状态。\n\n【跟进行动】\n1. 查找后续论文、证明全文、模型说明及可访问链接。2. 核对研究对象是否与千禧年大奖问题的正式表述完全一致。3. 跟踪偏微分方程专家、同行评审或权威机构的独立验证意见。",
+      "editorialStructure": "",
+      "socialMetrics": {
+        "platform": "x",
+        "post_id": "2097377042152972398",
+        "canonical_post_id": "2097377042152972398",
+        "conversation_id": "2097377042152972398",
+        "account": "gdb",
+        "account_name": "Greg Brockman",
+        "account_avatar": "https://pbs.twimg.com/profile_images/1347621377503711233/bHg3ipfD_400x400.jpg",
+        "account_verified": true,
+        "followers": 1042208,
+        "likes": 7639,
+        "replies": 336,
+        "reposts": 560,
+        "quotes": 97,
+        "bookmarks": 1262,
+        "impressions": 945555,
+        "engagement": 10887,
+        "is_retweet": false,
+        "is_reply": false,
+        "is_quote": true,
+        "thread_count": 1,
+        "thread_segments": [],
+        "edit_history_tweet_ids": [
+          "2097377042152972398"
+        ],
+        "own_text": "Announcing a solution to the Navier-Stokes problem, one of the seven Millenium Prize problem. Represents a major milestone for both AI and mathematics, as well as pointing to an upcoming renaissance in scientific discovery. Hoping that the knowledge created by this model can help the community better understand non-linear PDEs, which are used to model much of the physical world.",
+        "own_chars": 381,
+        "quoted_text": "We’re sharing a solution to the Navier-Stokes Millennium Prize Problem, one of the deepest problems at the frontier of mathematics. The proof was produced by a group of agents, using an OpenAI next-generation model significantly more capable than GPT-6 Astra. The problem concerns whether the description of smooth three-dimensional fluid motion modeled by the Navier-Stokes equations can break down. It has remained unresolved for roughly 90 years.",
+        "quoted_chars": 449,
+        "quoted": {
+          "post_id": "2097374640582668336",
+          "text": "We’re sharing a solution to the Navier-Stokes Millennium Prize Problem, one of the deepest problems at the frontier of mathematics.\n\nThe proof was produced by a group of agents, using an OpenAI next-generation model significantly more capable than GPT-6 Astra.\n\nThe problem concerns whether the description of smooth three-dimensional fluid motion modeled by the Navier-Stokes equations can break down. It has remained unresolved for roughly 90 years.",
+          "created_at": "2026-09-08T17:20:56.000Z",
+          "account": "openai",
+          "account_name": "OpenAI",
+          "avatar": "https://pbs.twimg.com/profile_images/1885410181409820672/ztsaR0JW_400x400.jpg",
+          "verified": true,
+          "media_assets": {
+            "images": [
+              {
+                "id": "3_2097361302931087365",
+                "platform": "x",
+                "type": "photo",
+                "url": "https://pbs.twimg.com/media/HRtS_iLboAUUlYv.jpg",
+                "width": 1254,
+                "height": 1254
+              }
+            ],
+            "videos": [],
+            "articles": []
+          }
+        },
+        "has_article": true,
+        "has_media": false,
+        "has_event": true,
+        "has_hard_evidence": true,
+        "event_and_evidence": true,
+        "strong_signal": true,
+        "account_tier": "P0",
+        "social_score": 85,
+        "gate": "direct"
+      },
+      "socialText": "Announcing a solution to the Navier-Stokes problem, one of the seven Millenium Prize problem.\n\nRepresents a major milestone for both AI and mathematics, as well as pointing to an upcoming renaissance in scientific discovery.\n\nHoping that the knowledge created by this model can help the community better understand non-linear PDEs, which are used to model much of the physical world.",
+      "eventPeers": [],
+      "qualityScore": 85.0
+    },
+    {
+      "recordId": "recvuMBkvf2oNl",
+      "sourceId": "social-media",
+      "title": "team has been cooking https://t.co/tZQcsNYRaM",
+      "titleCn": "团队称正在推进项目并发布链接",
+      "source": "X · @gdb",
+      "url": "https://x.com/gdb/status/2097449751473979626",
+      "category": "其他",
+      "contentType": "社交媒体帖子",
+      "tier": "L4 补充源",
+      "priority": "P0",
+      "publishedDate": "2026-09-09",
+      "summary": "账号仅表示“团队一直在忙于推进”，并附上链接 https://t.co/tZQcsNYRaM。原文未说明项目名称、产品内容、发布时间或技术细节。",
+      "why": "该帖可能是在预告团队的新进展，但现有文字不足以判断其具体价值与影响。",
+      "impact": 15,
+      "novelty": 10,
+      "actionability": 20,
+      "urgency": "低",
+      "tags": [
+        "产品",
+        "其他"
+      ],
+      "imageUrl": "",
+      "mediaAssets": {
+        "images": [],
+        "videos": []
+      },
+      "topComments": [],
+      "deepAnalysis": "【帖子信号】\n@gdb 明确披露的内容只有“team has been cooking”，可理解为团队近期一直在推进某项工作，并给出短链接 https://t.co/tZQcsNYRaM。帖子未直接披露项目名称、模型能力、产品形态、发布时间、性能数字、定价或开放范围。\n\n【价值与边界】\n这是一条带有预告意味的弱信号，可能指向产品发布、功能更新或团队成果，但这些解释均无法从现有原文确认。已披露事实仅限于团队正在推进工作以及存在一个外部链接；链接落地页的内容、是否与 AI 有关、是否已经公开发布及其实际影响均尚待验证。因此不应据此推断具体模型、技术突破或商业计划。\n\n【跟进行动】\n1. 展开短链接并核验最终域名、页面标题、发布日期及发布主体。\n2. 检查该账号前后帖和官方渠道，确认是否存在对应公告、演示或技术文档。\n3. 若链接指向产品或研究成果，再依据可访问性、技术指标与第三方验证重新评估影响和可操作性。",
+      "editorialStructure": "",
+      "socialMetrics": {
+        "platform": "x",
+        "post_id": "2097449751473979626",
+        "canonical_post_id": "2097449751473979626",
+        "conversation_id": "2097449751473979626",
+        "account": "gdb",
+        "account_name": "Greg Brockman",
+        "account_avatar": "https://pbs.twimg.com/profile_images/1347621377503711233/bHg3ipfD_400x400.jpg",
+        "account_verified": true,
+        "followers": 1042208,
+        "likes": 852,
+        "replies": 45,
+        "reposts": 39,
+        "quotes": 2,
+        "bookmarks": 44,
+        "impressions": 60569,
+        "engagement": 1068,
+        "is_retweet": false,
+        "is_reply": false,
+        "is_quote": true,
+        "thread_count": 1,
+        "thread_segments": [],
+        "edit_history_tweet_ids": [
+          "2097449751473979626"
+        ],
+        "own_text": "team has been cooking",
+        "own_chars": 21,
+        "quoted_text": "More exciting news from : GPT-Image-2.5-Sunburst is and Flare is across the Text-to-Image Arena, the Image Edit Arena, and the Multi-Image Edit Arena! Both releases are significant improvements over GPT-Image-2 (medium) in all 3 Arenas. Sunburst delivers the highest quality generation, while Flare still improves upon GPT Image 2 at significantly faster speeds. The increase by points are (Sunburst | Flare): - Text-to-Image: +40 | +18 pts - Single-Image Edit: +59 | +30 pts - Multi-Image Edit: +81 | +47 pts Across all categories like 3D Imaging & Modeling, Art and more, Sunburst is and Flare holds in all three Arenas. Congrats to the team at !",
+        "quoted_chars": 648,
+        "quoted": {
+          "post_id": "2097400515546255754",
+          "text": "More exciting news from @OpenAI: GPT-Image-2.5-Sunburst is #1 and Flare is #2 across the Text-to-Image Arena, the Image Edit Arena, and the Multi-Image Edit Arena!\n\nBoth releases are significant improvements over GPT-Image-2 (medium) in all 3 Arenas. Sunburst delivers the highest quality generation, while Flare still improves upon GPT Image 2 at significantly faster speeds.\n\nThe increase by points are (Sunburst | Flare):\n- Text-to-Image: +40 | +18 pts\n- Single-Image Edit: +59 | +30 pts\n- Multi-Image Edit: +81 | +47 pts\n\nAcross all categories like 3D Imaging & Modeling, Art and more, Sunburst is #1 and Flare holds #2 in all three Arenas.\n\nCongrats to the team at @OpenAI!",
+          "created_at": "2026-09-08T19:03:45.000Z",
+          "account": "arena",
+          "account_name": "Arena.ai",
+          "avatar": "https://pbs.twimg.com/profile_images/2017015061454438400/iNKfXZ_I_400x400.jpg",
+          "verified": true,
+          "media_assets": {
+            "images": [
+              {
+                "id": "3_2097400433308516352",
+                "platform": "x",
+                "type": "photo",
+                "url": "https://pbs.twimg.com/media/HRt2lOMawAATzzN.jpg",
+                "width": 4088,
+                "height": 4088
+              },
+              {
+                "id": "3_2097400443127361536",
+                "platform": "x",
+                "type": "photo",
+                "url": "https://pbs.twimg.com/media/HRt2lyxacAAdgOR.jpg",
+                "width": 4088,
+                "height": 4088
+              },
+              {
+                "id": "3_2097400451893481472",
+                "platform": "x",
+                "type": "photo",
+                "url": "https://pbs.twimg.com/media/HRt2mTba0AA0-y2.jpg",
+                "width": 4088,
+                "height": 4088
+              }
+            ],
+            "videos": [],
+            "articles": []
+          }
+        },
+        "has_article": false,
+        "has_media": false,
+        "has_event": true,
+        "has_hard_evidence": true,
+        "event_and_evidence": true,
+        "strong_signal": true,
+        "account_tier": "P0",
+        "social_score": 73,
+        "gate": "direct"
+      },
+      "socialText": "team has been cooking https://t.co/tZQcsNYRaM",
+      "eventPeers": [],
+      "qualityScore": 73.0
+    },
+    {
+      "recordId": "recvuMBkvfci5N",
+      "sourceId": "social-media",
+      "title": "ChatGPT Images 2.5 for fashion: https://t.co/6dZSSPTA0v",
+      "titleCn": "ChatGPT Images 2.5 面向时尚场景",
+      "source": "X · @gdb",
+      "url": "https://x.com/gdb/status/2097449272996253981",
+      "category": "其他",
+      "contentType": "社交媒体帖子",
+      "tier": "L4 补充源",
+      "priority": "P0",
+      "publishedDate": "2026-09-09",
+      "summary": "@gdb 发布“ChatGPT Images 2.5 for fashion”并附外部链接，但给定原文未披露功能、模型规格、案例或上线信息。现阶段只能确认该帖子将 ChatGPT Images 2.5 与时尚场景关联。",
+      "why": "该信号可能指向生成式图像在时尚行业的产品化应用，但信息不足，需打开链接核验具体内容。",
+      "impact": 45,
+      "novelty": 38,
+      "actionability": 25,
+      "urgency": "低",
+      "tags": [
+        "AI",
+        "多模态",
+        "产品"
+      ],
+      "imageUrl": "",
+      "mediaAssets": {
+        "images": [],
+        "videos": []
+      },
+      "topComments": [],
+      "deepAnalysis": "【帖子信号】\n账号 @gdb 明确发布了“ChatGPT Images 2.5 for fashion”这一表述，并附上链接 https://t.co/6dZSSPTA0v。给定原文没有提供图片生成能力、模型版本差异、时尚行业用例、价格、开放范围、发布时间或性能数据，也无法仅凭帖文判断“2.5”是正式产品版本、功能更新还是内容标题。\n\n【价值与边界】\n已披露事实仅限于 ChatGPT Images 2.5 与 fashion 场景被同时提及，这可能涉及服装设计、视觉创意或营销素材等方向，但这些具体用途均未在原文中得到证实。其行业影响取决于链接内容是否展示可用产品、真实案例及相较既有图像能力的改进，目前不能据此断言已经发布或形成商业落地。\n\n【跟进行动】\n1. 打开短链接，核验落地页主体、发布日期及“2.5”的正式定义。\n2. 检查是否提供生成样例、提示词、编辑能力或可重复测试入口。\n3. 对照官方产品文档，确认可用地区、账号范围、价格与版权说明。",
+      "editorialStructure": "",
+      "socialMetrics": {
+        "platform": "x",
+        "post_id": "2097449272996253981",
+        "canonical_post_id": "2097449272996253981",
+        "conversation_id": "2097449272996253981",
+        "account": "gdb",
+        "account_name": "Greg Brockman",
+        "account_avatar": "https://pbs.twimg.com/profile_images/1347621377503711233/bHg3ipfD_400x400.jpg",
+        "account_verified": true,
+        "followers": 1042208,
+        "likes": 557,
+        "replies": 46,
+        "reposts": 15,
+        "quotes": 1,
+        "bookmarks": 80,
+        "impressions": 94905,
+        "engagement": 761,
+        "is_retweet": false,
+        "is_reply": false,
+        "is_quote": true,
+        "thread_count": 1,
+        "thread_segments": [],
+        "edit_history_tweet_ids": [
+          "2097449272996253981"
+        ],
+        "own_text": "ChatGPT Images 2.5 for fashion:",
+        "own_chars": 31,
+        "quoted_text": ". Images 2.5 is a major leap for fashion applications. The previous model was great at staying true to an original design, without turning it into something you’d already seen on a runway. But the results sometimes looked flat. 2.5 brings those designs to life!",
+        "quoted_chars": 261,
+        "quoted": {
+          "post_id": "2097414587197075837",
+          "text": ".@ChatGPT Images 2.5 is a major leap for fashion applications.\n\nThe previous model was great at staying true to an original design, without turning it into something you’d already seen on a runway. But the results sometimes looked flat.\n\n2.5 brings those designs to life! https://t.co/b9AtvNyJrB",
+          "created_at": "2026-09-08T19:59:40.000Z",
+          "account": "yanabana",
+          "account_name": "Yana Welinder",
+          "avatar": "https://pbs.twimg.com/profile_images/1865641642788831232/CIOwDhb9_400x400.jpg",
+          "verified": false,
+          "media_assets": {
+            "images": [
+              {
+                "id": "3_2097413931845484544",
+                "platform": "x",
+                "type": "photo",
+                "url": "https://pbs.twimg.com/media/HRuC28KbAAAOazM.jpg",
+                "width": 1254,
+                "height": 1254
+              },
+              {
+                "id": "3_2097414055782998016",
+                "platform": "x",
+                "type": "photo",
+                "url": "https://pbs.twimg.com/media/HRuC-J3bYAAlcda.jpg",
+                "width": 1254,
+                "height": 1254
+              },
+              {
+                "id": "3_2097414123592224768",
+                "platform": "x",
+                "type": "photo",
+                "url": "https://pbs.twimg.com/media/HRuDCGeaEAANZl-.jpg",
+                "width": 1254,
+                "height": 1254
+              }
+            ],
+            "videos": [],
+            "articles": []
+          }
+        },
+        "has_article": false,
+        "has_media": false,
+        "has_event": false,
+        "has_hard_evidence": true,
+        "event_and_evidence": false,
+        "strong_signal": false,
+        "account_tier": "P0",
+        "social_score": 56,
+        "llm_core_fact": "ChatGPT Images 2.5 针对时尚应用提升了图像表现力，能够在忠实保留原创设计的同时，生成比上一版本更立体、更生动的效果。",
+        "llm_event_type": "模型能力更新",
+        "llm_confidence": 0,
+        "gate": "llm"
+      },
+      "socialText": "ChatGPT Images 2.5 for fashion: https://t.co/6dZSSPTA0v",
+      "eventPeers": [],
+      "qualityScore": 56.0
+    },
+    {
+      "recordId": "recvuBxNAJJOjx",
+      "sourceId": "social-media",
+      "title": "Astra for spectrogram -&gt; sound identification https://t.co/zyOFJE25M1",
+      "titleCn": "Astra：从声谱图识别声音",
+      "source": "X · @gdb",
+      "url": "https://x.com/gdb/status/2097055132009861234",
+      "category": "其他",
+      "contentType": "社交媒体帖子",
+      "tier": "L4 补充源",
+      "priority": "P0",
+      "publishedDate": "2026-09-08",
+      "summary": "X账号@​gdb发布信息，指向名为“Astra”的声谱图到声音识别项目或演示。原文仅提供标题和链接，未披露其具体技术实现、性能指标、代码或应用范围。",
+      "why": "该信息可能涉及音频理解与声谱图识别，但目前缺乏正文细节，实际创新性和可用性尚无法判断。",
+      "impact": 35,
+      "novelty": 40,
+      "actionability": 25,
+      "urgency": "低",
+      "tags": [
+        "AI",
+        "多模态"
+      ],
+      "imageUrl": "",
+      "mediaAssets": {
+        "images": [],
+        "videos": []
+      },
+      "topComments": [],
+      "deepAnalysis": "【帖子信号】账号@​gdb明确发布了标题“Astra for spectrogram -> sound identification”，并附有链接https://t.co/zyOFJE25M1。现有原文证据仅包含项目名“Astra”及“从声谱图到声音识别”的方向性描述，没有给出模型架构、训练数据、识别类别、准确率、延迟、演示结果、代码仓库或许可证信息。\n\n【价值与边界】如果该项目能够将声谱图有效映射到声音类别或语义标签，可能对音频检索、环境声音监测和多模态理解具有潜在价值。但“for”可能表示工具、实验或演示，不能据此确认其已形成可用产品，也不能确认是否使用大模型、是否支持实时推理或是否具备超越现有方法的效果。所有性能、创新性和可复现性判断均有待链接内容验证。\n\n【跟进行动】1. 打开链接核验Astra的项目性质、作者说明、演示和技术文档。2. 查找代码、模型权重、数据集及许可证，以评估可复现性。3. 若存在实验结果，重点核对测试集、评价指标、基线方法和音频类别覆盖范围。",
+      "editorialStructure": "",
+      "socialMetrics": {
+        "platform": "x",
+        "post_id": "2097055132009861234",
+        "canonical_post_id": "2097055132009861234",
+        "conversation_id": "2097055132009861234",
+        "account": "gdb",
+        "account_name": "Greg Brockman",
+        "account_avatar": "https://pbs.twimg.com/profile_images/1347621377503711233/bHg3ipfD_400x400.jpg",
+        "account_verified": true,
+        "followers": 1042208,
+        "likes": 897,
+        "replies": 67,
+        "reposts": 39,
+        "quotes": 9,
+        "bookmarks": 214,
+        "impressions": 89879,
+        "engagement": 1341,
+        "is_retweet": false,
+        "is_reply": false,
+        "is_quote": true,
+        "thread_count": 1,
+        "thread_segments": [],
+        "edit_history_tweet_ids": [
+          "2097055132009861234"
+        ],
+        "own_text": "Astra for spectrogram -&gt; sound identification",
+        "own_chars": 48,
+        "quoted_text": "So Astra is able to identify sounds from mel spectrograms zero-shot. I don't think we've scratched the surface of what this model can do (and this is light reasoning btw)",
+        "quoted_chars": 170,
+        "quoted": {
+          "post_id": "2096892510241268094",
+          "text": "So Astra is able to identify sounds from mel spectrograms\n\nzero-shot.\n\nI don't think we've scratched the surface of what this model can do (and this is light reasoning btw) https://t.co/eYQecO55sD",
+          "created_at": "2026-09-07T09:25:07.000Z",
+          "account": "maxxrubin_",
+          "account_name": "Max",
+          "avatar": "https://pbs.twimg.com/profile_images/2045073530128371712/BPzEJom8_400x400.jpg",
+          "verified": false,
+          "media_assets": {
+            "images": [
+              {
+                "id": "3_2096889517072691200",
+                "platform": "x",
+                "type": "photo",
+                "url": "https://pbs.twimg.com/media/HRml5-5bsAA4fiC.jpg",
+                "width": 1390,
+                "height": 1008
+              },
+              {
+                "id": "3_2096889532398628864",
+                "platform": "x",
+                "type": "photo",
+                "url": "https://pbs.twimg.com/media/HRml63_a8AAfk-i.jpg",
+                "width": 1396,
+                "height": 1860
+              }
+            ],
+            "videos": [
+              {
+                "id": "13_2096890488947441665",
+                "platform": "x",
+                "type": "video",
+                "url": "https://pbs.twimg.com/amplify_video_thumb/2096890488947441665/img/q8a9uEj2JJVFQJ0C.jpg",
+                "width": 1920,
+                "height": 768,
+                "playbackUrl": "https://video.twimg.com/amplify_video/2096890488947441665/vid/avc1/1920x768/ET6U4bYnWJaYHY4m.mp4",
+                "thumbnailUrl": "https://pbs.twimg.com/amplify_video_thumb/2096890488947441665/img/q8a9uEj2JJVFQJ0C.jpg",
+                "durationSec": 5.2
+              },
+              {
+                "id": "13_2096890499202494464",
+                "platform": "x",
+                "type": "video",
+                "url": "https://pbs.twimg.com/amplify_video_thumb/2096890499202494464/img/GvUdx74rO3kUs22x.jpg",
+                "width": 1920,
+                "height": 768,
+                "playbackUrl": "https://video.twimg.com/amplify_video/2096890499202494464/vid/avc1/1920x768/SPW4qxu3u-EI-ED_.mp4",
+                "thumbnailUrl": "https://pbs.twimg.com/amplify_video_thumb/2096890499202494464/img/GvUdx74rO3kUs22x.jpg",
+                "durationSec": 8.8
+              }
+            ],
+            "articles": []
+          }
+        },
+        "has_article": false,
+        "has_media": false,
+        "has_event": false,
+        "has_hard_evidence": false,
+        "event_and_evidence": false,
+        "strong_signal": false,
+        "account_tier": "P0",
+        "social_score": 64,
+        "llm_core_fact": "Astra 能够对梅尔频谱图中的声音进行零样本识别。",
+        "llm_event_type": "模型能力",
+        "llm_confidence": 0,
+        "gate": "llm"
+      },
+      "socialText": "Astra for spectrogram -> sound identification https://t.co/zyOFJE25M1",
+      "eventPeers": [],
+      "qualityScore": 64.0
+    },
+    {
+      "recordId": "recvuBxNAJ6Bvy",
+      "sourceId": "social-media",
+      "title": "ChatGPT Work for your personal writing style: https://t.co/IvKKSMeAoM",
+      "titleCn": "ChatGPT Work 支持个人写作风格",
+      "source": "X · @gdb",
+      "url": "https://x.com/gdb/status/2097082100268802188",
+      "category": "其他",
+      "contentType": "社交媒体帖子",
+      "tier": "L4 补充源",
+      "priority": "P0",
+      "publishedDate": "2026-09-08",
+      "summary": "X 账号 @gdb 分享了题为“ChatGPT Work for your personal writing style”的链接。原文未提供产品功能、发布时间、适用范围或效果数据。",
+      "why": "该信息指向 ChatGPT Work 可能围绕个性化写作风格提供能力，但具体实现与可用性尚未证实。",
+      "impact": 58,
+      "novelty": 42,
+      "actionability": 35,
+      "urgency": "低",
+      "tags": [
+        "AI",
+        "LLM",
+        "产品"
+      ],
+      "imageUrl": "",
+      "mediaAssets": {
+        "images": [],
+        "videos": []
+      },
+      "topComments": [],
+      "deepAnalysis": "【帖子信号】\nX 账号 @gdb 发布了一条极简帖文，标题为“ChatGPT Work for your personal writing style”，并附带短链接线索：https://t.co/IvKKSMeAoM。帖文本身明确传递的只有 ChatGPT Work 与“个人写作风格”相关；没有披露模型名称、功能入口、定价、上线地区、用户范围、技术机制或评测结果。\n\n【价值与边界】\n若链接内容确实对应正式产品信息，个性化写作风格可能提升职场写作、文案协作和知识工作中的一致性，并减少用户反复提示风格偏好的成本。其潜在价值取决于系统是否可稳定学习、保存并受控调用用户风格。当前可确认的事实仅是该账号分享了相关标题和链接；尚待验证的信息包括该能力是否由 OpenAI 正式发布、是否属于 ChatGPT Work 的独立功能、如何处理用户文本与隐私、是否支持团队级治理，以及输出风格是否可被可靠评估。\n\n【跟进行动】\n1. 打开并核验短链接的最终落地页、发布主体、发布日期及原始产品说明。\n2. 检查是否有官方帮助文档、定价页或管理员文档，确认适用套餐、地区与数据控制选项。\n3. 使用同一组写作样本测试风格一致性、事实保真度和可撤销性，并与通用提示词方案对比。",
+      "editorialStructure": "",
+      "socialMetrics": {
+        "platform": "x",
+        "post_id": "2097082100268802188",
+        "canonical_post_id": "2097082100268802188",
+        "conversation_id": "2097082100268802188",
+        "account": "gdb",
+        "account_name": "Greg Brockman",
+        "account_avatar": "https://pbs.twimg.com/profile_images/1347621377503711233/bHg3ipfD_400x400.jpg",
+        "account_verified": true,
+        "followers": 1042208,
+        "likes": 888,
+        "replies": 68,
+        "reposts": 33,
+        "quotes": 8,
+        "bookmarks": 197,
+        "impressions": 96744,
+        "engagement": 1303,
+        "is_retweet": false,
+        "is_reply": false,
+        "is_quote": true,
+        "thread_count": 1,
+        "thread_segments": [],
+        "edit_history_tweet_ids": [
+          "2097082100268802188"
+        ],
+        "own_text": "ChatGPT Work for your personal writing style:",
+        "own_chars": 45,
+        "quoted_text": "ChatGPT Work can now pick up on what makes your writing sound like… you. Your favorite phrases. Your very specific sign-off. your capitalizations quirks. Connect the tools you use every day, like Gmail, Google Drive, Slack, and SharePoint, and ChatGPT Work will learn your writing style from your emails, messages, and files—and carry it into whatever you write next.",
+        "quoted_chars": 367,
+        "quoted": {
+          "post_id": "2097018264048251309",
+          "text": "ChatGPT Work can now pick up on what makes your writing sound like… you. Your favorite phrases. Your very specific sign-off. your capitalizations quirks.\n\nConnect the tools you use every day, like Gmail, Google Drive, Slack, and SharePoint, and ChatGPT Work will learn your writing style from your emails, messages, and files—and carry it into whatever you write next.",
+          "created_at": "2026-09-07T17:44:49.000Z",
+          "account": "chatgpt",
+          "account_name": "ChatGPT",
+          "avatar": "https://pbs.twimg.com/profile_images/2081980424666935296/qU5G7mQg_400x400.jpg",
+          "verified": true,
+          "media_assets": {
+            "images": [
+              {
+                "id": "3_2097017069208539136",
+                "platform": "x",
+                "type": "photo",
+                "url": "https://pbs.twimg.com/media/HRoZ6fobEAAUhcN.jpg",
+                "width": 3840,
+                "height": 2160
+              }
+            ],
+            "videos": [],
+            "articles": []
+          }
+        },
+        "has_article": false,
+        "has_media": false,
+        "has_event": false,
+        "has_hard_evidence": false,
+        "event_and_evidence": false,
+        "strong_signal": false,
+        "account_tier": "P0",
+        "social_score": 55,
+        "llm_core_fact": "ChatGPT Work 新增了根据用户连接的 Gmail、Google Drive、Slack 和 SharePoint 中的邮件、消息及文件学习个人写作风格，并将其应用于后续写作的能力。",
+        "llm_event_type": "产品功能更新",
+        "llm_confidence": 0,
+        "gate": "llm"
+      },
+      "socialText": "ChatGPT Work for your personal writing style: https://t.co/IvKKSMeAoM",
+      "eventPeers": [],
+      "qualityScore": 55.0
+    }
+  ],
+  "briefRecordId": "recvuMNIcwwagp",
+  "briefTableId": "tblL72CwS6RcQ41Z"
+}

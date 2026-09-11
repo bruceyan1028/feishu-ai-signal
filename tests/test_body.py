@@ -252,6 +252,31 @@ class ScrapeParagraphTest(unittest.TestCase):
         self.assertEqual(links[0]["title"], "How Claude's text watermark works")
         self.assertEqual(links[0]["published_raw"], "Aug 14, 2026")
 
+    def test_anthropic_news_merges_featured_grid_and_news_table(self):
+        html = """
+        <section class="FeaturedGrid">
+          <a href="https://www.anthropic.com/threat-intelligence-report-september-2026"
+             class="FeaturedGrid-module__sideLink FeaturedGrid-module__gridItem">
+            <time>Sep 10, 2026</time><h4>Detecting and countering misuse of AI</h4>
+          </a>
+          <a href="/claude-fable-and-mythos-5-1"
+             class="FeaturedGrid-module__gridItem FeaturedGrid-module__featured">
+            <time>Sep 1, 2026</time><h2>Introducing Claude Fable 5.1</h2>
+          </a>
+        </section>
+        <div class="PublicationList"><ul>
+          <li><a href="/news/enterprise-frontier-safeguards" class="PublicationList-module__listItem">
+            <time>Sep 1, 2026</time><span class="title">Developing Enterprise Frontier Safeguards</span>
+          </a></li>
+        </ul></div>
+        """
+        feed = {"id": "anthropic-news", "url": "https://www.anthropic.com/news", "max_articles": 20}
+        links = scrape._extract_links_for_feed(html, feed, use_jina=False)
+        self.assertEqual(len(links), 3)
+        self.assertEqual(links[0]["title"], "Detecting and countering misuse of AI")
+        self.assertEqual(links[0]["published_raw"], "Sep 10, 2026")
+        self.assertTrue(any("claude-fable-and-mythos-5-1" in item["url"] for item in links))
+
     def test_link_path_include_relaxes_list_prefix_depth(self):
         """聚合列表页（/latest）链到其它栏目时，白名单应放行，不再要求 /latest/ 前缀。"""
         html = """

@@ -272,6 +272,7 @@ def load_recent_briefs(
 ) -> list[dict[str, Any]]:
     table_id = config.FEISHU_BRIEF_TABLE_ID or feishu.ensure_daily_brief_table(token)
     brief_records = feishu.read_all_records_with_ids(token, table_id)
+    technical_source_ids = daily._technical_source_ids(feishu.read_param_records(token))
     entries = load_entry_pool(token) if entries is None else entries
     briefs: list[dict[str, Any]] = []
     for record in brief_records:
@@ -298,12 +299,19 @@ def load_recent_briefs(
                 if _within_source_window(signal, date, lookback_hours)
             ]
         signals = cluster.enrich_with_pool(signals, pool, threshold=0.85)
-        paper_signals = [
-            signal for signal in signals if signal.get("contentType") == "论文"
+        technical_signals = [
+            signal
+            for signal in signals
+            if signal.get("contentType") not in {"视频", "播客", daily.SOCIAL_CONTENT_TYPE}
+            and (
+                signal.get("sourceId") in technical_source_ids
+            or signal.get("contentType") in {"论文", "Github热榜"}
+            )
         ]
-        signals = [
-            signal for signal in signals if signal.get("contentType") != "论文"
-        ]
+        video_signals = [signal for signal in signals if signal.get("contentType") == "视频"]
+        podcast_signals = [signal for signal in signals if signal.get("contentType") == "播客"]
+        independent_ids = {id(signal) for signal in technical_signals + video_signals + podcast_signals}
+        signals = [signal for signal in signals if id(signal) not in independent_ids]
         briefs.append(
             {
                 "date": date,
@@ -311,7 +319,9 @@ def load_recent_briefs(
                 "intro": str(daily.scalar(fields.get("导语")) or ""),
                 "bullets": _json_cell(fields.get("关键要点"), []),
                 "signals": signals,
-                "paperSignals": paper_signals,
+                "technicalSignals": technical_signals,
+                "videoSignals": video_signals,
+                "podcastSignals": podcast_signals,
                 "socialPosts": recent_social_posts(entries, date),
                 "briefRecordId": str(record.get("record_id") or ""),
                 "briefTableId": table_id,
@@ -655,8 +665,12 @@ def build_site(
     mirror_social_videos(briefs, social_media_dir)
     rendered: dict[str, list[dict[str, str]]] = {}
     for brief in briefs:
-        published_signals = (brief.get("signals") or []) + (
-            brief.get("paperSignals") or []
+        published_signals = (
+            (brief.get("signals") or [])
+            + (brief.get("technicalSignals") or [])
+            + (brief.get("paperSignals") or [])  # 兼容历史输入文件
+            + (brief.get("videoSignals") or [])
+            + (brief.get("podcastSignals") or [])
         )
         for signal in published_signals:
             pdf_url = str(signal.get("pdfUrl") or "")
@@ -829,9 +843,10 @@ def run() -> int:
         current["signals"] = cluster.enrich_with_pool(
             current.get("signals") or [], pool, threshold=0.85
         )
-        current["paperSignals"] = cluster.enrich_with_pool(
-            current.get("paperSignals") or [], pool, threshold=0.85
-        )
+        for section in ("technicalSignals", "videoSignals", "podcastSignals"):
+            current[section] = cluster.enrich_with_pool(
+                current.get(section) or [], pool, threshold=0.85
+            )
         briefs = [current, *[item for item in briefs if item["date"] != current["date"]]][:7]
     curate_web_media(briefs)
     site = build_site(briefs, args.site_dir, params=params)

@@ -773,15 +773,16 @@
   },
   {
    "dedup_key": "normalize(url)",
-   "dimension": "创业融资并购",
+   "dimension": "中文媒体",
    "endpoint": {
-    "link": "https://36kr.com/feed",
-    "text": "https://36kr.com/feed"
+    "link": "https://36kr.com/",
+    "text": "https://36kr.com/"
    },
    "fetch_method": "Bridge",
-   "keyword_regex": "(funding|raised|series [a-d]|valuation|acqui|merger|ipo|invest|融资|并购|估值|startup)",
+   "keyword_regex": "(人工智能|智能体|大模型|大语言模型|生成式|多模态|具身|算力|算法|芯片|GPU|机器学习|深度学习|神经网络|强化学习|扩散模型|机器人|自动驾驶|开源模型|AIGC|LLM|GPT|Claude|Gemini|DeepSeek|文心|通义|千问|Kimi|豆包|Llama|OpenAI|Anthropic|英伟达|Transformer)",
    "lookback_window": "24h",
    "name": "36氪 AI",
+   "notes": "官网首页与 Feed 当前均返回反爬页；保留 experimental，待接入稳定 Bridge/RSSHub 后再启用。",
    "priority": "P0",
    "source_id": "36kr-ai",
    "status": "experimental",
@@ -1122,16 +1123,36 @@
   {
    "dimension": "中文媒体",
    "endpoint": {
-    "link": "https://www.qbitai.com/feed",
-    "text": "https://www.qbitai.com/feed"
+    "link": "https://www.qbitai.com/",
+    "text": "https://www.qbitai.com/"
    },
-   "fetch_method": "RSS",
+   "extra_config": "{\"force_direct\": true, \"link_path_include\": \"^/20\\\\d{2}/\\\\d{2}/\\\\d+\\\\.html$\", \"max_articles\": 12}",
+   "fetch_method": "Scrape",
    "keyword_regex": "(人工智能|智能体|大模型|大语言模型|生成式|多模态|具身|算力|算法|芯片|GPU|机器学习|深度学习|神经网络|强化学习|扩散模型|机器人|自动驾驶|开源模型|AIGC|LLM|GPT|Claude|Gemini|DeepSeek|文心|通义|千问|Kimi|豆包|Llama|OpenAI|Anthropic|英伟达|Transformer)",
    "lookback_window": "24h",
    "name": "量子位",
-   "notes": "A类·官网可抓(拟走Scrape),不必依赖微信。AI产业报道",
+   "notes": "官网 WordPress 可直连；Feed 返回 403，改为直连首页抽取文章。",
    "priority": "P1",
    "source_id": "qbitai",
+   "status": "active",
+   "tier": "L3",
+   "来源类型": "公众号"
+  },
+  {
+   "dedup_key": "normalize(url)",
+   "dimension": "中文媒体",
+   "endpoint": {
+    "link": "https://www.mittrchina.com/",
+    "text": "https://www.mittrchina.com/"
+   },
+   "extra_config": "{\"mittrchina_api\": true, \"max_articles\": 12}",
+   "fetch_method": "Scrape",
+   "keyword_regex": "(人工智能|智能体|大模型|大语言模型|生成式|多模态|具身|算力|算法|芯片|GPU|机器学习|深度学习|神经网络|强化学习|扩散模型|机器人|自动驾驶|开源模型|AIGC|LLM|GPT|Claude|Gemini|DeepSeek|文心|通义|千问|Kimi|豆包|Llama|OpenAI|Anthropic|英伟达|Transformer)",
+   "lookback_window": "24h",
+   "name": "MIT Technology Review China",
+   "notes": "官网为 SPA；通过公开 information API 获取最新文章及正文。",
+   "priority": "P1",
+   "source_id": "mittrchina",
    "status": "active",
    "tier": "L3",
    "来源类型": "公众号"
@@ -1227,24 +1248,6 @@
   {
    "dimension": "中文媒体",
    "endpoint": {
-    "link": "https://www.pingwest.com/",
-    "text": "https://www.pingwest.com/"
-   },
-   "extra_config": "{\"force_direct\": true, \"keyword_min_hits\": 2}",
-   "fetch_method": "Scrape",
-   "keyword_regex": "(人工智能|智能体|大模型|大语言模型|生成式|多模态|具身|算力|算法|芯片|GPU|机器学习|深度学习|神经网络|强化学习|扩散模型|机器人|自动驾驶|开源模型|AIGC|LLM|GPT|Claude|Gemini|DeepSeek|文心|通义|千问|Kimi|豆包|Llama|OpenAI|Anthropic|英伟达|Transformer)",
-   "lookback_window": "24h",
-   "name": "品玩 / 硅星人",
-   "notes": "A类·官网可抓,含硅星人。科技/AI",
-   "priority": "P1",
-   "source_id": "pingwest",
-   "status": "active",
-   "tier": "L3",
-   "来源类型": "公众号"
-  },
-  {
-   "dimension": "中文媒体",
-   "endpoint": {
     "link": "https://www.thepaper.cn/",
     "text": "https://www.thepaper.cn/"
    },
@@ -1310,24 +1313,6 @@
    "notes": "A类·财经深度(部分付费墙)·官网可抓",
    "priority": "P1",
    "source_id": "caixin",
-   "status": "active",
-   "tier": "L3",
-   "来源类型": "公众号"
-  },
-  {
-   "dimension": "中文媒体",
-   "endpoint": {
-    "link": "https://www.guokr.com/",
-    "text": "https://www.guokr.com/"
-   },
-   "extra_config": "{\"link_path_include\": \"^/article/\\\\d\", \"keyword_min_hits\": 2}",
-   "fetch_method": "Scrape",
-   "keyword_regex": "(人工智能|智能体|大模型|大语言模型|生成式|多模态|具身|算力|算法|芯片|GPU|机器学习|深度学习|神经网络|强化学习|扩散模型|机器人|自动驾驶|开源模型|AIGC|LLM|GPT|Claude|Gemini|DeepSeek|文心|通义|千问|Kimi|豆包|Llama|OpenAI|Anthropic|英伟达|Transformer)",
-   "lookback_window": "24h",
-   "name": "果壳",
-   "notes": "A类·科普/思想·官网可抓",
-   "priority": "P1",
-   "source_id": "guokr",
    "status": "active",
    "tier": "L3",
    "来源类型": "公众号"
@@ -2235,6 +2220,13 @@
    "备注": "中文媒体收敛：须命中 AI 关键词，排除股价/基金行情噪音",
    "必含关键词": "ai,人工智能,大模型,模型,llm,gpt,claude,gemini,deepseek,kimi,qwen,通义,豆包,智谱,glm,minimax,阶跃,文心,混元,智能体,agent,多模态,推理,算力,芯片,gpu,英伟达,nvidia,开源,机器学习,深度学习,transformer,具身,机器人,自动驾驶,aigc,生成式",
    "排除关键词": "etf,净流入,净流出,涨停,跌停,主力资金,北向资金,基金份额,申购,赎回,股价腰斩,市值蒸发,收盘,开盘,涨超,跌超,大盘,指数基金,券商,持仓,减持,增持,回购,财报预告,业绩快报",
+   "正文最小字数": 300
+  },
+  {
+   "source_id": "mittrchina",
+   "名称": "MIT Technology Review China",
+   "备注": "中文媒体收敛：仅保留 AI 相关报道",
+   "必含关键词": "ai,人工智能,大模型,模型,llm,gpt,claude,gemini,deepseek,kimi,qwen,通义,豆包,智能体,agent,多模态,推理,算力,芯片,gpu,英伟达,nvidia,开源,机器学习,深度学习,transformer,具身,机器人,自动驾驶,aigc,生成式",
    "正文最小字数": 300
   }
  ],

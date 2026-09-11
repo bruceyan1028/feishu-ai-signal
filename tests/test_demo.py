@@ -540,13 +540,12 @@ class DailyTests(unittest.TestCase):
             limit=50,
         )
         self.assertEqual(selected[0]["record_id"], "official")
-        # arXiv 条目进入独立论文板块，受论文上限约束但不占主候选名额。
+        # arXiv 条目进入独立技术开源板块，不占主候选名额。
         arxiv_selected = [item for item in selected if item["source_id"].startswith("arxiv-")]
-        self.assertEqual(len(arxiv_selected), config.DAILY_MAX_PAPERS)
-        self.assertLessEqual(len(arxiv_selected), config.MAX_ARXIV_ITEMS)
+        self.assertEqual(len(arxiv_selected), min(config.DAILY_TECHNICAL_LIMIT, config.MAX_ARXIV_ITEMS + 2))
         self.assertNotIn("scrape", [item["record_id"] for item in selected])
 
-    def test_github_hotlist_is_capped(self) -> None:
+    def test_github_hotlist_uses_independent_technical_limit(self) -> None:
         now = datetime.now(timezone.utc)
         stamp = int(now.timestamp() * 1000)
         records = [
@@ -559,7 +558,7 @@ class DailyTests(unittest.TestCase):
                     "链接": {"link": f"https://github.com/o/r{i}"},
                 },
             }
-            for i in range(config.DAILY_MAX_GITHUB + 5)
+            for i in range(config.DAILY_TECHNICAL_LIMIT + 5)
         ]
         selected = daily.select_candidates(
             records,
@@ -568,7 +567,7 @@ class DailyTests(unittest.TestCase):
             now=now,
             limit=50,
         )
-        self.assertEqual(len(selected), config.DAILY_MAX_GITHUB)
+        self.assertEqual(len(selected), min(len(records), config.DAILY_TECHNICAL_LIMIT))
 
     def test_papers_do_not_stop_collection_of_main_candidates(self) -> None:
         now = datetime.now(timezone.utc)
@@ -623,7 +622,7 @@ class DailyTests(unittest.TestCase):
                     if daily.content_type(item["fields"]) == "论文"
                 ]
             ),
-            config.DAILY_MAX_PAPERS,
+            config.DAILY_MAX_PAPERS + 2,
         )
 
     def test_single_source_cannot_flood_candidates(self) -> None:
@@ -668,17 +667,20 @@ class DailyTests(unittest.TestCase):
             "文章",
         )
 
-    def test_output_keeps_minimum_video_slot(self) -> None:
+    def test_independent_sections_do_not_consume_news_limit(self) -> None:
         ranked = [
             {"recordId": f"article-{index}", "contentType": ""}
             for index in range(5)
         ]
         ranked.append({"recordId": "video-1", "contentType": "视频"})
 
-        selected = daily.balance_output_signals(ranked, 3)
+        main, technical, video, podcast, social = daily.partition_output_signals(ranked, 3, set())
 
-        self.assertEqual(len(selected), 3)
-        self.assertIn("video-1", [item["recordId"] for item in selected])
+        self.assertEqual(len(main), 3)
+        self.assertEqual(technical, [])
+        self.assertEqual([item["recordId"] for item in video], ["video-1"])
+        self.assertEqual(podcast, [])
+        self.assertEqual(social, [])
 
     def test_papers_do_not_count_toward_daily_output_limit(self) -> None:
         ranked = [
@@ -689,14 +691,29 @@ class DailyTests(unittest.TestCase):
             for index in range(5)
         ]
 
-        main, papers, social = daily.partition_output_signals(ranked, 3)
+        main, technical, video, podcast, social = daily.partition_output_signals(ranked, 3, set())
 
         self.assertEqual(
             [item["recordId"] for item in main],
             ["article-0", "article-1", "article-2"],
         )
-        self.assertEqual(len(papers), config.DAILY_MAX_PAPERS)
+        self.assertEqual(len(technical), config.DAILY_MAX_PAPERS + 2)
+        self.assertEqual(video, [])
+        self.assertEqual(podcast, [])
         self.assertEqual(social, [])
+
+    def test_technical_candidates_ignore_source_priority(self) -> None:
+        now = datetime.now(timezone.utc)
+        stamp = int(now.timestamp() * 1000)
+        records = [
+            {"record_id": "p0", "fields": {"source_id": "tech-p0", "发布时间": stamp - 1, "质量分": 10}},
+            {"record_id": "p2", "fields": {"source_id": "tech-p2", "发布时间": stamp, "质量分": 90}},
+        ]
+        selected = daily.select_candidates(
+            records, {"tech-p0": "P0", "tech-p2": "P2"}, {"tech-p0", "tech-p2"},
+            now=now, technical_source_ids={"tech-p0", "tech-p2"},
+        )
+        self.assertEqual([item["record_id"] for item in selected], ["p2", "p0"])
 
     def test_candidate_does_not_use_collection_time_as_publish_time(self) -> None:
         now = datetime.now(timezone.utc)
@@ -948,14 +965,14 @@ class DeliveryTests(unittest.TestCase):
         self.assertIn("flushHeading", template)
         self.assertIn("pendingImages", template)
 
-    def test_papers_are_hidden_until_the_paper_section_is_selected(self) -> None:
+    def test_independent_sections_are_hidden_until_selected(self) -> None:
         template = Path("index.html").read_text(encoding="utf-8")
-        self.assertIn("...(data.paperSignals || [])", template)
-        self.assertIn("if(!f) return s.contentType !== '论文'", template)
-        self.assertIn("if(s.contentType === '论文') return f === '论文'", template)
-        self.assertIn("signals.filter(s => s.contentType !== '论文').slice(0,3)", template)
+        self.assertIn("data.technicalSignals || data.paperSignals || []", template)
+        self.assertIn("if(!f) return s.board === 'news'", template)
+        self.assertIn("if(f===TECHNICAL_FILTER) return s.board === 'technical'", template)
+        self.assertIn("signals.filter(s => s.board === 'news').slice(0,3)", template)
         self.assertIn("String(idx + 1).padStart(2,'0')", template)
-        self.assertIn("不计入日报 30 条", template)
+        self.assertIn("独立技术板块", template)
 
     def test_homepage_is_three_columns_with_data_on_both_sides(self) -> None:
         template = Path("index.html").read_text(encoding="utf-8")

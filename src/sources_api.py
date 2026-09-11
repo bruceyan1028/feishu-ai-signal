@@ -197,7 +197,6 @@ def create_source(body: dict[str, Any], site_dir: Path) -> dict[str, Any]:
         "dimension": str(body.get("type") or "其他").strip(),
         "来源类型": str(body.get("format") or "纯网页").strip(),
         "priority": source_view.CN_TO_PRIORITY.get(str(body.get("priority") or "中"), "P1"),
-        "tier": str(body.get("tier") or "L3").strip(),
         "lookback_window": str(body.get("lookback") or "7d").strip(),
         # 新接入的源一律先落 experimental：配置存在不等于链路已验证。
         "status": source_view.STATUS_EXPERIMENTAL,

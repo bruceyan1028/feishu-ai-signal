@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-10 11:55",
+  "generatedAt": "2026-09-11 11:39",
   "origin": "feishu",
   "briefWindowDays": 7,
   "sources": [
@@ -91,7 +91,7 @@
       "lookback": "24h",
       "last": "09-10 11:04",
       "perDay": 4,
-      "briefCount": 18
+      "briefCount": 14
     },
     {
       "id": "gcp-ai-infra",
@@ -145,7 +145,7 @@
       "lookback": "72h",
       "last": "09-10 11:04",
       "perDay": 0,
-      "briefCount": 3
+      "briefCount": 4
     },
     {
       "id": "hf-papers-trending",
@@ -289,7 +289,7 @@
       "lookback": "24h",
       "last": "09-10 11:04",
       "perDay": 1,
-      "briefCount": 2
+      "briefCount": 1
     },
     {
       "id": "youtube-nvidia",
@@ -469,7 +469,7 @@
       "lookback": "24h",
       "last": "09-10 11:04",
       "perDay": 2,
-      "briefCount": 8
+      "briefCount": 5
     },
     {
       "id": "whitehouse-tech-actions",
@@ -649,7 +649,7 @@
       "lookback": "24h",
       "last": "09-10 11:04",
       "perDay": 12,
-      "briefCount": 6
+      "briefCount": 4
     },
     {
       "id": "amd-instinct",
@@ -810,6 +810,24 @@
       "fetchMethod": "Media",
       "lookback": "24h",
       "last": "09-10 11:04",
+      "perDay": 0,
+      "briefCount": 0
+    },
+    {
+      "id": "mittrchina",
+      "recordId": "recvuShTMMhLjq",
+      "name": "MIT Technology Review China",
+      "url": "https://www.mittrchina.com/",
+      "status": "active",
+      "statusLabel": "已接入",
+      "on": true,
+      "format": "公众号",
+      "type": "中文媒体",
+      "tier": "L3",
+      "priority": "中",
+      "fetchMethod": "Scrape",
+      "lookback": "24h",
+      "last": "",
       "perDay": 0,
       "briefCount": 0
     },
@@ -994,42 +1012,6 @@
       "briefCount": 13
     },
     {
-      "id": "pingwest",
-      "recordId": "recvqgCxAL42lP",
-      "name": "品玩 / 硅星人",
-      "url": "https://www.pingwest.com/",
-      "status": "active",
-      "statusLabel": "已接入",
-      "on": true,
-      "format": "公众号",
-      "type": "中文媒体",
-      "tier": "L3",
-      "priority": "中",
-      "fetchMethod": "Scrape",
-      "lookback": "24h",
-      "last": "09-10 11:04",
-      "perDay": 2,
-      "briefCount": 10
-    },
-    {
-      "id": "zhidx",
-      "recordId": "recvqgCxALGZLO",
-      "name": "智东西",
-      "url": "https://zhidx.com/rss",
-      "status": "active",
-      "statusLabel": "已接入",
-      "on": true,
-      "format": "公众号",
-      "type": "中文媒体",
-      "tier": "L3",
-      "priority": "中",
-      "fetchMethod": "RSS",
-      "lookback": "24h",
-      "last": "09-10 11:04",
-      "perDay": 5,
-      "briefCount": 7
-    },
-    {
       "id": "geekpark",
       "recordId": "recvqgCxALicBa",
       "name": "极客公园 / Founder Park",
@@ -1046,24 +1028,6 @@
       "last": "09-10 11:04",
       "perDay": 0,
       "briefCount": 0
-    },
-    {
-      "id": "guokr",
-      "recordId": "recvqgCxALsI6U",
-      "name": "果壳",
-      "url": "https://www.guokr.com/",
-      "status": "active",
-      "statusLabel": "已接入",
-      "on": true,
-      "format": "公众号",
-      "type": "中文媒体",
-      "tier": "L3",
-      "priority": "中",
-      "fetchMethod": "Scrape",
-      "lookback": "24h",
-      "last": "09-10 11:04",
-      "perDay": 4,
-      "briefCount": 3
     },
     {
       "id": "thepaper",
@@ -1117,7 +1081,7 @@
       "lookback": "24h",
       "last": "09-10 11:04",
       "perDay": 2,
-      "briefCount": 14
+      "briefCount": 11
     },
     {
       "id": "caixin",
@@ -1141,7 +1105,7 @@
       "id": "qbitai",
       "recordId": "recvqgCxALFA07",
       "name": "量子位",
-      "url": "https://www.qbitai.com/feed",
+      "url": "https://www.qbitai.com/",
       "status": "active",
       "statusLabel": "已接入",
       "on": true,
@@ -1149,7 +1113,7 @@
       "type": "中文媒体",
       "tier": "L3",
       "priority": "中",
-      "fetchMethod": "RSS",
+      "fetchMethod": "Scrape",
       "lookback": "24h",
       "last": "09-10 11:04",
       "perDay": 0,
@@ -1357,12 +1321,12 @@
       "id": "36kr-ai",
       "recordId": "recvqgCxALgmzs",
       "name": "36氪 AI",
-      "url": "https://36kr.com/feed",
+      "url": "https://36kr.com/",
       "status": "experimental",
       "statusLabel": "待测",
       "on": false,
       "format": "公众号",
-      "type": "创业融资并购",
+      "type": "中文媒体",
       "tier": "L3",
       "priority": "高",
       "fetchMethod": "Bridge",
