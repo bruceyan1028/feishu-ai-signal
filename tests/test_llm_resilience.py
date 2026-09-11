@@ -88,6 +88,16 @@ class LlmRetryTest(unittest.TestCase):
 
 
 class AnalysisFailureToleranceTest(unittest.TestCase):
+    def test_wrapped_editorial_heading_is_merged_without_touching_real_headings(self):
+        self.assertEqual(
+            daily.merge_wrapped_headings("## CED架构：把百万上下文\"读薄\"，\n\n## 预填充算力砍半"),
+            "## CED架构：把百万上下文\"读薄\"，预填充算力砍半",
+        )
+        self.assertEqual(
+            daily.merge_wrapped_headings("## 第一章\n\n## 第二章"),
+            "## 第一章\n\n## 第二章",
+        )
+
     def test_manually_excluded_entry_is_not_a_daily_candidate(self):
         now = datetime.now(timezone.utc)
         records = [

@@ -515,6 +515,21 @@ def polish_verbatim_body(text: str, source: str = "", title: str = "") -> str:
 
 # 线程各段之间采集端写的是 `---` 分隔行，卡片按段落连续渲染就够，不需要这条横线
 _THREAD_SEP_RE = re.compile(r"(?m)^\s*-{3,}\s*$")
+_SPLIT_HEADING_RE = re.compile(
+    r"(?m)^(#{2,4}\s+)([^\n]{2,80}[，、：:；;])\s*\n\s*\1([^\n]{2,80})\s*$"
+)
+
+
+def merge_wrapped_headings(text: str) -> str:
+    """合并抓取器把同一视觉标题按换行拆成的连续 Markdown 标题。
+
+    只处理前半段以未完成标点结尾的情况，例如 ``标题：\n副标题``；两个
+    完整标题相邻时保持原样，避免损失文章自身的章节层级。
+    """
+    return _SPLIT_HEADING_RE.sub(
+        lambda match: f"{match.group(1)}{match.group(2).strip()}{match.group(3).strip()}",
+        text or "",
+    )
 
 
 def social_full_text(fields: dict[str, Any]) -> str:
@@ -532,12 +547,12 @@ def display_body(fields: dict[str, Any]) -> dict[str, Any]:
     polished = clean_body(str(scalar(fields.get(READABLE_BODY_FIELD)) or ""), source)
     if polished:
         # 清理只做删减与分段，页脚删掉不算截断，读者看到的就是完整正文
-        return {"body": polished, "bodyTruncated": False}
+        return {"body": merge_wrapped_headings(polished), "bodyTruncated": False}
     translated = clean_body(str(scalar(fields.get("中文正文")) or ""), source)
     if translated:
         # 译文按上限截断过，原文更长时告诉前端还有后续内容
-        return {"body": translated, "bodyTruncated": len(raw) > _translated_chars(fields)}
-    return {"body": raw, "bodyTruncated": False}
+        return {"body": merge_wrapped_headings(translated), "bodyTruncated": len(raw) > _translated_chars(fields)}
+    return {"body": merge_wrapped_headings(raw), "bodyTruncated": False}
 
 
 def brief_bullet_title(text: str, suggested: str = "") -> str:
