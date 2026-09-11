@@ -1821,7 +1821,7 @@ def _extract_links_for_feed(page: str, feed: dict[str, Any], *, use_jina: bool) 
         links = _extract_cohere_blog_links(page, feed)
         if links:
             return links
-    if str(_feed_extra(feed).get("list_parser") or "").strip() == "zhipu_news":
+    if str(_feed_extra(feed).get("list_parser") or "").strip() in {"zhipu_news", "zhipu_research"}:
         return _extract_zhipu_news_links(page, feed)
     return _extract_links(page, feed) if use_jina else _extract_links_html(page, feed)
 
@@ -2020,18 +2020,25 @@ def _extract_cohere_blog_links(html: str, feed: dict[str, Any]) -> list[dict[str
 
 
 def _extract_zhipu_news_links(html: str, feed: dict[str, Any]) -> list[dict[str, str]]:
-    """从智谱 SSR 新闻卡片保留真实标题和日期，避免按数字 URL 错排。"""
+    """从智谱 SSR 新闻/研究页提取真实标题和链接。
+
+    研究页的卡片由客户端渲染，HTML 中通常只有 Next.js 数据里的
+    ``externalurl_zh``/``title_zh``，因此同时支持可见锚点和嵌入数据。
+    """
     from urllib.parse import urljoin
 
     src_url = str(feed.get("url") or "")
     max_n = int(feed.get("max_articles") or config.DEFAULT_MAX_ARTICLES)
+    research_mode = str(_feed_extra(feed).get("list_parser") or "").strip() == "zhipu_research"
     anchors = list(
         re.finditer(
-            r"""<a\b[^>]*\bhref=["']([^"']*/(?:zh|en)/news/\d+)["'][^>]*>""",
+            r"""<a\b[^>]*\bhref=["']([^"']*/(?:zh|en)/(?:news|research)/\d+)["'][^>]*>""",
             html or "",
             re.I,
         )
     )
+    if research_mode:
+        anchors = []
     links: list[dict[str, str]] = []
     seen: set[str] = set()
     for index, anchor in enumerate(anchors):
@@ -2053,6 +2060,26 @@ def _extract_zhipu_news_links(html: str, feed: dict[str, Any]) -> list[dict[str,
             continue
         seen.add(url)
         links.append({"url": url, "title": title, "published_raw": published})
+        # 研究页的可见研究链接也会出现在页脚导航，邻域标题不可靠；
+        # 序列化数据分支会提供准确标题。
+        if research_mode:
+            continue
+        if len(links) >= max_n:
+            break
+    # /zh/research 是 Next.js SPA，研究条目常只出现在序列化数据中。
+    embedded = re.finditer(
+        r'''externalurl_zh\\?"\s*:\s*\\?"([^"\\]+/zh/research/\d+)\\?"'''
+        r'''(?:(?!externalurl_zh).){0,500}?title_zh\\?"\s*:\s*\\?"([^"\\]+)''',
+        html or "",
+        re.I | re.S,
+    )
+    for match in embedded:
+        url = urljoin(src_url, match.group(1)).split("#")[0]
+        title = _one_line(_html_to_text(match.group(2)))
+        if not title or url in seen:
+            continue
+        seen.add(url)
+        links.append({"url": url, "title": title})
         if len(links) >= max_n:
             break
     return links

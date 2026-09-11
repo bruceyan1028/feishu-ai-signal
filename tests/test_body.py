@@ -223,6 +223,14 @@ class ScrapeParagraphTest(unittest.TestCase):
         self.assertEqual(links[0]["published_raw"], "2026/03/31")
         self.assertEqual(links[0]["title"], "智谱首份业绩报告发布，探索 AGI 智能上界")
 
+    def test_zhipu_research_embedded_entries_are_extracted(self):
+        html = r'''<script>self.__next_f.push([1,"externalurl_zh\":\"https://www.zhipuai.cn/zh/research/156\",\"title_zh\":\"GLM-5V-Turbo\"}])</script>'''
+        links = scrape._extract_zhipu_news_links(
+            html, {"url": "https://www.zhipuai.cn/zh/research", "max_articles": 8}
+        )
+        self.assertEqual(links[0]["url"], "https://www.zhipuai.cn/zh/research/156")
+        self.assertEqual(links[0]["title"], "GLM-5V-Turbo")
+
     def test_anthropic_news_table_keeps_date_order(self):
         html = """
         <div class="PublicationList">

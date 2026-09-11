@@ -1655,15 +1655,15 @@
    "dedup_key": "normalize(url)",
    "dimension": "前沿模型公司",
    "endpoint": {
-    "link": "https://www.zhipuai.cn/zh/news",
-    "text": "https://www.zhipuai.cn/zh/news"
+    "link": "https://www.zhipuai.cn/zh/research",
+    "text": "https://www.zhipuai.cn/zh/research"
    },
-   "extra_config": "{\"force_direct\":true,\"list_parser\":\"zhipu_news\",\"article_title_from_h1\":true,\"max_articles\":8}",
+   "extra_config": "{\"force_direct\":true,\"list_parser\":\"zhipu_research\",\"article_title_from_h1\":true,\"max_articles\":20}",
    "fetch_method": "Scrape",
    "keyword_regex": "(zhipu|glm|chatglm|bigmodel|agent|reasoning|multimodal|open.?source|智谱|清言|发布|开源|模型|智能体|推理)",
    "lookback_window": "72h",
    "name": "智谱 AI 新闻",
-   "notes": "智谱企业新闻 SSR 卡片；直连提取真实链接、标题和发布日期",
+   "notes": "智谱官方研究发布页；研究页为 Next.js，解析可见卡片及序列化研究条目，详情页提取发布日期",
    "priority": "P0",
    "source_id": "zhipu-ai",
    "status": "active",
