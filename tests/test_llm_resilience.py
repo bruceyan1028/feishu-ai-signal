@@ -45,6 +45,26 @@ class LlmRetryTest(unittest.TestCase):
         )
         self.assertTrue(post.call_args.kwargs["stream"])
 
+    def test_retriable_primary_failure_switches_to_configured_fallback(self):
+        backup = self._response(200)
+        backup.iter_content.return_value = [b'{"choices":[{"message":{"content":"{\\"ok\\":2}"}}]}']
+        fallback = {
+            "name": "fallback_1",
+            "api_key": "fallback-key",
+            "base_url": "https://fallback.example/v1",
+            "model": "fallback-model",
+        }
+        with (
+            mock.patch.object(report.config, "LLM_API_KEY", "primary-key"),
+            mock.patch.object(report.config, "LLM_FALLBACK_PROVIDERS", (fallback,)),
+            mock.patch.object(report.config, "LLM_MAX_RETRIES", 1),
+            mock.patch("requests.post", side_effect=[__import__("requests").Timeout("down"), backup]) as post,
+        ):
+            result = report._llm_json("prompt")
+        self.assertEqual(result, {"ok": 2})
+        self.assertEqual(post.call_count, 2)
+        self.assertEqual(post.call_args.kwargs["headers"]["Authorization"], "Bearer fallback-key")
+
     def test_retry_status_covers_transient_gateway_codes(self):
         for status in (408, 409, 418, 425, 429, 500, 502, 503, 504):
             self.assertIn(status, report._RETRY_STATUS)

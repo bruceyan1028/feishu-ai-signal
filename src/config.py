@@ -108,6 +108,26 @@ LLM_CONNECT_TIMEOUT_SECONDS = float(os.environ.get("LLM_CONNECT_TIMEOUT_SECONDS"
 LLM_READ_TIMEOUT_SECONDS = float(os.environ.get("LLM_READ_TIMEOUT_SECONDS", "45"))
 LLM_TOTAL_TIMEOUT_SECONDS = float(os.environ.get("LLM_TOTAL_TIMEOUT_SECONDS", "60"))
 LLM_MAX_RETRIES = int(os.environ.get("LLM_MAX_RETRIES", "3"))
+# 备用模型必须是独立供应商/网关，才可规避单点限流或网络故障。任一组缺字段即跳过。
+LLM_FALLBACK_PROVIDERS = tuple(
+    {
+        "name": f"fallback_{index}",
+        "api_key": os.environ.get(f"LLM_FALLBACK_{index}_API_KEY", "").strip(),
+        "base_url": os.environ.get(f"LLM_FALLBACK_{index}_BASE_URL", "").strip().rstrip("/"),
+        "model": os.environ.get(f"LLM_FALLBACK_{index}_MODEL", "").strip(),
+    }
+    for index in (1, 2)
+    if all(
+        os.environ.get(f"LLM_FALLBACK_{index}_{field}", "").strip()
+        for field in ("API_KEY", "BASE_URL", "MODEL")
+    )
+)
+LLM_PROVIDER_FAILURE_THRESHOLD = int(
+    os.environ.get("LLM_PROVIDER_FAILURE_THRESHOLD", "3")
+)
+LLM_PROVIDER_COOLDOWN_SECONDS = float(
+    os.environ.get("LLM_PROVIDER_COOLDOWN_SECONDS", "600")
+)
 # 图片筛选默认复用文本模型的网关和密钥，只单独指定模型；必要时仍可覆盖。
 VISION_API_KEY = os.environ.get("VISION_API_KEY", "").strip() or LLM_API_KEY
 VISION_BASE_URL = os.environ.get("VISION_BASE_URL", "").strip().rstrip("/") or LLM_BASE_URL

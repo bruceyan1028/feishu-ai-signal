@@ -21,6 +21,7 @@ import logging
 from collections import Counter
 from datetime import datetime, timezone
 from pathlib import Path
+from threading import Lock
 from typing import Any
 
 from . import config
@@ -36,6 +37,8 @@ CACHE_FILE = OUTPUT_DIR / ".report_cache.json"
 # 可重试的 HTTP 状态：都是「过会儿再来」而不是「这个请求本身有问题」。
 # 418 是网关限流/反滥用时的返回，不重试会让一条信号直接把整轮跑挂掉。
 _RETRY_STATUS = frozenset({408, 409, 418, 425, 429, 500, 502, 503, 504})
+_provider_failures: dict[str, tuple[int, float]] = {}
+_provider_failures_lock = Lock()
 
 
 class LlmHttpError(RuntimeError):
@@ -151,7 +154,7 @@ ANALYSIS_PROMPT = """你是资深 AI 行业分析师。请阅读下面这条 AI 
 """
 
 
-def _llm_json(
+def _llm_json_with_provider(
     prompt: str,
     image_urls: list[str] | None = None,
     *,
@@ -323,6 +326,96 @@ def _llm_json(
     if content.startswith("```"):
         content = content.removeprefix("```json").removeprefix("```").removesuffix("```").strip()
     return json.loads(content)
+
+
+def _provider_available(name: str, now: float) -> bool:
+    """连续失败的供应商在冷却期内跳过，避免每条日报都重复等待。"""
+    with _provider_failures_lock:
+        failures, last_failure = _provider_failures.get(name, (0, 0.0))
+    return not (
+        failures >= max(1, config.LLM_PROVIDER_FAILURE_THRESHOLD)
+        and now - last_failure < max(0.0, config.LLM_PROVIDER_COOLDOWN_SECONDS)
+    )
+
+
+def _record_provider_success(name: str) -> None:
+    with _provider_failures_lock:
+        _provider_failures.pop(name, None)
+
+
+def _record_provider_failure(name: str, now: float) -> None:
+    with _provider_failures_lock:
+        failures, _last_failure = _provider_failures.get(name, (0, 0.0))
+        _provider_failures[name] = (failures + 1, now)
+
+
+def _is_retriable_provider_error(exc: Exception) -> bool:
+    import requests
+
+    if isinstance(exc, (requests.Timeout, requests.ConnectionError, json.JSONDecodeError)):
+        return True
+    return isinstance(exc, LlmHttpError) and exc.status in _RETRY_STATUS
+
+
+def _llm_json(
+    prompt: str,
+    image_urls: list[str] | None = None,
+    *,
+    api_key: str | None = None,
+    base_url: str | None = None,
+    model: str | None = None,
+    prefer_responses: bool = False,
+) -> dict[str, Any]:
+    """调用文本模型，并在可重试故障时切换到独立备用供应商。
+
+    显式指定 API/模型的调用（主要是视觉模型）保持固定，不能把图像请求错误地
+    路由到文本备用模型。
+    """
+    import time
+
+    explicit_provider = any(value is not None for value in (api_key, base_url, model))
+    if explicit_provider:
+        return _llm_json_with_provider(
+            prompt,
+            image_urls,
+            api_key=api_key,
+            base_url=base_url,
+            model=model,
+            prefer_responses=prefer_responses,
+        )
+
+    providers = (
+        {"name": "primary", "api_key": config.LLM_API_KEY, "base_url": config.LLM_BASE_URL, "model": config.LLM_MODEL},
+        *config.LLM_FALLBACK_PROVIDERS,
+    )
+    now = time.monotonic()
+    available = [provider for provider in providers if _provider_available(provider["name"], now)]
+    # 全部处于冷却期时仍选主模型试一次，避免短暂故障把日报永久拒之门外。
+    candidates = available or [providers[0]]
+    last_error: Exception | None = None
+    for index, provider in enumerate(candidates, 1):
+        name = str(provider["name"])
+        try:
+            result = _llm_json_with_provider(
+                prompt,
+                image_urls,
+                api_key=str(provider["api_key"]),
+                base_url=str(provider["base_url"]),
+                model=str(provider["model"]),
+                prefer_responses=prefer_responses,
+            )
+        except Exception as exc:  # noqa: BLE001 - 供应商切换只吞可恢复的传输/网关故障
+            if not _is_retriable_provider_error(exc):
+                raise
+            _record_provider_failure(name, time.monotonic())
+            last_error = exc
+            if index < len(candidates):
+                log.warning("LLM 供应商 %s 不可用，切换至下一个备用模型：%s", name, exc)
+            continue
+        _record_provider_success(name)
+        return result
+    assert last_error is not None
+    raise last_error
 
 
 def analyze_entry(entry: dict[str, Any]) -> dict[str, Any]:
