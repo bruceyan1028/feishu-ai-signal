@@ -2067,6 +2067,28 @@ def _extract_zhipu_news_links(html: str, feed: dict[str, Any]) -> list[dict[str,
         if len(links) >= max_n:
             break
     # /zh/research 是 Next.js SPA，研究条目常只出现在序列化数据中。
+    # 主列表使用 blogsItems，包含 id/title_zh/createAt；这是页面实际展示的
+    # 研究条目，优先于页脚导航里的 externalurl_zh。
+    blog_items = re.finditer(
+        r'''\\?"id\\?"\s*:\s*(\d+)\s*,\\?"title_zh\\?"\s*:\s*\\?"([^"\\]+)\\?"\s*,\\?"title_en\\?"\s*:\s*(?:null|\\?"[^"\\]*\\?")\s*,\\?"createAt\\?"\s*:\s*\\?"([^"\\]+)''',
+        html or "",
+        re.I,
+    )
+    for match in blog_items:
+        item_id, raw_title, created = match.groups()
+        url = urljoin(src_url, f"/zh/research/{item_id}").split("#")[0]
+        title = _one_line(_html_to_text(raw_title))
+        if not title or url in seen:
+            continue
+        seen.add(url)
+        links.append({"url": url, "title": title, "published_raw": created})
+        if len(links) >= max_n:
+            break
+    if links:
+        links.sort(key=_cand_recency_key, reverse=True)
+        return links[:max_n]
+
+    # 兼容旧版研究页：研究条目可能只出现在序列化的 externalurl_zh 数据中。
     embedded = re.finditer(
         r'''externalurl_zh\\?"\s*:\s*\\?"([^"\\]+/zh/research/\d+)\\?"'''
         r'''(?:(?!externalurl_zh).){0,500}?title_zh\\?"\s*:\s*\\?"([^"\\]+)''',
