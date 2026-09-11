@@ -63,7 +63,7 @@ _STATUSES = ("active", "experimental", "paused")
 _PRIORITIES = ("P0", "P1", "P2")
 _TIERS = ("L1", "L2", "L3", "L4")
 _URGENCY = ("Pending", "高", "中", "低")
-_ENTRY_STATUS = ("待分析", "已分析")
+_ENTRY_STATUS = ("待分析", "已分析", "已排除")
 
 
 def _f(name: str, ftype: int, options: tuple[str, ...] | None = None) -> dict[str, Any]:

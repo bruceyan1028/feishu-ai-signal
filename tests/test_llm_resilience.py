@@ -88,6 +88,24 @@ class LlmRetryTest(unittest.TestCase):
 
 
 class AnalysisFailureToleranceTest(unittest.TestCase):
+    def test_manually_excluded_entry_is_not_a_daily_candidate(self):
+        now = datetime.now(timezone.utc)
+        records = [
+            {
+                "record_id": "excluded",
+                "fields": {
+                    "source_id": "demo",
+                    "标题": "Unrelated item",
+                    "发布时间": int(now.timestamp() * 1000),
+                    "状态": "已排除",
+                },
+            }
+        ]
+        self.assertEqual(
+            daily.select_candidates(records, {"demo": "P1"}, {"demo"}, now=now),
+            [],
+        )
+
     def test_legacy_deep_analysis_is_not_on_daily_critical_path_by_default(self):
         fields = {"原文": "x" * 500, "来源": "demo", "标题": "Existing signal"}
         analysis = {"summary_cn": "已有摘要", "why": "已有结论"}

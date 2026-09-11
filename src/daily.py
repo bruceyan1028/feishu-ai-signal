@@ -800,6 +800,9 @@ def select_candidates(
     candidates = []
     for record in records:
         fields = record.get("fields") or {}
+        # 人工确认的跑题条目保留在条目表以便审计，但不能再次进入日报候选。
+        if scalar(fields.get("状态")) == "已排除":
+            continue
         source_id = str(scalar(fields.get("source_id")) or "")
         if allowed_source_ids is not None and source_id not in allowed_source_ids:
             continue
