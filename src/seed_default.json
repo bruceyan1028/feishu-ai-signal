@@ -97,6 +97,7 @@
     "link": "https://cohere.com/blog",
     "text": "https://cohere.com/blog"
    },
+   "extra_config": "{\"list_parser\": \"cohere_blog\", \"max_articles\": 20}",
    "fetch_method": "Scrape",
    "keyword_regex": "(model|gpt|claude|gemini|llama|qwen|deepseek|grok|command|mistral|doubao|seed|volc|agent|reasoning|multimodal|context|rlhf|inference|training|fine-tun|moe|rag|release|launch|announce|introducing|now available|update|preview|GA)",
    "lookback_window": "24h",
@@ -131,17 +132,18 @@
    "dedup_key": "hash(model_name+version)",
    "dimension": "前沿模型公司",
    "endpoint": {
-    "link": "https://qwenlm.github.io/blog/index.xml",
-    "text": "https://qwenlm.github.io/blog/index.xml"
+    "link": "https://qwen.ai/research",
+    "text": "https://qwen.ai/research"
    },
-   "fetch_method": "RSS",
+   "extra_config": "{\"list_parser\": \"qwen_research\", \"force_direct\": true, \"max_articles\": 20}",
+   "fetch_method": "Scrape",
    "keyword_regex": "(model|gpt|claude|gemini|llama|qwen|deepseek|grok|command|mistral|doubao|seed|volc|agent|reasoning|multimodal|context|rlhf|inference|training|fine-tun|moe|rag|release|launch|announce|introducing|now available|update|preview|GA)",
    "lookback_window": "24h",
    "name": "Qwen Blog",
-   "notes": "官方博客 Atom；旧地址 atom.xml 无内容，已改 index.xml",
+   "notes": "新的官方研究入口；SPA 页面，待接入前端研究列表接口。旧 qwenlm.github.io/blog 为停更历史镜像",
    "priority": "P0",
    "source_id": "qwen-blog",
-   "status": "active",
+   "status": "experimental",
    "tier": "L1",
    "来源类型": "纯网页"
   },

@@ -277,6 +277,20 @@ class ScrapeParagraphTest(unittest.TestCase):
         self.assertEqual(links[0]["published_raw"], "Sep 10, 2026")
         self.assertTrue(any("claude-fable-and-mythos-5-1" in item["url"] for item in links))
 
+    def test_cohere_blog_ignores_tag_links_and_keeps_dates(self):
+        html = """
+        <a href="/blog/tag/research">Research</a>
+        <a aria-label="Read full article: Introducing North Small Translate" href="/blog/north-small-translate">
+          <p>Introducing North Small Translate</p><p>Sep 10, 2026</p>
+        </a>
+        <a href="/blog/megakernels"><p>Inside the megakernel serving engine</p><p>Sep 8, 2026</p></a>
+        """
+        feed = {"id": "cohere-blog", "url": "https://cohere.com/blog", "max_articles": 20}
+        links = scrape._extract_links_for_feed(html, feed, use_jina=False)
+        self.assertEqual(len(links), 2)
+        self.assertEqual(links[0]["title"], "Introducing North Small Translate")
+        self.assertEqual(links[0]["published_raw"], "Sep 10, 2026")
+
     def test_link_path_include_relaxes_list_prefix_depth(self):
         """聚合列表页（/latest）链到其它栏目时，白名单应放行，不再要求 /latest/ 前缀。"""
         html = """

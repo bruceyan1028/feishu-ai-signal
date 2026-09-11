@@ -1796,6 +1796,14 @@ def _is_anthropic_news_feed(feed: dict[str, Any]) -> bool:
     return _host(feed.get("url") or "") == "anthropic.com" and _path_of(feed.get("url") or "").rstrip("/") == "/news"
 
 
+def _is_cohere_blog_feed(feed: dict[str, Any]) -> bool:
+    sid = str(feed.get("id") or "").strip().lower()
+    return sid == "cohere-blog" or (
+        _host(feed.get("url") or "") == "cohere.com"
+        and _path_of(feed.get("url") or "").rstrip("/") == "/blog"
+    )
+
+
 def _extract_links_for_feed(page: str, feed: dict[str, Any], *, use_jina: bool) -> list[dict[str, Any]]:
     spec = capture_spec.spec_for(str(feed.get("id") or ""), feed.get("_capture_specs") or {})
     if spec and spec.get("route", {}).get("list"):
@@ -1807,6 +1815,10 @@ def _extract_links_for_feed(page: str, feed: dict[str, Any], *, use_jina: bool) 
         return _extract_hf_pwc_paper_links(page, feed)
     if _is_anthropic_news_feed(feed):
         links = _extract_anthropic_news_links(page, feed)
+        if links:
+            return links
+    if _is_cohere_blog_feed(feed):
+        links = _extract_cohere_blog_links(page, feed)
         if links:
             return links
     if str(_feed_extra(feed).get("list_parser") or "").strip() == "zhipu_news":
@@ -1958,6 +1970,51 @@ def _extract_anthropic_news_links(html: str, feed: dict[str, Any]) -> list[dict[
         if old is None or (not old.get("published_raw") and item.get("published_raw")):
             links_by_url[item["url"]] = item
     links = list(links_by_url.values())
+    links.sort(key=_cand_recency_key, reverse=True)
+    return links[:max_n]
+
+
+def _extract_cohere_blog_links(html: str, feed: dict[str, Any]) -> list[dict[str, str]]:
+    """从 Cohere Blog 的精选卡片和文章列表抽取文章。
+
+    页面会重复渲染桌面/移动端卡片，并混有 ``/blog/tag/*`` 导航链接；通用 href
+    扫描容易把标签页当文章，且按 HTML 出现顺序截断。这里只接受一级 blog slug，
+    从卡片邻域读取真实标题和日期，最后按日期排序去重。
+    """
+    from urllib.parse import urljoin
+
+    src_url = str(feed.get("url") or "https://cohere.com/blog")
+    max_n = int(feed.get("max_articles") or config.DEFAULT_MAX_ARTICLES)
+    anchor_re = re.compile(
+        r'''<a\b(?=[^>]*\bhref=["']/blog/[^"'#?]+["'])[^>]*\bhref=["'](/blog/[^"'#?]+)["'][^>]*>(.*?)</a>''',
+        re.I | re.S,
+    )
+    anchors = list(anchor_re.finditer(html or ""))
+    candidates: list[dict[str, str]] = []
+    for index, match in enumerate(anchors):
+        path = match.group(1)
+        if path.startswith("/blog/tag/") or path.rstrip("/") == "/blog":
+            continue
+        url = urljoin(src_url, path).split("#")[0]
+        end = anchors[index + 1].start() if index + 1 < len(anchors) else len(html)
+        # 当前锚点的内容有时被 React 截断；在同一张卡片的局部窗口中寻找 aria-label、标题和日期。
+        card = (html[match.start() : min(end, match.start() + 5000)])
+        label_match = re.search(r'''\baria-label=["']Read full article:\s*([^"']+)["']''', html[match.start() : match.end()], re.I)
+        title_match = re.search(r"(?is)<p\b[^>]*>(.*?)</p>", match.group(2))
+        title = _one_line(_html_to_text(label_match.group(1) if label_match else (title_match.group(1) if title_match else "")))
+        if not title:
+            title = _one_line(_html_to_text(match.group(2)))
+        date_match = re.search(r"\b(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s+\d{1,2},\s+20\d{2}\b", card, re.I)
+        if not title or not date_match:
+            continue
+        candidates.append({"url": url, "title": title[:200], "published_raw": date_match.group(0)})
+
+    by_url: dict[str, dict[str, str]] = {}
+    for item in candidates:
+        old = by_url.get(item["url"])
+        if old is None or len(item["title"]) > len(old["title"]):
+            by_url[item["url"]] = item
+    links = list(by_url.values())
     links.sort(key=_cand_recency_key, reverse=True)
     return links[:max_n]
 
