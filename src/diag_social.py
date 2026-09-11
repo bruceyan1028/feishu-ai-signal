@@ -7,7 +7,7 @@ import logging
 import os
 from pathlib import Path
 
-from . import config, feishu, social, sources, typed_config
+from . import bootstrap, config, feishu, social, sources, typed_config
 
 logging.basicConfig(
     level=logging.INFO,
@@ -32,6 +32,17 @@ def _load_dotenv() -> None:
     config.LLM_API_KEY = os.environ.get("LLM_API_KEY", "").strip()
     config.LLM_BASE_URL = (os.environ.get("LLM_BASE_URL") or config.LLM_BASE_URL).strip()
     config.LLM_MODEL = (os.environ.get("LLM_MODEL") or config.LLM_MODEL).strip()
+    # config 在本模块导入时已初始化；同步 bootstrap 读到的飞书配置，
+    # 让直接执行 ``python -m src.diag_social`` 也能使用项目 .env。
+    for name in (
+        "FEISHU_APP_ID",
+        "FEISHU_APP_SECRET",
+        "FEISHU_BASE_ID",
+        "FEISHU_PARAM_TABLE_ID",
+        "FEISHU_ENTRY_TABLE_ID",
+        "FEISHU_SOCIAL_CONFIG_TABLE_ID",
+    ):
+        setattr(config, name, getattr(bootstrap.config, name))
 
 
 def _kept_payload(item: dict) -> dict:

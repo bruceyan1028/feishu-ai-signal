@@ -215,6 +215,26 @@ def run(methods: set[str] | None = None) -> int:
                 existing_account_counts=account_counts,
             )
             raw_items += social_items
+            # 健康记录不仅要写总数，也要保留账号级读取与筛选结果，避免
+            # “日报只显示一个账号”时无法分辨是没采到还是被质量门过滤。
+            for feed in social_sources:
+                source_id = str(feed.get("id") or "")
+                if not source_id:
+                    continue
+                prefix = f"{source_id}:"
+                fetch_stats[source_id] = {
+                    "accounts": {
+                        key.removeprefix(prefix): count
+                        for key, count in social_batch.read_counts.items()
+                        if key.startswith(prefix)
+                    },
+                    "successful_accounts": sorted(
+                        key.removeprefix(prefix)
+                        for key in social_batch.successful_accounts
+                        if key.startswith(prefix)
+                    ),
+                    "filter": social_stats,
+                }
             log.info(
                 "Social 筛选漏斗 %s；API 读取 %d 条",
                 social_stats,
