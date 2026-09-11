@@ -1447,21 +1447,48 @@ def generate(day: str | None = None) -> dict[str, Any]:
     failed: list[str] = []
     off_topic: list[str] = []
     body_admitted_sources = _body_admitted_source_ids(params)
+
+    # 新条目的主分析彼此独立，曾经逐条等待 LLM，导致总耗时随候选数线性增长。
+    # 先并发完成这一步，后续仍按候选原顺序补字段、组装信号并集中回写飞书。
+    pending_analysis = [
+        (index, item)
+        for index, item in enumerate(candidates, 1)
+        if _existing_analysis(item["fields"]) is None
+    ]
+    analyzed_by_record: dict[str, dict[str, Any]] = {}
+    failed_by_record: dict[str, str] = {}
+
+    def _analyze_pending(task: tuple[int, dict[str, Any]]) -> tuple[str, dict[str, Any] | None, str]:
+        index, item = task
+        fields = item["fields"]
+        record_id = str(item["record_id"])
+        title = str(scalar(fields.get("标题")) or record_id)
+        log.info("分析 %d/%d: %s", index, len(candidates), title)
+        try:
+            return record_id, analyze_signal(fields), ""
+        except Exception as exc:  # noqa: BLE001 - 单条失败不该作废整份日报
+            log.warning("分析失败，跳过该信号: %s (%s)", title, exc)
+            return record_id, None, title
+
+    if pending_analysis:
+        attempted = len(pending_analysis)
+        workers = max(1, min(config.DAILY_ANALYSIS_CONCURRENCY, len(pending_analysis)))
+        with ThreadPoolExecutor(max_workers=workers) as executor:
+            for record_id, analysis, failed_title in executor.map(_analyze_pending, pending_analysis):
+                if analysis is None:
+                    failed_by_record[record_id] = failed_title
+                else:
+                    analyzed_by_record[record_id] = analysis
+
     for index, item in enumerate(candidates, 1):
         fields = item["fields"]
         analysis = _existing_analysis(fields)
         update_fields: dict[str, Any] = {}
         if analysis is None:
-            log.info("分析 %d/%d: %s", index, len(candidates), scalar(fields.get("标题")))
-            attempted += 1
-            try:
-                analysis = analyze_signal(fields)
-            except Exception as exc:
-                # 单条信号的 LLM 调用失败不该让整份简报作废：这一步跑在几十分钟的
-                # 采集之后，为一条抓不到的解读丢掉当天全部推送，代价完全不成比例。
-                title = str(scalar(fields.get("标题")) or item.get("record_id") or "")
-                log.warning("分析失败，跳过该信号: %s (%s)", title, exc)
-                failed.append(title)
+            record_id = str(item["record_id"])
+            analysis = analyzed_by_record.get(record_id)
+            if analysis is None:
+                failed.append(failed_by_record.get(record_id) or record_id)
                 continue
             update_fields = {
                 "中文标题": analysis["title_cn"],

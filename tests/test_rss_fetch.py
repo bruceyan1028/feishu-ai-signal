@@ -1,6 +1,7 @@
 """RSS 拉取：UA / 超时 / 重试（不打外网）。"""
 from __future__ import annotations
 
+from threading import Barrier
 import unittest
 from unittest import mock
 
@@ -104,6 +105,26 @@ class RssFetchTest(unittest.TestCase):
         self.assertEqual(items[0]["title"], "Hello")
         self.assertEqual(stats["demo"]["entries"], 1)
         self.assertIsNone(stats["demo"]["error"])
+
+    def test_fetch_feed_sources_runs_sources_concurrently_and_keeps_order(self):
+        barrier = Barrier(2)
+
+        def fetch(url):
+            barrier.wait(timeout=2)
+            title = "First" if url.endswith("first.xml") else "Second"
+            return rss.feedparser.parse(_MINI_FEED.replace(b"Hello", title.encode("ascii")))
+
+        feeds = [
+            {"id": "first", "url": "https://example.com/first.xml"},
+            {"id": "second", "url": "https://example.com/second.xml"},
+        ]
+        with mock.patch.object(config, "RSS_CONCURRENCY", 2), mock.patch.object(
+            rss, "_fetch_feed_parsed", side_effect=fetch
+        ):
+            items, stats = rss.fetch_feed_sources_with_stats(feeds)
+
+        self.assertEqual([item["title"] for item in items], ["First", "Second"])
+        self.assertEqual(list(stats), ["first", "second"])
 
     def test_empty_body_is_retried_then_fails(self):
         empty = mock.Mock()

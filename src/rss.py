@@ -1544,15 +1544,10 @@ def fetch_feed_sources_with_stats(
     区分「feed 拿不到/解析不了」和「feed 正常但这几天没更新」很关键：前者要修链路，
     后者是源自身的节奏，不该被当成故障去调规则。
     """
-    raw_items: list[dict[str, Any]] = []
-    stats: dict[str, dict[str, Any]] = {}
-    for feed in feeds:
+    def _fetch(feed: dict[str, Any]) -> tuple[list[dict[str, Any]], str, dict[str, Any]]:
         url = feed["url"]
         sid = str(feed.get("id") or url)
-        st = stats.setdefault(
-            sid,
-            {"source_id": sid, "engine": "feedparser", "entries": 0, "error": None},
-        )
+        st: dict[str, Any] = {"source_id": sid, "engine": "feedparser", "entries": 0, "error": None}
         t0 = time.perf_counter()
         try:
             parsed = _fetch_feed_parsed(url)
@@ -1560,19 +1555,20 @@ def fetch_feed_sources_with_stats(
             log.warning("RSS 抓取失败 %s: %s", url, exc)
             st["error"] = f"fetch_failed: {type(exc).__name__}"
             st["timing_ms"] = round((time.perf_counter() - t0) * 1000, 1)
-            continue
+            return [], sid, st
         st["timing_ms"] = round((time.perf_counter() - t0) * 1000, 1)
         st["entries"] = len(parsed.entries)
         if getattr(parsed, "bozo", False) and not parsed.entries:
             log.warning("RSS 无法解析或为空 %s", url)
             st["error"] = "unparseable_or_empty"
-            continue
+            return [], sid, st
         if not parsed.entries:
             st["error"] = "feed_empty"
+        items: list[dict[str, Any]] = []
         for entry in parsed.entries:
             body = _best_body(entry)
             page_url = entry.get("link") or entry.get("id") or ""
-            raw_items.append(
+            items.append(
                 {
                     "title": entry.get("title", ""),
                     "url": page_url,
@@ -1590,4 +1586,16 @@ def fetch_feed_sources_with_stats(
                 }
             )
         log.info("RSS %s → %d 条", feed.get("id") or url, len(parsed.entries))
+        return items, sid, st
+
+    raw_items: list[dict[str, Any]] = []
+    stats: dict[str, dict[str, Any]] = {}
+    if not feeds:
+        return raw_items, stats
+    # map 保持输入顺序：并发缩短等待时间，同时让下游处理与此前的稳定顺序一致。
+    workers = max(1, min(config.RSS_CONCURRENCY, len(feeds)))
+    with ThreadPoolExecutor(max_workers=workers) as pool:
+        for items, sid, st in pool.map(_fetch, feeds):
+            stats[sid] = st
+            raw_items.extend(items)
     return raw_items, stats

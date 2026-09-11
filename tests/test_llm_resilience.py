@@ -5,6 +5,8 @@
 """
 from __future__ import annotations
 
+from datetime import datetime, timezone
+from threading import Barrier
 import unittest
 from unittest import mock
 
@@ -60,6 +62,69 @@ class AnalysisFailureToleranceTest(unittest.TestCase):
     def test_no_attempts_is_not_a_failure(self):
         # 全部命中缓存时一条都不用分析，这不该被当成故障
         self.assertFalse(daily.analysis_failure_is_systemic(0, 0))
+
+    def test_daily_analyzes_missing_candidates_concurrently(self):
+        stamp = int(datetime.now(timezone.utc).timestamp() * 1000)
+        candidates = [
+            {
+                "record_id": f"r{index}",
+                "source_id": "demo",
+                "priority": "P0",
+                "fields": {
+                    "source_id": "demo",
+                    "标题": f"Model release {index}",
+                    "原文": "Evidence about an AI model release. " * 8,
+                    "发布时间": stamp - index,
+                    "链接": {"link": f"https://example.com/{index}"},
+                    "来源类型": "文章",
+                },
+            }
+            for index in range(2)
+        ]
+        params = [{"fields": {"source_id": "demo", "status": "active", "priority": "P0"}}]
+        barrier = Barrier(2)
+
+        def analyze(fields):
+            barrier.wait(timeout=2)
+            title = str(fields["标题"])
+            return {
+                "title_cn": title,
+                "summary_cn": "摘要",
+                "deep_analysis_cn": "解读",
+                "why": "重要",
+                "impact": 80,
+                "novelty": 70,
+                "actionability": 60,
+                "urgency": "中",
+                "topics": ["AI"],
+                "category": "",
+            }
+
+        def read_records(_token, table_id, *_args):
+            return [] if table_id == "briefs" else candidates
+
+        with (
+            mock.patch.object(daily.config, "LLM_API_KEY", "test-key"),
+            mock.patch.object(daily.config, "FEISHU_ENTRY_TABLE_ID", "entries"),
+            mock.patch.object(daily.config, "FEISHU_BRIEF_TABLE_ID", "briefs"),
+            mock.patch.object(daily.config, "DAILY_ANALYSIS_CONCURRENCY", 2),
+            mock.patch.object(daily.feishu, "get_tenant_access_token", return_value="token"),
+            mock.patch.object(daily.feishu, "ensure_entry_enrichment_fields"),
+            mock.patch.object(daily.feishu, "ensure_select_option"),
+            mock.patch.object(daily.feishu, "read_param_records", return_value=params),
+            mock.patch.object(daily.feishu, "read_all_records_with_ids", side_effect=read_records),
+            mock.patch.object(daily.feishu, "batch_update_records"),
+            mock.patch.object(daily.feishu, "create_record", return_value={"record_id": "brief-row"}),
+            mock.patch.object(daily, "select_candidates", return_value=candidates),
+            mock.patch.object(daily.cluster, "collapse_for_brief", side_effect=lambda items, **_kwargs: items),
+            mock.patch.object(daily, "analyze_signal", side_effect=analyze) as analyzed,
+            mock.patch.object(daily.rss, "fetch_article_media", return_value={}),
+            mock.patch.object(daily.report, "_llm_json", return_value={"intro": "导语", "bullets": []}),
+        ):
+            payload = daily.generate("2026-09-11")
+
+        self.assertEqual(analyzed.call_count, 2)
+        self.assertEqual(payload["signals"][0]["recordId"], "r0")
 
 
 if __name__ == "__main__":

@@ -268,13 +268,13 @@ python -m src.health --days 30
   → 按 P0 优先、质量分、时间排序；给非 P0 留 DAILY_MIN_NON_P0
   → 论文独立板块；视频/播客/GitHub/每源上限
   → cluster.collapse_for_brief 标题近似折叠
-  → 无存量分析则 analyze_signal（中文标题/摘要/解读/打分）
+  → 无存量分析则并发 analyze_signal（中文标题/摘要/解读/打分，默认 3 路）
   → 文章配图、论文图表
   → LLM 写 intro + bullets
   → upsert 每日简报表
 ```
 
-规模默认：主候选 30、主输出信号 30；论文独立收录且默认隐藏，最多 4；视频 1–4、播客最多 2、GitHub 最多 5、每源最多 4。
+规模默认：主候选 30、主输出信号 30；论文独立收录且默认隐藏，最多 4；视频 1–4、播客最多 2、GitHub 最多 5、每源最多 4。`DAILY_ANALYSIS_CONCURRENCY` 默认 3，遇到模型网关限流时应优先下调；RSS 源通过 `RSS_CONCURRENCY`（默认 6）受控并发抓取，单源重试不会阻塞其它源。
 
 分析字段：`title_cn`、`summary_cn`、`why`、`deep_analysis_cn`、`impact` / `novelty` / `actionability`（0–100）、`urgency`（高/中/低）、`topics`（从固定集合选 2–4 个）。端侧主题由规则强制补「端侧」；白宫政策强制补「监管」。
 

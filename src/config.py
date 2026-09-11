@@ -156,6 +156,8 @@ PODCAST_TRANSCRIPT_CHUNK_CHARS = int(
 REPORT_MAX_ENTRIES = int(os.environ.get("REPORT_MAX_ENTRIES", "20"))
 DAILY_CANDIDATE_LIMIT = int(os.environ.get("DAILY_CANDIDATE_LIMIT", "30"))
 DAILY_SIGNAL_LIMIT = int(os.environ.get("DAILY_SIGNAL_LIMIT", "30"))
+# 单条日报分析会触发文本/视觉 LLM，保守并发以避免网关限流后重试反而拉长总耗时。
+DAILY_ANALYSIS_CONCURRENCY = int(os.environ.get("DAILY_ANALYSIS_CONCURRENCY", "3"))
 # 每份简报里「论文」类条目的硬上限，避免论文稀释「快速读新闻」体验
 DAILY_MAX_PAPERS = int(os.environ.get("DAILY_MAX_PAPERS", "4"))
 # 视频更适合作为补充材料：候选最多 4 条，排序分轻微降权，避免同日频道更新挤占新闻。
@@ -221,6 +223,8 @@ PAPER_ENRICH_ENABLED = os.environ.get("PAPER_ENRICH_ENABLED", "1").strip().lower
 # 日更节奏下取 8：足以覆盖高产媒体，慢更新源多出的额度会重复抓旧文再被去重。
 # 可用某源 extra_config.max_articles 单独覆盖。
 DEFAULT_MAX_ARTICLES = 8
+# RSS 源之间无数据依赖。受控并发能隔离单源重试等待，避免慢源阻塞整批。
+RSS_CONCURRENCY = int(os.environ.get("RSS_CONCURRENCY", "6"))
 JINA_CONCURRENCY = 3
 JINA_TIMEOUT = 60
 HTTP_MAX_TRIES = 4
