@@ -944,6 +944,7 @@ class DeliveryTests(unittest.TestCase):
         template = Path("index.html").read_text(encoding="utf-8")
         self.assertIn("curatedBy === 'llm'", template)
         self.assertIn("afterHeading", template)
+        self.assertIn("hasPlacementAnchors", template)
         self.assertIn("flushHeading", template)
         self.assertIn("pendingImages", template)
 

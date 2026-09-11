@@ -3211,7 +3211,11 @@ function figureHtml(s, item){
 
 // 正文配图:模型选过图时按小标题就位,否则在段落间均匀铺开
 function bodyImagePlacer(s, images, paraCount){
-  const llmPlaced = s.mediaAssets?.curatedBy === 'llm' || s.mediaAssets?.curatedBy === 'vision';
+  const curated = s.mediaAssets?.curatedBy === 'llm' || s.mediaAssets?.curatedBy === 'vision';
+  // A visual curator can return a valid figure but omit an anchor. Treating
+  // that as anchored leaves every figure for the trailing fallback block.
+  const hasPlacementAnchors = images.some(item => String(item.afterHeading || item.after_heading || item.afterText || item.after_text || '').trim());
+  const llmPlaced = curated && hasPlacementAnchors;
   let pending = images.slice();
   let placed = 0;
   const step = !llmPlaced && images.length && paraCount

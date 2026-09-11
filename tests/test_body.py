@@ -471,6 +471,16 @@ class ArticleMediaTest(unittest.TestCase):
             [item["url"] for item in parsed["images"]], ["https://example.com/chart-wide.png"]
         )
 
+    def test_article_images_keep_nearby_text_for_later_placement(self):
+        html = (
+            "<article><p>前一段描述光学矩阵计算的工作原理。</p>"
+            '<img src="/figure.png" alt="系统架构图" width="1200">'
+            "<p>后一段解释系统部署条件。</p></article>"
+        )
+        image = rss.extract_article_images(html, self.PAGE)[0]
+        self.assertEqual(image["alt"], "系统架构图")
+        self.assertIn("前一段描述光学矩阵计算", image["context"])
+
     def test_backfilled_images_land_on_the_item(self):
         item = {"media_assets": {"images": [], "videos": []}, "image_url": ""}
         rss._fill_missing_images(item, [{"url": "https://example.com/a.jpg", "alt": "图"}])

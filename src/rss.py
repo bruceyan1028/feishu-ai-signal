@@ -1277,7 +1277,8 @@ def extract_article_images(html_chunk: str, page_url: str, limit: int = 4) -> li
     """按文档顺序取正文插图，过滤掉 logo/图标/追踪像素。"""
     images: list[dict[str, str]] = []
     seen: set[str] = set()
-    for tag in _IMG_TAG_RE.findall(html_chunk):
+    for match in _IMG_TAG_RE.finditer(html_chunk):
+        tag = match.group(0)
         url = _best_image_url_from_tag(tag)
         if not url or url.startswith("data:"):
             continue
@@ -1298,7 +1299,13 @@ def extract_article_images(html_chunk: str, page_url: str, limit: int = 4) -> li
         if key in seen:
             continue
         seen.add(key)
-        images.append({"url": url, "alt": unescape(_attr(tag, "alt"))[:120]})
+        asset = {"url": url, "alt": unescape(_attr(tag, "alt"))[:120]}
+        # Carries the source position through visual curation so that
+        # heading-less articles can place a selected figure in prose.
+        context = _nearby_image_text(html_chunk, match.start(), match.end())
+        if context:
+            asset["context"] = context
+        images.append(asset)
         if len(images) >= limit:
             break
     return images
