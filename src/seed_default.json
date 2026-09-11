@@ -777,19 +777,37 @@
    "dedup_key": "normalize(url)",
    "dimension": "中文媒体",
    "endpoint": {
-    "link": "https://36kr.com/",
-    "text": "https://36kr.com/"
+    "link": "https://www.36kr.com/user/19630955",
+    "text": "https://www.36kr.com/user/19630955"
    },
-   "fetch_method": "Bridge",
+   "fetch_method": "Scrape",
    "keyword_regex": "(人工智能|智能体|大模型|大语言模型|生成式|多模态|具身|算力|算法|芯片|GPU|机器学习|深度学习|神经网络|强化学习|扩散模型|机器人|自动驾驶|开源模型|AIGC|LLM|GPT|Claude|Gemini|DeepSeek|文心|通义|千问|Kimi|豆包|Llama|OpenAI|Anthropic|英伟达|Transformer)",
    "lookback_window": "24h",
    "name": "36氪 AI",
-   "notes": "官网首页与 Feed 当前均返回反爬页；保留 experimental，待接入稳定 Bridge/RSSHub 后再启用。",
+   "notes": "作者页当前被反爬；暂不启用，待测。",
    "priority": "P0",
    "source_id": "36kr-ai",
    "status": "experimental",
    "tier": "L3",
-   "来源类型": "公众号"
+   "来源类型": "纯网页"
+  },
+  {
+   "dedup_key": "normalize(url)",
+   "dimension": "中文媒体",
+   "endpoint": {
+    "link": "https://news.qq.com/omn/author/8QIf3n9a7oYauzjc5QE=",
+    "text": "https://news.qq.com/omn/author/8QIf3n9a7oYauzjc5QE="
+   },
+   "fetch_method": "Scrape",
+   "keyword_regex": "(人工智能|智能体|大模型|大语言模型|生成式|多模态|具身|算力|算法|芯片|GPU|机器学习|深度学习|神经网络|强化学习|扩散模型|机器人|自动驾驶|开源模型|AIGC|LLM|GPT|Claude|Gemini|DeepSeek|文心|通义|千问|Kimi|豆包|Llama|OpenAI|Anthropic|英伟达|Transformer)",
+   "lookback_window": "24h",
+   "name": "暗涌Waves",
+   "notes": "腾讯新闻作者页；已确认可见近两周文章，正式启用。",
+   "priority": "P0",
+   "source_id": "qq-news-ai-author",
+   "status": "active",
+   "tier": "L3",
+   "来源类型": "纯网页"
   },
   {
    "dedup_key": "normalize(url)",
@@ -2127,6 +2145,10 @@
   {
    "source_id": "36kr-ai",
    "名称": "36氪 AI"
+  },
+  {
+   "source_id": "qq-news-ai-author",
+   "名称": "暗涌Waves"
   },
   {
    "source_id": "latepost-ai",

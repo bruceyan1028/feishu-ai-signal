@@ -1,0 +1,11 @@
+{
+  "36kr-ai": {
+    "status": "experimental",
+    "notes": "作者页当前被反爬；暂不启用，待测。"
+  },
+  "qq-news-ai-author": {
+    "status": "active",
+    "name": "暗涌Waves",
+    "notes": "腾讯新闻作者页；已确认可见近两周文章，正式启用。"
+  }
+}
