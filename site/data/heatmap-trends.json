@@ -1,222 +1,212 @@
 {
-  "generatedAt": "2026-09-10T11:58:06+08:00",
+  "generatedAt": "2026-09-11T12:09:31+08:00",
   "days": [
-    "2026-09-04",
     "2026-09-05",
     "2026-09-06",
     "2026-09-07",
     "2026-09-08",
     "2026-09-09",
-    "2026-09-10"
+    "2026-09-10",
+    "2026-09-11"
   ],
   "topics": [
+    "deepseek-v4-1-flash",
     "meta-muse-ai-agent",
-    "jacob-coxon",
-    "trump-ai-posts",
     "anthropic",
-    "navier-stokes"
+    "ai-healthcare-regulation-recommendations",
+    "navier-stokes-openai"
   ],
   "labels": {
+    "deepseek-v4-1-flash": "deepseek v4.1 flash",
     "meta-muse-ai-agent": "meta muse ai agent",
-    "jacob-coxon": "jacob coxon",
-    "trump-ai-posts": "trump ai posts",
     "anthropic": "anthropic",
-    "navier-stokes": "navier stokes"
+    "ai-healthcare-regulation-recommendations": "ai healthcare regulation recommendations uk",
+    "navier-stokes-openai": "navier stokes openai"
   },
   "queries": {
+    "deepseek-v4-1-flash": {
+      "g": "deepseek v4.1 flash",
+      "x": "\"deepseek v4.1 flash\" -is:retweet"
+    },
     "meta-muse-ai-agent": {
       "g": "meta muse ai agent",
       "x": "\"meta muse ai agent\" -is:retweet"
-    },
-    "jacob-coxon": {
-      "g": "jacob coxon",
-      "x": "\"jacob coxon\" -is:retweet"
-    },
-    "trump-ai-posts": {
-      "g": "trump ai posts",
-      "x": "\"trump ai posts\" -is:retweet"
     },
     "anthropic": {
       "g": "anthropic",
       "x": "\"anthropic\" -is:retweet"
     },
-    "navier-stokes": {
-      "g": "navier stokes",
-      "x": "\"navier stokes\" -is:retweet"
+    "ai-healthcare-regulation-recommendations": {
+      "g": "ai healthcare regulation recommendations uk",
+      "x": "\"ai healthcare regulation recommendations uk\" -is:retweet"
+    },
+    "navier-stokes-openai": {
+      "g": "navier stokes openai",
+      "x": "\"navier stokes openai\" -is:retweet"
     }
   },
   "scopes": {
+    "deepseek-v4-1-flash": "global",
     "meta-muse-ai-agent": "global",
-    "jacob-coxon": "global",
-    "trump-ai-posts": "global",
     "anthropic": "global",
-    "navier-stokes": "global"
+    "ai-healthcare-regulation-recommendations": "country",
+    "navier-stokes-openai": "country"
   },
   "marks": {
+    "deepseek-v4-1-flash": "🌐",
     "meta-muse-ai-agent": "🌐",
-    "jacob-coxon": "🌐",
-    "trump-ai-posts": "🌐",
     "anthropic": "🌐",
-    "navier-stokes": "🌐"
+    "ai-healthcare-regulation-recommendations": "🇬🇧",
+    "navier-stokes-openai": "🇦🇺"
   },
   "breakouts": [
+    "deepseek-v4-1-flash",
     "meta-muse-ai-agent",
-    "jacob-coxon",
-    "trump-ai-posts",
     "anthropic",
-    "navier-stokes"
+    "ai-healthcare-regulation-recommendations",
+    "navier-stokes-openai"
   ],
   "selection": {
     "method": "google-trending-ai",
     "volumes": {
+      "deepseek-v4-1-flash": 500,
       "meta-muse-ai-agent": 200000,
-      "jacob-coxon": 50000,
-      "trump-ai-posts": 1000,
-      "anthropic": 10000,
-      "navier-stokes": 50000
+      "anthropic": 50000,
+      "ai-healthcare-regulation-recommendations": 100,
+      "navier-stokes-openai": 200
     },
     "geos": {
+      "deepseek-v4-1-flash": [
+        "US"
+      ],
       "meta-muse-ai-agent": [
         "IN"
       ],
-      "jacob-coxon": [
-        "US",
-        "CA"
-      ],
-      "trump-ai-posts": [
-        "US",
-        "GB"
-      ],
       "anthropic": [
+        "US",
         "GB",
-        "IN",
         "DE",
         "JP",
-        "AU"
-      ],
-      "navier-stokes": [
-        "US",
-        "GB",
-        "DE",
         "AU",
         "CA"
+      ],
+      "ai-healthcare-regulation-recommendations": [
+        "GB"
+      ],
+      "navier-stokes-openai": [
+        "AU"
       ]
     },
     "plot_geo": {
+      "deepseek-v4-1-flash": "",
       "meta-muse-ai-agent": "",
-      "jacob-coxon": "",
-      "trump-ai-posts": "",
       "anthropic": "",
-      "navier-stokes": ""
+      "ai-healthcare-regulation-recommendations": "GB",
+      "navier-stokes-openai": "AU"
     },
     "breakouts": [
+      "deepseek-v4-1-flash",
       "meta-muse-ai-agent",
-      "jacob-coxon",
-      "trump-ai-posts",
       "anthropic",
-      "navier-stokes"
+      "ai-healthcare-regulation-recommendations",
+      "navier-stokes-openai"
     ]
   },
   "google-trends": {
     "error": "",
     "topics": [
+      "deepseek-v4-1-flash",
       "meta-muse-ai-agent",
-      "jacob-coxon",
-      "trump-ai-posts",
       "anthropic",
-      "navier-stokes"
+      "ai-healthcare-regulation-recommendations",
+      "navier-stokes-openai"
     ],
     "labels": {
+      "deepseek-v4-1-flash": "deepseek v4.1 flash",
       "meta-muse-ai-agent": "meta muse ai agent",
-      "jacob-coxon": "jacob coxon",
-      "trump-ai-posts": "trump ai posts",
       "anthropic": "anthropic",
-      "navier-stokes": "navier stokes"
+      "ai-healthcare-regulation-recommendations": "ai healthcare regulation recommendations uk",
+      "navier-stokes-openai": "navier stokes openai"
     },
     "queries": {
+      "deepseek-v4-1-flash": {
+        "g": "deepseek v4.1 flash",
+        "x": "\"deepseek v4.1 flash\" -is:retweet"
+      },
       "meta-muse-ai-agent": {
         "g": "meta muse ai agent",
         "x": "\"meta muse ai agent\" -is:retweet"
-      },
-      "jacob-coxon": {
-        "g": "jacob coxon",
-        "x": "\"jacob coxon\" -is:retweet"
-      },
-      "trump-ai-posts": {
-        "g": "trump ai posts",
-        "x": "\"trump ai posts\" -is:retweet"
       },
       "anthropic": {
         "g": "anthropic",
         "x": "\"anthropic\" -is:retweet"
       },
-      "navier-stokes": {
-        "g": "navier stokes",
-        "x": "\"navier stokes\" -is:retweet"
+      "ai-healthcare-regulation-recommendations": {
+        "g": "ai healthcare regulation recommendations uk",
+        "x": "\"ai healthcare regulation recommendations uk\" -is:retweet"
+      },
+      "navier-stokes-openai": {
+        "g": "navier stokes openai",
+        "x": "\"navier stokes openai\" -is:retweet"
       }
     },
     "scopes": {
+      "deepseek-v4-1-flash": "global",
       "meta-muse-ai-agent": "global",
-      "jacob-coxon": "global",
-      "trump-ai-posts": "global",
       "anthropic": "global",
-      "navier-stokes": "global"
+      "ai-healthcare-regulation-recommendations": "country",
+      "navier-stokes-openai": "country"
     },
     "marks": {
+      "deepseek-v4-1-flash": "🌐",
       "meta-muse-ai-agent": "🌐",
-      "jacob-coxon": "🌐",
-      "trump-ai-posts": "🌐",
       "anthropic": "🌐",
-      "navier-stokes": "🌐"
+      "ai-healthcare-regulation-recommendations": "🇬🇧",
+      "navier-stokes-openai": "🇦🇺"
     },
     "breakouts": [
+      "deepseek-v4-1-flash",
       "meta-muse-ai-agent",
-      "jacob-coxon",
-      "trump-ai-posts",
       "anthropic",
-      "navier-stokes"
+      "ai-healthcare-regulation-recommendations",
+      "navier-stokes-openai"
     ],
     "selection": {
       "volumes": {
+        "deepseek-v4-1-flash": 500,
         "meta-muse-ai-agent": 200000,
-        "jacob-coxon": 50000,
-        "trump-ai-posts": 1000,
-        "anthropic": 10000,
-        "navier-stokes": 50000
+        "anthropic": 50000,
+        "ai-healthcare-regulation-recommendations": 100,
+        "navier-stokes-openai": 200
       },
       "geos": {
+        "deepseek-v4-1-flash": [
+          "US"
+        ],
         "meta-muse-ai-agent": [
           "IN"
         ],
-        "jacob-coxon": [
-          "US",
-          "CA"
-        ],
-        "trump-ai-posts": [
-          "US",
-          "GB"
-        ],
         "anthropic": [
+          "US",
           "GB",
-          "IN",
           "DE",
           "JP",
-          "AU"
-        ],
-        "navier-stokes": [
-          "US",
-          "GB",
-          "DE",
           "AU",
           "CA"
+        ],
+        "ai-healthcare-regulation-recommendations": [
+          "GB"
+        ],
+        "navier-stokes-openai": [
+          "AU"
         ]
       },
       "plot_geo": {
+        "deepseek-v4-1-flash": "",
         "meta-muse-ai-agent": "",
-        "jacob-coxon": "",
-        "trump-ai-posts": "",
         "anthropic": "",
-        "navier-stokes": ""
+        "ai-healthcare-regulation-recommendations": "GB",
+        "navier-stokes-openai": "AU"
       },
       "method": "google-trending-ai"
     },
@@ -226,46 +216,46 @@
           0.0,
           0.0,
           0.0,
-          0.0,
-          2.0,
-          53.0,
+          9.0,
+          26.0,
+          97.0,
           100.0
         ],
         [
           0.0,
           0.0,
           0.0,
-          0.0,
-          0.0,
-          92.0,
-          100.0
-        ],
-        [
-          2.0,
-          2.0,
-          4.0,
-          21.0,
-          39.0,
-          54.0,
-          100.0
-        ],
-        [
-          43.0,
-          35.0,
-          32.0,
-          44.0,
-          46.0,
-          85.0,
-          100.0
-        ],
-        [
-          8.0,
-          11.0,
-          5.0,
           3.0,
-          54.0,
           100.0,
-          47.0
+          100.0,
+          54.0
+        ],
+        [
+          37.0,
+          35.0,
+          45.0,
+          45.0,
+          95.0,
+          100.0,
+          90.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          79.0,
+          100.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          21.0,
+          100.0,
+          28.0,
+          44.0
         ]
       ],
       "normalized": [
@@ -273,59 +263,77 @@
           0.0,
           0.0,
           0.0,
-          0.0,
-          0.02,
-          0.53,
+          0.09,
+          0.26,
+          0.97,
           1.0
         ],
         [
           0.0,
           0.0,
           0.0,
-          0.0,
-          0.0,
-          0.92,
-          1.0
-        ],
-        [
-          0.02,
-          0.02,
-          0.04,
-          0.21,
-          0.39,
-          0.54,
-          1.0
-        ],
-        [
-          0.43,
-          0.35,
-          0.32,
-          0.44,
-          0.46,
-          0.85,
-          1.0
-        ],
-        [
-          0.08,
-          0.11,
-          0.05,
           0.03,
-          0.54,
           1.0,
-          0.47
+          1.0,
+          0.54
+        ],
+        [
+          0.37,
+          0.35,
+          0.45,
+          0.45,
+          0.95,
+          1.0,
+          0.9
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.79,
+          1.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.21,
+          1.0,
+          0.28,
+          0.44
         ]
       ]
     },
     "trend": {
-      "meta-muse-ai-agent": 10.909,
-      "jacob-coxon": 6.522,
-      "trump-ai-posts": 4.918,
-      "anthropic": 2.105,
-      "navier-stokes": 1.558
+      "deepseek-v4-1-flash": 4.545,
+      "meta-muse-ai-agent": 1.596,
+      "anthropic": 1.513,
+      "ai-healthcare-regulation-recommendations": 7.595,
+      "navier-stokes-openai": 1.772
     },
     "items": {
-      "meta-muse-ai-agent|2026-09-04": [
-        "g-meta-muse-ai-agent"
+      "deepseek-v4-1-flash|2026-09-05": [
+        "g-deepseek-v4-1-flash"
+      ],
+      "deepseek-v4-1-flash|2026-09-06": [
+        "g-deepseek-v4-1-flash"
+      ],
+      "deepseek-v4-1-flash|2026-09-07": [
+        "g-deepseek-v4-1-flash"
+      ],
+      "deepseek-v4-1-flash|2026-09-08": [
+        "g-deepseek-v4-1-flash"
+      ],
+      "deepseek-v4-1-flash|2026-09-09": [
+        "g-deepseek-v4-1-flash"
+      ],
+      "deepseek-v4-1-flash|2026-09-10": [
+        "g-deepseek-v4-1-flash"
+      ],
+      "deepseek-v4-1-flash|2026-09-11": [
+        "g-deepseek-v4-1-flash"
       ],
       "meta-muse-ai-agent|2026-09-05": [
         "g-meta-muse-ai-agent"
@@ -345,50 +353,8 @@
       "meta-muse-ai-agent|2026-09-10": [
         "g-meta-muse-ai-agent"
       ],
-      "jacob-coxon|2026-09-04": [
-        "g-jacob-coxon"
-      ],
-      "jacob-coxon|2026-09-05": [
-        "g-jacob-coxon"
-      ],
-      "jacob-coxon|2026-09-06": [
-        "g-jacob-coxon"
-      ],
-      "jacob-coxon|2026-09-07": [
-        "g-jacob-coxon"
-      ],
-      "jacob-coxon|2026-09-08": [
-        "g-jacob-coxon"
-      ],
-      "jacob-coxon|2026-09-09": [
-        "g-jacob-coxon"
-      ],
-      "jacob-coxon|2026-09-10": [
-        "g-jacob-coxon"
-      ],
-      "trump-ai-posts|2026-09-04": [
-        "g-trump-ai-posts"
-      ],
-      "trump-ai-posts|2026-09-05": [
-        "g-trump-ai-posts"
-      ],
-      "trump-ai-posts|2026-09-06": [
-        "g-trump-ai-posts"
-      ],
-      "trump-ai-posts|2026-09-07": [
-        "g-trump-ai-posts"
-      ],
-      "trump-ai-posts|2026-09-08": [
-        "g-trump-ai-posts"
-      ],
-      "trump-ai-posts|2026-09-09": [
-        "g-trump-ai-posts"
-      ],
-      "trump-ai-posts|2026-09-10": [
-        "g-trump-ai-posts"
-      ],
-      "anthropic|2026-09-04": [
-        "g-anthropic"
+      "meta-muse-ai-agent|2026-09-11": [
+        "g-meta-muse-ai-agent"
       ],
       "anthropic|2026-09-05": [
         "g-anthropic"
@@ -408,53 +374,77 @@
       "anthropic|2026-09-10": [
         "g-anthropic"
       ],
-      "navier-stokes|2026-09-04": [
-        "g-navier-stokes"
+      "anthropic|2026-09-11": [
+        "g-anthropic"
       ],
-      "navier-stokes|2026-09-05": [
-        "g-navier-stokes"
+      "ai-healthcare-regulation-recommendations|2026-09-05": [
+        "g-ai-healthcare-regulation-recommendations"
       ],
-      "navier-stokes|2026-09-06": [
-        "g-navier-stokes"
+      "ai-healthcare-regulation-recommendations|2026-09-06": [
+        "g-ai-healthcare-regulation-recommendations"
       ],
-      "navier-stokes|2026-09-07": [
-        "g-navier-stokes"
+      "ai-healthcare-regulation-recommendations|2026-09-07": [
+        "g-ai-healthcare-regulation-recommendations"
       ],
-      "navier-stokes|2026-09-08": [
-        "g-navier-stokes"
+      "ai-healthcare-regulation-recommendations|2026-09-08": [
+        "g-ai-healthcare-regulation-recommendations"
       ],
-      "navier-stokes|2026-09-09": [
-        "g-navier-stokes"
+      "ai-healthcare-regulation-recommendations|2026-09-09": [
+        "g-ai-healthcare-regulation-recommendations"
       ],
-      "navier-stokes|2026-09-10": [
-        "g-navier-stokes"
+      "ai-healthcare-regulation-recommendations|2026-09-10": [
+        "g-ai-healthcare-regulation-recommendations"
+      ],
+      "ai-healthcare-regulation-recommendations|2026-09-11": [
+        "g-ai-healthcare-regulation-recommendations"
+      ],
+      "navier-stokes-openai|2026-09-05": [
+        "g-navier-stokes-openai"
+      ],
+      "navier-stokes-openai|2026-09-06": [
+        "g-navier-stokes-openai"
+      ],
+      "navier-stokes-openai|2026-09-07": [
+        "g-navier-stokes-openai"
+      ],
+      "navier-stokes-openai|2026-09-08": [
+        "g-navier-stokes-openai"
+      ],
+      "navier-stokes-openai|2026-09-09": [
+        "g-navier-stokes-openai"
+      ],
+      "navier-stokes-openai|2026-09-10": [
+        "g-navier-stokes-openai"
+      ],
+      "navier-stokes-openai|2026-09-11": [
+        "g-navier-stokes-openai"
       ]
     },
     "itemIndex": {
+      "g-deepseek-v4-1-flash": {
+        "title": "Google Trends · deepseek v4.1 flash",
+        "source": "Google Trends",
+        "url": "https://trends.google.com/trends/explore?date=now%207-d&q=deepseek%20v4.1%20flash"
+      },
       "g-meta-muse-ai-agent": {
         "title": "Google Trends · meta muse ai agent",
         "source": "Google Trends",
         "url": "https://trends.google.com/trends/explore?date=now%207-d&q=meta%20muse%20ai%20agent"
-      },
-      "g-jacob-coxon": {
-        "title": "Google Trends · jacob coxon",
-        "source": "Google Trends",
-        "url": "https://trends.google.com/trends/explore?date=now%207-d&q=jacob%20coxon"
-      },
-      "g-trump-ai-posts": {
-        "title": "Google Trends · trump ai posts",
-        "source": "Google Trends",
-        "url": "https://trends.google.com/trends/explore?date=now%207-d&q=trump%20ai%20posts"
       },
       "g-anthropic": {
         "title": "Google Trends · anthropic",
         "source": "Google Trends",
         "url": "https://trends.google.com/trends/explore?date=now%207-d&q=anthropic"
       },
-      "g-navier-stokes": {
-        "title": "Google Trends · navier stokes",
+      "g-ai-healthcare-regulation-recommendations": {
+        "title": "Google Trends · ai healthcare regulation recommendations uk",
         "source": "Google Trends",
-        "url": "https://trends.google.com/trends/explore?date=now%207-d&q=navier%20stokes"
+        "url": "https://trends.google.com/trends/explore?date=now%207-d&q=ai%20healthcare%20regulation%20recommendations%20uk&geo=GB"
+      },
+      "g-navier-stokes-openai": {
+        "title": "Google Trends · navier stokes openai",
+        "source": "Google Trends",
+        "url": "https://trends.google.com/trends/explore?date=now%207-d&q=navier%20stokes%20openai&geo=AU"
       }
     }
   },
@@ -510,53 +500,50 @@
     "matrix": {
       "raw": [
         [
-          12492.0,
-          6837.0,
+          10085.0,
           5394.0,
           6237.0,
           9067.0,
-          28061.0,
-          4164.0
+          27920.0,
+          24948.0,
+          4044.0
         ],
         [
-          52448.0,
-          21279.0,
+          31908.0,
           17433.0,
           20256.0,
           36463.0,
-          45743.0,
-          4226.0
+          45487.0,
+          28877.0,
+          4441.0
         ]
       ],
       "normalized": [
         [
-          0.4452,
-          0.2436,
-          0.1922,
-          0.2223,
-          0.3231,
+          0.3612,
+          0.1932,
+          0.2234,
+          0.3247,
           1.0,
-          0.1484
+          0.8936,
+          0.1448
         ],
         [
+          0.7015,
+          0.3833,
+          0.4453,
+          0.8016,
           1.0,
-          0.4057,
-          0.3324,
-          0.3862,
-          0.6952,
-          0.8722,
-          0.0806
+          0.6348,
+          0.0976
         ]
       ]
     },
     "trend": {
-      "anthropic": 0.367,
-      "openai": 0.131
+      "anthropic": 0.29,
+      "openai": 0.148
     },
     "items": {
-      "anthropic|2026-09-04": [
-        "x-anthropic"
-      ],
       "anthropic|2026-09-05": [
         "x-anthropic"
       ],
@@ -575,8 +562,8 @@
       "anthropic|2026-09-10": [
         "x-anthropic"
       ],
-      "openai|2026-09-04": [
-        "x-openai"
+      "anthropic|2026-09-11": [
+        "x-anthropic"
       ],
       "openai|2026-09-05": [
         "x-openai"
@@ -594,6 +581,9 @@
         "x-openai"
       ],
       "openai|2026-09-10": [
+        "x-openai"
+      ],
+      "openai|2026-09-11": [
         "x-openai"
       ]
     },
