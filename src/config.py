@@ -103,6 +103,11 @@ DIFY_WEBHOOK_URL = os.environ.get("DIFY_WEBHOOK_URL", "").strip()
 LLM_API_KEY = os.environ.get("LLM_API_KEY", "").strip()
 LLM_BASE_URL = _env("LLM_BASE_URL", "https://api.deepseek.com/v1").rstrip("/")
 LLM_MODEL = _env("LLM_MODEL", "deepseek-chat")
+# 单次日报会并发请求模型网关。把连接、读取和总预算拆开，避免无响应网关占满 worker。
+LLM_CONNECT_TIMEOUT_SECONDS = float(os.environ.get("LLM_CONNECT_TIMEOUT_SECONDS", "10"))
+LLM_READ_TIMEOUT_SECONDS = float(os.environ.get("LLM_READ_TIMEOUT_SECONDS", "45"))
+LLM_TOTAL_TIMEOUT_SECONDS = float(os.environ.get("LLM_TOTAL_TIMEOUT_SECONDS", "60"))
+LLM_MAX_RETRIES = int(os.environ.get("LLM_MAX_RETRIES", "3"))
 # 图片筛选默认复用文本模型的网关和密钥，只单独指定模型；必要时仍可覆盖。
 VISION_API_KEY = os.environ.get("VISION_API_KEY", "").strip() or LLM_API_KEY
 VISION_BASE_URL = os.environ.get("VISION_BASE_URL", "").strip().rstrip("/") or LLM_BASE_URL
@@ -158,6 +163,10 @@ DAILY_CANDIDATE_LIMIT = int(os.environ.get("DAILY_CANDIDATE_LIMIT", "30"))
 DAILY_SIGNAL_LIMIT = int(os.environ.get("DAILY_SIGNAL_LIMIT", "30"))
 # 单条日报分析会触发文本/视觉 LLM，保守并发以避免网关限流后重试反而拉长总耗时。
 DAILY_ANALYSIS_CONCURRENCY = int(os.environ.get("DAILY_ANALYSIS_CONCURRENCY", "3"))
+# 历史条目的长解读是可异步补全内容；日报主链路不应因它逐条等待模型。
+DAILY_FILL_LEGACY_DEEP_ANALYSIS = os.environ.get(
+    "DAILY_FILL_LEGACY_DEEP_ANALYSIS", "0"
+).strip().lower() in {"1", "true", "yes", "on"}
 # 每份简报里「论文」类条目的硬上限，避免论文稀释「快速读新闻」体验
 DAILY_MAX_PAPERS = int(os.environ.get("DAILY_MAX_PAPERS", "4"))
 # 视频更适合作为补充材料：候选最多 4 条，排序分轻微降权，避免同日频道更新挤占新闻。

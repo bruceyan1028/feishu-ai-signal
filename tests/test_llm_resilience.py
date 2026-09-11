@@ -6,6 +6,7 @@
 from __future__ import annotations
 
 from datetime import datetime, timezone
+import json
 from threading import Barrier
 import unittest
 from unittest import mock
@@ -18,6 +19,10 @@ class LlmRetryTest(unittest.TestCase):
         resp = mock.MagicMock()
         resp.status_code = status
         resp.json.return_value = {"choices": [{"message": {"content": content}}]}
+        resp.iter_content.return_value = [
+            json.dumps({"choices": [{"message": {"content": content}}]}).encode()
+        ]
+        resp.encoding = "utf-8"
         resp.raise_for_status = mock.MagicMock()
         return resp
 
@@ -28,6 +33,17 @@ class LlmRetryTest(unittest.TestCase):
                 result = report._llm_json("prompt")
         self.assertEqual(result, {"ok": 1})
         self.assertEqual(post.call_count, 2)
+
+    def test_llm_uses_bounded_connect_and_read_timeouts(self):
+        response = self._response(200)
+        with mock.patch("requests.post", return_value=response) as post:
+            result = report._llm_json("prompt")
+        self.assertEqual(result, {"ok": 1})
+        self.assertEqual(
+            post.call_args.kwargs["timeout"],
+            (report.config.LLM_CONNECT_TIMEOUT_SECONDS, report.config.LLM_READ_TIMEOUT_SECONDS),
+        )
+        self.assertTrue(post.call_args.kwargs["stream"])
 
     def test_retry_status_covers_transient_gateway_codes(self):
         for status in (408, 409, 418, 425, 429, 500, 502, 503, 504):
@@ -42,6 +58,7 @@ class LlmRetryTest(unittest.TestCase):
         # CI 日志里 URL 是打码的，正文是唯一能看出「为什么被拒」的东西
         blocked = self._response(418)
         blocked.text = '{"error":"access denied from this IP"}'
+        blocked.iter_content.return_value = [blocked.text.encode()]
         with mock.patch("requests.post", return_value=blocked):
             with mock.patch("time.sleep"):
                 with self.assertRaises(report.LlmHttpError) as caught:
@@ -51,6 +68,14 @@ class LlmRetryTest(unittest.TestCase):
 
 
 class AnalysisFailureToleranceTest(unittest.TestCase):
+    def test_legacy_deep_analysis_is_not_on_daily_critical_path_by_default(self):
+        fields = {"原文": "x" * 500, "来源": "demo", "标题": "Existing signal"}
+        analysis = {"summary_cn": "已有摘要", "why": "已有结论"}
+        with mock.patch.object(daily.config, "DAILY_FILL_LEGACY_DEEP_ANALYSIS", False):
+            with mock.patch.object(daily.report, "_llm_json") as llm:
+                self.assertEqual(daily._ensure_deep_analysis(fields, analysis), {})
+        llm.assert_not_called()
+
     def test_isolated_failures_do_not_abort_the_brief(self):
         self.assertFalse(daily.analysis_failure_is_systemic(1, 30))
         self.assertFalse(daily.analysis_failure_is_systemic(15, 30))

@@ -47,6 +47,28 @@ class LlmHttpError(RuntimeError):
         detail = self.body[:300] or "(响应正文为空)"
         super().__init__(f"LLM 网关返回 {status}：{detail}")
 
+
+def _read_llm_response(response: Any, deadline: float) -> str:
+    """读取响应体时也执行总时限。
+
+    ``requests`` 的 read timeout 只约束两个网络数据块之间的间隔；异常网关若
+    每隔几秒吐一点数据，普通 ``response.json()`` 会无限等待。流式消费让每个
+    数据块都经过 deadline 检查。
+    """
+    import time
+
+    chunks: list[bytes] = []
+    for chunk in response.iter_content(chunk_size=64 * 1024):
+        if time.monotonic() >= deadline:
+            response.close()
+            raise TimeoutError("LLM total timeout while reading response body")
+        if chunk:
+            chunks.append(chunk)
+    if time.monotonic() >= deadline:
+        response.close()
+        raise TimeoutError("LLM total timeout while reading response body")
+    return b"".join(chunks).decode(response.encoding or "utf-8", errors="replace")
+
 SCORE_META = [
     ("impact", "影响", "impact"),
     ("novelty", "新颖", "novelty"),
@@ -165,7 +187,13 @@ def _llm_json(
         endpoints.sort(key=lambda item: item[0] != "responses")
 
     resp = None
+    response_text = ""
     response_mode = "chat"
+    # chat/completions and responses are fallback protocols for the same call.
+    # They must share one deadline so an unavailable gateway cannot consume the
+    # whole budget twice.
+    deadline = time.monotonic() + max(1.0, config.LLM_TOTAL_TIMEOUT_SECONDS)
+    max_attempts = max(1, config.LLM_MAX_RETRIES)
     for mode, url in endpoints:
         body: dict[str, Any] = {"model": selected_model}
         if mode == "responses":
@@ -204,7 +232,29 @@ def _llm_json(
                     "response_format": {"type": "json_object"},
                 }
             )
-        for attempt in range(3):
+        for attempt in range(max_attempts):
+            remaining = deadline - time.monotonic()
+            if remaining <= 0:
+                raise requests.Timeout(
+                    f"LLM total timeout after {config.LLM_TOTAL_TIMEOUT_SECONDS:.0f}s"
+                )
+            connect_timeout = min(max(0.1, config.LLM_CONNECT_TIMEOUT_SECONDS), remaining)
+            # requests 的二元 timeout 分别覆盖 connect/read；为 read 留出 connect 预算，
+            # 保证单次调用不会突破本条请求的总 deadline。
+            read_timeout = min(
+                max(0.1, config.LLM_READ_TIMEOUT_SECONDS),
+                max(0.1, remaining - connect_timeout),
+            )
+            started = time.monotonic()
+            log.info(
+                "LLM 请求 %s 第 %d/%d 次（连接 %.1fs，读取 %.1fs，剩余 %.1fs）",
+                mode,
+                attempt + 1,
+                max_attempts,
+                connect_timeout,
+                read_timeout,
+                remaining,
+            )
             try:
                 resp = requests.post(
                     url,
@@ -213,26 +263,51 @@ def _llm_json(
                         "Content-Type": "application/json",
                     },
                     json=body,
-                    timeout=180,
+                    timeout=(connect_timeout, read_timeout),
+                    stream=True,
                 )
-            except (requests.Timeout, requests.ConnectionError):
-                if attempt == 2:
+            except (requests.Timeout, requests.ConnectionError) as exc:
+                elapsed = time.monotonic() - started
+                log.warning(
+                    "LLM 请求 %s 第 %d/%d 次失败（%.1fs）：%s",
+                    mode,
+                    attempt + 1,
+                    max_attempts,
+                    elapsed,
+                    exc,
+                )
+                if attempt == max_attempts - 1 or time.monotonic() >= deadline:
                     raise
-                time.sleep(2**attempt)
+                time.sleep(min(2**attempt, max(0.0, deadline - time.monotonic())))
                 continue
-            if resp.status_code in _RETRY_STATUS and attempt < 2:
-                time.sleep(2**attempt)
+            if resp.status_code in _RETRY_STATUS and attempt < max_attempts - 1:
+                resp.close()
+                log.warning(
+                    "LLM 请求 %s 第 %d/%d 次返回 HTTP %d，准备重试",
+                    mode,
+                    attempt + 1,
+                    max_attempts,
+                    resp.status_code,
+                )
+                time.sleep(min(2**attempt, max(0.0, deadline - time.monotonic())))
                 continue
             break
         if resp is not None and resp.status_code not in {404, 405}:
+            try:
+                response_text = _read_llm_response(resp, deadline)
+            except (TimeoutError, requests.Timeout, requests.ConnectionError) as exc:
+                log.warning("LLM 响应体读取失败：%s", exc)
+                raise requests.Timeout(str(exc)) from exc
             response_mode = mode
             break
     assert resp is not None
     if resp.status_code >= 400:
+        if not response_text:
+            response_text = _read_llm_response(resp, deadline)
         # 光一句「418 Client Error」查不出任何东西，而 URL 在 CI 日志里是被
         # 打码的。网关把真正的原因（限流/封 IP/配额）写在正文里，带上它。
-        raise LlmHttpError(resp.status_code, resp.text)
-    payload = resp.json()
+        raise LlmHttpError(resp.status_code, response_text)
+    payload = json.loads(response_text)
     if response_mode == "chat":
         content = payload["choices"][0]["message"]["content"]
     else:

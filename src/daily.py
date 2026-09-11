@@ -1212,6 +1212,10 @@ def _ensure_deep_analysis(
         if preserve_structure:
             analysis["editorial_structure"] = "source"
         return {}
+    if not config.DAILY_FILL_LEGACY_DEEP_ANALYSIS:
+        # 这类条目已有可用摘要，只是缺历史长解读。把它留给异步维护任务，
+        # 避免日报在主线程中逐条等待 LLM，导致整份简报看似卡死。
+        return {}
     source = str(scalar(fields.get("来源")) or "")
     raw_text = clean_body(str(scalar(fields.get("原文")) or ""), source)
     is_paper = content_type(fields) == "论文"
