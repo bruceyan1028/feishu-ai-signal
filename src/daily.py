@@ -760,18 +760,25 @@ def analysis_failure_is_systemic(failed: int, attempted: int) -> bool:
 def _active_source_ids(param_records: list[dict[str, Any]]) -> set[str]:
     # 简报候选来源白名单：active 的正式采集源。
     # 让抓取型来源也能进入每日简报，而不只是 RSS。
-    return {
-        str(sources.cell((record.get("fields") or {}).get("source_id")) or "")
-        for record in param_records
-        if sources.cell((record.get("fields") or {}).get("status")) == "active"
-        and sources.cell((record.get("fields") or {}).get("fetch_method")) in {
-            "RSS",
-            "Scrape",
-            "Media",
-            "Social",
-            "Podcast",
-        }
-    } - {""}
+    result: set[str] = set()
+    for record in param_records:
+        fields = record.get("fields") or {}
+        if (
+            sources.cell(fields.get("status")) != "active"
+            or sources.cell(fields.get("fetch_method"))
+            not in {"RSS", "Scrape", "Media", "Social", "Podcast"}
+        ):
+            continue
+        source_id = str(sources.cell(fields.get("source_id")) or "")
+        try:
+            extra = json.loads(str(sources.cell(fields.get("extra_config")) or "") or "{}")
+        except (TypeError, ValueError):
+            extra = {}
+        if source_id and isinstance(extra, dict) and extra.get("daily_include") is False:
+            continue
+        if source_id:
+            result.add(source_id)
+    return result
 
 
 def _body_admitted_source_ids(param_records: list[dict[str, Any]]) -> set[str]:

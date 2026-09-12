@@ -545,6 +545,26 @@ class DailyTests(unittest.TestCase):
         self.assertEqual(len(arxiv_selected), min(config.DAILY_TECHNICAL_LIMIT, config.MAX_ARXIV_ITEMS + 2))
         self.assertNotIn("scrape", [item["record_id"] for item in selected])
 
+    def test_daily_source_allowlist_excludes_independent_only_source(self) -> None:
+        records = [
+            {
+                "fields": {
+                    "source_id": "github-trending",
+                    "status": "active",
+                    "fetch_method": "Scrape",
+                    "extra_config": '{"daily_include": false}',
+                }
+            },
+            {
+                "fields": {
+                    "source_id": "official-news",
+                    "status": "active",
+                    "fetch_method": "RSS",
+                }
+            },
+        ]
+        self.assertEqual(daily._active_source_ids(records), {"official-news"})
+
     def test_github_hotlist_uses_independent_technical_limit(self) -> None:
         now = datetime.now(timezone.utc)
         stamp = int(now.timestamp() * 1000)

@@ -59,23 +59,6 @@
    "dedup_key": "normalize(url)",
    "dimension": "前沿模型公司",
    "endpoint": {
-    "link": "https://ai.meta.com/blog/",
-    "text": "https://ai.meta.com/blog/"
-   },
-   "fetch_method": "Scrape",
-   "keyword_regex": "(model|gpt|claude|gemini|llama|qwen|deepseek|grok|command|mistral|doubao|seed|volc|agent|reasoning|multimodal|context|rlhf|inference|training|fine-tun|moe|rag|release|launch|announce|introducing|now available|update|preview|GA)",
-   "lookback_window": "24h",
-   "name": "Meta AI Blog",
-   "priority": "P0",
-   "source_id": "meta-ai-blog",
-   "status": "active",
-   "tier": "L1",
-   "来源类型": "纯网页"
-  },
-  {
-   "dedup_key": "normalize(url)",
-   "dimension": "前沿模型公司",
-   "endpoint": {
     "link": "https://about.fb.com/news/feed/",
     "text": "https://about.fb.com/news/feed/"
    },
@@ -103,28 +86,9 @@
    "lookback_window": "24h",
    "name": "Cohere Blog",
    "notes": "无官方RSS；重点：Command系列、企业客户案例",
-   "priority": "P1",
+   "priority": "P2",
    "source_id": "cohere-blog",
    "status": "active",
-   "tier": "L1",
-   "来源类型": "纯网页"
-  },
-  {
-   "dedup_key": "hash(model_family+version)",
-   "dimension": "前沿模型公司",
-   "endpoint": {
-    "link": "https://github.com/deepseek-ai/DeepSeek-V3/releases.atom",
-    "text": "https://github.com/deepseek-ai/DeepSeek-V3/releases.atom"
-   },
-   "extra_config": "{\"repos\":[\"deepseek-ai/deepseek-llm\",\"deepseek-ai/DeepSeek-V3\"]}",
-   "fetch_method": "RSS",
-   "keyword_regex": "(model|gpt|claude|gemini|llama|qwen|deepseek|grok|command|mistral|doubao|seed|volc|agent|reasoning|multimodal|context|rlhf|inference|training|fine-tun|moe|rag|release|launch|announce|introducing|now available|update|preview|GA)",
-   "lookback_window": "24h",
-   "name": "DeepSeek GitHub Releases",
-   "notes": "模型/工具release最快信号",
-   "priority": "P0",
-   "source_id": "deepseek-github",
-   "status": "experimental",
    "tier": "L1",
    "来源类型": "纯网页"
   },
@@ -143,7 +107,7 @@
    "notes": "新的官方研究入口；SPA 页面，待接入前端研究列表接口。旧 qwenlm.github.io/blog 为停更历史镜像",
    "priority": "P0",
    "source_id": "qwen-blog",
-   "status": "experimental",
+   "status": "active",
    "tier": "L1",
    "来源类型": "纯网页"
   },
@@ -325,7 +289,7 @@
     "link": "https://github.com/trending",
     "text": "https://github.com/trending"
    },
-   "extra_config": "{\"query_terms\":[\"llm\",\"large language model\",\"agent\",\"rag\",\"inference\",\"diffusion\",\"multimodal\",\"fine-tuning\",\"mlops\"],\"topic_whitelist\":[\"llm\",\"large-language-models\",\"llmops\",\"agent\",\"ai-agents\",\"rag\",\"retrieval-augmented-generation\",\"inference\",\"llm-inference\",\"mlops\",\"transformers\",\"diffusion\",\"fine-tuning\",\"vector-database\",\"embeddings\",\"multimodal\",\"reasoning\",\"generative-ai\",\"text-to-image\",\"model-serving\",\"quantization\"],\"languages\":[\"python\",\"typescript\",\"javascript\",\"rust\",\"go\",\"c++\",\"cuda\",\"jupyter notebook\"],\"min_absolute_stars\":500,\"breakout_created_days\":60,\"breakout_min_stars\":300,\"active_pushed_days\":14,\"active_min_stars\":3000,\"exclude_topics\":[\"awesome\",\"awesome-list\",\"book\",\"tutorial\",\"roadmap\",\"interview\",\"cheatsheet\",\"course\"],\"exclude_name_regex\":\"(awesome|roadmap|interview|cheat-?sheet|tutorial|handbook|course|free-?code-?camp)\",\"wrapper_penalty\":-0.3,\"max_articles\":15}",
+   "extra_config": "{\"query_terms\":[\"llm\",\"large language model\",\"agent\",\"rag\",\"inference\",\"diffusion\",\"multimodal\",\"fine-tuning\",\"mlops\"],\"topic_whitelist\":[\"llm\",\"large-language-models\",\"llmops\",\"agent\",\"ai-agents\",\"rag\",\"retrieval-augmented-generation\",\"inference\",\"llm-inference\",\"mlops\",\"transformers\",\"diffusion\",\"fine-tuning\",\"vector-database\",\"embeddings\",\"multimodal\",\"reasoning\",\"generative-ai\",\"text-to-image\",\"model-serving\",\"quantization\"],\"languages\":[\"python\",\"typescript\",\"javascript\",\"rust\",\"go\",\"c++\",\"cuda\",\"jupyter notebook\"],\"min_absolute_stars\":500,\"breakout_created_days\":60,\"breakout_min_stars\":300,\"active_pushed_days\":14,\"active_min_stars\":3000,\"exclude_topics\":[\"awesome\",\"awesome-list\",\"book\",\"tutorial\",\"roadmap\",\"interview\",\"cheatsheet\",\"course\"],\"exclude_name_regex\":\"(awesome|roadmap|interview|cheat-?sheet|tutorial|handbook|course|free-?code-?camp)\",\"wrapper_penalty\":-0.3,\"max_articles\":15,\"daily_include\":false}",
    "fetch_method": "Scrape",
    "keyword_regex": "(transformer|moe|mamba|agent|tool-use|reasoning|planning|long-context|multimodal|rlhf|dpo|grpo|inference|rag|benchmark|sota|alignment|safety|llm|diffusion|world-model|code-generation)",
    "lookback_window": "24h",
@@ -490,155 +454,6 @@
   },
   {
    "dedup_key": "normalize(url)",
-   "dimension": "模型评测基准",
-   "endpoint": {
-    "link": "https://crfm.stanford.edu/feed",
-    "text": "https://crfm.stanford.edu/feed"
-   },
-   "extra_config": "{\"note\": \"原 HELM leaderboard SPA；改采 CRFM RSS\", \"former\": \"https://crfm.stanford.edu/helm/\"}",
-   "fetch_method": "RSS",
-   "lookback_window": "24h",
-   "name": "Stanford CRFM / HELM",
-   "priority": "P1",
-   "source_id": "stanford-helm",
-   "status": "active",
-   "tier": "L1",
-   "来源类型": "纯网页"
-  },
-  {
-   "dedup_key": "normalize(url)",
-   "dimension": "模型评测基准",
-   "endpoint": {
-    "link": "https://mlcommons.org/category/news/feed/",
-    "text": "https://mlcommons.org/category/news/feed/"
-   },
-   "extra_config": "{\"snapshot_mode\":true,\"snapshot_retention_days\":365}",
-   "fetch_method": "RSS",
-   "lookback_window": "48h",
-   "name": "MLCommons / MLPerf",
-   "priority": "P1",
-   "source_id": "mlperf",
-   "status": "active",
-   "tier": "L1",
-   "来源类型": "纯网页"
-  },
-  {
-   "dedup_key": "normalize(url)",
-   "dimension": "模型评测基准",
-   "extra_config": "{\"snapshot_mode\":true,\"snapshot_retention_days\":365}",
-   "fetch_method": "Manual",
-   "lookback_window": "48h",
-   "name": "MMLU-Pro / GPQA / AIME",
-   "notes": "手工跟踪学术基准更新",
-   "priority": "P2",
-   "source_id": "academic-benchmarks",
-   "status": "paused",
-   "tier": "L2",
-   "来源类型": "纯网页"
-  },
-  {
-   "dedup_key": "normalize(url)",
-   "dimension": "模型评测基准",
-   "endpoint": {
-    "link": "https://github.com/open-compass/OpenCompass/releases.atom",
-    "text": "https://github.com/open-compass/OpenCompass/releases.atom"
-   },
-   "extra_config": "{\"note\": \"榜单 SPA；改采 GitHub Releases Atom\", \"former\": \"https://opencompass.org.cn/\"}",
-   "fetch_method": "RSS",
-   "lookback_window": "24h",
-   "name": "OpenCompass Releases",
-   "priority": "P0",
-   "source_id": "opencompass",
-   "status": "active",
-   "tier": "L2",
-   "来源类型": "纯网页"
-  },
-  {
-   "dedup_key": "normalize(url)",
-   "dimension": "产品化企业采用",
-   "endpoint": {
-    "link": "https://www.mckinsey.com/capabilities/quantumblack/our-insights/the-state-of-ai",
-    "text": "https://www.mckinsey.com/capabilities/quantumblack/our-insights/the-state-of-ai"
-   },
-   "fetch_method": "Manual",
-   "keyword_regex": "(adoption|enterprise|roi|deployment|production|pilot|customer|copilot|saas|gartner|case study|案例)",
-   "lookback_window": "24h",
-   "name": "McKinsey State of AI",
-   "notes": "PDF报告人工导入",
-   "priority": "P0",
-   "source_id": "mckinsey-state-of-ai",
-   "status": "active",
-   "tier": "L3",
-   "来源类型": "纯网页"
-  },
-  {
-   "dedup_key": "normalize(url)",
-   "dimension": "产品化企业采用",
-   "fetch_method": "Manual",
-   "keyword_regex": "(adoption|enterprise|roi|deployment|production|pilot|customer|copilot|saas|gartner|case study|案例)",
-   "lookback_window": "24h",
-   "name": "Deloitte/PwC/BCG/Bain AI",
-   "notes": "报告PDF人工导入",
-   "priority": "P1",
-   "source_id": "consulting-ai-reports",
-   "status": "paused",
-   "tier": "L3",
-   "来源类型": "纯网页"
-  },
-  {
-   "dedup_key": "normalize(url)",
-   "dimension": "产品化企业采用",
-   "endpoint": {
-    "link": "https://www.gartner.com/en/topics/artificial-intelligence",
-    "text": "https://www.gartner.com/en/topics/artificial-intelligence"
-   },
-   "fetch_method": "Manual",
-   "keyword_regex": "(adoption|enterprise|roi|deployment|production|pilot|customer|copilot|saas|gartner|case study|案例)",
-   "lookback_window": "24h",
-   "name": "Gartner AI / Hype Cycle",
-   "notes": "订阅制",
-   "priority": "P1",
-   "source_id": "gartner-ai",
-   "status": "experimental",
-   "tier": "L3",
-   "来源类型": "纯网页"
-  },
-  {
-   "dedup_key": "normalize(url)",
-   "dimension": "产品化企业采用",
-   "endpoint": {
-    "link": "https://www.salesforce.com/news/feed/",
-    "text": "https://www.salesforce.com/news/feed/"
-   },
-   "fetch_method": "RSS",
-   "keyword_regex": "(adoption|enterprise|roi|deployment|production|pilot|customer|copilot|saas|gartner|case study|案例)",
-   "lookback_window": "24h",
-   "name": "Salesforce AI",
-   "priority": "P1",
-   "source_id": "salesforce-ai",
-   "status": "experimental",
-   "tier": "L1",
-   "来源类型": "纯网页"
-  },
-  {
-   "dedup_key": "normalize(url)",
-   "dimension": "产品化企业采用",
-   "endpoint": {
-    "link": "https://github.blog/feed/",
-    "text": "https://github.blog/feed/"
-   },
-   "fetch_method": "RSS",
-   "keyword_regex": "(adoption|enterprise|roi|deployment|production|pilot|customer|copilot|saas|gartner|case study|案例)",
-   "lookback_window": "24h",
-   "name": "Microsoft Copilot / GitHub Copilot",
-   "priority": "P0",
-   "source_id": "ms-copilot",
-   "status": "experimental",
-   "tier": "L1",
-   "来源类型": "纯网页"
-  },
-  {
-   "dedup_key": "normalize(url)",
    "dimension": "产品化企业采用",
    "fetch_method": "Manual",
    "keyword_regex": "(adoption|enterprise|roi|deployment|production|pilot|customer|copilot|saas|gartner|case study|案例)",
@@ -647,24 +462,6 @@
    "notes": "医疗/金融/法律/制造/教育/客服；News API待接",
    "priority": "P2",
    "source_id": "vertical-ai-cases",
-   "status": "paused",
-   "tier": "L3",
-   "来源类型": "纯网页"
-  },
-  {
-   "dedup_key": "normalize(url)",
-   "dimension": "创业融资并购",
-   "endpoint": {
-    "link": "https://pitchbook.com/",
-    "text": "https://pitchbook.com/"
-   },
-   "fetch_method": "Manual",
-   "keyword_regex": "(funding|raised|series [a-d]|valuation|acqui|merger|ipo|invest|融资|并购|估值|startup)",
-   "lookback_window": "24h",
-   "name": "PitchBook",
-   "notes": "订阅/API",
-   "priority": "P1",
-   "source_id": "pitchbook",
    "status": "paused",
    "tier": "L3",
    "来源类型": "纯网页"
@@ -694,13 +491,13 @@
     "text": "https://www.theinformation.com/"
    },
    "fetch_method": "Manual",
-   "keyword_regex": "(funding|raised|series [a-d]|valuation|acqui|merger|ipo|invest|融资|并购|估值|startup)",
+   "keyword_regex": "(ai|artificial intelligence|llm|model|agent|openai|anthropic|google|meta|nvidia|semiconductor|compute|data center|robot|autonomous|generative)",
    "lookback_window": "24h",
    "name": "The Information AI Agenda",
-   "notes": "订阅制",
+   "notes": "订阅制；官网受 Cloudflare 保护，普通 HTTP/Jina 抓取不可用。仅在受控浏览器或订阅授权渠道采集公开标题、链接和发布时间。",
    "priority": "P0",
    "source_id": "the-information",
-   "status": "paused",
+   "status": "active",
    "tier": "L3",
    "来源类型": "纯网页"
   },
@@ -758,23 +555,6 @@
   },
   {
    "dedup_key": "normalize(url)",
-   "dimension": "创业融资并购",
-   "endpoint": {
-    "link": "https://sifted.eu/feed",
-    "text": "https://sifted.eu/feed"
-   },
-   "fetch_method": "RSS",
-   "keyword_regex": "(funding|raised|series [a-d]|valuation|acqui|merger|ipo|invest|融资|并购|估值|startup)",
-   "lookback_window": "24h",
-   "name": "Sifted",
-   "priority": "P2",
-   "source_id": "sifted",
-   "status": "active",
-   "tier": "L3",
-   "来源类型": "纯网页"
-  },
-  {
-   "dedup_key": "normalize(url)",
    "dimension": "中文媒体",
    "endpoint": {
     "link": "https://www.36kr.com/user/19630955",
@@ -811,53 +591,6 @@
   },
   {
    "dedup_key": "normalize(url)",
-   "dimension": "创业融资并购",
-   "endpoint": {
-    "link": "https://rsshub.app/latepost/latest",
-    "text": "https://rsshub.app/latepost/latest"
-   },
-   "fetch_method": "Bridge",
-   "keyword_regex": "(funding|raised|series [a-d]|valuation|acqui|merger|ipo|invest|融资|并购|估值|startup)",
-   "lookback_window": "24h",
-   "name": "晚点 LatePost",
-   "priority": "P0",
-   "source_id": "latepost-ai",
-   "status": "experimental",
-   "tier": "L3",
-   "来源类型": "公众号"
-  },
-  {
-   "dedup_key": "normalize(url)",
-   "dimension": "创业融资并购",
-   "endpoint": {
-    "link": "https://www.jiqizhixin.com/rss",
-    "text": "https://www.jiqizhixin.com/rss"
-   },
-   "fetch_method": "Bridge",
-   "keyword_regex": "(funding|raised|series [a-d]|valuation|acqui|merger|ipo|invest|融资|并购|估值|startup)",
-   "lookback_window": "24h",
-   "name": "机器之心",
-   "priority": "P0",
-   "source_id": "jiqizhixin",
-   "status": "experimental",
-   "tier": "L3",
-   "来源类型": "公众号"
-  },
-  {
-   "dedup_key": "normalize(url)",
-   "dimension": "创业融资并购",
-   "fetch_method": "Manual",
-   "keyword_regex": "(funding|raised|series [a-d]|valuation|acqui|merger|ipo|invest|融资|并购|估值|startup)",
-   "lookback_window": "24h",
-   "name": "公司注册和招聘变化",
-   "priority": "P2",
-   "source_id": "corp-signals",
-   "status": "paused",
-   "tier": "L4",
-   "来源类型": "纯网页"
-  },
-  {
-   "dedup_key": "normalize(url)",
    "dimension": "政策监管地缘",
    "endpoint": {
     "link": "https://www.ai.gov/",
@@ -870,24 +603,6 @@
    "name": "AI.gov / 美国 AI 政策",
    "priority": "P0",
    "source_id": "ai-gov-us",
-   "status": "experimental",
-   "tier": "L1",
-   "来源类型": "纯网页"
-  },
-  {
-   "dedup_key": "normalize(url)",
-   "dimension": "政策监管地缘",
-   "endpoint": {
-    "link": "https://www.nist.gov/news-events/news/rss.xml",
-    "text": "https://www.nist.gov/news-events/news/rss.xml"
-   },
-   "extra_config": "{\"policy_stage_extract\":true}",
-   "fetch_method": "RSS",
-   "keyword_regex": "(ai act|regulation|compliance|executive order|export control|备案|algorithm|governance|litigation|incident|policy)",
-   "lookback_window": "24h",
-   "name": "NIST AI RMF",
-   "priority": "P1",
-   "source_id": "nist-ai-rmf",
    "status": "experimental",
    "tier": "L1",
    "来源类型": "纯网页"
@@ -931,60 +646,6 @@
   },
   {
    "dedup_key": "normalize(url)",
-   "dimension": "政策监管地缘",
-   "endpoint": {
-    "link": "https://www.smartnation.gov.cn/",
-    "text": "https://www.smartnation.gov.cn/"
-   },
-   "extra_config": "{\"policy_stage_extract\":true}",
-   "fetch_method": "Manual",
-   "keyword_regex": "(ai act|regulation|compliance|executive order|export control|备案|algorithm|governance|litigation|incident|policy)",
-   "lookback_window": "24h",
-   "name": "Singapore NAIS 2.0",
-   "priority": "P2",
-   "source_id": "singapore-nais",
-   "status": "experimental",
-   "tier": "L1",
-   "来源类型": "纯网页"
-  },
-  {
-   "dedup_key": "normalize(url)",
-   "dimension": "政策监管地缘",
-   "endpoint": {
-    "link": "https://www.reuters.com/legal/",
-    "text": "https://www.reuters.com/legal/"
-   },
-   "extra_config": "{\"policy_stage_extract\":true}",
-   "fetch_method": "Manual",
-   "keyword_regex": "(ai act|regulation|compliance|executive order|export control|备案|algorithm|governance|litigation|incident|policy)",
-   "lookback_window": "24h",
-   "name": "律所 AI Litigation Tracker",
-   "priority": "P1",
-   "source_id": "litigation-tracker",
-   "status": "experimental",
-   "tier": "L3",
-   "来源类型": "纯网页"
-  },
-  {
-   "dedup_key": "normalize(url)",
-   "dimension": "政策监管地缘",
-   "endpoint": {
-    "link": "https://incidentdatabase.ai/rss.xml",
-    "text": "https://incidentdatabase.ai/rss.xml"
-   },
-   "extra_config": "{\"policy_stage_extract\":true}",
-   "fetch_method": "RSS",
-   "keyword_regex": "(ai act|regulation|compliance|executive order|export control|备案|algorithm|governance|litigation|incident|policy)",
-   "lookback_window": "24h",
-   "name": "AI Incident Database",
-   "priority": "P1",
-   "source_id": "ai-incident-db",
-   "status": "experimental",
-   "tier": "L2",
-   "来源类型": "纯网页"
-  },
-  {
-   "dedup_key": "normalize(url)",
    "dimension": "其他",
    "extra_config": "{\"duration_min\":5,\"duration_max\":90,\"view_to_sub_ratio\":0.1}",
    "fetch_method": "Manual",
@@ -1021,7 +682,7 @@
    },
    "extra_config": "{\"max_items\":6,\"max_duration_sec\":14400,\"fallback_urls\":[\"https://api.substack.com/feed/podcast/69345.rss\"]}",
    "fetch_method": "Podcast",
-   "lookback_window": "72h",
+   "lookback_window": "48h",
    "min_content_chars": 1,
    "name": "Dwarkesh Podcast",
    "notes": "Apple 当前 feed 优先，旧 Substack feed 兜底；新源先诊断验收",
@@ -1030,30 +691,6 @@
    "status": "experimental",
    "tier": "L4",
    "来源类型": "播客"
-  },
-  {
-   "dedup_key": "normalize(url)",
-   "dimension": "其他",
-   "fetch_method": "Manual",
-   "lookback_window": "48h",
-   "name": "在线会议（有回放）",
-   "priority": "P2",
-   "source_id": "online-conf-replay",
-   "status": "paused",
-   "tier": "L4",
-   "来源类型": "纯网页"
-  },
-  {
-   "dedup_key": "normalize(url)",
-   "dimension": "其他",
-   "fetch_method": "Manual",
-   "lookback_window": "48h",
-   "name": "在线会议（实时）",
-   "priority": "P2",
-   "source_id": "online-conf-live",
-   "status": "paused",
-   "tier": "L4",
-   "来源类型": "纯网页"
   },
   {
    "dedup_key": "normalize(url)",
@@ -1124,23 +761,6 @@
    "来源类型": "论文"
   },
   {
-   "dedup_key": "normalize(url)",
-   "dimension": "算力芯片云",
-   "endpoint": {
-    "link": "https://www.utilitydive.com/feeds/news/",
-    "text": "https://www.utilitydive.com/feeds/news/"
-   },
-   "fetch_method": "RSS",
-   "keyword_regex": "(datacenter|data center|gpu|ai|artificial intelligence|power|grid|transmission|energy|hyperscale|inference|training|chip|compute|solar|battery)",
-   "lookback_window": "24h",
-   "name": "Utility Dive",
-   "priority": "P2",
-   "source_id": "utility-dive",
-   "status": "active",
-   "tier": "L3",
-   "来源类型": "纯网页"
-  },
-  {
    "dimension": "中文媒体",
    "endpoint": {
     "link": "https://www.qbitai.com/",
@@ -1197,24 +817,6 @@
   {
    "dimension": "中文媒体",
    "endpoint": {
-    "link": "https://www.jazzyear.com/",
-    "text": "https://www.jazzyear.com/"
-   },
-   "extra_config": "{\"keyword_min_hits\": 2}",
-   "fetch_method": "Scrape",
-   "keyword_regex": "(人工智能|智能体|大模型|大语言模型|生成式|多模态|具身|算力|算法|芯片|GPU|机器学习|深度学习|神经网络|强化学习|扩散模型|机器人|自动驾驶|开源模型|AIGC|LLM|GPT|Claude|Gemini|DeepSeek|文心|通义|千问|Kimi|豆包|Llama|OpenAI|Anthropic|英伟达|Transformer)",
-   "lookback_window": "24h",
-   "name": "甲子光年",
-   "notes": "A类·甲子光年·纯SPA首页无可抽 href 文章链接，Jina也拿不到，待接 API/专用抽取器",
-   "priority": "P2",
-   "source_id": "jazzyear",
-   "status": "experimental",
-   "tier": "L3",
-   "来源类型": "公众号"
-  },
-  {
-   "dimension": "中文媒体",
-   "endpoint": {
     "link": "https://www.leiphone.com/feed",
     "text": "https://www.leiphone.com/feed"
    },
@@ -1250,60 +852,6 @@
   {
    "dimension": "中文媒体",
    "endpoint": {
-    "link": "https://www.geekpark.net/",
-    "text": "https://www.geekpark.net/"
-   },
-   "extra_config": "{\"link_path_include\": \"^/news/\\\\d|\\\\.html$\", \"keyword_min_hits\": 2}",
-   "fetch_method": "Scrape",
-   "keyword_regex": "(人工智能|智能体|大模型|大语言模型|生成式|多模态|具身|算力|算法|芯片|GPU|机器学习|深度学习|神经网络|强化学习|扩散模型|机器人|自动驾驶|开源模型|AIGC|LLM|GPT|Claude|Gemini|DeepSeek|文心|通义|千问|Kimi|豆包|Llama|OpenAI|Anthropic|英伟达|Transformer)",
-   "lookback_window": "24h",
-   "name": "极客公园 / Founder Park",
-   "notes": "A类·官网可抓。科技/AI创业",
-   "priority": "P1",
-   "source_id": "geekpark",
-   "status": "active",
-   "tier": "L3",
-   "来源类型": "公众号"
-  },
-  {
-   "dimension": "中文媒体",
-   "endpoint": {
-    "link": "https://www.thepaper.cn/",
-    "text": "https://www.thepaper.cn/"
-   },
-   "extra_config": "{\"force_direct\": true, \"keyword_min_hits\": 2}",
-   "fetch_method": "Scrape",
-   "keyword_regex": "(人工智能|智能体|大模型|大语言模型|生成式|多模态|具身|算力|算法|芯片|GPU|机器学习|深度学习|神经网络|强化学习|扩散模型|机器人|自动驾驶|开源模型|AIGC|LLM|GPT|Claude|Gemini|DeepSeek|文心|通义|千问|Kimi|豆包|Llama|OpenAI|Anthropic|英伟达|Transformer)",
-   "lookback_window": "24h",
-   "name": "澎湃新闻·科技",
-   "notes": "A类·泛科技/时政·官网可抓",
-   "priority": "P1",
-   "source_id": "thepaper",
-   "status": "active",
-   "tier": "L3",
-   "来源类型": "公众号"
-  },
-  {
-   "dimension": "中文媒体",
-   "endpoint": {
-    "link": "https://a.jiemian.com/index.php?m=article&a=rss",
-    "text": "https://a.jiemian.com/index.php?m=article&a=rss"
-   },
-   "extra_config": "{\"keyword_min_hits\": 2}",
-   "fetch_method": "RSS",
-   "keyword_regex": "(人工智能|智能体|大模型|大语言模型|生成式|多模态|具身|算力|算法|芯片|GPU|机器学习|深度学习|神经网络|强化学习|扩散模型|机器人|自动驾驶|开源模型|AIGC|LLM|GPT|Claude|Gemini|DeepSeek|文心|通义|千问|Kimi|豆包|Llama|OpenAI|Anthropic|英伟达|Transformer)",
-   "lookback_window": "24h",
-   "name": "界面新闻",
-   "notes": "A类·财经商业·官网可抓",
-   "priority": "P1",
-   "source_id": "jiemian",
-   "status": "active",
-   "tier": "L3",
-   "来源类型": "公众号"
-  },
-  {
-   "dimension": "中文媒体",
-   "endpoint": {
     "link": "https://wallstreetcn.com/",
     "text": "https://wallstreetcn.com/"
    },
@@ -1315,24 +863,6 @@
    "notes": "A类·财经/宏观·官网可抓",
    "priority": "P1",
    "source_id": "wallstreetcn",
-   "status": "active",
-   "tier": "L3",
-   "来源类型": "公众号"
-  },
-  {
-   "dimension": "中文媒体",
-   "endpoint": {
-    "link": "https://www.caixin.com/",
-    "text": "https://www.caixin.com/"
-   },
-   "extra_config": "{\"force_direct\": true, \"keyword_min_hits\": 2}",
-   "fetch_method": "Scrape",
-   "keyword_regex": "(人工智能|智能体|大模型|大语言模型|生成式|多模态|具身|算力|算法|芯片|GPU|机器学习|深度学习|神经网络|强化学习|扩散模型|机器人|自动驾驶|开源模型|AIGC|LLM|GPT|Claude|Gemini|DeepSeek|文心|通义|千问|Kimi|豆包|Llama|OpenAI|Anthropic|英伟达|Transformer)",
-   "lookback_window": "24h",
-   "name": "财新",
-   "notes": "A类·财经深度(部分付费墙)·官网可抓",
-   "priority": "P1",
-   "source_id": "caixin",
    "status": "active",
    "tier": "L3",
    "来源类型": "公众号"
@@ -1565,7 +1095,7 @@
    },
    "extra_config": "{\"max_items\":6,\"max_duration_sec\":14400}",
    "fetch_method": "Podcast",
-   "lookback_window": "72h",
+   "lookback_window": "48h",
    "min_content_chars": 1,
    "name": "硅谷 101",
    "notes": "白名单节目每期处理；新源先诊断验收",
@@ -1584,7 +1114,7 @@
    },
    "extra_config": "{\"max_items\":6,\"max_duration_sec\":14400}",
    "fetch_method": "Podcast",
-   "lookback_window": "72h",
+   "lookback_window": "48h",
    "min_content_chars": 1,
    "name": "Latent Space",
    "notes": "白名单节目每期处理；新源先诊断验收",
@@ -1622,7 +1152,7 @@
    },
    "extra_config": "{\"max_items\":6,\"max_duration_sec\":14400}",
    "fetch_method": "Podcast",
-   "lookback_window": "72h",
+   "lookback_window": "48h",
    "min_content_chars": 1,
    "name": "AI 炼金术",
    "notes": "喜马拉雅 RSS 偶发超时；先诊断验收",
@@ -1650,24 +1180,6 @@
    "status": "active",
    "tier": "L4",
    "来源类型": "播客"
-  },
-  {
-   "dedup_key": "normalize(url)",
-   "dimension": "前沿模型公司",
-   "endpoint": {
-    "link": "https://www.moonshot.cn/",
-    "text": "https://www.moonshot.cn/"
-   },
-   "fetch_method": "Scrape",
-   "keyword_regex": "(model|gpt|claude|gemini|llama|qwen|deepseek|grok|kimi|glm|minimax|step|hunyuan|agent|reasoning|multimodal|open.?source|发布|开源|模型|智能体|推理)",
-   "lookback_window": "72h",
-   "name": "Moonshot AI 月之暗面",
-   "notes": "国产厂商官方源；直连诊断 no_links_extracted（SPA，需 Jina）。待代理可用后复测",
-   "priority": "P0",
-   "source_id": "moonshot-ai",
-   "status": "experimental",
-   "tier": "L1",
-   "来源类型": "纯网页"
   },
   {
    "dedup_key": "normalize(url)",
@@ -1702,25 +1214,7 @@
    "notes": "国产厂商官方源；能抓到文章（2 篇）但页面无发布时间，清洗阶段被 missing_or_invalid_date 丢弃",
    "priority": "P0",
    "source_id": "minimax-ai",
-   "status": "experimental",
-   "tier": "L1",
-   "来源类型": "纯网页"
-  },
-  {
-   "dedup_key": "normalize(url)",
-   "dimension": "前沿模型公司",
-   "endpoint": {
-    "link": "https://platform.stepfun.com/",
-    "text": "https://platform.stepfun.com/"
-   },
-   "fetch_method": "Scrape",
-   "keyword_regex": "(model|gpt|claude|gemini|llama|qwen|deepseek|grok|kimi|glm|minimax|step|hunyuan|agent|reasoning|multimodal|open.?source|发布|开源|模型|智能体|推理)",
-   "lookback_window": "72h",
-   "name": "阶跃星辰 StepFun",
-   "notes": "开放平台首页是产品导航，链接均无发布时间；由 stepfun-modelscope 替代",
-   "priority": "P0",
-   "source_id": "stepfun-ai",
-   "status": "paused",
+   "status": "active",
    "tier": "L1",
    "来源类型": "纯网页"
   },
@@ -1745,74 +1239,6 @@
    "dedup_key": "normalize(url)",
    "dimension": "算力芯片云",
    "endpoint": {
-    "link": "https://rocm.blogs.amd.com/blog/atom.xml",
-    "text": "https://rocm.blogs.amd.com/blog/atom.xml"
-   },
-   "fetch_method": "RSS",
-   "keyword_regex": "(gpu|tpu|blackwell|h100|mi3|inference|training|bedrock|vertex|datacenter|cuda|rocm|pricing|chip|compute)",
-   "lookback_window": "24h",
-   "name": "AMD Instinct / ROCm",
-   "priority": "P1",
-   "source_id": "amd-instinct",
-   "status": "active",
-   "tier": "L1",
-   "来源类型": "纯网页"
-  },
-  {
-   "dedup_key": "normalize(url)",
-   "dimension": "算力芯片云",
-   "endpoint": {
-    "link": "https://azure.microsoft.com/en-us/blog/feed/",
-    "text": "https://azure.microsoft.com/en-us/blog/feed/"
-   },
-   "fetch_method": "RSS",
-   "keyword_regex": "(gpu|tpu|blackwell|h100|mi3|inference|training|bedrock|vertex|datacenter|cuda|rocm|pricing|chip|compute)",
-   "lookback_window": "24h",
-   "name": "Microsoft Azure AI Infrastructure",
-   "priority": "P1",
-   "source_id": "azure-ai-infra",
-   "status": "active",
-   "tier": "L1",
-   "来源类型": "纯网页"
-  },
-  {
-   "dedup_key": "normalize(url)",
-   "dimension": "算力芯片云",
-   "endpoint": {
-    "link": "https://cloudblog.withgoogle.com/products/ai-machine-learning/rss/",
-    "text": "https://cloudblog.withgoogle.com/products/ai-machine-learning/rss/"
-   },
-   "fetch_method": "RSS",
-   "keyword_regex": "(gpu|tpu|blackwell|h100|mi3|inference|training|bedrock|vertex|datacenter|cuda|rocm|pricing|chip|compute)",
-   "lookback_window": "24h",
-   "name": "Google Cloud AI Blog",
-   "priority": "P0",
-   "source_id": "gcp-ai-infra",
-   "status": "active",
-   "tier": "L1",
-   "来源类型": "纯网页"
-  },
-  {
-   "dedup_key": "normalize(url)",
-   "dimension": "算力芯片云",
-   "endpoint": {
-    "link": "https://www.together.ai/blog/rss.xml",
-    "text": "https://www.together.ai/blog/rss.xml"
-   },
-   "fetch_method": "RSS",
-   "keyword_regex": "(gpu|tpu|blackwell|h100|mi3|inference|training|bedrock|vertex|datacenter|cuda|rocm|pricing|chip|compute)",
-   "lookback_window": "24h",
-   "name": "Together AI Blog",
-   "priority": "P1",
-   "source_id": "together-ai",
-   "status": "active",
-   "tier": "L2",
-   "来源类型": "纯网页"
-  },
-  {
-   "dedup_key": "normalize(url)",
-   "dimension": "算力芯片云",
-   "endpoint": {
     "link": "https://lambda.ai/blog/rss.xml",
     "text": "https://lambda.ai/blog/rss.xml"
    },
@@ -1820,7 +1246,7 @@
    "keyword_regex": "(gpu|tpu|blackwell|h100|mi3|inference|training|bedrock|vertex|datacenter|cuda|rocm|pricing|chip|compute)",
    "lookback_window": "24h",
    "name": "Lambda Labs Blog",
-   "priority": "P1",
+   "priority": "P0",
    "source_id": "lambda-labs",
    "status": "active",
    "tier": "L2",
@@ -1838,48 +1264,10 @@
    "keyword_regex": "(gpu|tpu|blackwell|h100|mi3|inference|training|bedrock|vertex|datacenter|cuda|rocm|pricing|chip|compute)",
    "lookback_window": "24h",
    "name": "Epoch AI Compute Data",
-   "priority": "P1",
+   "priority": "P0",
    "source_id": "epoch-compute",
    "status": "active",
    "tier": "L2",
-   "来源类型": "纯网页"
-  },
-  {
-   "dedup_key": "normalize(url)",
-   "dimension": "前沿模型公司",
-   "endpoint": {
-    "link": "https://modelscope.cn/organization/ZhipuAI",
-    "text": "https://modelscope.cn/organization/ZhipuAI"
-   },
-   "extra_config": "{\"modelscope_api\":true,\"modelscope_mode\":\"owner\",\"modelscope_owner\":\"ZhipuAI\",\"model_name_exclude_regex\":\"(?:FP8|GGUF|NVFP4)$\",\"recent_days\":30,\"max_articles\":8}",
-   "fetch_method": "Scrape",
-   "keyword_regex": "(glm|zhipu|model|agent|reasoning|multimodal|vision|audio|ocr|open.?source|release)",
-   "lookback_window": "24h",
-   "name": "智谱 ModelScope 官方模型",
-   "notes": "ModelScope 官方组织 OpenAPI；仅按模型真实创建时间入库，过滤量化副本",
-   "priority": "P0",
-   "source_id": "zhipu-modelscope",
-   "status": "active",
-   "tier": "L1",
-   "来源类型": "纯网页"
-  },
-  {
-   "dedup_key": "normalize(url)",
-   "dimension": "前沿模型公司",
-   "endpoint": {
-    "link": "https://modelscope.cn/organization/stepfun-ai",
-    "text": "https://modelscope.cn/organization/stepfun-ai"
-   },
-   "extra_config": "{\"modelscope_api\":true,\"modelscope_mode\":\"owner\",\"modelscope_owner\":\"stepfun-ai\",\"model_name_exclude_regex\":\"(?:FP8|GGUF|NVFP4)$\",\"recent_days\":30,\"max_articles\":8}",
-   "fetch_method": "Scrape",
-   "keyword_regex": "(stepfun|step[- .]?[0-9]|model|agent|reasoning|multimodal|vision|audio|open.?source|release)",
-   "lookback_window": "24h",
-   "name": "阶跃星辰 ModelScope 官方模型",
-   "notes": "ModelScope 官方组织 OpenAPI；仅按模型真实创建时间入库，过滤量化副本",
-   "priority": "P0",
-   "source_id": "stepfun-modelscope",
-   "status": "active",
-   "tier": "L1",
    "来源类型": "纯网页"
   },
   {
@@ -1902,25 +1290,6 @@
    "来源类型": "纯网页"
   },
   {
-   "dedup_key": "normalize(url)",
-   "dimension": "政策监管地缘",
-   "endpoint": {
-    "link": "https://www.whitehouse.gov/presidential-actions/feed/",
-    "text": "https://www.whitehouse.gov/presidential-actions/feed/"
-   },
-   "extra_config": "{\"keyword_min_hits\":2,\"policy_stage_extract\":true,\"document_pdf_enrich\":true,\"max_document_pdfs\":2,\"title_exclude_regex\":\"(trade agenda|auto manufacturing|stationary sources|chemical manufacturing|tariffs?|duties on|adjusting imports|space transportation|space launch)\"}",
-   "fetch_method": "RSS",
-   "keyword_regex": "(artificial intelligence|\\bA\\.I\\.\\b|\\bAI\\b|machine learning|foundation models?|large language models?|\\bLLMs?\\b|generative AI|AI safety|AI governance|Genesis Mission)",
-   "lookback_window": "24h",
-   "name": "White House 科技总统行动",
-   "notes": "仅收录明确谈 AI/ML/模型的总统行动；航天运输等泛科技备忘录不入库",
-   "priority": "P0",
-   "source_id": "whitehouse-tech-actions",
-   "status": "active",
-   "tier": "L1",
-   "来源类型": "纯网页"
-  },
-  {
    "dedup_key": "podcast_guid",
    "dimension": "其他",
    "endpoint": {
@@ -1929,13 +1298,13 @@
    },
    "extra_config": "{\"max_items\":3,\"max_duration_sec\":14400}",
    "fetch_method": "Podcast",
-   "lookback_window": "72h",
+   "lookback_window": "48h",
    "min_content_chars": 1,
    "name": "Practical AI",
    "notes": "新增播客源；完整诊断通过后再转 active",
    "priority": "P2",
    "source_id": "podcast-practical-ai",
-   "status": "experimental",
+   "status": "active",
    "tier": "L4",
    "来源类型": "播客"
   },
@@ -1986,7 +1355,7 @@
    },
    "extra_config": "{\"max_items\":3,\"max_duration_sec\":14400}",
    "fetch_method": "Podcast",
-   "lookback_window": "72h",
+   "lookback_window": "48h",
    "min_content_chars": 1,
    "name": "Gradient Dissent",
    "notes": "新增播客源；完整诊断通过后再转 active",
@@ -2062,13 +1431,13 @@
    },
    "extra_config": "{\"max_items\":3,\"max_duration_sec\":14400}",
    "fetch_method": "Podcast",
-   "lookback_window": "72h",
+   "lookback_window": "48h",
    "min_content_chars": 1,
    "name": "NVIDIA AI Podcast",
    "notes": "新增播客源；完整诊断通过后再转 active",
    "priority": "P2",
    "source_id": "podcast-nvidia-ai",
-   "status": "experimental",
+   "status": "paused",
    "tier": "L4",
    "来源类型": "播客"
   }
@@ -2151,14 +1520,6 @@
    "名称": "暗涌Waves"
   },
   {
-   "source_id": "latepost-ai",
-   "名称": "晚点 LatePost"
-  },
-  {
-   "source_id": "jiqizhixin",
-   "名称": "机器之心"
-  },
-  {
    "source_id": "huxiu",
    "名称": "虎嗅",
    "备注": "中文媒体收敛：须命中 AI 关键词，排除股价/基金行情噪音",
@@ -2169,54 +1530,6 @@
   {
    "source_id": "wallstreetcn",
    "名称": "华尔街见闻",
-   "备注": "中文媒体收敛：须命中 AI 关键词，排除股价/基金行情噪音",
-   "必含关键词": "ai,人工智能,大模型,模型,llm,gpt,claude,gemini,deepseek,kimi,qwen,通义,豆包,智谱,glm,minimax,阶跃,文心,混元,智能体,agent,多模态,推理,算力,芯片,gpu,英伟达,nvidia,开源,机器学习,深度学习,transformer,具身,机器人,自动驾驶,aigc,生成式",
-   "排除关键词": "etf,净流入,净流出,涨停,跌停,主力资金,北向资金,基金份额,申购,赎回,股价腰斩,市值蒸发,收盘,开盘,涨超,跌超,大盘,指数基金,券商,持仓,减持,增持,回购,财报预告,业绩快报",
-   "正文最小字数": 300
-  },
-  {
-   "source_id": "caixin",
-   "名称": "财新",
-   "备注": "中文媒体收敛：须命中 AI 关键词，排除股价/基金行情噪音",
-   "必含关键词": "ai,人工智能,大模型,模型,llm,gpt,claude,gemini,deepseek,kimi,qwen,通义,豆包,智谱,glm,minimax,阶跃,文心,混元,智能体,agent,多模态,推理,算力,芯片,gpu,英伟达,nvidia,开源,机器学习,深度学习,transformer,具身,机器人,自动驾驶,aigc,生成式",
-   "排除关键词": "etf,净流入,净流出,涨停,跌停,主力资金,北向资金,基金份额,申购,赎回,股价腰斩,市值蒸发,收盘,开盘,涨超,跌超,大盘,指数基金,券商,持仓,减持,增持,回购,财报预告,业绩快报",
-   "正文最小字数": 300
-  },
-  {
-   "source_id": "thepaper",
-   "名称": "澎湃新闻",
-   "备注": "中文媒体收敛：须命中 AI 关键词，排除股价/基金行情噪音",
-   "必含关键词": "ai,人工智能,大模型,模型,llm,gpt,claude,gemini,deepseek,kimi,qwen,通义,豆包,智谱,glm,minimax,阶跃,文心,混元,智能体,agent,多模态,推理,算力,芯片,gpu,英伟达,nvidia,开源,机器学习,深度学习,transformer,具身,机器人,自动驾驶,aigc,生成式",
-   "排除关键词": "etf,净流入,净流出,涨停,跌停,主力资金,北向资金,基金份额,申购,赎回,股价腰斩,市值蒸发,收盘,开盘,涨超,跌超,大盘,指数基金,券商,持仓,减持,增持,回购,财报预告,业绩快报",
-   "正文最小字数": 300
-  },
-  {
-   "source_id": "guokr",
-   "名称": "果壳",
-   "备注": "中文媒体收敛：须命中 AI 关键词，排除股价/基金行情噪音",
-   "必含关键词": "ai,人工智能,大模型,模型,llm,gpt,claude,gemini,deepseek,kimi,qwen,通义,豆包,智谱,glm,minimax,阶跃,文心,混元,智能体,agent,多模态,推理,算力,芯片,gpu,英伟达,nvidia,开源,机器学习,深度学习,transformer,具身,机器人,自动驾驶,aigc,生成式",
-   "排除关键词": "etf,净流入,净流出,涨停,跌停,主力资金,北向资金,基金份额,申购,赎回,股价腰斩,市值蒸发,收盘,开盘,涨超,跌超,大盘,指数基金,券商,持仓,减持,增持,回购,财报预告,业绩快报",
-   "正文最小字数": 300
-  },
-  {
-   "source_id": "jiemian",
-   "名称": "界面新闻",
-   "备注": "中文媒体收敛：须命中 AI 关键词，排除股价/基金行情噪音",
-   "必含关键词": "ai,人工智能,大模型,模型,llm,gpt,claude,gemini,deepseek,kimi,qwen,通义,豆包,智谱,glm,minimax,阶跃,文心,混元,智能体,agent,多模态,推理,算力,芯片,gpu,英伟达,nvidia,开源,机器学习,深度学习,transformer,具身,机器人,自动驾驶,aigc,生成式",
-   "排除关键词": "etf,净流入,净流出,涨停,跌停,主力资金,北向资金,基金份额,申购,赎回,股价腰斩,市值蒸发,收盘,开盘,涨超,跌超,大盘,指数基金,券商,持仓,减持,增持,回购,财报预告,业绩快报",
-   "正文最小字数": 300
-  },
-  {
-   "source_id": "pingwest",
-   "名称": "品玩",
-   "备注": "中文媒体收敛：须命中 AI 关键词，排除股价/基金行情噪音",
-   "必含关键词": "ai,人工智能,大模型,模型,llm,gpt,claude,gemini,deepseek,kimi,qwen,通义,豆包,智谱,glm,minimax,阶跃,文心,混元,智能体,agent,多模态,推理,算力,芯片,gpu,英伟达,nvidia,开源,机器学习,深度学习,transformer,具身,机器人,自动驾驶,aigc,生成式",
-   "排除关键词": "etf,净流入,净流出,涨停,跌停,主力资金,北向资金,基金份额,申购,赎回,股价腰斩,市值蒸发,收盘,开盘,涨超,跌超,大盘,指数基金,券商,持仓,减持,增持,回购,财报预告,业绩快报",
-   "正文最小字数": 300
-  },
-  {
-   "source_id": "geekpark",
-   "名称": "极客公园",
    "备注": "中文媒体收敛：须命中 AI 关键词，排除股价/基金行情噪音",
    "必含关键词": "ai,人工智能,大模型,模型,llm,gpt,claude,gemini,deepseek,kimi,qwen,通义,豆包,智谱,glm,minimax,阶跃,文心,混元,智能体,agent,多模态,推理,算力,芯片,gpu,英伟达,nvidia,开源,机器学习,深度学习,transformer,具身,机器人,自动驾驶,aigc,生成式",
    "排除关键词": "etf,净流入,净流出,涨停,跌停,主力资金,北向资金,基金份额,申购,赎回,股价腰斩,市值蒸发,收盘,开盘,涨超,跌超,大盘,指数基金,券商,持仓,减持,增持,回购,财报预告,业绩快报",
