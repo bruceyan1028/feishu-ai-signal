@@ -758,9 +758,10 @@ function heatNewsUrl(topic){
 
 applyHeatDemo('google-trends');
 
-const filters = ['全部', '端侧模型', '前沿模型公司', '技术研究开源', '算力芯片云', '政策监管地缘', '模型评测基准', '产品化企业采用', '创业融资并购', '其他'];
+const filters = ['全部', '端侧模型', '前沿模型公司', '算力芯片云', '政策监管地缘', '模型评测基准', '产品化企业采用', '创业融资并购', '其他'];
+const TECHNICAL_FILTER = '技术开源';
 const SOCIAL_FILTER = '社交媒体帖子';
-const FORMAT_FILTERS = ['论文', '视频', '播客', SOCIAL_FILTER, '公众号', 'Github热榜'];
+const FORMAT_FILTERS = [TECHNICAL_FILTER, '视频', '播客', SOCIAL_FILTER, '公众号'];
 // 「端侧模型」是标签驱动的横切专题,不是领域分类:按 tags 匹配
 const EDGE_FILTER = '端侧模型';
 const SECTION_FILTERS = filters.filter(f => f !== '全部');
@@ -778,8 +779,10 @@ function keepOriginalTitle(s){
   return /[A-Za-z]/.test(original);
 }
 function matchesFilter(s, f){
-  if(f==='全部') return s.contentType !== '论文';
-  if(s.contentType === '论文') return f === '论文';
+  if(f==='全部') return s.board === 'news';
+  if(f===TECHNICAL_FILTER) return s.board === 'technical';
+  if(f==='视频') return s.board === 'video';
+  if(f==='播客') return s.board === 'podcast';
   if(f===EDGE_FILTER) return s.tags.includes('端侧');
   if(FORMAT_FILTERS.includes(f)) return s.contentType===f;
   return s.cat===f;
@@ -788,8 +791,10 @@ function isTagOn(f){ return state.activeFilter === f; }
 function allTagsOn(){ return !state.activeFilter; }
 function matchesFeed(s){
   const f = state.activeFilter;
-  if(!f) return s.contentType !== '论文';
-  if(s.contentType === '论文') return f === '论文';
+  if(!f) return s.board === 'news';
+  if(f===TECHNICAL_FILTER) return s.board === 'technical';
+  if(f==='视频') return s.board === 'video';
+  if(f==='播客') return s.board === 'podcast';
   if(f === EDGE_FILTER) return (s.tags || []).includes('端侧');
   if(FORMAT_FILTERS.includes(f)) return s.contentType === f;
   return s.cat === f;
@@ -1002,13 +1007,20 @@ async function loadBrief(){
       mediaAssets: s.mediaAssets || {images:[], videos:[]},
       metrics: s.socialMetrics || {},
     })).filter(p=>p.account);
-    const rawSignals = [...(data.signals || []), ...(data.paperSignals || [])];
+    const sections = [
+      ['news', data.signals || []],
+      ['technical', data.technicalSignals || data.paperSignals || []],
+      ['video', data.videoSignals || []],
+      ['podcast', data.podcastSignals || []],
+    ];
+    const rawSignals = sections.flatMap(([board, items]) => items.map(s => ({...s, board})));
     signals = rawSignals.map((s, index)=>({
       rank: index + 1,
       // 要点里的 refs 用的是这个原始序号，rank 下面会按影响分重排，别拿 rank 去对
       srcIndex: index + 1,
       recordId: s.recordId,
       sourceId: s.sourceId || '',
+      board: s.board || 'news',
       impact: Number(s.impact) || 0,
       urgency: s.urgency || '中',
       contentType: s.contentType || s.kind || '',
@@ -1061,7 +1073,7 @@ async function loadBrief(){
       else seenImages.add(imageKey);
     });
     const relatedDocs = ['模型选型评测表', '技术决策记录库', 'AI 团队知识库'];
-    personal = signals.filter(s => s.contentType !== '论文').slice(0,3).map((s,index)=>({
+    personal = signals.filter(s => s.board === 'news').slice(0,3).map((s,index)=>({
       ref:s.rank,
       match:Math.max(82, 96-index*5),
       title:s.zhTitle,
@@ -2745,7 +2757,7 @@ function briefHtml(A){
 
   const visible = signals.filter(matchesFeed).slice().sort(sortFns[state.sortKey]);
 
-  const mainSignals = signals.filter(s => s.contentType !== '论文');
+  const mainSignals = signals.filter(s => s.board === 'news');
   const counts = { 全部: mainSignals.length };
   filters.concat(FORMAT_FILTERS).forEach(f => {
     if(f === '全部') return;
@@ -2754,7 +2766,9 @@ function briefHtml(A){
   // 社媒不在 signals 里，计数走它自己那份
   counts[SOCIAL_FILTER] = socialPosts.length;
   const socialMode = state.activeFilter === SOCIAL_FILTER;
-  const paperMode = state.activeFilter === '论文';
+  const technicalMode = state.activeFilter === TECHNICAL_FILTER;
+  const videoMode = state.activeFilter === '视频';
+  const podcastMode = state.activeFilter === '播客';
 
   const cardsHtml = visible.map((s, idx) => {
     // 「待分析」是真会写进周报待纳入表的动作，公开站只读时按钮置灰而不是藏起来，
@@ -2832,8 +2846,12 @@ function briefHtml(A){
     <div class="feed-main">
       ${socialMode
         ? techDivider(A, '02', '社媒帖子', `${briefMeta.date || ''} · ${visibleSocialPosts().length}/${socialPosts.length} · 不计入简报信号`)
-        : paperMode
-          ? techDivider(A, '02', '论文', `${briefMeta.date || ''} · ${visible.length} · 不计入日报 30 条`)
+        : technicalMode
+          ? techDivider(A, '02', '技术开源', `${briefMeta.date || ''} · ${visible.length} · 独立技术板块`)
+          : videoMode
+            ? techDivider(A, '02', '视频', `${briefMeta.date || ''} · ${visible.length} · 独立视频板块`)
+            : podcastMode
+              ? techDivider(A, '02', '播客', `${briefMeta.date || ''} · ${visible.length} · 独立播客板块`)
           : techDivider(A, '02', '全部信号', `${briefMeta.date || ''} · ${visible.length}/${mainSignals.length}`)}
       ${socialMode ? '' : signals.length ? '' : `
       <div style="padding: 8px 0 26px;">

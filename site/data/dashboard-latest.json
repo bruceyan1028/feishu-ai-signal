@@ -1,10 +1,10 @@
 {
-  "generatedAt": "2026-09-11T11:39:34+08:00",
+  "generatedAt": "2026-09-12T13:51:04+08:00",
   "leaderboard": {
     "source": "Artificial Analysis",
     "sourceUrl": "https://artificialanalysis.ai/",
     "metric": "智能指数",
-    "updatedAt": "2026-09-11T11:39:36+08:00",
+    "updatedAt": "2026-09-12T13:51:05+08:00",
     "error": "",
     "models": [
       {
@@ -18,8 +18,8 @@
         "coding": 81.6,
         "math": null,
         "price": 20.0,
-        "speed": 69.0,
-        "latency": 131.81
+        "speed": 66.7,
+        "latency": 137.76
       },
       {
         "rank": 2,
@@ -32,8 +32,8 @@
         "coding": 76.9,
         "math": null,
         "price": 20.0,
-        "speed": 56.1,
-        "latency": 241.07
+        "speed": 64.2,
+        "latency": 215.68
       },
       {
         "rank": 3,
@@ -46,8 +46,8 @@
         "coding": 78.0,
         "math": null,
         "price": 10.0,
-        "speed": 58.1,
-        "latency": 33.71
+        "speed": 61.4,
+        "latency": 36.03
       },
       {
         "rank": 4,
@@ -60,8 +60,8 @@
         "coding": 76.5,
         "math": null,
         "price": 20.0,
-        "speed": 69.3,
-        "latency": 57.77
+        "speed": 70.0,
+        "latency": 60.71
       },
       {
         "rank": 5,
@@ -74,8 +74,8 @@
         "coding": 75.8,
         "math": null,
         "price": 2.0,
-        "speed": 454.8,
-        "latency": 28.71
+        "speed": 438.7,
+        "latency": 26.45
       },
       {
         "rank": 6,
@@ -88,8 +88,8 @@
         "coding": 77.4,
         "math": null,
         "price": 8.0,
-        "speed": 72.3,
-        "latency": 78.49
+        "speed": 68.7,
+        "latency": 124.83
       },
       {
         "rank": 7,
@@ -102,8 +102,8 @@
         "coding": 74.8,
         "math": null,
         "price": 2.15,
-        "speed": 53.5,
-        "latency": 2.99
+        "speed": 54.8,
+        "latency": 3.57
       },
       {
         "rank": 8,
@@ -116,8 +116,8 @@
         "coding": 76.8,
         "math": null,
         "price": 3.0,
-        "speed": 67.9,
-        "latency": 37.39
+        "speed": 71.4,
+        "latency": 38.01
       },
       {
         "rank": 9,
@@ -130,8 +130,8 @@
         "coding": 76.2,
         "math": null,
         "price": 6.0,
-        "speed": 37.0,
-        "latency": 2.58
+        "speed": 37.2,
+        "latency": 2.99
       },
       {
         "rank": 10,
@@ -144,8 +144,8 @@
         "coding": 76.7,
         "math": null,
         "price": 4.5,
-        "speed": 103.1,
-        "latency": 108.55
+        "speed": 115.5,
+        "latency": 107.22
       },
       {
         "rank": 11,
@@ -172,8 +172,8 @@
         "coding": 71.5,
         "math": null,
         "price": 0.24,
-        "speed": 92.4,
-        "latency": 2.11
+        "speed": 108.2,
+        "latency": 2.04
       }
     ],
     "buckets": [
@@ -182,7 +182,7 @@
         "label": "小模型",
         "note": "4B–40B",
         "sourceUrl": "https://artificialanalysis.ai/models/open-source/small",
-        "updatedAt": "2026-09-11T11:39:37+08:00",
+        "updatedAt": "2026-09-12T13:51:06+08:00",
         "error": "",
         "models": [
           {
@@ -336,7 +336,7 @@
         "label": "微型",
         "note": "≤4B",
         "sourceUrl": "https://artificialanalysis.ai/models/open-source/tiny",
-        "updatedAt": "2026-09-11T11:39:37+08:00",
+        "updatedAt": "2026-09-12T13:51:07+08:00",
         "error": "",
         "models": [
           {
@@ -746,7 +746,7 @@
   "market": {
     "source": "腾讯财经",
     "sourceUrl": "https://stockapp.finance.qq.com/",
-    "updatedAt": "2026-09-11T11:39:40+08:00",
+    "updatedAt": "2026-09-12T13:53:07+08:00",
     "error": "",
     "quotes": [
       {
@@ -757,15 +757,15 @@
         "logoDomain": "nvidia.com",
         "url": "https://www.nasdaq.com/market-activity/stocks/nvda",
         "currency": "USD",
-        "price": 218.36,
-        "change": -5.06,
-        "changePct": -2.26,
-        "open": 220.53,
-        "high": 220.99,
-        "low": 217.2,
-        "prevClose": 223.42,
-        "marketCap": 52727.4,
-        "quotedAt": "2026-09-10 16:00:01"
+        "price": 218.29,
+        "change": -0.07,
+        "changePct": -0.03,
+        "open": 221.24,
+        "high": 222.0,
+        "low": 218.15,
+        "prevClose": 218.36,
+        "marketCap": 52710.5,
+        "quotedAt": "2026-09-11 16:00:01"
       },
       {
         "code": "usAMD",
@@ -775,15 +775,15 @@
         "logoDomain": "amd.com",
         "url": "https://www.nasdaq.com/market-activity/stocks/amd",
         "currency": "USD",
-        "price": 503.6,
-        "change": -17.5,
-        "changePct": -3.36,
-        "open": 509.07,
-        "high": 516.33,
-        "low": 502.81,
-        "prevClose": 521.1,
-        "marketCap": 8221.1,
-        "quotedAt": "2026-09-10 16:00:01"
+        "price": 516.13,
+        "change": 12.53,
+        "changePct": 2.49,
+        "open": 510.71,
+        "high": 521.06,
+        "low": 501.35,
+        "prevClose": 503.6,
+        "marketCap": 8425.7,
+        "quotedAt": "2026-09-11 16:00:01"
       },
       {
         "code": "usAVGO",
@@ -793,15 +793,15 @@
         "logoDomain": "broadcom.com",
         "url": "https://www.nasdaq.com/market-activity/stocks/avgo",
         "currency": "USD",
-        "price": 360.83,
-        "change": -3.55,
-        "changePct": -0.97,
-        "open": 360.03,
-        "high": 365.27,
-        "low": 357.75,
-        "prevClose": 364.38,
-        "marketCap": 17166.8,
-        "quotedAt": "2026-09-10 16:00:01"
+        "price": 361.99,
+        "change": 1.16,
+        "changePct": 0.32,
+        "open": 364.85,
+        "high": 366.78,
+        "low": 361.64,
+        "prevClose": 360.83,
+        "marketCap": 17280.1,
+        "quotedAt": "2026-09-11 16:00:01"
       },
       {
         "code": "usTSM",
@@ -811,15 +811,15 @@
         "logoDomain": "tsmc.com",
         "url": "https://www.nasdaq.com/market-activity/stocks/tsm",
         "currency": "USD",
-        "price": 428.03,
-        "change": -7.33,
-        "changePct": -1.68,
-        "open": 426.44,
-        "high": 432.53,
-        "low": 424.05,
-        "prevClose": 435.36,
-        "marketCap": 22199.7,
-        "quotedAt": "2026-09-10 16:05:32"
+        "price": 433.24,
+        "change": 5.21,
+        "changePct": 1.22,
+        "open": 431.55,
+        "high": 435.37,
+        "low": 428.9,
+        "prevClose": 428.03,
+        "marketCap": 22469.9,
+        "quotedAt": "2026-09-11 16:04:42"
       },
       {
         "code": "usMU",
@@ -829,15 +829,15 @@
         "logoDomain": "micron.com",
         "url": "https://www.nasdaq.com/market-activity/stocks/mu",
         "currency": "USD",
-        "price": 977.41,
-        "change": -50.36,
-        "changePct": -4.9,
-        "open": 997.0,
-        "high": 999.0,
-        "low": 973.5,
-        "prevClose": 1027.77,
-        "marketCap": 11038.8,
-        "quotedAt": "2026-09-10 16:00:01"
+        "price": 975.26,
+        "change": -2.15,
+        "changePct": -0.22,
+        "open": 993.2,
+        "high": 993.99,
+        "low": 967.38,
+        "prevClose": 977.41,
+        "marketCap": 11014.5,
+        "quotedAt": "2026-09-11 16:00:01"
       },
       {
         "code": "usARM",
@@ -847,15 +847,15 @@
         "logoDomain": "arm.com",
         "url": "https://www.nasdaq.com/market-activity/stocks/arm",
         "currency": "USD",
-        "price": 254.18,
-        "change": -10.05,
-        "changePct": -3.8,
-        "open": 253.0,
-        "high": 257.92,
-        "low": 251.29,
-        "prevClose": 264.23,
-        "marketCap": 2714.6,
-        "quotedAt": "2026-09-10 16:00:01"
+        "price": 264.79,
+        "change": 10.61,
+        "changePct": 4.17,
+        "open": 257.7,
+        "high": 267.77,
+        "low": 253.06,
+        "prevClose": 254.18,
+        "marketCap": 2828.0,
+        "quotedAt": "2026-09-11 16:00:01"
       },
       {
         "code": "usMRVL",
@@ -865,15 +865,15 @@
         "logoDomain": "marvell.com",
         "url": "https://www.nasdaq.com/market-activity/stocks/mrvl",
         "currency": "USD",
-        "price": 226.96,
-        "change": -8.05,
-        "changePct": -3.43,
-        "open": 228.03,
-        "high": 234.49,
-        "low": 226.15,
-        "prevClose": 235.01,
-        "marketCap": 2039.7,
-        "quotedAt": "2026-09-10 16:00:01"
+        "price": 236.1,
+        "change": 9.14,
+        "changePct": 4.03,
+        "open": 234.63,
+        "high": 240.2,
+        "low": 229.28,
+        "prevClose": 226.96,
+        "marketCap": 2121.8,
+        "quotedAt": "2026-09-11 16:00:01"
       },
       {
         "code": "usMSFT",
@@ -883,15 +883,15 @@
         "logoDomain": "microsoft.com",
         "url": "https://www.nasdaq.com/market-activity/stocks/msft",
         "currency": "USD",
-        "price": 492.44,
-        "change": 0.79,
-        "changePct": 0.16,
-        "open": 488.32,
-        "high": 494.52,
-        "low": 486.0,
-        "prevClose": 491.65,
-        "marketCap": 36566.4,
-        "quotedAt": "2026-09-10 16:00:01"
+        "price": 495.63,
+        "change": 3.19,
+        "changePct": 0.65,
+        "open": 495.65,
+        "high": 498.97,
+        "low": 492.58,
+        "prevClose": 492.44,
+        "marketCap": 36803.2,
+        "quotedAt": "2026-09-11 16:00:01"
       },
       {
         "code": "usGOOGL",
@@ -901,15 +901,15 @@
         "logoDomain": "google.com",
         "url": "https://www.nasdaq.com/market-activity/stocks/googl",
         "currency": "USD",
-        "price": 332.6,
-        "change": 1.95,
-        "changePct": 0.59,
-        "open": 328.23,
-        "high": 333.23,
-        "low": 327.74,
-        "prevClose": 330.65,
-        "marketCap": 40676.8,
-        "quotedAt": "2026-09-10 16:00:01"
+        "price": 338.5,
+        "change": 5.9,
+        "changePct": 1.77,
+        "open": 335.03,
+        "high": 342.98,
+        "low": 335.03,
+        "prevClose": 332.6,
+        "marketCap": 41398.3,
+        "quotedAt": "2026-09-11 16:00:01"
       },
       {
         "code": "usAMZN",
@@ -919,15 +919,15 @@
         "logoDomain": "amazon.com",
         "url": "https://www.nasdaq.com/market-activity/stocks/amzn",
         "currency": "USD",
-        "price": 251.89,
-        "change": -0.51,
-        "changePct": -0.2,
-        "open": 250.11,
-        "high": 253.15,
-        "low": 249.58,
-        "prevClose": 252.4,
-        "marketCap": 27169.6,
-        "quotedAt": "2026-09-10 16:00:01"
+        "price": 256.78,
+        "change": 4.89,
+        "changePct": 1.94,
+        "open": 254.09,
+        "high": 257.59,
+        "low": 253.14,
+        "prevClose": 251.89,
+        "marketCap": 27697.1,
+        "quotedAt": "2026-09-11 16:00:01"
       },
       {
         "code": "usMETA",
@@ -937,15 +937,15 @@
         "logoDomain": "meta.com",
         "url": "https://www.nasdaq.com/market-activity/stocks/meta",
         "currency": "USD",
-        "price": 644.38,
-        "change": -9.31,
-        "changePct": -1.42,
-        "open": 653.71,
-        "high": 663.5,
-        "low": 642.14,
-        "prevClose": 653.69,
-        "marketCap": 16415.6,
-        "quotedAt": "2026-09-10 16:00:01"
+        "price": 648.03,
+        "change": 3.65,
+        "changePct": 0.57,
+        "open": 653.51,
+        "high": 664.24,
+        "low": 646.2,
+        "prevClose": 644.38,
+        "marketCap": 16508.6,
+        "quotedAt": "2026-09-11 16:00:01"
       },
       {
         "code": "usAAPL",
@@ -955,15 +955,15 @@
         "logoDomain": "apple.com",
         "url": "https://www.nasdaq.com/market-activity/stocks/aapl",
         "currency": "USD",
-        "price": 326.57,
-        "change": 11.23,
-        "changePct": 3.56,
-        "open": 316.67,
-        "high": 326.74,
-        "low": 316.51,
-        "prevClose": 315.34,
-        "marketCap": 47660.2,
-        "quotedAt": "2026-09-10 16:00:01"
+        "price": 332.27,
+        "change": 5.7,
+        "changePct": 1.75,
+        "open": 327.45,
+        "high": 336.22,
+        "low": 326.3,
+        "prevClose": 326.57,
+        "marketCap": 48492.1,
+        "quotedAt": "2026-09-11 16:00:01"
       },
       {
         "code": "usORCL",
@@ -973,15 +973,15 @@
         "logoDomain": "oracle.com",
         "url": "https://www.nasdaq.com/market-activity/stocks/orcl",
         "currency": "USD",
-        "price": 152.94,
-        "change": -8.69,
-        "changePct": -5.38,
-        "open": 158.38,
-        "high": 159.24,
-        "low": 152.52,
-        "prevClose": 161.63,
-        "marketCap": 4405.4,
-        "quotedAt": "2026-09-10 16:05:32"
+        "price": 150.28,
+        "change": -2.66,
+        "changePct": -1.74,
+        "open": 164.43,
+        "high": 166.0,
+        "low": 149.84,
+        "prevClose": 152.94,
+        "marketCap": 4328.8,
+        "quotedAt": "2026-09-11 16:04:42"
       },
       {
         "code": "usTSLA",
@@ -991,15 +991,15 @@
         "logoDomain": "tesla.com",
         "url": "https://www.nasdaq.com/market-activity/stocks/tsla",
         "currency": "USD",
-        "price": 363.56,
-        "change": -4.25,
-        "changePct": -1.16,
-        "open": 360.6,
-        "high": 369.21,
-        "low": 357.68,
-        "prevClose": 367.81,
-        "marketCap": 14359.0,
-        "quotedAt": "2026-09-10 16:00:01"
+        "price": 365.44,
+        "change": 1.88,
+        "changePct": 0.52,
+        "open": 364.2,
+        "high": 368.66,
+        "low": 361.6,
+        "prevClose": 363.56,
+        "marketCap": 14433.2,
+        "quotedAt": "2026-09-11 16:00:01"
       },
       {
         "code": "usSPCX",
@@ -1009,15 +1009,15 @@
         "logoDomain": "spacex.com",
         "url": "https://www.nasdaq.com/market-activity/stocks/spcx",
         "currency": "USD",
-        "price": 148.18,
-        "change": 0.63,
-        "changePct": 0.43,
-        "open": 145.0,
-        "high": 154.7,
-        "low": 144.89,
-        "prevClose": 147.55,
-        "marketCap": 19532.8,
-        "quotedAt": "2026-09-10 16:00:01"
+        "price": 151.21,
+        "change": 3.03,
+        "changePct": 2.04,
+        "open": 150.01,
+        "high": 151.85,
+        "low": 145.92,
+        "prevClose": 148.18,
+        "marketCap": 19932.2,
+        "quotedAt": "2026-09-11 16:00:01"
       },
       {
         "code": "usPLTR",
@@ -1027,15 +1027,15 @@
         "logoDomain": "palantir.com",
         "url": "https://www.nasdaq.com/market-activity/stocks/pltr",
         "currency": "USD",
-        "price": 165.86,
-        "change": -3.67,
-        "changePct": -2.16,
-        "open": 167.35,
-        "high": 169.0,
-        "low": 164.55,
-        "prevClose": 169.53,
-        "marketCap": 3985.7,
-        "quotedAt": "2026-09-10 16:00:01"
+        "price": 167.23,
+        "change": 1.37,
+        "changePct": 0.83,
+        "open": 168.1,
+        "high": 168.61,
+        "low": 165.4,
+        "prevClose": 165.86,
+        "marketCap": 4018.6,
+        "quotedAt": "2026-09-11 16:00:01"
       },
       {
         "code": "usCRWV",
@@ -1045,15 +1045,15 @@
         "logoDomain": "coreweave.com",
         "url": "https://www.nasdaq.com/market-activity/stocks/crwv",
         "currency": "USD",
-        "price": 89.12,
-        "change": -5.82,
-        "changePct": -6.13,
-        "open": 89.91,
-        "high": 92.19,
-        "low": 88.73,
-        "prevClose": 94.94,
-        "marketCap": 491.5,
-        "quotedAt": "2026-09-10 16:00:01"
+        "price": 88.99,
+        "change": -0.13,
+        "changePct": -0.15,
+        "open": 91.08,
+        "high": 91.99,
+        "low": 88.62,
+        "prevClose": 89.12,
+        "marketCap": 490.8,
+        "quotedAt": "2026-09-11 16:00:01"
       },
       {
         "code": "usSNOW",
@@ -1063,15 +1063,15 @@
         "logoDomain": "snowflake.com",
         "url": "https://www.nasdaq.com/market-activity/stocks/snow",
         "currency": "USD",
-        "price": 329.72,
-        "change": -1.76,
-        "changePct": -0.53,
-        "open": 329.7,
-        "high": 341.45,
-        "low": 325.01,
-        "prevClose": 331.48,
-        "marketCap": 1163.3,
-        "quotedAt": "2026-09-10 16:05:32"
+        "price": 328.99,
+        "change": -0.73,
+        "changePct": -0.22,
+        "open": 329.86,
+        "high": 333.48,
+        "low": 323.42,
+        "prevClose": 329.72,
+        "marketCap": 1160.7,
+        "quotedAt": "2026-09-11 16:04:42"
       },
       {
         "code": "sh688256",
@@ -1081,15 +1081,15 @@
         "logoDomain": "cambricon.com",
         "url": "https://www.sse.com.cn/assortment/stock/list/info/company/index.shtml?COMPANY_CODE=688256",
         "currency": "CNY",
-        "price": 1008.0,
-        "change": -35.84,
-        "changePct": -3.43,
+        "price": 1040.0,
+        "change": -3.84,
+        "changePct": -0.37,
         "open": 1020.99,
-        "high": 1042.96,
+        "high": 1047.33,
         "low": 1006.0,
         "prevClose": 1043.84,
-        "marketCap": 6338.9,
-        "quotedAt": "20260911113913"
+        "marketCap": 6540.1,
+        "quotedAt": "20260911161500"
       },
       {
         "code": "sh688836",
@@ -1099,15 +1099,15 @@
         "logoDomain": "unitree.com",
         "url": "https://www.sse.com.cn/assortment/stock/list/info/company/index.shtml?COMPANY_CODE=688836",
         "currency": "CNY",
-        "price": 473.7,
-        "change": -24.85,
-        "changePct": -4.98,
+        "price": 477.12,
+        "change": -21.43,
+        "changePct": -4.3,
         "open": 490.25,
         "high": 497.87,
         "low": 473.13,
         "prevClose": 498.55,
-        "marketCap": 1916.0,
-        "quotedAt": "20260911113916"
+        "marketCap": 1929.8,
+        "quotedAt": "20260911161500"
       },
       {
         "code": "sh688041",
@@ -1117,15 +1117,15 @@
         "logoDomain": "",
         "url": "https://www.sse.com.cn/assortment/stock/list/info/company/index.shtml?COMPANY_CODE=688041",
         "currency": "CNY",
-        "price": 226.45,
-        "change": -5.92,
-        "changePct": -2.55,
+        "price": 230.89,
+        "change": -1.48,
+        "changePct": -0.64,
         "open": 228.02,
         "high": 231.5,
         "low": 225.37,
         "prevClose": 232.37,
-        "marketCap": 5263.5,
-        "quotedAt": "20260911113934"
+        "marketCap": 5366.7,
+        "quotedAt": "20260911161500"
       },
       {
         "code": "sh688795",
@@ -1135,15 +1135,15 @@
         "logoDomain": "",
         "url": "https://www.sse.com.cn/assortment/stock/list/info/company/index.shtml?COMPANY_CODE=688795",
         "currency": "CNY",
-        "price": 347.85,
-        "change": -16.2,
-        "changePct": -4.45,
+        "price": 357.85,
+        "change": -6.2,
+        "changePct": -1.7,
         "open": 360.0,
         "high": 364.0,
         "low": 345.18,
         "prevClose": 364.05,
-        "marketCap": 1635.0,
-        "quotedAt": "20260911113934"
+        "marketCap": 1682.0,
+        "quotedAt": "20260911161500"
       },
       {
         "code": "sh688802",
@@ -1153,15 +1153,15 @@
         "logoDomain": "",
         "url": "https://www.sse.com.cn/assortment/stock/list/info/company/index.shtml?COMPANY_CODE=688802",
         "currency": "CNY",
-        "price": 466.0,
-        "change": -27.8,
-        "changePct": -5.63,
+        "price": 489.0,
+        "change": -4.8,
+        "changePct": -0.97,
         "open": 482.51,
         "high": 492.0,
-        "low": 465.0,
+        "low": 463.0,
         "prevClose": 493.8,
-        "marketCap": 1864.5,
-        "quotedAt": "20260911113924"
+        "marketCap": 1956.5,
+        "quotedAt": "20260911161500"
       },
       {
         "code": "sh688981",
@@ -1171,15 +1171,15 @@
         "logoDomain": "",
         "url": "https://www.sse.com.cn/assortment/stock/list/info/company/index.shtml?COMPANY_CODE=688981",
         "currency": "CNY",
-        "price": 116.1,
-        "change": -3.08,
-        "changePct": -2.58,
+        "price": 117.41,
+        "change": -1.77,
+        "changePct": -1.49,
         "open": 118.0,
         "high": 118.4,
         "low": 115.8,
         "prevClose": 119.18,
-        "marketCap": 9940.8,
-        "quotedAt": "20260911113916"
+        "marketCap": 10053.0,
+        "quotedAt": "20260911161500"
       },
       {
         "code": "sz300308",
@@ -1189,15 +1189,15 @@
         "logoDomain": "innolight.com",
         "url": "https://www.szse.cn/certificate/individual/index.html?code=300308",
         "currency": "CNY",
-        "price": 906.37,
-        "change": 16.27,
-        "changePct": 1.83,
+        "price": 926.0,
+        "change": 35.9,
+        "changePct": 4.03,
         "open": 898.17,
         "high": 929.8,
         "low": 891.17,
         "prevClose": 890.1,
-        "marketCap": 10676.2,
-        "quotedAt": "20260911113936"
+        "marketCap": 10907.4,
+        "quotedAt": "20260911161436"
       },
       {
         "code": "sz300502",
@@ -1207,15 +1207,15 @@
         "logoDomain": "eoptolink.com",
         "url": "https://www.szse.cn/certificate/individual/index.html?code=300502",
         "currency": "CNY",
-        "price": 415.0,
-        "change": 4.1,
-        "changePct": 1.0,
+        "price": 423.0,
+        "change": 12.1,
+        "changePct": 2.94,
         "open": 408.8,
-        "high": 423.8,
+        "high": 426.3,
         "low": 408.1,
         "prevClose": 410.9,
-        "marketCap": 5786.2,
-        "quotedAt": "20260911113927"
+        "marketCap": 5897.7,
+        "quotedAt": "20260911161427"
       },
       {
         "code": "sz000977",
@@ -1225,15 +1225,15 @@
         "logoDomain": "inspur.com",
         "url": "https://www.szse.cn/certificate/individual/index.html?code=000977",
         "currency": "CNY",
-        "price": 68.37,
-        "change": -2.06,
-        "changePct": -2.92,
+        "price": 70.54,
+        "change": 0.11,
+        "changePct": 0.16,
         "open": 69.01,
-        "high": 69.61,
+        "high": 70.73,
         "low": 68.09,
         "prevClose": 70.43,
-        "marketCap": 1004.0,
-        "quotedAt": "20260911113921"
+        "marketCap": 1035.9,
+        "quotedAt": "20260911161421"
       },
       {
         "code": "sh601138",
@@ -1243,15 +1243,15 @@
         "logoDomain": "fii-foxconn.com",
         "url": "https://www.sse.com.cn/assortment/stock/list/info/company/index.shtml?COMPANY_CODE=601138",
         "currency": "CNY",
-        "price": 63.06,
-        "change": -0.85,
-        "changePct": -1.33,
+        "price": 64.07,
+        "change": 0.16,
+        "changePct": 0.25,
         "open": 62.66,
         "high": 64.49,
         "low": 62.5,
         "prevClose": 63.91,
-        "marketCap": 12513.7,
-        "quotedAt": "20260911113922"
+        "marketCap": 12714.1,
+        "quotedAt": "20260911161500"
       },
       {
         "code": "sz002230",
@@ -1261,15 +1261,15 @@
         "logoDomain": "iflytek.com",
         "url": "https://www.szse.cn/certificate/individual/index.html?code=002230",
         "currency": "CNY",
-        "price": 38.5,
-        "change": -0.66,
-        "changePct": -1.69,
+        "price": 39.15,
+        "change": -0.01,
+        "changePct": -0.03,
         "open": 38.9,
-        "high": 39.05,
+        "high": 39.16,
         "low": 38.15,
         "prevClose": 39.16,
-        "marketCap": 924.8,
-        "quotedAt": "20260911113854"
+        "marketCap": 940.4,
+        "quotedAt": "20260911161454"
       },
       {
         "code": "sh688111",
@@ -1279,15 +1279,15 @@
         "logoDomain": "",
         "url": "https://www.sse.com.cn/assortment/stock/list/info/company/index.shtml?COMPANY_CODE=688111",
         "currency": "CNY",
-        "price": 226.72,
-        "change": -1.0,
-        "changePct": -0.44,
+        "price": 228.82,
+        "change": 1.1,
+        "changePct": 0.48,
         "open": 226.79,
-        "high": 229.5,
+        "high": 231.19,
         "low": 223.8,
         "prevClose": 227.72,
-        "marketCap": 1052.0,
-        "quotedAt": "20260911113910"
+        "marketCap": 1061.8,
+        "quotedAt": "20260911161500"
       },
       {
         "code": "sz300418",
@@ -1297,15 +1297,15 @@
         "logoDomain": "",
         "url": "https://www.szse.cn/certificate/individual/index.html?code=300418",
         "currency": "CNY",
-        "price": 43.49,
-        "change": -0.77,
-        "changePct": -1.74,
+        "price": 43.81,
+        "change": -0.45,
+        "changePct": -1.02,
         "open": 44.03,
         "high": 44.47,
-        "low": 43.28,
+        "low": 43.2,
         "prevClose": 44.26,
-        "marketCap": 558.9,
-        "quotedAt": "20260911113933"
+        "marketCap": 563.0,
+        "quotedAt": "20260911161433"
       },
       {
         "code": "sh601360",
@@ -1315,15 +1315,15 @@
         "logoDomain": "360.cn",
         "url": "https://www.sse.com.cn/assortment/stock/list/info/company/index.shtml?COMPANY_CODE=601360",
         "currency": "CNY",
-        "price": 8.66,
-        "change": -0.05,
-        "changePct": -0.57,
+        "price": 8.74,
+        "change": 0.03,
+        "changePct": 0.34,
         "open": 8.79,
         "high": 8.83,
         "low": 8.58,
         "prevClose": 8.71,
-        "marketCap": 606.2,
-        "quotedAt": "20260911113932"
+        "marketCap": 611.8,
+        "quotedAt": "20260911161500"
       },
       {
         "code": "hk02513",
@@ -1333,15 +1333,15 @@
         "logoDomain": "z.ai",
         "url": "https://www.hkex.com.hk/Market-Data/Securities-Prices/Equities/Equities-Quote?sc_lang=zh-HK&sym=2513",
         "currency": "HKD",
-        "price": 788.0,
-        "change": -31.0,
-        "changePct": -3.79,
+        "price": 793.0,
+        "change": -26.0,
+        "changePct": -3.17,
         "open": 800.0,
         "high": 847.5,
-        "low": 784.5,
+        "low": 766.0,
         "prevClose": 819.0,
-        "marketCap": 3669.1,
-        "quotedAt": "2026/09/11 11:24:34"
+        "marketCap": 3692.4,
+        "quotedAt": "2026/09/11 16:09:02"
       },
       {
         "code": "hk00100",
@@ -1351,15 +1351,15 @@
         "logoDomain": "minimaxi.com",
         "url": "https://www.hkex.com.hk/Market-Data/Securities-Prices/Equities/Equities-Quote?sc_lang=zh-HK&sym=100",
         "currency": "HKD",
-        "price": 265.4,
-        "change": -26.6,
-        "changePct": -9.11,
+        "price": 270.0,
+        "change": -22.0,
+        "changePct": -7.53,
         "open": 285.0,
         "high": 296.8,
-        "low": 265.2,
+        "low": 263.4,
         "prevClose": 292.0,
-        "marketCap": 926.9,
-        "quotedAt": "2026/09/11 11:24:34"
+        "marketCap": 942.9,
+        "quotedAt": "2026/09/11 16:08:55"
       },
       {
         "code": "hk06082",
@@ -1369,15 +1369,15 @@
         "logoDomain": "",
         "url": "https://www.hkex.com.hk/Market-Data/Securities-Prices/Equities/Equities-Quote?sc_lang=zh-HK&sym=6082",
         "currency": "HKD",
-        "price": 34.66,
-        "change": -2.82,
-        "changePct": -7.52,
+        "price": 35.46,
+        "change": -2.02,
+        "changePct": -5.39,
         "open": 36.98,
         "high": 36.98,
         "low": 34.2,
         "prevClose": 37.48,
-        "marketCap": 898.3,
-        "quotedAt": "2026/09/11 11:24:33"
+        "marketCap": 919.1,
+        "quotedAt": "2026/09/11 16:09:02"
       },
       {
         "code": "hk09903",
@@ -1387,15 +1387,15 @@
         "logoDomain": "",
         "url": "https://www.hkex.com.hk/Market-Data/Securities-Prices/Equities/Equities-Quote?sc_lang=zh-HK&sym=9903",
         "currency": "HKD",
-        "price": 303.8,
-        "change": -17.2,
-        "changePct": -5.36,
+        "price": 311.6,
+        "change": -9.4,
+        "changePct": -2.93,
         "open": 320.8,
         "high": 321.0,
-        "low": 301.6,
+        "low": 301.0,
         "prevClose": 321.0,
-        "marketCap": 817.8,
-        "quotedAt": "2026/09/11 11:24:32"
+        "marketCap": 838.7,
+        "quotedAt": "2026/09/11 16:08:59"
       }
     ]
   }
