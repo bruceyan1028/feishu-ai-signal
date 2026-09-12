@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-12 15:06",
+  "generatedAt": "2026-09-12 15:27",
   "origin": "feishu",
   "briefWindowDays": 1,
   "sources": [
@@ -902,7 +902,7 @@
       "lookback": "24h",
       "last": "",
       "perDay": 0,
-      "briefCount": 0
+      "briefCount": 2
     },
     {
       "id": "together-ai",
