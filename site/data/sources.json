@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-09-12 13:51",
+  "generatedAt": "2026-09-12 14:42",
   "origin": "feishu",
-  "briefWindowDays": 7,
+  "briefWindowDays": 1,
   "sources": [
     {
       "id": "anthropic-news",
@@ -103,7 +103,7 @@
       "lookback": "24h",
       "last": "09-12 12:58",
       "perDay": 0,
-      "briefCount": 2
+      "briefCount": 0
     },
     {
       "id": "google-deepmind-blog",
@@ -222,7 +222,7 @@
       "lookback": "24h",
       "last": "09-12 12:58",
       "perDay": 0,
-      "briefCount": 1
+      "briefCount": 0
     },
     {
       "id": "youtube-mistral-ai",
@@ -273,7 +273,7 @@
       "lookback": "24h",
       "last": "09-12 12:58",
       "perDay": 0,
-      "briefCount": 3
+      "briefCount": 0
     },
     {
       "id": "youtube-nvidia",
@@ -341,7 +341,7 @@
       "lookback": "24h",
       "last": "09-12 12:58",
       "perDay": 0,
-      "briefCount": 5
+      "briefCount": 3
     },
     {
       "id": "youtube-openai",
@@ -443,7 +443,7 @@
       "lookback": "24h",
       "last": "09-12 12:58",
       "perDay": 0,
-      "briefCount": 5
+      "briefCount": 3
     },
     {
       "id": "whitehouse-tech-actions",
@@ -613,7 +613,7 @@
       "lookback": "24h",
       "last": "09-12 12:58",
       "perDay": 0,
-      "briefCount": 7
+      "briefCount": 4
     },
     {
       "id": "amd-instinct",
@@ -783,7 +783,7 @@
       "lookback": "24h",
       "last": "09-12 12:58",
       "perDay": 0,
-      "briefCount": 4
+      "briefCount": 3
     },
     {
       "id": "mlperf",
@@ -953,7 +953,7 @@
       "lookback": "24h",
       "last": "09-12 12:58",
       "perDay": 0,
-      "briefCount": 14
+      "briefCount": 1
     },
     {
       "id": "geekpark",
@@ -1021,7 +1021,7 @@
       "lookback": "24h",
       "last": "09-12 12:58",
       "perDay": 0,
-      "briefCount": 13
+      "briefCount": 3
     },
     {
       "id": "caixin",
@@ -1209,23 +1209,6 @@
       "last": "09-09 05:30",
       "perDay": 0,
       "briefCount": 0
-    },
-    {
-      "id": "utility-dive",
-      "recordId": "recvqgCxALSw3s",
-      "name": "Utility Dive",
-      "url": "https://www.utilitydive.com/feeds/news/",
-      "status": "active",
-      "statusLabel": "已接入",
-      "on": true,
-      "format": "纯网页",
-      "type": "算力芯片云",
-      "priority": "低",
-      "fetchMethod": "RSS",
-      "lookback": "24h",
-      "last": "09-12 12:58",
-      "perDay": 0,
-      "briefCount": 6
     },
     {
       "id": "podcast-crossing",

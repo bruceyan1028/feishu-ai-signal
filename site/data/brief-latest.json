@@ -1,136 +1,61 @@
 {
   "date": "2026-09-12",
   "title": "AI Signal 每日情报 · 2026-09-12",
-  "intro": "本轮信号显示，AI正从模型能力竞赛加速进入科研闭环、软件工程、机器人和关键基础设施，但多项突破仍缺乏独立验证。与此同时，数学规范、创作者权益、安全治理与电力承载能力正成为规模化扩张的主要约束。",
+  "intro": "本轮信号显示，AI竞争正从模型能力延伸至大规模基础设施、物理世界部署和端到端自主执行。与此同时，科研规范、安全治理与创作者利益分配成为技术扩张必须面对的约束。",
   "bullets": [
     {
-      "title": "OpenAI称在又一千禧年难题上取得重大进展，具体猜想尚未公布",
-      "text": "OpenAI据称继提交纳维-斯托克斯问题论文及Lean代码后，又在另一项未具名千禧年难题上取得进展，但目标和成果均未获确认。25位菲尔兹奖得主警告，以解题数量和速度衡量能力，可能挤压数学界对理解、同行验证和知识积累的重视；研究接续成本下降还可能促使学者延迟公开想法。",
-      "refs": [
-        1,
-        4,
-        5
-      ]
-    },
-    {
-      "title": "专家共议AI自主科研：关键在数据、实验与产业闭环",
-      "text": "AI for Science正在从辅助单个环节扩展至假设提出、实验设计、执行和反馈，并已在材料、生命科学及药物研发中接受验证。不过，数据质量、机理理解、长程任务稳定性和真实实验复核仍限制自主发现，关键决策尚不能完全脱离人类研究者。",
-      "refs": [
-        7
-      ]
-    },
-    {
       "title": "OpenAI 将 Habitat 扩展为支撑十亿用户的全球分布式存储平台",
-      "text": "Cognition称新模型可帮助Devin测试并展示自身产出，Perplexity也将沟通、代码修改和生产系统监控交给同类模型，团队介入检查的频率据称有所下降。与此对应，OpenAI已把Habitat扩展为面向约十亿用户、每秒承载2200万次请求的全球分布式存储平台，凸显智能体落地对底层系统能力的需求。",
+      "text": "OpenAI的Habitat据称已能服务约十亿ChatGPT用户并承载每秒2200万次请求；Cognition和Perplexity则将GPT-6 Astra用于测试、改码及生产监控，均称人工检查频率有所下降。",
       "refs": [
-        3,
-        12,
-        16
+        2,
+        11,
+        14
       ]
     },
     {
       "title": "九识以超3万辆L4无人车构建城市运力平台",
-      "text": "XDOF凭借真实世界交互数据、训练基础设施及轨迹进展识别方案，在成立不久后传出约12亿美元估值；Mecka AI也正推进红杉领投、估值接近5亿美元的交易。与此同时，九识将超过3万辆无人车和2.5亿公里运营数据延伸至城市运力服务，显示竞争正从本体制造转向数据、训练和规模化运营。",
+      "text": "九识披露无人车队超过3万辆、覆盖300余座城市，并向智驾方案和运力租赁延伸；XDOF与Mecka AI因真实世界训练数据受到高估值融资关注，深度智控也连续融资以拓展算力和能源场景。",
       "refs": [
-        6,
-        8,
-        18
+        5,
+        7,
+        10,
+        15
+      ]
+    },
+    {
+      "title": "25位菲尔兹奖得主警告AI正将数学研究异化为速度竞赛",
+      "text": "专家认为相关工具已开始覆盖假设、实验设计和反馈，但仍受数据、机理理解、长程稳定性及真实验证限制。25位菲尔兹奖得主进一步警告，单纯追逐解题数量和速度可能挤压理解、验证与知识积累。",
+      "refs": [
+        3,
+        6
+      ]
+    },
+    {
+      "title": "AI加速知识竞争，未成熟想法面临“黑暗森林”风险",
+      "text": "AI智能体与算力降低了接续他人研究的成本，可能促使研究者推迟公开早期想法；转向私密交流虽有助于保护原创，却会削弱可验证记录、公共协作和新人学习渠道。",
+      "refs": [
+        4
       ]
     },
     {
       "title": "Bi/InSe隧穿晶体管突破60毫伏极限并实现高电流与高开关比",
-      "text": "铋/硒化铟隧穿晶体管实现约30mV/十倍电流的亚阈值摆幅，为降低芯片功耗提供潜在路径，但顶栅集成和长期可靠性仍待解决。数据中心用电增长已促使宾夕法尼亚监管机构讨论费率、资本回报和限电机制，而冬季风暴中的停运改善则表明前期准备及跨区域调度对电力韧性至关重要。",
+      "text": "铋/硒化铟隧穿晶体管实现约30mV/十倍电流的亚阈值摆幅，但顶栅集成和长期可靠性仍待验证；德赛西威的舱驾融合方案则通过共享内存、统一链路和资源隔离降低时延与硬件成本，并已量产应用。",
       "refs": [
-        2,
-        14,
-        19
+        1,
+        8
       ]
     },
     {
       "title": "AI内容产能过剩与算法平台权力重构",
-      "text": "AI降低影视、音乐等内容的生产门槛，却可能带来产能过剩、价格竞争和创作者失业，收益进一步向模型与平台集中。相关艺术实践同时表明，当标准化技能被自动化后，人类的审美、叙事、想象力和判断力将成为更稀缺的差异化能力。",
+      "text": "影视与内容生产门槛下降的同时，产能过剩、价格竞争和创作者失业风险上升，收益可能更多流向模型与平台。主题乐园机器人、AI影像和虚拟偶像等新形态持续出现，也令审美、叙事、想象力和判断力的重要性进一步上升。",
       "refs": [
-        10,
-        23
+        9,
+        13,
+        18
       ]
     }
   ],
   "signals": [
-    {
-      "recordId": "recvuYJJMOpP2M",
-      "sourceId": "mittrchina",
-      "title": "OpenAI宣称解决下一个千禧年难题，留给人类数学家独立解决的还剩几个？",
-      "titleCn": "OpenAI称在又一千禧年难题上取得重大进展，具体猜想尚未公布",
-      "source": "MIT Technology Review China",
-      "url": "https://www.mittrchina.com/news/detail/16934",
-      "category": "前沿模型公司",
-      "contentType": "公众号",
-      "priority": "P1",
-      "publishedDate": "2026-09-11",
-      "summary": "OpenAI据称在提交纳维-斯托克斯方程问题的165页论文及Lean验证代码后，又在一个未具名的千禧年难题上取得重大进展。外界猜测目标可能是霍奇猜想或BSD猜想，但相关公司均未确认。",
-      "why": "若这些成果通过数学界独立验证，将标志着AI在高难度数学证明中实现重大突破，并可能改变数学研究与验证范式。",
-      "impact": 96,
-      "novelty": 94,
-      "actionability": 58,
-      "urgency": "高",
-      "tags": [
-        "AI",
-        "LLM",
-        "推理",
-        "其他"
-      ],
-      "imageUrl": "media/generated/generated-4c74e1b821921fcbe5.png",
-      "mediaAssets": {
-        "images": [
-          {
-            "url": "media/articles/recvuYJJMOpP2M-10da8277cf6f.png",
-            "alt": "霍奇猜想相关传言截图",
-            "kind": "article-figure",
-            "afterHeading": "",
-            "afterText": "而如果两条传言都成立，就意味着一个月内将有三个千禧年难题相继被AI攻克，这在数学界堪称史无前例。",
-            "layout": "wide",
-            "confidence": 0.78,
-            "topicRelevance": 0.86,
-            "visualQuality": 0.38,
-            "coverSuitable": false
-          }
-        ],
-        "videos": [],
-        "cover": "media/generated/generated-4c74e1b821921fcbe5.png",
-        "curatedBy": "generated",
-        "curationVersion": 2,
-        "coverConfidence": 0.62,
-        "coverVisualQuality": 0.91,
-        "coverKind": "generated-cover"
-      },
-      "topComments": [],
-      "deepAnalysis": "",
-      "editorialStructure": "",
-      "body": "9 月 10 日，OpenAI 向《纽约时报》透露，“自纳维-斯托克斯（Navier–Stokes，简称 NS）方程完成以来，我们在另一个千禧年难题上取得了重大进展，正在斟酌如何审慎公布这些结果。”\n\n两天前，OpenAI 刚刚宣布，其内部模型花费数百万美元攻克了NS 存在性与光滑性问题，附带 165 页论文和 Lean 形式化验证代码。\n\n但这次，OpenAI 没有点明猜想的名称。在社交媒体上众说纷纭的猜测中，更多人推断他们解决的是霍奇猜想（Hodge Conjecture）。同时也有传言指出，OpenAI 或 Anthropic 中的一方已将伯奇-斯温纳顿-戴尔猜想（Birch–Swinnerton-Dyer Conjecture，以下简称 BSD 猜想）推进到接近完成的阶段。\n\n截至目前，这两类说法都未能获得任何一家公司的官方确认。\n\n而如果两条传言都成立，就意味着一个月内将有三个千禧年难题相继被AI攻克，这在数学界堪称史无前例。\n\n（来源：X）\n\n霍奇猜想、BSD 猜想与 NS 方程的形态迥异，而共同点在于，它们都试图探索两个看起来不相关的数学世界之间，是否存在一座精确的桥梁。\n\n其中，NS 方程横跨物理与数学，而霍奇猜想则把桥梁架在拓扑学与代数几何之间，其核心对象是代数簇，一组多项式方程的解构成的高维几何形状。把方程的变量数量和次数不断推广，得到的形状可以位于任意高维空间中，绝大多数无法可视化。\n\n这类形状可以从两个角度描述。\n\n一种是关注它“整体”的样子：有多少个洞、多少个环、多高维的空腔，这些结构在不撕裂形状的前提下能自由变形，属于拓扑的范畴。\n\n另一种是关注刚性的结构，即能被具体多项式方程严格描述的子几何。\n\n1950 年，英国数学家威廉·霍奇（William Hodge）在国际数学家大会上断言，对于一类良好的空间（非奇异射影代数簇），某一类具有特定对称性的拓扑结构（霍奇类），总能由代数方程精确定义的对象构造出来，这一论断即霍奇猜想。\n\nBSD 猜想就是在数论与解析函数之间寻找连接点。对于椭圆曲线，数学家关心一类基本问题：给定一条椭圆曲线，它上面有多少个有理数解？这些有理解构成一个群，其中“独立”的无限阶生成元的个数被称为该曲线的秩（rank）。\n\n1960 年代前后，英国数学家布莱恩·伯奇（Bryan Birch）与彼得·斯温纳顿-戴尔（Peter Swinnerton-Dyer）在剑桥大学的 EDSAC-2 计算机上做了大量计算，发现了一个惊人的规律：椭圆曲线的秩在特定点的行为，似乎与该曲线对应的 L 函数存在精确对应，而后者是一个完全属于解析领域的对象。\n\nBSD 猜想的核心断言是：椭圆曲线的代数秩，等于其 L 函数在 s=1 处零点的阶数。这道题横跨了代数与解析两个方向，同时内含黎曼猜想的部分含义。\n\n2000 年，克雷数学研究所悬赏百万美元，号召数学家解决七大千禧年难题。截至目前，人类数学家只独立解决了庞加莱猜想（Poincaré Conjecture）。\n\n该猜想由法国数学家亨利·庞加莱（Henri Poincaré）在 1904 年提出，追问三维空间中“简单”闭曲面的拓扑分类。此后近百年，围绕这一命题的多次尝试均告失败。直到 2002 年 11 月至 2003 年 7 月间，闭关十年的俄罗斯数学家格里戈里·佩雷尔曼（Grigori Perelman）在 arXiv 先后上传了三篇论文、合计 68 页，勾勒出他对威廉·瑟斯顿（William Thurston）几何化猜想的证明，庞加莱猜想正是其中的一个推论。\n\n图 | 格里戈里·佩雷尔曼（Grigori Perelman）（来源：WikiPedia）\n\n数学界用了近三年时间独立验证这份证明，最终确认结果正确。2006 年 8 月，第 25 届国际数学家大会将菲尔兹奖授予格里戈里，他拒绝出席。国际数学联盟主席约翰·鲍尔（John M. Ball）专程飞往圣彼得堡试图说服他，两天总计十小时的谈话也未能改变他的决定。他成为菲尔兹奖历史上首位主动拒领的数学家。\n\n2010 年 3 月，克雷数学研究所授予格里戈里百万美元的千禧年数学奖，他再次拒绝，理由是他认为里奇流（Ricci flow）理论的奠基者理查德·汉密尔顿（Richard Hamilton）在这一证明中的贡献同样关键，却未获对应的荣誉。\n\n此后，格里戈里辞去教职，与母亲住在圣彼得堡一间普通公寓里，靠母亲的退休金和自己此前的少量积蓄生活。他不接受采访，也不参加任何数学活动。\n\n对比人类数学家的孤独求索，OpenAI 的证明过程显然更接近规模化的产业行动。但我们不得不承认，效率差异客观存在，如果霍奇猜想真的倒下，后续每一个千禧年难题都很可能以同样方式被 AI 破解。\n\n当模型的训练数据开始与数学界的思考发生交汇，数学界最重视的“独立证明”，其边界正在变得模糊。\n\n参考内容：\n\nhttps://www.nytimes.com/2026/09/10/science/tristan-buckmaster-openai-math-navier-stokes.html",
-      "bodyTruncated": false,
-      "bodyVerbatim": true,
-      "eventRole": "",
-      "eventPerspective": "",
-      "qualityScore": 0.0,
-      "eventAggregation": {
-        "total": 1,
-        "groups": [
-          {
-            "key": "官方来源",
-            "tone": "#16130f",
-            "items": [
-              {
-                "source": "MIT Technology Review China",
-                "title": "OpenAI称在又一千禧年难题上取得重大进展，具体猜想尚未公布",
-                "url": "https://www.mittrchina.com/news/detail/16934",
-                "note": "原始发布 / 公告。",
-                "text": "OpenAI称在又一千禧年难题上取得重大进展，具体猜想尚未公布 —— 原始发布 / 公告。"
-              }
-            ]
-          }
-        ]
-      }
-    },
     {
       "recordId": "recvuYJJMOec9p",
       "sourceId": "mittrchina",
@@ -153,40 +78,28 @@
         "AI",
         "其他"
       ],
-      "imageUrl": "media/articles/recvuYJJMOec9p-3ea2dc14e3af.png",
+      "imageUrl": "https://p11-sign.toutiaoimg.com/tos-cn-i-6w9my0ksvp/07123c8962d545349e3f4a72293c14ce~tplv-obj.image?lk3s=ef143cfe&traceid=202609112103235421A05018B1B5C8DBF9&x-expires=2147483647&x-signature=5oVNG47jU1PbtgliRkma2DCZrOI%3D",
       "mediaAssets": {
         "images": [
           {
-            "url": "media/articles/recvuYJJMOec9p-e42ec9081ab1.png",
+            "url": "https://p11-sign.toutiaoimg.com/tos-cn-i-6w9my0ksvp/273f28d8530a49f68bd539a7c1639f25~tplv-obj.image?lk3s=ef143cfe&traceid=202609112103235421A05018B1B5C8DBF9&x-expires=2147483647&x-signature=UZZFBWxebfGhDNaWLdddx2vY4io%3D",
             "alt": "Bi/InSe晶体管性能对比图",
             "kind": "article-figure",
             "afterHeading": "当两样材料叠加一道干净界面",
-            "afterText": "隧穿场效应晶体管已经被研究了几十年，国际器件与系统路线图（IRDS，International ",
+            "afterText": "",
             "layout": "wide",
-            "confidence": 0.96,
-            "topicRelevance": 0.98,
-            "visualQuality": 0.83,
-            "coverSuitable": false
-          },
-          {
-            "url": "media/articles/recvuYJJMOec9p-851944a40ee2.png",
-            "alt": "Bi与InSe界面隧穿机制",
-            "kind": "article-figure",
-            "afterHeading": "",
-            "afterText": "本次团队的做法是在超高真空环境里用脉冲激光沉积技术一层一层往上长。先生长硒化铟，再生长铋，整个过",
-            "layout": "wide",
-            "confidence": 0.92,
-            "topicRelevance": 0.95,
-            "visualQuality": 0.78,
+            "confidence": 0.95,
+            "topicRelevance": 0.97,
+            "visualQuality": 0.86,
             "coverSuitable": false
           }
         ],
         "videos": [],
-        "cover": "media/articles/recvuYJJMOec9p-3ea2dc14e3af.png",
+        "cover": "https://p11-sign.toutiaoimg.com/tos-cn-i-6w9my0ksvp/07123c8962d545349e3f4a72293c14ce~tplv-obj.image?lk3s=ef143cfe&traceid=202609112103235421A05018B1B5C8DBF9&x-expires=2147483647&x-signature=5oVNG47jU1PbtgliRkma2DCZrOI%3D",
         "curatedBy": "vision",
         "curationVersion": 2,
         "coverConfidence": 0.88,
-        "coverVisualQuality": 0.86
+        "coverVisualQuality": 0.84
       },
       "topComments": [],
       "deepAnalysis": "",
@@ -238,13 +151,10 @@
         "产品",
         "其他"
       ],
-      "imageUrl": "media/generated/generated-e912fbe9182fd13846.png",
+      "imageUrl": "",
       "mediaAssets": {
         "images": [],
-        "videos": [],
-        "cover": "media/generated/generated-e912fbe9182fd13846.png",
-        "coverKind": "generated-cover",
-        "curatedBy": "generated"
+        "videos": []
       },
       "topComments": [],
       "deepAnalysis": "【核心内容】\nOpenAI 披露了其在线存储系统 Habitat 的演进：它最初是一个 Python 库，随后扩展为全球分布式存储平台，用于支撑 ChatGPT 的大规模服务。原文给出的核心规模指标包括约十亿 ChatGPT 用户，以及每秒 2200 万次请求。这表明 Habitat 已从应用内部的软件组件转变为面向全球业务负载的基础设施。原文没有提供具体演进时间、部署区域数量或当前版本信息。\n\n【关键细节】\n现有证据只明确说明了 Habitat 的起点、最终形态和服务规模，即从 Python 库发展为全球分布式存储平台，并承担 ChatGPT 的在线请求。每秒 2200 万次请求反映的是请求处理规模，但原文没有说明该数字是峰值、平均值还是设计容量，也没有区分读请求、写请求或其他操作。关于数据分片、副本机制、一致性模型、跨区域同步、故障转移、缓存策略、延迟、持久化方案及底层数据库，原文均未披露。原文同样没有说明 Habitat 是否对外提供、是否开源，以及其与 OpenAI 其他存储或计算系统之间的关系。\n\n【价值与影响】\n该案例的主要价值在于揭示了消费级生成式 AI 服务背后的存储压力：模型推理并非唯一瓶颈，用户状态、会话及其他在线数据所形成的高频访问同样需要全球化基础设施支撑。从 Python 库扩展为分布式平台，也说明快速增长的 AI 产品可能迫使团队重构早期应用层组件，使其具备更强的横向扩展和全球服务能力。对开发者和企业而言，这一规模指标可作为容量规划的参照，但不能直接用于推导单用户成本、数据量或所需机器数量。\n\n【局限与风险】\n原文信息高度概括，缺少架构图、技术实现、性能测试方法和第三方验证，因此无法判断每秒 2200 万次请求对应的实际数据吞吐量与服务质量。十亿用户也未说明是注册用户、累计用户还是活跃用户，标题中的“超过十亿”与摘要中的“十亿”存在表述精度差异。平台的可用性、尾延迟、数据一致性、灾难恢复、安全隔离、隐私保护及运营成本均未披露。由于材料来自 OpenAI 自身，其数字和成果可能具有宣传性，尚不能据此比较 Habitat 与其他分布式存储系统的优劣。\n\n【行动建议】\n1. 跟进完整技术文章，核实十亿用户和每秒 2200 万请求的统计口径、时间窗口及峰均值定义。\n2. 重点提取 Habitat 的分片、一致性、跨区域复制、故障恢复和容量扩展机制，再判断其是否具有可复现价值。\n3. 企业可用自身峰值请求、数据大小和延迟目标进行缩比压测，但不应直接套用 OpenAI 的规模数字。\n4. 在评估类似架构时同步核算跨区域传输、存储副本、隐私合规和故障演练成本。",
@@ -294,64 +204,64 @@
         "Agent",
         "推理"
       ],
-      "imageUrl": "media/articles/recvuYJJMOoqtj-38efb6b3a015.png",
+      "imageUrl": "",
       "mediaAssets": {
         "images": [
           {
-            "url": "media/articles/recvuYJJMOoqtj-fa5add696558.png",
-            "alt": "陶哲轩转发数学与AI联合声明",
+            "url": "https://p11-sign.toutiaoimg.com/tos-cn-i-6w9my0ksvp/698eaf1930dd43a1812f3688b885ebfe~tplv-obj.image?lk3s=ef143cfe&traceid=202609121047198BB013641A4E5A7F69A7&x-expires=2147483647&x-signature=qOxvH6HnzEbshOBb9bZo7FSmsII%3D",
+            "alt": "陶哲轩转发联合声明",
             "kind": "article-figure",
             "afterHeading": "",
-            "afterText": "今天，陶哲轩、邓煜等 25 位菲尔兹奖得主共同发布了一份题为《数学领域中人工智能的严重失衡》（A",
+            "afterText": "",
             "layout": "wide",
-            "confidence": 0.96,
-            "topicRelevance": 0.95,
-            "visualQuality": 0.72,
+            "confidence": 0.98,
+            "topicRelevance": 1.0,
+            "visualQuality": 0.55,
             "coverSuitable": false
           },
           {
-            "url": "media/articles/recvuYJJMOoqtj-7afe074e9c0f.png",
-            "alt": "联合声明签署者名单",
+            "url": "https://p3-sign.toutiaoimg.com/tos-cn-i-6w9my0ksvp/76b07d87069a4bf6a24cf08b9e222e89~tplv-obj.image?lk3s=ef143cfe&traceid=202609121047198BB013641A4E5A7F69A7&x-expires=2147483647&x-signature=EcP2SOiJteJw1fCzCweXJr1SL0M%3D",
+            "alt": "菲尔兹奖得主签署名单",
             "kind": "article-figure",
             "afterHeading": "",
-            "afterText": "公开信的主要内容并不是反对 AI 进入数学研究。25 位数学家真正质疑的是另一件事：当 AI 公",
+            "afterText": "",
             "layout": "portrait",
             "confidence": 0.98,
-            "topicRelevance": 0.93,
-            "visualQuality": 0.62,
+            "topicRelevance": 1.0,
+            "visualQuality": 0.5,
             "coverSuitable": false
           },
           {
-            "url": "media/articles/recvuYJJMOoqtj-dea46e789c5e.png",
-            "alt": "AI生成纳维尔-斯托克斯方程解答",
+            "url": "https://p3-sign.toutiaoimg.com/tos-cn-i-6w9my0ksvp/f75467b8af304aecaf386de958d82073~tplv-obj.image?lk3s=ef143cfe&traceid=202609121047198BB013641A4E5A7F69A7&x-expires=2147483647&x-signature=APQac7WaP%2BEXHdZ%2BBXD%2FIVz17qo%3D",
+            "alt": "AI生成纳维尔-斯托克斯解答",
             "kind": "article-figure",
             "afterHeading": "",
-            "afterText": "9 月 8 日，OpenAI 宣布，一个尚未公开的内部模型给出了 Navier–Stokes 存",
-            "layout": "portrait",
-            "confidence": 0.94,
-            "topicRelevance": 0.96,
-            "visualQuality": 0.78,
+            "afterText": "",
+            "layout": "normal",
+            "confidence": 0.9,
+            "topicRelevance": 0.88,
+            "visualQuality": 0.82,
             "coverSuitable": false
           },
           {
-            "url": "media/articles/recvuYJJMOoqtj-d327c7b2ca78.png",
+            "url": "https://p3-sign.toutiaoimg.com/tos-cn-i-6w9my0ksvp/9ee0527ea51d4eff97aa6b7be2ed7281~tplv-obj.image?lk3s=ef143cfe&traceid=202609121047198BB013641A4E5A7F69A7&x-expires=2147483647&x-signature=oAz30EqujCmiLAMEtA%2BtPOYkYpE%3D",
             "alt": "陶哲轩分享形式化证明实践",
             "kind": "article-figure",
             "afterHeading": "",
-            "afterText": "如果 AI 直接给出终点，而人类只负责核验，那么原本依附在“解题”过程中的训练、讨论和代际传承，",
+            "afterText": "",
             "layout": "wide",
-            "confidence": 0.89,
+            "confidence": 0.86,
             "topicRelevance": 0.84,
-            "visualQuality": 0.68,
+            "visualQuality": 0.62,
             "coverSuitable": false
           }
         ],
         "videos": [],
-        "cover": "media/articles/recvuYJJMOoqtj-38efb6b3a015.png",
+        "cover": "",
         "curatedBy": "vision",
         "curationVersion": 2,
-        "coverConfidence": 0.98,
-        "coverVisualQuality": 0.95
+        "coverConfidence": 0.02,
+        "coverVisualQuality": 0.18
       },
       "topComments": [],
       "deepAnalysis": "",
@@ -404,15 +314,15 @@
         "监管",
         "其他"
       ],
-      "imageUrl": "media/articles/recvuYJJMOH9e8-224bbd1dc968.png",
+      "imageUrl": "https://img.huxiucdn.com/ai/ai-general-cover/202609/12/35094-prod-nb2ep-general-1-1789142684324.png?imageView2/1/w/788/h/444/|imageMogr2/strip/interlace/1/quality/85",
       "mediaAssets": {
         "images": [],
         "videos": [],
-        "cover": "media/articles/recvuYJJMOH9e8-224bbd1dc968.png",
+        "cover": "https://img.huxiucdn.com/ai/ai-general-cover/202609/12/35094-prod-nb2ep-general-1-1789142684324.png?imageView2/1/w/788/h/444/|imageMogr2/strip/interlace/1/quality/85",
         "curatedBy": "vision",
         "curationVersion": 2,
-        "coverConfidence": 0.82,
-        "coverVisualQuality": 0.88
+        "coverConfidence": 0.78,
+        "coverVisualQuality": 0.86
       },
       "topComments": [],
       "deepAnalysis": "",
@@ -464,40 +374,40 @@
         "产品",
         "端侧"
       ],
-      "imageUrl": "media/articles/recvuYEC5fH9lH-b355347420de.jpg",
+      "imageUrl": "https://static.leiphone.com/uploads/new/images/20260911/6aa3dd57c85d9.jpg",
       "mediaAssets": {
         "images": [
           {
-            "url": "media/articles/recvuYEC5fH9lH-a090f0fc6987.jpg",
-            "alt": "九识发布无人驾驶安全体系",
+            "url": "https://static.leiphone.com/uploads/new/images/20260911/6aa3dd57f12c6.jpg",
+            "alt": "九识无人驾驶安全体系发布会",
             "kind": "article-figure",
             "afterHeading": "从数据到商业飞轮，为什么九识能成功扩张",
             "afterText": "制度上，九识在今年成立安全委员会，统筹车辆功能安全、网络安全等安全体系建设。",
             "layout": "wide",
-            "confidence": 0.91,
+            "confidence": 0.89,
             "topicRelevance": 0.9,
-            "visualQuality": 0.78,
+            "visualQuality": 0.72,
             "coverSuitable": false
           },
           {
-            "url": "media/articles/recvuYEC5fH9lH-1ebb05bd8a10.png",
-            "alt": "技术降低无人车运营成本",
+            "url": "https://static.leiphone.com/uploads/new/images/20260911/6aa3dd5861aff.png",
+            "alt": "九识展示无人车规模化运营能力",
             "kind": "article-figure",
             "afterHeading": "扩张影响：更大的市场、更稳的收入",
             "afterText": "3万台机器每天真实运行，需要的不只是模型，还有车辆调度、故障处理、客服、远程运维、充电、任务分配",
             "layout": "wide",
-            "confidence": 0.87,
+            "confidence": 0.84,
             "topicRelevance": 0.86,
-            "visualQuality": 0.82,
+            "visualQuality": 0.76,
             "coverSuitable": false
           }
         ],
         "videos": [],
         "documents": [],
-        "cover": "media/articles/recvuYEC5fH9lH-b355347420de.jpg",
+        "cover": "https://static.leiphone.com/uploads/new/images/20260911/6aa3dd57c85d9.jpg",
         "curatedBy": "vision",
         "curationVersion": 2,
-        "coverConfidence": 0.94,
+        "coverConfidence": 0.96,
         "coverVisualQuality": 0.9
       },
       "topComments": [],
@@ -551,89 +461,89 @@
         "端侧",
         "产品"
       ],
-      "imageUrl": "media/articles/recvuYEC5f96O5-6f3d98f174ca.jpg",
+      "imageUrl": "https://static.leiphone.com/uploads/new/images/20260912/6aa4aee568038.jpeg?imageView2/2/w/740",
       "mediaAssets": {
         "images": [
           {
-            "url": "media/articles/recvuYEC5f96O5-d940069c979e.jpg",
-            "alt": "汪军分享自主科研系统",
+            "url": "https://static.leiphone.com/uploads/new/images/20260912/6aa4aee5754a6.jpeg?imageView2/2/w/740",
+            "alt": "汪军演讲自主科研系统",
             "kind": "article-figure",
             "afterHeading": "汪 军：从智能体到AI科学家，关键在打通数字与物理世界的闭环",
             "afterText": "来自人工智能、材料科学、生命科学和创新药研发等领域的学者与产业界嘉宾，围绕自主研究系统的学习与进",
             "layout": "wide",
-            "confidence": 0.96,
-            "topicRelevance": 0.95,
+            "confidence": 0.98,
+            "topicRelevance": 0.99,
             "visualQuality": 0.86,
             "coverSuitable": false
           },
           {
-            "url": "media/articles/recvuYEC5f96O5-df2e5cd03b68.jpg",
+            "url": "https://static.leiphone.com/uploads/new/images/20260912/6aa4aee5a13f6.jpeg?imageView2/2/w/740",
             "alt": "张统一讲解机器自主发现",
             "kind": "article-figure",
             "afterHeading": "张统一：走向机器自主发现，首先要夯实数据源",
             "afterText": "除算法研究外，汪军还介绍了端侧智能体与“智能体云”等工程探索，通过连接算力、数据和工具，为科研任",
             "layout": "wide",
-            "confidence": 0.97,
-            "topicRelevance": 0.96,
-            "visualQuality": 0.9,
+            "confidence": 0.94,
+            "topicRelevance": 0.97,
+            "visualQuality": 0.84,
             "coverSuitable": false
           },
           {
-            "url": "media/articles/recvuYEC5f96O5-042c5cb22462.jpg",
-            "alt": "专家探讨生命科学与AI",
+            "url": "https://static.leiphone.com/uploads/new/images/20260912/6aa4aee59d577.jpeg?imageView2/2/w/740",
+            "alt": "谢志分享AI药物研发",
             "kind": "article-figure",
             "afterHeading": "谢志：AI药物设计的核心，是理解生命并持续产生可验证的发现",
-            "afterText": "在张统一看来，通往机器自主发现，需要将数据生产、计算模拟与学科知识共同纳入研究体系。科学家对问题",
-            "layout": "normal",
-            "confidence": 0.83,
-            "topicRelevance": 0.86,
-            "visualQuality": 0.76,
-            "coverSuitable": false
-          },
-          {
-            "url": "media/articles/recvuYEC5f96O5-f8b0d75b7f80.jpg",
-            "alt": "秦刚介绍AI创新药研发",
-            "kind": "article-figure",
-            "afterHeading": "秦刚：以临床需求为起点，探索AI驱动的创新药研发闭环",
             "afterText": "他也明确指出，系统在关键决策上仍需要人工参与，自主研究的稳定性有待提高。真正重要的，是让AI持续",
             "layout": "wide",
             "confidence": 0.97,
-            "topicRelevance": 0.95,
+            "topicRelevance": 0.98,
             "visualQuality": 0.88,
             "coverSuitable": false
           },
           {
-            "url": "media/articles/recvuYEC5f96O5-9f48307be28d.jpg",
-            "alt": "张书铭分享AI材料研发",
+            "url": "https://static.leiphone.com/uploads/new/images/20260912/6aa4b14393167.jpeg?imageView2/2/w/740",
+            "alt": "AI推动材料研发闭环",
             "kind": "article-figure",
-            "afterHeading": "张书铭：从Token到材料，以产业需求牵引研发闭环",
-            "afterText": "秦刚强调，这些探索的最终评价仍要回到临床。AI与自动化能否真正改变新药研发，需要以疗法的实际效果",
+            "afterHeading": "杨孟洋：连接数据、模型、实验与量产，让材料创新形成完整链条",
+            "afterText": "他还分享了与欧莱雅围绕配方稳定性开展合作的案例：团队从反应机理切入，筛选可抑制活性组分失效的添加",
             "layout": "wide",
-            "confidence": 0.95,
-            "topicRelevance": 0.92,
-            "visualQuality": 0.86,
+            "confidence": 0.93,
+            "topicRelevance": 0.95,
+            "visualQuality": 0.84,
             "coverSuitable": false
           },
           {
-            "url": "media/articles/recvuYEC5f96O5-acf9c51306ac.jpg",
+            "url": "https://static.leiphone.com/uploads/new/images/20260912/6aa4b10fbedf5.jpeg?imageView2/2/w/740",
+            "alt": "杨灵讨论发现智能",
+            "kind": "article-figure",
+            "afterHeading": "杨灵：从递归自我改进走向发现智能，让AI判断什么值得研究",
+            "afterText": "对于商业落地，他认为，中国的制造与供应链条件为AI材料研发提供了重要支撑。衡量AI for Ma",
+            "layout": "wide",
+            "confidence": 0.95,
+            "topicRelevance": 0.96,
+            "visualQuality": 0.87,
+            "coverSuitable": false
+          },
+          {
+            "url": "https://static.leiphone.com/uploads/new/images/20260912/6aa4b10fe0a75.jpeg?imageView2/2/w/740",
             "alt": "专家圆桌讨论AI自主进化",
             "kind": "article-figure",
             "afterHeading": "圆桌讨论：AI学会研究之后，技术真的会自主进化吗？",
             "afterText": "在随后举行的圆桌讨论中，汪军担任主持人，与江苏理工学院人工智能学院执行院长常珊、华大研究院合成生",
             "layout": "wide",
-            "confidence": 0.98,
-            "topicRelevance": 0.96,
+            "confidence": 0.99,
+            "topicRelevance": 0.98,
             "visualQuality": 0.91,
             "coverSuitable": false
           }
         ],
         "videos": [],
         "documents": [],
-        "cover": "media/articles/recvuYEC5f96O5-6f3d98f174ca.jpg",
+        "cover": "https://static.leiphone.com/uploads/new/images/20260912/6aa4aee568038.jpeg?imageView2/2/w/740",
         "curatedBy": "vision",
         "curationVersion": 2,
         "coverConfidence": 0.96,
-        "coverVisualQuality": 0.93
+        "coverVisualQuality": 0.92
       },
       "topComments": [],
       "deepAnalysis": "",
@@ -686,15 +596,15 @@
         "融资",
         "产品"
       ],
-      "imageUrl": "media/articles/recvuYJJMObO59-77d16277f0b2.png",
+      "imageUrl": "https://img.huxiucdn.com/ai/ai-general-cover/202609/12/35107-prod-db-general-1-1789178118847.png?imageView2/1/w/788/h/444/|imageMogr2/strip/interlace/1/quality/85",
       "mediaAssets": {
         "images": [],
         "videos": [],
-        "cover": "media/articles/recvuYJJMObO59-77d16277f0b2.png",
+        "cover": "https://img.huxiucdn.com/ai/ai-general-cover/202609/12/35107-prod-db-general-1-1789178118847.png?imageView2/1/w/788/h/444/|imageMogr2/strip/interlace/1/quality/85",
         "curatedBy": "vision",
         "curationVersion": 2,
         "coverConfidence": 0.84,
-        "coverVisualQuality": 0.86
+        "coverVisualQuality": 0.82
       },
       "topComments": [],
       "deepAnalysis": "",
@@ -747,13 +657,10 @@
         "端侧",
         "产品"
       ],
-      "imageUrl": "media/generated/generated-ac1c51781ca63bab48.png",
+      "imageUrl": "",
       "mediaAssets": {
         "images": [],
-        "videos": [],
-        "cover": "media/generated/generated-ac1c51781ca63bab48.png",
-        "coverKind": "generated-cover",
-        "curatedBy": "generated"
+        "videos": []
       },
       "topComments": [],
       "deepAnalysis": "",
@@ -806,15 +713,15 @@
         "产品",
         "其他"
       ],
-      "imageUrl": "media/articles/recvuYJJMOFnYX-bcbd9aab2370.png",
+      "imageUrl": "https://img.huxiucdn.com/ai/ai-general-cover/202609/12/1297-prod-gptqn-general-1-1789183204235.png?imageView2/1/w/788/h/444/|imageMogr2/strip/interlace/1/quality/85",
       "mediaAssets": {
         "images": [],
         "videos": [],
-        "cover": "media/articles/recvuYJJMOFnYX-bcbd9aab2370.png",
+        "cover": "https://img.huxiucdn.com/ai/ai-general-cover/202609/12/1297-prod-gptqn-general-1-1789183204235.png?imageView2/1/w/788/h/444/|imageMogr2/strip/interlace/1/quality/85",
         "curatedBy": "vision",
         "curationVersion": 2,
-        "coverConfidence": 0.84,
-        "coverVisualQuality": 0.9
+        "coverConfidence": 0.88,
+        "coverVisualQuality": 0.91
       },
       "topComments": [],
       "deepAnalysis": "",
@@ -867,16 +774,28 @@
         "产品",
         "其他"
       ],
-      "imageUrl": "media/generated/generated-7b86298853812f2797.png",
+      "imageUrl": "",
       "mediaAssets": {
-        "images": [],
+        "images": [
+          {
+            "url": "https://i.qbitai.com/wp-content/uploads/2026/09/132423725e8599341def59426a5bd6da.jpeg",
+            "alt": "深度智控获多方融资加码",
+            "kind": "article-figure",
+            "afterHeading": "",
+            "afterText": "近日，物理AI企业深度智控（DeepCtrls）完成新一轮B+轮数亿元融资。本轮融资由宁德时代领",
+            "layout": "wide",
+            "confidence": 0.78,
+            "topicRelevance": 0.92,
+            "visualQuality": 0.48,
+            "coverSuitable": false
+          }
+        ],
         "videos": [],
-        "cover": "media/generated/generated-7b86298853812f2797.png",
-        "curatedBy": "generated",
+        "cover": "",
+        "curatedBy": "vision",
         "curationVersion": 2,
-        "coverConfidence": 0.84,
-        "coverVisualQuality": 0.7,
-        "coverKind": "generated-cover"
+        "coverConfidence": 0.0,
+        "coverVisualQuality": 0.25
       },
       "topComments": [],
       "deepAnalysis": "",
@@ -929,13 +848,10 @@
         "Agent",
         "产品"
       ],
-      "imageUrl": "media/generated/generated-5f37b8e0fbeb9af0aa.png",
+      "imageUrl": "",
       "mediaAssets": {
         "images": [],
-        "videos": [],
-        "cover": "media/generated/generated-5f37b8e0fbeb9af0aa.png",
-        "coverKind": "generated-cover",
-        "curatedBy": "generated"
+        "videos": []
       },
       "topComments": [],
       "deepAnalysis": "【核心内容】\nCognition正在借助GPT-6 Astra改善其软件开发智能体Devin的自我测试能力。原文明确指出，GPT-6 Astra能够增强Devin测试软件以及展示软件确实可用的能力，最终目标是让工程师减少代码审查工作，并交付更多软件。原文未披露具体发布时间、上线范围、客户名单、定价或性能数字。\n\n【关键细节】\n这一进展覆盖的不只是代码生成，还涉及生成后验证与结果展示。按照原文表述，Devin需要测试自己完成的软件，并向工程师证明其能够工作，因此重点在于提高软件开发智能体输出的可检查性。GPT-6 Astra在其中承担何种具体任务、是否直接执行测试、生成测试用例或分析运行结果，原文均未说明。原文也没有披露支持的编程语言、软件环境、测试类型、基准数据，以及相较此前模型的提升幅度。\n\n【价值与影响】\n如果Devin能够更可靠地验证并展示自身工作，工程师的角色可能从逐行检查大量代码，部分转向审阅测试证据与最终行为。这有助于缓解智能体生成代码后仍需大量人工确认的问题，使软件开发智能体更接近可交付的工作流工具，而不仅是代码生成助手。对企业而言，潜在价值主要体现在缩短审查与交付周期；对开发者而言，则是减少重复检查，但原文只表述了目标，尚未提供实际生产效率或质量改善证据。\n\n【局限与风险】\n原文信息非常有限，没有给出独立评测、对照实验、错误率、测试覆盖率或真实项目结果，因此无法确认能力提升的规模与稳定性。自我测试也不等于独立验证：如果代码生成与测试判断依赖相近的模型能力，可能出现共同遗漏或错误地判定成功。安全边界、执行环境隔离、测试成本、延迟、数据隐私及人工复核机制均为原文未披露，现阶段不宜据此推断Devin可以替代正式代码审查。\n\n【行动建议】\n1. 关注Cognition或OpenAI后续公布的基准、失败案例和真实项目数据，重点核对测试通过率与人工验收结果的一致性。\n2. 企业试用时应选取低风险项目，将Devin的结论与现有单元测试、集成测试及人工审查并行比较。\n3. 记录代码缺陷率、审查耗时、返工次数和推理成本，验证其是否真正减少总交付成本。\n4. 在缺少安全与可靠性证据前，保留独立测试、权限隔离和人工批准环节。",
@@ -985,11 +901,11 @@
         "融资",
         "其他"
       ],
-      "imageUrl": "media/articles/recvuYEC5fC3eZ-ac29ce8ddb1b.webp",
+      "imageUrl": "https://techcrunch.com/wp-content/uploads/2026/09/GettyImages-2294192768.jpg?resize=1200,798",
       "mediaAssets": {
         "images": [],
         "videos": [],
-        "cover": "media/articles/recvuYEC5fC3eZ-ac29ce8ddb1b.webp",
+        "cover": "https://techcrunch.com/wp-content/uploads/2026/09/GettyImages-2294192768.jpg?resize=1200,798",
         "curatedBy": "vision",
         "curationVersion": 2,
         "coverConfidence": 0.78,
@@ -1021,64 +937,6 @@
       }
     },
     {
-      "recordId": "recvuYEC5f5IR2",
-      "sourceId": "utility-dive",
-      "title": "Pennsylvania PUC to consider ratemaking, ROE and curtailment as data centers grow",
-      "titleCn": "宾夕法尼亚州公用事业委员会将评估数据中心增长下的费率、股本回报率与限电机制",
-      "source": "Utility Dive",
-      "url": "https://www.utilitydive.com/news/pennsylvania-puc-to-consider-rates-and-curtailment-as-data-centers-grow/830174",
-      "category": "算力芯片云",
-      "contentType": "文章",
-      "priority": "P2",
-      "publishedDate": "2026-09-11",
-      "summary": "随着数据中心推动用电需求快速增长，宾夕法尼亚州公用事业委员会拟考虑费率制定、股本回报率及限电相关问题。该委员会称，相关决策背景是PJM区域内电力需求与可用供电资源之间的平衡日益受到关注。",
-      "why": "这可能影响数据中心的用电成本、供电可靠性以及电力基础设施投资激励。",
-      "impact": 72,
-      "novelty": 44,
-      "actionability": 61,
-      "urgency": "中",
-      "tags": [
-        "监管",
-        "硬件",
-        "其他"
-      ],
-      "imageUrl": "media/articles/recvuYEC5f5IR2-522e68397064.webp",
-      "mediaAssets": {
-        "images": [],
-        "videos": [],
-        "documents": [],
-        "cover": "media/articles/recvuYEC5f5IR2-522e68397064.webp",
-        "curatedBy": "vision",
-        "curationVersion": 2,
-        "coverConfidence": 0.88,
-        "coverVisualQuality": 0.9
-      },
-      "topComments": [],
-      "deepAnalysis": "【核心内容】\n宾夕法尼亚州公用事业委员会（PUC）将围绕数据中心增长带来的电力需求问题，考虑费率制定、股本回报率（ROE）和限电或负荷削减机制。委员会表示，相关决策发生在PJM区域对供需平衡日益担忧的背景下：电力需求正在快速增加，而能够满足需求的资源是否充足受到关注。原文未披露具体决策时间、适用对象及最终规则。\n\n【关键细节】\n标题显示，监管讨论至少涉及三个相互关联的方向：如何通过费率机制分配新增供电成本，如何设定或评估公用事业公司的股本回报率，以及在供电资源不足时如何处理数据中心负荷削减。给出的正文证据仅明确指出，PJM区域面临快速增长的电力需求与可用资源之间的平衡压力。原文未说明需求增量规模、数据中心在新增负荷中的占比、涉及哪些电力公司，也未披露费率方案、ROE水平、限电触发条件或补偿办法。\n\n【价值与影响】\n该议题意味着数据中心扩张已进入电力监管和成本分摊层面，而不只是选址与并网问题。若监管机制发生变化，可能影响数据中心运营成本、项目建设节奏和供电可靠性，也可能改变公用事业投资新增发电、输电和配电能力的经济激励。对企业而言，电力价格及潜在负荷削减风险将成为评估数据中心项目的重要变量；对行业而言，PJM区域的处理方式可能提供可观察的监管案例，但原文不足以判断其是否会被其他地区采用。\n\n【局限与风险】\n现有证据非常有限，未提供正式文件、听证安排、政策选项、实施范围或量化预测，因此无法判断措施的严格程度和落地概率。费率、ROE和限电机制对不同主体的影响可能相反：提高投资回报可能促进扩容，但也可能推高用户成本；限电可缓解系统压力，却可能影响数据中心服务连续性。上述具体结果均需等待正式方案验证，原文未披露。\n\n【行动建议】\n1. 跟踪宾夕法尼亚州PUC发布的正式议程、命令、听证材料及公众意见征集文件。\n2. 核查拟议费率是否区分数据中心等大型新增负荷，并量化其并网和运营成本变化。\n3. 关注限电机制的触发条件、优先级、通知时间及补偿安排，评估业务连续性风险。\n4. 将ROE调整与新增发电、输配电投资承诺对照，验证其能否实际缓解PJM区域资源压力。",
-      "editorialStructure": "",
-      "eventRole": "",
-      "eventPerspective": "",
-      "qualityScore": 0.0,
-      "eventAggregation": {
-        "total": 1,
-        "groups": [
-          {
-            "key": "官方来源",
-            "tone": "#16130f",
-            "items": [
-              {
-                "source": "Utility Dive",
-                "title": "宾夕法尼亚州公用事业委员会将评估数据中心增长下的费率、股本回报率与限电机制",
-                "url": "https://www.utilitydive.com/news/pennsylvania-puc-to-consider-rates-and-curtailment-as-data-centers-grow/830174",
-                "note": "原始发布 / 公告。",
-                "text": "宾夕法尼亚州公用事业委员会将评估数据中心增长下的费率、股本回报率与限电机制 —— 原始发布 / 公告。"
-              }
-            ]
-          }
-        ]
-      }
-    },
-    {
       "recordId": "recvuYJJMOrKes",
       "sourceId": "mittrchina",
       "title": "波士顿动力前高管创业，要打造一个“机器人版迪士尼”",
@@ -1101,52 +959,28 @@
         "产品",
         "其他"
       ],
-      "imageUrl": "media/articles/recvuYJJMOrKes-641f30ac7e2a.png",
+      "imageUrl": "https://p11-sign.toutiaoimg.com/tos-cn-i-6w9my0ksvp/b71cf6ba78f24569986194283a4ef6e8~tplv-obj.image?lk3s=ef143cfe&traceid=20260911211240F142F3701510DCCD95A9&x-expires=2147483647&x-signature=C4atlQGubwNbFTV3JvZjUanGlN8%3D",
       "mediaAssets": {
         "images": [
           {
-            "url": "media/articles/recvuYJJMOrKes-e43295c045cd.gif",
+            "url": "https://p11-sign.toutiaoimg.com/tos-cn-i-6w9my0ksvp/439ec06527b847449eb6bc639ee0399a~tplv-obj.image?lk3s=ef143cfe&traceid=20260911211240F142F3701510DCCD95A9&x-expires=2147483647&x-signature=yFd6fWC3icQ8Bf1N1I2bfni0bxU%3D",
             "alt": "波士顿动力机器人跳舞",
             "kind": "article-figure",
             "afterHeading": "波士顿动力出来的人，开始研究机器人怎么“演戏”",
-            "afterText": "Dynamic Creatures 的 CEO Marc Theermann 在波士顿动力工作了",
+            "afterText": "",
             "layout": "wide",
-            "confidence": 0.93,
-            "topicRelevance": 0.9,
-            "visualQuality": 0.88,
-            "coverSuitable": false
-          },
-          {
-            "url": "media/articles/recvuYJJMOrKes-4b735f34446d.png",
-            "alt": "Dynamic Creatures创始人介绍角色机器人",
-            "kind": "article-figure",
-            "afterHeading": "",
-            "afterText": "另一位创始人 Farbod Farshidian 的背景则偏向技术。他曾在 Robotics a",
-            "layout": "wide",
-            "confidence": 0.8,
-            "topicRelevance": 0.84,
-            "visualQuality": 0.68,
-            "coverSuitable": false
-          },
-          {
-            "url": "media/articles/recvuYJJMOrKes-ad4f44c17018.png",
-            "alt": "SnowJay机器人智能平台",
-            "kind": "article-figure",
-            "afterHeading": "",
-            "afterText": "Dynamic Creatures 因此引入了动画制作和动作捕捉工具。动画师可以先设计角色运动，",
-            "layout": "wide",
-            "confidence": 0.88,
-            "topicRelevance": 0.82,
-            "visualQuality": 0.58,
+            "confidence": 0.78,
+            "topicRelevance": 0.72,
+            "visualQuality": 0.9,
             "coverSuitable": false
           }
         ],
         "videos": [],
-        "cover": "media/articles/recvuYJJMOrKes-641f30ac7e2a.png",
+        "cover": "https://p11-sign.toutiaoimg.com/tos-cn-i-6w9my0ksvp/b71cf6ba78f24569986194283a4ef6e8~tplv-obj.image?lk3s=ef143cfe&traceid=20260911211240F142F3701510DCCD95A9&x-expires=2147483647&x-signature=C4atlQGubwNbFTV3JvZjUanGlN8%3D",
         "curatedBy": "vision",
         "curationVersion": 2,
-        "coverConfidence": 0.86,
-        "coverVisualQuality": 0.94
+        "coverConfidence": 0.89,
+        "coverVisualQuality": 0.78
       },
       "topComments": [],
       "deepAnalysis": "",
@@ -1199,85 +1033,13 @@
         "Agent",
         "产品"
       ],
-      "imageUrl": "media/generated/generated-bc6517e12b3fdae092.png",
+      "imageUrl": "",
       "mediaAssets": {
         "images": [],
-        "videos": [],
-        "cover": "media/generated/generated-bc6517e12b3fdae092.png",
-        "coverKind": "generated-cover",
-        "curatedBy": "generated"
+        "videos": []
       },
       "topComments": [],
       "deepAnalysis": "【核心内容】\n据标题及所给证据，Perplexity正在使用GPT-6 Astra承担端到端系统相关任务。Astra的具体用途包括撰写沟通内容、修改软件以及监控生产系统。Perplexity表示，相较于此前使用的模型，团队检查或介入的频率大幅降低。这是原文提供的核心采用信号，但没有披露部署时间、覆盖团队、任务规模或量化结果。\n\n【关键细节】\n这些任务横跨文本生成、软件工程和生产运维三个环节，说明Astra并非只被用于单次问答，而是进入了与实际系统运行相关的工作流。“检查频率更低”意味着Perplexity认为其能够在更少人工确认的情况下持续完成任务，但原文没有给出检查频率的前后对比、任务成功率、代码缺陷率、告警准确率或人工节省时长。原文也未说明Astra是否可以自主执行代码部署、是否具备生产环境写入权限，以及通信撰写、软件修改和系统监控是否由同一条工作流串联完成。\n\n【价值与影响】\n若这一使用方式能够稳定复现，其价值在于把大模型从辅助生成工具推进到跨环节的系统执行角色。对开发者而言，潜在变化是减少反复确认和人工衔接；对企业而言，则可能降低软件维护与生产监控中的协调成本。尤其是软件变更和生产监控都属于高责任任务，更少的人工检查可能代表模型可靠性或工具调用能力有所提升。不过，现有证据只能确认Perplexity的使用陈述，尚不足以判断Astra相对其他模型的普遍优势，也无法证明其适用于其他组织的生产环境。\n\n【局限与风险】\n原文信息极少，没有披露模型架构、上下文能力、权限控制、工具调用机制、价格、延迟和可用范围，也没有独立评测或可复现实验。“大幅减少检查”缺少明确基线和数字，可能受到任务难度、工作流设计及人工监督标准变化的影响。允许模型修改软件或接触生产系统还可能带来错误变更、权限越界、敏感信息泄露和监控误判等风险；相关防护、审计、回滚及人工审批机制原文未披露。\n\n【行动建议】\n1. 跟进Perplexity或OpenAI后续是否公布任务成功率、人工介入率、代码回滚率及生产事故等量化指标。\n2. 企业验证类似方案时，应先在隔离环境和只读监控场景中测试，并保留完整操作日志与人工审批。\n3. 以相同任务集对比Astra与现有模型，重点测量完成率、错误率、成本、延迟和人工复核时间。\n4. 在授予软件修改或生产权限前，配置最小权限、自动测试、异常停止与快速回滚机制。",
-      "editorialStructure": "",
-      "eventRole": "",
-      "eventPerspective": "",
-      "qualityScore": 0.0,
-      "eventAggregation": {
-        "total": 2,
-        "groups": [
-          {
-            "key": "官方来源",
-            "tone": "#16130f",
-            "items": [
-              {
-                "source": "OpenAI News",
-                "title": "Perplexity采用GPT-6 Astra端到端处理系统任务",
-                "url": "https://openai.com/index/perplexity-improving-accuracy-with-astra",
-                "note": "原始发布 / 公告。",
-                "text": "Perplexity采用GPT-6 Astra端到端处理系统任务 —— 原始发布 / 公告。"
-              }
-            ]
-          },
-          {
-            "key": "相关报道",
-            "tone": "#2b6cb0",
-            "items": [
-              {
-                "source": "智东西",
-                "title": "GPT-6 Astra发布：媒体称其在多项评测中领先",
-                "url": "https://zhidx.com/p/590669.html",
-                "note": "同事件的其它源头报道。",
-                "text": "GPT-6 Astra发布：媒体称其在多项评测中领先 —— 同事件的其它源头报道。"
-              }
-            ]
-          }
-        ]
-      }
-    },
-    {
-      "recordId": "recvuYEC5fmJKr",
-      "sourceId": "utility-dive",
-      "title": "Court rejects DOE ‘emergency’ order delaying coal plant retirement as overstep",
-      "titleCn": "法院驳回能源部延缓煤电厂退役的“紧急”命令，认定其越权",
-      "source": "Utility Dive",
-      "url": "https://www.utilitydive.com/news/appeals-court-vacates-doe-emergency-order-michigan-power-plant/830189",
-      "category": "算力芯片云",
-      "contentType": "文章",
-      "priority": "P2",
-      "publishedDate": "2026-09-12",
-      "summary": "美国哥伦比亚特区联邦巡回上诉法院驳回能源部以“紧急”名义延缓煤电厂退役的命令。法院认为，能源部对“紧急情况”的解释可能导致缺乏法律依据的频繁联邦干预，并威胁能源市场稳定。",
-      "why": "该裁决限制了美国能源部以紧急权力介入发电设施退役和能源市场运行的空间。",
-      "impact": 68,
-      "novelty": 38,
-      "actionability": 55,
-      "urgency": "中",
-      "tags": [
-        "监管",
-        "其他"
-      ],
-      "imageUrl": "media/articles/recvuYEC5fmJKr-7551fc05a87f.webp",
-      "mediaAssets": {
-        "images": [],
-        "videos": [],
-        "cover": "media/articles/recvuYEC5fmJKr-7551fc05a87f.webp",
-        "curatedBy": "vision",
-        "curationVersion": 2,
-        "coverConfidence": 0.98,
-        "coverVisualQuality": 0.88
-      },
-      "topComments": [],
-      "deepAnalysis": "【核心内容】\n美国哥伦比亚特区联邦巡回上诉法院驳回了美国能源部（DOE）一项被称为“紧急”命令的措施。根据标题，该命令旨在延缓一座煤电厂退役，法院则将其认定为对能源部权限边界的逾越。判决引文显示，争议核心是能源部对“紧急情况”一词的解释：法院认为，这种解释会为频繁的联邦干预打开空间，而相关干预既缺乏成文法支持，也可能威胁能源市场稳定。原文证据未提供裁决日期、涉事煤电厂名称、命令期限或案件当事方等信息。\n\n【关键细节】\n法院的判断重点并非原文所能确认的煤电经济性、排放表现或具体电力可靠性指标，而是紧急权力是否具有充分法定依据。判决措辞同时提出两层担忧：第一，若宽泛解释“紧急”，能源部可能更频繁地介入电厂退役等市场与运营决策；第二，这类缺少法律支持的干预本身可能破坏能源市场稳定。标题表明命令的直接效果是推迟煤电厂退役，但原文未披露能源部引用的具体法律条款、提出的可靠性理由、法院采用的审查标准，以及裁决是否立即撤销命令或仍可上诉。\n\n【价值与影响】\n该裁决的主要价值在于划定联邦行政机关使用紧急权限的边界。对电力企业和资产所有者而言，电厂退役计划能否被行政命令临时改变，关系到维护支出、燃料采购、人员安排及替代电源规划。对能源市场参与者而言，法院明确表达了对频繁行政干预的担忧，有助于强化政策可预期性，但其适用范围仍取决于完整判决理由。该事件并非人工智能或算力技术进展；它对数据中心、电力供应等领域是否存在间接影响，原文没有提供证据，不能据此推断。\n\n【局限与风险】\n现有材料只有标题和一句判决引文，无法判断法院是否全面否定能源部的紧急权力，还是仅认定本案事实不满足法定条件。原文未披露当地电网是否面临容量不足、煤电厂退出是否影响可靠性、相关成本由谁承担，也未说明裁决对其他待退役电厂是否构成直接约束。将单一案件解读为所有类似命令均无效，可能夸大其先例效应；同样，仅凭“威胁市场稳定”的表述也无法量化实际市场影响。\n\n【行动建议】\n1. 查阅完整判决，核对能源部援引的法条、法院审查标准、救济方式及是否存在后续上诉空间。\n2. 确认涉事电厂、所在电力市场、原定退役时间和命令有效期，评估裁决的实际运营影响。\n3. 能源企业应盘点依赖类似紧急命令的项目，并分别制定命令有效与失效两种情景下的运营方案。\n4. 市场参与者应持续跟踪能源部是否调整紧急命令的法律依据或程序，而非仅依据标题作出投资判断。",
       "editorialStructure": "",
       "eventRole": "",
       "eventPerspective": "",
@@ -1290,11 +1052,11 @@
             "tone": "#16130f",
             "items": [
               {
-                "source": "Utility Dive",
-                "title": "法院驳回能源部延缓煤电厂退役的“紧急”命令，认定其越权",
-                "url": "https://www.utilitydive.com/news/appeals-court-vacates-doe-emergency-order-michigan-power-plant/830189",
+                "source": "OpenAI News",
+                "title": "Perplexity采用GPT-6 Astra端到端处理系统任务",
+                "url": "https://openai.com/index/perplexity-improving-accuracy-with-astra",
                 "note": "原始发布 / 公告。",
-                "text": "法院驳回能源部延缓煤电厂退役的“紧急”命令，认定其越权 —— 原始发布 / 公告。"
+                "text": "Perplexity采用GPT-6 Astra端到端处理系统任务 —— 原始发布 / 公告。"
               }
             ]
           }
@@ -1323,11 +1085,11 @@
         "融资",
         "其他"
       ],
-      "imageUrl": "media/articles/recvuYEC5feWtb-c1566df120f5.webp",
+      "imageUrl": "https://techcrunch.com/wp-content/uploads/2026/08/GettyImages-2082335389.jpg?resize=1200,857",
       "mediaAssets": {
         "images": [],
         "videos": [],
-        "cover": "media/articles/recvuYEC5feWtb-c1566df120f5.webp",
+        "cover": "https://techcrunch.com/wp-content/uploads/2026/08/GettyImages-2082335389.jpg?resize=1200,857",
         "curatedBy": "vision",
         "curationVersion": 2,
         "coverConfidence": 0.82,
@@ -1359,77 +1121,6 @@
       }
     },
     {
-      "recordId": "recvuYEC5fVVUj",
-      "sourceId": "utility-dive",
-      "title": "Unplanned power plant outages fall sharply during 2025/26 winter storms: FERC-NERC report",
-      "titleCn": "FERC-NERC：2025/26年冬季风暴期间非计划停运显著减少",
-      "source": "Utility Dive",
-      "url": "https://www.utilitydive.com/news/unplanned-power-plant-outages-winter-weather-ferc-nerc/830141",
-      "category": "算力芯片云",
-      "contentType": "文章",
-      "priority": "P2",
-      "publishedDate": "2026-09-11",
-      "summary": "FERC与NERC报告称，在2026年初严寒天气中，准备工作改善和跨区域电力调度对避免计划性停电发挥了关键作用。报道标题同时指出，2025/26年冬季风暴期间发电厂非计划停运大幅下降。",
-      "why": "该报告反映出提前准备与跨区域输电可提升极端天气下的电网韧性，但原文未提供具体降幅和成本数据。",
-      "impact": 65,
-      "novelty": 38,
-      "actionability": 52,
-      "urgency": "中",
-      "tags": [
-        "监管",
-        "硬件",
-        "其他"
-      ],
-      "imageUrl": "media/articles/recvuYEC5fVVUj-b1ba4c6199e6.webp",
-      "mediaAssets": {
-        "images": [
-          {
-            "url": "media/articles/recvuYEC5fVVUj-5a7a5053a46d.webp",
-            "alt": "区域间电力输入与输出示意",
-            "kind": "article-figure",
-            "afterHeading": "关键细节",
-            "afterText": "",
-            "layout": "wide",
-            "confidence": 0.96,
-            "topicRelevance": 0.94,
-            "visualQuality": 0.82,
-            "coverSuitable": false
-          }
-        ],
-        "videos": [],
-        "documents": [],
-        "cover": "media/articles/recvuYEC5fVVUj-b1ba4c6199e6.webp",
-        "curatedBy": "vision",
-        "curationVersion": 2,
-        "coverConfidence": 0.93,
-        "coverVisualQuality": 0.86
-      },
-      "topComments": [],
-      "deepAnalysis": "【核心内容】\nUtility Dive援引FERC与NERC的报告称，2025/26年冬季风暴期间，发电厂非计划停运显著减少。在2026年初的严寒天气中，电力系统避免了计划性停电；报告将这一结果主要归因于准备工作的改善，以及不同区域之间的电力转移。事件主体是美国联邦能源监管委员会FERC与电网可靠性机构NERC，关注重点是极端低温下的发电可用性和电网韧性。\n\n【关键细节】\n原文明确提到两项关键因素：一是运营方在寒潮前进行了更充分的准备，二是通过跨区域电力转移缓解局部供需压力。这说明可靠性并非只取决于单个电厂能否持续运行，还依赖区域电网之间的互济能力。标题称非计划停运“显著减少”，正文证据则强调避免了计划性停电，两者分别涉及设备意外退出与系统运营方主动限电，不能直接视为同一指标。原文未披露非计划停运数量、同比降幅、受影响区域、峰值负荷、备用容量、输电规模及具体准备措施。\n\n【价值与影响】\n这一结果表明，极端天气下的电力可靠性可以通过运营准备和跨区协同获得改善，而不完全依赖新增发电能力。对电力企业和大型用电企业而言，区域间输电能力、应急调度机制以及寒潮前的设备准备可能具有较高价值。对数据中心等高负荷用户，这类电网韧性改善也可能降低停电风险，但原文没有讨论算力设施、云服务或具体企业，因此不能据此判断其对AI基础设施的直接影响。\n\n【局限与风险】\n现有证据非常简短，缺少报告全文中的量化结果、统计口径与历史基准，无法判断“显著减少”的绝对规模及统计意义。原文也未说明改善来自天气差异、机组防寒改造、燃料保障还是调度规则变化。跨区域电力转移受到输电容量和相邻地区同时受灾等条件限制，不能保证每次寒潮都有效。此外，避免计划性停电不等于完全消除非计划停运，相关因果关系仍需报告数据支持。\n\n【行动建议】\n1. 获取FERC-NERC报告全文，核对非计划停运降幅、比较基期及地区分布。\n2. 分开验证非计划停运、计划性停电和负荷损失三个指标，避免混用结论。\n3. 对高耗电设施评估所在区域的跨区输电能力、冬季备用容量及应急响应机制。\n4. 跟踪后续寒潮中的同口径数据，判断此次改善是否可持续。",
-      "editorialStructure": "",
-      "eventRole": "",
-      "eventPerspective": "",
-      "qualityScore": 0.0,
-      "eventAggregation": {
-        "total": 1,
-        "groups": [
-          {
-            "key": "官方来源",
-            "tone": "#16130f",
-            "items": [
-              {
-                "source": "Utility Dive",
-                "title": "FERC-NERC：2025/26年冬季风暴期间非计划停运显著减少",
-                "url": "https://www.utilitydive.com/news/unplanned-power-plant-outages-winter-weather-ferc-nerc/830141",
-                "note": "原始发布 / 公告。",
-                "text": "FERC-NERC：2025/26年冬季风暴期间非计划停运显著减少 —— 原始发布 / 公告。"
-              }
-            ]
-          }
-        ]
-      }
-    },
-    {
       "recordId": "recvuYEC5fRo0n",
       "sourceId": "techcrunch-ai",
       "title": "Nscale adds former OpenAI exec Fidji Simo to its board ahead of potential IPO",
@@ -1451,15 +1142,15 @@
         "融资",
         "其他"
       ],
-      "imageUrl": "media/articles/recvuYEC5fRo0n-58c2bcca3118.webp",
+      "imageUrl": "https://techcrunch.com/wp-content/uploads/2026/07/Fidji-Simo.jpg?w=1024",
       "mediaAssets": {
         "images": [],
         "videos": [],
-        "cover": "media/articles/recvuYEC5fRo0n-58c2bcca3118.webp",
+        "cover": "https://techcrunch.com/wp-content/uploads/2026/07/Fidji-Simo.jpg?w=1024",
         "curatedBy": "vision",
         "curationVersion": 2,
         "coverConfidence": 0.98,
-        "coverVisualQuality": 0.86
+        "coverVisualQuality": 0.88
       },
       "topComments": [],
       "deepAnalysis": "【核心内容】\nNscale已将Fidji Simo纳入董事会，标题将这一人事变动与公司可能进行的首次公开募股联系起来。现有证据强调了Simo的两项经历：她被描述为OpenAI的二号高管，同时曾领导Instacart在2023年完成IPO。由此可确认的核心事件只有董事会任命，以及Nscale存在潜在上市可能；原文没有表明IPO已经正式启动、提交申请或确定时间表。\n\n【关键细节】\n此次任命的直接价值来自Simo兼具AI行业高管经历和公开市场交易经验。Instacart在2023年完成IPO，意味着她拥有带领企业经历上市流程的实际背景。不过，原文没有披露她在Nscale董事会中的具体职务、委员会席位、任期、薪酬、持股或工作范围，也没有说明她将直接负责上市筹备。标题使用“former OpenAI exec”，而摘要又称其为OpenAI的“No. 2 exec”，两种表述在任职状态上存在歧义，无法仅凭现有材料判断她与OpenAI的当前关系。\n\n【价值与影响】\n对于准备进入资本市场的企业，拥有IPO经验的董事通常可在治理结构、投资者沟通和上市流程判断方面提供参考。因此，这项任命可被视为Nscale加强董事会能力、提高资本市场准备度的信号。Simo的OpenAI背景也会提升该任命在AI行业内的关注度。然而，人事安排本身不等于IPO确定发生，也不能证明公司的财务质量、估值水平或上市条件已经成熟。其实际影响取决于Nscale后续是否推进正式申报，以及Simo在董事会中的具体参与程度。\n\n【局限与风险】\n现有原文极短，未披露任命日期、Nscale业务与财务数据、融资状况、IPO目标市场、承销机构、估值、募资规模和预计时间。原文也未提供双方公告、监管文件或直接引语，无法验证“潜在IPO”处于内部讨论、顾问筹备还是正式申报阶段。标题与摘要对Simo是否属于OpenAI“前高管”的表述并不完全一致，需要额外核实。仅凭知名高管加入董事会推断上市概率或公司价值，存在将治理信号过度解读为交易事实的风险。\n\n【行动建议】\n1. 核对Nscale、OpenAI及Simo本人的正式公告，确认其当前任职状态和董事会职责。\n2. 跟踪相关交易所或监管机构文件，判断Nscale是否已提交招股材料或启动正式上市程序。\n3. 在财务数据、估值和募资条款披露后，再评估此次董事任命对IPO执行与公司治理的实际价值。\n4. 关注后续董事会扩充、审计安排及承销机构聘用等更具验证力的上市准备信号。",
@@ -1480,76 +1171,6 @@
                 "url": "https://techcrunch.com/2026/09/11/nscale-adds-former-openai-exec-fidji-simo-to-its-board-ahead-of-potential-ipo",
                 "note": "原始发布 / 公告。",
                 "text": "Nscale在潜在IPO前延揽OpenAI前高管Fidji Simo加入董事会 —— 原始发布 / 公告。"
-              }
-            ]
-          }
-        ]
-      }
-    },
-    {
-      "recordId": "recvuYEC5fVsCy",
-      "sourceId": "utility-dive",
-      "title": "New York ISO’s independence is critical when the grid is stressed",
-      "titleCn": "纽约电网承压凸显独立系统运营商的重要性",
-      "source": "Utility Dive",
-      "url": "https://www.utilitydive.com/news/nyisos-independence-is-critical-when-the-grid-is-stressed/829319",
-      "category": "算力芯片云",
-      "contentType": "文章",
-      "priority": "P2",
-      "publishedDate": "2026-09-11",
-      "summary": "NYISO系统与资源规划高级副总裁Zach Smith表示，今夏Champlain Hudson Power Express停运事件凸显了独立电网运营商在电力系统承压时的重要性。现有原文未披露停运原因、持续时间及具体影响。",
-      "why": "独立调度与规划机制直接关系到电网在突发停运和供需紧张情况下的可靠性与应变能力。",
-      "impact": 62,
-      "novelty": 35,
-      "actionability": 45,
-      "urgency": "中",
-      "tags": [
-        "监管",
-        "其他"
-      ],
-      "imageUrl": "media/articles/recvuYEC5fVsCy-7939c35dd3b5.webp",
-      "mediaAssets": {
-        "images": [
-          {
-            "url": "media/articles/recvuYEC5fVsCy-63e77c6118cf.webp",
-            "alt": "NYISO高管Zach Smith",
-            "kind": "article-figure",
-            "afterHeading": "核心内容",
-            "afterText": "",
-            "layout": "portrait",
-            "confidence": 0.91,
-            "topicRelevance": 0.94,
-            "visualQuality": 0.86,
-            "coverSuitable": false
-          }
-        ],
-        "videos": [],
-        "documents": [],
-        "cover": "media/articles/recvuYEC5fVsCy-7939c35dd3b5.webp",
-        "curatedBy": "vision",
-        "curationVersion": 2,
-        "coverConfidence": 0.84,
-        "coverVisualQuality": 0.89
-      },
-      "topComments": [],
-      "deepAnalysis": "【核心内容】\n文章观点来自纽约独立系统运营商NYISO负责系统与资源规划的高级副总裁Zach Smith。其核心判断是：今夏Champlain Hudson Power Express发生的停运事件，凸显了电网在承受压力时维持独立运营机构的重要性。原文将具体输电设施的停运与系统运营治理联系起来，强调独立电网运营商在紧张条件下的作用，但摘要未提供事件日期、停运规模、持续时间、影响区域或恢复过程。\n\n【关键细节】\n现有证据仅表明事件涉及Champlain Hudson Power Express，并被用于论证NYISO保持独立性的必要性。原文没有解释所谓“独立”具体指监管权限、市场调度权、资源规划权还是与政府及市场主体之间的组织关系；也未披露NYISO在停运期间采取了哪些调度、备用资源调用或应急协调措施。停运原因、系统负荷水平、供电缺口、价格变化、可靠性指标及是否发生用户侧中断均未披露，因此不能据此判断事件严重程度或独立运营机制产生了多大可量化效果。\n\n【价值与影响】\n该观点的价值在于提醒政策制定者和电力市场参与者，重大输电资源出现异常时，电网可靠性不仅取决于基础设施容量，也取决于调度与规划机构能否独立作出系统性决策。对数据中心及其他高耗电企业而言，区域电网治理、跨区输电稳定性和应急调度能力会影响供电风险评估。不过，原文没有直接讨论AI算力、云服务或数据中心，不能将其解读为针对AI基础设施的专门政策信号。\n\n【局限与风险】\n证据仅为文章摘要和作者观点，缺少完整论证及第三方数据，可能带有机构立场。原文未披露事故技术报告、独立调查结果、可靠性数据或反事实比较，因而无法验证如果缺少独立运营商，电网表现是否会更差。项目性质、停运责任、经济损失及监管争议也均未说明，不宜据此推断具体主体存在失误。\n\n【行动建议】\n1. 查阅NYISO关于此次停运的正式事件报告，核对时间线、负荷、备用容量与处置措施。\n2. 对比事故前后的电价、输电约束和可靠性指标，验证独立调度的实际效果。\n3. 数据中心和大型用电企业可将关键输电设施停运情景纳入选址及供电韧性评估。\n4. 持续关注相关监管文件，确认“独立性”涉及的具体制度安排及潜在调整。",
-      "editorialStructure": "",
-      "eventRole": "",
-      "eventPerspective": "",
-      "qualityScore": 0.0,
-      "eventAggregation": {
-        "total": 1,
-        "groups": [
-          {
-            "key": "官方来源",
-            "tone": "#16130f",
-            "items": [
-              {
-                "source": "Utility Dive",
-                "title": "纽约电网承压凸显独立系统运营商的重要性",
-                "url": "https://www.utilitydive.com/news/nyisos-independence-is-critical-when-the-grid-is-stressed/829319",
-                "note": "原始发布 / 公告。",
-                "text": "纽约电网承压凸显独立系统运营商的重要性 —— 原始发布 / 公告。"
               }
             ]
           }
@@ -1578,15 +1199,15 @@
         "硬件",
         "融资"
       ],
-      "imageUrl": "media/articles/recvuYJJMObihT-a119b9a19fd0.jpg",
+      "imageUrl": "https://wpimg-wscn.awtmt.com/29263312-0ee0-4223-a125-41f6b68ae633.jpeg",
       "mediaAssets": {
         "images": [],
         "videos": [],
-        "cover": "media/articles/recvuYJJMObihT-a119b9a19fd0.jpg",
+        "cover": "https://wpimg-wscn.awtmt.com/29263312-0ee0-4223-a125-41f6b68ae633.jpeg",
         "curatedBy": "vision",
         "curationVersion": 2,
-        "coverConfidence": 0.93,
-        "coverVisualQuality": 0.88
+        "coverConfidence": 0.94,
+        "coverVisualQuality": 0.89
       },
       "topComments": [],
       "deepAnalysis": "",
@@ -1639,53 +1260,53 @@
         "多模态",
         "产品"
       ],
-      "imageUrl": "media/articles/recvuYEC5f4RY1-9d2d01daab2b.jpg",
+      "imageUrl": "https://static.leiphone.com/uploads/new/images/20260911/6aa3d0fe7f4d4.jpg?imageMogr2/quality/90",
       "mediaAssets": {
         "images": [
           {
-            "url": "media/articles/recvuYEC5f4RY1-0a50b62bb239.jpg",
-            "alt": "AARON自主署名画作展出",
+            "url": "https://static.leiphone.com/uploads/new/images/20260911/6aa3d0fdb1c91.jpg?imageMogr2/quality/90",
+            "alt": "AI艺术节展馆现场",
+            "kind": "article-figure",
+            "afterHeading": "",
+            "afterText": "9月9日，随着2026 Inclusion·外滩大会在上海开幕，大会首次设立的特色板块——AI艺",
+            "layout": "wide",
+            "confidence": 0.78,
+            "topicRelevance": 0.82,
+            "visualQuality": 0.76,
+            "coverSuitable": false
+          },
+          {
+            "url": "https://static.leiphone.com/uploads/new/images/20260911/6aa3d0fe1a5c2.jpg?imageMogr2/quality/90",
+            "alt": "AARON自主署名画作",
             "kind": "article-figure",
             "afterHeading": "",
             "afterText": "展览中，一件跨越半个世纪的作品格外引人注目——《AARON at Tsukuba, #2 19-",
             "layout": "wide",
-            "confidence": 0.98,
+            "confidence": 0.97,
             "topicRelevance": 0.98,
-            "visualQuality": 0.82,
-            "coverSuitable": false
-          },
-          {
-            "url": "media/articles/recvuYEC5f4RY1-5f08e9f90fcc.jpg",
-            "alt": "AI艺术展现场作品",
-            "kind": "article-figure",
-            "afterHeading": "",
-            "afterText": "随着AI持续降低影像创作门槛，创作者的想象力、叙事力与审美表达变得更加重要。此次展映中，既有传统",
-            "layout": "wide",
-            "confidence": 0.92,
-            "topicRelevance": 0.9,
             "visualQuality": 0.78,
             "coverSuitable": false
           },
           {
-            "url": "media/articles/recvuYEC5f4RY1-7a3e6eaf335e.jpg",
-            "alt": "AI影像展映空间",
+            "url": "https://static.leiphone.com/uploads/new/images/20260911/6aa3d0feedcd8.jpg?imageMogr2/quality/90",
+            "alt": "AI艺术主题沙龙现场",
             "kind": "article-figure",
             "afterHeading": "",
             "afterText": "而最具“现场感”的一幕，将出现在9月11日晚举行的“外滩大会x Yuri尤栗AI音乐会”。外滩大",
             "layout": "wide",
-            "confidence": 0.98,
-            "topicRelevance": 0.98,
-            "visualQuality": 0.9,
-            "coverSuitable": true
+            "confidence": 0.9,
+            "topicRelevance": 0.88,
+            "visualQuality": 0.86,
+            "coverSuitable": false
           }
         ],
         "videos": [],
         "documents": [],
-        "cover": "media/articles/recvuYEC5f4RY1-9d2d01daab2b.jpg",
+        "cover": "https://static.leiphone.com/uploads/new/images/20260911/6aa3d0fe7f4d4.jpg?imageMogr2/quality/90",
         "curatedBy": "vision",
         "curationVersion": 2,
         "coverConfidence": 0.86,
-        "coverVisualQuality": 0.88
+        "coverVisualQuality": 0.84
       },
       "topComments": [],
       "deepAnalysis": "",
@@ -2227,225 +1848,6 @@
       }
     },
     {
-      "recordId": "recvuYLhbRF2ZN",
-      "sourceId": "arxiv-cs-ai",
-      "title": "Ordinary, Reasonable Chatbots: Do AI Models Track Human Legal Judgments?",
-      "titleCn": "普通且理性的聊天机器人：AI 模型能否复现人类法律判断？",
-      "source": "arXiv cs.AI",
-      "url": "https://arxiv.org/abs/2609.06769",
-      "category": "技术研究开源",
-      "contentType": "论文",
-      "priority": "",
-      "publishedDate": "2026-09-12",
-      "summary": "论文比较26个大语言模型与人类参与者对25项法律“合理性”问题的判断，发现模型整体接近人类，但回答更同质，并在部分问题上更支持政府和企业。模型输出还更接近白人、男性、年长及受教育程度较高的受访者，不过作者强调这些人口统计学差异仍需更系统的研究确认。",
-      "why": "研究以分布检验和群体相似度分析揭示了LLM充当“硅陪审员”时可能压缩人类意见差异并偏向特定人口群体的问题。",
-      "impact": 78,
-      "novelty": 74,
-      "actionability": 71,
-      "urgency": "中",
-      "tags": [
-        "AI",
-        "LLM",
-        "监管",
-        "其他"
-      ],
-      "imageUrl": "https://arxiv.org/html/2609.06769v2/figures/violins.png",
-      "mediaAssets": {
-        "images": [
-          {
-            "url": "https://arxiv.org/html/2609.06769v2/figures/violins.png",
-            "alt": "Figure 1: Response Distributions by Question , median is DASH line and mean is DOT."
-          },
-          {
-            "url": "https://arxiv.org/html/2609.06769v2/figures/median_cosine_sim.png",
-            "alt": "Figure 2: Model Family and Demographic Group Cosine Similarity , using median (left) and mean (right) response vectors. Lighter cells indicate greater similarity."
-          },
-          {
-            "url": "https://arxiv.org/html/2609.06769v2/figures/cos_monte_carlo.png",
-            "alt": "Figure 3: Repeated Cosine Similarity Monte Carlo Distributions"
-          }
-        ],
-        "videos": [],
-        "documents": []
-      },
-      "topComments": [],
-      "deepAnalysis": "【研究问题与核心结论】\n论文研究26个LLM能否复现人类对25项法律“合理性”问题的判断。合理性属于依赖情境和隐含规范的法律标准，而不是可通过识别明确条件直接适用的规则；既有法律研究还认为此类判断可能随性别、种族、年龄和教育程度变化，因此仅检验模型能否给出流畅或平均上合理的答案并不充分。作者的可核验结论是：模型回答的中心趋势总体接近人类，但分布通常更集中，偶尔把可变标准处理成固定规则；在若干问题上，模型比人类更支持政府或企业，其跨问题回答轮廓也更接近白人、男性、年长和教育程度较高的受访者。论文将这些人口统计学结果定性为初步或提示性证据，而非已经确立的普遍因果规律。\n\n【方法与创新】\n研究让来自Meta、Google、Anthropic、OpenAI、DeepSeek和xAI等厂商的26个模型回答同一组法律相关问题，再与人类调查回答比较。分析不只比较均值，而是同时考察回答位置、离散程度、完整分布与跨问题轮廓：Brown–Forsythe检验用于比较离散程度，Kolmogorov–Smirnov检验比较经验分布，Brunner–Munzel检验估计模型回答大于人类回答的概率P(M>H)，并采用Bonferroni校正。作者还以中位绝对偏差MAD衡量模型内部同质性，以各问题均值或中位数组成向量，通过余弦相似度比较模型家族和人口群体；Figure 3进一步展示重复余弦相似度的蒙特卡洛分布。真正新增之处是把法律合理性视为分布和群体对齐问题，而非准确率任务。论文没有提出新模型架构或训练算法，也未将提示设计包装为训练创新，主要贡献属于评测设计和统计分析。\n\n【实验设计与关键结果】\n实验覆盖25种合理性判断和26个LLM，并保留“reasonable”与“ideal”两类人类回答；问题及保留样本量列于PDF第12页的表格。Figure 1（PDF第6页）以小提琴分布呈现逐题的人类与模型回答，并分别以虚线和点标示中位数与均值，支持“中心趋势常接近、模型分布更窄”的总体观察。Table 1（PDF第8页）报告三类非参数或稳健统计量及Bonferroni校正后的显著性等级。该页给出的具体方向包括：交通拦停可接受拘留时间的人类中位数为12分钟、LLM为15分钟；刑事被告受审前等待为6周对12周；无令状GPS跟踪为1天对2天；移民驱逐前拘留为10天对90天。企业相关问题中，安全支出比例为15%对5%，再次污染概率为50%对30%，竞业限制期限为6个月对12个月，均分别为人类与LLM中位数。Figure 2（PDF第9页）使用均值和中位数回答向量比较模型家族与人口群体，显示各模型家族具有相近的群体对齐模式。Table 3（PDF第10页）以独立双样本t检验比较人口群体的平均对齐分数；正文概括模型总体更接近年长、白人、男性和高教育群体。PDF第11页进一步指出，在利率问题上，DeepSeek、Gemini、Llama和Claude显著更接近男性回答，但许可价格问题未呈现同样模式，说明差异具有问题依赖性。给定材料未展示Table 3、Table 4和Figure 3的完整数值，故不能据此补写效应量。\n\n【证据强度与局限】\n证据优势在于覆盖多个模型家族和多类法律情境，并同时使用位置、方差、分布、随机优势和向量相似度指标；Brown–Forsythe、KS与Brunner–Munzel检验降低了正态性、等方差及极端值假设的依赖，多重比较也经过Bonferroni校正。蒙特卡洛重复分析为相似度结果提供一定稳健性检查。然而，25道题仍不足以代表法律中全部合理性标准，人口统计学对齐也不能证明模型具有相应身份或价值观。正文承认受访者政治倾向未知，样本可能偏自由派，且人口群体代表性仍需扩大。论文给出的多个偏向案例方向并不完全一致，产品退货和施工延期等问题被作者称为模糊，限制了统一偏向结论。模型具体版本、推理参数、提示重复次数、调查抽样框、统计功效、完整失败案例及总体计算成本在给定证据中未充分披露；训练数据中是否包含相似问卷、法律材料或调查结果也未检验，因而无法排除数据泄漏或记忆效应。\n\n【研究意义与后续问题】\n研究改变了“平均答案接近人类即可代表人类判断”的简单认识：模型即使在中心趋势上表现良好，也可能压缩真实社会分歧，并将特定人口群体或制度立场的判断伪装成统一的普通人标准。这对硅抽样、自动法律咨询以及辅助司法判断的外部效度均有直接意义。后续研究仍需扩大受访者和法律领域，控制政治取向及交叉人口属性，检验提示、模型版本和采样温度对分布的影响，并区分模型训练数据记忆、对法律文本的制度性模仿与真正的情境推理。还需建立纵向复测和跨文化实验，判断观察到的政府、企业及人口群体对齐是否稳定，以及模型同质性究竟来自训练目标、对齐过程还是解码机制。",
-      "editorialStructure": "",
-      "pdfUrl": "https://arxiv.org/pdf/2609.06769.pdf",
-      "paperFullTextSource": "pdf",
-      "paperPages": 15,
-      "paperCaptions": [
-        {
-          "page": 6,
-          "text": "Figure 1: Response Distributions by Question, median is DASH line and mean is DOT. ment bias. Finally, we examine cross-question alignment For humans, we construct group-level response profiles by between models and humans using cosine similarity. We taking both the mean and the median across respondents"
-        },
-        {
-          "page": 8,
-          "text": "Table 1: Brown–Forsythe (W), Kolmogorov–Smirnov (D), and Brunner–Munzel (P(M > H)) statistics table ∗∗∗, ∗∗, and ∗denote Bonferroni-corrected p < 0.001, p < 0.01, and p < 0.05, respectively. bust to these tail behaviors and to the inclusion or ex- Pro-Government and Pro-Corporation Alignment. Ficlusion of extreme model outputs. Our primary tests, the nally, we observe several interesting tendencies in the model"
-        },
-        {
-          "page": 9,
-          "text": "Figure 2: Model Family and Demographic Group Cosine Similarity, using median (left) and mean (right) response vectors. Lighter cells indicate greater similarity. Question Model MAD Human MAD Since all model families exhibit broadly similar alignment"
-        },
-        {
-          "page": 10,
-          "text": "Table 3: Independent two-sample t-tests, comparing mean alignment scores across demographic groups. responses that are similar to human responses. Although the ences, including pro-government and pro-corporation bias models often provided answers that were statistically differ- as noted in §5.1, as well as our finding that LLMs align more"
-        },
-        {
-          "page": 11,
-          "text": "Table 4: Demographic Distributions (Interest Rate), DeepSeek, Gemini, Llama, and Claude pro- duce predictions that are significantly closer to men’s re- sponses than women’s. In contrast, Q19 (Permit Price) does"
-        },
-        {
-          "page": 12,
-          "text": "Table 5: Models Metadata Short Label (Units) Reasonable N Ideal N Models Q1: business contract acceptance (days) 236 216 392"
-        },
-        {
-          "page": 12,
-          "text": "Table 6: Questions and retained sample sizes for reasonable, ideal, and model responses."
-        },
-        {
-          "page": 13,
-          "text": "Figure 3: Repeated Cosine Similarity Monte Carlo Distributions"
-        }
-      ],
-      "paperVisualPages": [
-        8,
-        10,
-        11,
-        12
-      ],
-      "eventRole": "",
-      "eventPerspective": "",
-      "qualityScore": 85.3,
-      "eventAggregation": {
-        "total": 1,
-        "groups": [
-          {
-            "key": "官方来源",
-            "tone": "#16130f",
-            "items": [
-              {
-                "source": "arXiv cs.AI",
-                "title": "普通且理性的聊天机器人：AI 模型能否复现人类法律判断？",
-                "url": "https://arxiv.org/abs/2609.06769",
-                "note": "原始发布 / 公告。",
-                "text": "普通且理性的聊天机器人：AI 模型能否复现人类法律判断？ —— 原始发布 / 公告。"
-              }
-            ]
-          }
-        ]
-      }
-    },
-    {
-      "recordId": "recvuYJJMOMiTD",
-      "sourceId": "arxiv-cs-ai",
-      "title": "Automating Quadratic Unconstrained Binary Optimization (QUBO) Formulation Generation from Natural Language",
-      "titleCn": "QuantumQUBO Agent：从自然语言自动生成QUBO公式",
-      "source": "arXiv cs.AI",
-      "url": "https://arxiv.org/abs/2609.10629",
-      "category": "技术研究开源",
-      "contentType": "论文",
-      "priority": "",
-      "publishedDate": "2026-09-12",
-      "summary": "论文提出一个多智能体框架，将自然语言组合优化问题自动转化为QUBO数学公式及可执行代码，并发布包含12个领域、100道问题的QUBOBench。完整系统取得68%准确率，比单次直接调用基线高22个百分点，消融结果显示迭代反馈与自修复是主要性能来源。",
-      "why": "该研究把依赖专家的QUBO建模过程转化为可测试、可纠错的Agent流水线，并提供开放基准与代码以支持复现。",
-      "impact": 74,
-      "novelty": 78,
-      "actionability": 85,
-      "urgency": "中",
-      "tags": [
-        "AI",
-        "Agent",
-        "推理",
-        "开源"
-      ],
-      "imageUrl": "https://arxiv.org/html/2609.10629v1/piechart.png",
-      "mediaAssets": {
-        "images": [
-          {
-            "url": "media/papers/recvuYJJMOMiTD-p3-f1.png",
-            "alt": "PDF 第 3 页图表：Figure 1. Workflow and Architecture of QuantumQUBO Agent",
-            "kind": "pdf-page",
-            "layout": "wide"
-          },
-          {
-            "url": "media/papers/recvuYJJMOMiTD-p4-f2.png",
-            "alt": "PDF 第 4 页图表：Table 1. Ablation results on QUBOBench. Rows from top: Quan- tumQUBO Agent, without iterative feedback, without Judge and iterative feedback, Direct Method.",
-            "kind": "pdf-page",
-            "layout": "wide"
-          },
-          {
-            "url": "media/papers/recvuYJJMOMiTD-p4-f3.png",
-            "alt": "PDF 第 4 页图表：Table 1 shows that the full pipeline achieves 68% accu- racy, outperforming all ablated variants. Removing iterative feedback causes the largest drop to 35%, confirming that self-repair is the most critical component. Removing the Judge while keeping all other components fixed yields 36%, nearly identical to the no-retry setting, indicating that the Judge provides value only when paired with a sufficient retry budget to act on its feedback.",
-            "kind": "pdf-page",
-            "layout": "wide"
-          },
-          {
-            "url": "media/papers/recvuYJJMOMiTD-p4-f4.png",
-            "alt": "PDF 第 4 页图表：Table 2. Error type distribution on QUBOBench. Percentages are of total errors by QuantumQUBO Agent vs direct method.",
-            "kind": "pdf-page",
-            "layout": "wide"
-          },
-          {
-            "url": "https://arxiv.org/html/2609.10629v1/piechart.png",
-            "alt": "Figure 2 : Per-domain distribution of problems in QUBOBench."
-          }
-        ],
-        "videos": [],
-        "documents": []
-      },
-      "topComments": [],
-      "deepAnalysis": "【研究问题与核心结论】\n论文研究如何把自然语言描述的组合优化问题自动转化为正确的二次无约束二元优化（QUBO）形式。该任务不仅要识别二元决策变量和目标函数，还要把约束编码为惩罚项、选择适当惩罚权重，并生成能够构造Q矩阵或能量函数的代码；任何变量映射、符号、惩罚强度或实现错误都可能改变最优解。作者认为，既有单次LLM生成缺乏结构化推理、执行验证和错误修复，相关工作又主要关注MILP到QUBO转换，不能充分覆盖直接从自然语言开始的端到端建模。核心结论是：将规划、公式生成、审查、编码和调试拆分为多个Agent，并通过测试用例驱动迭代反馈，可在QUBOBench上达到68%准确率，相较单次直接方法提高22个百分点；性能提升主要来自可反复执行的自修复，而非单纯增加一个审查角色。\n\n【方法与创新】\nQuantumQUBO Agent采用端到端多智能体流水线。根据Figure 1（PDF第3页），Planner Agent先从题目中提取变量、目标和约束；Formulizer Agent据此生成包含惩罚项的数学QUBO；Judge Agent检查公式并向前两阶段反馈；Coder Agent把公式实现为构建QUBO的代码；Debugger Agent结合小规模测试实例及其基准最优值执行代码，区分公式错误与编码错误并触发回退。只有全部测试通过时，系统才输出公式和代码。真正的架构创新是按建模职责拆分Agent，并建立Judge反馈和执行调试两类闭环；训练方面，给定证据未显示模型微调、强化学习或新损失函数，因此不能视为训练算法创新；工程层面则包括代码执行、测试用例验证、错误路由和重试预算。论文同时构建QUBOBench：100个问题、覆盖12个应用领域，来源包括同行评审文献、竞赛和经典NP难问题，并为问题配置人工整理的小规模实例。相较直接单调用基线，新增内容不是更大的基础模型，而是结构化分工、外部可执行验证与迭代修复。\n\n【实验设计与关键结果】\n主要数据集是QUBOBench，共100道组合优化问题、12个领域；Table 3（PDF第9页）给出各领域问题和测试用例分布，并说明图论占比最高，Robotics及Electronics & VLSI较稀疏。给定图表未完整展示每个领域的具体数量，因此不能补写。基线包括Direct Method以及移除迭代反馈、移除Judge等消融变体，评价指标为问题是否通过配套测试的准确率。Table 1（PDF第4页）显示完整流水线为68%，无迭代反馈降至35%，去除Judge的变体为36%；摘要报告完整方法比直接单次调用高22个百分点，据此直接基线为46%。35%的无反馈结果是最大降幅，说明重试与自修复比静态模块堆叠更关键。Table 2（PDF第4页）进一步把失败分成编码错误、公式错误和其他错误：完整系统分别为79.3%、15.5%和5.2%，直接方法分别为26.4%、66.0%和7.5%。这表明结构化Planner–Formulizer–Judge链条降低了数学建模错误，但剩余失败转移到Coder实现阶段。Figure 1（PDF第3页）还明确展示了测试未通过后，公式错误返回Formulizer、编码错误返回Coder的差异化修复路径。\n\n【证据强度与局限】\n证据优势在于任务集合跨12个领域，并同时提供总准确率、组件消融和错误类型对照，而非只展示少量成功案例；数据与代码已开源，也提高了复查和复现可能性。尤其是68%对46%、以及移除迭代反馈后降至35%的差距，与作者关于自修复重要性的结论一致。不过，100道问题仍属有限样本，且领域分布明显不均，图论占主导会限制跨领域外推。论文给定证据未披露置信区间、统计显著性、多次随机运行方差或不同随机种子的稳定性，也未说明不同方法是否使用完全相同的token、调用次数和计算预算；多Agent系统拥有更多推理与重试机会，因此与单调用基线并非严格等计算量比较。基础LLM型号、温度、最大重试次数、成本和延迟在给定证据中未披露。测试用例能验证小实例的能量与最优解，却不必然证明公式对所有规模和边界条件均正确；若测试覆盖不足，错误QUBO仍可能通过。基准题目来自公开文献和经典问题，是否与基础模型训练语料重合、是否存在记忆或数据泄漏，论文未披露。失败分析给出类型比例，但未提供人工标注一致性及复杂失败案例的系统统计。\n\n【研究意义与后续问题】\n该工作的重要认识是，LLM进行优化建模时，主要瓶颈可以从“不会写公式”转变为“公式正确但代码实现失败”：完整系统的公式错误仅占失败的15.5%，而编码错误占79.3%。这支持把数学审查、可执行验证和定向回退视为不同能力，而不是依赖一次性长提示完成全部任务。QUBOBench也为自然语言到QUBO的比较提供了统一载体。仍待研究的问题包括：如何形式化证明生成QUBO与原问题等价；如何自动验证惩罚权重在不同实例规模下充分且不过大；如何在相同调用和算力预算下公平衡量多Agent收益；以及如何降低代码阶段错误、处理缺少标准答案的真实问题，并检验在更均衡领域及更大规模实例上的泛化能力。",
-      "editorialStructure": "",
-      "pdfUrl": "https://arxiv.org/pdf/2609.10629.pdf",
-      "paperFullTextSource": "pdf",
-      "paperPages": 9,
-      "paperCaptions": [
-        {
-          "page": 3,
-          "text": "Figure 1. Workflow and Architecture of QuantumQUBO Agent 3.1.2. THE FORMULIZER AGENT 3.1.4. THE DEBUGGER AGENT Our second agent is the Formulizer Agent. The Formulizer Our next agent is the Debugger Agent. It is an LLM agent"
-        },
-        {
-          "page": 4,
-          "text": "Table 1 shows that the full pipeline achieves 68% accuadapted from Lucas (Lucas, 2014). A data sample consists racy, outperforming all ablated variants. Removing iterative of hand curated problem description and sample small in-"
-        },
-        {
-          "page": 9,
-          "text": "Table 3 summarizes the per-domain distribution of problems and test cases. Graph theory dominates due to the centrality of graph-theoretic formulations in the QUBO literature, while domains such as Robotics and Electronics & VLSI remain comparatively sparse, reflecting the relative scarcity of published QUBO formulations in these areas."
-        },
-        {
-          "page": 9,
-          "text": "Table 3. Per-domain distribution of problems and test cases in QUBOBench. Domain #Problems #TC"
-        }
-      ],
-      "paperVisualPages": [
-        3,
-        4,
-        9
-      ],
-      "eventRole": "",
-      "eventPerspective": "",
-      "qualityScore": 85.1,
-      "eventAggregation": {
-        "total": 1,
-        "groups": [
-          {
-            "key": "官方来源",
-            "tone": "#16130f",
-            "items": [
-              {
-                "source": "arXiv cs.AI",
-                "title": "QuantumQUBO Agent：从自然语言自动生成QUBO公式",
-                "url": "https://arxiv.org/abs/2609.10629",
-                "note": "原始发布 / 公告。",
-                "text": "QuantumQUBO Agent：从自然语言自动生成QUBO公式 —— 原始发布 / 公告。"
-              }
-            ]
-          }
-        ]
-      }
-    },
-    {
       "recordId": "recvuAVZd2YK5w",
       "sourceId": "jmlr",
       "title": "Have ASkotch: A Neat Solution for Large-Scale Kernel Ridge Regression",
@@ -2466,36 +1868,10 @@
         "AI",
         "开源"
       ],
-      "imageUrl": "media/papers/recvuAVZd2YK5w-p4-f1.png",
+      "imageUrl": "",
       "mediaAssets": {
-        "images": [
-          {
-            "url": "media/papers/recvuAVZd2YK5w-p4-f1.png",
-            "alt": "PDF 第 4 页图表：Figure 1: Full KRR is advantageous over inducing points KRR, even for large problems. Our method ASkotch, run with its default hyperparameters, outperforms the state-of-the- art for both full and inducing points KRR on a subsample of the taxi dataset. Falkon is limited to m = 2·104 inducing points due to memory constraints. State-of-the-art Nystr¨om PCG methods—Gaussian Nystr¨om (Frangella et al., 2023) and Randomly Pivoted Cholesky (D´ıaz et al., 2023; Epperly et al., 2025)—with a rank r = 50 preconditioner fail to complete a single iteration. EigenPro 2.0 and EigenPro 3.0 (not shown) diverge",
-            "kind": "pdf-page",
-            "layout": "wide"
-          },
-          {
-            "url": "media/papers/recvuAVZd2YK5w-p4-f2.png",
-            "alt": "PDF 第 4 页图表：Table 1: A comparison of the capabilities of ASkotch and state-of-the-art methods for KRR. “Reliable defaults” indicates whether the method comes with default hyperparameters that work well in practice. “Converges” indicates whether the method has a rigorous linear convergence guarantee.",
-            "kind": "pdf-page",
-            "layout": "wide"
-          },
-          {
-            "url": "media/papers/recvuAVZd2YK5w-p16-f3.png",
-            "alt": "PDF 第 16 页图表：Figure 2: Summary of reductions and correspondences between ARLS/RLS sampling, DPPs, and the resulting lower bounds on µ and ˆµ. The dashed arrows are for intuition only: ARLS is closely related to RLS and RLS is related to DPPs, so we expect ARLS to be related to DPPs. The solid arrows correspond to our approach for obtaining a lower bound on ˆµ.",
-            "kind": "pdf-page",
-            "layout": "wide"
-          },
-          {
-            "url": "media/papers/recvuAVZd2YK5w-p27-f4.png",
-            "alt": "PDF 第 27 页图表：Figure 3: Performance comparison between ASkotch and competitors on 10 classification and 13 regression tasks. We designate a classification problem as “solved” when the method reaches within 0.001 of the highest classification accuracy found across all the optimizer + hyperparameter combinations. We designate a regression problem as “solved” when the method reaches within 1% of the lowest MAE (in a relative sense) found across all the optimizer + hyperparameter combinations. PCG and Falkon are run in double precision. EigenPro 2.0, EigenPro 3.0, and PCG do not solve any of the regression prob",
-            "kind": "pdf-page",
-            "layout": "wide"
-          }
-        ],
-        "videos": [],
-        "cover": "media/papers/recvuAVZd2YK5w-p4-f1.png"
+        "images": [],
+        "videos": []
       },
       "topComments": [],
       "deepAnalysis": "【研究问题与核心结论】\n论文研究如何在大样本上直接求解完整核岭回归线性系统 Kλw=y。Cholesky 的计算与存储复杂度分别为 O(n³) 和 O(n²)，PCG 每次迭代需要 O(n²) 计算且低秩预条件器通常占用 O(nr) 存储；诱导点 KRR 虽降低成本，却因仅在 m 个核基函数构成的子空间内求解而可能损失预测性能。作者提出 ASkotch，核心结论是：完整 KRR 并非天然不适合超大数据；通过随机分块投影、局部预条件与加速，可以实现每次迭代关于 n 线性的成本、与 n 无关且随预条件秩 r 线性增长的显式存储，并获得可证明的线性收敛。在适当条件下，其收敛率可不依赖原线性系统的条件数；23项任务和一亿样本实验支持其总体优于所比较的完整及诱导点 KRR 求解器。\n\n【方法与创新】\nASkotch 属于近似 sketch-and-project 方法：每步抽取核矩阵的一个块，在该块对应的子问题上进行预条件投影更新，而不是像 PCG 那样反复执行完整核矩阵乘法。预条件器以随机 Nyström 近似构造，利用低秩特征分解及 Woodbury 形式降低应用成本；默认阻尼按块自适应设置为 ρ=λ+λr(ĶBB)，采样默认采用均匀分布（Table 3，PDF第11页）。算法层面的主要新增是把分块 sketch-and-project、局部低秩预条件和 Nesterov 型加速组合成完整 KRR 求解器。理论创新则通过岭杠杆分数、近似岭杠杆分数与行列式点过程建立预期投影强度的下界，再导出加速参数相关的收敛界；Figure 2（PDF第16页）明确给出 ARLS/RLS、DPP、µ 下界及谱近似到 μ̂ 下界的证明链条。该工作没有新的模型训练技巧；工程优化主要是适配 GPU 并行、PyKeOps 核计算及单精度稳定实现。附录还说明直接使用 Woodbury 公式在单精度下可能因正交性误差不稳定，因此改用额外 Cholesky 计算增强数值稳定性。\n\n【实验设计与关键结果】\n实验覆盖10个分类和13个回归任务，应用领域包括视觉、粒子物理、生态、广告、计算化学、音乐、社会经济与交通，并使用 Laplacian、Matérn-5/2 和 RBF 三类核。基线包括完整 KRR 的 EigenPro 2.0、PCG，以及诱导点 KRR 的 Falkon、EigenPro 3.0；PCG 分别采用 Gaussian Nyström 与随机枢轴 Cholesky 预条件。分类“解决”定义为准确率距所有优化器与超参数组合所得最高值不超过0.001，回归则要求 MAE 距最低值不超过1%。Figure 3（PDF第27页）显示，在完整时间预算处，ASkotch 解决8/10个分类任务和全部13个回归任务；PCG约解决7/10个分类任务，EigenPro 2.0约6/10，EigenPro 3.0与Falkon各约4/10，而回归中 PCG、EigenPro 2.0和3.0均为0，Falkon约为四分之一。Figure 4（PDF第28页）在三个 n≥5×10⁵ 的问题上以相对残差对完整数据遍历次数作图，各秩设置均呈线性收敛，并在至多100次完整遍历内达到机器精度，较大 r 通常更快。Figure 1（PDF第4页）使用 n=10⁸ 的出租车子集；所有方法限时24小时并运行于单张48 GB RTX A6000，Falkon因内存限制只能取 m=2×10⁴，秩50的两种 Nyström-PCG 未完成一次迭代，ASkotch则完成求解并取得更优预测表现，但所给证据未列出具体误差数值。\n\n【证据强度与局限】\n证据优势在于同时包含理论收敛分析、多领域任务、三类常用核、超大规模案例和高精度残差验证，且代码公开；统一使用单张 RTX A6000 也提高了硬件可比性。作者让 PCG和EigenPro采用与ASkotch相同的秩，并为Nyström-PCG使用相同阻尼程序，减少部分调参偏差。但 ASkotch 与 EigenPro 使用单精度，Falkon和PCG因稳定性使用双精度，实际时间比较同时混入了数值格式差异。Figure 3采用相对于所有组合最优结果的“解决率”，没有报告每个数据集的绝对误差、方差或统计显著性；随机重复次数、置信区间、能耗及预条件构造成本的完整分解，论文所给证据未披露。JMLR版本还明确将扩展实验和消融留在 arXiv 报告中，因此主文不足以独立判断加速、采样、阻尼和预条件各自的贡献。数据泄漏检查与全部预处理细节亦未在所给正文中披露。\n\n【研究意义与后续问题】\n该工作改变了“大规模核方法必须依赖少量诱导点”的默认认识：若能避免全矩阵存储并把更新限制在可并行的局部块，完整 KRR 可在预测质量和运行成本上同时胜过低秩近似。其方法还可能推广到一般正定线性系统，但这一外推尚未由实验验证。后续关键问题包括自动选择加速参数 μ̂、ν̂，量化不同核谱与块采样分布下的真实复杂度，解释何时条件数无关界能转化为墙钟时间优势，以及分布式、混合精度和 n≥10⁹ 场景中的通信、稳定性与内存瓶颈。完整 KRR 相对诱导点 KRR 的优势也仍需在更多核、噪声水平和非均匀数据分布下验证。",
@@ -2595,36 +1971,10 @@
         "开源",
         "其他"
       ],
-      "imageUrl": "media/papers/recvuAVZd2Sclr-p12-f1.png",
+      "imageUrl": "",
       "mediaAssets": {
-        "images": [
-          {
-            "url": "media/papers/recvuAVZd2Sclr-p12-f1.png",
-            "alt": "PDF 第 12 页图表：Figure 1 depicts the results of generating random correlation matrices using the DaO method for three DAGs. The DAGs make up the simplest non-trivial cases for the DaO Method and the dimensions of the plots represent the correlations in the matrix:",
-            "kind": "pdf-page",
-            "layout": "wide"
-          },
-          {
-            "url": "media/papers/recvuAVZd2Sclr-p26-f2.png",
-            "alt": "PDF 第 26 页图表：Figure 9: Mean performance of CDAs on data generated from ER-DAGs with α = 10 using the DaO method for DAG Models over 20 repetitions.",
-            "kind": "pdf-page",
-            "layout": "wide"
-          },
-          {
-            "url": "media/papers/recvuAVZd2Sclr-p26-f3.png",
-            "alt": "PDF 第 26 页图表：Figure 10: Mean performance of CDAs on data generated from ER-DAGs with 20 variables and α = 10 over 20 repetitions.",
-            "kind": "pdf-page",
-            "layout": "wide"
-          },
-          {
-            "url": "media/papers/recvuAVZd2Sclr-p37-f4.png",
-            "alt": "PDF 第 37 页图表：Figure 11: Vertex in/out-degree distributions for 100 DAGs with |V | = 100 and α = 10.",
-            "kind": "pdf-page",
-            "layout": "wide"
-          }
-        ],
-        "videos": [],
-        "cover": "media/papers/recvuAVZd2Sclr-p12-f1.png"
+        "images": [],
+        "videos": []
       },
       "topComments": [],
       "deepAnalysis": "【研究问题与核心结论】\n论文研究如何在缺少真实因果真值数据时，为因果发现算法构造公平、完整且可解释的线性模拟基准。现有研究通常先随机生成DAG，再以人工指定区间抽取结构方程系数和误差方差；不同设定会改变相关强度、近确定性和变量可排序性，使同一算法在不同论文中得到冲突结果。作者的核心结论是：给定DAG后，应优先均匀采样所有满足该DAG全局马尔可夫性质的正定相关矩阵，而不是人为规定线性效应分布。DaO据此覆盖相应相关矩阵空间，不偏好特定矩阵且不提供可调参数，并可由相关矩阵和DAG恢复递归线性SEM。作者因此主张其适合作为无特定应用领域假设的通用基准，但明确承认这种均匀分布不等同于真实科学系统的分布。\n\n【方法与创新】\nDaO以DAG G为输入，对经典Onion相关矩阵采样法作DAG约束适配，输出满足G所蕴含条件独立关系的正定相关矩阵R；R与G随后确定标准化线性递归SEM的边系数及加性误差方差，并可使用任意有限方差的误差分布生成样本。其架构性创新是把采样对象由独立边系数改为“与指定DAG马尔可夫相容的相关矩阵空间”，并给出均匀性和覆盖性的正确性论证。相对ZARX和Tetrad，新增内容不是调参或训练技巧，而是模拟目标分布的重新定义；工程部分则提供R、Python实现及PyPI包daosim。非高斯误差不会一般地产生对应族的多元分布，例如逐节点Student’s t误差并不意味着联合分布是多元t，这一边界被作者明确区分。\n\n【实验设计与关键结果】\n验证使用ER、入度无标度SFi和出度无标度SFo三类DAG，对比ZARX、Tetrad和DaO。主要设置包括|V|=100、α=10、模型表征实验100次重复；附录还给出|V|=20的100次重复。Figure 1（PDF第13页）在三个|V|=3、|E|=2的最小非平凡DAG上各采样100次，以相关系数坐标展示可行空间覆盖。Figures 2-5（第19-20页）比较标准化β、误差标准差和绝对相关的经验分布：图注与正文指出ZARX产生最高绝对相关和最小误差标准差，部分误差标准差接近0，即近确定性；DaO的绝对相关最低、误差标准差最大。Table 1及Figures 6-8（第21-22页）以R²秩相关衡量R²-sortability，三种图结构中ZARX均最高，Tetrad较弱，DaO最低；给定材料未包含Table 1的具体数值，不能据此补写。算法实验覆盖DAGMA、sDAGMA、BOSS、fGES、PC、dLiNGAM、itMCMC、MMHC及R²-sort等，指标为邻接与方向的precision、recall和F1。Figure 9（第26页）在DaO生成的ER-DAG、α=10、20次重复上显示，样本量由约2^7增加到2^12时多数方法召回率上升；dLiNGAM在图示条件下的方向召回与F1总体处于高位，而DAGMA方向指标明显偏低。Figure 10（第26页）对20变量ER-DAG的ZARX与Tetrad模拟进行对照，同一算法的排序和幅度明显改变，尤其DAGMA与sDAGMA。图中无误差条，以上数值关系只能按坐标近似读取，不能视为精确统计量。\n\n【证据强度与局限】\n理论部分对采样空间、正定性和均匀性进行了形式化刻画，且开源双语言实现，使核心构造具有较强可复现性；多图结构、两种变量规模及多类因果发现算法也支持“模拟设计影响测评结论”的判断。但算法性能实验仅20次重复，图中未给出置信区间、方差或显著性检验，论文给定证据不足以证明所有算法排序差异均具有统计稳定性。计算时间、内存开销、随节点数和稠密度扩展的定量结果、随机种子及完整硬件配置在所给原文中未披露。实验完全基于模拟数据，不涉及真实真值数据；均匀相关矩阵也可能把大量概率质量放在现实领域罕见区域。方法限于无环、无潜在混杂、横截面和线性相关结构，不能直接覆盖反馈环、时间序列或非线性因果机制。非高斯联合分布的语义亦受误差叠加限制。数据泄漏不属于该纯模拟设计的主要风险，但不同算法是否获得完全一致的调参与计算预算，论文给定材料未披露。\n\n【研究意义与后续问题】\n论文改变的关键认识是，因果发现模拟的主要偏差未必来自DAG拓扑，而可能来自参数化方式隐式制造的高相关、近确定性和R²可排序信号；所谓“系数必须远离零”也可能反而造成近违反faithfulness。DaO提供了一个可证明覆盖完整相关空间的中性参照，使研究者能够区分算法能力与模拟器伪特征。不过，“均匀”只定义了数学上的不偏好，并不自动意味着科学现实性。后续核心问题包括：如何在保持可刻画性的同时限制到领域相关子空间，如何处理潜变量、混杂、时间依赖、反馈环和非线性，以及不同相关矩阵测度下的均匀性是否导致不同结论。还需更大规模、带不确定性统计和计算成本报告的独立复现实验，检验DaO下观察到的算法排序能否跨图规模、密度和误差分布稳定成立。",
@@ -2781,36 +2131,10 @@
         "推理",
         "开源"
       ],
-      "imageUrl": "media/papers/recvuAVZd2YMBd-p17-f1.png",
+      "imageUrl": "",
       "mediaAssets": {
-        "images": [
-          {
-            "url": "media/papers/recvuAVZd2YMBd-p17-f1.png",
-            "alt": "PDF 第 17 页图表：Table 2 summarizes the experimental results on three different datasets using various base- line models and the proposed method, AgentPEN. From the results, we observe that Agent- PEN consistently outperforms existing baselines across all three datasets in terms of both ACC and MCC. To further evaluate the robustness of AgentPEN, we additionally run the",
-            "kind": "pdf-page",
-            "layout": "wide"
-          },
-          {
-            "url": "media/papers/recvuAVZd2YMBd-p18-f2.png",
-            "alt": "PDF 第 18 页图表：Table 2: Performance comparison of AgentPEN and baselines.",
-            "kind": "pdf-page",
-            "layout": "wide"
-          },
-          {
-            "url": "media/papers/recvuAVZd2YMBd-p20-f3.png",
-            "alt": "PDF 第 20 页图表：Table 3: Ablation study results.",
-            "kind": "pdf-page",
-            "layout": "wide"
-          },
-          {
-            "url": "media/papers/recvuAVZd2YMBd-p27-f4.png",
-            "alt": "PDF 第 27 页图表：Table 6: Investment results of AgentPEN on CMIN-CN from 2021-06 to 2021-12. AgentPEN-based strategies are averaged over 5 seeds. The long-short strategy takes long positions on stocks predicted to rise and short positions on stocks pre- dicted to fall, while the long-only strategy only holds stocks predicted to rise.",
-            "kind": "pdf-page",
-            "layout": "wide"
-          }
-        ],
-        "videos": [],
-        "cover": "media/papers/recvuAVZd2YMBd-p17-f1.png"
+        "images": [],
+        "videos": []
       },
       "topComments": [],
       "deepAnalysis": "【研究问题与核心结论】\n论文研究含噪、影响持续时间不定且跨股票传播的金融新闻，如何与价格序列对齐，并同时用于次日涨跌预测和结果解释。作者认为，BERT、RoBERTa等传统编码器难以判断新闻与目标股票的相关性、影响期限及影响对象，而简单拼接文本与价格嵌入也不能显式刻画模态交互。AgentPEN据此把新闻处理拆成选择、时空记忆和融合，再用条件变分循环生成过程描述市场运动的不确定性。可核验的核心结论是：在AgentPEN-US、CMIN-US和CMIN-CN上，完整模型的ACC分别为56.91%、58.09%和57.09%，MCC分别为0.118、0.130和0.128，均高于表列基线；组件移除实验也显示新闻相关性评分、记忆、跨注意力及随机潜变量均有贡献。不过，“预测性能更高”的证据明显强于“解释性更好”的证据。\n\n【方法与创新】\n架构由Representation Fusion Agent、Deep Recurrent Generation（DRG）和Temporal Attention Prediction（TAP）组成，整体见Figure 1（PDF第6页），生成与预测结构见Figure 3、Figure 4（第10、13页）。Agent先让LLM为新闻与目标股票计算相关性分数，以阈值筛除噪声；随后分别估计新闻影响期限和受影响股票集合，写入Temporal Memory与Spatial Memory，并在预测日按有效期、股票覆盖和相关性检索Top-K新闻。新闻嵌入和三维价格特征投影后，以价格为query、新闻为key/value执行多头交叉注意力。DRG使用GRU及条件VAE式先验、后验网络逐时刻采样潜变量并产生辅助涨跌预测，TAP再利用解码状态和此前辅助预测输出目标日结果。真正的架构新增点是LLM控制的选择—记忆—融合链路及其与循环生成模块的组合；随机潜变量和KL约束属于生成式训练设计，网格搜索窗口、学习率、批量大小等属于工程配置，并非新的学习原理。\n\n【实验设计与关键结果】\nTable 1（PDF第16页）给出按时间切分的三个数据集：AgentPEN-US覆盖88只股票，测试集984个样本；CMIN-US覆盖110只股票，测试集862个样本；CMIN-CN覆盖沪深300成分股，测试集1040个样本。评价指标为ACC和适合类别不均衡二分类的MCC；基线共十个，包括ALSTM、StockNet、PEN、CMIN、FinMA、MagicNet和ExPred。Table 2（第18页）显示AgentPEN在三组数据上的最佳基线ACC分别为55.14%、55.85%、55.67%，对应AgentPEN为56.91%、58.09%、57.09%；MCC最佳基线分别为0.109、0.121、0.126，对应结果为0.118、0.130、0.128。Figure 5（第19页）报告五个随机种子：ACC为56.91±0.71、58.09±0.64、57.09±0.28，MCC为0.1178±0.0137、0.1296±0.0157、0.1282±0.0045。Table 3（第20页）的消融中，CMIN-US移除文本选择或改用随机相关性后，ACC由58.09%降至53.71%和53.61%；确定性DRG使三个数据集MCC降至0.070、0.076、0.048，MLP版本则降至0.009、0.010、0.051，支持相关性选择和随机潜变量的作用。\n\n【证据强度与局限】\n实验包含跨中美市场、十个基线、时间切分、五随机种子和较完整组件消融，且ACC与MCC方向一致，预测结论具有中上强度。但绝对优势有限：相对最佳基线的ACC仅增加1.42至2.24个百分点，CMIN-CN的MCC仅增加0.002。论文给出均值与标准差，却未披露显著性检验或置信区间；也未在给定证据中说明所有基线是否按相同数据、调参预算和LLM资源重训。新闻抓取、清洗、去重及潜在前视泄漏防护细节不足，LLM调用成本、延迟、版本稳定性和完整算力消耗亦未披露。消融能证明模块对预测有用，但不能直接证明生成解释真实、忠实或可审计；给定材料未提供人工评价者一致性、事实性、因果忠实度等解释指标。Table 6和Figure 8涉及投资回测，但所给图页未展示具体数值，不能据此确认交易成本、换手率和风险调整收益。\n\n【研究意义与后续问题】\n该工作最有价值的认识是：LLM不必直接承担最终数值预测，而可作为结构化信息处理器，显式判断新闻相关性、时间有效区间和跨股票影响，再由可训练的时序生成模型完成预测；随机相关性对照也削弱了“仅因减少新闻数量而提升”的替代解释。其工程价值主要在模块可分解、数据切分和消融路径较清楚，并发布了AgentPEN-US数据集。尚待解决的问题包括LLM评分是否能跨模型和跨时期校准，记忆内容是否受到新闻重复与事后叙事影响，潜变量是否真正表征市场不确定性，以及解释文本能否通过忠实度、稳定性和金融专家盲评。还需要包含交易摩擦的滚动回测、市场状态外推和严格泄漏审计，才能判断统计预测增益能否转化为稳定的现实效用。",
@@ -2935,36 +2259,10 @@
         "开源",
         "其他"
       ],
-      "imageUrl": "media/papers/recvuAVZd2C0TT-p9-f1.png",
+      "imageUrl": "",
       "mediaAssets": {
-        "images": [
-          {
-            "url": "media/papers/recvuAVZd2C0TT-p9-f1.png",
-            "alt": "PDF 第 9 页图表：Figure 1: Construction of Sn for a data point xn. Subfigure A shows a schematic repre- sentation while B visualizes Kn and gc, and C visualizes Sn in data space. In this example, the set Kn = {35, 87, 42} contains C′ = 3 component indices for xn, as indicated by the green box in A and green lines in B. Each of the three components has a set of neighborhoods gc that includes the component c itself and two additional component indices, i.e., |gc| = G = 3. Specifically, we have g35 = {98, 35, 23}, g87 = {16, 87, 63} and g42 = {37, 42, 8}. These three sets are highlighted by orange boxes in A and ",
-            "kind": "pdf-page",
-            "layout": "wide"
-          },
-          {
-            "url": "media/papers/recvuAVZd2C0TT-p9-f2.png",
-            "alt": "PDF 第 9 页图表：Figure 2: Comparison of Euclidean distances and joints. In A and B, the component centers are identical and the same data point is marked with a red cross. For isotropic, equally weighted components (A), the smallest Euclidean distance correspond to the largest joint between components and the data point. However, for general covariance matrices (B), this is no longer the case.",
-            "kind": "pdf-page",
-            "layout": "wide"
-          },
-          {
-            "url": "media/papers/recvuAVZd2C0TT-p18-f3.png",
-            "alt": "PDF 第 18 页图表：Figure 5: Effectiveness and efficiency in terms of negative log-likelihood (NLL) and runtime of v-MFA compared to em-MFA, k-means+FA and the parameters after initial- ization. Each of the four subfigures refers to experiments on one benchmark data set. The y-axes denote the relative NLL on the test set w.r.t. em-MFA as base- line, given by Equation (15). For v-MFA, we present the performance across nine different settings of the hyperparameters C′ and G. For each configuration of G ∈{5, 15, 30}, measurements for v-MFA (three red, blue and yellow triangles, respectively) refer to configurations",
-            "kind": "pdf-page",
-            "layout": "wide"
-          },
-          {
-            "url": "media/papers/recvuAVZd2C0TT-p24-f4.png",
-            "alt": "PDF 第 24 页图表：Table 1: Quality and runtime of several zero-shot denoising algorithms, measured by PSNR, SSIM and average runtime per image in seconds. The reported errors denote standard deviations across images in the respective dataset. The best result within each row among the blind zero-shot algorithms are marked bold, while overall best results (including the non-blind algorithms BM3D and DivN) are underlined.",
-            "kind": "pdf-page",
-            "layout": "wide"
-          }
-        ],
-        "videos": [],
-        "cover": "media/papers/recvuAVZd2C0TT-p9-f1.png"
+        "images": [],
+        "videos": []
       },
       "topComments": [],
       "deepAnalysis": "【研究问题与核心结论】\n论文研究如何在样本数 N、维度 D 和混合分量数 C 均很大时训练能够表达分量内相关性的高斯混合模型。一般协方差 GMM 的常规 EM 每轮复杂度为 O(NCD²)；对角协方差虽可降至 O(NCD)，却不能表达维度间相关性。核心结论是：将截断变分后验与混合因子分析模型结合后，v-MFA 可使复杂度对 D 线性、对 NC 呈经验次线性，同时获得与常规 MFA 优化相近的负对数似然；作者进一步在约 1 亿张图像上以单台高端 CPU、不到 9 小时训练了超过 100 亿参数的模型。\n\n【方法与创新】\nv-MFA 为每个样本 xn 维护仅含 C′ 个高后验分量的集合 Kn，而非计算全部 C 个分量的联合概率。算法为每个当前分量 c 构造大小为 G 的邻域 gc，将这些邻域的并集及一个随机分量组成搜索集 Sn，再依据联合概率更新 Kn。Figure 1（PDF 第9页）给出的示例中 C′=3、G=3，Kn={35,87,42}，合并邻域和随机分量后得到 10 个候选；这说明计算被限制在局部候选集，但仍以随机候选保留跳出局部搜索的机会。Figure 2（PDF 第9页）说明一般协方差下最近欧氏中心不一定具有最大联合概率，因此算法不能简单以欧氏近邻替代概率搜索。架构层面的变化是以低维因子分析器参数化各分量协方差，保留主要相关结构；算法创新是截断变分分布及基于分量邻域的候选更新。C′、G 和因子维度 H 属于精度与成本的控制参数，而并行运行及 CPU 利用率属于工程实现，不应与复杂度创新混为一谈。\n\n【实验设计与关键结果】\n实验覆盖复杂度缩放、四个高维基准、YFCC100M 大规模训练和零样本去噪。基线包括常规 em-MFA、k-means+FA、torch-mfa、em-DIAG、v-DIAG，以及使用欧氏候选的变体；主要指标为每个样本直至收敛所需的联合概率计算次数、测试集 NLL、墙钟时间，以及去噪 PSNR、SSIM 和每图运行时间。Figure 4（PDF 第16页）以联合概率评估次数检验随 C 增长的复杂度，支持 v-MFA 对 NC 的经验次线性缩放，但给定材料没有提供拟合指数或置信区间。Figure 5（PDF 第18页）显示 C′=3、G=5 的 v-MFA 在四个数据集上均为最快配置，且所有给出的 C′、G 组合都快于 em-MFA；图中完整坐标数值未随原文提供。Figure 6（PDF 第21页）对应 YFCC100M，摘要报告约 1 亿图像、超过 100 亿参数、单台高端 CPU 训练不足 9 小时。去噪实验固定 C=1000，并与 N2F、S2S、BM3D 等方法比较；Table 1（PDF 第24页）将 v-MFA列为最快的盲零样本方法，约比 N2F 快两倍、比 S2S 快超过 2000 倍，只有非盲 BM3D 更快，但所给表格图像未包含具体 PSNR、SSIM 数值。Figure 8（PDF 第26页）把 C 从 1000 增至 10000，在参数量约十倍增长时去噪时间不足两倍，并报告 PSNR、SSIM 随规模改善。\n\n【证据强度与局限】\n证据链覆盖理论复杂度、受控缩放、标准数据集、大规模训练和下游任务，且附录列出硬件、数据集及更多基线，强于只报告单一速度点。不过“次线性”主要由经验缩放支持，给定证据未提供斜率估计、误差区间或统计检验；最坏情况是否仍可能接近全分量搜索也未明确。MFA 以低秩子空间近似一般协方差，因此并非无条件等价于任意满协方差 GMM，其质量依赖 H。硬件比较可能受实现语言、并行方式和优化程度影响；Table B1（PDF 第45页）还说明部分实验以四个各占 16 核的实例并行，跨方法墙钟比较需结合完整配置解释。初始化敏感性、失败案例、内存峰值、能耗及百亿参数实验的重复次数和方差，论文未披露于给定材料。代码仓库、随机种子和完整复现命令也未披露于给定材料。\n\n【研究意义与后续问题】\n论文改变的关键认识不是 GMM 能取得新的任务质量上限，而是大规模、相关性可表达的混合模型未必必须承担 O(NC) 级全分量评分。候选邻域与截断后验的组合也与稀疏混合专家的 Top-K 路由存在形式联系，可能启发避免计算全部专家路由分数的概率化搜索。仍待解决的问题包括次线性性质的理论条件与最坏情况界、C′和G对收敛及偏差的系统影响、不同 H 下表达能力与成本的定量关系，以及方法能否扩展至非高斯观测、时序潜变量模型和没有闭式 M 步的模型。",
@@ -3120,36 +2418,10 @@
         "推理",
         "AI"
       ],
-      "imageUrl": "media/papers/recvuGBG2GdVmN-p7-f1.png",
+      "imageUrl": "",
       "mediaAssets": {
-        "images": [
-          {
-            "url": "media/papers/recvuGBG2GdVmN-p7-f1.png",
-            "alt": "PDF 第 7 页图表：Figure 1: An illustration of CoT and vanilla ICL. Figure (a) shows the CoT prompt and the corresponding output of ChatGPT (GPT-3.5-turbo-16k). The intermediate reasoning is shown in red. The output of ChatGPT follows the pattern in the prompt, which consists of a reasoning step, followed by the desired answer. Fig- ure (b) shows the result of using the corresponding vanilla ICL prompt, which includes of two input-output pairs. In this case, ChatGPT fails to provide the correct answer. Figure (c) illustrates a general pipeline of CoT prompting with n demonstration examples. Each example include",
-            "kind": "pdf-page",
-            "layout": "wide"
-          },
-          {
-            "url": "media/papers/recvuGBG2GdVmN-p8-f2.png",
-            "alt": "PDF 第 8 页图表：Figure 2: An illustration of the multi-step latent-variable model defined in (2). According to this graphical model, for any h ≥1, each step zi h of i-th example depends on the previous steps {zi ℓ}ℓ<h and the hidden concept θ∗.",
-            "kind": "pdf-page",
-            "layout": "wide"
-          },
-          {
-            "url": "media/papers/recvuGBG2GdVmN-p9-f3.png",
-            "alt": "PDF 第 9 页图表：Table 1: Summary of the three sources of errors in CoT prompting.",
-            "kind": "pdf-page",
-            "layout": "wide"
-          },
-          {
-            "url": "media/papers/recvuGBG2GdVmN-p16-f4.png",
-            "alt": "PDF 第 16 页图表：Table 2: Average accuracy of the six prompting methods on the CityEquation task. The results are based on 200 random testing instances. “PI CoT” stands for the par- tially informative chain of thought method.",
-            "kind": "pdf-page",
-            "layout": "wide"
-          }
-        ],
-        "videos": [],
-        "cover": "media/papers/recvuGBG2GdVmN-p7-f1.png"
+        "images": [],
+        "videos": []
       },
       "topComments": [],
       "deepAnalysis": "【研究问题与核心结论】\n论文研究固定参数的预训练LLM为何能通过CoT示例完成新任务，以及中间推理步骤、Transformer架构和示例数量分别起什么作用。现有工作多展示算术、常识和符号任务上的经验收益，却缺少对CoT所构造统计估计量及其误差来源的统一说明。作者用潜在任务变量θ*生成输入Z0、中间步骤Z1…ZH−1和输出ZH，并证明理想预训练条件下的CoT预测近似贝叶斯模型平均：模型依据提示中的示例更新θ*的后验，再对候选任务的输出分布加权。总误差由预训练误差与提示误差组成，后者还可分为查询误差和上下文误差；在论文假设下，提示误差随示例数n指数下降。CoT在平均意义上优于普通ICL，但不保证对每个任务实例都占优，中间步骤的信息质量是关键条件。\n\n【方法与创新】\n架构层面，作者分析注意力如何复制历史步骤并聚合与当前位置相关的信息，构造可显式逼近目标条件分布的Transformer模型；Figure 3（PDF第11页）以两层Transformer说明第一层作为copy head复制先前步骤，后续映射用于近似任务后验及下一步分布。统计建模层面的核心新增是Figure 2（PDF第8页）的多步潜变量图模型：每一步同时依赖θ*和此前步骤，从而把推理轨迹视为关于隐藏任务的额外观测。理论上，作者将CoT估计量联系到贝叶斯模型平均，并以Pac-Bayes框架控制预训练泛化误差，同时分别处理Transformer函数类的逼近误差。训练技巧并非主要创新；实证模型采用从头训练的GPT-2家族decoder-only Transformer。工程优化也不是论文重点。对长CoT，Corollary 32给出更多步骤在期望上降低预测误差的解释，而Proposition 14指出为处理顺序依赖，所需深度D随链长H线性增长，预训练文档数N随H多项式增长。\n\n【实验设计与关键结果】\n实验使用合成上下文回归，而非真实通用LLM基准。两层网络任务令x∼N(0,I10)，W∈R10×4、v∈R4，目标为vᵀReLU(Wx)；CoT1提供ReLU(Wx)，CoT2提供参数v。决策树任务输入维度20、树深4，以路径上四个输入坐标值作为中间步骤。每类模型从N=2.56×10^7个随机任务预训练，每任务T=101个样本，Adam训练4×10^5步、批量64；两层网络所用GPT-2配置为12层、4个注意力头、嵌入维度128（PDF第34页）。测试覆盖n=1至100，每个固定θ*重复100次，再对10个独立θ*平均，以MSE评价CoT和ICL。Figure 10（PDF第33页）显示两层网络三种方法的log MSE在n≤20时近似线性，之后接近预训练误差底；CoT1明显优于ICL，CoT2仅略有改善，直接支持“中间步骤质量决定收益”。Figure 11（PDF第34页）中，决策树任务在n≤65时也呈log-linear趋势；CoT学习更快，但n=100时两者测试损失均约0.12。正文称平均MSE支持Proposition 11，但不确定性区间存在重叠，因此不能据此断言逐实例优势。\n\n【证据强度与局限】\n理论贡献较完整：作者明确给出生成模型、估计量解释、误差分解、Transformer逼近构造和Pac-Bayes界，实验也针对Theorem 7与Proposition 11设置直接对照，而不是只报告最终准确率。不过，结论依赖任务来自指定先验、训练与测试遵循同一生成机制等假设；这与开放域语言推理中的分布偏移、错误推理轨迹和自适应搜索有明显距离。实验仅覆盖两层网络和深度四决策树，且使用连续回归MSE，不能直接推出自然语言CoT的正确率变化。虽然重复实验并绘制标准差或区间，论文所给证据未披露正式显著性检验。训练使用2560万个任务，计算成本较高，但论文未披露总算力、训练时长及能耗。所给材料也未提供完整代码与随机种子信息；数据泄漏检查未披露。CityEquation的Table 2位于PDF第16页，但给定图像未显示具体表格数值，因而不能据此量化六种提示方法的差异。\n\n【研究意义与后续问题】\n论文改变了“CoT只是模仿文本格式”的单一理解：在其模型内，中间步骤等价于帮助识别隐藏任务的额外观测，因此收益取决于其对θ*的辨识信息，而非链条长度本身。这也统一解释了优质中间特征带来快速学习、无信息步骤收益有限，以及长链推理在推断收益与预训练资源间的权衡。尚待解决的问题包括：指数衰减是否能在真实语言任务和分布外测试中成立；分离参数λ、网络深度D和数据量N的理论依赖能否被定量验证；带回溯、验证、工具调用或可变长度轨迹的自适应推理能否纳入同一模型；以及错误或相互矛盾的中间步骤会如何改变后验集中与误差界。",
@@ -3289,36 +2561,10 @@
         "开源",
         "其他"
       ],
-      "imageUrl": "media/papers/recvuAVZd2vSSS-p6-f1.png",
+      "imageUrl": "",
       "mediaAssets": {
-        "images": [
-          {
-            "url": "media/papers/recvuAVZd2vSSS-p6-f1.png",
-            "alt": "PDF 第 6 页图表：Figure 1: The left panel shows the cone-like set C(3, S) while the right panel depicts the region where bΘappr t −Θ∗may fall.",
-            "kind": "pdf-page",
-            "layout": "wide"
-          },
-          {
-            "url": "media/papers/recvuAVZd2vSSS-p20-f2.png",
-            "alt": "PDF 第 20 页图表：Figure 2: Online sparse linear regression under weak signal setup for t0 ∈[20, 500] and t = 10000 online learning rounds for independent and Toeplitz ρ = 0.5 covariate designs.",
-            "kind": "pdf-page",
-            "layout": "wide"
-          },
-          {
-            "url": "media/papers/recvuAVZd2vSSS-p20-f3.png",
-            "alt": "PDF 第 20 页图表：Figure 3: Online sparse linear regression under weak signal setup for projection sparsity level s ∈[15, 100], t0 = 100, and T = 104 online rounds, under independent and Toeplitz ρ = 0.5 covariate correlation designs.",
-            "kind": "pdf-page",
-            "layout": "wide"
-          },
-          {
-            "url": "media/papers/recvuAVZd2vSSS-p21-f4.png",
-            "alt": "PDF 第 21 页图表：Figure 4: Online sparse linear regression under weak signal setup without the initial batch under projection sparsity level s ∈{15, 30}.",
-            "kind": "pdf-page",
-            "layout": "wide"
-          }
-        ],
-        "videos": [],
-        "cover": "media/papers/recvuAVZd2vSSS-p6-f1.png"
+        "images": [],
+        "videos": []
       },
       "topComments": [],
       "deepAnalysis": "【研究问题与核心结论】\n论文研究带广义稀疏结构的在线回归：样本逐轮到达时，如何在不反复调整正则化参数、不保存全部历史数据、也不在每轮求解完整优化问题的前提下，估计稀疏向量或低秩矩阵。在线 LASSO 等惩罚方法的最优正则化强度依赖未知噪声与持续增长的样本量；已有在线方法还可能需要不断扩张的设计矩阵、线性规划、逐轮求解ℓ1问题、较强的不可表示条件，或将稀疏条件数限制在较小范围。作者的核心结论是：改用基数或秩约束，并让实际投影水平适度高于真实稀疏度或秩，可使在线硬阈值算法克服非凸投影带来的局部性，在受限强凸与受限光滑条件下全局收敛至统计误差邻域，并达到随样本量按1/(t0+t)衰减的最优均方误差量级，同时只需保存汇总统计量。\n\n【方法与创新】\n框架以Υ(Θ)≤s替代惩罚项，其中Υ分别取向量的ℓ0基数和矩阵秩。每轮利用累计损失或其汇总统计量计算梯度，执行固定步长的梯度更新，再通过硬阈值保留最大的s个坐标，或通过截断奇异值分解保留秩s近似；每轮可重复K次。真正的算法新增点是把在线累计统计、梯度步骤和非凸稀疏投影组合为闭式迭代，而不是重新求解正则化优化。理论新增点则是揭示过参数化投影集的作用：s不能低于真实结构复杂度，但适度增大后可建立收缩性质，容许任意受限或稀疏条件数。该工作不涉及新的神经网络架构或训练技巧；硬阈值、低秩投影和汇总统计属于算法与工程实现，过参数化条件及全局收敛证明属于理论创新。初始批次可用于初始化和选择s；无初始批次时也给出了流式版本。\n\n【实验设计与关键结果】\n论文覆盖合成在线稀疏线性回归和在线低秩矩阵感知，比较 OHT 的K∈{1,5,10,20}设置与 OS LASSO 的K=1、20设置，主要指标为平方Frobenius误差∥Θt−Θ*∥²F。Figure 2（PDF第20页）在弱信号、T=10000、初始批量t0从20增至500时显示：独立设计下 OS LASSO 误差由约0.9降至约0.03，而各 OHT 曲线整体处于约0.01量级；Toeplitz ρ=0.5下 OS LASSO 在t0≥200后仍约为0.09至0.10，OHT 约为0.02。Figure 3（PDF第20页）固定t0=100、T=10^4并令s∈[15,100]：s较小时K=1误差明显更高，独立和Toeplitz设计分别约0.055和0.15；K≥5可降至约0.003至0.015，但随着s增至100，误差上升至约0.023至0.03，体现过参数化并非越大越好。Figure 4（PDF第21页）表明无初始批次、s=15或30时误差均随2000轮迭代下降，且较大K收敛更快。低秩实验见Figure 5至7（PDF第23至24页）：正文报告低估投影秩s=3、4会阻止收敛，s=20的MSE约为s=5的四倍，与Theorem 9所示误差对投影水平的线性依赖一致。附录C的Lemma 6证明受约束低秩估计量满足期望误差不超过8s*σ²/[α²(t0+t)]（PDF第37页）。\n\n【证据强度与局限】\n证据由两部分构成：受限强凸、受限光滑及噪声矩条件下的非渐近证明，以及对不同相关性、初始批量、投影水平和迭代次数的对照实验。理论明确给出误差随样本量、稀疏度和曲率参数的依赖，且无初始批次实验与投影水平消融增强了结论可信度。不过，实验主要是合成数据，能否覆盖真实流数据中的漂移、重尾噪声、缺失值及模型错设尚未验证。图中未给出置信区间、重复次数或显著性检验；论文未披露所示差异的统计不确定性。与基线的总计算时间、峰值内存和截断SVD成本也未在给定图表中量化，因而“高效”主要由更新形式和存储结构支持。真实稀疏度、每轮迭代数K及合适投影水平通常未知，正文也承认需要初始或早期交叉验证；低估s会直接导致失败，过度增大则增加误差常数与计算量。给定证据未提供代码仓库信息，端到端复现便利性仍有限。\n\n【研究意义与后续问题】\n该工作改变了“过参数化只会扩大估计方差”的单一认识：在非凸在线投影中，适度扩大可行集还能改善优化几何，使简单硬阈值迭代获得全局收缩；但Figure 3及低秩实验又显示，过大投影水平会按结构复杂度放大统计误差。这建立了优化可达性与统计效率之间可分析的权衡，并把在线稀疏回归从动态正则化转向结构约束。后续仍需研究数据分布漂移、重尾或相关噪声下的保证，能否在线自适应选择s和K而保持最优速率，以及大矩阵场景中近似低秩投影对理论收敛、运行时间和存储上界的影响；真实高维数据上的公平基准和失败模式也仍待验证。",
@@ -3382,6 +2628,342 @@
                 "url": "http://jmlr.org/papers/v27/24-0815.html",
                 "note": "原始发布 / 公告。",
                 "text": "在线广义稀疏回归：过参数化如何带来最优收敛 —— 原始发布 / 公告。"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "recordId": "recvuAVZd2RIvl",
+      "sourceId": "jmlr",
+      "title": "torchgfn: A PyTorch GFlowNet Library",
+      "titleCn": "torchgfn：模块化 PyTorch GFlowNet 开源库",
+      "source": "JMLR",
+      "url": "http://jmlr.org/papers/v27/23-1095.html",
+      "category": "技术研究开源",
+      "contentType": "论文",
+      "priority": "",
+      "publishedDate": "2026-09-08",
+      "summary": "论文提出通用 GFlowNet 库 torchgfn，以解耦环境、采样器、函数估计器和训练目标，支持离散、连续、图结构及扩散采样任务。复现实验表明，它较既有 PyTorch gflownet 实现通常更快，但仍明显慢于采用 JAX/JIT 的 gfnx。",
+      "why": "该工作把分散且面向特定任务的 GFlowNet 实现统一为可替换组件，并通过公开代码、示例环境和跨库性能对照降低算法复现与扩展成本。",
+      "impact": 76,
+      "novelty": 65,
+      "actionability": 89,
+      "urgency": "中",
+      "tags": [
+        "AI",
+        "推理",
+        "开源"
+      ],
+      "imageUrl": "",
+      "mediaAssets": {
+        "images": [],
+        "videos": []
+      },
+      "topComments": [],
+      "deepAnalysis": "【研究问题与核心结论】\n论文关注 GFlowNet 研究缺少通用、易扩展且可用于公平比较的实现基础设施这一问题。既有开源代码多与单篇项目绑定，或局限于分子与图任务，或嵌入复杂实验框架，另一些实现则优先追求性能而牺牲可修改性。作者的核心结论是：通过严格分离环境、采样过程、数据容器、神经网络估计器和训练目标，torchgfn 能以统一 PyTorch API 覆盖多类离散与连续 GFlowNet 场景，并在模块可替换性和运行效率之间取得折中。论文展示了已发表任务的统一复现以及跨库计时，但证据主要支持软件架构与工程效率，不等同于提出了新的 GFlowNet 学习理论或生成质量优势。\n\n【方法与创新】\nFigure 1（PDF 第2页）给出了核心架构：无状态 Envs 通过顶层 States 与 Actions 抽象执行状态转移；Sampler 从策略中采样并生成 Trajectories、Transitions 或 StatesPairs 等 Containers；PolicyMixin 将容器连接到实现特定目标的 GFlowNet 子类，如 TrajectoryBalanceGFlowNet 和 DetailedBalanceGFlowNet；一个或多个 Estimator 封装 PyTorch nn.Module，分别表示策略、状态流等函数近似器，再由损失训练。真正新增的是这些接口之间的严格解耦及可交换设计，而不是新的网络架构。Gym 同时覆盖 HyperGrid、DiscreteEBM、BitSequence、连续 Box、BayesianStructure、Ring 和 DiffusionSampling 等环境。就性质而言，主要贡献属于软件架构和 API 设计；论文给定证据没有提出新的训练损失、优化算法或专用硬件工程。\n\n【实验设计与关键结果】\nTable 1（PDF 第4页）将 torchgfn 与 recursion、gflownet、gfnx 对照：前三者基于 PyTorch，gfnx 基于 JAX；torchgfn 被定位为模块化、解耦、通用且使用无状态环境，区别于 recursion 的图与分子导向、gflownet 的环境中心设计及 gfnx 的低层高性能取向。Table 3（PDF 第14页）在批量128下报告分阶段耗时、峰值内存和参数量。torchgfn 对 gflownet 的总耗时为：Box 42.3 对60.7毫秒，Box uniform-pb 18.4对60.8毫秒，Ising 6×6为78.3对3635.0毫秒，Ising 10×10为208.0对15849.0毫秒；HyperGrid small、medium、large 分别为30.8对141.4、77.8对223.0、113.3对364.7毫秒。其代价是部分设置参数或内存略高，例如 HyperGrid large 为101130个参数、55MB，而 gflownet 为100101个参数、37MB。gfnx 仍更快：Ising 10×10总耗时9.8毫秒，torchgfn 为208.0毫秒。Figure 3（PDF 第15页）用100次迭代、50次预热、3个种子比较批量32/128/512；在批量128时，torchgfn 相对 gflownet 在 Ising 6×6 快47.0倍，在 Ising 10×10快76.8倍，但相对 gfnx 在这两项分别慢16.1倍和19.9倍。图中 gflownet 的 Ising 10×10、批量512因计算时间不可接受而缺失。Figure 3与Table 3的绝对总耗时口径并不完全一致，例如 bitseq small 的批量128分别约32和22.1毫秒，给定材料未解释差异。\n\n【证据强度与局限】\n架构图、组件对照和逐场景性能表为工程主张提供了可核验证据，Figure 3还报告3个种子的均值与方差，优于仅给单次计时。然而实验任务数量有限，且跨 PyTorch 与JAX/JIT比较同时混入框架、编译和实现成熟度差异；Table 3中gfnx的JIT步骤无法拆分，也削弱了分阶段归因。论文给定证据未披露硬件型号、软件版本、统计显著性检验、置信区间、端到端收敛时间、相同计算预算下的生成质量，以及各库是否达到等价目标分布拟合精度。除参数量和峰值内存外，也未系统报告编译成本。已发表结果的“复现”缺少给定材料中的逐任务误差、奖励或分布距离数值，因此不能据此确认科学结果完全等价。代码与PyPI公开提升了复现可能性，但长期维护性和外部贡献质量尚不能由论文实验验证。\n\n【研究意义与后续问题】\n该工作的主要意义是把 GFlowNet 方法研究从项目级代码迁移到组件级实验：研究者可以在保持环境和估计器不变时替换训练目标或采样策略，从而减少实现差异对算法比较的干扰。结果也表明，模块化 PyTorch 实现可以显著优于既有 PyTorch 基线，但通用性仍与JAX/JIT吞吐量存在明显交换。后续问题包括：不同组件组合是否保持语义一致与数值稳定；连续空间、图生成和扩散采样能否用统一指标验证正确性；编译、向量化或分布式执行能否缩小与gfnx的性能差距而不破坏接口；以及跨任务复现是否能加入固定版本、完整硬件配置、收敛曲线和目标分布误差测试。",
+      "editorialStructure": "",
+      "pdfUrl": "http://jmlr.org/papers/volume27/23-1095/23-1095.pdf",
+      "paperFullTextSource": "pdf",
+      "paperPages": 15,
+      "paperCaptions": [
+        {
+          "page": 2,
+          "text": "Figure 1: A schematic of the modular torchgfn repository structure. States and Actions are top- level abstractions used to interface between the stateless Envs. Containers are generic objects which hold States-Actions sequences drawn from Samplers. These interface"
+        },
+        {
+          "page": 4,
+          "text": "Table 1: High-level comparison of GFlowNet libraries. Library torchgfn recursion gflownet gfnx PyTorch PyTorch PyTorch JAX"
+        },
+        {
+          "page": 14,
+          "text": "Table 3: Per-phase iteration time (ms, batch size 128), peak memory, and parameter count. Phase times averaged over seeds; “—” indicates JIT-compiled step (not decom- posable into individual timings)."
+        },
+        {
+          "page": 15,
+          "text": "Figure 3: Comparison of the torchgfn library per-iteration time (ms) against the gflownet and gfnx library, across 100 iterations with a 50 iteration burn-in, with variance across 3 seeds. Ising 10 × 10 is not shown for gflownet due to untenable com-"
+        }
+      ],
+      "paperVisualPages": [
+        2,
+        4,
+        14,
+        15
+      ],
+      "eventRole": "",
+      "eventPerspective": "",
+      "qualityScore": 62.3,
+      "eventAggregation": {
+        "total": 1,
+        "groups": [
+          {
+            "key": "官方来源",
+            "tone": "#16130f",
+            "items": [
+              {
+                "source": "JMLR",
+                "title": "torchgfn：模块化 PyTorch GFlowNet 开源库",
+                "url": "http://jmlr.org/papers/v27/23-1095.html",
+                "note": "原始发布 / 公告。",
+                "text": "torchgfn：模块化 PyTorch GFlowNet 开源库 —— 原始发布 / 公告。"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "recordId": "recvuAVZd2pKUO",
+      "sourceId": "jmlr",
+      "title": "A Provably Convergent Plug-and-Play Framework for Stochastic Bilevel Optimization",
+      "titleCn": "具备收敛保证的即插即用随机双层优化框架 PnPBO",
+      "source": "JMLR",
+      "url": "http://jmlr.org/papers/v27/25-0957.html",
+      "category": "技术研究开源",
+      "contentType": "论文",
+      "priority": "",
+      "publishedDate": "2026-09-08",
+      "summary": "论文提出统一的随机双层优化框架 PnPBO，可为上层、下层和隐式变量独立接入无偏或有偏随机估计器，并通过移动平均与裁剪稳定更新。作者证明 PAGE、ZeroSARAH、SAGA、STORM及混合策略的实例可获得最优样本复杂度，有限和情形下与已知下界及单层优化复杂度一致。",
+      "why": "该研究以统一理论接口消除了多类随机估计器从单层优化迁移到双层优化时的复杂度差距，并给出了基准实验和消融验证。",
+      "impact": 80,
+      "novelty": 85,
+      "actionability": 84,
+      "urgency": "中",
+      "tags": [
+        "AI",
+        "其他"
+      ],
+      "imageUrl": "",
+      "mediaAssets": {
+        "images": [],
+        "videos": []
+      },
+      "topComments": [],
+      "deepAnalysis": "【研究问题与核心结论】\n论文研究非凸—强凸随机双层优化：上层目标可能非凸，下层目标关于下层变量强凸，目标是在随机环境中找到满足 E‖∇H(x)‖²≤ε 的驻点。困难在于超梯度不仅依赖下层最优解，还包含逆 Hessian—向量积；以往 Neumann 级数方法带来额外对数因子或批量开销，SOBA、SABA、SRBA等方法又分别存在更大样本复杂度、依赖更强光滑性或与对应单层估计器相差因子的问题。作者的核心结论是：PnPBO能够统一接入有偏和无偏随机估计器，在经典光滑性假设下为 PAGE、ZeroSARAH、SAGA、STORM及混合策略建立收敛保证；有限和情形的复杂度达到 Dagréou等人给出的下界，并与单层非凸优化相当，从而回答双层与单层优化能否具有相同最优复杂度这一问题。\n\n【方法与创新】\nPnPBO把单循环算法拆为三个可独立配置的模块：上层变量x使用估计器A，下层变量y使用B，隐式变量z使用C，三者可分别选择有偏或无偏估计器。真正的算法创新并非新的神经网络架构或训练目标，而是随机估计器的抽象接口、统一误差递推以及双层变量耦合下的复杂度分析。对无偏上层估计器，作者加入历史方向的移动平均，因为对近似方向Dx的无偏估计并不等价于对真实超梯度∇H的无偏估计；该处理降低超梯度误差并允许更大步长。隐式变量采用半径R=Cf/μ的裁剪，利用Lemma 19给出的‖z*(x)‖上界，避免预先假定迭代变量有界。SFFBA将ZeroSARAH及其记忆变量扩展到三个模块，以避免反复计算全梯度；其他实例包括基于PAGE和混合估计策略的SPABA、MSEBA。裁剪属于低成本工程稳定化措施，移动平均属于更新技巧，模块化接口和收敛证明则构成主要方法创新。\n\n【实验设计与关键结果】\n理论比较覆盖有限和与期望两种设定。Table 1（PDF第4页）按n+m≲ε⁻²的有限和区间比较算法，并说明一次性O(n+m)初始化可被O((n+m)¹ᐟ²ε⁻¹)项吸收；摘要称PnPBO实例达到该文采用的已知下界。Table 2（PDF第21页）比较期望设定，正文指出依赖经典光滑性而非均方光滑性的既有方法最佳复杂度为O(ε⁻²)。数值实验使用MNIST污染数据清洗，以及IJCNN1、covtype上的ℓ2正则逻辑回归超参数优化；所有方法批量大小均为64，重复五次并报告均值，基线参数沿用benchmark-bilevel配置，本文方法通过网格搜索选择常数步长。Figure 3（PDF第23页）中，MNIST污染率0.9时，SPABA和MSEBA约在10秒内降至17%左右测试错误率，而MRBO在50秒附近仍约22%；IJCNN1上SFFBA在约300秒后达到约10⁻⁵量级的次优差距，其余多数方差缩减方法主要处于10⁻⁴至10⁻³量级。Figure 4（PDF第24页）显示，在污染率0.5、0.7、0.9下，PnPBO实例均能较快进入较低测试误差区间；covtype上各方法差距较小，正文明确称SPABA与SRBA接近。Figure 5（PDF第25页）的消融表明MA-SOBA、MA-SABA比未加移动平均的版本更快接近最小值，去除z裁剪则会降低SPABA、SFFBA和MSEBA的收敛速度。\n\n【证据强度与局限】\n理论部分建立在明确的非凸—强凸结构、光滑性和随机估计器误差条件之上，并通过Lemma 19—22控制下层解、隐式解、超梯度偏差及相邻方向变化；特别是Lemma 22直接使用裁剪产生的z有界性，理论组件之间衔接清楚。有限和结果与既有下界比较，证据强度较高，但适用范围仍受下层强凸、二阶信息可用等假设限制。实验覆盖两个任务族和三个数据集，并包含移动平均及裁剪消融，但仅重复五次，图中未展示置信区间或统计显著性检验；不同方法的常数调参方式并非完全一致，本文方法使用网格搜索，而基线沿用既有配置，可能影响运行时间比较的公平性。论文未披露图中均值的方差、峰值内存、Hessian—向量积的独立耗时及大规模深度模型实验。现有证据未显示数据泄漏，但也未提供专门的数据泄漏审计。正文给出算法、假设和证明，论文采用CC-BY 4.0许可；完整代码是否发布，给定证据未披露。\n\n【研究意义与后续问题】\n这项工作的主要意义是把“为每一种方差缩减器单独设计双层算法”转化为可组合的估计器接口，并表明双层结构在有限和设定下不必天然承担高于单层优化的渐近样本复杂度。移动平均处理近似超梯度的偏差传播，裁剪则把隐式变量稳定性纳入可证明分析，这两点对其他带辅助变量的随机优化问题也具有方法论价值。尚未解决的问题包括：下层仅凸或非凸时能否保持类似复杂度；理论最优的样本复杂度能否转化为墙钟时间和内存优势；不同估计器混搭的最优选择原则是什么；以及如何去除逆Hessian相关的二阶信息。作者也明确把基于价值函数的单循环、无Hessian随机双层算法列为后续方向。",
+      "editorialStructure": "",
+      "pdfUrl": "http://jmlr.org/papers/volume27/25-0957/25-0957.pdf",
+      "paperFullTextSource": "pdf",
+      "paperPages": 41,
+      "paperCaptions": [
+        {
+          "page": 4,
+          "text": "Table 1: Comparison of stochastic bilevel optimization algorithms in the finite-sum setting. Following Dagr´eou et al. (2024), the finite-sum complexity comparison is made in the regime n + m ≲ϵ−2. In this regime, the one-time O(n + m) initialization cost is subsumed by O((n +"
+        },
+        {
+          "page": 9,
+          "text": "Figure 1: PnPBO and Unified Analysis Framework Schematic 4.1 On the Variance Properties of Stochastic Estimators In this subsection, we recall a generic template for single-level stochastic estimators and"
+        },
+        {
+          "page": 12,
+          "text": "Figure 2: Roadmap of the Analysis Framework. Above, “BE” represents biased stochastic estimator and “UE” represents unbiased stochastic estimator. In the figure, we have kept only the key terms from the formulas."
+        },
+        {
+          "page": 21,
+          "text": "Table 2: Comparison of Stochastic Algorithms for BLO in the Expectation Setting. ∗indicates that this result has been published in our conference paper (Chu et al., 2024). We omit comparisons with BSA (Ghadimi and Wang, 2018), TTSA (Hong et al., 2023), SOBA (Dagr´eou"
+        },
+        {
+          "page": 22,
+          "text": "Figure 3(a), we report the test error—defined as the percentage of incorrect predictions on the test set—comparing SPABA, SFFBA, and MSEBA with variance-reduction-based methods, including those designed for the finite-sum setting, under a corruption probability"
+        },
+        {
+          "page": 23,
+          "text": "Figure 3: Comparison of SPABA, SFFBA and MSEBA with other variance-reduction-based stochastic BLO methods. Left: Test error for data hyper-cleaning on MNIST with ˜p = 0.9 corruption rate, Right: Suboptimality gap for hyperparameter"
+        },
+        {
+          "page": 23,
+          "text": "Figure 4(d) shows comparisons with all benchmark methods on the covtype data set, focusing on the test error. All algorithms exhibit a rapid decrease in test error, with the performance of SRBA and our method, SPABA, closely aligned. Both methods achieve the"
+        },
+        {
+          "page": 24,
+          "text": "Figure 4: Top: Compare SPABA, SFFBA, and MSEBA with other benchmark algorithms for the data hyper-cleaning problem under different ˜p. Bottom: Compare SPABA, SFFBA, and MSEBA with other benchmark algorithms for hyperpa-"
+        },
+        {
+          "page": 24,
+          "text": "Figure 3(b) compares the suboptimality gap of our methods—SPABA, SFFBA, and MSEBA—with that of other variance-reduction-based algorithms for hyperparameter optimization in ℓ2-penalized logistic regression on the IJCNN1 data set. Figure 4(e) further compares our methods with all other benchmark algorithms. We observe that SFFBA"
+        },
+        {
+          "page": 25,
+          "text": "Figure 5: Left: Compare the performance of SOBA and MA-SOBA, and SABA and MA- SABA in the problem of hyperparameter selection experiment on the IJCNN1 data set. Right: Compare the performance of SPABA, SFFBA, and MSEBA with"
+        },
+        {
+          "page": 27,
+          "text": "Table 3: Single-level instantiations of the abstract inequalities in Section 4.1. In the Active terms column, we report only nonzero coefficients. The SAGA row is based on Lemma C.5 in (Dagr´eou et al., 2022); the coefficients reported here"
+        }
+      ],
+      "paperVisualPages": [
+        4,
+        21,
+        23,
+        24
+      ],
+      "eventRole": "",
+      "eventPerspective": "",
+      "qualityScore": 62.1,
+      "eventAggregation": {
+        "total": 1,
+        "groups": [
+          {
+            "key": "官方来源",
+            "tone": "#16130f",
+            "items": [
+              {
+                "source": "JMLR",
+                "title": "具备收敛保证的即插即用随机双层优化框架 PnPBO",
+                "url": "http://jmlr.org/papers/v27/25-0957.html",
+                "note": "原始发布 / 公告。",
+                "text": "具备收敛保证的即插即用随机双层优化框架 PnPBO —— 原始发布 / 公告。"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "recordId": "recvuAVZd2JcWr",
+      "sourceId": "jmlr",
+      "title": "Dirichlet Active Learning",
+      "titleCn": "Dirichlet主动学习：基于图传播随机场的低标注分类",
+      "source": "JMLR",
+      "url": "http://jmlr.org/papers/v27/23-1489.html",
+      "category": "技术研究开源",
+      "contentType": "论文",
+      "priority": "",
+      "publishedDate": "2026-09-08",
+      "summary": "论文提出Dirichlet主动学习（DiAL），以Dirichlet随机场建模给定特征的类别概率，并利用图拉普拉斯传播在相似样本间共享观测强度。实验表明，该方法在低标注率图分类中兼顾决策边界利用、簇探索和计算效率。",
+      "why": "该研究将可解释的Dirichlet不确定性、图半监督学习与主动采样统一起来，并为探索—利用行为提供理论保证。",
+      "impact": 74,
+      "novelty": 82,
+      "actionability": 77,
+      "urgency": "中",
+      "tags": [
+        "AI",
+        "推理",
+        "开源"
+      ],
+      "imageUrl": "",
+      "mediaAssets": {
+        "images": [],
+        "videos": []
+      },
+      "topComments": [],
+      "deepAnalysis": "【研究问题与核心结论】\n论文研究池式、逐点查询的主动学习：当标签昂贵而未标注样本充足时，如何同时选择能够探索尚未覆盖数据簇、又能细化分类边界的样本。传统不确定性采样容易集中于当前决策边界，遗漏尚无标签的簇；强调覆盖的图方法又可能牺牲分类精度或依赖昂贵的矩阵运算。作者提出Dirichlet Active Learning（DiAL），把特征条件类别概率表示为Dirichlet随机场，通过相似特征之间的传播校准分布参数，再由均值完成分类、由方差形成采集函数。核心结论是：Dirichlet方差结合最大值或比例采样策略，可在低标签图学习中取得与强基线相当的准确率，同时保持簇探索能力；理论部分则分别以簇探索和对决策边界的注意力刻画其探索与利用性质。\n\n【方法与创新】\nDiAL为每个样本维护K维Dirichlet参数，参数均值给出类别概率估计，总方差构成采集分数。观测标签并非只作用于被标注节点，而是借助基于图拉普拉斯的传播算子向相似节点传递“伪计数”或观测强度，由此形成空间相关的Dirichlet随机场。论文给出的方差采集函数为Avar(x)=[β(x)²−Σk α̃k(x)²]/[β(x)²(β(x)+1)]，并比较最大值策略MV与按分数比例随机抽样PS（Table 1，PDF第17页；Figure 2，第6页）。真正的架构创新是以Dirichlet随机场统一分类概率与认知不确定性；训练层面的新增点是随标签顺序更新传播后的参数；工程优化则来自稀疏图拉普拉斯求解，避免VOpt和ΣOpt所需的完整逆矩阵，也不依赖MCVOpt的低秩特征分解。Figure 4（第18页）还指出单个Dirichlet分量变化时方差并不单调，说明该采集函数不是简单的低计数启发式。\n\n【实验设计与关键结果】\n实验覆盖二维Two Moons传播算子示例、Salinas-A与Pavia高光谱图像，以及MNIST、FASHIONMNIST及其10%缩小版本。后两类数据将10个原始类别按模3映射，使同一分类标签包含多个分离簇，以测试探索能力（Table 3，PDF第22页）。比较方法包括Dir. Var.、Dir. Var. (Prop)、随机采样、softmax不确定性Unc. (SM)、LAND、MCVOpt、VOpt (Full)和Σ-Opt (Full)；指标包括随标注集规模变化的分类准确率、已覆盖簇比例及每轮采集函数计算时间。Figure 6（第20页）显示，Salinas-A在约50个标签时DiAL两种策略约为97%—97.5%，接近约97.5%的MCVOpt，而Unc. (SM)约94%；Pavia上DiAL最终约98.2%—98.8%，Unc. (SM)则降至约86%—87%。这些数值为坐标图读取的近似值。Figures 7—10（第23—24页）同时报告准确率和簇覆盖比例，直接检验探索而非只看分类性能。Figure 11（第27页）的计时按每种规模平均10次试验；Table 4（第26页）从复杂度上比较稀疏线性求解、完整图拉普拉斯逆和MCVOpt所需r个特征对，但所给图页未提供可可靠抄录的具体耗时数值。\n\n【证据强度与局限】\n证据优势在于包含多类真实数据、专门构造的多簇同类任务、准确率与覆盖率双指标、多个探索型和不确定性基线，以及计算复杂度和计时对照；理论部分还试图解释经验上的边界利用与簇探索，而非只报告排行榜结果。局限是图中多数曲线未给出置信区间，除计时的10次平均外，所给证据未披露分类实验的重复次数、方差或统计显著性。高光谱曲线可显示DiAL竞争力，但不能证明在所有标注预算下严格优于MCVOpt。图构建、拉普拉斯参数、传播超参数和初始标签选择可能显著影响结果；作者也明确指出相关超参数的最优选取超出本文范围。代码地址、硬件环境、完整内存占用、超参数搜索预算、数据泄漏检查及系统化失败案例在所给证据中未披露，因此复现性虽受益于明确公式和公开数据集，仍需核验实现细节。\n\n【研究意义与后续问题】\n该工作的重要认识是，主动学习中的不确定性不必仅由判别模型的softmax置信度近似；Dirichlet参数能够把类别均值、证据强度和方差置于同一对象中，而图传播又使这种证据结构适用于极低标签率。实验尤其说明，仅追逐当前边界可能长期忽略孤立簇，而比例采样能够在保留高方差偏好的同时引入探索。后续研究仍需回答：理论保证在近似图、噪声标签、类别不平衡和分布漂移下是否成立；传播尺度与Dirichlet先验能否数据自适应选择；批量查询是否保持同样的探索性质；在百万级图上稀疏求解的时间和内存优势是否仍成立；以及方差采集面对模型错设或图连接错误时会出现何种系统性失败。",
+      "editorialStructure": "",
+      "pdfUrl": "http://jmlr.org/papers/volume27/23-1489/23-1489.pdf",
+      "paperFullTextSource": "pdf",
+      "paperPages": 63,
+      "paperCaptions": [
+        {
+          "page": 2,
+          "text": "Figure 1: Active learning process flowchart. Active learning seeks to judiciously select a limited number of currently unlabeled data points that will inform the classification task (Settles, 2012). These points are then labeled"
+        },
+        {
+          "page": 2,
+          "text": "Figure 1 illustrates the active learning process that iterates between (1) using currentlylabeled data to infer a classifier on the unlabeled data, (2) selecting the next query point from the unlabeled data via the acquisition function, and (3) labeling the query point and updating the labeled data. In practical applications, the labeling “oracle” is a domain"
+        },
+        {
+          "page": 6,
+          "text": "Figure 2: Utilizing the Dirichlet Learning semi-supervised classifier introduced in Section 2, DiAL selects query points using the Dirichlet Variance acquisition function (9) with either the Maximum Value or Proportional Sampling policies (Section 3)."
+        },
+        {
+          "page": 13,
+          "text": "Figure 3: Example propagation operators on a synthetic data set (Two Moons) in two di- mensions. Panel (a) shows both the level sets of the underlying data-generating distribution ρ(x) and an empirical sample of 1500 points from ρ. Panels (b-d)"
+        },
+        {
+          "page": 17,
+          "text": "Table 1: Summary of two methods which we study based upon the proposed “Dirich- (β(x))2−PKk=1(˜αk(x))2 let Variance” acquisition functions, Avar(x) = (β(x))2(β(x)+1) . The first,"
+        },
+        {
+          "page": 18,
+          "text": "Figure 4: Demonstration of the non-monotonicity of variance of Dirichlet random vari- ables in individual components, αi. Panel (a) is a heatmap of V ar[P] = α1α2 for P ∼Dir(α1, α2). The red dotted line in (a) represents a (α1+α2)2(α1+α2+1)"
+        },
+        {
+          "page": 19,
+          "text": "Table 2: Acquisition functions of interest in the experiments in Subsections 4.1 and 4.2. See Section 3 for a detailed explanation of MV (maximum value) and PS (proportional sampling) policies."
+        },
+        {
+          "page": 20,
+          "text": "Figure 5: Ground truth classifications of Salinas A (a) and Pavia (b) HSI data sets. (a) Salinas (b) Pavia Figure 6: Plots of accuracy results on HSI data sets, Salinas-A and Pavia data sets."
+        },
+        {
+          "page": 20,
+          "text": "Figure 6: Plots of accuracy results on HSI data sets, Salinas-A and Pavia data sets. the setup presented in (Murphy and Maggioni, 2019; Cloninger and Mhaskar, 2021). The goal is to classify the pixels in the image into material classes based on the samples from the"
+        },
+        {
+          "page": 22,
+          "text": "Table 3: “modulo” class labels. Each ground truth class is interpreted as a different “cluster” so that the resulting class structure has multiple clusters per class. For MNIST and FASHIONMNIST, there are 10 ground truth classes, and we take these classes"
+        },
+        {
+          "page": 23,
+          "text": "Figure 7: Plots of results on MNIST-SMALL data set, showing both accuracies (a) and cluster proportion (b) as a function of the active learning iteration (i.e., the size of the labeled data)."
+        },
+        {
+          "page": 23,
+          "text": "Figure 8: Plots of results on FASHIONMNIST-SMALL data set, showing both accuracies (a) and cluster proportion (b) as a function of the active learning iteration (i.e., the size of the labeled data)."
+        },
+        {
+          "page": 24,
+          "text": "Figure 9: Plots of Results on MNIST data set, showing both accuracies (a) and cluster proportion (b) as a function of the active learning iteration (i.e., the size of the labeled data)."
+        },
+        {
+          "page": 24,
+          "text": "Figure 10: Plots of results on FASHIONMNIST data set, showing both accuracies (a) and cluster proportion (b) as a function of the active learning iteration (i.e., the size of the labeled data)."
+        },
+        {
+          "page": 26,
+          "text": "Table 4: Computational comparison between acquisition functions, where n = |X|, K is the number of classes, and r ≪n is the number of eigenvalues computed in the auxiliary matrix used in MCVOpt. SpSolve(L, n) represents the cost of a sparse"
+        },
+        {
+          "page": 27,
+          "text": "Figure 11: Timing comparison of acquisition function computation per iteration. For each acquisition function and data set size (n), we plot the average time it took to compute the corresponding acquisition function over the unlabeled"
+        },
+        {
+          "page": 27,
+          "text": "Figure 11 shows a timing comparison between these acquisition functions. For each acquisition function, we computed the average time over 10 trials to perform one iteration of the active learning process (i.e., the time required to compute the acquisition function"
+        },
+        {
+          "page": 45,
+          "text": "Figure 12: Numerical demonstration of the effect of λ(t) on the steady state distribution ¯q(x) in a 1D setting. With class-conditional distributions p(x|y = 0), p(x|y = 1) show respectively in gray and purple panel (a), we numerically solve (25) up to"
+        },
+        {
+          "page": 52,
+          "text": "Figure 13: Example of clusters and probability matrix P setup for Example 5. The data set can be written as the union of 2 disjoint clusters, X = X1 ∪X2, where the circles respectively represent X1 and X2. The coloring of regions represents"
+        },
+        {
+          "page": 54,
+          "text": "Table 1) in our experimental results. While the derivation of “optimal” values for either of these hyperparameters would be an interesting line of inquiry with practical importance, it lies outside the scope of this current work."
+        },
+        {
+          "page": 55,
+          "text": "Figure 14: Demonstration of population-level and data-conditional uncertainties in a toy example of a mixture of Gaussians in one dimension. The dashed black line represents a measure of the population-level uncertainty for the given setup; this"
+        },
+        {
+          "page": 56,
+          "text": "Figure 15: Visualization of a kernel density estimator (KDE) of the choices made from the first 50 query points by Dir. Var. and Unc. (SM) from the toy example shown in Figure 14. Note that the empirical distribution (reflected by the KDE) of the"
+        }
+      ],
+      "paperVisualPages": [
+        20,
+        22,
+        26,
+        54
+      ],
+      "eventRole": "",
+      "eventPerspective": "",
+      "qualityScore": 61.6,
+      "eventAggregation": {
+        "total": 1,
+        "groups": [
+          {
+            "key": "官方来源",
+            "tone": "#16130f",
+            "items": [
+              {
+                "source": "JMLR",
+                "title": "Dirichlet主动学习：基于图传播随机场的低标注分类",
+                "url": "http://jmlr.org/papers/v27/23-1489.html",
+                "note": "原始发布 / 公告。",
+                "text": "Dirichlet主动学习：基于图传播随机场的低标注分类 —— 原始发布 / 公告。"
               }
             ]
           }
