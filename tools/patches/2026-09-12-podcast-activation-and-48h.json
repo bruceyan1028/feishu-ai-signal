@@ -1,0 +1,9 @@
+{
+  "podcast-dwarkesh": {"lookback_window": "48h"},
+  "podcast-gradient-dissent": {"lookback_window": "48h"},
+  "podcast-latent-space": {"lookback_window": "48h"},
+  "podcast-nvidia-ai": {"lookback_window": "48h", "status": "paused"},
+  "podcast-practical-ai": {"lookback_window": "48h", "status": "active"},
+  "podcast-ai-alchemy": {"lookback_window": "48h"},
+  "podcast-silicon-valley-101": {"lookback_window": "48h"}
+}
