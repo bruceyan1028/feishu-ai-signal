@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-12 14:42",
+  "generatedAt": "2026-09-12 15:06",
   "origin": "feishu",
   "briefWindowDays": 1,
   "sources": [
@@ -884,6 +884,23 @@
       "fetchMethod": "Media",
       "lookback": "24h",
       "last": "09-12 12:58",
+      "perDay": 0,
+      "briefCount": 0
+    },
+    {
+      "id": "the-decoder-ai",
+      "recordId": "recvuZdiOAxkcf",
+      "name": "The Decoder",
+      "url": "https://the-decoder.com/feed/",
+      "status": "active",
+      "statusLabel": "已接入",
+      "on": true,
+      "format": "纯网页",
+      "type": "创业融资并购",
+      "priority": "中",
+      "fetchMethod": "RSS",
+      "lookback": "24h",
+      "last": "",
       "perDay": 0,
       "briefCount": 0
     },

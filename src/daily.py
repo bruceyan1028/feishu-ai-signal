@@ -4,6 +4,7 @@ from __future__ import annotations
 import argparse
 import json
 import logging
+import os
 import re
 from collections import Counter
 from concurrent.futures import ThreadPoolExecutor
@@ -1710,6 +1711,7 @@ def generate(day: str | None = None) -> dict[str, Any]:
     video_signals = cluster.attach_aggregations(video_signals)
     podcast_signals = cluster.attach_aggregations(podcast_signals)
     published_signals = signals + technical_signals + video_signals + podcast_signals
+    skip_visual_media = os.environ.get("DAILY_SKIP_VISUAL_MEDIA", "").strip() == "1"
     article_targets = [
         signal
         for signal in published_signals
@@ -1718,7 +1720,7 @@ def generate(day: str | None = None) -> dict[str, Any]:
         and "arxiv.org/" not in str(signal.get("url") or "")
     ]
     article_media: dict[str, dict[str, Any]] = {}
-    if article_targets:
+    if article_targets and not skip_visual_media:
         with ThreadPoolExecutor(max_workers=min(8, len(article_targets))) as executor:
             fetched_media = executor.map(
                 rss.fetch_article_media,
